@@ -1,0 +1,120 @@
+.icon-48-notificationss {
+      background-image: url(../images/l_notificationss.png);
+      padding-left:60px!important;
+}
+
+.icon-48-notifications {
+      background-image: url(../images/l_notificationss.png);
+      padding-left:60px!important;
+}
+
+.clients_href {
+    background-image: url("../images/clients.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.goals_href {
+    background-image: url("../images/goals.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.calendar_href {
+    background-image: url("../images/calendar.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.programs_href {
+    background-image: url("../images/programs.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.nutrition_plans_href {
+    background-image: url("../images/nutrition_plans.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.nutrition_diary_href {
+    background-image: url("../images/nutrition_diary.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.assessments_href {
+    background-image: url("../images/assessments.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.settings_href {
+    background-image: url("../images/settings.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+
+
+
+
+
+
+
+#clients_href {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/clients.png);
+    display: block;
+} 
+
+#goals_href {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/goals.png);
+    display: block;
+} 
+
+#calendar_href {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/calendar.png);
+    display: block;
+} 
+
+#programs_href {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/programs.png);
+    display: block;
+} 
+
+#nutrition_plans_href {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/nutrition_plans.png);
+    display: block;
+} 
+
+#nutrition_diary_href {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/nutrition_diary.png);
+    display: block;
+} 
+
+#assessments_href {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/assessments.png);
+    display: block;
+} 
+
+#settings_href {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/settings.png);
+    display: block;
+} 
