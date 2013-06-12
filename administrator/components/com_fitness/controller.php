@@ -26,7 +26,7 @@ class FitnessController extends JController
 	{
 		require_once JPATH_COMPONENT.'/helpers/fitness.php';
 
-		$view		= JFactory::getApplication()->input->getCmd('view', 'notifications');
+		$view		= JFactory::getApplication()->input->getCmd('view', 'dashboard');
         JFactory::getApplication()->input->set('view', $view);
 
 		parent::display($cachable, $urlparams);

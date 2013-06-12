@@ -13,15 +13,15 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controlleradmin');
 
 /**
- * Notificationss list controller class.
+ * Clients list controller class.
  */
-class FitnessControllerNotificationss extends JControllerAdmin
+class FitnessControllerClients extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
-	public function getModel($name = 'notifications', $prefix = 'FitnessModel')
+	public function getModel($name = 'client', $prefix = 'FitnessModel')
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;

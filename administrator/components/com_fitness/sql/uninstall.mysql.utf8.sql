@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS `#__fitness_notifications`;
+DROP TABLE IF EXISTS `#__fitness_clients`;

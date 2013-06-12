@@ -39,7 +39,7 @@
         <menu img="components/com_fitness/assets/images/s_com_fitness.png" >COM_FITNESS</menu>
         <submenu>
             
-            <menu link="option=com_fitness&amp;view=notifications" view="notifications" img="components/com_fitness/assets/images/s_notificationss.png" alt="Fitness/Notificationss">COM_FITNESS_TITLE_NOTIFICATIONSS</menu>
+            <menu link="option=com_fitness&amp;view=dashboard" view="notifications" img="components/com_fitness/assets/images/s_notificationss.png" alt="Fitness/Notificationss">COM_FITNESS_TITLE_NOTIFICATIONSS</menu>
             <menu link="option=com_fitness&amp;view=clients" view="clients" img="components/com_fitness/assets/images/s_clients.png" alt="Fitness/Clients">COM_FITNESS_TITLE_CLIENTS</menu>
             <menu link="option=com_fitness&amp;view=goals" view="goals" img="components/com_fitness/assets/images/s_goals.png" alt="Fitness/Goals">COM_FITNESS_TITLE_GOALS</menu>
             <menu link="option=com_fitness&amp;view=calendar" view="calendar" img="components/com_fitness/assets/images/s_calendar.png" alt="Fitness/Calendar">COM_FITNESS_TITLE_CALENDAR</menu>

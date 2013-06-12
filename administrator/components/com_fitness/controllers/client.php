@@ -13,13 +13,13 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controllerform');
 
 /**
- * Notifications controller class.
+ * Client controller class.
  */
-class FitnessControllerNotifications extends JControllerForm
+class FitnessControllerClient extends JControllerForm
 {
 
     function __construct() {
-        $this->view_list = 'notificationss';
+        $this->view_list = 'clients';
         parent::__construct();
     }
 

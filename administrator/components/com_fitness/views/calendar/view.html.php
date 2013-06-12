@@ -41,10 +41,9 @@ class FitnessViewCalendar extends JView {
 
         $input = JFactory::getApplication()->input;
         $view = $input->getCmd('view', '');
-        FitnessHelper::addSubmenu('Notifications', 'notifications');
+        FitnessHelper::addSubmenu('Dashboard', 'dashboard');
         FitnessHelper::addSubmenu('Clients', 'clients');
         FitnessHelper::addSubmenu('Goals', 'goals');
-        FitnessHelper::addSubmenu('Calendar', 'calendar');
         FitnessHelper::addSubmenu('Programs', 'programs');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
         FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diary');

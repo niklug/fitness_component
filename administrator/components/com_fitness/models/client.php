@@ -15,7 +15,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * Fitness model.
  */
-class FitnessModelnotifications extends JModelAdmin
+class FitnessModelclient extends JModelAdmin
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -33,7 +33,7 @@ class FitnessModelnotifications extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'Notifications', $prefix = 'FitnessTable', $config = array())
+	public function getTable($type = 'Client', $prefix = 'FitnessTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -52,7 +52,7 @@ class FitnessModelnotifications extends JModelAdmin
 		$app	= JFactory::getApplication();
 
 		// Get the form.
-		$form = $this->loadForm('com_fitness.notifications', 'notifications', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_fitness.client', 'client', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
 			return false;
 		}
@@ -69,13 +69,14 @@ class FitnessModelnotifications extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_fitness.edit.notifications.data', array());
+		$data = JFactory::getApplication()->getUserState('com_fitness.edit.client.data', array());
 
 		if (empty($data)) {
 			$data = $this->getItem();
             
 		}
 
+                $data->other_trainers = explode(',',$data->other_trainers);
 		return $data;
 	}
 
@@ -112,7 +113,7 @@ class FitnessModelnotifications extends JModelAdmin
 			// Set ordering to the last item if not set
 			if (@$table->ordering === '') {
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__fitness_notifications');
+				$db->setQuery('SELECT MAX(ordering) FROM #__fitness_clients');
 				$max = $db->loadResult();
 				$table->ordering = $max+1;
 			}

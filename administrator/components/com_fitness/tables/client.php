@@ -11,9 +11,9 @@
 defined('_JEXEC') or die;
 
 /**
- * notifications Table class
+ * client Table class
  */
-class FitnessTablenotifications extends JTable {
+class FitnessTableclient extends JTable {
 
     /**
      * Constructor
@@ -21,7 +21,7 @@ class FitnessTablenotifications extends JTable {
      * @param JDatabase A database connector object
      */
     public function __construct(&$db) {
-        parent::__construct('#__fitness_notifications', 'id', $db);
+        parent::__construct('#__fitness_clients', 'id', $db);
     }
 
     /**
@@ -37,7 +37,7 @@ class FitnessTablenotifications extends JTable {
         
 		$input = JFactory::getApplication()->input;
 		$task = $input->getString('task', '');
-		if(($task == 'save' || $task == 'apply') && (!JFactory::getUser()->authorise('core.edit.state','com_fitness.notifications.'.$array['id']) && $array['state'] == 1)){
+		if(($task == 'save' || $task == 'apply') && (!JFactory::getUser()->authorise('core.edit.state','com_fitness') && $array['state'] == 1)){
 			$array['state'] = 0;
 		}
 
@@ -52,9 +52,9 @@ class FitnessTablenotifications extends JTable {
             $registry->loadArray($array['metadata']);
             $array['metadata'] = (string) $registry;
         }
-        if(!JFactory::getUser()->authorise('core.admin', 'com_fitness.notifications.'.$array['id'])){
-            $actions = JFactory::getACL()->getActions('com_fitness','notifications');
-            $default_actions = JFactory::getACL()->getAssetRules('com_fitness.notifications.'.$array['id'])->getData();
+        if(!JFactory::getUser()->authorise('core.admin', 'com_fitness.client.'.$array['id'])){
+            $actions = JFactory::getACL()->getActions('com_fitness','client');
+            $default_actions = JFactory::getACL()->getAssetRules('com_fitness.client.'.$array['id'])->getData();
             $array_jaccess = array();
             foreach($actions as $action){
                 $array_jaccess[$action->name] = $default_actions[$action->name];
@@ -94,6 +94,7 @@ class FitnessTablenotifications extends JTable {
         if (property_exists($this, 'ordering') && $this->id == 0) {
             $this->ordering = self::getNextOrder();
         }
+        $this->other_trainers = implode(',',$this->other_trainers);
 
         return parent::check();
     }
@@ -181,7 +182,7 @@ class FitnessTablenotifications extends JTable {
     */
     protected function _getAssetName() {
         $k = $this->_tbl_key;
-        return 'com_fitness.notifications.' . (int) $this->$k;
+        return 'com_fitness.client.' . (int) $this->$k;
     }
  
     /**
