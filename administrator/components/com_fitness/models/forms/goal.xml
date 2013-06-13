@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_GOALS_FORM_LBL_GOAL_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+
+       
+       <field name="user_id" type="sql" class="inputbox"
+            query="SELECT id, username FROM #__users"
+            key_field="id"
+            value_field="username"
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_USER_ID"
+       /> 
+       
+       <field name="trainer_id" type="sql" class="inputbox"
+            query="SELECT id, username FROM jos_users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'"
+            key_field="id"
+            value_field="username"
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_TRAINER_ID"
+       /> 
+              
+
+       <field name="category_id" type="text" size="20" class="inputbox"
+        
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_CATEGORY_ID"
+            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_CATEGORY_ID" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="deadline" type="calendar"
+                
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_DEADLINE"
+            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_DEADLINE" 
+                
+                
+                
+            filter="raw" /> 
+
+       <field name="details" type="editor"
+                
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_DETAILS"
+            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_DETAILS" 
+                
+                
+                
+            filter="raw" /> 
+
+       <field name="comments" type="editor"
+                
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_COMMENTS"
+            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_COMMENTS" 
+                
+                
+                
+            filter="raw" /> 
+
+       <field name="completed" type="list"
+                
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_COMPLETED"
+            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_COMPLETED" 
+                
+                
+                
+            filter="raw">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+        </field> 
+
+       <field name="created" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_CREATED"
+            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_CREATED" 
+        filter="safehtml" /> 
+
+       <field name="modified" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_MODIFIED"
+            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_MODIFIED" 
+        filter="safehtml" /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

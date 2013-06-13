@@ -6,12 +6,6 @@
             readonly="true" class="readonly"
             description="JGLOBAL_FIELD_ID_DESC" /> 
 
-       <field name="user_id_OLD" type="text" size="40" class="inputbox"
-        
-            label="Username"
-            description="" 
-         default="0" 
-        filter="safehtml" /> 
        
        <field name="user_id" type="sql" class="inputbox"
             query="SELECT id, username FROM #__users"

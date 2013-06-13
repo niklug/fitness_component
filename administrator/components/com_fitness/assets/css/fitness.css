@@ -118,3 +118,20 @@
     background-image: url(../images/settings.png);
     display: block;
 } 
+
+
+
+
+
+
+
+.icon-48-goals {
+      background-image: url(../images/l_goals.png);
+      padding-left:60px!important;
+}
+
+.icon-48-goal {
+      background-image: url(../images/l_goals.png);
+      padding-left:60px!important;
+}
+

@@ -42,7 +42,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 		</div>
             
                 <?php
-                $db = &JFactory::getDbo();
+                $db = JFactory::getDbo();
                 $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'";
                 $db->setQuery($sql);
                 $primary_trainerlist = $db->loadObjectList();
@@ -62,7 +62,7 @@ $saveOrder	= $listOrder == 'a.ordering';
             
                         
                 <?php
-                $db = &JFactory::getDbo();
+                $db = JFactory::getDbo();
                 $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
                 $db->setQuery($sql);
                 $grouplist = $db->loadObjectList();
@@ -173,7 +173,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</td>
 				<td>
 					<?php 
-                                        $user = &JFactory::getUser($item->primary_trainer);
+                                        $user = JFactory::getUser($item->primary_trainer);
                                         
                                         echo $user->username; 
                                         ?>

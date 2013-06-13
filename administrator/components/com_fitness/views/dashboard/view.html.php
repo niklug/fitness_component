@@ -30,7 +30,7 @@ class FitnessViewDashboard extends JView
 		$this->items		= $this->get('Items');
 		$this->pagination	= $this->get('Pagination');
                 
-                $document = &JFactory::getDocument();
+                $document = JFactory::getDocument();
                 $document -> addStyleSheet(JURI::base() . 'components' . DS. 'com_fitness' . DS .'assets' . DS . 'css' . DS . 'fitness.css');
 
 		// Check for errors.
