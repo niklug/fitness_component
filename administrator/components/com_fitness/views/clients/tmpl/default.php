@@ -33,15 +33,51 @@ $saveOrder	= $listOrder == 'a.ordering';
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 		</div>
-		
-        
-		<div class='filter-select fltrt'>
+            
+                <div class='filter-select fltrt'>
 			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
 			</select>
 		</div>
+            
+                <?php
+                $db = &JFactory::getDbo();
+                $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'";
+                $db->setQuery($sql);
+                $primary_trainerlist = $db->loadObjectList();
+                foreach ($primary_trainerlist as $option) {
+                    $primary_trainer[] = JHTML::_('select.option', $option->value, $option->text );
+                }
+                
+                ?>
 
+                <div class='filter-select fltrt'>
+			<select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-Primary Trainer-');?></option>
+				<?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
+			</select>
+		</div>
+            
+            
+                        
+                <?php
+                $db = &JFactory::getDbo();
+                $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
+                $db->setQuery($sql);
+                $grouplist = $db->loadObjectList();
+                foreach ($grouplist as $option) {
+                    $group[] = JHTML::_('select.option', $option->value, $option->text );
+                }
+ 
+                ?>
+
+                <div class='filter-select fltrt'>
+			<select name="filter_group" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-User Group-');?></option>
+				<?php echo JHtml::_('select.options', $group, "value", "text", $this->state->get('filter.group'), true);?>
+			</select>
+		</div>
 
 	</fieldset>
 	<div class="clr"> </div>
@@ -117,6 +153,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 			$canEdit	= $user->authorise('core.edit',			'com_fitness');
 			$canCheckin	= $user->authorise('core.manage',		'com_fitness');
 			$canChange	= $user->authorise('core.edit.state',	'com_fitness');
+                        //$canChange = 1;
 			?>
 			<tr class="row<?php echo $i % 2; ?>">
 				<td class="center">
@@ -135,7 +172,11 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $item->email; ?>
 				</td>
 				<td>
-					<?php echo $item->primary_trainer; ?>
+					<?php 
+                                        $user = &JFactory::getUser($item->primary_trainer);
+                                        
+                                        echo $user->username; 
+                                        ?>
 				</td>
 	
 

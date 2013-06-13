@@ -73,7 +73,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 				<li><?php echo $this->form->getLabel('primary_trainer'); ?>
 				<?php echo $this->form->getInput('primary_trainer'); ?></li>
 				<li><?php echo $this->form->getLabel('other_trainers'); ?>
-				<?php echo getInput($this->item->id); ?></li>
+				<?php echo $this->getInput($this->item->id); ?></li>
 
 
             </ul>
@@ -93,32 +93,3 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         }
     </style>
 </form>
-
-<?php
-
-function getInput($item_id) {
-  
-            $db = &JFactory::getDbo();
-            $query = "SELECT id, username FROM #__users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'";
-            $db->setQuery($query);
-            $result = $db->loadObjectList();
-            $query = "SELECT other_trainers FROM #__fitness_clients WHERE id='$item_id'";
-            $db->setQuery($query);
-            $other_trainers = explode(',', $db->loadResult());
-               
-            $drawField = '';
-            $drawField .= '<select id="jform[other_trainers][]" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
-            $drawField .= '<option value="">none</option>';
-            foreach ($result as $item) {
-                if(in_array($item->id, $other_trainers)){
-                    $selected = 'selected="selected"';
-                } else {
-                    $selected = '';
-                }
-                
-                $drawField .= '<option ' . $selected . ' value="' . $item->id . '">' . $item->username . ' </option>';
-        
-            };
-            $drawField .= '</select>';
-            return $drawField;
-}

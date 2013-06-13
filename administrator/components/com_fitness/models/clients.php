@@ -31,6 +31,7 @@ class FitnessModelclients extends JModelList {
                 'state', 'a.state',
                 'primary_trainer', 'a.primary_trainer',
                 'other_trainers', 'a.other_trainers',
+                'g.group_id'
 
             );
         }
@@ -53,8 +54,15 @@ class FitnessModelclients extends JModelList {
 
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
-
         
+        // Filter by primary trainer
+        $primary_trainer = $app->getUserStateFromRequest($this->context . '.filter.primary_trainer', 'filter_primary_trainer', '', 'string');
+        $this->setState('filter.primary_trainer', $primary_trainer);
+        
+                
+        // Filter by group
+        $group = $app->getUserStateFromRequest($this->context . '.filter.group', 'filter_group', '', 'string');
+        $this->setState('filter.group', $group);
 
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
@@ -79,6 +87,8 @@ class FitnessModelclients extends JModelList {
         // Compile the store id.
         $id.= ':' . $this->getState('filter.search');
         $id.= ':' . $this->getState('filter.state');
+        $id.= ':' . $this->getState('filter.primary_trainer');
+        $id.= ':' . $this->getState('filter.group');
 
         return parent::getStoreId($id);
     }
@@ -107,14 +117,27 @@ class FitnessModelclients extends JModelList {
         $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
 
         
-    // Filter by published state
-    $published = $this->getState('filter.state');
-    if (is_numeric($published)) {
-        $query->where('a.state = '.(int) $published);
-    } else if ($published === '') {
-        $query->where('(a.state IN (0, 1))');
-    }
-    
+        // Filter by published state
+        $published = $this->getState('filter.state');
+        if (is_numeric($published)) {
+            $query->where('a.state = '.(int) $published);
+        } else if ($published === '') {
+            $query->where('(a.state IN (0, 1))');
+        }
+
+
+        // Filter by primary trainer
+        $primary_trainer = $this->getState('filter.primary_trainer');
+        if (is_numeric($primary_trainer)) {
+            $query->where('a.primary_trainer = '.(int) $primary_trainer);
+        } 
+
+
+            // Filter by group
+        $group = $this->getState('filter.group');
+        if (is_numeric($group)) {
+            $query->where('g.group_id = '.(int) $group);
+        } 
 
         // Filter by search in title
         $search = $this->getState('filter.search');
@@ -123,7 +146,14 @@ class FitnessModelclients extends JModelList {
                 $query->where('a.id = ' . (int) substr($search, 3));
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('( a.user_id LIKE '.$search.'  OR  a.primary_trainer LIKE '.$search.'  OR  a.other_trainers LIKE '.$search.' )');
+                $query->where('(
+                    a.user_id LIKE '.$search.'
+                    OR  u.username LIKE '.$search.' 
+                    OR  u.name LIKE '.$search.' 
+                    OR  u.email LIKE '.$search.'   
+                    OR  ug.title LIKE '.$search.' 
+                    OR  a.primary_trainer LIKE '.$search.' 
+                    OR  a.other_trainers LIKE '.$search.' )');
             }
         }
 
