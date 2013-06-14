@@ -9,14 +9,15 @@
 
        
        <field name="user_id" type="sql" class="inputbox"
-            query="SELECT id, username FROM #__users"
+            query="SELECT #__users.id, #__users.username FROM #__users INNER JOIN #__fitness_clients ON #__fitness_clients.user_id=#__users.id"
             key_field="id"
             value_field="username"
             label="COM_FITNESS_GOALS_FORM_LBL_GOAL_USER_ID"
+            required="true"
        /> 
        
        <field name="trainer_id" type="sql" class="inputbox"
-            query="SELECT id, username FROM jos_users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'"
+            query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id='9'"
             key_field="id"
             value_field="username"
             label="COM_FITNESS_GOALS_FORM_LBL_GOAL_TRAINER_ID"
@@ -40,6 +41,19 @@
                 
                 
             filter="raw" /> 
+       
+       <field name="completed" type="list"
+                
+            label="COM_FITNESS_GOALS_GOALS_COMPLETED"
+            description="" 
+                
+                
+                
+            filter="raw">
+                <option value="1">Incomplete</option>
+                <option value="2">Pending</option>
+                <option value="3">Complete</option>
+        </field> 
 
        <field name="details" type="editor"
                 
@@ -59,17 +73,7 @@
                 
             filter="raw" /> 
 
-       <field name="completed" type="list"
-                
-            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_COMPLETED"
-            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_COMPLETED" 
-                
-                
-                
-            filter="raw">
-                <option value="0">No</option>
-                <option value="1">Yes</option>
-        </field> 
+
 
        <field name="created" type="calendar" class="inputbox"
         

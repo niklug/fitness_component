@@ -37,6 +37,7 @@ class FitnessModelgoals extends JModelList {
                 'state', 'a.state',
                 'created', 'a.created',
                 'modified', 'a.modified',
+                'u.name'
 
             );
         }
@@ -61,9 +62,31 @@ class FitnessModelgoals extends JModelList {
         $this->setState('filter.state', $published);
 
         
-		//Filtering deadline
-		$this->setState('filter.deadline.from', $app->getUserStateFromRequest($this->context.'.filter.deadline.from', 'filter_from_deadline', '', 'string'));
-		$this->setState('filter.deadline.to', $app->getUserStateFromRequest($this->context.'.filter.deadline.to', 'filter_to_deadline', '', 'string'));
+        //Filtering deadline
+        $this->setState('filter.deadline.from', $app->getUserStateFromRequest($this->context.'.filter.deadline.from', 'filter_from_deadline', '', 'string'));
+        $this->setState('filter.deadline.to', $app->getUserStateFromRequest($this->context.'.filter.deadline.to', 'filter_to_deadline', '', 'string'));
+        
+        // Filter by primary trainer
+        $primary_trainer = $app->getUserStateFromRequest($this->context . '.filter.primary_trainer', 'filter_primary_trainer', '', 'string');
+        $this->setState('filter.primary_trainer', $primary_trainer);
+        
+                
+        // Filter by group
+        $group = $app->getUserStateFromRequest($this->context . '.filter.group', 'filter_group', '', 'string');
+        $this->setState('filter.group', $group);
+        
+        // Filter by goal status
+        $goal_status = $app->getUserStateFromRequest($this->context . '.filter.goal_status', 'filter_goal_status', '', 'string');
+        $this->setState('filter.goal_status', $goal_status);
+        
+        // Filter by created
+        $created = $app->getUserStateFromRequest($this->context . '.filter.created', 'filter_created', '', 'string');
+        $this->setState('filter.created', $created);
+        
+                
+        // Filter by modified
+        $modified = $app->getUserStateFromRequest($this->context . '.filter.modified', 'filter_modified', '', 'string');
+        $this->setState('filter.modified', $modified);
 
 
         // Load the parameters.
@@ -89,6 +112,11 @@ class FitnessModelgoals extends JModelList {
         // Compile the store id.
         $id.= ':' . $this->getState('filter.search');
         $id.= ':' . $this->getState('filter.state');
+        $id.= ':' . $this->getState('filter.primary_trainer');
+        $id.= ':' . $this->getState('filter.group');
+        $id.= ':' . $this->getState('filter.goal_status');
+        $id.= ':' . $this->getState('filter.created');
+        $id.= ':' . $this->getState('filter.modified');
 
         return parent::getStoreId($id);
     }
@@ -107,22 +135,71 @@ class FitnessModelgoals extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*'
+                        'list.select', 'a.*,  ug.title as usergroup'
                 )
         );
         $query->from('`#__fitness_goals` AS a');
+                
+        $query->leftJoin('#__users AS u ON u.id = a.user_id');
+        
+        $query->leftJoin('#__user_usergroup_map AS g ON u.id = g.user_id');
+        
+        $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
 
         
 
         
-    // Filter by published state
-    $published = $this->getState('filter.state');
-    if (is_numeric($published)) {
-        $query->where('a.state = '.(int) $published);
-    } else if ($published === '') {
-        $query->where('(a.state IN (0, 1))');
-    }
+        // Filter by published state
+        $published = $this->getState('filter.state');
+        if (is_numeric($published)) {
+            $query->where('a.state = '.(int) $published);
+        } else if ($published === '') {
+            $query->where('(a.state IN (0, 1))');
+        }
+
     
+    
+        // Filter by primary trainer
+        $primary_trainer = $this->getState('filter.primary_trainer');
+        if (is_numeric($primary_trainer)) {
+            $query->where('a.primary_trainer = '.(int) $primary_trainer);
+        } 
+
+
+        // Filter by group
+        $group = $this->getState('filter.group');
+        if (is_numeric($group)) {
+            $query->where('g.group_id = '.(int) $group);
+        } 
+        
+        
+        // Filter by goal status
+
+        $goal_status = $this->getState('filter.goal_status');
+
+        if ($goal_status) {
+            $query->where('a.completed = ' . (int) $goal_status);
+        } 
+        
+        // Filter by created
+        $created = $this->getState('filter.created');
+        $created = $db->Quote('%' . $db->escape($created, true) . '%');
+        
+
+        if ($created) {
+            $query->where('a.created LIKE '.$created);
+        } 
+        
+        
+         // Filter by created
+        $modified = $this->getState('filter.modified');
+        $modified = $db->Quote('%' . $db->escape($modified, true) . '%');
+
+        if ($modified) {
+            $query->where('a.modified LIKE '.$modified);
+        } 
+        
+        
 
         // Filter by search in title
         $search = $this->getState('filter.search');
@@ -131,7 +208,18 @@ class FitnessModelgoals extends JModelList {
                 $query->where('a.id = ' . (int) substr($search, 3));
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('( a.user_id LIKE '.$search.'  OR  a.trainer_id LIKE '.$search.'  OR  a.category_id LIKE '.$search.'  OR  a.deadline LIKE '.$search.'  OR  a.created LIKE '.$search.'  OR  a.modified LIKE '.$search.' )');
+                $query->where('( a.user_id LIKE '.$search.'
+                    OR  a.primary_trainer LIKE '.$search.' 
+                    OR  a.category_id LIKE '.$search.' 
+                    OR  a.deadline LIKE '.$search.' 
+                    OR  a.created LIKE '.$search.' 
+                    OR  a.modified LIKE '.$search.'
+                    OR  u.username LIKE '.$search.' 
+                    OR  u.name LIKE '.$search.' 
+                    OR  u.email LIKE '.$search.'   
+                    OR  ug.title LIKE '.$search.' 
+                              
+                 )');
             }
         }
 

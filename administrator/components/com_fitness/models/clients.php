@@ -31,7 +31,8 @@ class FitnessModelclients extends JModelList {
                 'state', 'a.state',
                 'primary_trainer', 'a.primary_trainer',
                 'other_trainers', 'a.other_trainers',
-                'g.group_id'
+                'g.group_id', 'u.name', 'u.username',
+                'u.email'
 
             );
         }

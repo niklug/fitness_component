@@ -16,7 +16,7 @@
 
        
        <field name="primary_trainer" type="sql" class="inputbox"
-            query="SELECT id, username FROM jos_users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'"
+            query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id='9'"
             key_field="id"
             value_field="username"
             label="COM_FITNESS_FORM_LBL_CLIENT_PRIMARY_TRAINER"
@@ -24,7 +24,7 @@
        
        
       <field name="other_trainers_work" type="sql" class="inputbox"
-            query="SELECT id, username FROM jos_users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'"
+            query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id='9'"
             key_field="id"
             value_field="username"
             label="COM_FITNESS_FORM_LBL_CLIENT_OTHER_TRAINERS"

@@ -81,15 +81,23 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 				<?php echo $this->form->getInput('category_id'); ?></li>
 				<li><?php echo $this->form->getLabel('deadline'); ?>
 				<?php echo $this->form->getInput('deadline'); ?></li>
+                                <li><?php echo $this->form->getLabel('completed'); ?>
+				<?php echo $this->form->getInput('completed'); ?></li>
 				<li><?php echo $this->form->getLabel('details'); ?>
 				<?php echo $this->form->getInput('details'); ?></li>
 				<li><?php echo $this->form->getLabel('comments'); ?>
 				<?php echo $this->form->getInput('comments'); ?></li>
-				<li><?php echo $this->form->getLabel('completed'); ?>
-				<?php echo $this->form->getInput('completed'); ?></li>
+	
 				<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
-				<input type="hidden" name="jform[created]" value="<?php echo $this->item->created; ?>" />
-				<input type="hidden" name="jform[modified]" value="<?php echo $this->item->modified; ?>" />
+                                
+                                <?php $created =  $this->item->created; 
+                                if($created == '0000-00-00 00:00:00') {
+                                    $created = JHTML::_('date', $date = null, $format = 'Y-m-d h:m:s', $offset = NULL );
+                                }
+                                
+                                ?>
+				<input type="hidden" name="jform[created]" value="<?php echo $created ?>" />
+				<input type="hidden" name="jform[modified]" value="<?php echo JHTML::_('date', $date = null, $format = 'Y-m-d h:m:s', $offset = NULL ); ?>" />
 
 
             </ul>
@@ -109,3 +117,8 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         }
     </style>
 </form>
+
+
+
+
+

@@ -39,15 +39,95 @@ $saveOrder	= $listOrder == 'a.ordering';
 			<?php //Filter for the field deadline
 			$selected_from_deadline = JRequest::getVar('filter_from_deadline');
 			$selected_to_deadline = JRequest::getVar('filter_to_deadline');
+                        ?>
+                        <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Deadline from:'); ?></label>
+                        <?php
 				echo JHtml::_('calendar', $selected_from_deadline, 'filter_from_deadline', 'filter_from_deadline', '%Y-%m-%d', 'onchange="this.form.submit();"');
+                        ?>
+                        <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Deadline to:'); ?></label>
+                        <?php
 				echo JHtml::_('calendar', $selected_to_deadline, 'filter_to_deadline', 'filter_to_deadline', '%Y-%m-%d',  'onchange="this.form.submit();"');
 			?>
+
+
+                        <?php //Filter for the created
+                        $filter_created = JRequest::getVar('filter_created');
+                              ?>
+                        <label class="filter-search-lbl" for="filter_created"><?php echo JText::_('Created: '); ?></label>
+                        <?php
+                                echo JHtml::_('calendar', $filter_created, 'filter_created', 'filter_created', '%Y-%m-%d', 'onchange="this.form.submit();"');
+                        ?>
+
+                        <?php //Filter for the created
+                        $filter_modified = JRequest::getVar('filter_modified');
+                              ?>
+                        <label class="filter-search-lbl" for="filter_modified"><?php echo JText::_('Modified: '); ?></label>
+                        <?php
+                                echo JHtml::_('calendar', $filter_modified, 'filter_modified', 'filter_modified', '%Y-%m-%d', 'onchange="this.form.submit();"');
+                        ?>
+            
 		</div>
+            </fieldset>
+            <fieldset style="border:none;">
 
 		<div class='filter-select fltrt'>
 			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
+			</select>
+		</div>
+                <?php
+                $db = JFactory::getDbo();
+                $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'";
+                $db->setQuery($sql);
+                $primary_trainerlist = $db->loadObjectList();
+                foreach ($primary_trainerlist as $option) {
+                    $primary_trainer[] = JHTML::_('select.option', $option->value, $option->text );
+                }
+                
+                ?>
+
+                <div class='filter-select fltrt'>
+			<select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-Primary Trainer-');?></option>
+				<?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
+			</select>
+		</div>
+            
+
+            
+            
+                <?php
+                $db = JFactory::getDbo();
+                $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
+                $db->setQuery($sql);
+                $grouplist = $db->loadObjectList();
+                foreach ($grouplist as $option) {
+                    $group[] = JHTML::_('select.option', $option->value, $option->text );
+                }
+ 
+                ?>
+
+                <div class='filter-select fltrt'>
+			<select name="filter_group" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-User Group-');?></option>
+				<?php echo JHtml::_('select.options', $group, "value", "text", $this->state->get('filter.group'), true);?>
+			</select>
+		</div>
+            
+            
+            
+                <?php
+                $goal_status[] = JHTML::_('select.option', '1', 'Incomplete' );
+                $goal_status[] = JHTML::_('select.option', '2', 'Pending' );
+                $goal_status[] = JHTML::_('select.option', '3', 'Complete' );
+ 
+                ?>
+
+                <div class='filter-select fltrt'>
+			<select name="filter_goal_status" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-Goal status-');?></option>
+				<?php echo JHtml::_('select.options', $goal_status, "value", "text", $this->state->get('filter.goal_status'), true);?>
 			</select>
 		</div>
 
@@ -63,10 +143,13 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</th>
 
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_USER_ID', 'a.user_id', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_USER_ID', 'u.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_TRAINER_ID', 'a.trainer_id', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_TRAINER_ID', 'a.primary_trainer', $listDirn, $listOrder); ?>
+				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'User Group', 'a.user_group', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_CATEGORY_ID', 'a.category_id', $listDirn, $listOrder); ?>
@@ -137,16 +220,19 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php
                                         $user = JFactory::getUser($item->user_id);
                                         
-                                        echo $user->username; 
+                                        echo $user->name; 
                                          
                                         ?>
 				</td>
 				<td>
 					<?php
-                                        $user = JFactory::getUser($item->trainer_id);
+                                        $user = JFactory::getUser($item->primary_trainer);
                                         
-                                        echo $user->username; 
+                                        echo $user->name; 
                                         ?>
+				</td>
+                                <td>
+					<?php echo $item->usergroup; ?>
 				</td>
 				<td>
 					<?php echo $item->category_id; ?>
@@ -154,8 +240,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<td>
 					<?php echo $item->deadline; ?>
 				</td>
-				<td>
-					<?php echo $item->completed; ?>
+				<td class="center">
+					<?php echo $this->goal_state_html($item->id, $item->completed); ?>
 				</td>
 				<td>
 					<?php echo $item->created; ?>
@@ -207,3 +293,68 @@ $saveOrder	= $listOrder == 'a.ordering';
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
+
+<style>
+    .goal_status_wrapper {
+        background-color: #FFFFFF;
+        border-radius: 5px 5px 5px 5px;
+        left: 50%;
+        margin-left: -50px;
+        padding: 2px 0;
+        position: fixed;
+        top: 33%;
+        width: 100px;
+        text-align: center;
+    }
+    
+    .goal_status_wrapper a{
+        margin: 5px;
+    }
+    
+    .goal_status_incomplete {
+        background-color: #FFF6F6;
+        border: 1px solid #FF7570;
+        color: #E62C2F !important;
+  
+    }
+    
+    .goal_status_pending {
+        background-color: #E3E4E4;
+        border: 1px solid #818283;
+        color: #818283 !important;
+    }
+    
+    .goal_status_complete {
+        background-color: #F3FFEE;
+        border: 1px solid #1BC721;
+        color: #006C09 !important;
+
+    }
+    
+    .goal_status__button {
+        display: block;
+        font-size: 10px !important;
+        height: 14px;
+        margin: 0;
+        text-align: center;
+        text-transform: uppercase;
+        width: 90px;
+    }
+    
+    
+</style>
+
+
+<div class="goal_status_wrapper">
+    <span>Set Goal <b>2</b> as:</span>
+    <a class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>
+    <a class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>
+    <a class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>
+    
+</div>
+
+<script type="text/javascript">
+    function setGoalStatus(goal_id, goal_status) {
+        alert(goal_id + ' ' + goal_status);
+    }
+</script>

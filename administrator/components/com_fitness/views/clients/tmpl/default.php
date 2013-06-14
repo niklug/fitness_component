@@ -90,11 +90,11 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</th>
                                 
                                 <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Name', 'a.name', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Name', 'u.name', $listDirn, $listOrder); ?>
 				</th>
                                 
                                 <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Username', 'a.username', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Username', 'u.username', $listDirn, $listOrder); ?>
 				</th>
                                 
                                 <th class='left'>
@@ -102,7 +102,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</th>
 
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Email Adress', 'a.email', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Email Adress', 'u.email', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_CLIENTS_PRIMARY_TRAINER', 'a.primary_trainer', $listDirn, $listOrder); ?>

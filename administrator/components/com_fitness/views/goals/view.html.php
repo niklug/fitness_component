@@ -117,4 +117,31 @@ class FitnessViewGoals extends JView
 
 
 	}
+        
+    /**
+     * 
+     * @param type $goal_id
+     * @param type $goal_status
+     * @return string
+     */   
+    public function goal_state_html($goal_id, $goal_status) {
+        $html = '';
+        switch ($goal_status) {
+            case 1:
+                $html .= '<a onclick="setGoalStatus(' . $goal_id . ', ' . $goal_status . ')" class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>';
+                break;
+            case 2:
+                $html .= '<a onclick="setGoalStatus(' . $goal_id . ', ' . $goal_status . ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
+                break;
+            case 3:
+                $html .= '<a onclick="setGoalStatus(' . $goal_id . ', ' . $goal_status . ')" class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>';
+                break;
+
+            default:
+                break;
+        }
+        
+        return $html;
+    }
+
 }

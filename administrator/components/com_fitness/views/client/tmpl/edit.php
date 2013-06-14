@@ -74,6 +74,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 				<?php echo $this->form->getInput('primary_trainer'); ?></li>
 				<li><?php echo $this->form->getLabel('other_trainers'); ?>
 				<?php echo $this->getInput($this->item->id); ?></li>
+                       
 
 
             </ul>
