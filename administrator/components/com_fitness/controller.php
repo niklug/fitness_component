@@ -33,4 +33,20 @@ class FitnessController extends JController
 
 		return $this;
 	}
+        
+        //------------------------------------------------------
+	function setGoalStatus() {
+            
+ 		$view = $this -> getView('goals', 'json');
+                $view->setModel($this->getModel('goals'));
+   		$view -> setGoalStatus();
+	}
+        
+        //------------------------------------------------------
+	function sendGoalEmail() {
+            
+ 		$view = $this -> getView('goals', 'json');
+                $view->setModel($this->getModel('goals'));
+   		$view -> sendGoalEmail();
+	}
 }

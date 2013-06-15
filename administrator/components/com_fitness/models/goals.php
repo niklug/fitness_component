@@ -251,5 +251,54 @@ class FitnessModelgoals extends JModelList {
         
         return $items;
     }
+    
+    /**
+     * 
+     * @param type $goal_id
+     * @param type $goal_status_id
+     * @param type $user_id
+     * @return type
+     */
+    public function setGoalStatus($goal_id, $goal_status_id, $user_id) {
+        $db = &JFactory::getDBo();
+        $query = "UPDATE #__fitness_goals SET completed='$goal_status_id' WHERE id='$goal_id'";
+        $db->setQuery($query);
+        $db->query();
+        return $goal_status_id;
+    }
+    
+    public function sendGoalEmail($goal_id, $goal_status_id, $user_id) {
+        return $this->sendEmail('npkorban@mail.ru', 'Goal email', 'Test');
+    }
+    
+    
+    
+    private function sendEmail($recipient, $Subject, $body) {
+        
+        $mailer = & JFactory::getMailer();
+
+        $config = new JConfig();
+
+        $sender = array($config->mailfrom, $config->fromname);
+
+        $mailer->setSender($sender);
+
+        //$recipient = 'npkorban@mail.ru';
+
+        $mailer->addRecipient($recipient);
+
+        $mailer->setSubject($Subject);
+
+        $mailer->isHTML(true);
+
+        $mailer->setBody($body);
+
+        $send = & $mailer->Send();
+        
+        return $send;
+        if (!$send) {
+            return 'error, email not sent';
+        } 
+    }
 
 }
