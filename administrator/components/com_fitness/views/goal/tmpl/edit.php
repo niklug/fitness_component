@@ -75,8 +75,8 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 				<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
 				<li><?php echo $this->form->getLabel('user_id'); ?>
 				<?php echo $this->form->getInput('user_id'); ?></li>
-				<li><?php echo $this->form->getLabel('trainer_id'); ?>
-				<?php echo $this->form->getInput('trainer_id'); ?></li>
+				<li><?php echo $this->form->getLabel('primary_trainer'); ?>
+				<?php echo $this->form->getInput('primary_trainer'); ?></li>
 				<li><?php echo $this->form->getLabel('category_id'); ?>
 				<?php echo $this->form->getInput('category_id'); ?></li>
 				<li><?php echo $this->form->getLabel('deadline'); ?>
@@ -91,7 +91,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 				<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
                                 
                                 <?php $created =  $this->item->created; 
-                                if($created == '0000-00-00 00:00:00') {
+                                if(($created == '0000-00-00 00:00:00') OR ($created == '')) {
                                     $created = JHTML::_('date', $date = null, $format = 'Y-m-d h:m:s', $offset = NULL );
                                 }
                                 

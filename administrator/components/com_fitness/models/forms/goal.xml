@@ -16,7 +16,7 @@
             required="true"
        /> 
        
-       <field name="trainer_id" type="sql" class="inputbox"
+       <field name="primary_trainer" type="sql" class="inputbox"
             query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')"
             key_field="id"
             value_field="username"

@@ -1,56 +1,56 @@
 .icon-48-notificationss {
-      background-image: url(../images/l_notificationss.png);
-      padding-left:60px!important;
+    background-image: url(../images/l_notificationss.png);
+    padding-left:60px!important;
 }
 
 .icon-48-notifications {
-      background-image: url(../images/l_notificationss.png);
-      padding-left:60px!important;
+    background-image: url(../images/l_notificationss.png);
+    padding-left:60px!important;
 }
 
-.clients_href {
+.clients_href, .icon-48-clients {
     background-image: url("../images/clients.png");
     background-size: 45px auto;
     display: block;
 } 
 
-.goals_href {
+.goals_href, .icon-48-goals {
     background-image: url("../images/goals.png");
     background-size: 45px auto;
     display: block;
 } 
 
-.calendar_href {
+.calendar_href, .icon-48-calendar {
     background-image: url("../images/calendar.png");
     background-size: 45px auto;
     display: block;
 } 
 
-.programs_href {
+.programs_href, .icon-48-programs {
     background-image: url("../images/programs.png");
     background-size: 45px auto;
     display: block;
 } 
 
-.nutrition_plans_href {
+.nutrition_plans_href, .icon-48-nutrition_plans {
     background-image: url("../images/nutrition_plans.png");
     background-size: 45px auto;
     display: block;
 } 
 
-.nutrition_diary_href {
+.nutrition_diary_href, .icon-48-nutrition_diary {
     background-image: url("../images/nutrition_diary.png");
     background-size: 45px auto;
     display: block;
 } 
 
-.assessments_href {
+.assessments_href, .icon-48-assessments {
     background-image: url("../images/assessments.png");
     background-size: 45px auto;
     display: block;
 } 
 
-.settings_href {
+.settings_href , .icon-48-settings{
     background-image: url("../images/settings.png");
     background-size: 45px auto;
     display: block;
@@ -121,90 +121,75 @@
 
 
 
-
-
-
-
-.icon-48-goals {
-      background-image: url(../images/l_goals.png);
-      padding-left:60px!important;
-}
-
-.icon-48-goal {
-      background-image: url(../images/l_goals.png);
-      padding-left:60px!important;
-}
-
-
 #filter_from_deadline, #filter_to_deadline, #filter_created, #filter_modified{
     width: 55px;
 }
 
 
-    .goal_status_wrapper {
-        background-color: #FFFFFF;
-        border-radius: 5px 5px 5px 5px;
-        left: 50%;
-        margin-left: -50px;
-        padding: 2px 0;
-        position: fixed;
-        top: 33%;
-        width: 100px;
-        text-align: center;
-        display:none;
-        border: 1px #cccccc solid;
-        padding-top:17px;
-        
-    }
-    
-    .goal_status_wrapper a{
-        margin: 5px;
-    }
-    
-    .goal_status_incomplete {
-        background-color: #FFF6F6;
-        border: 1px solid #FF7570;
-        color: #E62C2F !important;
-  
-    }
-    
-    .goal_status_pending {
-        background-color: #E3E4E4;
-        border: 1px solid #818283;
-        color: #818283 !important;
-    }
-    
-    .goal_status_complete {
-        background-color: #F3FFEE;
-        border: 1px solid #1BC721;
-        color: #006C09 !important;
+.goal_status_wrapper {
+    background-color: #FFFFFF;
+    border-radius: 5px 5px 5px 5px;
+    left: 50%;
+    margin-left: -50px;
+    padding: 2px 0;
+    position: fixed;
+    top: 33%;
+    width: 100px;
+    text-align: center;
+    display:none;
+    border: 1px #cccccc solid;
+    padding-top:17px;
 
-    }
-    
-    .goal_status__button {
-        display: block;
-        font-size: 10px !important;
-        height: 11px;
-        margin: 0;
-        padding: 2px 0;
-        text-align: center;
-        text-transform: uppercase;
-        width: 90px;
-    }
-    
-    
-    .hideimage{
-        cursor: pointer;
-        padding: 5px;
-        position: absolute;
-        right: 0;
-        top: 0
-    }
-    
-    .send_email_button {
-        background-image: url("../images/send_email.png");
-        background-size: 20px auto;
-        display: block;
-        height: 20px;
-        width: 20px;
-    }
+}
+
+.goal_status_wrapper a{
+    margin: 5px;
+}
+
+.goal_status_incomplete {
+    background-color: #FFF6F6;
+    border: 1px solid #FF7570;
+    color: #E62C2F !important;
+
+}
+
+.goal_status_pending {
+    background-color: #E3E4E4;
+    border: 1px solid #818283;
+    color: #818283 !important;
+}
+
+.goal_status_complete {
+    background-color: #F3FFEE;
+    border: 1px solid #1BC721;
+    color: #006C09 !important;
+
+}
+
+.goal_status__button {
+    display: block;
+    font-size: 10px !important;
+    height: 11px;
+    margin: 0;
+    padding: 2px 0;
+    text-align: center;
+    text-transform: uppercase;
+    width: 90px;
+}
+
+
+.hideimage{
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 0
+}
+
+.send_email_button {
+    background-image: url("../images/send_email.png");
+    background-size: 20px auto;
+    display: block;
+    height: 20px;
+    width: 20px;
+}
