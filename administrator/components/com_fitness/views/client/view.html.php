@@ -86,9 +86,8 @@ class FitnessViewClient extends JView
          * @return string
          */
         function getInput($item_id) {
-
                     $db = &JFactory::getDbo();
-                    $query = "SELECT id, username FROM #__users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'";
+                    $query = "SELECT id, username FROM #__users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
                     $db->setQuery($query);
                     $result = $db->loadObjectList();
                     $query = "SELECT other_trainers FROM #__fitness_clients WHERE id='$item_id'";

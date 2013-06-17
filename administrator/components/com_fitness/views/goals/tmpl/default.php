@@ -78,7 +78,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 		</div>
                 <?php
                 $db = JFactory::getDbo();
-                $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id='9'";
+                
+                $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN jos_user_usergroup_map ON jos_user_usergroup_map.user_id=jos_users.id WHERE jos_user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
                 $db->setQuery($sql);
                 $primary_trainerlist = $db->loadObjectList();
                 foreach ($primary_trainerlist as $option) {

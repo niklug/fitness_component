@@ -25,9 +25,8 @@ class FitnessController extends JController
 	public function display($cachable = false, $urlparams = false)
 	{
 		require_once JPATH_COMPONENT.'/helpers/fitness.php';
-
-		$view		= JFactory::getApplication()->input->getCmd('view', 'dashboard');
-        JFactory::getApplication()->input->set('view', $view);
+ 		$view		= JFactory::getApplication()->input->getCmd('view', 'dashboard');
+                JFactory::getApplication()->input->set('view', $view);
 
 		parent::display($cachable, $urlparams);
 
