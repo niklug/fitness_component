@@ -65,6 +65,15 @@ FOREIGN KEY (category_id) REFERENCES #__fitness_categories(id) ON DELETE CASCADE
 FOREIGN KEY (session_type_id) REFERENCES #__fitness_session_type(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
+CREATE TABLE IF NOT EXISTS `#__fitness_locations` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL DEFAULT '1',
+PRIMARY KEY (`id`)
+) DEFAULT COLLATE=utf8_general_ci;
+
+
 
 
 
