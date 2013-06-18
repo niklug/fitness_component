@@ -5,8 +5,10 @@ CREATE TABLE IF NOT EXISTS `#__fitness_clients` (
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 `primary_trainer` INT(11)  NOT NULL ,
 `other_trainers` VARCHAR(255)  NOT NULL ,
-PRIMARY KEY (`id`)
-) DEFAULT COLLATE=utf8_general_ci;
+PRIMARY KEY (`id`),
+FOREIGN KEY (user_id) REFERENCES #__users(id) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT COLLATE=utf8_general_ci;
+
 
 
 CREATE TABLE IF NOT EXISTS `#__fitness_goals` (
@@ -22,7 +24,49 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goals` (
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
 `modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`),
+FOREIGN KEY (user_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_categories` (
+`id` int(11)  NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`color` VARCHAR(20)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`)
-) DEFAULT COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_session_type` (
+`id` int(11)  NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`category_id` INT(11)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL DEFAULT '1',
+PRIMARY KEY (`id`),
+FOREIGN KEY (category_id) REFERENCES #__fitness_categories(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_session_focus` (
+`id` int(11)  NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`category_id` INT(11)  NOT NULL ,
+`session_type_id` INT(11)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL DEFAULT '1',
+PRIMARY KEY (`id`),
+FOREIGN KEY (category_id) REFERENCES #__fitness_categories(id) ON DELETE CASCADE,
+FOREIGN KEY (session_type_id) REFERENCES #__fitness_session_type(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+
+
+
 
 

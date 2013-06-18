@@ -20,6 +20,37 @@
     display: block;
 } 
 
+.icon-48-sessiontypes {
+      background-image: url(../images/l_sessiontypes.png);
+      padding-left:60px!important;
+}
+
+.icon-48-sessiontype {
+      background-image: url(../images/l_sessiontypes.png);
+      padding-left:60px!important;
+}
+
+
+.icon-48-categories {
+      background-image: url(../images/l_categories.png);
+      padding-left:60px!important;
+}
+
+.icon-48-category {
+      background-image: url(../images/l_categories.png);
+      padding-left:60px!important;
+}
+
+.icon-48-sessionfocuses {
+      background-image: url(../images/l_sessionfocuses.png);
+      padding-left:60px!important;
+}
+
+.icon-48-sessionfocus {
+      background-image: url(../images/l_sessionfocuses.png);
+      padding-left:60px!important;
+}
+
 .calendar_href, .icon-48-calendar {
     background-image: url("../images/calendar.png");
     background-size: 45px auto;

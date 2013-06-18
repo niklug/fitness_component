@@ -268,7 +268,9 @@ class FitnessModelgoals extends JModelList {
     }
     
     public function sendGoalEmail($goal_id, $goal_status_id, $user_id) {
-        return $this->sendEmail('npkorban@mail.ru', 'Goal email', 'Test');
+        $goal = $this->getGoal($goal_id);
+        $trainer = JFactory::getUser($goal->primary_trainer);
+        return $this->sendEmail($trainer->email, 'Goal email', 'Test');
     }
     
     
@@ -299,6 +301,15 @@ class FitnessModelgoals extends JModelList {
         if (!$send) {
             return 'error, email not sent';
         } 
+    }
+    
+    
+    public function getGoal($goal_id) {
+        $db = &JFactory::getDBo();
+        $query = "SELECT * FROM #__fitness_goals WHERE id='$goal_id'";
+        $db->setQuery($query);
+        $result = $db->loadObject();
+        return $result;
     }
 
 }
