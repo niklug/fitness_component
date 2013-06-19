@@ -51,6 +51,17 @@
       padding-left:60px!important;
 }
 
+.icon-48-goalfocuses {
+      background-image: url(../images/l_goalfocuses.png);
+      padding-left:60px!important;
+}
+
+.icon-48-goalfocus {
+      background-image: url(../images/l_goalfocuses.png);
+      padding-left:60px!important;
+}
+
+
 .calendar_href, .icon-48-calendar {
     background-image: url("../images/calendar.png");
     background-size: 45px auto;
