@@ -16,22 +16,20 @@
             required="true"
        /> 
        
-       <field name="primary_trainer" type="sql" class="inputbox"
-            query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')"
+       <field name="goal_category_id" type="sql" class="inputbox"
+            query="SELECT id, name FROM #__fitness_goal_categories`"
             key_field="id"
-            value_field="username"
-            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_TRAINER_ID"
+            value_field="name"
+            label="Goal Type"
        /> 
               
+       <field name="goal_focus_id" type="sql" class="inputbox"
+            query="SELECT id, name FROM #__fitness_goal_focus`"
+            key_field="id"
+            value_field="name"
+            label="Goal Focus"
+       /> 
 
-       <field name="category_id" type="text" size="20" class="inputbox"
-        
-            label="COM_FITNESS_GOALS_FORM_LBL_GOAL_CATEGORY_ID"
-            description="COM_FITNESS_GOALS_FORM_DESC_GOAL_CATEGORY_ID" 
-        
-        
-        
-        filter="safehtml" /> 
 
        <field name="deadline" type="calendar"
                 

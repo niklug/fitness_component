@@ -37,7 +37,7 @@ class FitnessModelgoals extends JModelList {
                 'state', 'a.state',
                 'created', 'a.created',
                 'modified', 'a.modified',
-                'u.name'
+                'u.name', 'gc.name', 'gf.name'
 
             );
         }
@@ -66,10 +66,13 @@ class FitnessModelgoals extends JModelList {
         $this->setState('filter.deadline.from', $app->getUserStateFromRequest($this->context.'.filter.deadline.from', 'filter_from_deadline', '', 'string'));
         $this->setState('filter.deadline.to', $app->getUserStateFromRequest($this->context.'.filter.deadline.to', 'filter_to_deadline', '', 'string'));
         
-        // Filter by primary trainer
-        $primary_trainer = $app->getUserStateFromRequest($this->context . '.filter.primary_trainer', 'filter_primary_trainer', '', 'string');
-        $this->setState('filter.primary_trainer', $primary_trainer);
+        // Filter by goal category
+        $goal_category = $app->getUserStateFromRequest($this->context . '.filter.goal_category', 'filter_goal_category', '', 'string');
+        $this->setState('filter.goal_category', $goal_category);
         
+       // Filter by goal focus
+        $goal_focus = $app->getUserStateFromRequest($this->context . '.filter.goal_focus', 'filter_goal_focus', '', 'string');
+        $this->setState('filter.goal_focus', $goal_focus);
                 
         // Filter by group
         $group = $app->getUserStateFromRequest($this->context . '.filter.group', 'filter_group', '', 'string');
@@ -112,7 +115,8 @@ class FitnessModelgoals extends JModelList {
         // Compile the store id.
         $id.= ':' . $this->getState('filter.search');
         $id.= ':' . $this->getState('filter.state');
-        $id.= ':' . $this->getState('filter.primary_trainer');
+        $id.= ':' . $this->getState('filter.goal_focus');
+        $id.= ':' . $this->getState('filter.goal_category');
         $id.= ':' . $this->getState('filter.group');
         $id.= ':' . $this->getState('filter.goal_status');
         $id.= ':' . $this->getState('filter.created');
@@ -135,7 +139,7 @@ class FitnessModelgoals extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*,  ug.title as usergroup'
+                        'list.select', 'a.*,  ug.title as usergroup, gc.name as goal_category_name, gf.name as goal_focus_name'
                 )
         );
         $query->from('`#__fitness_goals` AS a');
@@ -145,6 +149,9 @@ class FitnessModelgoals extends JModelList {
         $query->leftJoin('#__user_usergroup_map AS g ON u.id = g.user_id');
         
         $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
+        
+        $query->leftJoin('#__fitness_goal_categories AS gc ON gc.id = a.goal_category_id');
+        $query->leftJoin('#__fitness_goal_focus AS gf ON gf.id = a.goal_focus_id');
 
         
 
@@ -159,11 +166,18 @@ class FitnessModelgoals extends JModelList {
 
     
     
-        // Filter by primary trainer
-        $primary_trainer = $this->getState('filter.primary_trainer');
-        if (is_numeric($primary_trainer)) {
-            $query->where('a.primary_trainer = '.(int) $primary_trainer);
+        // Filter by goal category
+        $goal_category = $this->getState('filter.goal_category');
+        if (is_numeric($goal_category)) {
+            $query->where('gc.id = '.(int) $goal_category);
         } 
+        
+        // Filter by goal focus
+        $goal_focus = $this->getState('filter.goal_focus');
+        if (is_numeric($goal_focus)) {
+            $query->where('gf.id = '.(int) $goal_focus);
+        } 
+
 
 
         // Filter by group
@@ -209,8 +223,8 @@ class FitnessModelgoals extends JModelList {
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
                 $query->where('( a.user_id LIKE '.$search.'
-                    OR  a.primary_trainer LIKE '.$search.' 
-                    OR  a.category_id LIKE '.$search.' 
+                    OR  gc.name LIKE '.$search.' 
+                    OR  gf.name LIKE '.$search.' 
                     OR  a.deadline LIKE '.$search.' 
                     OR  a.created LIKE '.$search.' 
                     OR  a.modified LIKE '.$search.'

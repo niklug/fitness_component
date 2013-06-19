@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goals` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 
 `user_id` INT(11)  NOT NULL ,
-`primary_trainer` INT(11)  NOT NULL ,
-`category_id` INT(11)  NOT NULL ,
+`goal_category_id` INT(11)  NOT NULL ,
+`goal_focus_id` INT(11)  NOT NULL ,
 `deadline` DATE NOT NULL ,
 `details` TEXT NOT NULL ,
 `comments` TEXT NOT NULL ,

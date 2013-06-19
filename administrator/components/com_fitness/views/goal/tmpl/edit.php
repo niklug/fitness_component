@@ -75,11 +75,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 				<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
 				<li><?php echo $this->form->getLabel('user_id'); ?>
 				<?php echo $this->form->getInput('user_id'); ?></li>
-				<li><?php echo $this->form->getLabel('primary_trainer'); ?>
-				<?php echo $this->form->getInput('primary_trainer'); ?></li>
-				<li><?php echo $this->form->getLabel('category_id'); ?>
-				<?php echo $this->form->getInput('category_id'); ?></li>
-				<li><?php echo $this->form->getLabel('deadline'); ?>
+				<li><?php echo $this->form->getLabel('goal_category_id'); ?>
+				<?php echo $this->form->getInput('goal_category_id'); ?></li>
+                                <li><?php echo $this->form->getLabel('goal_focus_id'); ?>
+				<?php echo $this->form->getInput('goal_focus_id'); ?></li>
+                        	<li><?php echo $this->form->getLabel('deadline'); ?>
 				<?php echo $this->form->getInput('deadline'); ?></li>
                                 <li><?php echo $this->form->getLabel('completed'); ?>
 				<?php echo $this->form->getInput('completed'); ?></li>

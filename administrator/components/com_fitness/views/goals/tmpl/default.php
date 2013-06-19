@@ -76,28 +76,36 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
 			</select>
 		</div>
+
+                
                 <?php
                 $db = JFactory::getDbo();
-                
-                $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+                $sql = "SELECT id, name FROM #__fitness_goal_categories`";
                 $db->setQuery($sql);
-                $primary_trainerlist = $db->loadObjectList();
-                if(isset($primary_trainerlist)) {
-                    foreach ($primary_trainerlist as $option) {
-                        $primary_trainer[] = JHTML::_('select.option', $option->value, $option->text );
-                    }
-                }
-                
+                $goal_category= $db->loadObjectList();
                 ?>
 
                 <div class='filter-select fltrt'>
-			<select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-Primary Trainer-');?></option>
-				<?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
+			<select name="filter_goal_category" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-Goal Type-');?></option>
+				<?php echo JHtml::_('select.options', $goal_category, "id", "name", $this->state->get('filter.goal_category'), true);?>
 			</select>
 		</div>
             
+                <?php
+                $db = JFactory::getDbo();
+                $sql = "SELECT id, name FROM #__fitness_goal_focus``";
+                $db->setQuery($sql);
+                $goal_focus= $db->loadObjectList();
+                ?>
 
+                <div class='filter-select fltrt'>
+			<select name="filter_goal_focus" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-Goal Focus-');?></option>
+				<?php echo JHtml::_('select.options', $goal_focus, "id", "name", $this->state->get('filter.goal_focus'), true);?>
+			</select>
+		</div>
+            
             
             
                 <?php
@@ -149,14 +157,15 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_USER_ID', 'u.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_TRAINER_ID', 'a.primary_trainer', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Goal Type', 'gc.name', $listDirn, $listOrder); ?>
+				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Goal Focus', 'gf.name', $listDirn, $listOrder); ?>
 				</th>
                                 <th class='left'>
 				<?php echo JHtml::_('grid.sort',  'User Group', 'a.user_group', $listDirn, $listOrder); ?>
 				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_CATEGORY_ID', 'a.category_id', $listDirn, $listOrder); ?>
-				</th>
+			
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_DEADLINE', 'a.deadline', $listDirn, $listOrder); ?>
 				</th>
@@ -231,17 +240,13 @@ $saveOrder	= $listOrder == 'a.ordering';
                                         ?>
 				</td>
 				<td>
-					<?php
-                                        $user = JFactory::getUser($item->primary_trainer);
-                                        
-                                        echo $user->name; 
-                                        ?>
+                                        <?php echo $item->goal_category_name; ?>
+				</td>
+                                <td>
+                                        <?php echo $item->goal_focus_name; ?>
 				</td>
                                 <td>
 					<?php echo $item->usergroup; ?>
-				</td>
-				<td>
-					<?php echo $item->category_id; ?>
 				</td>
 				<td>
 					<?php echo $item->deadline; ?>
