@@ -163,7 +163,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 				</td>
                                 <td>
-					<?php echo $item->name; ?>
+		                        <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=client.edit&id='.(int) $item->id); ?>">
+					<?php echo $this->escape($item->name); ?></a>
 				</td>
                                 <td>
 					<?php echo $item->username;?>

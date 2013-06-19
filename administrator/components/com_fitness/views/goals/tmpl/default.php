@@ -234,10 +234,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<td>
 					<?php
                                         $user = JFactory::getUser($item->user_id);
-                                        
-                                        echo $user->name; 
-                                         
                                         ?>
+					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=goal.edit&id='.(int) $item->id); ?>">
+					<?php echo $this->escape($user->name); ?></a>
+                          
 				</td>
 				<td>
                                         <?php echo $item->goal_category_name; ?>
