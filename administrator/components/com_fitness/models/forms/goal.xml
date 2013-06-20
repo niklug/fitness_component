@@ -10,7 +10,7 @@
 
        
         <field name="user_id" type="sql" class="inputbox"
-              query="SELECT #__users.id, #__users.username FROM #__users INNER JOIN #__fitness_clients ON #__fitness_clients.user_id=#__users.id"
+              query="SELECT #__users.id, #__users.username FROM #__users INNER JOIN #__fitness_clients ON #__fitness_clients.user_id=#__users.id WHERE #__fitness_clients.state='1'"
               key_field="id"
               value_field="username"
               label="COM_FITNESS_GOALS_FORM_LBL_GOAL_USER_ID"

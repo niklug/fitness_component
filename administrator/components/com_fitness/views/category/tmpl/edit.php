@@ -38,7 +38,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
         js = jQuery.noConflict();
         js(document).ready(function(){
-            
+           js("#calendarcolor").colorselect({ title: i18n.dcmvcal.color, index: cv, hiddenid: "colorvalue",colors:<?php echo json_encode($palette);?>,paletteDefault:"<?php echo $_GET["paletteDefault"];?>" });
 
             Joomla.submitbutton = function(task)
             {

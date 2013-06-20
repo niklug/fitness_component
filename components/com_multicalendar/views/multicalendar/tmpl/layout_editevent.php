@@ -441,7 +441,15 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
             }  
   
   
+            /** set up appointment color
+             *  npkorban
+             */
+            $('#Subject').change(function(){
+               var id = $(this).find(':selected')[0].id;
+               $('#colorvalue').val(id);
+            })
         });  
+
     </script>  
 <style type="text/css">  
   
@@ -537,15 +545,14 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
             <hr>
             <label>  
             <span id="s_subject">*Subject:</span>
-            <div id="calendarcolor">
-            </div>  
-            <?php  
-            if (isset($dc_subjects) && is_array($dc_subjects))
+           <?php  
+
+            if (isset($appointments[0]) && is_array($appointments[0]))
             {  
-                echo '<select id="Subject" name="Subject" class="required safe inputtext" >';
-                for ($i=0;$i<count($dc_subjects);$i++)
+                echo '<select id="Subject" name="Subject" class="required safe inputtext" ">';
+                for ($i=0;$i<count($appointments[0]);$i++)
                 {  
-                    echo '<option value="'.($dc_subjects[$i]).'" '.((isset($event) && (trim($event->title) ==trim($dc_subjects[$i])))?"selected":"").'>'.$dc_subjects[$i].'</option>';
+                    echo '<option id="' . $appointments[1][$i] . '" value="'.($appointments[0][$i]).'" '.((isset($event) && (trim($event->title) ==trim($appointments[0][$i])))?"selected":"").'>'.$appointments[0][$i].'</option>';
                 }  
                 echo '</select>';
             }  

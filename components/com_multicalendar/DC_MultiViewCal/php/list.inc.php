@@ -19,17 +19,19 @@ function getLocations() {
  */
 function getAppointments() { 
     $db	= & JFactory::getDBO();
-    $query = "SELECT name FROM #__fitness_categories";
+    $query = "SELECT name, color FROM #__fitness_categories";
     $db->setQuery($query);
-    $appointment = $db->loadResultArray();
+    $appointment[0] = $db->loadResultArray(0);
+    $appointment[1] = $db->loadResultArray(1);
     return $appointment;
 }
 
-
 //$dc_subjects = array("title 1","title 2","title 3","title 4");
 //$dc_locations = array("location 1","location 2","location 3","location 4");
-$dc_subjects = getAppointments();
+//$dc_subjects = getAppointments();
 $dc_locations = getLocations();
+
+$appointments = getAppointments();
 
 define("JC_JQUERY_MV",true);
 global $JC_JQUERY_SPECIAL ;

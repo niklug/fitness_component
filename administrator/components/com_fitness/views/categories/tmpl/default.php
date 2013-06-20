@@ -121,7 +121,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php endif; ?>
 				</td>
 				<td>
-					<?php echo $item->color; ?>
+					<div style="width:100px; height:15px;background-color:<?php echo $item->color; ?>;" ></div>
 				</td>
 
 
