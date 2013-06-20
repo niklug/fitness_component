@@ -1,0 +1,78 @@
+.multicalendar tr,.multicalendar td,.multicalendar th{border:0;text-align:left;padding:0px;}
+.multicalendar table [class*=span],.row-fluid .multicalendar table [class*=span] {display: table-row;}
+.multicalendar .mv-dayname,.multicalendar .wk-dayname{text-align:center;}
+.multicalendar .rb-i {overflow:hidden;color:white;white-space:nowrap;width:100%}
+.multicalendar .t-title {}
+.multicalendar .t-loc {display:none}
+.multicalendar .t-desc {display:none}
+.multicalendar td.specialday {display: none;}
+.multicalendar .st-more {color:#000;}
+.multicalendar .uEdition {text-decoration:underline;}
+/* start alert style */
+#popup_container {font-size:12px;min-width: 300px; /* Dialog will be no smaller than this */_width:320px;max-width: 600px; /* Dialog will wrap after this width */background: #fff;border: solid 1px #d8d8d8;color: #000;}
+#ctl, #cbl, #ctr, #cbr {display:none;}
+#popup_title {font-size:12px;font-weight: bold;text-align:left;line-height: 1.9em;color: #333;border-bottom: solid 1px #d8d8d8;cursor: default;padding:0 0 0 8px;margin: 0em;}
+#popup_content {background: 16px 16px no-repeat;padding: 12px;margin: 0em;}
+#popup_message {padding-left: 48px;}
+#popup_panel {text-align: center;margin: 1em 0em 0em 1em;}
+/* end alert style */
+.multicalendar .calmain,.multicalendar .ctoolbar,.multicalendar .infocontainer {margin: 0;font-size: 12px;font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;padding: 0;height: 100%;width:100%;}
+.multicalendar .calmain div,.multicalendar .calmain span,.multicalendar .calmain td {font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;}
+.multicalendar.calendaredition .ui-datepicker{font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;font-size: 12px;}
+.multicalendar .infocontainer input {border: solid 1px #3C7FB1; font-size: 12px;height: 15px !important;}
+.multicalendar .infocontainer input[type='checkbox'] {border: none;}
+.multicalendar .infocontainer textarea {border: solid 1px #3C7FB1;overflow:auto;}
+/* JQuery Validation */
+.multicalendar input.cusErrorPanel,.multicalendar cusErrorPanel.cusErrorPanel,.multicalendar textarea.cusErrorPanel {border:solid 1px red;}
+.multicalendar div.cusErrorPanel {z-index: auto;position:absolute;width: 276px;height: 35px;overflow: hidden;text-indent: 5px;line-height: 40px;font-size: 12px;font-family: Arial;color:#000000;background: url(images/tooltop.gif) no-repeat left top;opacity:0.9;filter: alpha(opacity=90);}
+.multicalendar .infocontainer {margin:2px;padding:4px;}
+.multicalendar .infocontainer .inputtext { width:400px;}
+.multicalendar .infocontainer .date {width:70px; font-size: 12px;}
+.multicalendar .infocontainer .fform {margin:0px;}
+.multicalendar .infocontainer .fform label {display:block;margin-top:2px;padding:2px;vertical-align:top;}
+.multicalendar .infocontainer .fform label.checkp {display:inline;}
+.multicalendar .infocontainer .fform label span {font-weight:bold;display:block;}
+.multicalendar .infocontainer .fform label span.inl{display:inline;}
+.multicalendar div.calmain {position: relative;}
+.multicalendar div.ptogtitle {position: absolute;z-index:100;top: 0px;right: 3px;height: 18px;padding: 1px 2px 1px 2px;font-weight: normal;}
+.multicalendar div.loadicon { background:#c44;color:#fff;}
+.multicalendar div.loaderror {padding: 1px 4px 1px 4px;background:#fad163;}
+.multicalendar div.ctoolbar {OVERFLOW: hidden;POSITION: relative;margin-bottom:5px;}
+.multicalendar div.ctoolbar div.fbutton {PADDING: 1px;DISPLAY: block;FLOAT: left;CURSOR: pointer;HEIGHT: 22px;margin-left:1px;}
+.multicalendar div.ctoolbar div.fbutton  div {float: left;padding: 2px 3px;}
+.multicalendar div.ctoolbar div.fbutton span {float: left;display: block;}
+.multicalendar div.ctoolbar div.btnseparator {float: left;height: 100%;margin: 3px;}
+.multicalendar div.ctoolbar div.fshowdatep {padding:1px;DISPLAY: block;FLOAT: left;CURSOR:default;HEIGHT: 22px;}
+.multicalendar div.ctoolbar div.fshowdatep  div {float: left;padding: 2px 3px;}
+.multicalendar div.ctoolbar div.fshowdatep span {float: left;display: block;}
+.mv_dlg .bubbletime{font-weight:bold}
+.ui-dialog{ position: absolute;overflow:visible;color:#000}
+.multicalendar .ui-datepicker { display:block }
+
+
+.ui-icon-closethick {
+    background-image: url(images/close.png) !important;
+    background-position: left top !important;
+    margin: 0 !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close, .ui-icon-closethick {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    background: none !important;
+    border: none !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close, .ui-dialog .ui-dialog-titlebar-close:hover {
+    padding: 0 !important;
+}
+.mv_dlg.ui-dialog .ui-dialog-titlebar-close span.ui-button-text{display:none}
+#editEventContainer,#bbit-cal-buddle,#bbit-cs-buddle,.mv_dlg_nmonth{display:none}
+
+#appointment_title{
+    margin: 0;
+    padding: 0 0 0 7px;
+}
