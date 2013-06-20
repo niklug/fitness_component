@@ -446,8 +446,87 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
              */
             $('#Subject').change(function(){
                var id = $(this).find(':selected')[0].id;
+               var catid = $(this).find(':selected').data('catid');
                $('#colorvalue').val(id);
-            })
+               // get session focus by category (appointment)
+               setupSessionType(catid);
+            });
+            
+            
+            $('#session_type').change(function(){
+                var catid = $('#Subject').find(':selected').data('catid');
+                var session_type = $(this).find(':selected').data('session_type');
+                setupSessionFocus(catid, session_type);
+
+            });
+            
+            function setupSessionTypeOnLoad() {
+               var id = $('#Subject').find(':selected')[0].id;
+               var catid = $('#Subject').find(':selected').data('catid');
+               $('#colorvalue').val(id);
+               // get session focus by category (appointment)
+               setupSessionType(catid);
+            }
+            setupSessionTypeOnLoad();
+            /**
+             * 
+             * @param {type} catid
+             * @returns {undefined}
+             */
+            function setupSessionType(catid) {
+               var url = DATA_FEED_URL+ "&method=get_session_type";
+               $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       catid : catid,
+                    },
+                    dataType : 'json',
+                    success : function(message) {
+                        $('#session_type').html('');
+                        $.each(message, function(index, value) {
+                            $('#session_type').append('<option data-session_type="' + index + '" value="' + value + '">' + value + '</option>');
+                        });
+                        var session_type = $('#session_type').find(':selected').data('session_type');
+                        setupSessionFocus(catid, session_type);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
+                    }
+                });
+            }
+            
+             /**
+             * 
+             * @param {type} catid
+             * @returns {undefined}
+             */
+            function setupSessionFocus(catid, session_type) {
+               var url = DATA_FEED_URL+ "&method=get_session_focus";
+               $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       catid : catid,
+                       session_type :session_type
+                    },
+                    dataType : 'json',
+                    success : function(message) {
+                        $('#session_focus').html('');
+                        $.each(message, function(index, value) {
+                            $('#session_focus').append('<option value="' + value + '">' + value + '</option>');
+                        });
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
+                    }
+                });
+            }
+            
+  
+            
         });  
 
     </script>  
@@ -543,47 +622,79 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
           </label>  
             
             <hr>
-            <label>  
-            <span id="s_subject">*Subject:</span>
-           <?php  
+                
+                <table border="0">
+                    <tbody>
+                        <tr>
+                            <td>Appointment</td>
+                            <td>
+                                <?php
+                                if (isset($appointments[0])) {
+                                    echo '<select style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
+                                    for ($i = 0; $i < count($appointments[0]); $i++) {
+                                        echo '<option data-catid="' . $appointments[2][$i] . '" id="' . $appointments[1][$i] . '" value="' . ($appointments[0][$i]) . '" ' . ((isset($event) && (trim($event->title) == trim($appointments[0][$i]))) ? "selected" : "") . '>' . $appointments[0][$i] . '</option>';
+                                    }
+                                    echo '</select>';
+                                }
+                                
+                                ?>  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Session Type</td>
+                            <td> <?php
+                                if (isset($dc_locations)) {
+                                    echo '<select  id="session_type" name="session_type" class="required safe inputtext" >';
+                                    for ($i = 0; $i < count($dc_locations); $i++) {
+                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
+                                    }
+                                    echo '</select>';
+                                }
+                               
+                                ?>  </td>
+                        </tr>
+                        <tr>
+                            <td>Session Focus</td>
+                            <td> <?php
+                                if (isset($dc_locations)) {
+                                    echo '<select  id="session_focus" name="session_focus" class="required safe inputtext" >';
+                                    for ($i = 0; $i < count($dc_locations); $i++) {
+                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
+                                    }
+                                    echo '</select>';
+                                }
+                               
+                                ?>  </td>
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>Location</td>
+                            <td> <?php
+                                if (isset($dc_locations)) {
+                                    echo '<select  id="Location" name="Location" class="required safe inputtext" >';
+                                    for ($i = 0; $i < count($dc_locations); $i++) {
+                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
+                                    }
+                                    echo '</select>';
+                                }
+                               
+                                ?>  </td>
+                        </tr>
+             
+                        
 
-            if (isset($appointments[0]) && is_array($appointments[0]))
-            {  
-                echo '<select id="Subject" name="Subject" class="required safe inputtext" ">';
-                for ($i=0;$i<count($appointments[0]);$i++)
-                {  
-                    echo '<option id="' . $appointments[1][$i] . '" value="'.($appointments[0][$i]).'" '.((isset($event) && (trim($event->title) ==trim($appointments[0][$i])))?"selected":"").'>'.$appointments[0][$i].'</option>';
-                }  
-                echo '</select>';
-            }  
-            else  
-                echo '<input MaxLength="200" class="required safe inputtext" id="Subject" name="Subject" type="text" value="'.((isset($event))?$event->title:"").'" />';
-            ?>  
+                    </tbody>
+                </table>
+
+           
+
   
-            <input id="colorvalue" name="colorvalue" type="hidden" value="<?php echo isset($event)?$event->color:"" ?>" />
-          </label>  
+           <input id="colorvalue" name="colorvalue" type="hidden" value="<?php echo isset($event)?$event->color:"" ?>" />
           <input type="hidden" id="rrule" name="rrule" value="<?php echo $event->rrule?>" size=55 />
           <input type="hidden" id="rruleType" name="rruleType" value="" size=55 />
-          
-          
-          <label>  
-            <span id="s_location">Location:</span>
-            <?php  
-            if (isset($dc_locations) && is_array($dc_locations))
-            {  
-                echo '<select id="Location" name="Location" class="required safe inputtext" >';
-                for ($i=0;$i<count($dc_locations);$i++)
-                {  
-                    echo '<option value="'.($dc_locations[$i]).'" '.((isset($event) && ($event->location ==trim($dc_locations[$i])))?"selected":"").'>'.$dc_locations[$i].'</option>';
-                }  
-                echo '</select>';
-            }  
-            else  
-                echo '<input MaxLength="200" id="Location" name="Location" class="inputtext"  type="text" value="'.((isset($event))?$event->location:"").'" />';
-            ?>  
-   
-          </label>  
-          <label>  
+           
+            <label>  
             <span id="s_remark">Remark:</span>
 <textarea cols="20" id="Description" name="Description" rows="2" >
 <?php echo isset($event)?$event->description:""; ?>

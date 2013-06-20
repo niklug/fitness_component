@@ -50,6 +50,14 @@ switch ($method) {
     case "remove":
         $ret = removeCalendar( JRequest::getVar("calendarId"),JRequest::getVar("rruleType"));
         break;
+    case "get_session_type":
+        
+            get_session_type();
+        break;
+    case "get_session_focus":
+        
+            get_session_focus();
+        break;
     case "adddetails":
 
         $st = JRequest::getVar("stpartdatelast") . " " . JRequest::getVar("stparttimelast");
@@ -455,13 +463,39 @@ function removeCalendar($id,$rruleType){
   return $ret;
 }
 
+/** get appointment type by category
+ * npkorban
+ * @param type $catid
+*/
+function  get_session_type() {
+    $catid = JRequest::getVar("catid");
+    $db = & JFactory::getDBO();
+    $query = "SELECT id, name FROM #__fitness_session_type WHERE category_id='$catid' AND state='1'";
+    $db->setQuery($query);
+    $id = $db->loadResultArray(0);
+    $name = $db->loadResultArray(1);
+    $result = array_combine($id, $name);
+    echo  json_encode($result);
+    die();
+}
 
 
-
-
-
-
-
+/** get appointment type by category
+ * npkorban
+ * @param type $catid
+*/
+function  get_session_focus() {
+    $catid = JRequest::getVar("catid");
+    $session_type = JRequest::getVar("session_type");
+    $db = & JFactory::getDBO();
+    $query = "SELECT id, name FROM #__fitness_session_focus WHERE category_id='$catid' AND session_type_id='$session_type' AND state='1'";
+    $db->setQuery($query);
+    $id = $db->loadResultArray(0);
+    $name = $db->loadResultArray(1);
+    $result = array_combine($id, $name);
+    echo  json_encode($result);
+    die();
+}
 
 
 jexit();

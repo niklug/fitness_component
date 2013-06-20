@@ -19,10 +19,11 @@ function getLocations() {
  */
 function getAppointments() { 
     $db	= & JFactory::getDBO();
-    $query = "SELECT name, color FROM #__fitness_categories";
+    $query = "SELECT name, color, id FROM #__fitness_categories";
     $db->setQuery($query);
     $appointment[0] = $db->loadResultArray(0);
     $appointment[1] = $db->loadResultArray(1);
+    $appointment[2] = $db->loadResultArray(2);
     return $appointment;
 }
 

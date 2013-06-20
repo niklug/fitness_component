@@ -26,7 +26,7 @@
 .multicalendar input.cusErrorPanel,.multicalendar cusErrorPanel.cusErrorPanel,.multicalendar textarea.cusErrorPanel {border:solid 1px red;}
 .multicalendar div.cusErrorPanel {z-index: auto;position:absolute;width: 276px;height: 35px;overflow: hidden;text-indent: 5px;line-height: 40px;font-size: 12px;font-family: Arial;color:#000000;background: url(images/tooltop.gif) no-repeat left top;opacity:0.9;filter: alpha(opacity=90);}
 .multicalendar .infocontainer {margin:2px;padding:4px;}
-.multicalendar .infocontainer .inputtext { width:400px;}
+.multicalendar .infocontainer .inputtext {    font-size: 12px;  width: 200px;}
 .multicalendar .infocontainer .date {width:70px; font-size: 12px;}
 .multicalendar .infocontainer .fform {margin:0px;}
 .multicalendar .infocontainer .fform label {display:block;margin-top:2px;padding:2px;vertical-align:top;}
@@ -76,3 +76,5 @@
     margin: 0;
     padding: 0 0 0 7px;
 }
+
+
