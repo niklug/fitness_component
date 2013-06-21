@@ -41,6 +41,20 @@ CREATE TABLE IF NOT EXISTS `#__fitness_categories` (
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
+
+
+INSERT INTO `#__fitness_categories` (`id`, `name`, `color`, `state`) VALUES
+(1, 'Personal Training', '#00BF32', 1),
+(2, 'Semi-Private Training ', '#007F01', 1),
+(3, 'Resistance Workout ', '#0070FF', 1),
+(4, 'Cardio Workout', '#E94E1B', 1),
+(5, 'Assessment', '#E6007E', 1),
+(6, 'Consultation', '#FFE500', 1),
+(7, 'Special Event', '#E30613', 1),
+(8, 'Available', '#7FFF8E', 1),
+(9, 'Unavailable', '#D1D1D1', 1);
+
+
 CREATE TABLE IF NOT EXISTS `#__fitness_session_type` (
 `id` int(11)  NOT NULL AUTO_INCREMENT,
 

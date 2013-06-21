@@ -58,6 +58,8 @@ switch ($method) {
         
             get_session_focus();
         break;
+    case "generateFormHtml":
+        generateFormHtml();
     case "adddetails":
 
         $st = JRequest::getVar("stpartdatelast") . " " . JRequest::getVar("stparttimelast");
@@ -497,6 +499,121 @@ function  get_session_focus() {
     die();
 }
 
+
+
+
+
+
+/* Appointments forms */
+function generateFormHtml() {
+    $form_id = JRequest::getVar("form_id");
+    
+    $formInstanse = new FormFactory();
+    $formType = $formInstanse->getForm($form_id);
+    $formHtml = $formType->generateHtml();
+    echo $formHtml;
+    die();
+}
+
+abstract class AppointmentForm {
+    abstract function generateHtml();
+}
+
+
+class PersonalTrainingForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class SemiPrivateForm {
+    public function generateHtml() {
+        // top
+        include( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/top_html.inc.php' );
+    }
+}
+
+
+class ResistanceWorkoutForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class CardioWorkoutForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class AssesstmentForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class ConsultationForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class SpecialEventForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class AvailableForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class UnAvailableForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+
+class FormFactory {
+    public function getForm($formId) {
+        switch ($formId) {
+            case 1:
+                return new PersonalTrainingForm();
+                break;
+            case 2:
+                return new SemiPrivateForm();
+                break;
+            case 3:
+                return new ResistanceWorkoutForm();
+                break;
+            case 4:
+                return new CardioWorkoutForm();
+                break;
+            case 5:
+                return new AssesstmentForm();
+                break;
+            case 6:
+                return new ConsultationForm();
+                break;
+            case 7:
+                return new SpecialEventForm();
+                break;
+            case 8:
+                return new AvailableForm();
+                break;
+            case 9:
+                return new UnAvailableForm();
+                break;
+
+            default:
+                return new PersonalTrainingForm();
+                break;
+        }
+    }
+}
 
 jexit();
 ?>

@@ -448,6 +448,8 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                var id = $(this).find(':selected')[0].id;
                var catid = $(this).find(':selected').data('catid');
                $('#colorvalue').val(id);
+               
+               generateFormHtml(catid);
                // get session focus by category (appointment)
                setupSessionType(catid);
             });
@@ -525,7 +527,38 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                 });
             }
             
-  
+            
+
+            /********************/ 
+            /**
+            * 
+
+             * @param {type} form_id
+             * @returns {undefined}             */
+            function generateFormHtml(form_id) {
+                //window.parent.$jc('#editEvent').dialog('close');
+                //window.parent.$jc('#editEvent').dialog('open');
+               
+               
+            /*
+                 var url = DATA_FEED_URL+ "&method=generateFormHtml";
+                 $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       form_id : form_id
+                    },
+                    dataType : 'text',
+                    success : function(message) {
+                        //$(".multicalendar").html(message);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
+                    }
+                });
+                */
+            }
             
         });  
 
@@ -797,7 +830,7 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
         <br />  
     </div>  
  
-      
+    <a id="bbit-cs-editLink" href=""></a>  
   </body>  
 </html>  
 <script>  
