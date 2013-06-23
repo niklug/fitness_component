@@ -335,11 +335,11 @@ function initMultiViewCal(container,calendarId,config)
                     
                     function showEditEvent(url)
                     {   
-                        var width = 600;
+                        var width = 620;
                         var height = 480;
                         try {
                         $jc("#editEvent").remove();
-                        var content = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="border:none;width:550px;height:'+(height-50)+'px" src="'+url+'" border="0" scrolling="no">';
+                        var content = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="border:none;width:600px;height:'+(height-50)+'px" src="'+url+'" border="0" scrolling="no">';
                         $jc("#editEventContainer").append("<div id=\"editEvent\" >"+content+"</div>");                            
                         $jc("#editEvent").dialog({
                             width: width,

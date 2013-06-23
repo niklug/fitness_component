@@ -485,9 +485,15 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                     },
                     dataType : 'json',
                     success : function(message) {
+                        var session_type = '<?php echo $event->session_type; ?>';
                         $('#session_type').html('');
                         $.each(message, function(index, value) {
-                            $('#session_type').append('<option data-session_type="' + index + '" value="' + value + '">' + value + '</option>');
+                            if(session_type == value) {
+                                var selected = 'selected';
+                            } else {
+                                selected = '';
+                            }
+                            $('#session_type').append('<option ' + selected + ' data-session_type="' + index + '" value="' + value + '">' + value + '</option>');
                         });
                         var session_type = $('#session_type').find(':selected').data('session_type');
                         setupSessionFocus(catid, session_type);
@@ -515,9 +521,15 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                     },
                     dataType : 'json',
                     success : function(message) {
+                        var session_focus = '<?php echo $event->session_focus; ?>';
                         $('#session_focus').html('');
                         $.each(message, function(index, value) {
-                            $('#session_focus').append('<option value="' + value + '">' + value + '</option>');
+                            if(session_focus == value) {
+                                var selected = 'selected';
+                            } else {
+                                selected = '';
+                            }
+                            $('#session_focus').append('<option ' + selected + ' value="' + value + '">' + value + '</option>');
                         });
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
@@ -528,6 +540,56 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
             }
             
             
+            
+           /** client onchange select
+             *  npkorban
+             */
+            $('#client').change(function(){
+               var client_id = $(this).find(':selected')[0].id;
+               setTrainerSelect(client_id);
+            });
+            
+            /** client onload select
+             *  npkorban
+             */
+            function setTrainerSelectOnLoad() {
+               var client_id = '<?php echo $event->client_id; ?>';
+               setTrainerSelect(client_id);
+            }
+            setTrainerSelectOnLoad();
+           /** client select
+             *  npkorban
+             */
+            function setTrainerSelect(client_id) {
+               var url = DATA_FEED_URL+ "&method=get_trainers";
+                $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       client_id : client_id
+                    },
+                    dataType : 'json',
+                    success : function(message) {
+                        $('#trainer').html('');
+                        $.each(message, function(index, value) {
+                            var client_id = '<?php echo $event->trainer_id; ?>';
+                            if(client_id == index) {
+                               var selected = 'selected';
+                            } else {
+                                selected = '';
+                            }
+                            if(index) {
+                                $('#trainer').append('<option ' + selected + ' value="' + index + '">' + value + '</option>');
+                            }
+                        });
+                     
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
+                    }
+                });
+            }
 
             /********************/ 
             /**
@@ -594,13 +656,7 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
     <div class="infocontainer ui-widget-content" >
         <hr>
         <form action="<?php echo $datafeed?>&calid=<?php echo $_GET["calid"];?>&month_index=<?php echo JRequest::getVar("month_index");?>&method=adddetails<?php echo isset($event)?"&id=".$event->id:""; ?>" class="fform" id="fmEdit" method="post">
-          <label>  
-              <div style="float:left;" > Start Date </div>
-              <div style="float:left;margin-left:50px;"> Start Time </div>
-              <div style="float:left;margin-left:16px;"> End Date </div>
-              <div style="display: inline;float: none;margin-left: 54px;"> End Time </div>
-            <div> 
-                
+               
               <?php if(isset($event) && ($event->rrule=="")){  //no recurrent events
                   $sarr = explode(" ", php2JsTime(mySql2PhpTime($event->starttime)));
                   $earr = explode(" ", php2JsTime(mySql2PhpTime($event->endtime)));
@@ -637,6 +693,13 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                   $etpartdate = $earr[1]."/".$earr[0]."/".$earr[2];
               }  
               ?>  
+            
+            <label>  
+              <div style="float:left;" > Start Date </div>
+              <div style="float:left;margin-left:50px;<?php if($stparttime == '00:00') echo 'visibility:hidden;'?>"> Start Time </div>
+              <div style="float:left;margin-left:16px;"> End Date </div>
+              <div style="display: inline;float: none;margin-left: 54px;<?php if($stparttime == '00:00') echo 'visibility:hidden;'?>"> End Time </div>
+            <div> 
               <input MaxLength="10" class="required date" id="stpartdate" name="stpartdate" type="text" value="<?php echo $stpartdate; ?>" />
               <input MaxLength="7" class="required time" id="stparttime" name="stparttime" style="width:52px;" type="text" value="<?php echo $stparttime; ?>" /><span id="s_to1" class="inl">&nbsp;&nbsp;&nbsp;</span>
               <input MaxLength="10" class="required date" id="etpartdate" name="etpartdate" type="text" value="<?php echo $etpartdate; ?>" />
@@ -656,71 +719,88 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
             
             <hr>
                 
-                <table border="0">
+                  <table border="0">
                     <tbody>
                         <tr>
-                            <td>Appointment</td>
                             <td>
-                                <?php
-                                if (isset($appointments[0])) {
-                                    echo '<select style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
-                                    for ($i = 0; $i < count($appointments[0]); $i++) {
-                                        echo '<option data-catid="' . $appointments[2][$i] . '" id="' . $appointments[1][$i] . '" value="' . ($appointments[0][$i]) . '" ' . ((isset($event) && (trim($event->title) == trim($appointments[0][$i]))) ? "selected" : "") . '>' . $appointments[0][$i] . '</option>';
-                                    }
-                                    echo '</select>';
-                                }
-                                
-                                ?>  
+                                <table border="0"  style="margin-right:25px;">
+                                    <tbody>
+                                        <tr>
+                                            <td>Appointment:</td>
+                                            <td>
+                                                <?php
+                                                if (isset($appointments[0])) {
+                                                    echo '<select style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
+                                                    for ($i = 0; $i < count($appointments[0]); $i++) {
+                                                        echo '<option data-catid="' . $appointments[2][$i] . '" id="' . $appointments[1][$i] . '" value="' . ($appointments[0][$i]) . '" ' . ((isset($event) && (trim($event->title) == trim($appointments[0][$i]))) ? "selected" : "") . '>' . $appointments[0][$i] . '</option>';
+                                                    }
+                                                    echo '</select>';
+                                                }
+
+                                                ?>  
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Session Type:</td>
+                                            <td> 
+                                                <select  id="session_type" name="session_type" class="required safe inputtext" ></select> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Session Focus:</td>
+                                            <td> 
+                                                <select  id="session_focus" name="session_focus" class="required safe inputtext" ></select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            
+                            
+                            <td>
+                                <table border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>Client:</td>
+                                            <td>
+                                                <?php
+                                                if (isset($clients[0]->name)) {
+                                                    echo '<select style="float:left;" id="client" name="client_id" class="required safe inputtext" ">';
+                                                    echo '<option> -Select-</option>';
+                                                    for ($i = 0; $i < count( $clients); $i++) {
+                                                        echo '<option " id="' .  $clients[$i]->user_id . '" value="' . ( $clients[$i]->user_id) . '" ' . ((isset($event) && (trim($event->client_id) == trim( $clients[$i]->user_id))) ? "selected" : "") . '>' .  $clients[$i]->name . '</option>';
+                                                    }
+                                                    echo '</select>';
+                                                }
+
+                                                ?>  
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Trainer:</td>
+                                            <td>
+                                                <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Location:</td>
+                                            <td> <?php
+                                                if (isset($dc_locations)) {
+                                                    echo '<select  id="Location" name="Location" class="required safe inputtext" >';
+                                                    for ($i = 0; $i < count($dc_locations); $i++) {
+                                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
+                                                    }
+                                                    echo '</select>';
+                                                }
+
+                                                ?>  </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </td>
                         </tr>
-                        <tr>
-                            <td>Session Type</td>
-                            <td> <?php
-                                if (isset($dc_locations)) {
-                                    echo '<select  id="session_type" name="session_type" class="required safe inputtext" >';
-                                    for ($i = 0; $i < count($dc_locations); $i++) {
-                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
-                                    }
-                                    echo '</select>';
-                                }
-                               
-                                ?>  </td>
-                        </tr>
-                        <tr>
-                            <td>Session Focus</td>
-                            <td> <?php
-                                if (isset($dc_locations)) {
-                                    echo '<select  id="session_focus" name="session_focus" class="required safe inputtext" >';
-                                    for ($i = 0; $i < count($dc_locations); $i++) {
-                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
-                                    }
-                                    echo '</select>';
-                                }
-                               
-                                ?>  </td>
-                        </tr>
-                        
-                        
-                        <tr>
-                            <td>Location</td>
-                            <td> <?php
-                                if (isset($dc_locations)) {
-                                    echo '<select  id="Location" name="Location" class="required safe inputtext" >';
-                                    for ($i = 0; $i < count($dc_locations); $i++) {
-                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
-                                    }
-                                    echo '</select>';
-                                }
-                               
-                                ?>  </td>
-                        </tr>
-             
-                        
-
                     </tbody>
-                </table>
-
-           
+                  </table>
 
   
            <input id="colorvalue" name="colorvalue" type="hidden" value="<?php echo isset($event)?$event->color:"" ?>" />
@@ -728,7 +808,7 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
           <input type="hidden" id="rruleType" name="rruleType" value="" size=55 />
            
             <label>  
-            <span id="s_remark">Remark:</span>
+            <span id="s_remark1">Details / Instructions</span>
 <textarea cols="20" id="Description" name="Description" rows="2" >
 <?php echo isset($event)?$event->description:""; ?>
 </textarea>  

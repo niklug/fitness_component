@@ -51,12 +51,13 @@ switch ($method) {
         $ret = removeCalendar( JRequest::getVar("calendarId"),JRequest::getVar("rruleType"));
         break;
     case "get_session_type":
-        
             get_session_type();
         break;
     case "get_session_focus":
-        
             get_session_focus();
+        break;
+    case "get_trainers":
+            get_trainers();
         break;
     case "generateFormHtml":
         generateFormHtml();
@@ -66,9 +67,23 @@ switch ($method) {
         $et = JRequest::getVar("etpartdatelast") . " " . JRequest::getVar("etparttimelast");
         if(JRequest::getVar("id")!=""){
 
-            $ret = updateDetailedCalendar(JRequest::getVar("id"), $st, $et,
-                JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent")==1)?1:0, JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
-                JRequest::getVar("Location"), JRequest::getVar("colorvalue"), JRequest::getVar("rrule"),JRequest::getVar("rruleType"), JRequest::getVar("timezone"));
+            $ret = updateDetailedCalendar(
+                        JRequest::getVar("id"),
+                        $st,
+                        $et,
+                        JRequest::getVar("Subject"),
+                        (JRequest::getVar("IsAllDayEvent")==1)?1:0, 
+                        JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                        JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                        JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                        JRequest::getVar("client_id"),
+                        JRequest::getVar("trainer_id"),
+                        JRequest::getVar("Location"), 
+                        JRequest::getVar("colorvalue"), 
+                        JRequest::getVar("rrule"),
+                        JRequest::getVar("rruleType"),
+                        JRequest::getVar("timezone")
+                    );
         }else{
 
             $ret = addDetailedCalendar($calid, $st, $et,JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent")==1)?1:0, JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
@@ -302,7 +317,24 @@ function updateCalendar($id, $st, $et){
   return $ret;
 }
 
-function updateDetailedCalendar($id, $st, $et, $sub, $ade, $dscr, $loc, $color, $rrule,$rruleType,$tz){
+function updateDetailedCalendar(
+        $id,
+        $st, 
+        $et, 
+        $sub, 
+        $ade, 
+        $dscr,
+        $session_type,
+        $session_focus,
+        $client_id,
+        $trainer_id,
+        $loc, 
+        $color,
+        $rrule,
+        $rruleType,
+        $tz
+        ){
+ 
   $ret = array();
   $db 	=& JFactory::getDBO();
 
@@ -321,6 +353,10 @@ function updateDetailedCalendar($id, $st, $et, $sub, $ade, $dscr, $loc, $color, 
               . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
               . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
               . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
+              . " `session_type`=" . $db->Quote($session_type) . ", "
+              . " `session_focus`=" . $db->Quote($session_focus) . ", "
+              . " `client_id`=" . $db->Quote($client_id) . ", "
+              . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
               . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
               . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
               . " `rrule`=" . $db->Quote($rrule) . " "
@@ -367,6 +403,10 @@ function updateDetailedCalendar($id, $st, $et, $sub, $ade, $dscr, $loc, $color, 
               . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
               . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
               . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
+              . " `session_type`=" . $db->Quote($session_type) . ", "
+              . " `session_focus`=" . $db->Quote($session_focus) . ", "
+              . " `client_id`=" . $db->Quote($client_id) . ", "
+              . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
               . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
               . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
               . " `rrule`=" . $db->Quote($rrule) . " "
@@ -498,6 +538,31 @@ function  get_session_focus() {
     echo  json_encode($result);
     die();
 }
+
+/** get appointment type by category
+ * npkorban
+ * @param type $catid
+*/
+function  get_trainers() {
+    $client_id = JRequest::getVar("client_id");
+    $db = & JFactory::getDBO();
+    $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
+    $db->setQuery($query);
+    $primary_trainer= $db->loadResultArray(0);
+    $other_trainers = $db->loadResultArray(1);
+    $other_trainers = explode(',', $other_trainers[0]);
+    $all_trainers_id = array_unique(array_merge($primary_trainer, $other_trainers));
+    
+    foreach ($all_trainers_id as $user_id) {
+        $user = &JFactory::getUser($user_id);
+        $all_trainers_name[] = $user->name;
+    }
+    
+    $result = array_combine($all_trainers_id, $all_trainers_name);
+    echo  json_encode($result);
+    die();
+}
+
 
 
 

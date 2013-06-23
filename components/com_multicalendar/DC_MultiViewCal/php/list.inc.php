@@ -1,4 +1,5 @@
 <?php
+
 /** get locations from fitness component
  * npkorban
  * 
@@ -11,6 +12,21 @@ function getLocations() {
     $locations = $db->loadResultArray();
     return $locations;
 }
+
+/** get clients from fitness component
+ * npkorban
+ * 
+ * @return type
+ */
+function getClients() { 
+    $db	= & JFactory::getDBO();
+    $query = "SELECT #__fitness_clients.user_id, #__users.name FROM #__fitness_clients LEFT JOIN #__users ON #__fitness_clients.user_id = #__users.id";
+    $db->setQuery($query);
+    $clients = $db->loadObjectList();
+    return $clients;
+}
+
+
 
 /** get Appointment (category) from fitness component
  * npkorban
@@ -27,12 +43,16 @@ function getAppointments() {
     return $appointment;
 }
 
+
+
 //$dc_subjects = array("title 1","title 2","title 3","title 4");
 //$dc_locations = array("location 1","location 2","location 3","location 4");
 //$dc_subjects = getAppointments();
 $dc_locations = getLocations();
 
 $appointments = getAppointments();
+
+$clients = getClients();
 
 define("JC_JQUERY_MV",true);
 global $JC_JQUERY_SPECIAL ;
