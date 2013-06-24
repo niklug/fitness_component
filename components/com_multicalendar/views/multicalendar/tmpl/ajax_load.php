@@ -59,6 +59,9 @@ switch ($method) {
     case "get_trainers":
             get_trainers();
         break;
+    case "set_event_status":
+            set_event_status();
+        break;
     case "generateFormHtml":
         generateFormHtml();
     case "adddetails":
@@ -565,6 +568,20 @@ function  get_trainers() {
 
 
 
+
+function set_event_status() {
+    $event_id = JRequest::getVar("event_id");
+    $event_status = JRequest::getVar("event_status");
+    $db = & JFactory::getDBO();
+    $query = "UPDATE #__dc_mv_events SET status='$event_status' WHERE id='$event_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        echo $db->stderr();
+    } else {
+        echo $event_status;
+    }
+    die();
+}
 
 
 

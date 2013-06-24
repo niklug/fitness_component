@@ -622,7 +622,84 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                 */
             }
             
+            
+                    
+             /* EVENT STATUS */
+            $(".open_status").live('click', function(e) {
+                var event_status = $(this).data('status');
+                openSetEventStatusBox(event_status);
+            });
+            
+            $(".set_status").live('click', function(e) {
+                var event_status = $(this).data('status');
+                eventSetStatus(event_status);
+            });
+            
+            $(".hideimage").live('click', function(e) {
+                hide_event_status_wrapper();
+            });
+            
+            function openSetEventStatusBox(event_status) {
+                 $(".event_status_wrapper").show();
+                 $(".event_status__button").show();
+                 if(event_status == 1)  $(".event_status_wrapper .event_status_pending").hide();
+                 if(event_status == 2)  $(".event_status_wrapper .event_status_attended").hide();
+                 if(event_status == 3)  $(".event_status_wrapper .event_status_cancelled").hide();
+                 if(event_status == 4)  $(".event_status_wrapper .event_status_latecancel").hide();
+                 if(event_status == 5)  $(".event_status_wrapper .event_status_noshow").hide();
+            } 
+            
+            
+            function hide_event_status_wrapper() {
+                $(".event_status_wrapper").hide();
+            }
+            
+            
+                    
+            function eventSetStatus(event_status) {
+                var event_id = '<?php echo $event->id; ?>';
+                var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
+                var url = DATA_FEED_URL+ "&method=set_event_status";
+                   $.ajax({
+                        type : "POST",
+                        url : url,
+                        data : {
+                            event_id : event_id,
+                            event_status : event_status
+                        },
+                        dataType : 'text',
+                        success : function(event_status) {
+                            hide_event_status_wrapper();
+                            $("#event_status").html( 'Appointment status' + event_status_html(event_status) );
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown)
+                        {
+                            alert("error");
+                        }
+                });
+
+            }
+
+            function event_status_html(event_status) {
+                 if(event_status == 1)  return '<a data-status="' + event_status + '" class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
+                 if(event_status == 2)  return '<a data-status="' + event_status + '"   class="open_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';
+                 if(event_status == 3)  return '<a data-status="' + event_status + '"  class="open_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';
+                 if(event_status == 4)  return '<a data-status="' + event_status + '" class="open_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';
+                 if(event_status == 5)  return '<a data-status="' + event_status + '"  class="open_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
+
+            }
+            /* END EVENT STATUS */
+            
+            
         });  
+        
+        
+        
+
+        
+
+        
+
 
     </script>  
 <style type="text/css">  
@@ -699,6 +776,19 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
               <div style="float:left;margin-left:50px;<?php if($stparttime == '00:00') echo 'visibility:hidden;'?>"> Start Time </div>
               <div style="float:left;margin-left:16px;"> End Date </div>
               <div style="display: inline;float: none;margin-left: 54px;<?php if($stparttime == '00:00') echo 'visibility:hidden;'?>"> End Time </div>
+              <?php
+              if(isset($event->status)) {
+              ?>
+              <div id="event_status">
+                    Appointment status
+                    <?php
+                        echo event_state_html($event->status);
+                    ?>
+                </div>  
+              <?php
+              }
+              ?>
+       
             <div> 
               <input MaxLength="10" class="required date" id="stpartdate" name="stpartdate" type="text" value="<?php echo $stpartdate; ?>" />
               <input MaxLength="7" class="required time" id="stparttime" name="stparttime" style="width:52px;" type="text" value="<?php echo $stparttime; ?>" /><span id="s_to1" class="inl">&nbsp;&nbsp;&nbsp;</span>
@@ -909,7 +999,14 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
         <br />  
         <br />  
     </div>  
- 
+      <div class="event_status_wrapper">
+          <img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" onclick="hide_event_status_wrapper()">
+              <a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>
+              <a data-status="2" class="set_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>
+              <a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>
+              <a data-status="4" class="set_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>
+              <a data-status="5" class="set_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>
+      </div>
     <a id="bbit-cs-editLink" href=""></a>  
   </body>  
 </html>  

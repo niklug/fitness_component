@@ -44,6 +44,38 @@ function getAppointments() {
 }
 
 
+/**
+ * npkorban
+ * @param type $event_id
+ * @param type $event_status
+ * @return string
+ */  
+function event_state_html($event_status) {
+    $html = '';
+    switch ($event_status) {
+        case 1:
+            $html .= '<a data-status="1" class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
+            break;
+        case 2:
+            $html .= '<a data-status="2" class="open_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';
+            break;
+        case 3:
+            $html .= '<a data-status="3" class="open_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';
+            break;
+        case 4:
+            $html .= '<a data-status="4" class="open_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';
+            break;
+        case 5:
+            $html .= '<a data-status="5" class="open_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
+            break;
+        default:
+            $html .= '<a data-status="1" class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
+            break;
+            break;
+    }
+
+    return $html;
+}
 
 //$dc_subjects = array("title 1","title 2","title 3","title 4");
 //$dc_locations = array("location 1","location 2","location 3","location 4");
