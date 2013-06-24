@@ -658,7 +658,6 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                     
             function eventSetStatus(event_status) {
                 var event_id = '<?php echo $event->id; ?>';
-                var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
                 var url = DATA_FEED_URL+ "&method=set_event_status";
                    $.ajax({
                         type : "POST",
@@ -691,6 +690,63 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
             /* END EVENT STATUS */
             
             
+            
+            
+            /* start execise table */
+            	$("#add_exercise").click(function(){
+                    $(".entry-form").fadeIn("fast");	
+                });
+                
+                $("#close_add_exercise_box").click(function(){
+                    $(".entry-form").fadeOut("fast");	
+                });
+                
+                $("#cancel_exercise").click(function(){
+                    $(".entry-form").fadeOut("fast");	
+                });
+                
+                $("#save_exercise").click(function(){
+                    ajax_exercise("save_exercise");
+                    
+                    
+                });
+                
+                function ajax_exercise(action, id){
+                    var url = DATA_FEED_URL;
+                    if(action =="save_exercise") {
+                        $("#save_exercise").attr("disabled", true);
+                        var data = $("#exercise_fields").serialize()+"&method=" + action;
+                    } else if(action == "delete"){
+                            data = "method="+action+"&item_id="+id;
+                    }
+              
+                    $.ajax({
+                        type : "POST",
+                        url : url,
+                        data : data,
+                        dataType : 'text',
+                        success : function(respond) {
+                            $("#save_exercise").attr("disabled", false);
+                            if(isNaN(respond)) {
+                                alert(respond);
+                                return;
+                            }
+                            $(".entry-form").fadeOut("fast");
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown)
+                        {
+                            alert("error");
+                        }
+                });
+
+
+
+            }
+            
+            
+             /* end execise table */
+            
+            
         });  
         
         
@@ -702,317 +758,24 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
 
 
     </script>  
-<style type="text/css">  
   
-#repeatsave a,#repeatdelete a{width:150px;text-align:center;display:block;float:left;margin:3px 10px 20px 0px}
-.ui-dialog{ position: absolute;  }
-.ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.ui-widget-overlay { background: #eeeeee ; opacity: .80;filter:Alpha(Opacity=80); }
-  
-.ui-datepicker-trigger     {
-        width:23px;  
-        height:23px;  
-        border:none;  
-        cursor:pointer;  
-        background:url("<?php echo $path; ?>css/images/cal.gif") no-repeat center center;
-        margin-left:5px; 
-}  
-#repeat,#repeatsave,#repeatdelete{display:none;font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;font-size: 12px;}
-  
-#repeat div{padding:2px;}
-#repeat label{width:100px;float:left}
-#repeat .fl{float:left}  
-#repeat .clear{clear:both}
-  
-#repeat.ui-dialog-content{display:block}
-</style>  
-  </head>  
-  <body class="multicalendar calendaredition">
-      <h3 id="appointment_title">Add/Edit Appointment</h3>
-      
-    <div class="infocontainer ui-widget-content" >
-        <hr>
-        <form action="<?php echo $datafeed?>&calid=<?php echo $_GET["calid"];?>&month_index=<?php echo JRequest::getVar("month_index");?>&method=adddetails<?php echo isset($event)?"&id=".$event->id:""; ?>" class="fform" id="fmEdit" method="post">
-               
-              <?php if(isset($event) && ($event->rrule=="")){  //no recurrent events
-                  $sarr = explode(" ", php2JsTime(mySql2PhpTime($event->starttime)));
-                  $earr = explode(" ", php2JsTime(mySql2PhpTime($event->endtime)));
-                  $shm = explode(":", $sarr[1]);
-                  $ehm = explode(":", $earr[1]);
-                  $stpartdate = $sarr[0];
-                  $stparttime = fomartTimeAMPM(intval($shm[0]),intval($shm[1]));
-                  $etpartdate = $earr[0];
-                  $etparttime = fomartTimeAMPM(intval($ehm[0]),intval($ehm[1]));
-              }  
-              else if (JRequest::getVar("start")!="" && JRequest::getVar("end")!="")
-              {  
-                  $sarr = explode(" ", JRequest::getVar("start"));
-                  $earr = explode(" ", JRequest::getVar("end"));
-                  $shm = explode(":", $sarr[1]);
-                  $ehm = explode(":", $earr[1]);
-                  $stpartdate = $sarr[0];
-                  $stparttime = fomartTimeAMPM(intval($shm[0]),intval($shm[1]));
-                  $etpartdate = $earr[0];
-                  $etparttime = fomartTimeAMPM(intval($ehm[0]),intval($ehm[1]));
-              }  
-              else  
-              {  
-                   $stpartdate = "";
-                   $stparttime = "";
-                   $etpartdate = "";
-                   $etparttime = "";
-              }  
-              if (JRequest::getVar("month_index")=="1" && $stpartdate!="" && $etpartdate!="")
-              {  
-                  $sarr = explode("/", $stpartdate);
-                  $stpartdate = $sarr[1]."/".$sarr[0]."/".$sarr[2];
-                  $earr = explode("/", $etpartdate);
-                  $etpartdate = $earr[1]."/".$earr[0]."/".$earr[2];
-              }  
-              ?>  
-            
-            <label>  
-              <div style="float:left;" > Start Date </div>
-              <div style="float:left;margin-left:50px;<?php if($stparttime == '00:00') echo 'visibility:hidden;'?>"> Start Time </div>
-              <div style="float:left;margin-left:16px;"> End Date </div>
-              <div style="display: inline;float: none;margin-left: 54px;<?php if($stparttime == '00:00') echo 'visibility:hidden;'?>"> End Time </div>
-              <?php
-              if(isset($event->status)) {
-              ?>
-              <div id="event_status">
-                    Appointment status
-                    <?php
-                        echo event_state_html($event->status);
-                    ?>
-                </div>  
-              <?php
-              }
-              ?>
-       
-            <div> 
-              <input MaxLength="10" class="required date" id="stpartdate" name="stpartdate" type="text" value="<?php echo $stpartdate; ?>" />
-              <input MaxLength="7" class="required time" id="stparttime" name="stparttime" style="width:52px;" type="text" value="<?php echo $stparttime; ?>" /><span id="s_to1" class="inl">&nbsp;&nbsp;&nbsp;</span>
-              <input MaxLength="10" class="required date" id="etpartdate" name="etpartdate" type="text" value="<?php echo $etpartdate; ?>" />
-              <input MaxLength="7" class="required time" id="etparttime" name="etparttime" style="width:52px;" type="text" value="<?php echo $etparttime; ?>" />
-              <input MaxLength="10" id="stpartdatelast" name="stpartdatelast" type="hidden" value="" />
-              <input MaxLength="10" id="etpartdatelast" name="etpartdatelast" type="hidden" value="" />
-              <input MaxLength="10" id="stparttimelast" name="stparttimelast" type="hidden" value="" />
-              <input MaxLength="10" id="etparttimelast" name="etparttimelast" type="hidden" value="" />
-               
-              <label style="display:none" class="checkp">
-                <input id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1" <?php if(isset($event)&&$event->isalldayevent!=0 || JRequest::getVar("isallday")=="1") {echo "checked";} ?>/><span id="s_all_day_event" class="inl">All Day Event</span>
-              </label>  
-              <div>  
-              </div>  
-            </div>  
-          </label>  
-            
-            <hr>
-                
-                  <table border="0">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <table border="0"  style="margin-right:25px;">
-                                    <tbody>
-                                        <tr>
-                                            <td>Appointment:</td>
-                                            <td>
-                                                <?php
-                                                if (isset($appointments[0])) {
-                                                    echo '<select style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
-                                                    for ($i = 0; $i < count($appointments[0]); $i++) {
-                                                        echo '<option data-catid="' . $appointments[2][$i] . '" id="' . $appointments[1][$i] . '" value="' . ($appointments[0][$i]) . '" ' . ((isset($event) && (trim($event->title) == trim($appointments[0][$i]))) ? "selected" : "") . '>' . $appointments[0][$i] . '</option>';
-                                                    }
-                                                    echo '</select>';
-                                                }
-
-                                                ?>  
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Session Type:</td>
-                                            <td> 
-                                                <select  id="session_type" name="session_type" class="required safe inputtext" ></select> 
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Session Focus:</td>
-                                            <td> 
-                                                <select  id="session_focus" name="session_focus" class="required safe inputtext" ></select>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            
-                            
-                            <td>
-                                <table border="0">
-                                    <tbody>
-                                        <tr>
-                                            <td>Client:</td>
-                                            <td>
-                                                <?php
-                                                if (isset($clients[0]->name)) {
-                                                    echo '<select style="float:left;" id="client" name="client_id" class="required safe inputtext" ">';
-                                                    echo '<option> -Select-</option>';
-                                                    for ($i = 0; $i < count( $clients); $i++) {
-                                                        echo '<option " id="' .  $clients[$i]->user_id . '" value="' . ( $clients[$i]->user_id) . '" ' . ((isset($event) && (trim($event->client_id) == trim( $clients[$i]->user_id))) ? "selected" : "") . '>' .  $clients[$i]->name . '</option>';
-                                                    }
-                                                    echo '</select>';
-                                                }
-
-                                                ?>  
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Trainer:</td>
-                                            <td>
-                                                <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Location:</td>
-                                            <td> <?php
-                                                if (isset($dc_locations)) {
-                                                    echo '<select  id="Location" name="Location" class="required safe inputtext" >';
-                                                    for ($i = 0; $i < count($dc_locations); $i++) {
-                                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
-                                                    }
-                                                    echo '</select>';
-                                                }
-
-                                                ?>  </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                  </table>
-
-  
-           <input id="colorvalue" name="colorvalue" type="hidden" value="<?php echo isset($event)?$event->color:"" ?>" />
-          <input type="hidden" id="rrule" name="rrule" value="<?php echo $event->rrule?>" size=55 />
-          <input type="hidden" id="rruleType" name="rruleType" value="" size=55 />
-           
-            <label>  
-            <span id="s_remark1">Details / Instructions</span>
-<textarea cols="20" id="Description" name="Description" rows="2" >
-<?php echo isset($event)?$event->description:""; ?>
-</textarea>  
-          </label>  
-          <input id="timezone" name="timezone" type="hidden" value="" />
-          <br /> 
-          
-          <a href="#" id="savebtn">Save</a>
-          <?php if(isset($event) && (JRequest::getVar("delete")=="1")){ ?>
-        <a href="#" id="deletebtn">Delete</a>
-        <?php } ?>  
-          <a href="#" id="closebtn">Close</a>
-          
-          
-          <label class="checkp">
-              <input id="repeatcheckbox" name="repeatcheckbox" type="checkbox" value="1" <?php if (isset($event) && $event->rrule != "") {
-              echo "checked";
-          } ?>/><span class="inl"><span id="repeat1" class="inl">Repeat</span>: <span id="repeatspan" class="inl"></span> <a href="#" id="repeatanchor">Edit</a></span>
-          </label> 
-           <br /> 
-           
-      </form>  
-    </div>  
-    <div id="repeatsave">
-        <h2 id="rsh2">Edit recurring event</h2>
-        <p id="rsp1">Would you like to change only this event, all events in the series, or this and all following events in the series?</p>
-        <div style="clear:both"><a href="#" id="r_save_one" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus">Only this event</a> <span id="rss1">All other events in the series will remain the same.</span></div>
-        <div style="clear:both"><a href="#" id="r_save_following" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus">Following events</a> <span id="rss2">This and all the following events will be changed.</span><br />
-        <span id="rss3">Any changes to future events will be lost.</span></div>
-        <div style="clear:both"><a href="#" id="r_save_all" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus">All events</a> <span id="rss4">All events in the series will be changed.</span><br />
-        <span id="rss5">Any changes made to other events will be kept.</span></div>
-        <div style="clear:both;float:right"><a href="#" id="r_save_cancel" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus">Cancel this change</a></div>
-        <div style="clear:both"></div>
-    </div>  
-    <div id="repeatdelete">
-        <h2 id="rdh2">Delete recurring event</h2>
-        <p id="rdp1">Would you like to delete only this event, all events in the series, or this and all future events in the series?</p>
-        <div style="clear:both"><a href="#" id="r_delete_one" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus">Only this instance</a> <span id="rds1">All other events in the series will remain.</span></div>
-        <div style="clear:both"><a href="#" id="r_delete_following" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus">All following</a> <span id="rds2">This and all the following events will be deleted.</span></div>
-        <div style="clear:both"><a href="#" id="r_delete_all" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus">All events in the series</a> <span id="rds3">All events in the series will be deleted.</span></div>
-        <div style="clear:both;float:right"><a href="#" id="r_delete_cancel" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus">Cancel this change</a></div>
-        <div style="clear:both"></div>
-    </div>  
-    <div id="repeat">  
-        <div>  
-            <label id="rl1">Repeats</label>
-            <select id="freq">
-                <option id="opt0" value="0">Daily</option>
-                <option id="opt1" value="1">Every weekday (Monday to Friday)</option>
-                <option id="opt2" value="2">Every Monday, Wednesday, and Friday</option>
-                <option id="opt3" value="3">Every Tuesday, and Thursday</option>
-                <option id="opt4" value="4">Weekly</option>
-                <option id="opt5" value="5">Monthly</option>
-                <option id="opt6" value="6">Yearly</option>
-            </select>  
-        </div>  
-        <div id="intervaldiv">
-            <label id="rl2">Repeat every:</label>
-            <select id="interval"></select> <span id="interval_label">weeks</span>
-        </div>  
-        <div id="bydayweek">
-            <label id="rl3">Repeat on:</label>
-            <input id="bydaySU" class="bydayw" name="SU" type="checkbox"><span id="chk0">SU</span>
-            <input id="bydayMO" class="bydayw" name="MO" type="checkbox"><span id="chk1">MO</span>
-            <input id="bydayTU" class="bydayw" name="TU" type="checkbox"><span id="chk2">TU</span>
-            <input id="bydayWE" class="bydayw" name="WE" type="checkbox"><span id="chk3">WE</span>
-            <input id="bydayTH" class="bydayw" name="TH" type="checkbox"><span id="chk4">TH</span>
-            <input id="bydayFR" class="bydayw" name="FR" type="checkbox"><span id="chk5">FR</span>
-            <input id="bydaySA" class="bydayw" name="SA" type="checkbox"><span id="chk6">SA</span>
-        </div>  
-        <div id="bydaymonth">
-            <label id="rl4">Repeat by:</label>
-            <input id="byday_m" class="bydaym" name="bydaym" type="radio" value="1" checked="checked"> <span id="bydaymonth1">day of the month</span>
-            <input id="byday_w" class="bydaym" name="bydaym" type="radio" value="2"> <span id="bydaymonth2">day of the week</span>
-        </div>  
-        <div>  
-            <label id="rl5">Starts on:</label>
-            <label id="starts"><?php echo $stpartdate; ?></label>
-        </div>  
-        <div class="clear"></div>
-        <div>  
-            <label id="rl6">Ends:</label>
-            <div class="fl">
-                <div><input id="end_never" name="end" checked="" title="Ends never" type="radio"> <span id="end1">Never</span></div>
-                <div><input id="end_count" name="end" title="Ends after a number of occurrences" type="radio"> <span id="end21">After</span> <select id="end_after"></select> <span id="end22">occurrences</span></div>
-                <div><input id="end_until" name="end" title="Ends on a specified date" type="radio"> <span id="end3">On</span> <input size="10" id="end_until_input" value="5/14/2013"></div>
-            </div>  
-        </div>  
-        <div class="clear"></div>
-        <div>  
-            <label id="rl7">Summary:</label>
-            <span id="summary"></span>
-        </div> 
-        
-        <input type="hidden" id="format" value="" size=55 />
-        <a href="#" id="savebtnRepeat">Save</a>
-        <a href="#" id="closebtnRepeat">Close</a>
-        <br />  
-        <br />  
-    </div>  
-      <div class="event_status_wrapper">
-          <img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" onclick="hide_event_status_wrapper()">
-              <a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>
-              <a data-status="2" class="set_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>
-              <a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>
-              <a data-status="4" class="set_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>
-              <a data-status="5" class="set_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>
-      </div>
-    <a id="bbit-cs-editLink" href=""></a>  
-  </body>  
-</html>  
-<script>  
-  
-</script>  
+    <!-- Top form, calendar, appointment status -->
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/top_form.inc.php' );
+    ?>
+    <!-- Main fields -->
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/main_fields.inc.php' );
+    ?>
+    <!-- Exicise table --> 
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/exercises.inc.php' );
+    ?>
+    <!-- Bottom form --> 
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/bottom_form.inc.php' );
+    ?>
+         
   
 <?php  
 jexit();  

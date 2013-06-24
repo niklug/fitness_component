@@ -62,6 +62,9 @@ switch ($method) {
     case "set_event_status":
             set_event_status();
         break;
+    case "save_exercise":
+            save_exercise();
+        break;
     case "generateFormHtml":
         generateFormHtml();
     case "adddetails":
@@ -583,7 +586,28 @@ function set_event_status() {
     die();
 }
 
+function save_exercise() {
+    $post = JRequest::get('post');
+    $db = & JFactory::getDBO();
+    $no_fields = array('method', 'layout', 'view', 'option');
+    if(!$post['title']) {
+        die('Title is empty');
+    }
+    $obj = new stdClass();
+    foreach ($post as $key=>$value) {
+        if(!in_array($key, $no_fields)) {
+            $obj->$key = $value;
+        }
+    }
 
+    $insert = $db->insertObject('#__fitness_events_exercises', $obj, 'id');
+    if(!$insert) {
+        echo $db->stderr();
+        return;
+    }
+    echo $db->insertid();
+    die();
+}
 
 
 /* Appointments forms */

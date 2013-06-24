@@ -77,6 +77,14 @@ function event_state_html($event_status) {
     return $html;
 }
 
+function getExercises($event_id) {
+    $db	= & JFactory::getDBO();
+    $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$event_id'";
+    $db->setQuery($query);
+    $result = $db->loadObjectList();
+    return $result;
+}
+
 //$dc_subjects = array("title 1","title 2","title 3","title 4");
 //$dc_locations = array("location 1","location 2","location 3","location 4");
 //$dc_subjects = getAppointments();

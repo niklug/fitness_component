@@ -19,7 +19,7 @@
 .multicalendar .calmain,.multicalendar .ctoolbar,.multicalendar .infocontainer {margin: 0;font-size: 12px;font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;padding: 0;height: 100%;width:100%;}
 .multicalendar .calmain div,.multicalendar .calmain span,.multicalendar .calmain td {font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;}
 .multicalendar.calendaredition .ui-datepicker{font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;font-size: 12px;}
-.multicalendar .infocontainer input {border: solid 1px #3C7FB1; font-size: 12px;height: 15px !important;}
+.multicalendar .infocontainer input {border: solid 1px #3C7FB1; font-size: 12px;height: 15px;}
 .multicalendar .infocontainer input[type='checkbox'] {border: none;}
 .multicalendar .infocontainer textarea {border: solid 1px #3C7FB1;overflow:auto;}
 /* JQuery Validation */
@@ -172,3 +172,87 @@
 
 
 
+
+
+.entry-form input[type='button']{
+    background-color: #E2EFF8;
+    border: 1px solid #AED0EA;
+    color: #333333;
+    line-height: 18px;
+    padding: 2px 6px 5px;
+    text-decoration: none;
+    height: 25px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.table-list{
+	font-family: verdana;
+	font-size: 12px;
+	border: 1px solid #EAEAEA;
+	padding: 2px;
+}
+.table-list th{
+	background: #EDF2F6;
+    border-bottom: 1px dotted #DDDDDD;
+    color: #444444;
+    font-size: 12px;
+    font-weight: normal !important;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 5px;
+    text-align: left;
+}
+.table-list td{
+    border-bottom: 1px dotted #EAEAEA;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 28px;
+    padding: 5px;
+    text-align: left;
+}
+.table-list tr:hover{
+	background: #E3F3F9;
+}
+.entry-form{
+	background: #EDF2F6;
+	width: 350px;
+	padding: 10px;
+	border: 5px solid #C5D7E2;
+	box-shadow: 3px 3px 5px #888;
+	position: absolute;
+	top: 100px;
+	left:105px;
+	display: none;
+	border-radius: 5px;
+        z-index: 999;
+}
+.entry-form input[type='text']{
+    border: 1px solid #BBBBBB;
+    box-shadow: 2px 2px 4px #C5D7E2 inset;
+    height: 25px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    width: 290px;
+}
+.entry-form input[type='text']:focus{
+	border: 1px solid #C5D7E2;
+}
+
+
+#execise_table th, #execise_table td, #execise_table tr {
+    border: 1px solid #000000;
+}
+
+
+#editEvent {
+    overflow-y: auto;
+    background-color: #f4f4f4;
+}
+.ui-dialog-titlebar {
+    background-color: #F4F4F4 !important;
+}
+
+
+#exercise_fields{
+    font-size: 12px;
+}
