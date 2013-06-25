@@ -62,9 +62,15 @@ switch ($method) {
     case "set_event_status":
             set_event_status();
         break;
-    case "save_exercise":
-            save_exercise();
+    case "add_exercise":
+            add_exercise();
         break;
+    case "delete_exercise":
+            delete_exercise();
+        break;
+    case "set_event_exircise_order":
+        set_event_exircise_order();
+    break;
     case "generateFormHtml":
         generateFormHtml();
     case "adddetails":
@@ -586,12 +592,15 @@ function set_event_status() {
     die();
 }
 
-function save_exercise() {
+function add_exercise() {
     $post = JRequest::get('post');
     $db = & JFactory::getDBO();
     $no_fields = array('method', 'layout', 'view', 'option');
     if(!$post['title']) {
-        die('Title is empty');
+        $post['success'] = 0;
+        $post['message'] = 'Title is empty';
+        echo json_encode($post);
+        die();
     }
     $obj = new stdClass();
     foreach ($post as $key=>$value) {
@@ -602,10 +611,45 @@ function save_exercise() {
 
     $insert = $db->insertObject('#__fitness_events_exercises', $obj, 'id');
     if(!$insert) {
-        echo $db->stderr();
+        $post['success'] = 0;
+        $post['message'] = $db->stderr();
+        echo json_encode($post);
         return;
     }
-    echo $db->insertid();
+    $post['success'] = 1;
+    $post['id'] = $db->insertid();;
+    echo json_encode($post);
+    die();
+}
+
+function delete_exercise() {
+    $exercise_id = JRequest::getVar('exercise_id');
+    $db = & JFactory::getDBO();
+    $query = "DELETE FROM #__fitness_events_exercises WHERE id='$exercise_id'";
+    $db->setQuery($query);
+    $post['exercise_id'] = $exercise_id;
+    if (!$db->query()) {
+        $post['success'] = 0;
+        $post['message'] = $db->stderr();
+    }
+    $post['success'] = 1;
+    echo json_encode($post);
+    die();
+}
+
+
+function set_event_exircise_order() {
+    $row_id = JRequest::getVar('row_id');
+    $order = JRequest::getVar('order');
+    $db = & JFactory::getDBO();
+    $query = "UPDATE `#__fitness_events_exercises` SET `order` = '$order' WHERE `id` ='$row_id'";
+    $db->setQuery($query);
+        if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $status['success'] = 1;
+    echo json_encode($status);
     die();
 }
 
@@ -620,6 +664,8 @@ function generateFormHtml() {
     echo $formHtml;
     die();
 }
+
+
 
 abstract class AppointmentForm {
     abstract function generateHtml();
