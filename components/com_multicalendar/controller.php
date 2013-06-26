@@ -38,6 +38,13 @@ class MultiCalendarController extends JController
 	{
 		$task = JRequest::getVar( 'task' );
 		$rView = JRequest::getVar( 'view' );
+                
+                if ($rView=="pdf")
+		{
+                    JRequest::setVar( 'view', 'pdf');
+                    parent::display('default');
+		}
+                
 		if ($task=="load")
 		{
 			JRequest::setVar( 'layout', 'ajax'  );
@@ -56,6 +63,7 @@ class MultiCalendarController extends JController
 			}
 		    
 		}
+                
 		parent::display();
 	}
 		

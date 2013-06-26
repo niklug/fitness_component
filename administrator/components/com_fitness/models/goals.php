@@ -311,10 +311,11 @@ class FitnessModelgoals extends JModelList {
 
         $send = & $mailer->Send();
         
-        return $send;
-        if (!$send) {
-            return 'error, email not sent';
-        } 
+        if ($send == '1') {
+            return 'Email  sent';
+        } else {
+            return $send;
+        }
     }
     
     

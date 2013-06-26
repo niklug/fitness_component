@@ -1,13 +1,3 @@
- <input id="colorvalue" name="colorvalue" type="hidden" value="<?php echo isset($event)?$event->color:"" ?>" />
-          <input type="hidden" id="rrule" name="rrule" value="<?php echo $event->rrule?>" size=55 />
-          <input type="hidden" id="rruleType" name="rruleType" value="" size=55 />
-           
-          <label>  
-            <span id="s_remark1">Details / Instructions</span>
-            <textarea cols="20" id="Description" name="Description" rows="2" >
-            <?php echo isset($event)?$event->description:""; ?>
-            </textarea>  
-          </label>  
           <input id="timezone" name="timezone" type="hidden" value="" />
           <br /> 
           

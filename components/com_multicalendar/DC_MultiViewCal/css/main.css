@@ -31,7 +31,7 @@
 .multicalendar .infocontainer .fform {margin:0px;}
 .multicalendar .infocontainer .fform label {display:block;margin-top:2px;padding:2px;vertical-align:top;}
 .multicalendar .infocontainer .fform label.checkp {display:inline;}
-.multicalendar .infocontainer .fform label span {font-weight:bold;display:block;}
+.multicalendar .infocontainer .fform label span {font-weight:bold;display:block; margin-bottom: 3px;}
 .multicalendar .infocontainer .fform label span.inl{display:inline;}
 .multicalendar div.calmain {position: relative;}
 .multicalendar div.ptogtitle {position: absolute;z-index:100;top: 0px;right: 3px;height: 18px;padding: 1px 2px 1px 2px;font-weight: normal;}
@@ -285,14 +285,14 @@
 #add_exercise {
     background-image: url("images/add_exercise.png");
     background-repeat: no-repeat;
-    background-size: 20px auto;
+    background-size: 24px auto;
     cursor: pointer;
     display: block;
     float: left;
-    height: 20px;
+    height: 24px;
     margin-right: 5px;
     margin-top: 3px;
-    width: 20px;
+    width: 24px;
 }
 
 #drag_exercise {
@@ -305,4 +305,52 @@
 
 .drag_exercise_item {
     background-image: url('images/drag_list.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 22px auto;
+}
+
+
+#exercise_table td {
+    border-bottom: 1px dotted #cccccc ;
+}
+
+#exercise_table {
+    border: 1px solid #cccccc ;
+    padding: 0;
+}
+
+
+#exercise_table th {
+  border-bottom: 1px dotted #DDDDDD;
+  border-right: 1px dotted #DDDDDD;
+  font-weight: bold !important;
+}
+
+#exercise_table td {
+     border-right: 1px dotted #DDDDDD;
+}
+
+.cleditorMain {
+    height: 110px !important;
+}
+
+
+#email_button {
+    background-image: url('images/email_button.png');
+    background-repeat: no-repeat;
+    display: block;
+    height: 40px;
+    width: 40px;
+    background-size: 40px auto;
+}
+
+
+#pdf_button {
+    background-image: url('images/pdf_button.png');
+    background-repeat: no-repeat;
+    display: block;
+    height: 40px;
+    width: 40px;
+    background-size: 40px auto;
 }

@@ -80,3 +80,7 @@
         </tr>
     </tbody>
   </table>
+
+<input id="colorvalue" name="colorvalue" type="hidden" value="<?php echo isset($event)?$event->color:"" ?>" />
+<input type="hidden" id="rrule" name="rrule" value="<?php echo $event->rrule?>" size=55 />
+<input type="hidden" id="rruleType" name="rruleType" value="" size=55 />

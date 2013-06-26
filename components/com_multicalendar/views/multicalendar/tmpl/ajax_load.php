@@ -70,6 +70,8 @@ switch ($method) {
         break;
     case "set_event_exircise_order":
         set_event_exircise_order();
+    case "send_appointment_email":
+        send_appointment_email();
     break;
     case "generateFormHtml":
         generateFormHtml();
@@ -577,7 +579,9 @@ function  get_trainers() {
 
 
 
-
+/**
+ * set event status, on  click status button
+ */
 function set_event_status() {
     $event_id = JRequest::getVar("event_id");
     $event_status = JRequest::getVar("event_status");
@@ -592,6 +596,11 @@ function set_event_status() {
     die();
 }
 
+
+/**
+ * add event exercise
+ * @return type
+ */
 function add_exercise() {
     $post = JRequest::get('post');
     $db = & JFactory::getDBO();
@@ -622,6 +631,10 @@ function add_exercise() {
     die();
 }
 
+
+/**
+ * delete event exercise
+ */
 function delete_exercise() {
     $exercise_id = JRequest::getVar('exercise_id');
     $db = & JFactory::getDBO();
@@ -637,7 +650,9 @@ function delete_exercise() {
     die();
 }
 
-
+/**
+ * change event exercises order on drag and drop
+ */
 function set_event_exircise_order() {
     $row_id = JRequest::getVar('row_id');
     $order = JRequest::getVar('order');
@@ -652,6 +667,74 @@ function set_event_exircise_order() {
     echo json_encode($status);
     die();
 }
+
+/**
+ * sends email to the client with appointment content, exercises , etc..
+ */
+function send_appointment_email() {
+    $event_id = &JRequest::getVar(event_id);
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&tpml=component&event_id=' . $event_id;
+    $contents = file_get_contents($url);
+    $client_email = getClientEmailByEvent($event_id);
+    $status['success'] = 1;
+    sendEmail($client_email, 'Appointment details, elitefit.com.au', $contents);
+}
+
+/**
+ * standard send email function
+ * @param type $recipient
+ * @param type $Subject
+ * @param type $body
+ */
+function sendEmail($recipient, $Subject, $body) {
+
+    $mailer = & JFactory::getMailer();
+
+    $config = new JConfig();
+
+    $sender = array($config->mailfrom, $config->fromname);
+
+    $mailer->setSender($sender);
+
+    //$recipient = 'npkorban@mail.ru';
+
+    $mailer->addRecipient($recipient);
+
+    $mailer->setSubject($Subject);
+
+    $mailer->isHTML(true);
+
+    $mailer->setBody($body);
+
+    $send = & $mailer->Send();
+    
+    if($send == '1') {
+        echo 'Email  sent';
+    } else {
+        echo $send;
+    }
+    die();
+}
+
+
+/** get client email be event id
+ * 
+ * @param type $event_id
+ * @return type
+ */
+function getClientEmailByEvent($event_id) {
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id FROM #__dc_mv_events WHERE id='$event_id'";
+    $db->setQuery($query);
+        if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $client_id = $db->loadResult();
+    $user = &JFactory::getUser($client_id);
+    return $user->email;
+}
+
 
 
 /* Appointments forms */

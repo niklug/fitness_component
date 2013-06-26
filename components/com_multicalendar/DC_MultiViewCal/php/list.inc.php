@@ -43,7 +43,13 @@ function getAppointments() {
     return $appointment;
 }
 
-
+function getEmailPdfData($event_id) {
+   $db	= & JFactory::getDBO();
+   $query = "SELECT * FROM #__dc_mv_events WHERE id='$event_id'";
+   $db->setQuery($query);
+   $result = $db->loadObject();
+   return $result;
+}
 /**
  * npkorban
  * @param type $event_id
