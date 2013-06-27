@@ -19,7 +19,10 @@
                                 ?>  
                             </td>
                         </tr>
-                        <tr>
+                        <?php
+                        if (isset($event->status)) {
+                        ?>
+                       <tr>
                             <td>Session Type:</td>
                             <td> 
                                 <select  id="session_type" name="session_type" class="required safe inputtext" ></select> 
@@ -31,11 +34,16 @@
                                 <select  id="session_focus" name="session_focus" class="required safe inputtext" ></select>
                             </td>
                         </tr>
+                        <?php
+                        }
+                        ?>
                     </tbody>
                 </table>
             </td>
 
-
+            <?php
+                if (isset($event->status)) {
+            ?>
             <td>
                 <table border="0">
                     <tbody>
@@ -77,6 +85,9 @@
                     </tbody>
                 </table>
             </td>
+            <?php
+                }
+            ?>
         </tr>
     </tbody>
   </table>

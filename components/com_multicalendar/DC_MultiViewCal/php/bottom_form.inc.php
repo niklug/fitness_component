@@ -6,14 +6,24 @@
         <a href="#" id="deletebtn">Delete</a>
         <?php } ?>  
           <a href="#" id="closebtn">Close</a>
-          
-          
+          <?php
+            if (isset($event->status)) {
+          ?>
+            
+          <label class="checkp">
+              <input id="frontend_published" name="frontend_published" type="checkbox" value="1" <?php if (isset($event) && $event->frontend_published != "0") {
+              echo "checked";
+          } ?>/><span class="inl">Published</span>
+          </label> 
           <label class="checkp">
               <input id="repeatcheckbox" name="repeatcheckbox" type="checkbox" value="1" <?php if (isset($event) && $event->rrule != "") {
               echo "checked";
           } ?>/><span class="inl"><span id="repeat1" class="inl">Repeat</span>: <span id="repeatspan" class="inl"></span> <a href="#" id="repeatanchor">Edit</a></span>
           </label> 
            <br /> 
+          <?php
+            }
+          ?>
            
       </form>  
     </div>  

@@ -74,7 +74,7 @@ var i18n = jQuery.extend({}, i18n || {}, {
         "data_format_error": "Data format error! ",
         "invalid_title": "Event title can not be blank or contains ($<>)",
         "view_no_ready": "View is not ready",
-        "example": "e.g., meeting at room 107",
+        "example": "",
         "content": "What",
         "create_event": "Create event",
         "update_detail": "Edit details",

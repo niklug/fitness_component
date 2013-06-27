@@ -141,7 +141,7 @@ $(document).ready(function() {
     });  
 
 </script>  
-<div  style="margin-top: 10px;">
+<div id="exercise_table_wrapper">
             <table id="exercise_table" width="100%" border="0" cellpadding="0" cellspacing="0" class="table-list">
                 <tr>
                     <th width="4%"><a title="Drag, move and drop the row to change the ordering." href="javascript:void(0)" id="drag_exercise"></a></th>

@@ -31,7 +31,16 @@ $calid = JRequest::getVar( 'calid' );
 
 switch ($method) {
     case "add":
-        $ret = addCalendar($calid, JRequest::getVar("CalendarStartTime"), JRequest::getVar("CalendarEndTime"), JRequest::getVar("CalendarTitle"), JRequest::getVar("IsAllDayEvent"), JRequest::getVar("location"));
+        $ret = addCalendar($calid,
+                JRequest::getVar("CalendarStartTime"), 
+                JRequest::getVar("CalendarEndTime"),
+                JRequest::getVar("CalendarTitle"),
+                JRequest::getVar("IsAllDayEvent"),
+                
+       
+                JRequest::getVar("Location")
+    
+                );
         break;
     case "list":
         //$ret = listCalendar(JRequest::getVar("showdate"), JRequest::getVar("viewtype"));
@@ -45,7 +54,19 @@ switch ($method) {
 
         break;
     case "update":
-        $ret = updateCalendar(JRequest::getVar("calendarId"), JRequest::getVar("CalendarStartTime"), JRequest::getVar("CalendarEndTime"));
+        $ret = updateCalendar(
+                JRequest::getVar("CalendarStartTime"), 
+                JRequest::getVar("CalendarEndTime"),
+                JRequest::getVar("CalendarTitle"),
+                JRequest::getVar("IsAllDayEvent"),
+                
+                JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                JRequest::getVar("client_id"),
+                JRequest::getVar("trainer_id"),
+                JRequest::getVar("Location"), 
+                JRequest::getVar("colorvalue")
+               );
         break;
     case "remove":
         $ret = removeCalendar( JRequest::getVar("calendarId"),JRequest::getVar("rruleType"));
@@ -94,6 +115,7 @@ switch ($method) {
                         JRequest::getVar("trainer_id"),
                         JRequest::getVar("Location"), 
                         JRequest::getVar("colorvalue"), 
+                        JRequest::getVar("frontend_published"), 
                         JRequest::getVar("rrule"),
                         JRequest::getVar("rruleType"),
                         JRequest::getVar("timezone")
@@ -155,19 +177,43 @@ function getMessageOverlapping()
     $ret['Msg'] = "OVERLAPPING";
     return $ret;
 }
-function addCalendar($calid, $st, $et, $sub, $ade, $loc){
+function addCalendar(
+        $calid,
+        $st,
+        $et, 
+        $sub,
+        $ade,
+
+        $Location
+        ){
   $ret = array();
   $db 	=& JFactory::getDBO();
   $user =& JFactory::getUser();
   try{
     if (checkIfOverlapping($calid, $st, $et,$sub, $loc,0))
     {
-    $sql = "insert into `".DC_MV_CAL."` (`".DC_MV_CAL_IDCAL."`,`".DC_MV_CAL_TITLE."`, `".DC_MV_CAL_FROM."`, `".DC_MV_CAL_TO."`, `".DC_MV_CAL_ISALLDAY."`, `".DC_MV_CAL_LOCATION."`, `owner`, `published`) values (".$calid.","
+    $sql = "insert into `".DC_MV_CAL."` (
+        `".DC_MV_CAL_IDCAL."`,
+        `".DC_MV_CAL_TITLE."`,
+        `".DC_MV_CAL_FROM."`,
+        `".DC_MV_CAL_TO."`,
+        `".DC_MV_CAL_ISALLDAY."`,
+
+        `".DC_MV_CAL_LOCATION."`,
+         
+        `owner`,
+        `published`
+        ) values (
+        
+      ".$calid.","
       .$db->Quote($sub).", '"
       .php2MySqlTime(js2PhpTime($st))."', '"
       .php2MySqlTime(js2PhpTime($et))."', "
       .$db->Quote($ade).", "
-      .$db->Quote($loc).", ".$user->id.",1)";
+      .$db->Quote($loc).", "
+      .$user->id
+      .",1)";
+      
 
     $db->setQuery( $sql );
     if (!$db->query()){
@@ -303,16 +349,39 @@ function listCalendar($day, $type){
   return listCalendarByRange($st, $et);
 }
 
-function updateCalendar($id, $st, $et){
+function updateCalendar(
+        $id,
+        $st,
+        $et, 
+        $sub,
+        $ade,
+        
+        $session_type,
+        $session_focus,
+        $client_id,
+        $trainer_id,
+        $Location, 
+        $colorvalue){
   $ret = array();
   $db 	=& JFactory::getDBO();
   try{
     if (checkIfOverlappingThisEvent($id, $st, $et))
     {
-        $sql = "update `".DC_MV_CAL."` set"
-          . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
-          . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "' "
-          . "where `id`=" . $id;
+    $sql = "update `".DC_MV_CAL."` set"
+              . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+              . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "', "
+              . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
+              . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
+              . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
+              . " `session_type`=" . $db->Quote($session_type) . ", "
+              . " `session_focus`=" . $db->Quote($session_focus) . ", "
+              . " `client_id`=" . $db->Quote($client_id) . ", "
+              . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
+              . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
+              . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
+              . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
+              . " `rrule`=" . $db->Quote($rrule) . " "
+              . "where `id`=" . $id;
         $db->setQuery( $sql );
         if (!$db->query()){
           $ret['IsSuccess'] = false;
@@ -344,6 +413,7 @@ function updateDetailedCalendar(
         $trainer_id,
         $loc, 
         $color,
+        $frontend_published,
         $rrule,
         $rruleType,
         $tz
@@ -373,6 +443,7 @@ function updateDetailedCalendar(
               . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
               . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
               . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
+              . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
               . " `rrule`=" . $db->Quote($rrule) . " "
               . "where `id`=" . $id;
             $db->setQuery( $sql );
@@ -423,6 +494,7 @@ function updateDetailedCalendar(
               . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
               . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
               . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
+              . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
               . " `rrule`=" . $db->Quote($rrule) . " "
               . "where `id`=" . $id;
             $db->setQuery( $sql );

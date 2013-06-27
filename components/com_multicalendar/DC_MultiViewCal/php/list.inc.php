@@ -97,7 +97,7 @@ function getExercises($event_id) {
 $dc_locations = getLocations();
 
 $appointments = getAppointments();
-
+$dc_subjects = $appointments[0];
 $clients = getClients();
 
 define("JC_JQUERY_MV",true);

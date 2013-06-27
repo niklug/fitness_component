@@ -20,11 +20,19 @@ class FitnessHelper
 	 */
 	public static function addSubmenu($vName = '', $view)
 	{
-		JSubMenuHelper::addEntry(
+            if($view == 'calendar') {
+                		JSubMenuHelper::addEntry(
 			$vName,
-			'index.php?option=com_fitness&view='. $view,
+			'index.php?option=com_multicalendar&view=admin&task=admin',
 			$vName == $vName
 		);
+                return;
+            }
+            JSubMenuHelper::addEntry(
+                    $vName,
+                    'index.php?option=com_fitness&view='. $view,
+                    $vName == $vName
+            );
 
 	}
 
