@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+.icon-32-multilist
+{ background-image: url(../images/toolbar/icon-32-multilist.png); }
+.icon-48-multicalendar 		
+{ background-image: url(../images/header/icon-48-multicalendar.png); }
+.icon-48-multicalendar-new
+{ background-image: url(../images/header/icon-48-multicalendar-new.png); }
+.icon-48-multicalendar-edit
+{ background-image: url(../images/header/icon-48-multicalendar-edit.png); }
+.icon-48-multicalendar-management
+{ background-image: url(../images/header/icon-48-multicalendar-management.png); }
+

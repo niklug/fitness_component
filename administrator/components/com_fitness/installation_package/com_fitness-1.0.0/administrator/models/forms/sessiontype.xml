@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_SESSIONTYPE_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="name" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_SESSIONTYPE_NAME"
+            description="COM_FITNESS_FORM_DESC_SESSIONTYPE_NAME" 
+         default="" 
+        
+         required="true" 
+        filter="safehtml" /> 
+
+       
+      <field name="category_id" type="sql" class="inputbox"
+            query="SELECT id, name FROM #__fitness_categories"
+            key_field="id"
+            value_field="name"
+            label="COM_FITNESS_FORM_LBL_SESSIONTYPE_CATEGORY_ID"
+            required="true" 
+       /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

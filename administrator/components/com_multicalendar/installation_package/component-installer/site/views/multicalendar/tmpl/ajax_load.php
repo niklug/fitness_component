@@ -1,0 +1,926 @@
+<?php
+/**
+* @Copyright Copyright (C) 2010 CodePeople, www.codepeople.net
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*
+* This file is part of Multi Calendar for Joomla <www.joomlacalendars.com>.
+*
+* Multi Calendar for Joomla is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Multi Calendar for Joomla  is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Multi Calendar for Joomla.  If not, see <http://www.gnu.org/licenses/>.
+*
+**/
+
+defined('_JEXEC') or die('Restricted access');
+require_once( JPATH_COMPONENT.'/DC_MultiViewCal/php/functions.php' );
+require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/list.inc.php' );
+
+$db 	=& JFactory::getDBO();
+header('Content-type:text/javascript;charset=UTF-8');
+$method = JRequest::getVar( 'method' );
+$calid = JRequest::getVar( 'calid' );
+
+switch ($method) {
+    case "add":
+        $ret = addCalendar($calid,
+                JRequest::getVar("CalendarStartTime"), 
+                JRequest::getVar("CalendarEndTime"),
+                JRequest::getVar("CalendarTitle"),
+                JRequest::getVar("IsAllDayEvent"),
+                
+       
+                JRequest::getVar("Location")
+    
+                );
+        break;
+    case "list":
+        //$ret = listCalendar(JRequest::getVar("showdate"), JRequest::getVar("viewtype"));
+
+        $d1 = js2PhpTime(JRequest::getVar("startdate"));
+        $d2 = js2PhpTime(JRequest::getVar("enddate"));
+
+        $d1 = mktime(0, 0, 0,  date("m", $d1), date("d", $d1), date("Y", $d1));
+        $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2))+24*60*60-1;
+        $ret = listCalendarByRange($calid, ($d1),($d2));
+
+        break;
+    case "update":
+        $ret = updateCalendar(
+                JRequest::getVar("CalendarStartTime"), 
+                JRequest::getVar("CalendarEndTime"),
+                JRequest::getVar("CalendarTitle"),
+                JRequest::getVar("IsAllDayEvent"),
+                
+                JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                JRequest::getVar("client_id"),
+                JRequest::getVar("trainer_id"),
+                JRequest::getVar("Location"), 
+                JRequest::getVar("colorvalue")
+               );
+        break;
+    case "remove":
+        $ret = removeCalendar( JRequest::getVar("calendarId"),JRequest::getVar("rruleType"));
+        break;
+    case "get_session_type":
+            get_session_type();
+        break;
+    case "get_session_focus":
+            get_session_focus();
+        break;
+    case "get_trainers":
+            get_trainers();
+        break;
+    case "set_event_status":
+            set_event_status();
+        break;
+    case "add_exercise":
+            add_exercise();
+        break;
+    case "delete_exercise":
+            delete_exercise();
+        break;
+    case "set_event_exircise_order":
+        set_event_exircise_order();
+    case "send_appointment_email":
+        send_appointment_email();
+    break;
+    case "generateFormHtml":
+        generateFormHtml();
+    case "adddetails":
+
+        $st = JRequest::getVar("stpartdatelast") . " " . JRequest::getVar("stparttimelast");
+        $et = JRequest::getVar("etpartdatelast") . " " . JRequest::getVar("etparttimelast");
+        if(JRequest::getVar("id")!=""){
+
+            $ret = updateDetailedCalendar(
+                        JRequest::getVar("id"),
+                        $st,
+                        $et,
+                        JRequest::getVar("Subject"),
+                        (JRequest::getVar("IsAllDayEvent")==1)?1:0, 
+                        JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                        JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                        JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                        JRequest::getVar("client_id"),
+                        JRequest::getVar("trainer_id"),
+                        JRequest::getVar("Location"), 
+                        JRequest::getVar("colorvalue"), 
+                        JRequest::getVar("frontend_published"), 
+                        JRequest::getVar("rrule"),
+                        JRequest::getVar("rruleType"),
+                        JRequest::getVar("timezone")
+                    );
+        }else{
+
+            $ret = addDetailedCalendar($calid, $st, $et,JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent")==1)?1:0, JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                JRequest::getVar("Location"), JRequest::getVar("colorvalue"), JRequest::getVar("rrule"),0, JRequest::getVar("timezone"));
+        }
+        break;
+
+
+}
+echo json_encode($ret);
+function checkIfOverlappingThisEvent($id, $st, $et)
+{
+    $db 	=& JFactory::getDBO();
+    $sql = "select * from `".DC_MV_CAL."` where id=".$id;
+
+    $db->setQuery( $sql );
+    $rows = $db->loadObjectList();
+    if (count($rows)>0)
+        return checkIfOverlapping($rows[0]->calid, $st, $et, $rows[0]->title, $rows[0]->location,$id);
+    else
+        return true;
+}
+function checkIfOverlapping($calid, $st, $et, $sub, $loc,$id)
+{
+    $db 	=& JFactory::getDBO();
+    $sd = date("Y-m-d H:i:s",js2PhpTime($st));
+    $ed = date("Y-m-d H:i:s",js2PhpTime($et));
+    $condition = "";
+    if (JC_NO_OVERLAPPING_TIME)
+        $condition .= " and ( (`".DC_MV_CAL_FROM."` > '"
+      .($sd)."' and `".DC_MV_CAL_FROM."` < '". ($ed)."') or (`".DC_MV_CAL_TO."` > '"
+      .($sd)."' and `".DC_MV_CAL_TO."` < '". ($ed)."') or (`".DC_MV_CAL_FROM."` <= '"
+      .($sd)."' and `".DC_MV_CAL_TO."` >= '". ($ed)."') )   ";
+    if (JC_NO_OVERLAPPING_SUBJECT)
+        $condition .= " and ( `".DC_MV_CAL_TITLE."` = '". $sub."' )   ";
+    if (JC_NO_OVERLAPPING_LOCATION)
+        $condition .= " and ( `".DC_MV_CAL_LOCATION."` = '". $loc."' )   ";
+    if ($condition=="")
+        $condition = " and 1=0";
+    $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid.$condition;
+
+    $db->setQuery( $sql );
+
+    $rows = $db->loadObjectList();
+    if (count($rows)==0 || (count($rows)==1 && $rows[0]->id==$id))
+        return true;
+    else
+        return false;
+
+}
+function getMessageOverlapping()
+{
+    $ret = array();
+    $ret['IsSuccess'] = false;
+    $ret['Msg'] = "OVERLAPPING";
+    return $ret;
+}
+function addCalendar(
+        $calid,
+        $st,
+        $et, 
+        $sub,
+        $ade,
+
+        $Location
+        ){
+  $ret = array();
+  $db 	=& JFactory::getDBO();
+  $user =& JFactory::getUser();
+  try{
+    if (checkIfOverlapping($calid, $st, $et,$sub, $loc,0))
+    {
+    $sql = "insert into `".DC_MV_CAL."` (
+        `".DC_MV_CAL_IDCAL."`,
+        `".DC_MV_CAL_TITLE."`,
+        `".DC_MV_CAL_FROM."`,
+        `".DC_MV_CAL_TO."`,
+        `".DC_MV_CAL_ISALLDAY."`,
+
+        `".DC_MV_CAL_LOCATION."`,
+         
+        `owner`,
+        `published`
+        ) values (
+        
+      ".$calid.","
+      .$db->Quote($sub).", '"
+      .php2MySqlTime(js2PhpTime($st))."', '"
+      .php2MySqlTime(js2PhpTime($et))."', "
+      .$db->Quote($ade).", "
+      .$db->Quote($loc).", "
+      .$user->id
+      .",1)";
+      
+
+    $db->setQuery( $sql );
+    if (!$db->query()){
+      $ret['IsSuccess'] = false;
+      $ret['Msg'] = $db->stderr();
+    }else{
+      $ret['IsSuccess'] = true;
+      $ret['Msg'] = 'add success';
+      $ret['Data'] = $db->insertid();
+    }
+    }
+    else
+     $ret = getMessageOverlapping();
+
+	}catch(Exception $e){
+     $ret['IsSuccess'] = false;
+     $ret['Msg'] = $e->getMessage();
+  }
+
+  return $ret;
+}
+
+
+function addDetailedCalendar($calid, $st, $et, $sub, $ade, $dscr, $loc, $color, $rrule,$uid,$tz){
+  $ret = array();
+
+  $db 	=& JFactory::getDBO();
+  $user =& JFactory::getUser();
+  try{
+    if (checkIfOverlapping($calid, $st, $et,$sub, $loc,0))
+    {
+    $sql = "insert into `".DC_MV_CAL."` (`".DC_MV_CAL_IDCAL."`,`".DC_MV_CAL_TITLE."`, `".DC_MV_CAL_FROM."`, `".DC_MV_CAL_TO."`, `".DC_MV_CAL_ISALLDAY."`, `".DC_MV_CAL_DESCRIPTION."`, `".DC_MV_CAL_LOCATION."`, `".DC_MV_CAL_COLOR."`,`rrule`,`uid`,`owner`, `published`) values (".$calid.","
+      .$db->Quote($sub).", '"
+      .php2MySqlTime(js2PhpTime($st))."', '"
+      .php2MySqlTime(js2PhpTime($et))."', "
+      .$db->Quote($ade).", "
+      .$db->Quote($dscr).", "
+      .$db->Quote($loc).", "
+      .$db->Quote($color).", ".$db->Quote($rrule).", ".$db->Quote($uid).", ".$user->id.",1 )";
+
+    $db->setQuery( $sql );
+    if (!$db->query()){
+      $ret['IsSuccess'] = false;
+      $ret['Msg'] = $db->stderr();
+    }else{
+      $ret['IsSuccess'] = true;
+      $ret['Msg'] = 'add success';
+      $ret['Data'] = $db->insertid();
+    }
+    }
+    else
+     $ret = getMessageOverlapping();
+	}catch(Exception $e){
+     $ret['IsSuccess'] = false;
+     $ret['Msg'] = $e->getMessage();
+  }
+  return $ret;
+}
+
+function listCalendarByRange($calid,$sd, $ed){
+  $ret = array();
+  $ret['events'] = array();
+  $ret["issort"] =true;
+  $ret["start"] = php2JsTime($sd);
+  $ret["end"] = php2JsTime($ed);
+  $ret['error'] = null;
+  $db 	=& JFactory::getDBO();
+  try{
+    $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid." and ( (`".DC_MV_CAL_FROM."` between '"
+      .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_TO."` between '"
+      .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_FROM."` <= '"
+      .php2MySqlTime($sd)."' and `".DC_MV_CAL_TO."` >= '". php2MySqlTime($ed)."') or rrule<>'') order by uid desc,  ".DC_MV_CAL_FROM."  ";
+
+    $db->setQuery( $sql );
+    if (!$db->query()){
+          $ret['IsSuccess'] = false;
+          $ret['Msg'] = $db->stderr();
+    }
+    $rows = $db->loadObjectList();
+
+
+    $str = "";
+    for ($i=0;$i<count($rows);$i++)
+    {
+        $row = $rows[$i];
+        if (strlen($row->exdate)>0)
+            $row->rrule .= ";exdate=".$row->exdate;
+        $ev = array(
+            $row->id,
+            $row->title,
+            php2JsTime(mySql2PhpTime($row->starttime)),
+            php2JsTime(mySql2PhpTime($row->endtime)),
+            $row->isalldayevent,
+            0, //more than one day event
+            //$row->InstanceType,
+            ((is_numeric($row->uid) && $row->uid>0)?$row->uid:$row->rrule),//Recurring event rule,
+            $row->color,
+            1,//editable
+            $row->location,
+            '',//$attends
+            $row->description,
+            $row->owner,
+            $row->published
+        );
+        $ret['events'][] = $ev;
+    }
+	}catch(Exception $e){
+     $ret['error'] = $e->getMessage();
+  }
+  return $ret;
+}
+function listCalendar($day, $type){
+  $phpTime = js2PhpTime($day);
+  //echo $phpTime . "+" . $type;
+  switch($type){
+    case "month":
+      $st = mktime(0, 0, 0, date("m", $phpTime), 1, date("Y", $phpTime));
+      $et = mktime(0, 0, -1, date("m", $phpTime)+1, 1, date("Y", $phpTime));
+      break;
+    case "week":
+      //suppose first day of a week is monday
+      $monday  =  date("d", $phpTime) - date('N', $phpTime) + 1;
+      //echo date('N', $phpTime);
+      $st = mktime(0,0,0,date("m", $phpTime), $monday, date("Y", $phpTime));
+      $et = mktime(0,0,-1,date("m", $phpTime), $monday+7, date("Y", $phpTime));
+      break;
+    case "day":
+      $st = mktime(0, 0, 0, date("m", $phpTime), date("d", $phpTime), date("Y", $phpTime));
+      $et = mktime(0, 0, -1, date("m", $phpTime), date("d", $phpTime)+1, date("Y", $phpTime));
+      break;
+  }
+  //echo $st . "--" . $et;
+  return listCalendarByRange($st, $et);
+}
+
+function updateCalendar(
+        $id,
+        $st,
+        $et, 
+        $sub,
+        $ade,
+        
+        $session_type,
+        $session_focus,
+        $client_id,
+        $trainer_id,
+        $Location, 
+        $colorvalue){
+  $ret = array();
+  $db 	=& JFactory::getDBO();
+  try{
+    if (checkIfOverlappingThisEvent($id, $st, $et))
+    {
+    $sql = "update `".DC_MV_CAL."` set"
+              . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+              . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "', "
+              . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
+              . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
+              . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
+              . " `session_type`=" . $db->Quote($session_type) . ", "
+              . " `session_focus`=" . $db->Quote($session_focus) . ", "
+              . " `client_id`=" . $db->Quote($client_id) . ", "
+              . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
+              . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
+              . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
+              . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
+              . " `rrule`=" . $db->Quote($rrule) . " "
+              . "where `id`=" . $id;
+        $db->setQuery( $sql );
+        if (!$db->query()){
+          $ret['IsSuccess'] = false;
+          $ret['Msg'] = $db->stderr();
+        }else{
+          $ret['IsSuccess'] = true;
+          $ret['Msg'] = 'Succefully';
+        }
+    }
+    else
+         $ret = getMessageOverlapping();
+	}catch(Exception $e){
+     $ret['IsSuccess'] = false;
+     $ret['Msg'] = $e->getMessage();
+  }
+  return $ret;
+}
+
+function updateDetailedCalendar(
+        $id,
+        $st, 
+        $et, 
+        $sub, 
+        $ade, 
+        $dscr,
+        $session_type,
+        $session_focus,
+        $client_id,
+        $trainer_id,
+        $loc, 
+        $color,
+        $frontend_published,
+        $rrule,
+        $rruleType,
+        $tz
+        ){
+ 
+  $ret = array();
+  $db 	=& JFactory::getDBO();
+
+  try{
+    if (checkIfOverlapping(JRequest::getVar( 'calid' ), $st, $et,$sub,$loc,$id))
+    {
+        if ($rruleType=="only")
+        {
+            return addDetailedCalendar(JRequest::getVar( 'calid' ), $st, $et, $sub, $ade, $dscr, $loc, $color, "",$id,$tz);   
+        }        
+        else if ($rruleType=="all")
+        {
+            $sql = "update `".DC_MV_CAL."` set"
+              . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+              . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "', "
+              . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
+              . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
+              . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
+              . " `session_type`=" . $db->Quote($session_type) . ", "
+              . " `session_focus`=" . $db->Quote($session_focus) . ", "
+              . " `client_id`=" . $db->Quote($client_id) . ", "
+              . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
+              . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
+              . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
+              . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
+              . " `rrule`=" . $db->Quote($rrule) . " "
+              . "where `id`=" . $id;
+            $db->setQuery( $sql );
+            if (!$db->query()){
+              $ret['IsSuccess'] = false;
+              $ret['Msg'] = $db->stderr();
+            }else{
+              $ret['IsSuccess'] = true;
+              $ret['Msg'] = 'Succefully';
+            }
+        }        
+        else if (substr($rruleType,0,5)=="UNTIL")
+        {
+            $sql = "select * from `".DC_MV_CAL."` where id=".$id;
+
+            $db->setQuery( $sql );
+            $rows = $db->loadObjectList();
+            $pre_rrule = $rows[0]->rrule;
+            //remove until
+            $tmp = explode(";UNTIL=",$pre_rrule);
+            if (count($tmp)>1)
+            {
+                $pre_rrule = $tmp[0];
+                $tmp2 = explode(";",$tmp[1]); 
+                if (count($tmp2)>1)
+                    $pre_rrule .= ";".$tmp2[1]; 
+            }
+            //add
+            $pre_rrule .= ";".$rruleType;
+            $sql = "update `".DC_MV_CAL."` set"
+              . " `rrule`=" . $db->Quote($pre_rrule) . " "
+              . "where `id`=" . $id;
+            $db->setQuery( $sql );
+            $db->query();
+            return addDetailedCalendar(JRequest::getVar( 'calid' ), $st, $et, $sub, $ade, $dscr, $loc, $color, $rrule,0,$tz);
+        }
+        else 
+        {
+            $sql = "update `".DC_MV_CAL."` set"
+              . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+              . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "', "
+              . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
+              . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
+              . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
+              . " `session_type`=" . $db->Quote($session_type) . ", "
+              . " `session_focus`=" . $db->Quote($session_focus) . ", "
+              . " `client_id`=" . $db->Quote($client_id) . ", "
+              . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
+              . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
+              . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
+              . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
+              . " `rrule`=" . $db->Quote($rrule) . " "
+              . "where `id`=" . $id;
+            $db->setQuery( $sql );
+            if (!$db->query()){
+              $ret['IsSuccess'] = false;
+              $ret['Msg'] = $db->stderr();
+            }else{
+              $ret['IsSuccess'] = true;
+              $ret['Msg'] = 'Succefully';
+            }
+        }
+    }
+    else
+         $ret = getMessageOverlapping();
+	}catch(Exception $e){
+     $ret['IsSuccess'] = false;
+     $ret['Msg'] = $e->getMessage();
+  }
+  return $ret;
+}
+
+function removeCalendar($id,$rruleType){
+  $ret = array();
+  $db 	=& JFactory::getDBO();
+  try{
+        if (substr($rruleType,0,8)=="del_only")
+        {
+            $sql = "select * from `".DC_MV_CAL."` where id=".$id;
+
+            $db->setQuery( $sql );
+            $rows = $db->loadObjectList();
+            $exdate = $rows[0]->exdate.substr($rruleType,8);
+            
+            $sql = "update `".DC_MV_CAL."` set"
+              . " `exdate`=" . $db->Quote($exdate) . " "
+              . "where `id`=" . $id;
+              
+            $db->setQuery( $sql );            
+            if (!$db->query()){
+              $ret['IsSuccess'] = false;
+              $ret['Msg'] = $db->stderr();
+            }else{
+              $ret['IsSuccess'] = true;
+              $ret['Msg'] = 'Succefully';
+            }
+        }  
+        else if (substr($rruleType,0,9)=="del_UNTIL")
+        {
+            $sql = "select * from `".DC_MV_CAL."` where id=".$id;
+
+            $db->setQuery( $sql );
+            $rows = $db->loadObjectList();
+            $pre_rrule = $rows[0]->rrule;
+            //remove until
+            $tmp = explode(";UNTIL=",$pre_rrule);
+            if (count($tmp)>1)
+            {
+                $pre_rrule = $tmp[0];
+                $tmp2 = explode(";",$tmp[1]); 
+                if (count($tmp2)>1)
+                    $pre_rrule .= ";".$tmp2[1]; 
+            }
+            //add
+            $pre_rrule .= ";".substr($rruleType,4);
+            $sql = "update `".DC_MV_CAL."` set"
+              . " `rrule`=" . $db->Quote($pre_rrule) . " "
+              . "where `id`=" . $id;
+            $db->setQuery( $sql );            
+            if (!$db->query()){
+              $ret['IsSuccess'] = false;
+              $ret['Msg'] = $db->stderr();
+            }else{
+              $ret['IsSuccess'] = true;
+              $ret['Msg'] = 'Succefully';
+            }
+            
+        }
+        else  // $rruleType = "del_all" or ""
+        {
+            $sql = "delete from `".DC_MV_CAL."` where `id`=" . $id;
+	        $db->setQuery( $sql );
+            if (!$db->query()){
+              $ret['IsSuccess'] = false;
+              $ret['Msg'] = $db->stderr();
+            }else{
+              $ret['IsSuccess'] = true;
+              $ret['Msg'] = 'Succefully';
+            }
+        }
+	}catch(Exception $e){
+     $ret['IsSuccess'] = false;
+     $ret['Msg'] = $e->getMessage();
+  }
+  return $ret;
+}
+
+/** get appointment type by category
+ * npkorban
+ * @param type $catid
+*/
+function  get_session_type() {
+    $catid = JRequest::getVar("catid");
+    $db = & JFactory::getDBO();
+    $query = "SELECT id, name FROM #__fitness_session_type WHERE category_id='$catid' AND state='1'";
+    $db->setQuery($query);
+    $id = $db->loadResultArray(0);
+    $name = $db->loadResultArray(1);
+    $result = array_combine($id, $name);
+    echo  json_encode($result);
+    die();
+}
+
+
+/** get appointment type by category
+ * npkorban
+ * @param type $catid
+*/
+function  get_session_focus() {
+    $catid = JRequest::getVar("catid");
+    $session_type = JRequest::getVar("session_type");
+    $db = & JFactory::getDBO();
+    $query = "SELECT id, name FROM #__fitness_session_focus WHERE category_id='$catid' AND session_type_id='$session_type' AND state='1'";
+    $db->setQuery($query);
+    $id = $db->loadResultArray(0);
+    $name = $db->loadResultArray(1);
+    $result = array_combine($id, $name);
+    echo  json_encode($result);
+    die();
+}
+
+/** get appointment type by category
+ * npkorban
+ * @param type $catid
+*/
+function  get_trainers() {
+    $client_id = JRequest::getVar("client_id");
+    $db = & JFactory::getDBO();
+    $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
+    $db->setQuery($query);
+    $primary_trainer= $db->loadResultArray(0);
+    $other_trainers = $db->loadResultArray(1);
+    $other_trainers = explode(',', $other_trainers[0]);
+    $all_trainers_id = array_unique(array_merge($primary_trainer, $other_trainers));
+    
+    foreach ($all_trainers_id as $user_id) {
+        $user = &JFactory::getUser($user_id);
+        $all_trainers_name[] = $user->name;
+    }
+    
+    $result = array_combine($all_trainers_id, $all_trainers_name);
+    echo  json_encode($result);
+    die();
+}
+
+
+
+/**
+ * set event status, on  click status button
+ */
+function set_event_status() {
+    $event_id = JRequest::getVar("event_id");
+    $event_status = JRequest::getVar("event_status");
+    $db = & JFactory::getDBO();
+    $query = "UPDATE #__dc_mv_events SET status='$event_status' WHERE id='$event_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        echo $db->stderr();
+    } else {
+        echo $event_status;
+    }
+    die();
+}
+
+
+/**
+ * add event exercise
+ * @return type
+ */
+function add_exercise() {
+    $post = JRequest::get('post');
+    $db = & JFactory::getDBO();
+    $no_fields = array('method', 'layout', 'view', 'option');
+    if(!$post['title']) {
+        $post['success'] = 0;
+        $post['message'] = 'Title is empty';
+        echo json_encode($post);
+        die();
+    }
+    $obj = new stdClass();
+    foreach ($post as $key=>$value) {
+        if(!in_array($key, $no_fields)) {
+            $obj->$key = $value;
+        }
+    }
+
+    $insert = $db->insertObject('#__fitness_events_exercises', $obj, 'id');
+    if(!$insert) {
+        $post['success'] = 0;
+        $post['message'] = $db->stderr();
+        echo json_encode($post);
+        return;
+    }
+    $post['success'] = 1;
+    $post['id'] = $db->insertid();;
+    echo json_encode($post);
+    die();
+}
+
+
+/**
+ * delete event exercise
+ */
+function delete_exercise() {
+    $exercise_id = JRequest::getVar('exercise_id');
+    $db = & JFactory::getDBO();
+    $query = "DELETE FROM #__fitness_events_exercises WHERE id='$exercise_id'";
+    $db->setQuery($query);
+    $post['exercise_id'] = $exercise_id;
+    if (!$db->query()) {
+        $post['success'] = 0;
+        $post['message'] = $db->stderr();
+    }
+    $post['success'] = 1;
+    echo json_encode($post);
+    die();
+}
+
+/**
+ * change event exercises order on drag and drop
+ */
+function set_event_exircise_order() {
+    $row_id = JRequest::getVar('row_id');
+    $order = JRequest::getVar('order');
+    $db = & JFactory::getDBO();
+    $query = "UPDATE `#__fitness_events_exercises` SET `order` = '$order' WHERE `id` ='$row_id'";
+    $db->setQuery($query);
+        if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $status['success'] = 1;
+    echo json_encode($status);
+    die();
+}
+
+/**
+ * sends email to the client with appointment content, exercises , etc..
+ */
+function send_appointment_email() {
+    $event_id = &JRequest::getVar(event_id);
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&tpml=component&event_id=' . $event_id;
+    $contents = file_get_contents($url);
+    $client_email = getClientEmailByEvent($event_id);
+    $status['success'] = 1;
+    sendEmail($client_email, 'Appointment details, elitefit.com.au', $contents);
+}
+
+/**
+ * standard send email function
+ * @param type $recipient
+ * @param type $Subject
+ * @param type $body
+ */
+function sendEmail($recipient, $Subject, $body) {
+
+    $mailer = & JFactory::getMailer();
+
+    $config = new JConfig();
+
+    $sender = array($config->mailfrom, $config->fromname);
+
+    $mailer->setSender($sender);
+
+    //$recipient = 'npkorban@mail.ru';
+
+    $mailer->addRecipient($recipient);
+
+    $mailer->setSubject($Subject);
+
+    $mailer->isHTML(true);
+
+    $mailer->setBody($body);
+
+    $send = & $mailer->Send();
+    
+    if($send == '1') {
+        echo 'Email  sent';
+    } else {
+        echo $send;
+    }
+    die();
+}
+
+
+/** get client email be event id
+ * 
+ * @param type $event_id
+ * @return type
+ */
+function getClientEmailByEvent($event_id) {
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id FROM #__dc_mv_events WHERE id='$event_id'";
+    $db->setQuery($query);
+        if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $client_id = $db->loadResult();
+    $user = &JFactory::getUser($client_id);
+    return $user->email;
+}
+
+
+
+/* Appointments forms */
+function generateFormHtml() {
+    $form_id = JRequest::getVar("form_id");
+    
+    $formInstanse = new FormFactory();
+    $formType = $formInstanse->getForm($form_id);
+    $formHtml = $formType->generateHtml();
+    echo $formHtml;
+    die();
+}
+
+
+
+abstract class AppointmentForm {
+    abstract function generateHtml();
+}
+
+
+class PersonalTrainingForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class SemiPrivateForm {
+    public function generateHtml() {
+        // top
+        include( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/top_html.inc.php' );
+    }
+}
+
+
+class ResistanceWorkoutForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class CardioWorkoutForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class AssesstmentForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class ConsultationForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class SpecialEventForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class AvailableForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+class UnAvailableForm {
+    public function generateHtml() {
+        return __CLASS__;
+    }
+}
+
+
+class FormFactory {
+    public function getForm($formId) {
+        switch ($formId) {
+            case 1:
+                return new PersonalTrainingForm();
+                break;
+            case 2:
+                return new SemiPrivateForm();
+                break;
+            case 3:
+                return new ResistanceWorkoutForm();
+                break;
+            case 4:
+                return new CardioWorkoutForm();
+                break;
+            case 5:
+                return new AssesstmentForm();
+                break;
+            case 6:
+                return new ConsultationForm();
+                break;
+            case 7:
+                return new SpecialEventForm();
+                break;
+            case 8:
+                return new AvailableForm();
+                break;
+            case 9:
+                return new UnAvailableForm();
+                break;
+
+            default:
+                return new PersonalTrainingForm();
+                break;
+        }
+    }
+}
+
+jexit();
+?>
