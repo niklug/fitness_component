@@ -94,6 +94,9 @@ switch ($method) {
     case "send_appointment_email":
         send_appointment_email();
     break;
+    case "update_exercise_field":
+        update_exercise_field();
+    break;
     case "generateFormHtml":
         generateFormHtml();
     case "adddetails":
@@ -677,12 +680,6 @@ function add_exercise() {
     $post = JRequest::get('post');
     $db = & JFactory::getDBO();
     $no_fields = array('method', 'layout', 'view', 'option');
-    if(!$post['title']) {
-        $post['success'] = 0;
-        $post['message'] = 'Title is empty';
-        echo json_encode($post);
-        die();
-    }
     $obj = new stdClass();
     foreach ($post as $key=>$value) {
         if(!in_array($key, $no_fields)) {
@@ -812,6 +809,50 @@ function getClientEmailByEvent($event_id) {
     $client_id = $db->loadResult();
     $user = &JFactory::getUser($client_id);
     return $user->email;
+}
+
+function update_exercise_field() {
+    $exercise_id = &JRequest::getVar('exercise_id');
+    $exercise_column = &JRequest::getVar('exercise_column');
+    $new_value = &JRequest::getVar('new_value');
+    
+    switch ($exercise_column) {
+        case 1:
+            $column = 'title';
+            break;
+        case 2:
+            $column = 'speed';
+            break;
+        case 3:
+            $column = 'weight';
+            break;
+        case 4:
+            $column = 'reps';
+            break;
+        case 5:
+            $column = 'time';
+            break;
+        case 6:
+            $column = 'sets';
+            break;
+        case 7:
+            $column = 'rest';
+            break;
+
+        default:
+            return;
+            break;
+    }
+    $db = & JFactory::getDBO();
+    $query = "UPDATE `#__fitness_events_exercises` SET `$column` = '$new_value' WHERE `id` ='$exercise_id'";
+    $db->setQuery($query);
+        if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $status['success'] = 1;
+    echo json_encode($status);
+    die();
 }
 
 

@@ -43,7 +43,18 @@ $(document).ready(function() {
 
 
             $("#add_exercise").click(function(){
-                $(".entry-form").fadeIn("fast");	
+                //$(".entry-form").fadeIn("fast");
+                var obj = new Object();
+                obj.title = '';
+                obj.speed = '';
+                obj.weight = '';
+                obj.reps = '';
+                obj.time = '';
+                obj.sets = '';
+                obj.rest = '';
+                obj.event_id = $("input[name=event_id]").val();
+                var data = $.param(obj)+"&method=add_exercise";
+                ajax_exercise("add_exercise", '', data);
             });
 
             $("#close_add_exercise_box").click(function(){
@@ -133,8 +144,57 @@ $(document).ready(function() {
 
 
         }
+        
+        
+        
+        
+        $("#exercise_table td").live('dblclick', function() {
+                var exercise_id = $(this).closest("tr").attr("id").replace('exercise_row_', '');
+                var exercise_column = $(this).index();
+                
+                var OriginalContent = $(this).text();
+                $(this).addClass("cellEditing");
+                $(this).html("<input type='text' value='" + OriginalContent + "' />");
+                $(this).children().first().focus();
 
+                $(this).children().first().keypress(function(e) {
+                    if (e.which == 13) {
+                        var newContent = $(this).val();
+                        $(this).parent().text(newContent);
+                        $(this).parent().removeClass("cellEditing");
+                        
+                        update_exercise_field(exercise_id, exercise_column, newContent);
+                        //alert(event_id + ' ' + exercise_column);
+                    }
+                });
 
+                $(this).children().first().blur(function() {
+                    $(this).parent().text(OriginalContent);
+                    $(this).parent().removeClass("cellEditing");
+                });
+
+        });
+
+        function update_exercise_field(exercise_id, exercise_column, new_value) {
+            var url = DATA_FEED_URL+ "&method=update_exercise_field";
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                   exercise_id : exercise_id,
+                   exercise_column  : exercise_column,
+                   new_value : new_value
+                },
+                dataType : 'json',
+                success : function(response) {
+                    if(!response.success) alert(response.message);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert("error");
+                }
+            });
+        }
          /* end execise table */
 
 
@@ -142,20 +202,22 @@ $(document).ready(function() {
 
 </script>  
 <div id="exercise_table_wrapper">
-            <table id="exercise_table" width="100%" border="0" cellpadding="0" cellspacing="0" class="table-list">
-                <tr>
-                    <th width="4%"><a title="Drag, move and drop the row to change the ordering." href="javascript:void(0)" id="drag_exercise"></a></th>
-                    <th width="40%" title="Execise/Description/Notes"><a title="Add new exercise" href="javascript:void(0)" id="add_exercise"></a>Execise/Notes</th>
-                    <th width="10%">Speed</th>
-                    <th width="10%">Weight</th>
-                    <th width="10%">Reps</th>
-                    <th width="10%">Time</th>
-                    <th width="10%">Sets</th>
-                    <th width="10%">Rest</th>
-                    <th width="5%"><a href="#" title="Copy selected items" data-id="'.$exercise->id.'" class="copy_exercise"></a></th>
-                    <th width="5%"><a href="#" title="Trash selected items" data-id="'.$exercise->id.'" class="trash_exercise"></a></th>
-                </tr>
-                <tbody>
+            <table id="exercise_table" width="100%" border="0" cellpadding="0" cellspacing="0" >
+                <thead
+                    <tr>
+                        <th width="4%"><a title="Drag, move and drop the row to change the ordering." href="javascript:void(0)" id="drag_exercise"></a></th>
+                        <th width="40%" title="Execise/Description/Notes"><a title="Add new exercise" href="javascript:void(0)" id="add_exercise"></a>Execise/Notes</th>
+                        <th width="10%">Speed</th>
+                        <th width="10%">Weight</th>
+                        <th width="10%">Reps</th>
+                        <th width="10%">Time</th>
+                        <th width="10%">Sets</th>
+                        <th width="10%">Rest</th>
+                        <th width="5%"><a href="#" title="Copy selected items" data-id="'.$exercise->id.'" class="copy_exercise"></a></th>
+                        <th width="5%"><a href="#" title="Trash selected items" data-id="'.$exercise->id.'" class="trash_exercise"></a></th>
+                    </tr>
+                </thead>
+                <tbody class="table-list">
                 <?php
                    $exercises = getExercises($event->id);
                    $c = 0;
