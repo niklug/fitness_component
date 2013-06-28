@@ -2435,9 +2435,12 @@
                     }
                 }
             }
+            
             else {
                 alert(i18n.dcmvcal.data_format_error);
             }
+            $("#bbit-cs-buddle").dialog("destroy");
+            option.EditCmdhandler.call('', data);
             return false;
         }
 
@@ -2715,6 +2718,11 @@
                 $("#bbit-cal-buddle").dialog( "close" );
                 realsedragevent();
             });
+            $("#bbit-cal-buddle").dialog( "close" );
+            if (option.EditCmdhandler && $.isFunction(option.EditCmdhandler)) {
+                  option.EditCmdhandler.call(this, ['0', $("#bbit-cal-what").val(), $("#bbit-cal-start").val(), $("#bbit-cal-end").val(), $("#bbit-cal-allday").val()]);
+            }                        
+                realsedragevent();
             return false;
         }
         //format datestring to Date Type

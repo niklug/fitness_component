@@ -114,49 +114,6 @@
       </div>
     <a id="bbit-cs-editLink" href=""></a>  
     
-    
-    
-    <div class="entry-form">
-    <form name="exercise_fields" id="exercise_fields"> 
-        <table width="100%" border="0" cellpadding="4" cellspacing="0">
-            <tr>
-                <td colspan="2" align="right"><img id="close_add_exercise_box" class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close"></td>
-            </tr>
-            <tr>
-                <td>Title</td>
-                <td><input  maxlength="255" type="text" name="title"></td>
-            </tr>
-            <tr>
-                <td>Speed</td>
-                <td><input maxlength="10" type="text" name="speed"></td>
-            </tr>
-            <tr>
-                <td>Weight</td>
-                <td><input maxlength="10" type="text" name="weight"></td>
-            </tr>
-            <tr>
-                <td>Reps</td>
-                <td><input maxlength="255" type="text" name="reps"></td>
-            </tr>
-            <tr>
-                <td>Time</td>
-                <td><input maxlength="20" type="text" name="time"></td>
-            </tr>
-            <tr>
-                <td>Sets</td>
-                <td><input maxlength="255" type="text" name="sets"></td>
-            </tr>
-            <tr>
-                <td>Rest</td>
-                <td><input maxlength="255" type="text" name="rest"></td>
-            </tr>
-            <tr>
-                <td align="right"></td>
-                <td><input type="button" value="Save" id="save_exercise"><input type="button" value="Cancel" id="cancel_exercise"></td>
-            </tr>
-         </table>
-        <input  type="hidden" name="event_id" value="<?php echo $event->id;?>">
-       </form>
-    </div>
+   
   </body>  
 </html>  

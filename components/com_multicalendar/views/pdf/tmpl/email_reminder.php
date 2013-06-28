@@ -26,8 +26,7 @@
               ">
            
            
-            <div style="background-color: #35322F;border: 2px solid #FFFFFF; border-radius: 10px 10px 10px 10px;  color: #FFFFFF;
-                 margin-left: 40px; margin-top: 490px; padding: 10px; width: 600px;">
+            <div style="margin-left: 40px; margin-top: 490px; padding: 10px; width: 600px;">
                          
                  <table style="width: 100%;"  border="0">
                     <tbody>
@@ -150,9 +149,21 @@
                 
                 <span></span>
             </div>
-            <div style="background-color: #35322F;border: 2px solid #FFFFFF; border-radius: 10px 10px 10px 10px;  color: #FFFFFF;
-                 margin-left: 40px; margin-top: 30px; padding: 10px; width: 600px;">
-                
+            <div style="font-size: 14px;  color: #FFFFFF;  margin-left: 40px; margin-top: 30px;font-size: 14px; padding: 10px; width: 792px;">
+                (please arrive at least 5 mins before your scheduled appointment time. If you are training or doing anything physical in your appointment, please be sure to do a warm-up by walking, jogging or rowing for 5-10 mins - unless otherwise instructed not to do so)
+            </div>
+            
+            <div style="  color: #FFFFFF;  margin-left: 40px; margin-top: 30px;font-size: 14px; padding: 10px; width: 792px;">
+                <p style="color:#D14F16;">CANCELLATION POLICY</p>
+                <p>24 hours notice is required to reschedule or cancel any training session or appointment.</p>
+                <p>If less than 24 hours notice is given, FULL FEES will apply for that appointment, unless...</p>
+                <p> - your appointment time can be filled by another client.<br /> - your appointment is able to be rescheduled to another time on the same day (availability depending).</p>
+                <p>If you are late to your appointment, your appointment will still end at the scheduled time.<br /><br />If you do no show up to your appointment or cancel last minute, FULL FEES apply.</p>
+                <p>If you are training early to mid-morning and you need to cancel or reschedule your appointment, you must do so BEFORE 3pm the preceding day to allow time to fill your appointment. Failure to do so will incur FULL SESSION FEES if you cancel too late!</p>
+                <p style="color:#D14F16;">3 ‘STRIKES’ POLICY</p>
+                <p>If you break any of the before mentioned policies, one ‘Strike' will be recorded against you.</p>
+                <p>Each 'Strike' is cumulative and will remain on your record for a period of 1 month.</p>
+                <p>Gaining a 3rd ’Strike' will result in your training being suspended for a length of time determined by your trainer. If this continues, you will no longer be able to continue training with Elite Fitness.</p>
             </div>
         </div>
         

@@ -206,7 +206,7 @@ $(document).ready(function() {
                 <thead
                     <tr>
                         <th width="4%"><a title="Drag, move and drop the row to change the ordering." href="javascript:void(0)" id="drag_exercise"></a></th>
-                        <th width="40%" title="Execise/Description/Notes"><a title="Add new exercise" href="javascript:void(0)" id="add_exercise"></a>Execise/Notes</th>
+                        <th width="40%" title="Execise/Description/Notes"><a title="Add new exercise" href="javascript:void(0)" id="add_exercise"></a><div style="padding-top: 7px;">Execise/Notes</div></th>
                         <th width="10%">Speed</th>
                         <th width="10%">Weight</th>
                         <th width="10%">Reps</th>
