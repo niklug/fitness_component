@@ -158,38 +158,21 @@ $(document).ready(function() {
                 $(this).addClass("cellEditing");
                 $(this).html("<input type='text' value='" + OriginalContent + "' />");
                 $(this).children().first().focus();
-
-
-
-                $(this).children().first().blur(function() {
-                    var newContent = $(this).val();
-                    update_exercise_field(exercise_id, exercise_column, newContent);
-                    $(this).parent().text(newContent);
-                    $(this).parent().removeClass("cellEditing");
-                });
-                
-                /*                
-                $("#exercise_table td").children().keypress(function(e) {
-                    //alert(e.keyCode);
-                    var nexttd = $(this).parent().next("td");
-                    var currentindex =  nexttd.index();
-                    if((currentindex == 0) || (currentindex == 8) || (currentindex == 9)) return;
-
-                    if (e.keyCode == 13) {
-                        console.log(currentindex);
-                        var nextOriginalText = nexttd.text();
-
-                        nexttd.html("<input type='text' value='" + nextOriginalText + "' />");
-                        nexttd.children().focus();
-                    }
-
-                });
-            */
-                
+         
+        });
+        
+        
+        $("#exercise_table td input").live('blur', function() {
+            var exercise_id = $(this).closest("tr").attr("id").replace('exercise_row_', '');
+            var exercise_column = $(this).parent().index();
+            var newContent = $(this).val();
+            update_exercise_field(exercise_id, exercise_column, newContent);
+            $(this).parent().text(newContent);
+            $(this).parent().removeClass("cellEditing");
         });
         
         $("#exercise_table td input").live('keypress', function(e) {
-            if (e.keyCode == 9) {
+            if (e.keyCode == 13) {
                   
                   var nexttd = $(this).parent().next("td");
                   var newContent = $(this).val();
@@ -215,7 +198,7 @@ $(document).ready(function() {
                   $(this).parent().text(newContent);
                   $(this).parent().removeClass("cellEditing");
                   update_exercise_field(exercise_id, Math.abs(exercise_column), newContent);
-                  console.log(exercise_column);
+                  //console.log(exercise_column);
             }
         });
 
