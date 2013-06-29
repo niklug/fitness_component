@@ -100,6 +100,7 @@ $(document).ready(function() {
                   obj.event_id = $("input[name=event_id]").val();
                   var data = $.param(obj)+"&method=add_exercise";
                   ajax_exercise("add_exercise", '', data);
+                  rows.attr('checked', false);
                 });
             });
 
@@ -146,33 +147,76 @@ $(document).ready(function() {
         }
         
         
-        
-        
-        $("#exercise_table td").live('dblclick', function() {
+        $("#exercise_table td").live('click', function() {
                 var exercise_id = $(this).closest("tr").attr("id").replace('exercise_row_', '');
                 var exercise_column = $(this).index();
+                
+                var currentindex = $(this).index();
+                if((currentindex == 0) || (currentindex == 8) || (currentindex == 9)) return;
                 
                 var OriginalContent = $(this).text();
                 $(this).addClass("cellEditing");
                 $(this).html("<input type='text' value='" + OriginalContent + "' />");
                 $(this).children().first().focus();
 
-                $(this).children().first().keypress(function(e) {
-                    if (e.which == 13) {
-                        var newContent = $(this).val();
-                        $(this).parent().text(newContent);
-                        $(this).parent().removeClass("cellEditing");
-                        
-                        update_exercise_field(exercise_id, exercise_column, newContent);
-                        //alert(event_id + ' ' + exercise_column);
-                    }
-                });
+
 
                 $(this).children().first().blur(function() {
-                    $(this).parent().text(OriginalContent);
+                    var newContent = $(this).val();
+                    update_exercise_field(exercise_id, exercise_column, newContent);
+                    $(this).parent().text(newContent);
                     $(this).parent().removeClass("cellEditing");
                 });
+                
+                /*                
+                $("#exercise_table td").children().keypress(function(e) {
+                    //alert(e.keyCode);
+                    var nexttd = $(this).parent().next("td");
+                    var currentindex =  nexttd.index();
+                    if((currentindex == 0) || (currentindex == 8) || (currentindex == 9)) return;
 
+                    if (e.keyCode == 13) {
+                        console.log(currentindex);
+                        var nextOriginalText = nexttd.text();
+
+                        nexttd.html("<input type='text' value='" + nextOriginalText + "' />");
+                        nexttd.children().focus();
+                    }
+
+                });
+            */
+                
+        });
+        
+        $("#exercise_table td input").live('keypress', function(e) {
+            if (e.keyCode == 9) {
+                  
+                  var nexttd = $(this).parent().next("td");
+                  var newContent = $(this).val();
+                  var exercise_id = nexttd.closest("tr").attr("id").replace('exercise_row_', '');
+                  var exercise_column = $(this).parent().index();
+                  var nextindex =  nexttd.index();
+                  if((nextindex == 9)) return false;
+                  if((nextindex == 8)) {
+                        if(nexttd.closest("tr").next().length == 0) {
+                          $(this).parent().text(newContent);
+                          $(this).parent().removeClass("cellEditing");
+                          update_exercise_field(exercise_id, Math.abs(exercise_column), newContent);
+                          return false;
+                        }
+                        var nexttd = nexttd.closest("tr").next().find("td:eq(1)");
+                      
+                  }
+                  
+                  var nextOriginalText = nexttd.text();
+                  nexttd.html("<input type='text' value='" + nextOriginalText + "' />");
+                  nexttd.children().focus();
+                  
+                  $(this).parent().text(newContent);
+                  $(this).parent().removeClass("cellEditing");
+                  update_exercise_field(exercise_id, Math.abs(exercise_column), newContent);
+                  console.log(exercise_column);
+            }
         });
 
         function update_exercise_field(exercise_id, exercise_column, new_value) {
