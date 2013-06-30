@@ -142,6 +142,8 @@ $(document).ready(function() {
                                 <td width='10'><a href='#' data-id='"+response.id+"' class='delete_exercise'></a></td></tr>");
                             $(".table-list tr:last").effect("highlight", {color: '#4BADF5'}, 1000);
                             $(".entry-form input[type='text']").each(function(){$(this).val("");});
+                            var height = $('#exercise_table_wrapper')[0].scrollHeight;
+                            $("#exercise_table_wrapper").scrollTop(height);
                         }  else if(action == "delete_exercise"){
                             var row_id = response.exercise_id;
                             $("a[data-id='"+row_id+"']").closest("tr").effect("highlight", {
@@ -150,7 +152,7 @@ $(document).ready(function() {
                             var item =  $("a[data-id='"+row_id+"']").closest("tr");
                             item.fadeOut();
                             setTimeout(function(){item.remove()}, 1000);
-                            
+                           
                         }
                         attachDragExerciseRows();
                     },
