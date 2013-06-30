@@ -315,11 +315,14 @@
     border-bottom: 1px dotted #cccccc ;
 }
 
-#exercise_table {
+#exercise_table, #header_exercise_table {
     border: 1px solid #cccccc ;
     padding: 0;
 }
 
+#header_exercise_table {
+    background-color:#BBBBBB;
+}
 
 #exercise_table th {
   border-bottom: 1px dotted #DDDDDD;
@@ -360,7 +363,6 @@
 }
 
 #exercise_table_wrapper{
-    height: 263px;
-    margin-top: 10px;
+    height: 234px;
     overflow-y: auto;
 }
