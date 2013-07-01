@@ -115,3 +115,13 @@ PRIMARY KEY (`id`)
 
 
 
+CREATE TABLE IF NOT EXISTS `#__fitness_email_reminder` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `event_id` int(10) unsigned NOT NULL,
+  `sent` int(1) NOT NULL DEFAULT '0',
+  `confirmed` int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `event_id` (`event_id`),
+  FOREIGN KEY (event_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+

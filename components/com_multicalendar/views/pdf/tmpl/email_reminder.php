@@ -24,11 +24,27 @@
               background-size:<?php echo $width; ?>;
               background-repeat: no-repeat;
               ">
+
            
-           
-            <div style="margin-left: 40px; margin-top: 490px; padding: 10px; width: 600px;">
-                         
-                 <table style="width: 100%;"  border="0">
+            <div style="margin-left: 40px; margin-top: 0; padding: 10px; width: 793px;font-size:20px;">
+                  
+              
+                <table style="width: 100%; margin-top: 370px;"  border="0">
+                    <tr>
+                        <td align="right">
+                            <a target="_blank" href="<?php echo JUri::base() ?>index.php?option=com_multicalendar&task=confirm_email&event_id=<?php echo base64_encode($event_id) ?>" 
+                                 style="
+                              background-image: url('<?php echo JUri::base() ?>components/com_multicalendar/DC_MultiViewCal/css/images/confirm_email_button.png');
+                              background-repeat: no-repeat;
+                              display: block;
+                              height: 85px;
+                              width: 250px;
+                              "></a>  
+                        </td>
+                    </tr>
+                </table>
+                
+                 <table style="width: 100%;margin-top: 10px"  border="0">
                     <tbody>
                         <tr>
                             <td style="color:#ffffff;" width="25%">Client Name:</td>
@@ -66,7 +82,7 @@
                 </table>
                     
                     
-                 <table style="width: 100%; margin-top: 30px;" border="0">
+                 <table style="width: 100%; margin-top: 10px;" border="0">
                     <tbody>
                         <tr>
                             <td style="color:#ffffff;">Start Date:</td>
@@ -111,7 +127,7 @@
                     </tbody>
                 </table>
                     
-                <table style="width: 100%; margin-top: 30px;"  border="0">
+                <table style="width: 100%; margin-top: 35px;"  border="0">
                     <tbody>
                         <tr>
                             <td style="color:#ffffff;" width="25%">Appointment:</td>

@@ -40,7 +40,7 @@ $(document).ready(function() {
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
-                        alert("error");
+                        //alert("error");
                     }
                 });
             }
@@ -158,7 +158,7 @@ $(document).ready(function() {
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
-                        alert("error");
+                        //alert("error");
                     }
             });
 
@@ -266,7 +266,7 @@ $(document).ready(function() {
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown)
                 {
-                    alert("error");
+                    //alert("error");
                 }
             });
         }
