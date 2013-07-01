@@ -335,7 +335,7 @@ function initMultiViewCal(container,calendarId,config)
                     
                     function showEditEvent(url)
                     {   
-                        var width = 620;
+                        var width = 630;
                         var height = 720;
                         try {
                         $jc("#editEvent").remove();

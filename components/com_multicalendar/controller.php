@@ -176,7 +176,7 @@ class MultiCalendarController extends JController
             $query = "SELECT client_id FROM #__dc_mv_events WHERE id='$event_id'";
             $db->setQuery($query);
             if (!$db->query()) {
-                echo 'error';
+                echo $db->stderr();
             }
             $client_id = $db->loadResult();
             $user = &JFactory::getUser($client_id);

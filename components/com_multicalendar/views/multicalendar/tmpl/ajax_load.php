@@ -54,19 +54,7 @@ switch ($method) {
 
         break;
     case "update":
-        $ret = updateCalendar(
-                JRequest::getVar("CalendarStartTime"), 
-                JRequest::getVar("CalendarEndTime"),
-                JRequest::getVar("CalendarTitle"),
-                JRequest::getVar("IsAllDayEvent"),
-                
-                JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
-                JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
-                JRequest::getVar("client_id"),
-                JRequest::getVar("trainer_id"),
-                JRequest::getVar("Location"), 
-                JRequest::getVar("colorvalue")
-               );
+        $ret = updateCalendar(JRequest::getVar("calendarId"), JRequest::getVar("CalendarStartTime"), JRequest::getVar("CalendarEndTime"));  
         break;
     case "remove":
         $ret = removeCalendar( JRequest::getVar("calendarId"),JRequest::getVar("rruleType"));
@@ -352,39 +340,16 @@ function listCalendar($day, $type){
   return listCalendarByRange($st, $et);
 }
 
-function updateCalendar(
-        $id,
-        $st,
-        $et, 
-        $sub,
-        $ade,
-        
-        $session_type,
-        $session_focus,
-        $client_id,
-        $trainer_id,
-        $Location, 
-        $colorvalue){
+function updateCalendar($id, $st, $et){
   $ret = array();
   $db 	=& JFactory::getDBO();
   try{
     if (checkIfOverlappingThisEvent($id, $st, $et))
     {
-    $sql = "update `".DC_MV_CAL."` set"
-              . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
-              . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "', "
-              . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
-              . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
-              . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
-              . " `session_type`=" . $db->Quote($session_type) . ", "
-              . " `session_focus`=" . $db->Quote($session_focus) . ", "
-              . " `client_id`=" . $db->Quote($client_id) . ", "
-              . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
-              . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
-              . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
-              . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
-              . " `rrule`=" . $db->Quote($rrule) . " "
-              . "where `id`=" . $id;
+        $sql = "update `".DC_MV_CAL."` set"
+          . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+          . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "' "
+          . "where `id`=" . $id;
         $db->setQuery( $sql );
         if (!$db->query()){
           $ret['IsSuccess'] = false;
