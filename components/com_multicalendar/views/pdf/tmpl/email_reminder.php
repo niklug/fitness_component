@@ -23,13 +23,15 @@
               height:<?php echo $height; ?>;
               background-size:<?php echo $width; ?>;
               background-repeat: no-repeat;
+              font-family: Times New Roman;
+              background-size: 900px auto !important;
               ">
 
            
-            <div style="margin-left: 40px; margin-top: 0; padding: 10px; width: 793px;font-size:20px;">
+            <div style="margin-left: 40px; margin-top: 0; padding: 10px; width: 793px;font-size:16px;">
                   
               
-                <table style="width: 100%; margin-top: 370px;"  border="0">
+                <table style="width: 100%; margin-top: 380px;"  border="0">
                     <tr>
                         <td align="right">
                             <a target="_blank" href="<?php echo JUri::base() ?>index.php?option=com_multicalendar&task=confirm_email&event_id=<?php echo base64_encode($event_id) ?>" 
@@ -44,11 +46,11 @@
                     </tr>
                 </table>
                 
-                 <table style="width: 100%;margin-top: 10px"  border="0">
+                 <table style="width: 500px;margin-top: 25px"  border="0">
                     <tbody>
                         <tr>
-                            <td style="color:#ffffff;" width="25%">Client Name:</td>
-                            <td style="color:#D14F16;">
+                            <td style="color:#ffffff;" width="150px">Client Name:</td>
+                            <td style="font-weight: bold;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php
                                 $user = &JFactory::getUser($event_data->client_id);
@@ -59,7 +61,7 @@
                         </tr>
                         <tr>
                             <td style="color:#ffffff;">Trainer Name:</td>
-                            <td style="color:#D14F16;">
+                            <td style="font-weight: bold;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php
                                 $user = &JFactory::getUser($event_data->trainer_id);
@@ -70,7 +72,7 @@
                         </tr>
                         <tr>
                             <td style="color:#ffffff;">Location:</td>
-                            <td style="color:#D14F16;">
+                            <td style="font-weight: bold;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php
                                 echo $event_data->location;
@@ -82,11 +84,11 @@
                 </table>
                     
                     
-                 <table style="width: 100%; margin-top: 10px;" border="0">
+                 <table style="width: 750px; margin-top: 25px;" border="0">
                     <tbody>
                         <tr>
-                            <td style="color:#ffffff;">Start Date:</td>
-                            <td style="color:#D14F16;">
+                            <td style="width: 150px;color:#ffffff;">Start Date:</td>
+                            <td style="font-weight: bold;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php 
                                 $date = JFactory::getDate($event_data->starttime);
@@ -94,8 +96,8 @@
                                 ?>
                                 </i>
                             </td>
-                            <td style="color:#ffffff;">Finish Date:</td>
-                            <td style="color:#D14F16;">
+                            <td style="padding-left: 50px;color:#ffffff;">Finish Date:</td>
+                            <td style="font-weight: bold;width:200px;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php 
                                 $date = JFactory::getDate($event_data->endtime);
@@ -106,7 +108,7 @@
                         </tr>
                         <tr>
                             <td style="color:#ffffff;">Start Time:</td>
-                            <td style="color:#D14F16;">
+                            <td style="font-weight: bold;width:200px;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php 
                                 $date = JFactory::getDate($event_data->starttime);
@@ -114,8 +116,8 @@
                                 ?>
                                 </i>
                             </td>
-                            <td style="color:#ffffff;">Finish Time:</td>
-                            <td style="color:#D14F16;">
+                            <td style="padding-left: 50px;color:#ffffff;">Finish Time:</td>
+                            <td style="font-weight: bold;width:200px;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php 
                                 $date = JFactory::getDate($event_data->endtime);
@@ -127,11 +129,11 @@
                     </tbody>
                 </table>
                     
-                <table style="width: 100%; margin-top: 35px;"  border="0">
+                <table style="width: 500px; margin-top: 25px;"  border="0">
                     <tbody>
                         <tr>
-                            <td style="color:#ffffff;" width="25%">Appointment:</td>
-                            <td style="color:#D14F16;">
+                            <td style="color:#ffffff;" width="150px;">Appointment:</td>
+                            <td style="font-weight: bold;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php
                                 echo $event_data->title;
@@ -141,7 +143,7 @@
                         </tr>
                         <tr>
                             <td style="color:#ffffff;">Session Type:</td>
-                            <td style="color:#D14F16;">
+                            <td style="font-weight: bold;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php
                                 echo $event_data->session_type;
@@ -151,7 +153,7 @@
                         </tr>
                         <tr>
                             <td style="color:#ffffff;">Session Focus:</td>
-                            <td style="color:#D14F16;">
+                            <td style="font-weight: bold;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php
                                 echo $event_data->session_focus;
@@ -165,11 +167,11 @@
                 
                 <span></span>
             </div>
-            <div style="font-size: 14px;  color: #FFFFFF;  margin-left: 40px; margin-top: 30px;font-size: 14px; padding: 10px; width: 792px;">
+            <div style="font-size: 14px;  color: #FFFFFF;  margin-left: 40px; margin-top: 35px;font-size: 14px; padding: 10px; width: 792px;">
                 (please arrive at least 5 mins before your scheduled appointment time. If you are training or doing anything physical in your appointment, please be sure to do a warm-up by walking, jogging or rowing for 5-10 mins - unless otherwise instructed not to do so)
             </div>
             
-            <div style="  color: #FFFFFF;  margin-left: 40px; margin-top: 30px;font-size: 14px; padding: 10px; width: 792px;">
+            <div style="  color: #FFFFFF;  margin-left: 40px; margin-top: 60px;font-size: 14px; padding: 10px; width: 792px;">
                 <p style="color:#D14F16;">CANCELLATION POLICY</p>
                 <p>24 hours notice is required to reschedule or cancel any training session or appointment.</p>
                 <p>If less than 24 hours notice is given, FULL FEES will apply for that appointment, unless...</p>
