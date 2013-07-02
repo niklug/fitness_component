@@ -194,20 +194,12 @@ $(document).ready(function() {
            /** trainers onchange select
              *  npkorban
              */
-            $('#trainers').change(function(){
-               var trainer_id = $(this).find(':selected')[0].id;
+            $('#add_client_button').click(function(){
+               var trainer_id = $('#trainers').find(':selected')[0].id;
                setClientsSelect(trainer_id);
             });
             
-            /** trainers onload select
-             *  npkorban
-             */
-            function setClientsSelectOnLoad() {
-               var trainer_id = '<?php echo $event->trainer_id; ?>';
-               setClientsSelect(trainer_id);
-            }
-            
-            /** trainers select
+             /** trainers select
              *  npkorban
              */
             function setClientsSelect(trainer_id) {
@@ -221,13 +213,15 @@ $(document).ready(function() {
                     },
                     dataType : 'json',
                     success : function(message) {
+                        var number = $("#clients_html tr").length + 1;
                         var html = '';
                         html += '<tr>';
-                        html +='<td>Client : </td>';
+                        html +='<td>Client ' + number + ': </td>';
                         html +='<td>';
-                        html += '<select class="inputtext clients"   name="clients[]">';
+                        html += '<select class="inputtext clients"   name="clients">';
+                        html += '<option  value="">-Select-</option>';
                         $.each(message, function(index, value) {
-                            if(index) {
+                             if(index) {
                                 html += '<option  value="' + index + '">' +  value + '</option>';
                             }
                         });
@@ -244,6 +238,34 @@ $(document).ready(function() {
                     }
                 });
             }
+            
+            
+            $(".clients").live('change', function() {
+                var url = DATA_FEED_URL+ "&method=add_update_group_client";
+                var event_id = '<?php echo $event->id; ?>';
+                var client_id = $(this).find(':selected').val();
+                if(client_id) {
+                    $.ajax({
+                        type : "POST",
+                        url : url,
+                        data : {
+                           event_id : event_id,
+                           client_id : client_id
+                        },
+                        dataType : 'json',
+                        success : function(response) {
+                            if(response.status == '0') {
+                                alert(response.message);
+                            }
+        
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown)
+                        {
+                            alert("error");
+                        }
+                    });
+                }
+            });
             
 
             /********************/ 
@@ -384,7 +406,6 @@ $(document).ready(function() {
                 $("#trainers_select_tr").show();
                 $("#trainers").attr('disabled', false);
                 buildClientsSelect();
-                //setClientsSelectOnLoad();
                 
             }
             

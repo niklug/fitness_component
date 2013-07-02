@@ -91,6 +91,9 @@ switch ($method) {
     case "get_semi_clients":
         get_semi_clients();
     break;
+    case "add_update_group_client":
+        add_update_group_client();
+    break;
 
     case "generateFormHtml":
         generateFormHtml();
@@ -842,7 +845,7 @@ function update_exercise_field() {
     $db = & JFactory::getDBO();
     $query = "UPDATE `#__fitness_events_exercises` SET `$column` = '$new_value' WHERE `id` ='$exercise_id'";
     $db->setQuery($query);
-        if (!$db->query()) {
+    if (!$db->query()) {
         $status['success'] = 0;
         $status['message'] = $db->stderr();
     }
@@ -868,6 +871,41 @@ function get_semi_clients() {
     $result = array('clients'=>$clients, 'clients_name'=>$clients_name, 'status'=>$status);
     echo  json_encode($result);
     die();
+}
+
+
+function add_update_group_client() {
+    $event_id = JRequest::getVar("event_id");
+    $client_id = JRequest::getVar("client_id");
+    
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $client = $db->loadResult();
+    
+    if($client == $client_id) return;
+    
+    if($client) {
+        $query = "UPDATE `#__fitness_appointment_clients` SET `client_id` = '$client_id' WHERE `event_id` ='$event_id' AND `client_id`='$client_id'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $status['success'] = 0;
+            $status['message'] = $db->stderr();
+        }
+    } else {
+        $query = "INSERT  INTO `#__fitness_appointment_clients` (`client_id`,`event_id`,`status`) VALUES ('$client_id', '$event_id', '0')";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $status['success'] = 0;
+            $status['message'] = $db->stderr();
+        }
+        $status['success'] = 1;
+    }
+    die($client);
 }
 
 
