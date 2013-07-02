@@ -68,6 +68,9 @@ switch ($method) {
     case "get_trainers":
             get_trainers();
         break;
+    case "get_clients":
+        get_clients();
+    break;
     case "set_event_status":
             set_event_status();
         break;
@@ -85,6 +88,10 @@ switch ($method) {
     case "update_exercise_field":
         update_exercise_field();
     break;
+    case "get_semi_clients":
+        get_semi_clients();
+    break;
+
     case "generateFormHtml":
         generateFormHtml();
     case "adddetails":
@@ -617,6 +624,26 @@ function  get_trainers() {
     die();
 }
 
+/** get appointment type by category
+ * npkorban
+ * @param type $catid
+*/
+function  get_clients() {
+    $trainer_id = JRequest::getVar("trainer_id");
+    $db = & JFactory::getDBO();
+    $query = "SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$trainer_id' AND state='1'";
+    $db->setQuery($query);
+    $clients= $db->loadResultArray(0);
+    
+    foreach ($clients as $user_id) {
+        $user = &JFactory::getUser($user_id);
+        $clients_name[] = $user->name;
+    }
+    
+    $result = array_combine($clients, $clients_name);
+    echo  json_encode($result);
+    die();
+}
 
 
 /**
@@ -776,6 +803,10 @@ function getClientEmailByEvent($event_id) {
     return $user->email;
 }
 
+/**
+ * 
+ * @return type
+ */
 function update_exercise_field() {
     $exercise_id = &JRequest::getVar('exercise_id');
     $exercise_column = &JRequest::getVar('exercise_column');
@@ -817,6 +848,25 @@ function update_exercise_field() {
     }
     $status['success'] = 1;
     echo json_encode($status);
+    die();
+}
+
+
+function get_semi_clients() {
+    $event_id = JRequest::getVar("event_id");
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id, status FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
+    $db->setQuery($query);
+    $clients= $db->loadResultArray(0);
+    $status= $db->loadResultArray(1);
+    
+    foreach ($clients as $user_id) {
+        $user = &JFactory::getUser($user_id);
+        $clients_name[] = $user->name;
+    }
+    
+    $result = array('clients'=>$clients, 'clients_name'=>$clients_name, 'status'=>$status);
+    echo  json_encode($result);
     die();
 }
 

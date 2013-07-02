@@ -27,6 +27,20 @@ function getClients() {
 }
 
 
+/** get clients from fitness component
+ * npkorban
+ * 
+ * @return type
+ */
+function getTrainers() { 
+    $db	= & JFactory::getDBO();
+    $query = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+    $db->setQuery($query);
+    $trainers = $db->loadObjectList();
+    return $trainers;
+}
+
+
 
 /** get Appointment (category) from fitness component
  * npkorban
@@ -99,6 +113,7 @@ $dc_locations = getLocations();
 $appointments = getAppointments();
 $dc_subjects = $appointments[0];
 $clients = getClients();
+$trainers  = getTrainers();
 
 define("JC_JQUERY_MV",true);
 global $JC_JQUERY_SPECIAL ;

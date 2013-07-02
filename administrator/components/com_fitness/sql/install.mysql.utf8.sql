@@ -125,3 +125,15 @@ CREATE TABLE IF NOT EXISTS `#__fitness_email_reminder` (
   FOREIGN KEY (event_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+CREATE TABLE IF NOT EXISTS `#__fitness_appointment_clients` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `event_id` int(10) unsigned NOT NULL,
+  `client_id` int(10) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `event_id` (`event_id`),
+  KEY `client_id` (`client_id`),
+  KEY `client_id_2` (`client_id`),
+  FOREIGN KEY (event_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE,
+  FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

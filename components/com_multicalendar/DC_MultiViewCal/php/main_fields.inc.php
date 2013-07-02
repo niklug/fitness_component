@@ -47,7 +47,7 @@
             <td>
                 <table border="0">
                     <tbody>
-                        <tr>
+                        <tr id="client_select_tr">
                             <td>Client:</td>
                             <td>
                                 <?php
@@ -63,10 +63,23 @@
                                 ?>  
                             </td>
                         </tr>
-                        <tr>
+                        <tr id="trainer_select_tr">
                             <td>Trainer:</td>
                             <td>
                                 <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
+                            </td>
+                        </tr>
+                        <tr id="trainers_select_tr">
+                            <td>Trainer:</td>
+                            <td>
+                                <select  id="trainers" name="trainer_id" class="required safe inputtext" >
+                                    <?php
+                                    echo '<option> -Select-</option>';
+                                    for ($i = 0; $i < count( $trainers); $i++) {
+                                        echo '<option " id="' .  $trainers[$i]->id . '" value="' . ( $trainers[$i]->id) . '" ' . ((isset($event) && (trim($event->trainer_id) == trim( $trainers[$i]->id))) ? "selected" : "") . '>' .  $trainers[$i]->username . '</option>';
+                                    }
+                                    ?>
+                                </select>
                             </td>
                         </tr>
                         <tr>

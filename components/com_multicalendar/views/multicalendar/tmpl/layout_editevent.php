@@ -440,8 +440,7 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                 error.appendTo(form).css(newpos);
             }  
   
-  
-            
+       
            
         });  
 
@@ -454,6 +453,10 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
     <!-- Main fields -->
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/main_fields.inc.php' );
+    ?>
+    <!-- Add clients, Semi-Private form -->
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/clients.inc.php' );
     ?>
     <!-- Details, Email, Pdf -->
     <?php

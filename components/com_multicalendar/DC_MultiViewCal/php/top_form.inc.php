@@ -13,7 +13,8 @@ $(document).ready(function() {
                // get session focus by category (appointment)
                setupSessionType(catid);
             });
-            
+            var catid = $(this).find(':selected').data('catid');
+            generateFormHtml(catid);
             
             $('#session_type').change(function(){
                 var catid = $('#Subject').find(':selected').data('catid');
@@ -117,6 +118,7 @@ $(document).ready(function() {
                setTrainerSelect(client_id);
             }
             setTrainerSelectOnLoad();
+            
            /** client select
              *  npkorban
              */
@@ -150,38 +152,102 @@ $(document).ready(function() {
                     }
                 });
             }
-
-            /********************/ 
-            /**
-            * 
-
-             * @param {type} form_id
-             * @returns {undefined}             */
-            function generateFormHtml(form_id) {
-                //window.parent.$jc('#editEvent').dialog('close');
-                //window.parent.$jc('#editEvent').dialog('open');
-               
-               
-            /*
-                 var url = DATA_FEED_URL+ "&method=generateFormHtml";
-                 $.ajax({
+            
+            
+            function buildClientsSelect() {
+                var event_id = '<?php echo $event->id; ?>';
+                var trainer_id = $('#trainers').find(':selected')[0].id;
+                var url = DATA_FEED_URL+ "&method=get_semi_clients";
+                $.ajax({
                     type : "POST",
                     url : url,
                     data : {
-                       form_id : form_id
+                       event_id : event_id
                     },
-                    dataType : 'text',
+                    dataType : 'json',
                     success : function(message) {
-                        //$(".multicalendar").html(message);
+                        var html = '';
+                        
+                        for( var i = 0; i < message.clients.length; i++) {
+                            html += '<tr>';
+                            html +='<td>Client ' + (i+1) + ': </td>';
+                            html +='<td>';
+                            html += '<select class="inputtext clients"  name="clients[]">';
+                            html += '<option  value="' + message.clients[i]  + '">' +  message.clients_name[i] + '</option>';
+                            html += '</select>';
+                            html +='</td>';
+                            html += '</tr>';
+                            //html = message.clients[i] + ' ' + message.clients_name[i] + ' ' + message.status[i];
+                        }
+                        $("#clients_html").html(html);
+             
+                     
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
                         alert("error");
                     }
                 });
-                */
+            }
+                        
+            
+           /** trainers onchange select
+             *  npkorban
+             */
+            $('#trainers').change(function(){
+               var trainer_id = $(this).find(':selected')[0].id;
+               setClientsSelect(trainer_id);
+            });
+            
+            /** trainers onload select
+             *  npkorban
+             */
+            function setClientsSelectOnLoad() {
+               var trainer_id = '<?php echo $event->trainer_id; ?>';
+               setClientsSelect(trainer_id);
             }
             
+            /** trainers select
+             *  npkorban
+             */
+            function setClientsSelect(trainer_id) {
+               var url = DATA_FEED_URL+ "&method=get_clients";
+               
+                $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       trainer_id : trainer_id
+                    },
+                    dataType : 'json',
+                    success : function(message) {
+                        var html = '';
+                        html += '<tr>';
+                        html +='<td>Client : </td>';
+                        html +='<td>';
+                        html += '<select class="inputtext clients"   name="clients[]">';
+                        $.each(message, function(index, value) {
+                            if(index) {
+                                html += '<option  value="' + index + '">' +  value + '</option>';
+                            }
+                        });
+
+                        html += '</select>';
+                        html +='</td>';
+                        html += '</tr>';
+                        $("#clients_html").append(html);
+                     
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
+                    }
+                });
+            }
+            
+
+            /********************/ 
+         
             
                     
              /* EVENT STATUS */
@@ -249,7 +315,106 @@ $(document).ready(function() {
             }
             /* END EVENT STATUS */
             
-           
+            /*************************************************************
+             * @param {type} form_id
+             * @returns {undefined}             */
+            function generateFormHtml(form_id) {
+                //alert(form_id);
+                //window.parent.$jc('#editEvent').dialog('close');
+                //window.parent.$jc('#editEvent').dialog('open');
+                switch(form_id) {
+                    case 1:
+                       personalTrainingForm();
+                       break;
+                    case 2:
+                       semiPrivateForm();
+                       break;
+                    case 3:
+                       resistanceWorkoutForm();
+                       break;
+                    case 4:
+                       cardioWorkoutForm();
+                       break;
+                    case 5:
+                       assessmentForm();
+                       break;
+                    case 6:
+                       consultationForm();
+                       break;
+                    case 7:
+                       specialEventForm();
+                       break;
+                    case 8:
+                       availableForm();
+                       break;
+                    case 9:
+                       unavailableForm();
+                       break;
+                    default :
+                       personalTrainingForm(); 
+                }
+            }
+            
+            
+            function personalTrainingForm() {
+                console.log(arguments.callee.name);
+                $("#clients_wrapper").hide();
+                //client personal
+                $("#client_select_tr").show();
+                $("#client").attr('disabled', false);
+                //trainer personal
+                $("#trainer_select_tr").show();
+                $("#trainer").attr('disabled', false);
+                //trainer semi
+                $("#trainers_select_tr").hide();
+                $("#trainers").attr('disabled', true);
+                
+            }
+            
+            function semiPrivateForm() {
+                console.log(arguments.callee.name);
+                $("#clients_wrapper").show();
+                //client personal
+                $("#client_select_tr").hide();
+                $("#client").attr('disabled', true);
+                //trainer personal
+                $("#trainer_select_tr").hide();
+                $("#trainer").attr('disabled', true);
+                //trainer semi
+                $("#trainers_select_tr").show();
+                $("#trainers").attr('disabled', false);
+                buildClientsSelect();
+                //setClientsSelectOnLoad();
+                
+            }
+            
+            function resistanceWorkoutForm() {
+                console.log(arguments.callee.name);
+            }
+            
+            function cardioWorkoutForm() {
+                console.log(arguments.callee.name);
+            }
+            
+            function assessmentForm() {
+                console.log(arguments.callee.name);
+            }
+            
+            function consultationForm() {
+                console.log(arguments.callee.name);
+            }
+            
+            function specialEventForm() {
+                console.log(arguments.callee.name);
+            }
+            
+            function availableForm() {
+                console.log(arguments.callee.name);
+            }
+            
+            function unavailableForm() {
+                console.log(arguments.callee.name);
+            }
         });  
         
 </script>  
