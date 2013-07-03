@@ -94,6 +94,9 @@ switch ($method) {
     case "add_update_group_client":
         add_update_group_client();
     break;
+    case "delete_group_client":
+        delete_group_client();
+    break;
 
     case "generateFormHtml":
         generateFormHtml();
@@ -858,26 +861,33 @@ function update_exercise_field() {
 function get_semi_clients() {
     $event_id = JRequest::getVar("event_id");
     $db = & JFactory::getDBO();
-    $query = "SELECT client_id, status FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
+    $query = "SELECT id, client_id, status FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
     $db->setQuery($query);
-    $clients= $db->loadResultArray(0);
-    $status= $db->loadResultArray(1);
+    $ids = $db->loadResultArray(0);
+    $clients = $db->loadResultArray(1);
+    $status= $db->loadResultArray(2);
     
     foreach ($clients as $user_id) {
         $user = &JFactory::getUser($user_id);
         $clients_name[] = $user->name;
     }
     
-    $result = array('clients'=>$clients, 'clients_name'=>$clients_name, 'status'=>$status);
+    $result = array('ids' => $ids, 'clients'=>$clients, 'clients_name'=>$clients_name, 'status'=>$status);
     echo  json_encode($result);
     die();
 }
 
-
+/**
+ * 
+ * @return type
+ */
 function add_update_group_client() {
     $event_id = JRequest::getVar("event_id");
     $client_id = JRequest::getVar("client_id");
+    $id = JRequest::getVar("id");
     
+
+        
     $db = & JFactory::getDBO();
     $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
     $db->setQuery($query);
@@ -887,28 +897,51 @@ function add_update_group_client() {
     }
     $client = $db->loadResult();
     
-    if($client == $client_id) return;
+    if($client == $client_id) {
+        $user = &JFactory::getUser($client_id);
+        $status['success'] = 0;
+        $status['message'] = $user->username . ' already added for this event';
+        echo json_encode($status);
+        die();
+    }
     
-    if($client) {
-        $query = "UPDATE `#__fitness_appointment_clients` SET `client_id` = '$client_id' WHERE `event_id` ='$event_id' AND `client_id`='$client_id'";
+    if($id) {
+        $query = "UPDATE `#__fitness_appointment_clients` SET `client_id` = '$client_id' WHERE `id` ='$id'";
         $db->setQuery($query);
+        $status['success'] = 1;
         if (!$db->query()) {
             $status['success'] = 0;
             $status['message'] = $db->stderr();
         }
     } else {
+
         $query = "INSERT  INTO `#__fitness_appointment_clients` (`client_id`,`event_id`,`status`) VALUES ('$client_id', '$event_id', '0')";
         $db->setQuery($query);
+        $status['success'] = 1;
         if (!$db->query()) {
             $status['success'] = 0;
             $status['message'] = $db->stderr();
         }
-        $status['success'] = 1;
+        $status['id'] = $db->insertid();
     }
-    die($client);
+    echo json_encode($status);
+    die();
 }
 
-
+function delete_group_client() {
+    $id = JRequest::getVar("id");
+    $db = & JFactory::getDBO();
+    $query = "DELETE FROM #__fitness_appointment_clients WHERE id='$id'";
+    $db->setQuery($query);
+    $status['id'] = $id;
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $status['success'] = 1;
+    echo json_encode($status);
+    die();
+}
 
 /* Appointments forms */
 function generateFormHtml() {

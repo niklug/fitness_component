@@ -172,9 +172,12 @@ $(document).ready(function() {
                             html += '<tr>';
                             html +='<td>Client ' + (i+1) + ': </td>';
                             html +='<td>';
-                            html += '<select class="inputtext clients"  name="clients[]">';
+                            html += '<select data-id="' + message.ids[i]  + '" class="inputtext clients"  name="clients[]">';
                             html += '<option  value="' + message.clients[i]  + '">' +  message.clients_name[i] + '</option>';
                             html += '</select>';
+                            html +='</td>';
+                            html +='<td>';
+                            html += "<a href='#' data-id='" + message.ids[i] + "' class='delete_group_client'></a>";
                             html +='</td>';
                             html += '</tr>';
                             //html = message.clients[i] + ' ' + message.clients_name[i] + ' ' + message.status[i];
@@ -189,6 +192,34 @@ $(document).ready(function() {
                     }
                 });
             }
+            
+            
+            /**
+            *  delete group client
+            */
+            $(".delete_group_client").live('click', function() {
+                var id = $(this).data('id');
+                var url = DATA_FEED_URL+ "&method=delete_group_client";
+                $(this).closest("tr").fadeOut();
+                $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       id : id
+                    },
+                    dataType : 'json',
+                    success : function(response) {
+                        if(!response.success) {
+                           alert(response.message);
+                        }
+                        
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        //alert("error");
+                    }
+                });
+            });
                         
             
            /** trainers onchange select
@@ -228,6 +259,9 @@ $(document).ready(function() {
 
                         html += '</select>';
                         html +='</td>';
+                        html +='<td>';
+                        html += "<a href='#' class='delete_group_client'></a>";
+                        html +='</td>';
                         html += '</tr>';
                         $("#clients_html").append(html);
                      
@@ -244,17 +278,25 @@ $(document).ready(function() {
                 var url = DATA_FEED_URL+ "&method=add_update_group_client";
                 var event_id = '<?php echo $event->id; ?>';
                 var client_id = $(this).find(':selected').val();
+                var this_select_a = $(this).closest('tr').find('a');
+                var id = $(this).closest('tr').find('a').data('id');
+                if(!id) id = '';
+                
                 if(client_id) {
                     $.ajax({
                         type : "POST",
                         url : url,
                         data : {
+                           id : id,
                            event_id : event_id,
                            client_id : client_id
                         },
                         dataType : 'json',
                         success : function(response) {
-                            if(response.status == '0') {
+                            
+                           if(response.success) {
+                                this_select_a.attr('data-id', response.id);
+                           } else {
                                 alert(response.message);
                             }
         

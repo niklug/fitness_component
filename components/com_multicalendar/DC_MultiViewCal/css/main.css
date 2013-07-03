@@ -258,7 +258,7 @@
 }
 
 
-.delete_exercise{
+.delete_exercise, .delete_group_client{
     background-image: url('images/delete.png');
     background-repeat: no-repeat;
     display: block;
