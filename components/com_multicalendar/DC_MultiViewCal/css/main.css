@@ -381,7 +381,7 @@
 }
 
 #exercise_table_wrapper{
-    height: 234px;
+    max-height: 234px;
     overflow-y: auto;
 }
 

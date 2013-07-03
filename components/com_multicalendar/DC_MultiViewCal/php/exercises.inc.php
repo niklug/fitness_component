@@ -139,7 +139,7 @@ $(document).ready(function() {
                                 <td width='40'>"+response.sets+"</td>\n\
                                 <td width='40'>"+response.rest+"</td>\n\
                                 <td width='10'><input type='checkbox' name='exercise_checked[]' value='" + response.id + "'></td>\n\
-                                <td width='10'><a href='#' data-id='"+response.id+"' class='delete_exercise'></a></td></tr>");
+                                <td width='10'><a href='javascript:void(0)' data-id='"+response.id+"' class='delete_exercise'></a></td></tr>");
                             $(".table-list tr:last").effect("highlight", {color: '#4BADF5'}, 1000);
                             $(".entry-form input[type='text']").each(function(){$(this).val("");});
                             var height = $('#exercise_table_wrapper')[0].scrollHeight;
@@ -293,8 +293,8 @@ $(document).ready(function() {
                 <th width="40">Time</th>
                 <th width="40">Sets</th>
                 <th width="40">Rest</th>
-                <th width="10"><a href="#" title="Copy selected items" data-id="'.$exercise->id.'" class="copy_exercise"></a></th>
-                <th width="10"><a href="#" title="Trash selected items" data-id="'.$exercise->id.'" class="trash_exercise"></a></th>
+                <th width="10"><a href="javascript:void(0)" title="Copy selected items" data-id="'.$exercise->id.'" class="copy_exercise"></a></th>
+                <th width="10"><a href="javascript:void(0)" title="Trash selected items" data-id="'.$exercise->id.'" class="trash_exercise"></a></th>
             </tr>
         </thead>
 </table>
@@ -315,7 +315,7 @@ $(document).ready(function() {
                                 <td width="40">'.$exercise->sets.'</td>
                                 <td width="40">'.$exercise->rest.'</td>
                                 <td width="10"><input type="checkbox" name="exercise_checked[]" value="'.$exercise->id.'"></td>
-                                <td width="10"><a href="#" title="delete" data-id="'.$exercise->id.'" class="delete_exercise"></a></td>
+                                <td width="10"><a href="javascript:void(0)" title="delete" data-id="'.$exercise->id.'" class="delete_exercise"></a></td>
                             </tr>';
                        $c++;
                    }
