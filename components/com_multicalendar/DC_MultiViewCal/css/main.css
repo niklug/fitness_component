@@ -366,3 +366,26 @@
     height: 234px;
     overflow-y: auto;
 }
+
+
+#add_client_button {
+    background-color: #E8E8E8 ;
+    background-image: url("images/add_exercise.png");
+    background-repeat: no-repeat;
+    background-size: 24px auto;
+    border: 1px solid  	#989898 ;
+    color: #000000;
+    cursor: pointer;
+    display: block;
+    height: 23px;
+    margin-right: 5px;
+    margin-top: 3px;
+    padding: 1px;
+    text-decoration: none;
+    width: 135px;
+}
+
+#add_client_button div {
+    margin-left: 30px;
+    margin-top: 5px;
+}

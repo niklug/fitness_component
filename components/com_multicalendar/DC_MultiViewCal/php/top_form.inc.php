@@ -172,9 +172,12 @@ $(document).ready(function() {
                             html += '<tr>';
                             html +='<td>Client ' + (i+1) + ': </td>';
                             html +='<td>';
+                            
                             html += '<select data-id="' + message.ids[i]  + '" class="inputtext clients"  name="clients[]">';
                             html += '<option  value="' + message.clients[i]  + '">' +  message.clients_name[i] + '</option>';
                             html += '</select>';
+                            
+                            //html += '<input readonly data-id="' + message.ids[i]  + '" class="inputtext clients"  type="text" value="' +  message.clients_name[i] + '">';
                             html +='</td>';
                             html +='<td>';
                             html += "<a href='#' data-id='" + message.ids[i] + "' class='delete_group_client'></a>";

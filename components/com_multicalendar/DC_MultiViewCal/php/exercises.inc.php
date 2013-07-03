@@ -143,7 +143,11 @@ $(document).ready(function() {
                             $(".table-list tr:last").effect("highlight", {color: '#4BADF5'}, 1000);
                             $(".entry-form input[type='text']").each(function(){$(this).val("");});
                             var height = $('#exercise_table_wrapper')[0].scrollHeight;
+                            var iframe_height = $(document).height();
+                            $(document).scrollTop(iframe_height);
+                            //console.log(iframe_height );
                             $("#exercise_table_wrapper").scrollTop(height);
+                            
                         }  else if(action == "delete_exercise"){
                             var row_id = response.exercise_id;
                             $("a[data-id='"+row_id+"']").closest("tr").effect("highlight", {
@@ -152,6 +156,8 @@ $(document).ready(function() {
                             var item =  $("a[data-id='"+row_id+"']").closest("tr");
                             item.fadeOut();
                             setTimeout(function(){item.remove()}, 1000);
+                            var iframe_height = $(document).height();
+                            $(document).scrollTop(iframe_height);
                            
                         }
                         attachDragExerciseRows();
