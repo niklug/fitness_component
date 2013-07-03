@@ -104,16 +104,6 @@
         <br />  
         <br />  
     </div>  
-      <div class="event_status_wrapper">
-          <img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" onclick="hide_event_status_wrapper()">
-              <a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>
-              <a data-status="2" class="set_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>
-              <a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>
-              <a data-status="4" class="set_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>
-              <a data-status="5" class="set_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>
-      </div>
-    <a id="bbit-cs-editLink" href=""></a>  
-    
    
   </body>  
 </html>  

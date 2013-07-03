@@ -97,6 +97,10 @@ switch ($method) {
     case "delete_group_client":
         delete_group_client();
     break;
+    case "set_group_client_status":
+        set_group_client_status();
+    break;
+
 
     case "generateFormHtml":
         generateFormHtml();
@@ -915,7 +919,7 @@ function add_update_group_client() {
         }
     } else {
 
-        $query = "INSERT  INTO `#__fitness_appointment_clients` (`client_id`,`event_id`,`status`) VALUES ('$client_id', '$event_id', '0')";
+        $query = "INSERT  INTO `#__fitness_appointment_clients` (`client_id`,`event_id`,`status`) VALUES ('$client_id', '$event_id', '1')";
         $db->setQuery($query);
         $status['success'] = 1;
         if (!$db->query()) {
@@ -942,6 +946,27 @@ function delete_group_client() {
     echo json_encode($status);
     die();
 }
+
+
+/**
+ * set event status, on  click status button
+ */
+function set_group_client_status() {
+    $id = JRequest::getVar("id");
+    $client_status = JRequest::getVar("client_status");
+    $db = & JFactory::getDBO();
+    $query = "UPDATE #__fitness_appointment_clients SET status='$client_status'  WHERE id='$id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $status['ids'] = $id;
+    $status['success'] = 1;
+    echo json_encode($status);
+    die();
+}
+
 
 /* Appointments forms */
 function generateFormHtml() {

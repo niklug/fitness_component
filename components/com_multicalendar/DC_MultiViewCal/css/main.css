@@ -105,6 +105,24 @@
     margin: 5px;
 }
 
+.client_status_wrapper {
+   background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    display: none;
+    padding: 15px 0 2px;
+    position: fixed;
+    right: 24px;
+    text-align: center;
+    top: 205px;
+    width: 102px;
+
+}
+
+.client_status_wrapper a{
+    margin: 5px;
+}
+
 
 .event_status_pending {
     background-color: #EBEBEB;

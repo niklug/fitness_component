@@ -176,14 +176,15 @@ $(document).ready(function() {
                             html += '<select data-id="' + message.ids[i]  + '" class="inputtext clients"  name="clients[]">';
                             html += '<option  value="' + message.clients[i]  + '">' +  message.clients_name[i] + '</option>';
                             html += '</select>';
-                            
-                            //html += '<input readonly data-id="' + message.ids[i]  + '" class="inputtext clients"  type="text" value="' +  message.clients_name[i] + '">';
                             html +='</td>';
                             html +='<td>';
                             html += "<a href='#' data-id='" + message.ids[i] + "' class='delete_group_client'></a>";
                             html +='</td>';
+                            html +='<td>';
+                            html += client_status_html(message.status[i], message.ids[i]);
+                            html +='</td>';
                             html += '</tr>';
-                            //html = message.clients[i] + ' ' + message.clients_name[i] + ' ' + message.status[i];
+                            
                         }
                         $("#clients_html").html(html);
              
@@ -201,7 +202,7 @@ $(document).ready(function() {
             *  delete group client
             */
             $(".delete_group_client").live('click', function() {
-                var id = $(this).data('id');
+                var id = $(this).closest('tr').find('select').data('id');
                 var url = DATA_FEED_URL+ "&method=delete_group_client";
                 $(this).closest("tr").fadeOut();
                 $.ajax({
@@ -265,6 +266,9 @@ $(document).ready(function() {
                         html +='<td>';
                         html += "<a href='#' class='delete_group_client'></a>";
                         html +='</td>';
+                        html +='<td>';
+                        html += client_status_html('1', '');
+                        html +='</td>';
                         html += '</tr>';
                         $("#clients_html").append(html);
                      
@@ -281,8 +285,10 @@ $(document).ready(function() {
                 var url = DATA_FEED_URL+ "&method=add_update_group_client";
                 var event_id = '<?php echo $event->id; ?>';
                 var client_id = $(this).find(':selected').val();
-                var this_select_a = $(this).closest('tr').find('a');
-                var id = $(this).closest('tr').find('a').data('id');
+                var this_select = $(this).closest('tr').find('select');
+                var this_status_button = $(this).closest('tr').find('.open_client_status');
+                
+                var id = $(this).closest('tr').find('select').data('id');
                 if(!id) id = '';
                 
                 if(client_id) {
@@ -298,7 +304,8 @@ $(document).ready(function() {
                         success : function(response) {
                             
                            if(response.success) {
-                                this_select_a.attr('data-id', response.id);
+                                this_select.attr('data-id', response.id);
+                                this_status_button.attr('data-id', response.id);
                            } else {
                                 alert(response.message);
                             }
@@ -328,10 +335,7 @@ $(document).ready(function() {
                 eventSetStatus(event_status);
             });
             
-            $(".hideimage").live('click', function(e) {
-                hide_event_status_wrapper();
-            });
-            
+
             function openSetEventStatusBox(event_status) {
                  $(".event_status_wrapper").show();
                  $(".event_status__button").show();
@@ -342,9 +346,12 @@ $(document).ready(function() {
                  if(event_status == 5)  $(".event_status_wrapper .event_status_noshow").hide();
             } 
             
+            $(".event_status_wrapper .hideimage").live('click', function(e) {
+                hide_event_status_wrapper();
+            });
             
             function hide_event_status_wrapper() {
-                $(".event_status_wrapper").hide();
+                $(".event_status_wrapper").fadeOut();
             }
             
             
@@ -352,7 +359,7 @@ $(document).ready(function() {
             function eventSetStatus(event_status) {
                 var event_id = '<?php echo $event->id; ?>';
                 var url = DATA_FEED_URL+ "&method=set_event_status";
-                   $.ajax({
+                $.ajax({
                         type : "POST",
                         url : url,
                         data : {
@@ -381,6 +388,88 @@ $(document).ready(function() {
 
             }
             /* END EVENT STATUS */
+            
+            
+            
+            /* START GROUP C STATUS */
+            function client_status_html(client_status, id) {
+                 if(client_status == 1)  return '<a data-id="' + id + '" data-status="' + client_status + '" class="open_client_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
+                 if(client_status == 2)  return '<a data-id="' + id + '" data-status="' + client_status + '"   class="open_client_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';
+                 if(client_status == 3)  return '<a data-id="' + id + '" data-status="' + client_status + '"  class="open_client_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';
+                 if(client_status == 4)  return '<a data-id="' + id + '" data-status="' + client_status + '"  class="open_client_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';
+                 if(client_status == 5)  return '<a data-id="' + id + '" data-status="' + client_status + '"  class="open_client_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
+
+            }
+            
+            $(".open_client_status").live('click', function() {
+                var client_status = $(this).attr('data-status');
+                var id = $(this).attr('data-id');
+                openSetClientStatusBox(client_status, id);
+            });
+            
+                        
+            function openSetClientStatusBox(client_status, id) {
+                 $(".client_status_wrapper").attr('data-id', id);
+                 $(".client_status_wrapper").show();
+                 
+                 $(".event_status__button").show();
+                 if(client_status == 1)  $(".client_status_wrapper .event_status_pending").hide();
+                 if(client_status == 2)  $(".client_status_wrapper .event_status_attended").hide();
+                 if(client_status == 3)  $(".client_status_wrapper .event_status_cancelled").hide();
+                 if(client_status == 4)  $(".client_status_wrapper .event_status_latecancel").hide();
+                 if(client_status == 5)  $(".client_status_wrapper .event_status_noshow").hide();
+            } 
+            
+            $(".set_client_status").live('click', function(e) {
+                var client_status = $(this).attr('data-status');
+                clientSetStatus(client_status);
+            });
+            
+            $(".client_status_wrapper .hideimage").live('click', function(e) {
+                hide_client_status_wrapper();
+            });
+            
+            function hide_client_status_wrapper() {
+                $(".client_status_wrapper").fadeOut();
+            }
+            
+            function clientSetStatus(client_status) {
+                var id = $(".client_status_wrapper").attr('data-id');
+                var url = DATA_FEED_URL+ "&method=set_group_client_status";
+                $.ajax({
+                        type : "POST",
+                        url : url,
+                        data : {
+                            client_status : client_status,
+                            id : id
+                        },
+                        dataType : 'json',
+                        success : function(response) {
+                            if(response.success) {
+                                hide_client_status_wrapper();
+                   
+                                $('.open_client_status[data-id="' + id +'"]').parent().html( client_status_html(client_status, id));
+             
+                            } else {
+                                alert(response.message);
+                            }
+     
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown)
+                        {
+                            alert("error");
+                        }
+                });
+            }
+    
+    
+             /* END GROUP USER STATUS */
+            
+            /*
+             * 
+             * @param {type} form_id
+             * @returns {undefined}
+             */
             
             /*************************************************************
              * @param {type} form_id
@@ -588,3 +677,22 @@ $(document).ready(function() {
             </label>  
 
             <hr>
+            
+      <div class="event_status_wrapper">
+          <img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" >
+              <a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>
+              <a data-status="2" class="set_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>
+              <a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>
+              <a data-status="4" class="set_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>
+              <a data-status="5" class="set_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>
+      </div>
+            
+                  
+      <div class="client_status_wrapper">
+          <img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" >
+              <a data-status="1" class="set_client_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>
+              <a data-status="2" class="set_client_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>
+              <a data-status="3" class="set_client_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>
+              <a data-status="4" class="set_client_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>
+              <a data-status="5" class="set_client_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>
+      </div>

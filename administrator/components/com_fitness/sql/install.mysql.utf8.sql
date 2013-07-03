@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_appointment_clients` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `event_id` int(10) unsigned NOT NULL,
   `client_id` int(10) NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '0',
+  `status` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `event_id` (`event_id`),
   KEY `client_id` (`client_id`),
