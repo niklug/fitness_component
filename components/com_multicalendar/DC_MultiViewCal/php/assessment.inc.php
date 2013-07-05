@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 </script>  
 
-<div id="assessment_wrapper">
+<div id="assessment_wrapper" style="display:none;">
     <hr>
     <table border="0" width="100%">
         <tbody>
@@ -17,34 +17,34 @@ $(document).ready(function() {
                             <tr>
                                 <td >Height</td>
                                 <td>
-                                    <input class="assessment_input required digits"  maxlength="7" type="text" name="as_height">
+                                    <input class="assessment_input required digits"  maxlength="7" type="text" name="as_height" id="as_height">
                                 </td>
                                 <td>cm</td>
                             </tr>
                             <tr>
                                 <td>Weight</td>
                                 <td>
-                                    <input class="assessment_input required digits" maxlength="7" type="text" name="as_weight">
+                                    <input class="assessment_input required digits" maxlength="7" type="text" name="as_weight" id="as_weight">
                                 </td>
                                 <td>kg</td>
                             </tr>
                             <tr>
                                 <td>Age</td>
                                 <td>
-                                    <input class="assessment_input required digits" maxlength="2" type="text" name="as_age">
+                                    <input class="assessment_input required digits" maxlength="2" type="text" name="as_age" id="as_age">
                                 </td>
                                 <td>years</td>
                             </tr>
                             <tr>
                                 <td>Body Fat</td>
                                 <td>
-                                    <input class="assessment_input required digits" maxlength="3" type="text" name="as_body_fat">
+                                    <input class="assessment_input required digits" maxlength="3" type="text" name="as_body_fat" id="as_body_fat">
                                 </td>
                                 <td>%</td>
                             </tr>
                             <tr>
                                 <td>Lean Mass</td>
-                                <td><input class="assessment_input required digits" maxlength="5" type="text" name="as_lean_mass"></td>
+                                <td><input class="assessment_input required digits" maxlength="5" type="text" name="as_lean_mass" id="as_lean_mass"></td>
                                 <td>kg</td>
                             </tr>
                         </tbody>
@@ -276,7 +276,7 @@ $(document).ready(function() {
                             <tr>
                                 <td>Subscapularis</td>
                                 <td>
-                                    <input class="assessment_input digits"  maxlength="7" type="text" name="bsm_tricep">
+                                    <input class="assessment_input digits"  maxlength="7" type="text" name="bsm_subscapularis">
                                 </td>
                                 <td>mm</td>
                             <tr>
@@ -399,7 +399,7 @@ $(document).ready(function() {
             </tr>
         </tbody>
     </table>
-
+    <input type="hidden" name="event_id" value="<?php echo $event->id;?>">
 
 </div>
 

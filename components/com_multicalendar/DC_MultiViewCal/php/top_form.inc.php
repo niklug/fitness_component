@@ -512,6 +512,15 @@ $(document).ready(function() {
             }
             
             
+            function setAssessmentFields(status){
+                $("#as_height").attr('disabled', status);
+                $("#as_weight").attr('disabled', status);
+                $("#as_age").attr('disabled', status);
+                $("#as_body_fat").attr('disabled', status);
+                $("#as_lean_mass").attr('disabled', status);
+            }
+            
+            
             function personalTrainingForm() {
                 console.log(arguments.callee.name);
                 $("#clients_wrapper").hide();
@@ -527,6 +536,10 @@ $(document).ready(function() {
                 //trainer semi
                 $("#trainers_select_tr").hide();
                 $("#trainers").attr('disabled', true);
+                
+                //disable assessment fields
+                setAssessmentFields(true);
+                //
                 
             }
             
@@ -546,6 +559,9 @@ $(document).ready(function() {
                 $("#trainers_select_tr").show();
                 $("#trainers").attr('disabled', false);
                 buildClientsSelect();
+                //disable assessment fields
+                setAssessmentFields(true);
+                //
                 
             }
             
@@ -558,8 +574,11 @@ $(document).ready(function() {
             }
             
             function assessmentForm() {
+                
+                <?php if (isset($event->status)) { ?>
                 $("#clients_wrapper").hide();
                 $("#assessment_wrapper").show();
+                
                 $("#details_wrapper").hide();
                 $("#exercises_wrapper").hide();
                 //client personal
@@ -571,6 +590,10 @@ $(document).ready(function() {
                 //trainer semi
                 $("#trainers_select_tr").hide();
                 $("#trainers").attr('disabled', true);
+                //anable assessment fields
+                setAssessmentFields(false);
+                //
+                <?php }   ?>
             }
             
             function consultationForm() {

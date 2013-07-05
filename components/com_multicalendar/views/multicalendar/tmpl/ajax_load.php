@@ -403,7 +403,7 @@ function updateDetailedCalendar(
         $rruleType,
         $tz
         ){
- 
+ updateAssessmentData();
   $ret = array();
   $db 	=& JFactory::getDBO();
 
@@ -968,118 +968,45 @@ function set_group_client_status() {
 }
 
 
-/* Appointments forms */
-function generateFormHtml() {
-    $form_id = JRequest::getVar("form_id");
+function updateAssessmentData() {
+    $post = JRequest::get('post');
+    $info = print_r($post, true);
+    $db = & JFactory::getDBO();
+    $fields = array('event_id', 'as_height', 'as_weight', 'as_age', 
+        'as_body_fat', 'as_lean_mass', 'as_comments', 'ha_blood_pressure',
+        'ha_body_mass_index', 'ha_sit_reach', 'ha_lung_function', 
+        'ha_aerobic_fitness', 'ha_comments', 'am_height', 'am_bicep_l',
+        'am_weight', 'am_thigh_r', 'am_waist', 'am_thigh_l', 'am_hips', 
+        'am_calf_r', 'am_chest', 'am_calf_l', 'am_bicep_r', 'am_comments',
+        'bia_body_fat', 'bia_body_water', 'bia_muscle_mass', 'bia_bone_mass', 
+        'bia_visceral_fat', 'bio_comments', 'bsm_height', 'bsm_weight', 'bsm_chin',
+        'bsm_check', 'bsm_pec', 'bsm_tricep', 'bsm_subscapularis', 'bsm_sum10',
+        'bsm_sum12', 'bsm_midaxillary', 'bsm_supraillac', 'bsm_umbilical',
+        'bsm_knee', 'bsm_calf', 'bsm_quadricep', 'bsm_hamstring', 'bsm_body_fat',
+        'bsm_lean_mass', 'bsm_comments', 'nutrition_protocols', 'supplementation_protocols', 'training_protocols'
+    );
     
-    $formInstanse = new FormFactory();
-    $formType = $formInstanse->getForm($form_id);
-    $formHtml = $formType->generateHtml();
-    echo $formHtml;
-    die();
-}
-
-
-
-abstract class AppointmentForm {
-    abstract function generateHtml();
-}
-
-
-class PersonalTrainingForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class SemiPrivateForm {
-    public function generateHtml() {
-        // top
-        include( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/top_html.inc.php' );
-    }
-}
-
-
-class ResistanceWorkoutForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class CardioWorkoutForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class AssesstmentForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class ConsultationForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class SpecialEventForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class AvailableForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class UnAvailableForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-
-class FormFactory {
-    public function getForm($formId) {
-        switch ($formId) {
-            case 1:
-                return new PersonalTrainingForm();
-                break;
-            case 2:
-                return new SemiPrivateForm();
-                break;
-            case 3:
-                return new ResistanceWorkoutForm();
-                break;
-            case 4:
-                return new CardioWorkoutForm();
-                break;
-            case 5:
-                return new AssesstmentForm();
-                break;
-            case 6:
-                return new ConsultationForm();
-                break;
-            case 7:
-                return new SpecialEventForm();
-                break;
-            case 8:
-                return new AvailableForm();
-                break;
-            case 9:
-                return new UnAvailableForm();
-                break;
-
-            default:
-                return new PersonalTrainingForm();
-                break;
+    $obj = new stdClass();
+    
+    foreach ($post as $key=>$value) {
+        if(in_array($key, $fields)) {
+            $obj->$key = $value;
         }
     }
+
+    $insert = $db->insertObject('#__fitness_assessments', $obj, 'id');
+    if(!$insert) {
+        $post['success'] = 0;
+        $post['message'] = $db->stderr();
+        echo json_encode($post);
+        return;
+    }
 }
+
+
+
+
+
 
 jexit();
 ?>

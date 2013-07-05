@@ -8,7 +8,7 @@ $(document).ready(function() {
 
 </script>  
 
-<div id="clients_wrapper">
+<div id="clients_wrapper" style="display:none;">
     <hr>
     <table border="0">
         <tbody id="clients_html">
