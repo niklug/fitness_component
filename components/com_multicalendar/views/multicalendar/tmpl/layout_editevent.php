@@ -458,6 +458,10 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/clients.inc.php' );
     ?>
+    <!-- Assessment form -->
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/assessment.inc.php' );
+    ?>
     <!-- Details, Email, Pdf -->
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/details.inc.php' );

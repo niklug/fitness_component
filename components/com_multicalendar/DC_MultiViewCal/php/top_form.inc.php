@@ -515,6 +515,9 @@ $(document).ready(function() {
             function personalTrainingForm() {
                 console.log(arguments.callee.name);
                 $("#clients_wrapper").hide();
+                $("#assessment_wrapper").hide();
+                $("#details_wrapper").show();
+                $("#exercises_wrapper").show();
                 //client personal
                 $("#client_select_tr").show();
                 $("#client").attr('disabled', false);
@@ -530,6 +533,9 @@ $(document).ready(function() {
             function semiPrivateForm() {
                 console.log(arguments.callee.name);
                 $("#clients_wrapper").show();
+                $("#assessment_wrapper").hide();
+                $("#details_wrapper").show();
+                $("#exercises_wrapper").show();
                 //client personal
                 $("#client_select_tr").hide();
                 $("#client").attr('disabled', true);
@@ -552,7 +558,19 @@ $(document).ready(function() {
             }
             
             function assessmentForm() {
-                console.log(arguments.callee.name);
+                $("#clients_wrapper").hide();
+                $("#assessment_wrapper").show();
+                $("#details_wrapper").hide();
+                $("#exercises_wrapper").hide();
+                //client personal
+                $("#client_select_tr").show();
+                $("#client").attr('disabled', false);
+                //trainer personal
+                $("#trainer_select_tr").show();
+                $("#trainer").attr('disabled', false);
+                //trainer semi
+                $("#trainers_select_tr").hide();
+                $("#trainers").attr('disabled', true);
             }
             
             function consultationForm() {

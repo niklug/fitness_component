@@ -282,44 +282,46 @@ $(document).ready(function() {
     });  
 
 </script>  
-<table  id="header_exercise_table" width="100%" border="0" cellpadding="0" cellspacing="0" >
-        <thead
-            <tr>
-                <th width="15"><a title="Drag, move and drop the row to change the ordering." href="javascript:void(0)" id="drag_exercise"></a></th>
-                <th width="150" title="Execise/Description/Notes"><a title="Add new exercise" href="javascript:void(0)" id="add_exercise"></a><div style="padding-top: 7px;">Execise/Notes</div></th>
-                <th width="40">Speed</th>
-                <th width="40">Weight</th>
-                <th width="40">Reps</th>
-                <th width="40">Time</th>
-                <th width="40">Sets</th>
-                <th width="40">Rest</th>
-                <th width="10"><a href="javascript:void(0)" title="Copy selected items" data-id="'.$exercise->id.'" class="copy_exercise"></a></th>
-                <th width="10"><a href="javascript:void(0)" title="Trash selected items" data-id="'.$exercise->id.'" class="trash_exercise"></a></th>
-            </tr>
-        </thead>
-</table>
-<div id="exercise_table_wrapper">
-            <table id="exercise_table" width="100%" border="0" cellpadding="0" cellspacing="0" >
-                <tbody class="table-list">
-                <?php
-                   $exercises = getExercises($event->id);
-                   $c = 0;
-                   foreach ($exercises as $exercise) {
-                       echo '<tr id="exercise_row_' . $exercise->id . '">
-                                <td width="15" class="drag_exercise_item"></td>
-                                <td width="180" >'.$exercise->title.'</td>
-                                <td width="40" >'.$exercise->speed.'</td>
-                                <td width="40">'.$exercise->weight.'</td>
-                                <td width="40">'.$exercise->reps.'</td>
-                                <td width="40">'.$exercise->time.'</td>
-                                <td width="40">'.$exercise->sets.'</td>
-                                <td width="40">'.$exercise->rest.'</td>
-                                <td width="10"><input type="checkbox" name="exercise_checked[]" value="'.$exercise->id.'"></td>
-                                <td width="10"><a href="javascript:void(0)" title="delete" data-id="'.$exercise->id.'" class="delete_exercise"></a></td>
-                            </tr>';
-                       $c++;
-                   }
-                ?>
-                </tbody>
-            </table>
+<div id="exercises_wrapper">
+    <table  id="header_exercise_table" width="100%" border="0" cellpadding="0" cellspacing="0" >
+            <thead
+                <tr>
+                    <th width="15"><a title="Drag, move and drop the row to change the ordering." href="javascript:void(0)" id="drag_exercise"></a></th>
+                    <th width="150" title="Execise/Description/Notes"><a title="Add new exercise" href="javascript:void(0)" id="add_exercise"></a><div style="padding-top: 7px;">Execise/Notes</div></th>
+                    <th width="40">Speed</th>
+                    <th width="40">Weight</th>
+                    <th width="40">Reps</th>
+                    <th width="40">Time</th>
+                    <th width="40">Sets</th>
+                    <th width="40">Rest</th>
+                    <th width="10"><a href="javascript:void(0)" title="Copy selected items" data-id="'.$exercise->id.'" class="copy_exercise"></a></th>
+                    <th width="10"><a href="javascript:void(0)" title="Trash selected items" data-id="'.$exercise->id.'" class="trash_exercise"></a></th>
+                </tr>
+            </thead>
+    </table>
+    <div id="exercise_table_wrapper">
+                <table id="exercise_table" width="100%" border="0" cellpadding="0" cellspacing="0" >
+                    <tbody class="table-list">
+                    <?php
+                       $exercises = getExercises($event->id);
+                       $c = 0;
+                       foreach ($exercises as $exercise) {
+                           echo '<tr id="exercise_row_' . $exercise->id . '">
+                                    <td width="15" class="drag_exercise_item"></td>
+                                    <td width="180" >'.$exercise->title.'</td>
+                                    <td width="40" >'.$exercise->speed.'</td>
+                                    <td width="40">'.$exercise->weight.'</td>
+                                    <td width="40">'.$exercise->reps.'</td>
+                                    <td width="40">'.$exercise->time.'</td>
+                                    <td width="40">'.$exercise->sets.'</td>
+                                    <td width="40">'.$exercise->rest.'</td>
+                                    <td width="10"><input type="checkbox" name="exercise_checked[]" value="'.$exercise->id.'"></td>
+                                    <td width="10"><a href="javascript:void(0)" title="delete" data-id="'.$exercise->id.'" class="delete_exercise"></a></td>
+                                </tr>';
+                           $c++;
+                       }
+                    ?>
+                    </tbody>
+                </table>
+    </div>
 </div>
