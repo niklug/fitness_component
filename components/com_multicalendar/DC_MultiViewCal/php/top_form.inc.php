@@ -544,8 +544,11 @@ $(document).ready(function() {
                 //disable assessment fields
                 setAssessmentFields(true);
                 //
-                
+                set_etparttime(45);
+ 
             }
+            
+            
             
             function semiPrivateForm() {
                 $("#clients_wrapper").show();
@@ -565,15 +568,19 @@ $(document).ready(function() {
                 //disable assessment fields
                 setAssessmentFields(true);
                 //
+                set_etparttime(30);
                 
             }
+
             
             function resistanceWorkoutForm() {
                 semiPrivateForm();
+                set_etparttime(45);
             }
             
             function cardioWorkoutForm() {
                 semiPrivateForm();
+                set_etparttime(60);
             }
             
             function assessmentForm() {
@@ -595,6 +602,7 @@ $(document).ready(function() {
                 $("#trainers").attr('disabled', true);
                 //anable assessment fields
                 setAssessmentFields(false);
+                set_etparttime(60);
                 //
                 <?php }   ?>
             }
@@ -602,18 +610,58 @@ $(document).ready(function() {
             function consultationForm() {
                 semiPrivateForm();
                 $("#exercises_wrapper").hide();
+                set_etparttime(60);
             }
             
             function specialEventForm() {
                 consultationForm();
+                set_etparttime(60);
             }
             
             function availableForm() {
                 consultationForm();
+                set_etparttime(45);
             }
             
             function unavailableForm() {
                 consultationForm();
+                set_etparttime(60);
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            //////////////
+                        
+            function set_etparttime(minutes) {
+                var stparttime = $("#stparttime").val();
+                var stparttime_part = stparttime.split(":");
+                var date = new Date();
+                date.setHours(stparttime_part[0]);
+                date.setMinutes(stparttime_part[1]);
+                var newdate = addMinutes(date, minutes);
+                var hours = newdate.getHours();
+                var minutes = newdate.getMinutes();
+                $("#etparttime").val(pad(hours) + ':' + pad(minutes));
+            }
+            
+            function addMinutes(inDate, inMinutes)
+            {
+                var newdate = new Date();
+                newdate.setTime(inDate.getTime() + inMinutes * 60000);
+                return newdate;
+            }
+          
+	
+
+            function pad(d) {
+                return (d < 10) ? '0' + d.toString() : d.toString();
             }
         });  
         
@@ -681,6 +729,7 @@ $(document).ready(function() {
                 $earr = explode("/", $etpartdate);
                 $etpartdate = $earr[1] . "/" . $earr[0] . "/" . $earr[2];
             }
+        
             ?>  
 
             <label>  
