@@ -171,7 +171,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             var tt = "{0}:{1}";
             for (var i = <?php echo $hoursStart?>; i <= <?php echo $hoursEnd?>; i++) {
                 //arrT.push({ text: StrFormat(tt, [i >= 10 ? i : "0" + i, "00"]) }, { text: StrFormat(tt, [i >= 10 ? i : "0" + i, "30"]) });
-                arrT.push({ text: fomartTimeAMPM(i,0,__MilitaryTime) }, {  text: fomartTimeAMPM(i,15,__MilitaryTime) });
+                arrT.push({ text: fomartTimeAMPM(i,0,__MilitaryTime) }, {  text: fomartTimeAMPM(i,15,__MilitaryTime) },{  text: fomartTimeAMPM(i,30,__MilitaryTime) });
             }
 
             $("#timezone").val(new Date().getTimezoneOffset()/60 * -1);

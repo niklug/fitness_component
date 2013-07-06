@@ -12,6 +12,7 @@ $(document).ready(function() {
                generateFormHtml(catid);
                // get session focus by category (appointment)
                setupSessionType(catid);
+               setEndInterval(catid);
             });
             var catid = $(this).find(':selected').data('catid');
             generateFormHtml(catid);
@@ -511,6 +512,7 @@ $(document).ready(function() {
                 }
             }
             
+
             
             function setAssessmentFields(status){
                 $("#as_height").attr('disabled', status);
@@ -544,8 +546,6 @@ $(document).ready(function() {
                 //disable assessment fields
                 setAssessmentFields(true);
                 //
-                set_etparttime(45);
- 
             }
             
             
@@ -568,19 +568,15 @@ $(document).ready(function() {
                 //disable assessment fields
                 setAssessmentFields(true);
                 //
-                set_etparttime(30);
-                
             }
 
             
             function resistanceWorkoutForm() {
                 semiPrivateForm();
-                set_etparttime(45);
             }
             
             function cardioWorkoutForm() {
                 semiPrivateForm();
-                set_etparttime(60);
             }
             
             function assessmentForm() {
@@ -602,30 +598,25 @@ $(document).ready(function() {
                 $("#trainers").attr('disabled', true);
                 //anable assessment fields
                 setAssessmentFields(false);
-                set_etparttime(60);
-                //
+               //
                 <?php }   ?>
             }
             
             function consultationForm() {
                 semiPrivateForm();
                 $("#exercises_wrapper").hide();
-                set_etparttime(60);
             }
             
             function specialEventForm() {
                 consultationForm();
-                set_etparttime(60);
-            }
+             }
             
             function availableForm() {
                 consultationForm();
-                set_etparttime(45);
             }
             
             function unavailableForm() {
                 consultationForm();
-                set_etparttime(60);
             }
             
             
@@ -638,6 +629,42 @@ $(document).ready(function() {
             
             
             //////////////
+                function setEndInterval(form_id) {
+                var endInterval;
+                switch(form_id) {
+                    case 1:
+                       endInterval = 45;
+                       break;
+                    case 2:
+                       endInterval = 30;
+                       break;
+                    case 3:
+                       endInterval = 45;
+                       break;
+                    case 4:
+                       endInterval = 60;
+                       break;
+                    case 5:
+                       endInterval = 60;
+                       break;
+                    case 6:
+                       endInterval = 60;
+                       break;
+                    case 7:
+                       endInterval = 60;
+                       break;
+                    case 8:
+                       endInterval = 45;
+                       break;
+                    case 9:
+                       endInterval = 60;
+                       break;
+                    default :
+                       endInterval = 60; 
+                }
+                set_etparttime(endInterval);
+            }
+            
                         
             function set_etparttime(minutes) {
                 var stparttime = $("#stparttime").val();

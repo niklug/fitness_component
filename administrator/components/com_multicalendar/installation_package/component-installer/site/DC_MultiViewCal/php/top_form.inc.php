@@ -316,6 +316,8 @@ $(document).ready(function() {
                 $earr = explode("/", $etpartdate);
                 $etpartdate = $earr[1] . "/" . $earr[0] . "/" . $earr[2];
             }
+            
+            
             ?>  
 
             <label>  
@@ -334,6 +336,7 @@ $(document).ready(function() {
                     </div>  
                         <?php
                     }
+                    
                     ?>
 
                 <div> 

@@ -196,5 +196,6 @@ CREATE TABLE IF NOT EXISTS `#__fitness_assessments` (
   `training_protocols` text,
   PRIMARY KEY (`assessment_id`),
   KEY `event_id` (`event_id`),
+  KEY `event_id_2` (`event_id`),
   FOREIGN KEY (event_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE,
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
