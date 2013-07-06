@@ -969,7 +969,8 @@ function set_group_client_status() {
 
 
 function updateAssessmentData() {
-    $post = JRequest::get('post');
+    $post = JRequest::get('post','','POST','STRING',JREQUEST_ALLOWHTML);
+    if(!$post['assessment_form']) return;
     $info = print_r($post, true);
     $db = & JFactory::getDBO();
     $fields = array('event_id', 'as_height', 'as_weight', 'as_age', 
@@ -986,21 +987,31 @@ function updateAssessmentData() {
         'bsm_lean_mass', 'bsm_comments', 'nutrition_protocols', 'supplementation_protocols', 'training_protocols'
     );
     
+    //$fields_textarea = array('as_comments', 'ha_comments', 'am_comments', 'bio_comments', 'bsm_comments', 'nutrition_protocols', 'supplementation_protocols', 'training_protocols');
+    
     $obj = new stdClass();
     
     foreach ($post as $key=>$value) {
         if(in_array($key, $fields)) {
-            $obj->$key = $value;
+            $obj->$key = trim($value);
         }
+        //if(in_array($key, $fields_textarea)) {
+            //$obj->$key = preg_replace('/\W/', '&nbsp',trim($value));
+        //}
     }
 
-    $insert = $db->insertObject('#__fitness_assessments', $obj, 'id');
-    if(!$insert) {
-        $post['success'] = 0;
-        $post['message'] = $db->stderr();
-        echo json_encode($post);
-        return;
+    $event_id = $post['event_id'];
+    $query = "SELECT assessment_id FROM #__fitness_assessments WHERE event_id='$event_id'";
+    $db->setQuery($query);
+    $id = $db->loadResult();
+    
+    if(!$id) {
+        $insert = $db->insertObject('#__fitness_assessments', $obj, 'assessment_id');
+    } else {
+        $obj->assessment_id = $id;
+        $update= $db->updateObject('#__fitness_assessments', $obj, 'assessment_id');
     }
+
 }
 
 

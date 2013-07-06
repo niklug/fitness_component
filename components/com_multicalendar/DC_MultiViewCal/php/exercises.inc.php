@@ -282,7 +282,7 @@ $(document).ready(function() {
     });  
 
 </script>  
-<div id="exercises_wrapper">
+<div id="exercises_wrapper" style="display:none;">
     <table  id="header_exercise_table" width="100%" border="0" cellpadding="0" cellspacing="0" >
             <thead
                 <tr>

@@ -40,13 +40,16 @@ else
 function getCalendarByRange($id){
   try{
     $db 	=& JFactory::getDBO();
-    $sql = "select * from `".DC_MV_CAL."` where `".DC_MV_CAL_ID."` = " . $id;
+    //$sql = "select * from `".DC_MV_CAL."` where `".DC_MV_CAL_ID."` = " . $id;
+
+    $sql = "SELECT * FROM #__dc_mv_events LEFT JOIN #__fitness_assessments ON #__dc_mv_events.id = #__fitness_assessments.event_id WHERE #__dc_mv_events.id='$id'";
 
     $db->setQuery( $sql );
 
     $rows = $db->loadObjectList();
 	}catch(Exception $e){
   }
+
   return $rows[0];
 }
 function fomartTimeAMPM($h,$m) {

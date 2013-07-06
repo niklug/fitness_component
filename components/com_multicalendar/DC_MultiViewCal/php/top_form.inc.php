@@ -518,6 +518,11 @@ $(document).ready(function() {
                 $("#as_age").attr('disabled', status);
                 $("#as_body_fat").attr('disabled', status);
                 $("#as_lean_mass").attr('disabled', status);
+                if(status) {
+                    $("#assessment_form").val('0');
+                } else {
+                    $("#assessment_form").val('1');
+                }
             }
             
             
