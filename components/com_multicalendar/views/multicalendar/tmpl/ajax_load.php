@@ -403,7 +403,7 @@ function updateDetailedCalendar(
         $rruleType,
         $tz
         ){
- updateAssessmentData();
+ 
   $ret = array();
   $db 	=& JFactory::getDBO();
 
@@ -498,6 +498,12 @@ function updateDetailedCalendar(
      $ret['IsSuccess'] = false;
      $ret['Msg'] = $e->getMessage();
   }
+  
+  if(JRequest::getVar('assessment_form')) {
+      $retAss = updateAssessmentData();
+      if(!$retAss['IsSuccess']) $ret = $retAss;
+  }
+
   return $ret;
 }
 
@@ -968,9 +974,13 @@ function set_group_client_status() {
 }
 
 
+/** insert / update assessment, foreign key events id
+ * 
+ * @return type
+ */
 function updateAssessmentData() {
+    $ret['IsSuccess'] = true;
     $post = JRequest::get('post','','POST','STRING',JREQUEST_ALLOWHTML);
-    if(!$post['assessment_form']) return;
     $info = print_r($post, true);
     $db = & JFactory::getDBO();
     $fields = array('event_id', 'as_height', 'as_weight', 'as_age', 
@@ -1003,6 +1013,11 @@ function updateAssessmentData() {
     $event_id = $post['event_id'];
     $query = "SELECT assessment_id FROM #__fitness_assessments WHERE event_id='$event_id'";
     $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        return $ret;
+    }
     $id = $db->loadResult();
     
     if(!$id) {
@@ -1011,7 +1026,12 @@ function updateAssessmentData() {
         $obj->assessment_id = $id;
         $update= $db->updateObject('#__fitness_assessments', $obj, 'assessment_id');
     }
-
+    
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+    }
+    return $ret;
 }
 
 

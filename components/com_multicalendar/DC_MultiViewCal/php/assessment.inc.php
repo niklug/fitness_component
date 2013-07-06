@@ -17,34 +17,34 @@ $(document).ready(function() {
                             <tr>
                                 <td >Height</td>
                                 <td>
-                                    <input class="assessment_input required number"  maxlength="7" type="text" name="as_height" value="<?php echo $event->as_height?>" id="as_height">
+                                    <input class="assessment_input required number" min="1" maxlength="7" type="text" name="as_height" value="<?php echo $event->as_height?>" id="as_height">
                                 </td>
                                 <td>cm</td>
                             </tr>
                             <tr>
                                 <td>Weight</td>
                                 <td>
-                                    <input class="assessment_input required number" maxlength="7" type="text" name="as_weight" value="<?php echo $event->as_weight?>" id="as_weight">
+                                    <input class="assessment_input required number" min="1" maxlength="7" type="text" name="as_weight" value="<?php echo $event->as_weight?>" id="as_weight">
                                 </td>
                                 <td>kg</td>
                             </tr>
                             <tr>
                                 <td>Age</td>
                                 <td>
-                                    <input class="assessment_input required digits" maxlength="2" type="text" name="as_age" value="<?php echo $event->as_age?>" id="as_age">
+                                    <input class="assessment_input required digits" min="1" maxlength="2" type="text" name="as_age" value="<?php echo $event->as_age?>" id="as_age">
                                 </td>
                                 <td>years</td>
                             </tr>
                             <tr>
                                 <td>Body Fat</td>
                                 <td>
-                                    <input class="assessment_input required number" maxlength="5" type="text" name="as_body_fat" value="<?php echo $event->as_body_fat?>" id="as_body_fat">
+                                    <input class="assessment_input required number" min="1" maxlength="5" type="text" name="as_body_fat" value="<?php echo $event->as_body_fat?>" id="as_body_fat">
                                 </td>
                                 <td>%</td>
                             </tr>
                             <tr>
                                 <td>Lean Mass</td>
-                                <td><input class="assessment_input required number" maxlength="5" type="text" name="as_lean_mass" value="<?php echo $event->as_lean_mass?>" id="as_lean_mass"></td>
+                                <td><input class="assessment_input required number" min="1" maxlength="5" type="text" name="as_lean_mass" value="<?php echo $event->as_lean_mass?>" id="as_lean_mass"></td>
                                 <td>kg</td>
                             </tr>
                         </tbody>

@@ -527,7 +527,6 @@ $(document).ready(function() {
             
             
             function personalTrainingForm() {
-                console.log(arguments.callee.name);
                 $("#clients_wrapper").hide();
                 $("#assessment_wrapper").hide();
                 $("#details_wrapper").show();
@@ -549,7 +548,6 @@ $(document).ready(function() {
             }
             
             function semiPrivateForm() {
-                console.log(arguments.callee.name);
                 $("#clients_wrapper").show();
                 $("#assessment_wrapper").hide();
                 $("#details_wrapper").show();
@@ -571,11 +569,11 @@ $(document).ready(function() {
             }
             
             function resistanceWorkoutForm() {
-                console.log(arguments.callee.name);
+                semiPrivateForm();
             }
             
             function cardioWorkoutForm() {
-                console.log(arguments.callee.name);
+                semiPrivateForm();
             }
             
             function assessmentForm() {
@@ -602,19 +600,20 @@ $(document).ready(function() {
             }
             
             function consultationForm() {
-                console.log(arguments.callee.name);
+                semiPrivateForm();
+                $("#exercises_wrapper").hide();
             }
             
             function specialEventForm() {
-                console.log(arguments.callee.name);
+                consultationForm();
             }
             
             function availableForm() {
-                console.log(arguments.callee.name);
+                consultationForm();
             }
             
             function unavailableForm() {
-                console.log(arguments.callee.name);
+                consultationForm();
             }
         });  
         
@@ -711,11 +710,11 @@ $(document).ready(function() {
                     <input MaxLength="10" id="etpartdatelast" name="etpartdatelast" type="hidden" value="" />
                     <input MaxLength="10" id="stparttimelast" name="stparttimelast" type="hidden" value="" />
                     <input MaxLength="10" id="etparttimelast" name="etparttimelast" type="hidden" value="" />
-
+                    
                     <label  class="checkp">
-                        <input id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1" <?php if (isset($event) && $event->isalldayevent != 0 || JRequest::getVar("isallday") == "1") {
+                        <input id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1" <?php if (isset($event) && $event->isalldayevent != 0 ) {
                     echo "checked";
-                } ?>/><span id="s_all_day_event" class="inl">All Day Event</span>
+                } ?>/><span style="font-size:10px;font-weight:normal;" id="s_all_day_event" class="inl">All Day Event</span>
                     </label>  
                     <div>  
                     </div>  
