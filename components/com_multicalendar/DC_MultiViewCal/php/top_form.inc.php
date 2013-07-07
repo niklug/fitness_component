@@ -7,12 +7,13 @@ $(document).ready(function() {
             $('#Subject').change(function(){
                var id = $(this).find(':selected')[0].id;
                var catid = $(this).find(':selected').data('catid');
+               setEndInterval(catid);
                $('#colorvalue').val(id);
                
                generateFormHtml(catid);
                // get session focus by category (appointment)
                setupSessionType(catid);
-               setEndInterval(catid);
+               
             });
             var catid = $(this).find(':selected').data('catid');
             generateFormHtml(catid);

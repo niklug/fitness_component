@@ -7,13 +7,14 @@ $(document).ready(function() {
     });  
 
 </script>  
+<?php if (isset($event->status)) { ?>
+    <div id="clients_wrapper" style="display:none;">
+        <hr>
+        <table border="0">
+            <tbody id="clients_html">
 
-<div id="clients_wrapper" style="display:none;">
-    <hr>
-    <table border="0">
-        <tbody id="clients_html">
-
-        </tbody>
-    </table>
-    <a id="add_client_button" href="javascript:void(0)"><div>Add Another Client</div></a>
-</div>
+            </tbody>
+        </table>
+        <a id="add_client_button" href="javascript:void(0)"><div>Add Another Client</div></a>
+    </div>
+<?php }   ?>

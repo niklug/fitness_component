@@ -10,6 +10,7 @@
                                 <?php
                                 if (isset($appointments[0])) {
                                     echo '<select style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
+                                    echo '<option  value="" >-Select-</option>';
                                     for ($i = 0; $i < count($appointments[0]); $i++) {
                                         echo '<option data-catid="' . $appointments[2][$i] . '" id="' . $appointments[1][$i] . '" value="' . ($appointments[0][$i]) . '" ' . ((isset($event) && (trim($event->title) == trim($appointments[0][$i]))) ? "selected" : "") . '>' . $appointments[0][$i] . '</option>';
                                     }
