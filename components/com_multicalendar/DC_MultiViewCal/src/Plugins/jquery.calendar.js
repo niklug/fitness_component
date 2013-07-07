@@ -1469,10 +1469,10 @@
             p.userEdition = ( ((option.userOwner==e.event[12]) && (option.userEditOwner || option.userDelOwner))?"uEdition":"" );
             
             //npkorban
-            p.client_name = e.event[14];
-            p.trainer_name = e.event[15];
+            p.client_name = (e.event[14]!=null)?e.event[14]:"";
+            p.trainer_name = (e.event[15]!=null)?e.event[15]:"";
             
-            p.location = e.event[9];
+            p.location = (e.event[9]!=null)?e.event[9]:"";
             //console.log(e.event);
             var newtemp = Tp(__SCOLLEVENTTEMP, p);
             p = null;
@@ -1859,8 +1859,8 @@
             p.description = (e.event[11]!=null)?e.event[11]:"";
             p.userEdition = ( ((option.userOwner==e.event[12]) && (option.userEditOwner || option.userDelOwner))?"uEdition":"" );
             //npkorban
-            p.client_name = e.event[14];
-            p.trainer_name = e.event[15];
+            p.client_name = (e.event[14]!=null)?e.event[14]:"";
+            p.trainer_name = (e.event[15]!=null)?e.event[15]:"";
        
             return Tp(__ALLDAYEVENTTEMP, p);
         }
