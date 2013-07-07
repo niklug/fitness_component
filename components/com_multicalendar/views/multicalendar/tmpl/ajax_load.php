@@ -324,7 +324,9 @@ function listCalendarByRange($calid,$sd, $ed){
             '',//$attends
             $row->description,
             $row->owner,
-            $row->published
+            $row->published,
+            JFactory::getUser($row->client_id)->name,
+            JFactory::getUser($row->trainer_id)->name
         );
         $ret['events'][] = $ev;
     }
