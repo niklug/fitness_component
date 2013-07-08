@@ -47,10 +47,12 @@ switch ($method) {
 
         $d1 = js2PhpTime(JRequest::getVar("startdate"));
         $d2 = js2PhpTime(JRequest::getVar("enddate"));
+        $client_id = JRequest::getVar("client_id");
+        $trainer_id = JRequest::getVar("trainer_id");
 
         $d1 = mktime(0, 0, 0,  date("m", $d1), date("d", $d1), date("Y", $d1));
         $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2))+24*60*60-1;
-        $ret = listCalendarByRange($calid, ($d1),($d2));
+        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id);
 
         break;
     case "update":
@@ -281,7 +283,7 @@ function addDetailedCalendar($calid, $st, $et, $sub, $ade, $dscr, $loc, $color, 
   return $ret;
 }
 
-function listCalendarByRange($calid,$sd, $ed){
+function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id){
   $ret = array();
   $ret['events'] = array();
   $ret["issort"] =true;
@@ -290,7 +292,18 @@ function listCalendarByRange($calid,$sd, $ed){
   $ret['error'] = null;
   $db 	=& JFactory::getDBO();
   try{
-    $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid." and ( (`".DC_MV_CAL_FROM."` between '"
+    $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid;
+
+    if(isset($client_id)) {
+        $sql .= " and client_id='$client_id' ";
+    }
+    
+    if(isset($trainer_id)) {
+        $sql .= " and trainer_id='$trainer_id' ";
+    }
+    
+    $sql .=  " and ( (`".DC_MV_CAL_FROM."` between '"
+        
       .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_TO."` between '"
       .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_FROM."` <= '"
       .php2MySqlTime($sd)."' and `".DC_MV_CAL_TO."` >= '". php2MySqlTime($ed)."') or rrule<>'') order by uid desc,  ".DC_MV_CAL_FROM."  ";
@@ -356,7 +369,7 @@ function listCalendar($day, $type){
       break;
   }
   //echo $st . "--" . $et;
-  return listCalendarByRange($st, $et);
+  return listCalendarByRange($st, $et, '', '');
 }
 
 function updateCalendar($id, $st, $et){

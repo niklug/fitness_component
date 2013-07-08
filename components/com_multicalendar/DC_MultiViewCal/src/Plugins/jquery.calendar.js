@@ -3,6 +3,7 @@
   * This is the main class of wdCalendar.
   */
 ; (function($) {
+  $(document).ready(function() {
     var __WDAY = new Array(i18n.dcmvcal.dateformat.sun, i18n.dcmvcal.dateformat.mon, i18n.dcmvcal.dateformat.tue, i18n.dcmvcal.dateformat.wed, i18n.dcmvcal.dateformat.thu, i18n.dcmvcal.dateformat.fri, i18n.dcmvcal.dateformat.sat);
     var __WDAY2 = new Array(i18n.dcmvcal.dateformat.sun2, i18n.dcmvcal.dateformat.mon2, i18n.dcmvcal.dateformat.tue2, i18n.dcmvcal.dateformat.wed2, i18n.dcmvcal.dateformat.thu2, i18n.dcmvcal.dateformat.fri2, i18n.dcmvcal.dateformat.sat2);
     var __MonthName = new Array(i18n.dcmvcal.dateformat.jan, i18n.dcmvcal.dateformat.feb, i18n.dcmvcal.dateformat.mar, i18n.dcmvcal.dateformat.apr, i18n.dcmvcal.dateformat.may, i18n.dcmvcal.dateformat.jun, i18n.dcmvcal.dateformat.jul, i18n.dcmvcal.dateformat.aug, i18n.dcmvcal.dateformat.sep, i18n.dcmvcal.dateformat.oct, i18n.dcmvcal.dateformat.nov, i18n.dcmvcal.dateformat.dec);
@@ -1404,6 +1405,7 @@
                 var tt = BuildDayEvent(c, events[i], i);
 
                 hv.push(tt);
+                //console.log(tt);
             }
         }
         function getTitle(event) {
@@ -1881,14 +1883,16 @@
                 { name: "startdate", value: dateFormat.call(option.vstart, "M/d/yyyy HH:mm") },
                 { name: "enddate", value: dateFormat.call(option.vend, "M/d/yyyy HH:mm") },
                 { name: "viewtype", value: option.view },
-				 { name: "timezone", value: zone }
+		{ name: "timezone", value: zone }
                 ];
                 if (option.extParam) {
                     for (var pi = 0; pi < option.extParam.length; pi++) {
                         param[param.length] = option.extParam[pi];
                     }
                 }
-
+                
+                //option.url = option.url +'&client_id=733'
+                console.log(option.url);
                 $.ajax({
                     type: option.method, //
                     url: option.url,
@@ -3710,4 +3714,21 @@
         }
     };
     
+   
+    $('#filter_client').change(function() {
+        var client_id = $(this).find(':selected').val();
+
+
+    });
+    
+    $('#filter_trainer').change(function() {
+        var trainer_id = $(this).find(':selected').val();
+        alert(trainer_id);
+    });
+    
+    
+  });
+    
+ 
 })(jQuery);
+

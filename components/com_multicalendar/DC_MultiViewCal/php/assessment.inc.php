@@ -50,7 +50,7 @@ $(document).ready(function() {
                         </tbody>
                     </table>
                     Trainer Comments</br>
-                    <textarea cols="35"  name="as_comments" rows="3" ><?php echo $event->as_comments?></textarea> 
+                    <textarea style="height: 60px; width: 260px;" cols="35"  name="as_comments" rows="3" ><?php echo $event->as_comments?></textarea> 
  
                 </td>
                 <td>
@@ -93,7 +93,7 @@ $(document).ready(function() {
                         </tbody>
                     </table>
                     Trainer Comments</br>
-                    <textarea cols="35"  name="ha_comments" rows="3" ><?php echo $event->ha_comments?></textarea> 
+                    <textarea style="height: 60px; width: 260px;"  cols="35"  name="ha_comments" rows="3" ><?php echo $event->ha_comments?></textarea> 
                 </td>
             </tr>
             <tr>
@@ -173,7 +173,7 @@ $(document).ready(function() {
                         </tbody>
                     </table>
                     Trainer Comments</br>
-                    <textarea cols="35"  name="am_comments" rows="3" ><?php echo $event->am_comments?></textarea> 
+                    <textarea style="height: 60px; width: 260px;"  cols="35"  name="am_comments" rows="3" ><?php echo $event->am_comments?></textarea> 
                 </td>
                 <td>
                     <h4>Bio-Impedience Analysis</h4>
@@ -216,7 +216,7 @@ $(document).ready(function() {
                     </table>
                     </br>
                     Trainer Comments</br>
-                    <textarea style="margin-top: 8px"  cols="35"  name="bio_comments" rows="3" ><?php echo $event->bio_comments?></textarea> 
+                    <textarea  style="height: 60px; width: 260px; margin-top: 8px;"    cols="35"  name="bio_comments" rows="3" ><?php echo $event->bio_comments?></textarea> 
                 </td>
             </tr>
             <tr>
@@ -361,7 +361,7 @@ $(document).ready(function() {
                           </tbody>
                     </table>
                     <div style="margin-top: 7px;">Trainer Comments</br></div>
-                    <textarea cols="35"  name="bsm_comments" rows="3" ><?php echo $event->bsm_comments?></textarea> 
+                    <textarea style="height: 60px; width: 260px;"  cols="35"  name="bsm_comments" rows="3" ><?php echo $event->bsm_comments?></textarea> 
                  </td>
             </tr>
         </tbody>
@@ -371,15 +371,15 @@ $(document).ready(function() {
             <tr>
                 <td>
                     Nutrition Protocols</br>
-                    <textarea cols="23"  name="nutrition_protocols" rows="4" ><?php echo $event->nutrition_protocols?></textarea> 
+                    <textarea style="height: 70px; width: 176px;"  cols="23"  name="nutrition_protocols" rows="4" ><?php echo $event->nutrition_protocols?></textarea> 
                 </td>
                 <td>
                     Supplementation Protocols</br>
-                    <textarea cols="23"  name="supplementation_protocols" rows="4" ><?php echo $event->supplementation_protocols?></textarea> 
+                    <textarea style="height: 70px; width: 176px;"  cols="23"  name="supplementation_protocols" rows="4" ><?php echo $event->supplementation_protocols?></textarea> 
                 </td>
                 <td>
                     Training Protocols</br>
-                    <textarea cols="23"  name="training_protocols" rows="4" ><?php echo $event->training_protocols?></textarea> 
+                    <textarea style="height: 70px; width: 176px;"  cols="23"  name="training_protocols" rows="4" ><?php echo $event->training_protocols?></textarea> 
                 </td>
             </tr>
         </tbody>
