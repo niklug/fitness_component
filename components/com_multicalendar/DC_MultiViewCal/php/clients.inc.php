@@ -15,6 +15,6 @@ $(document).ready(function() {
 
             </tbody>
         </table>
-        <a id="add_client_button" href="javascript:void(0)"><div>Add Another Client</div></a>
+        <a id="add_client_button" href="javascript:void(0)"><div>Add Client</div></a>
     </div>
 <?php }   ?>

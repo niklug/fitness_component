@@ -194,7 +194,7 @@ $(document).ready(function() {
                 }
                 
                 $(this).addClass("cellEditing");
-                $(this).html("<input type='text' value='" + OriginalContent + "' />");
+                $(this).html("<input style='width:100%' type='text' value='" + OriginalContent + "' />");
                 $(this).children().first().focus();
          
         });

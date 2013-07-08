@@ -2,7 +2,7 @@
     <tbody>
         <tr>
             <td>
-                <table border="0"  style="margin-right:25px;">
+                <table border="0"  style="margin-right:17px;">
                     <tbody>
                         <tr>
                             <td>Appointment:</td>

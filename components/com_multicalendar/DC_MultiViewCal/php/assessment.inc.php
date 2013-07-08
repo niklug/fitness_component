@@ -107,39 +107,55 @@ $(document).ready(function() {
                                     <input class="assessment_input number"  maxlength="7" type="text" name="am_height" value="<?php echo $event->am_height ? $event->am_height : ''?>">
                                 </td>
                                 <td width="30px">cm</td>
+                                <td>Weight</td>
+                                <td>
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_weight" value="<?php echo $event->am_weight ? $event->am_weight : ''?>">
+                                </td>
+                                <td>cm</td>
+     
+                            </tr>
+                            <tr>
+
+                                <td>Waist</td>
+                                <td>
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_waist" value="<?php echo $event->am_waist ? $event->am_waist : ''?>">
+                                </td>
+                                <td>kg</td>
+                                <td>Hips</td>
+                                <td>
+                                     <input class="assessment_input number"  maxlength="7" type="text" name="am_hips" value="<?php echo $event->am_hips ? $event->am_hips : ''?>">
+                                </td>
+                                <td>cm</td>
+      
+                            </tr>
+                            <tr>
                                 <td>Bicep L</td>
                                 <td>
                                     <input class="assessment_input number"  maxlength="7" type="text" name="am_bicep_l" value="<?php echo $event->am_bicep_l ?  $event->am_bicep_l : ''?>">
                                 </td>
                                 <td>cm</td>
+                                 <td>Bicep R</td>
+                                <td>
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_bicep_r" value="<?php echo $event->am_bicep_r ?  $event->am_bicep_r : ''?>">
+                                </td>
+                                <td>cm</td>
                             </tr>
                             <tr>
-                                <td>Weight</td>
+                                <td>Thigh L</td>
                                 <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_weight" value="<?php echo $event->am_weight ? $event->am_weight : ''?>">
-                                </td>
-                                <td>kg</td>
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_thigh_l" value="<?php echo $event->am_thigh_l ? $event->am_thigh_l : ''?>">
+                                <td>cm</td>
                                 <td>Thigh R</td>
                                 <td>
                                     <input class="assessment_input number"  maxlength="7" type="text" name="am_thigh_r" value="<?php echo $event->am_thigh_r ? $event->am_thigh_r : ''?>">
                                 </td>
                                 <td>cm</td>
+
                             </tr>
                             <tr>
-                                <td>Waist</td>
+                                <td>Calf L</td>
                                 <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_waist" value="<?php echo $event->am_waist ? $event->am_waist : ''?>">
-                                </td>
-                                <td>cm</td>
-                                <td>Thigh L</td>
-                                <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_thigh_l" value="<?php echo $event->am_thigh_l ? $event->am_thigh_l : ''?>">
-                                <td>cm</td>
-                            </tr>
-                            <tr>
-                                <td>Hips</td>
-                                <td>
-                                     <input class="assessment_input number"  maxlength="7" type="text" name="am_hips" value="<?php echo $event->am_hips ? $event->am_hips : ''?>">
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_calf_l" value="<?php echo $event->am_calf_l ? $event->am_calf_l : ''?>">
                                 </td>
                                 <td>cm</td>
                                 <td>Calf R</td>
@@ -147,23 +163,13 @@ $(document).ready(function() {
                                     <input class="assessment_input number"  maxlength="7" type="text" name="am_calf_r" value="<?php echo $event->am_calf_r ? $event->am_calf_r : ''?>">
                                 </td>
                                 <td>cm</td>
+   
+          
                             </tr>
                             <tr>
                                 <td>Chest</td>
                                 <td>
                                     <input class="assessment_input number"  maxlength="7" type="text" name="am_chest" value="<?php echo $event->am_chest ? $event->am_chest : ''?>">
-                                </td>
-                                <td>cm</td>
-                                <td>Calf L</td>
-                                <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_calf_l" value="<?php echo $event->am_calf_l ? $event->am_calf_l : ''?>">
-                                </td>
-                                <td>cm</td>
-                            </tr>
-                            <tr>
-                                <td>Bicep R</td>
-                                <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="am_bicep_r" value="<?php echo $event->am_bicep_r ?  $event->am_bicep_r : ''?>">
                                 </td>
                                 <td>cm</td>
                                 <td></td>
@@ -272,17 +278,17 @@ $(document).ready(function() {
                                     <input class="assessment_input number"  maxlength="7" type="text" name="bsm_subscapularis" value="<?php echo $event->bsm_subscapularis ? $event->bsm_subscapularis : ''?>">
                                 </td>
                                 <td>mm</td>
+                            </tr>
                             <tr>
-                                <td>SUM 10</td>
+                                <td>Umbilical</td>
                                 <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="bsm_sum10" value="<?php echo $event->bsm_sum10 ? $event->bsm_sum10 : ''?>">
-                                </td>
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="bsm_umbilical" value="<?php echo $event->bsm_umbilical ? $event->bsm_umbilical : ''?>">
                                 <td>mm</td>
                             </tr>
                             <tr>
-                                <td>SUM 12</td>
+                                <td>Knee</td>
                                 <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="bsm_sum12" value="<?php echo $event->bsm_sum12 ? $event->bsm_sum12 : ''?>">
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="bsm_knee" value="<?php echo $event->bsm_knee ? $event->bsm_knee : ''?>">
                                 </td>
                                 <td>mm</td>
                             </tr>
@@ -293,7 +299,7 @@ $(document).ready(function() {
                                 </td>
                                 <td>mm</td>
                             </tr>
-                           <tr>
+                            <tr>
                                 <td>Suprailiac</td>
                                 <td>
                                     <input class="assessment_input number"  maxlength="7" type="text" name="bsm_supraillac" value="<?php echo $event->bsm_supraillac ? $event->bsm_supraillac : ''?>">
@@ -312,19 +318,6 @@ $(document).ready(function() {
                                 <td style="height: 45px;">
                                     
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Umbilical</td>
-                                <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="bsm_umbilical" value="<?php echo $event->bsm_umbilical ? $event->bsm_umbilical : ''?>">
-                                <td>mm</td>
-                            </tr>
-                            <tr>
-                                <td>Knee</td>
-                                <td>
-                                    <input class="assessment_input number"  maxlength="7" type="text" name="bsm_knee" value="<?php echo $event->bsm_knee ? $event->bsm_knee : ''?>">
-                                </td>
-                                <td>mm</td>
                             </tr>
                             <tr>
                                 <td>Calf</td>
@@ -346,6 +339,20 @@ $(document).ready(function() {
                                 <td>mm</td>
                             </tr>
                             <tr>
+                                <td>SUM 10</td>
+                                <td>
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="bsm_sum10" value="<?php echo $event->bsm_sum10 ? $event->bsm_sum10 : ''?>">
+                                </td>
+                                <td>mm</td>
+                            </tr>
+                            <tr>
+                                <td>SUM 12</td>
+                                <td>
+                                    <input class="assessment_input number"  maxlength="7" type="text" name="bsm_sum12" value="<?php echo $event->bsm_sum12 ? $event->bsm_sum12 : ''?>">
+                                </td>
+                                <td>mm</td>
+                            </tr>
+                            <tr>
                                 <td>Body Fat</td>
                                 <td>
                                     <input class="assessment_input number"  maxlength="7" type="text" name="bsm_body_fat" value="<?php echo $event->bsm_body_fat ? $event->bsm_body_fat : ''?>">
@@ -360,8 +367,8 @@ $(document).ready(function() {
                             </tr>
                           </tbody>
                     </table>
-                    <div style="margin-top: 7px;">Trainer Comments</br></div>
-                    <textarea style="height: 60px; width: 260px;"  cols="35"  name="bsm_comments" rows="3" ><?php echo $event->bsm_comments?></textarea> 
+                    <div style="margin-top: 9px;">Trainer Comments</br></div>
+                    <textarea style="height: 55px; width: 260px;"  cols="35"  name="bsm_comments" rows="3" ><?php echo $event->bsm_comments?></textarea> 
                  </td>
             </tr>
         </tbody>
