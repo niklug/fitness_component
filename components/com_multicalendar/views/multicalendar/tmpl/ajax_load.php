@@ -132,8 +132,23 @@ switch ($method) {
                     );
         }else{
 
-            $ret = addDetailedCalendar($calid, $st, $et,JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent")==1)?1:0, JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
-                JRequest::getVar("Location"), JRequest::getVar("colorvalue"), JRequest::getVar("rrule"),0, JRequest::getVar("timezone"));
+            $ret = addDetailedCalendar(
+                    $calid,
+                    $st,
+                    $et,
+                    JRequest::getVar("Subject"), 
+                    (JRequest::getVar("IsAllDayEvent")==1)?1:0,
+                    JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                    JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                    JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                    JRequest::getVar("client_id"),
+                    JRequest::getVar("trainer_id"),
+                    JRequest::getVar("Location"),
+                    JRequest::getVar("colorvalue"),
+                    JRequest::getVar("rrule"),
+                    0,
+                    JRequest::getVar("timezone")
+           );
         }
         break;
 
@@ -247,7 +262,23 @@ function addCalendar(
 }
 
 
-function addDetailedCalendar($calid, $st, $et, $sub, $ade, $dscr, $loc, $color, $rrule,$uid,$tz){
+function addDetailedCalendar(
+        $calid,
+        $st,
+        $et,
+        $sub,
+        $ade,
+        $dscr,
+        $session_type,
+        $session_focus,
+        $client_id,
+        $trainer_id,
+        $loc,
+        $color,
+        $rrule,
+        $uid,
+        $tz){
+                                
   $ret = array();
 
   $db 	=& JFactory::getDBO();
@@ -255,12 +286,31 @@ function addDetailedCalendar($calid, $st, $et, $sub, $ade, $dscr, $loc, $color, 
   try{
     if (checkIfOverlapping($calid, $st, $et,$sub, $loc,0))
     {
-    $sql = "insert into `".DC_MV_CAL."` (`".DC_MV_CAL_IDCAL."`,`".DC_MV_CAL_TITLE."`, `".DC_MV_CAL_FROM."`, `".DC_MV_CAL_TO."`, `".DC_MV_CAL_ISALLDAY."`, `".DC_MV_CAL_DESCRIPTION."`, `".DC_MV_CAL_LOCATION."`, `".DC_MV_CAL_COLOR."`,`rrule`,`uid`,`owner`, `published`) values (".$calid.","
+    $sql = "insert into `".DC_MV_CAL."` (
+        `".DC_MV_CAL_IDCAL."`,
+        `".DC_MV_CAL_TITLE."`,
+        `".DC_MV_CAL_FROM."`, 
+        `".DC_MV_CAL_TO."`, 
+        `".DC_MV_CAL_ISALLDAY."`,
+        `".DC_MV_CAL_DESCRIPTION."`,
+        `session_type`,
+        `session_focus`,
+        `client_id`,
+        `trainer_id`,
+        `".DC_MV_CAL_LOCATION."`, 
+        `".DC_MV_CAL_COLOR."`,
+        `rrule`,`uid`,`owner`, `published`) values (
+        
+       ".$calid.","
       .$db->Quote($sub).", '"
       .php2MySqlTime(js2PhpTime($st))."', '"
       .php2MySqlTime(js2PhpTime($et))."', "
       .$db->Quote($ade).", "
       .$db->Quote($dscr).", "
+      .$db->Quote($session_type).", "
+      .$db->Quote($session_focus).", "
+      .$db->Quote($client_id).", "
+      .$db->Quote($trainer_id).", "
       .$db->Quote($loc).", "
       .$db->Quote($color).", ".$db->Quote($rrule).", ".$db->Quote($uid).", ".$user->id.",1 )";
 

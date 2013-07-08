@@ -164,6 +164,9 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
              return ret;
         }
         $(document).ready(function() {
+            
+            
+        
             //debugger;
             $("#Description").cleditor({width:450, height:150, useCSS:true})[0].focus();
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
@@ -310,9 +313,33 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
  
                 dataType: "json",
                 success: function(data) {
-                    //alert(data.Msg);
+                    //alert(data.Data);
                     if (data.IsSuccess) {
-                        window.parent.$jc('#editEvent').dialog('close');
+                        
+                        <?php if($event->id) { ?>
+                            window.parent.$jc('#editEvent').dialog('close');
+                        <?php } ?>
+ 
+                        var event_id = data.Data;
+                        
+                        var current_url = window.location.href.replace('&id=0').replace('#') + '&id=' + event_id +'#';
+               
+                        $.ajax({
+                            type : "POST",
+                            url : current_url,
+                            dataType : 'html',
+                            success : function(content) {
+                                var height = 720;
+                                var iframe_start = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="overflow-y: auto;overflow-x: hidden;border:none;width:598px;height:'+(height-60)+'px" src="'+current_url+'" border="0" scrolling="auto">';
+                                var iframe_end = '</iframe>';
+                                window.parent.$jc('#editEvent').html(iframe_start +  iframe_end);
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown)
+                            {
+                                alert("error");
+                            }
+                        });
+              
                     } 
                     else 
                         alert(i18n.dcmvcal.error_occurs+ ".\r\n" + ((data.Msg=='OVERLAPPING')?i18n.dcmvcal.error_overlapping:data.Msg));
@@ -448,7 +475,7 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
         });  
 
     </script>  
-    
+       
     <!-- Top form, calendar, appointment status -->
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/top_form.inc.php' );
@@ -484,3 +511,5 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
 <?php  
 jexit();  
 ?>    
+    
+   

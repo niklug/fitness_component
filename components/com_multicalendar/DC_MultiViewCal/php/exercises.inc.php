@@ -246,7 +246,7 @@ $(document).ready(function() {
                   }
                   
                   var nextOriginalText = nexttd.text();
-                  nexttd.html("<input type='text' value='" + nextOriginalText + "' />");
+                  nexttd.html("<input style='width:100%' type='text' value='" + nextOriginalText + "' />");
                   nexttd.children().focus();
                   
                   $(this).parent().text(newContent);
