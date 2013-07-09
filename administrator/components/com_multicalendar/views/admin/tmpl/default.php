@@ -107,16 +107,16 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
 
 
-<div id="calendar_filters"  style="float:left;">
-    
+<div id="calendar_filters"  style="clear: both;height: 80px; width: 100%;">
+    <form id="calendar_filter_form">
     <?php
     $db = JFactory::getDbo();
     $sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
     $db->setQuery($sql);
     $clients = $db->loadObjectList();
     ?>
-    <div id="client_select"  style="float:left;">
-        <select id="filter_client" name="filter_client" class="inputbox">
+    <div id="client_select"  style="float:left;" >
+        <select multiple id="filter_client" name="client_id[]" class="inputbox">
                 <option value=""><?php echo JText::_('-Select Client-');?></option>
                 <?php 
                     foreach ($clients as $client) {
@@ -125,7 +125,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                 ?>
         </select>
     </div>
-    
+
     <?php
     $db = JFactory::getDbo();
     $sql = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
@@ -135,7 +135,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
     ?>
 
     <div id="trainer_select" style="float:left;margin-left: 20px;">
-        <select id="filter_trainer" name="filter_trainer" class="inputbox" >
+        <select multiple id="filter_trainer" name="trainer_id[]" class="inputbox" >
                 <option value=""><?php echo JText::_('-Select Trainer-');?></option>
                 <?php 
                     foreach ($primary_trainerlist as $trainer) {
@@ -144,8 +144,10 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                 ?>
         </select>
     </div>
-    
 
+    <input style="margin-left: 20px;" type="button" value="Go" name="find_filtered" id="find_filtered"/>
+    <input style="margin-left: 20px;" type="button" value="Reset" name="freset_filtered" id="reset_filtered"/>
+    </form>
 </div>
 
 </br></br>

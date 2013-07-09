@@ -343,13 +343,14 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id){
   $db 	=& JFactory::getDBO();
   try{
     $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid;
-
-    if(isset($client_id)) {
-        $sql .= " and client_id='$client_id' ";
+    $client_ids = implode($client_id, ',');
+    if($client_id[0]) {
+        $sql .= " and client_id IN ($client_ids) ";
     }
     
-    if(isset($trainer_id)) {
-        $sql .= " and trainer_id='$trainer_id' ";
+    $trainer_ids = implode($trainer_id, ',');
+    if($trainer_id[0]) {
+        $sql .= " and trainer_id IN ($trainer_ids) ";
     }
     
     $sql .=  " and ( (`".DC_MV_CAL_FROM."` between '"

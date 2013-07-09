@@ -3,7 +3,7 @@
   * This is the main class of wdCalendar.
   */
 ; (function($) {
-  $(document).ready(function() {
+  
     var __WDAY = new Array(i18n.dcmvcal.dateformat.sun, i18n.dcmvcal.dateformat.mon, i18n.dcmvcal.dateformat.tue, i18n.dcmvcal.dateformat.wed, i18n.dcmvcal.dateformat.thu, i18n.dcmvcal.dateformat.fri, i18n.dcmvcal.dateformat.sat);
     var __WDAY2 = new Array(i18n.dcmvcal.dateformat.sun2, i18n.dcmvcal.dateformat.mon2, i18n.dcmvcal.dateformat.tue2, i18n.dcmvcal.dateformat.wed2, i18n.dcmvcal.dateformat.thu2, i18n.dcmvcal.dateformat.fri2, i18n.dcmvcal.dateformat.sat2);
     var __MonthName = new Array(i18n.dcmvcal.dateformat.jan, i18n.dcmvcal.dateformat.feb, i18n.dcmvcal.dateformat.mar, i18n.dcmvcal.dateformat.apr, i18n.dcmvcal.dateformat.may, i18n.dcmvcal.dateformat.jun, i18n.dcmvcal.dateformat.jul, i18n.dcmvcal.dateformat.aug, i18n.dcmvcal.dateformat.sep, i18n.dcmvcal.dateformat.oct, i18n.dcmvcal.dateformat.nov, i18n.dcmvcal.dateformat.dec);
@@ -1866,6 +1866,29 @@
        
             return Tp(__ALLDAYEVENTTEMP, p);
         }
+
+        // npkorban
+        $(document).ready(function() {
+            var default_option_url = option.url;
+            
+            $("#find_filtered").click(function(){
+                var filter_options = $("#calendar_filter_form").serialize();
+                option.url = option.url + '&' + filter_options;
+                //alert(option.url);
+                populate();
+                option.url = default_option_url;
+            });
+            
+            $("#reset_filtered").click(function(){
+                $("#calendar_filter_form select").val('');
+                var filter_options = $("#calendar_filter_form").serialize();
+                option.url = option.url + '&' + filter_options;
+                //alert(option.url);
+                populate();
+                option.url = default_option_url;
+            });
+
+        });
         //to populate the data
         function populate() {
             if (option.isloading) {
@@ -3714,20 +3737,9 @@
         }
     };
     
-   
-    $('#filter_client').change(function() {
-        var client_id = $(this).find(':selected').val();
 
+    
 
-    });
-    
-    $('#filter_trainer').change(function() {
-        var trainer_id = $(this).find(':selected').val();
-        alert(trainer_id);
-    });
-    
-    
-  });
     
  
 })(jQuery);
