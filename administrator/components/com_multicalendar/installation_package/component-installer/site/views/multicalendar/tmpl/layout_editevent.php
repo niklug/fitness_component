@@ -40,13 +40,16 @@ else
 function getCalendarByRange($id){
   try{
     $db 	=& JFactory::getDBO();
-    $sql = "select * from `".DC_MV_CAL."` where `".DC_MV_CAL_ID."` = " . $id;
+    //$sql = "select * from `".DC_MV_CAL."` where `".DC_MV_CAL_ID."` = " . $id;
+
+    $sql = "SELECT * FROM #__dc_mv_events LEFT JOIN #__fitness_assessments ON #__dc_mv_events.id = #__fitness_assessments.event_id WHERE #__dc_mv_events.id='$id'";
 
     $db->setQuery( $sql );
 
     $rows = $db->loadObjectList();
 	}catch(Exception $e){
   }
+
   return $rows[0];
 }
 function fomartTimeAMPM($h,$m) {
@@ -161,6 +164,9 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
              return ret;
         }
         $(document).ready(function() {
+            
+            
+        
             //debugger;
             $("#Description").cleditor({width:450, height:150, useCSS:true})[0].focus();
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
@@ -168,7 +174,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             var tt = "{0}:{1}";
             for (var i = <?php echo $hoursStart?>; i <= <?php echo $hoursEnd?>; i++) {
                 //arrT.push({ text: StrFormat(tt, [i >= 10 ? i : "0" + i, "00"]) }, { text: StrFormat(tt, [i >= 10 ? i : "0" + i, "30"]) });
-                arrT.push({ text: fomartTimeAMPM(i,0,__MilitaryTime) }, {  text: fomartTimeAMPM(i,30,__MilitaryTime) });
+                arrT.push({ text: fomartTimeAMPM(i,0,__MilitaryTime) }, {  text: fomartTimeAMPM(i,15,__MilitaryTime) },{  text: fomartTimeAMPM(i,30,__MilitaryTime) },{  text: fomartTimeAMPM(i,45,__MilitaryTime) });
             }
 
             $("#timezone").val(new Date().getTimezoneOffset()/60 * -1);
@@ -307,9 +313,33 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
  
                 dataType: "json",
                 success: function(data) {
-                    //alert(data.Msg);
+                    //alert(data.Data);
                     if (data.IsSuccess) {
-                        window.parent.$jc('#editEvent').dialog('close');
+                        
+                        <?php if($event->id) { ?>
+                            window.parent.$jc('#editEvent').dialog('close');
+                        <?php } ?>
+ 
+                        var event_id = data.Data;
+                        
+                        var current_url = window.location.href.replace('&id=0').replace('#') + '&id=' + event_id +'#';
+               
+                        $.ajax({
+                            type : "POST",
+                            url : current_url,
+                            dataType : 'html',
+                            success : function(content) {
+                                var height = 720;
+                                var iframe_start = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="overflow-y: auto;overflow-x: hidden;border:none;width:598px;height:'+(height-60)+'px" src="'+current_url+'" border="0" scrolling="auto">';
+                                var iframe_end = '</iframe>';
+                                window.parent.$jc('#editEvent').html(iframe_start +  iframe_end);
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown)
+                            {
+                                alert("error");
+                            }
+                        });
+              
                     } 
                     else 
                         alert(i18n.dcmvcal.error_occurs+ ".\r\n" + ((data.Msg=='OVERLAPPING')?i18n.dcmvcal.error_overlapping:data.Msg));
@@ -440,13 +470,12 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                 error.appendTo(form).css(newpos);
             }  
   
-  
-            
+       
            
         });  
 
     </script>  
-    
+       
     <!-- Top form, calendar, appointment status -->
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/top_form.inc.php' );
@@ -454,6 +483,14 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
     <!-- Main fields -->
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/main_fields.inc.php' );
+    ?>
+    <!-- Add clients, Semi-Private form -->
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/clients.inc.php' );
+    ?>
+    <!-- Assessment form -->
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/assessment.inc.php' );
     ?>
     <!-- Details, Email, Pdf -->
     <?php
@@ -474,3 +511,5 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
 <?php  
 jexit();  
 ?>    
+    
+   

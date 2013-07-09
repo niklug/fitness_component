@@ -6,5 +6,7 @@ DROP TABLE IF EXISTS `#__fitness_categories`;
 DROP TABLE IF EXISTS `#__fitness_locations`;
 DROP TABLE IF EXISTS `#__fitness_goal_focus`;
 DROP TABLE IF EXISTS `#__fitness_goal_categories`;
+DROP TABLE IF EXISTS `#__fitness_email_reminder`;
+DROP TABLE IF EXISTS `#__fitness_appointment_clients` 
 
 

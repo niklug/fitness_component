@@ -3,6 +3,7 @@
   * This is the main class of wdCalendar.
   */
 ; (function($) {
+  $(document).ready(function() {
     var __WDAY = new Array(i18n.dcmvcal.dateformat.sun, i18n.dcmvcal.dateformat.mon, i18n.dcmvcal.dateformat.tue, i18n.dcmvcal.dateformat.wed, i18n.dcmvcal.dateformat.thu, i18n.dcmvcal.dateformat.fri, i18n.dcmvcal.dateformat.sat);
     var __WDAY2 = new Array(i18n.dcmvcal.dateformat.sun2, i18n.dcmvcal.dateformat.mon2, i18n.dcmvcal.dateformat.tue2, i18n.dcmvcal.dateformat.wed2, i18n.dcmvcal.dateformat.thu2, i18n.dcmvcal.dateformat.fri2, i18n.dcmvcal.dateformat.sat2);
     var __MonthName = new Array(i18n.dcmvcal.dateformat.jan, i18n.dcmvcal.dateformat.feb, i18n.dcmvcal.dateformat.mar, i18n.dcmvcal.dateformat.apr, i18n.dcmvcal.dateformat.may, i18n.dcmvcal.dateformat.jun, i18n.dcmvcal.dateformat.jul, i18n.dcmvcal.dateformat.aug, i18n.dcmvcal.dateformat.sep, i18n.dcmvcal.dateformat.oct, i18n.dcmvcal.dateformat.nov, i18n.dcmvcal.dateformat.dec);
@@ -273,8 +274,9 @@
         if (option.dayWithColumns == "dc_subjects" || option.dayWithColumns == "dc_locations" )
             option.columnsList = eval(option.dayWithColumns);
         //template for month and date
-        var __SCOLLEVENTTEMP = "<DIV style=\"WIDTH:${width};top:${top};left:${left};\" title=\"${title}\" class=\"chip chip${i} ${drag}\"><div class=\"dhdV\" style=\"display:none\">${data}</div><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}\" class=ct>&nbsp;</DIV><DL class=\"${userEdition}\" style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; HEIGHT: ${height}px; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\"><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${starttime} - ${endtime} ${icon}</DT><DD><SPAN>${content}</SPAN></DD><DIV class='resizer' style='display:${redisplay}'><DIV class=rszr_icon>&nbsp;</DIV></DIV></DL><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; BORDER-RIGHT-COLOR: ${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb1>&nbsp;</DIV><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BORDER-TOP-COLOR:${bdcolor}; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb2>&nbsp;</DIV></DIV>";
-        var __ALLDAYEVENTTEMP = '<div class="rb-o ${eclass}" id="${id}" title1="${title}" style="color:${color};"><div class="dhdV" style="display:none">${data}</div><div class="${extendClass} rb-m" style="background-color:${color}"><div class="rb-i t-title ${userEdition}">${content}</div><div class="rb-i t-loc">${location}</div><div class="rb-i t-desc">${description}</div></div></div>';
+  
+        var __SCOLLEVENTTEMP = "<DIV style=\"WIDTH:${width};top:${top};left:${left};\" title=\"${title}\" class=\"chip chip${i} ${drag}\"><div class=\"dhdV\" style=\"display:none\">${data}</div><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}\" class=ct>&nbsp;</DIV><DL class=\"${userEdition}\" style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; HEIGHT: ${height}px; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\"><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${client_name}</DT><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${trainer_name}</DT><DD><SPAN>${location}</SPAN></DD><DIV class='resizer' style='display:${redisplay}'><DIV class=rszr_icon>&nbsp;</DIV></DIV></DL><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; BORDER-RIGHT-COLOR: ${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb1>&nbsp;</DIV><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BORDER-TOP-COLOR:${bdcolor}; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb2>&nbsp;</DIV></DIV>";
+        var __ALLDAYEVENTTEMP = '<div class="rb-o ${eclass}" id="${id}" title1="${title}" style="color:${color};"><div class="dhdV" style="display:none">${data}</div><div class="${extendClass} rb-m" style="background-color:${color}"><div class="rb-i t-title ${userEdition}">${client_name}</div><div class="rb-i t-title ${userEdition}">${trainer_name}</div><div class="rb-i t-title ${userEdition}">${location}</div><div class="rb-i t-desc">${description}</div></div></div>';
         var __MonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
         var __LASSOTEMP = "<div class='drag-lasso' style='left:${left}px;top:${top}px;width:${width}px;height:${height}px;'>&nbsp;</div>";
         var __VIEWWEEKDAYS = option.viewWeekDays;
@@ -407,6 +409,7 @@
             //viewType, showday, events, config
             var showday = new Date(option.showday.getFullYear(), option.showday.getMonth(), option.showday.getDate());
             var events = option.eventItems;
+            //console.log(option);
             var config = { view: option.view, weekstartday: option.weekstartday, theme: option.theme,thecontainer: option.thecontainer };
             if (option.view == "day" || option.view == "week" || option.view == "nDays") {
                 var $dvtec = $("#dvtec"+option.thecontainer);
@@ -1402,6 +1405,7 @@
                 var tt = BuildDayEvent(c, events[i], i);
 
                 hv.push(tt);
+                //console.log(tt);
             }
         }
         function getTitle(event) {
@@ -1465,8 +1469,16 @@
                 p.redisplay = "none";
             }
             p.userEdition = ( ((option.userOwner==e.event[12]) && (option.userEditOwner || option.userDelOwner))?"uEdition":"" );
+            
+            //npkorban
+            p.client_name = (e.event[14]!=null)?e.event[14]:"";
+            p.trainer_name = (e.event[15]!=null)?e.event[15]:"";
+            
+            p.location = (e.event[9]!=null)?e.event[9]:"";
+            //console.log(e.event);
             var newtemp = Tp(__SCOLLEVENTTEMP, p);
             p = null;
+   
             return newtemp;
         }
 
@@ -1848,7 +1860,10 @@
             p.location = (e.event[9]!=null)?e.event[9]:"";
             p.description = (e.event[11]!=null)?e.event[11]:"";
             p.userEdition = ( ((option.userOwner==e.event[12]) && (option.userEditOwner || option.userDelOwner))?"uEdition":"" );
-            
+            //npkorban
+            p.client_name = (e.event[14]!=null)?e.event[14]:"";
+            p.trainer_name = (e.event[15]!=null)?e.event[15]:"";
+       
             return Tp(__ALLDAYEVENTTEMP, p);
         }
         //to populate the data
@@ -1868,14 +1883,16 @@
                 { name: "startdate", value: dateFormat.call(option.vstart, "M/d/yyyy HH:mm") },
                 { name: "enddate", value: dateFormat.call(option.vend, "M/d/yyyy HH:mm") },
                 { name: "viewtype", value: option.view },
-				 { name: "timezone", value: zone }
+		{ name: "timezone", value: zone }
                 ];
                 if (option.extParam) {
                     for (var pi = 0; pi < option.extParam.length; pi++) {
                         param[param.length] = option.extParam[pi];
                     }
                 }
-
+                
+                //option.url = option.url +'&client_id=733'
+                console.log(option.url);
                 $.ajax({
                     type: option.method, //
                     url: option.url,
@@ -1890,6 +1907,7 @@
                     success: function(data) {//function(datastr) {
 						//datastr =datastr.replace(/"\\\/(Date\([0-9-]+\))\\\/"/gi, 'new $1');
                         //var data = (new Function("return " + datastr))();
+                        //console.log(data);
                         if (data != null && data.error != null) {
                             if (option.onRequestDataError) {
                                 option.onRequestDataError(1, data);
@@ -2435,9 +2453,12 @@
                     }
                 }
             }
+            
             else {
                 alert(i18n.dcmvcal.data_format_error);
             }
+            $("#bbit-cs-buddle").dialog("destroy");
+            option.EditCmdhandler.call('', data);
             return false;
         }
 
@@ -2715,6 +2736,11 @@
                 $("#bbit-cal-buddle").dialog( "close" );
                 realsedragevent();
             });
+            $("#bbit-cal-buddle").dialog( "close" );
+            if (option.EditCmdhandler && $.isFunction(option.EditCmdhandler)) {
+                  option.EditCmdhandler.call(this, ['0', $("#bbit-cal-what").val(), $("#bbit-cal-start").val(), $("#bbit-cal-end").val(), $("#bbit-cal-allday").val()]);
+            }                        
+                realsedragevent();
             return false;
         }
         //format datestring to Date Type
@@ -3688,4 +3714,21 @@
         }
     };
     
+   
+    $('#filter_client').change(function() {
+        var client_id = $(this).find(':selected').val();
+
+
+    });
+    
+    $('#filter_trainer').change(function() {
+        var trainer_id = $(this).find(':selected').val();
+        alert(trainer_id);
+    });
+    
+    
+  });
+    
+ 
 })(jQuery);
+

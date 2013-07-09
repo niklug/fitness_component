@@ -103,6 +103,52 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 <?php }?>
 <link rel="stylesheet" href="../components/com_multicalendar/DC_MultiViewCal/css/main.css" type="text/css" />
 
+
+
+
+
+<div id="calendar_filters"  style="float:left;">
+    
+    <?php
+    $db = JFactory::getDbo();
+    $sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
+    $db->setQuery($sql);
+    $clients = $db->loadObjectList();
+    ?>
+    <div id="client_select"  style="float:left;">
+        <select id="filter_client" name="filter_client" class="inputbox">
+                <option value=""><?php echo JText::_('-Select Client-');?></option>
+                <?php 
+                    foreach ($clients as $client) {
+                        echo '<option value="' . $client->user_id . '">' . JFactory::getUser($client->user_id)->username. '</option>';
+                    }
+                ?>
+        </select>
+    </div>
+    
+    <?php
+    $db = JFactory::getDbo();
+    $sql = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+    $db->setQuery($sql);
+    $primary_trainerlist = $db->loadObjectList();
+
+    ?>
+
+    <div id="trainer_select" style="float:left;margin-left: 20px;">
+        <select id="filter_trainer" name="filter_trainer" class="inputbox" >
+                <option value=""><?php echo JText::_('-Select Trainer-');?></option>
+                <?php 
+                    foreach ($primary_trainerlist as $trainer) {
+                        echo '<option value="' . $trainer->id . '">' . $trainer->username . '</option>';
+                    }
+                ?>
+        </select>
+    </div>
+    
+
+</div>
+
+</br></br>
 <div id="cal<?php echo $id?>" class="multicalendar"></div>
 <script type="text/javascript">
 var pathCalendarRootPic = "<?php echo JURI::root();?>";
@@ -133,6 +179,7 @@ userAdd:true,
             userEditOwner:true,
             userDelOwner:true,
             userOwner:-1 <?php echo $newp;?>});
+
 </script>
 
 <form action="index.php?option=com_multicalendar" method="post" name="adminForm" id="adminForm">

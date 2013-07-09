@@ -20,134 +20,145 @@
             </a>
             <br/>
             <br/>
-            <div style="float: right; position: absolute; right: 20px; text-align: right; top: 70px;">
-                <span>www.elitefit.com.au</span><br/>
-                <span>info@elitefit.com.au</span><br/>
-                <span>0422 050 590</span>
-            </div>
-            
-            
-            <div style="width: 600px;margin-top: 20px;">
-                <h3 style="margin: 0; padding: 0; ">SESSION DETAILS</h3>
-                <hr style="width:100%;">
-                 <table style="width: 100%;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px;" border="0">
-                    <tbody>
-                        <tr>
-                            <td>Start Date:</td>
-                            <td>
-                                <i>
-                                <?php 
-                                $date = JFactory::getDate($event_data->starttime);
-                                echo $date->toFormat('%A, %d %b %Y');
-                                ?>
-                                </i>
-                            </td>
-                            <td>Finish Date:</td>
-                            <td>
-                                <i>
-                                <?php 
-                                $date = JFactory::getDate($event_data->endtime);
-                                echo $date->toFormat('%A, %d %b %Y');
-                                ?>
-                                </i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Start Time:</td>
-                            <td>
-                                <i>
-                                <?php 
-                                $date = JFactory::getDate($event_data->starttime);
-                                echo $date->format('H:i:s'); 
-                                ?>
-                                </i>
-                            </td>
-                            <td>Finish Time:</td>
-                            <td>
-                                <i>
-                                <?php 
-                                $date = JFactory::getDate($event_data->endtime);
-                                echo $date->format('H:i:s'); 
-                                ?>
-                                </i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                    
-                <table style="width: 100%;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px; margin-top: 10px;"  border="0">
-                    <tbody>
-                        <tr>
-                            <td width="25%">Appointment:</td>
-                            <td>
-                                <i>
-                                <?php
-                                echo $event_data->title;
-                                ?>
-                                </i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Session Type:</td>
-                            <td>
-                                <i>
-                                <?php
-                                echo $event_data->session_type;
-                                ?>
-                                </i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Session Focus:</td>
-                            <td>
-                                <i>
-                                <?php
-                                echo $event_data->session_focus;
-                                ?>
-                                </i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                    
-                <table style="width: 100%;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px; margin-top: 10px;"  border="0">
-                    <tbody>
-                        <tr>
-                            <td width="25%">Client Name:</td>
-                            <td>
-                                <i>
-                                <?php
-                                $user = &JFactory::getUser($event_data->client_id);
-                                echo $user->name;
-                                ?>
-                                </i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trainer Name:</td>
-                            <td>
-                                <i>
-                                <?php
-                                $user = &JFactory::getUser($event_data->trainer_id);
-                                echo $user->name;
-                                ?>
-                                </i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Location:</td>
-                            <td>
-                                <i>
-                                <?php
-                                echo $event_data->location;
-                                ?>
-                                </i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <table border="0">
+                <tr>
+                    <td width="70%">
+                        <div style="width: 600px;">
+                            <h3 style="margin: 0; padding: 0; ">SESSION DETAILS</h3>
+                            <hr style="width:100%;">
+                                <table style="width: 100%;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px;" border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>Start Date:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    $date = JFactory::getDate($event_data->starttime);
+                                                    echo $date->toFormat('%A, %d %b %Y');
+                                                    ?>
+                                                </i>
+                                            </td>
+                                            <td>Finish Date:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    $date = JFactory::getDate($event_data->endtime);
+                                                    echo $date->toFormat('%A, %d %b %Y');
+                                                    ?>
+                                                </i>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Start Time:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    $date = JFactory::getDate($event_data->starttime);
+                                                    echo $date->format('H:i:s');
+                                                    ?>
+                                                </i>
+                                            </td>
+                                            <td>Finish Time:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    $date = JFactory::getDate($event_data->endtime);
+                                                    echo $date->format('H:i:s');
+                                                    ?>
+                                                </i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-            </div>
+                                <table style="width: 100%;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px; margin-top: 10px;"  border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td width="25%">Appointment:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    echo $event_data->title;
+                                                    ?>
+                                                </i>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Session Type:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    echo $event_data->session_type;
+                                                    ?>
+                                                </i>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Session Focus:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    echo $event_data->session_focus;
+                                                    ?>
+                                                </i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table style="width: 100%;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px; margin-top: 10px;"  border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td width="25%">Client Name:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    $user = &JFactory::getUser($event_data->client_id);
+                                                    echo $user->name;
+                                                    ?>
+                                                </i>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Trainer Name:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    $user = &JFactory::getUser($event_data->trainer_id);
+                                                    echo $user->name;
+                                                    ?>
+                                                </i>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Location:</td>
+                                            <td>
+                                                <i>
+                                                    <?php
+                                                    echo $event_data->location;
+                                                    ?>
+                                                </i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                        </div>
+                    </td>
+                        <td style="vertical-align: top;" width="30%" align="right">
+                            <div style="float: right; position: absolute; right: 20px; text-align: right; top: 70px;">
+                                <span>www.elitefit.com.au</span><br/>
+                                <span>info@elitefit.com.au</span><br/>
+                                <span>0422 050 590</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            
+            
 
 
             <div style="width: 784px;margin-top: 20px;">

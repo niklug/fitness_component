@@ -2,7 +2,7 @@
     <tbody>
         <tr>
             <td>
-                <table border="0"  style="margin-right:25px;">
+                <table border="0"  style="margin-right:17px;">
                     <tbody>
                         <tr>
                             <td>Appointment:</td>
@@ -10,6 +10,7 @@
                                 <?php
                                 if (isset($appointments[0])) {
                                     echo '<select style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
+                                    echo '<option  value="" >-Select-</option>';
                                     for ($i = 0; $i < count($appointments[0]); $i++) {
                                         echo '<option data-catid="' . $appointments[2][$i] . '" id="' . $appointments[1][$i] . '" value="' . ($appointments[0][$i]) . '" ' . ((isset($event) && (trim($event->title) == trim($appointments[0][$i]))) ? "selected" : "") . '>' . $appointments[0][$i] . '</option>';
                                     }
@@ -19,9 +20,6 @@
                                 ?>  
                             </td>
                         </tr>
-                        <?php
-                        if (isset($event->status)) {
-                        ?>
                        <tr>
                             <td>Session Type:</td>
                             <td> 
@@ -34,20 +32,15 @@
                                 <select  id="session_focus" name="session_focus" class="required safe inputtext" ></select>
                             </td>
                         </tr>
-                        <?php
-                        }
-                        ?>
                     </tbody>
                 </table>
             </td>
 
-            <?php
-                if (isset($event->status)) {
-            ?>
+
             <td>
                 <table border="0">
                     <tbody>
-                        <tr>
+                        <tr id="client_select_tr">
                             <td>Client:</td>
                             <td>
                                 <?php
@@ -63,10 +56,23 @@
                                 ?>  
                             </td>
                         </tr>
-                        <tr>
+                        <tr id="trainer_select_tr">
                             <td>Trainer:</td>
                             <td>
                                 <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
+                            </td>
+                        </tr>
+                        <tr id="trainers_select_tr">
+                            <td>Trainer:</td>
+                            <td>
+                                <select  id="trainers" name="trainer_id" class="required safe inputtext" >
+                                    <?php
+                                    echo '<option> -Select-</option>';
+                                    for ($i = 0; $i < count( $trainers); $i++) {
+                                        echo '<option " id="' .  $trainers[$i]->id . '" value="' . ( $trainers[$i]->id) . '" ' . ((isset($event) && (trim($event->trainer_id) == trim( $trainers[$i]->id))) ? "selected" : "") . '>' .  $trainers[$i]->username . '</option>';
+                                    }
+                                    ?>
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -85,9 +91,7 @@
                     </tbody>
                 </table>
             </td>
-            <?php
-                }
-            ?>
+
         </tr>
     </tbody>
   </table>

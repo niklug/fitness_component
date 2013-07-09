@@ -47,26 +47,16 @@ switch ($method) {
 
         $d1 = js2PhpTime(JRequest::getVar("startdate"));
         $d2 = js2PhpTime(JRequest::getVar("enddate"));
+        $client_id = JRequest::getVar("client_id");
+        $trainer_id = JRequest::getVar("trainer_id");
 
         $d1 = mktime(0, 0, 0,  date("m", $d1), date("d", $d1), date("Y", $d1));
         $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2))+24*60*60-1;
-        $ret = listCalendarByRange($calid, ($d1),($d2));
+        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id);
 
         break;
     case "update":
-        $ret = updateCalendar(
-                JRequest::getVar("CalendarStartTime"), 
-                JRequest::getVar("CalendarEndTime"),
-                JRequest::getVar("CalendarTitle"),
-                JRequest::getVar("IsAllDayEvent"),
-                
-                JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
-                JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
-                JRequest::getVar("client_id"),
-                JRequest::getVar("trainer_id"),
-                JRequest::getVar("Location"), 
-                JRequest::getVar("colorvalue")
-               );
+        $ret = updateCalendar(JRequest::getVar("calendarId"), JRequest::getVar("CalendarStartTime"), JRequest::getVar("CalendarEndTime"));  
         break;
     case "remove":
         $ret = removeCalendar( JRequest::getVar("calendarId"),JRequest::getVar("rruleType"));
@@ -80,6 +70,9 @@ switch ($method) {
     case "get_trainers":
             get_trainers();
         break;
+    case "get_clients":
+        get_clients();
+    break;
     case "set_event_status":
             set_event_status();
         break;
@@ -94,6 +87,23 @@ switch ($method) {
     case "send_appointment_email":
         send_appointment_email();
     break;
+    case "update_exercise_field":
+        update_exercise_field();
+    break;
+    case "get_semi_clients":
+        get_semi_clients();
+    break;
+    case "add_update_group_client":
+        add_update_group_client();
+    break;
+    case "delete_group_client":
+        delete_group_client();
+    break;
+    case "set_group_client_status":
+        set_group_client_status();
+    break;
+
+
     case "generateFormHtml":
         generateFormHtml();
     case "adddetails":
@@ -122,8 +132,23 @@ switch ($method) {
                     );
         }else{
 
-            $ret = addDetailedCalendar($calid, $st, $et,JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent")==1)?1:0, JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
-                JRequest::getVar("Location"), JRequest::getVar("colorvalue"), JRequest::getVar("rrule"),0, JRequest::getVar("timezone"));
+            $ret = addDetailedCalendar(
+                    $calid,
+                    $st,
+                    $et,
+                    JRequest::getVar("Subject"), 
+                    (JRequest::getVar("IsAllDayEvent")==1)?1:0,
+                    JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                    JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                    JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                    JRequest::getVar("client_id"),
+                    JRequest::getVar("trainer_id"),
+                    JRequest::getVar("Location"),
+                    JRequest::getVar("colorvalue"),
+                    JRequest::getVar("rrule"),
+                    0,
+                    JRequest::getVar("timezone")
+           );
         }
         break;
 
@@ -237,7 +262,23 @@ function addCalendar(
 }
 
 
-function addDetailedCalendar($calid, $st, $et, $sub, $ade, $dscr, $loc, $color, $rrule,$uid,$tz){
+function addDetailedCalendar(
+        $calid,
+        $st,
+        $et,
+        $sub,
+        $ade,
+        $dscr,
+        $session_type,
+        $session_focus,
+        $client_id,
+        $trainer_id,
+        $loc,
+        $color,
+        $rrule,
+        $uid,
+        $tz){
+                                
   $ret = array();
 
   $db 	=& JFactory::getDBO();
@@ -245,12 +286,31 @@ function addDetailedCalendar($calid, $st, $et, $sub, $ade, $dscr, $loc, $color, 
   try{
     if (checkIfOverlapping($calid, $st, $et,$sub, $loc,0))
     {
-    $sql = "insert into `".DC_MV_CAL."` (`".DC_MV_CAL_IDCAL."`,`".DC_MV_CAL_TITLE."`, `".DC_MV_CAL_FROM."`, `".DC_MV_CAL_TO."`, `".DC_MV_CAL_ISALLDAY."`, `".DC_MV_CAL_DESCRIPTION."`, `".DC_MV_CAL_LOCATION."`, `".DC_MV_CAL_COLOR."`,`rrule`,`uid`,`owner`, `published`) values (".$calid.","
+    $sql = "insert into `".DC_MV_CAL."` (
+        `".DC_MV_CAL_IDCAL."`,
+        `".DC_MV_CAL_TITLE."`,
+        `".DC_MV_CAL_FROM."`, 
+        `".DC_MV_CAL_TO."`, 
+        `".DC_MV_CAL_ISALLDAY."`,
+        `".DC_MV_CAL_DESCRIPTION."`,
+        `session_type`,
+        `session_focus`,
+        `client_id`,
+        `trainer_id`,
+        `".DC_MV_CAL_LOCATION."`, 
+        `".DC_MV_CAL_COLOR."`,
+        `rrule`,`uid`,`owner`, `published`) values (
+        
+       ".$calid.","
       .$db->Quote($sub).", '"
       .php2MySqlTime(js2PhpTime($st))."', '"
       .php2MySqlTime(js2PhpTime($et))."', "
       .$db->Quote($ade).", "
       .$db->Quote($dscr).", "
+      .$db->Quote($session_type).", "
+      .$db->Quote($session_focus).", "
+      .$db->Quote($client_id).", "
+      .$db->Quote($trainer_id).", "
       .$db->Quote($loc).", "
       .$db->Quote($color).", ".$db->Quote($rrule).", ".$db->Quote($uid).", ".$user->id.",1 )";
 
@@ -273,7 +333,7 @@ function addDetailedCalendar($calid, $st, $et, $sub, $ade, $dscr, $loc, $color, 
   return $ret;
 }
 
-function listCalendarByRange($calid,$sd, $ed){
+function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id){
   $ret = array();
   $ret['events'] = array();
   $ret["issort"] =true;
@@ -282,7 +342,18 @@ function listCalendarByRange($calid,$sd, $ed){
   $ret['error'] = null;
   $db 	=& JFactory::getDBO();
   try{
-    $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid." and ( (`".DC_MV_CAL_FROM."` between '"
+    $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid;
+
+    if(isset($client_id)) {
+        $sql .= " and client_id='$client_id' ";
+    }
+    
+    if(isset($trainer_id)) {
+        $sql .= " and trainer_id='$trainer_id' ";
+    }
+    
+    $sql .=  " and ( (`".DC_MV_CAL_FROM."` between '"
+        
       .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_TO."` between '"
       .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_FROM."` <= '"
       .php2MySqlTime($sd)."' and `".DC_MV_CAL_TO."` >= '". php2MySqlTime($ed)."') or rrule<>'') order by uid desc,  ".DC_MV_CAL_FROM."  ";
@@ -316,7 +387,9 @@ function listCalendarByRange($calid,$sd, $ed){
             '',//$attends
             $row->description,
             $row->owner,
-            $row->published
+            $row->published,
+            JFactory::getUser($row->client_id)->name,
+            JFactory::getUser($row->trainer_id)->name
         );
         $ret['events'][] = $ev;
     }
@@ -346,42 +419,19 @@ function listCalendar($day, $type){
       break;
   }
   //echo $st . "--" . $et;
-  return listCalendarByRange($st, $et);
+  return listCalendarByRange($st, $et, '', '');
 }
 
-function updateCalendar(
-        $id,
-        $st,
-        $et, 
-        $sub,
-        $ade,
-        
-        $session_type,
-        $session_focus,
-        $client_id,
-        $trainer_id,
-        $Location, 
-        $colorvalue){
+function updateCalendar($id, $st, $et){
   $ret = array();
   $db 	=& JFactory::getDBO();
   try{
     if (checkIfOverlappingThisEvent($id, $st, $et))
     {
-    $sql = "update `".DC_MV_CAL."` set"
-              . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
-              . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "', "
-              . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
-              . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
-              . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
-              . " `session_type`=" . $db->Quote($session_type) . ", "
-              . " `session_focus`=" . $db->Quote($session_focus) . ", "
-              . " `client_id`=" . $db->Quote($client_id) . ", "
-              . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
-              . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
-              . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
-              . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
-              . " `rrule`=" . $db->Quote($rrule) . " "
-              . "where `id`=" . $id;
+        $sql = "update `".DC_MV_CAL."` set"
+          . " `".DC_MV_CAL_FROM."`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+          . " `".DC_MV_CAL_TO."`='" . php2MySqlTime(js2PhpTime($et)) . "' "
+          . "where `id`=" . $id;
         $db->setQuery( $sql );
         if (!$db->query()){
           $ret['IsSuccess'] = false;
@@ -423,11 +473,36 @@ function updateDetailedCalendar(
   $db 	=& JFactory::getDBO();
 
   try{
-    if (checkIfOverlapping(JRequest::getVar( 'calid' ), $st, $et,$sub,$loc,$id))
+    if (checkIfOverlapping(
+            JRequest::getVar( 'calid' ),
+            $st,
+            $et,
+            $sub,
+            $loc,
+            $id
+        ))
     {
         if ($rruleType=="only")
         {
-            return addDetailedCalendar(JRequest::getVar( 'calid' ), $st, $et, $sub, $ade, $dscr, $loc, $color, "",$id,$tz);   
+            return addDetailedCalendar(
+                    JRequest::getVar( 'calid' ),
+                    $st,
+                    $et,
+                    $sub,
+                    $ade,
+                    $dscr,
+                    $session_type,
+                    $session_focus,
+                    $client_id,
+                    $trainer_id,
+                    $loc,
+                    $color,
+                    "",
+                    $id,
+                    $tz
+               );   
+    
+
         }        
         else if ($rruleType=="all")
         {
@@ -478,7 +553,23 @@ function updateDetailedCalendar(
               . "where `id`=" . $id;
             $db->setQuery( $sql );
             $db->query();
-            return addDetailedCalendar(JRequest::getVar( 'calid' ), $st, $et, $sub, $ade, $dscr, $loc, $color, $rrule,0,$tz);
+            return addDetailedCalendar(
+                    JRequest::getVar( 'calid' ),
+                    $st,
+                    $et,
+                    $sub,
+                    $ade,
+                    $dscr,
+                    $session_type,
+                    $session_focus,
+                    $client_id,
+                    $trainer_id,
+                    $loc,
+                    $color,
+                    "",
+                    $id,
+                    $tz
+             );
         }
         else 
         {
@@ -513,6 +604,12 @@ function updateDetailedCalendar(
      $ret['IsSuccess'] = false;
      $ret['Msg'] = $e->getMessage();
   }
+  
+  if(JRequest::getVar('assessment_form')) {
+      $retAss = updateAssessmentData();
+      if(!$retAss['IsSuccess']) $ret = $retAss;
+  }
+
   return $ret;
 }
 
@@ -649,6 +746,26 @@ function  get_trainers() {
     die();
 }
 
+/** get appointment type by category
+ * npkorban
+ * @param type $catid
+*/
+function  get_clients() {
+    $trainer_id = JRequest::getVar("trainer_id");
+    $db = & JFactory::getDBO();
+    $query = "SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$trainer_id' AND state='1'";
+    $db->setQuery($query);
+    $clients= $db->loadResultArray(0);
+    
+    foreach ($clients as $user_id) {
+        $user = &JFactory::getUser($user_id);
+        $clients_name[] = $user->name;
+    }
+    
+    $result = array_combine($clients, $clients_name);
+    echo  json_encode($result);
+    die();
+}
 
 
 /**
@@ -677,12 +794,6 @@ function add_exercise() {
     $post = JRequest::get('post');
     $db = & JFactory::getDBO();
     $no_fields = array('method', 'layout', 'view', 'option');
-    if(!$post['title']) {
-        $post['success'] = 0;
-        $post['message'] = 'Title is empty';
-        echo json_encode($post);
-        die();
-    }
     $obj = new stdClass();
     foreach ($post as $key=>$value) {
         if(!in_array($key, $no_fields)) {
@@ -744,9 +855,16 @@ function set_event_exircise_order() {
  * sends email to the client with appointment content, exercises , etc..
  */
 function send_appointment_email() {
-    $event_id = &JRequest::getVar(event_id);
+    $event_id = &JRequest::getVar('event_id');
     $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&tpml=component&event_id=' . $event_id;
-    $contents = file_get_contents($url);
+
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+    curl_setopt($ch, CURLOPT_URL,$url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $contents = curl_exec ($ch);
+    curl_close ($ch);
+
     $client_email = getClientEmailByEvent($event_id);
     $status['success'] = 1;
     sendEmail($client_email, 'Appointment details, elitefit.com.au', $contents);
@@ -807,120 +925,225 @@ function getClientEmailByEvent($event_id) {
     return $user->email;
 }
 
-
-
-/* Appointments forms */
-function generateFormHtml() {
-    $form_id = JRequest::getVar("form_id");
+/**
+ * 
+ * @return type
+ */
+function update_exercise_field() {
+    $exercise_id = &JRequest::getVar('exercise_id');
+    $exercise_column = &JRequest::getVar('exercise_column');
+    $new_value = &JRequest::getVar('new_value');
     
-    $formInstanse = new FormFactory();
-    $formType = $formInstanse->getForm($form_id);
-    $formHtml = $formType->generateHtml();
-    echo $formHtml;
+    switch ($exercise_column) {
+        case 1:
+            $column = 'title';
+            break;
+        case 2:
+            $column = 'speed';
+            break;
+        case 3:
+            $column = 'weight';
+            break;
+        case 4:
+            $column = 'reps';
+            break;
+        case 5:
+            $column = 'time';
+            break;
+        case 6:
+            $column = 'sets';
+            break;
+        case 7:
+            $column = 'rest';
+            break;
+
+        default:
+            return;
+            break;
+    }
+    $db = & JFactory::getDBO();
+    $query = "UPDATE `#__fitness_events_exercises` SET `$column` = '$new_value' WHERE `id` ='$exercise_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $status['success'] = 1;
+    echo json_encode($status);
     die();
 }
 
 
-
-abstract class AppointmentForm {
-    abstract function generateHtml();
-}
-
-
-class PersonalTrainingForm {
-    public function generateHtml() {
-        return __CLASS__;
+function get_semi_clients() {
+    $event_id = JRequest::getVar("event_id");
+    $db = & JFactory::getDBO();
+    $query = "SELECT id, client_id, status FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
+    $db->setQuery($query);
+    $ids = $db->loadResultArray(0);
+    $clients = $db->loadResultArray(1);
+    $status= $db->loadResultArray(2);
+    
+    foreach ($clients as $user_id) {
+        $user = &JFactory::getUser($user_id);
+        $clients_name[] = $user->name;
     }
+    
+    $result = array('ids' => $ids, 'clients'=>$clients, 'clients_name'=>$clients_name, 'status'=>$status);
+    echo  json_encode($result);
+    die();
 }
 
-class SemiPrivateForm {
-    public function generateHtml() {
-        // top
-        include( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/top_html.inc.php' );
+/**
+ * 
+ * @return type
+ */
+function add_update_group_client() {
+    $event_id = JRequest::getVar("event_id");
+    $client_id = JRequest::getVar("client_id");
+    $id = JRequest::getVar("id");
+    
+
+        
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
     }
-}
-
-
-class ResistanceWorkoutForm {
-    public function generateHtml() {
-        return __CLASS__;
+    $client = $db->loadResult();
+    
+    if($client == $client_id) {
+        $user = &JFactory::getUser($client_id);
+        $status['success'] = 0;
+        $status['message'] = $user->username . ' already added for this event';
+        echo json_encode($status);
+        die();
     }
-}
-
-class CardioWorkoutForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class AssesstmentForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class ConsultationForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class SpecialEventForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class AvailableForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-class UnAvailableForm {
-    public function generateHtml() {
-        return __CLASS__;
-    }
-}
-
-
-class FormFactory {
-    public function getForm($formId) {
-        switch ($formId) {
-            case 1:
-                return new PersonalTrainingForm();
-                break;
-            case 2:
-                return new SemiPrivateForm();
-                break;
-            case 3:
-                return new ResistanceWorkoutForm();
-                break;
-            case 4:
-                return new CardioWorkoutForm();
-                break;
-            case 5:
-                return new AssesstmentForm();
-                break;
-            case 6:
-                return new ConsultationForm();
-                break;
-            case 7:
-                return new SpecialEventForm();
-                break;
-            case 8:
-                return new AvailableForm();
-                break;
-            case 9:
-                return new UnAvailableForm();
-                break;
-
-            default:
-                return new PersonalTrainingForm();
-                break;
+    
+    if($id) {
+        $query = "UPDATE `#__fitness_appointment_clients` SET `client_id` = '$client_id' WHERE `id` ='$id'";
+        $db->setQuery($query);
+        $status['success'] = 1;
+        if (!$db->query()) {
+            $status['success'] = 0;
+            $status['message'] = $db->stderr();
         }
+    } else {
+
+        $query = "INSERT  INTO `#__fitness_appointment_clients` (`client_id`,`event_id`,`status`) VALUES ('$client_id', '$event_id', '1')";
+        $db->setQuery($query);
+        $status['success'] = 1;
+        if (!$db->query()) {
+            $status['success'] = 0;
+            $status['message'] = $db->stderr();
+        }
+        $status['id'] = $db->insertid();
     }
+    echo json_encode($status);
+    die();
 }
+
+function delete_group_client() {
+    $id = JRequest::getVar("id");
+    $db = & JFactory::getDBO();
+    $query = "DELETE FROM #__fitness_appointment_clients WHERE id='$id'";
+    $db->setQuery($query);
+    $status['id'] = $id;
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $status['success'] = 1;
+    echo json_encode($status);
+    die();
+}
+
+
+/**
+ * set event status, on  click status button
+ */
+function set_group_client_status() {
+    $id = JRequest::getVar("id");
+    $client_status = JRequest::getVar("client_status");
+    $db = & JFactory::getDBO();
+    $query = "UPDATE #__fitness_appointment_clients SET status='$client_status'  WHERE id='$id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $status['ids'] = $id;
+    $status['success'] = 1;
+    echo json_encode($status);
+    die();
+}
+
+
+/** insert / update assessment, foreign key events id
+ * 
+ * @return type
+ */
+function updateAssessmentData() {
+    $ret['IsSuccess'] = true;
+    $post = JRequest::get('post','','POST','STRING',JREQUEST_ALLOWHTML);
+    $info = print_r($post, true);
+    $db = & JFactory::getDBO();
+    $fields = array('event_id', 'as_height', 'as_weight', 'as_age', 
+        'as_body_fat', 'as_lean_mass', 'as_comments', 'ha_blood_pressure',
+        'ha_body_mass_index', 'ha_sit_reach', 'ha_lung_function', 
+        'ha_aerobic_fitness', 'ha_comments', 'am_height', 'am_bicep_l',
+        'am_weight', 'am_thigh_r', 'am_waist', 'am_thigh_l', 'am_hips', 
+        'am_calf_r', 'am_chest', 'am_calf_l', 'am_bicep_r', 'am_comments',
+        'bia_body_fat', 'bia_body_water', 'bia_muscle_mass', 'bia_bone_mass', 
+        'bia_visceral_fat', 'bio_comments', 'bsm_height', 'bsm_weight', 'bsm_chin',
+        'bsm_check', 'bsm_pec', 'bsm_tricep', 'bsm_subscapularis', 'bsm_sum10',
+        'bsm_sum12', 'bsm_midaxillary', 'bsm_supraillac', 'bsm_umbilical',
+        'bsm_knee', 'bsm_calf', 'bsm_quadricep', 'bsm_hamstring', 'bsm_body_fat',
+        'bsm_lean_mass', 'bsm_comments', 'nutrition_protocols', 'supplementation_protocols', 'training_protocols'
+    );
+    
+    //$fields_textarea = array('as_comments', 'ha_comments', 'am_comments', 'bio_comments', 'bsm_comments', 'nutrition_protocols', 'supplementation_protocols', 'training_protocols');
+    
+    $obj = new stdClass();
+    
+    foreach ($post as $key=>$value) {
+        if(in_array($key, $fields)) {
+            $obj->$key = trim($value);
+        }
+        //if(in_array($key, $fields_textarea)) {
+            //$obj->$key = preg_replace('/\W/', '&nbsp',trim($value));
+        //}
+    }
+
+    $event_id = $post['event_id'];
+    $query = "SELECT assessment_id FROM #__fitness_assessments WHERE event_id='$event_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        return $ret;
+    }
+    $id = $db->loadResult();
+    
+    if(!$id) {
+        $insert = $db->insertObject('#__fitness_assessments', $obj, 'assessment_id');
+    } else {
+        $obj->assessment_id = $id;
+        $update= $db->updateObject('#__fitness_assessments', $obj, 'assessment_id');
+    }
+    
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+    }
+    return $ret;
+}
+
+
+
+
+
 
 jexit();
 ?>

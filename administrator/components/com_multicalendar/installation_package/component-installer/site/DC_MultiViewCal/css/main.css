@@ -25,7 +25,7 @@
 /* JQuery Validation */
 .multicalendar input.cusErrorPanel,.multicalendar cusErrorPanel.cusErrorPanel,.multicalendar textarea.cusErrorPanel {border:solid 1px red;}
 .multicalendar div.cusErrorPanel {z-index: auto;position:absolute;width: 276px;height: 35px;overflow: hidden;text-indent: 5px;line-height: 40px;font-size: 12px;font-family: Arial;color:#000000;background: url(images/tooltop.gif) no-repeat left top;opacity:0.9;filter: alpha(opacity=90);}
-.multicalendar .infocontainer {margin:2px;padding:4px;}
+.multicalendar .infocontainer {margin:0px;padding:4px; }
 .multicalendar .infocontainer .inputtext {    font-size: 12px;  width: 200px;}
 .multicalendar .infocontainer .date {width:70px; font-size: 12px;}
 .multicalendar .infocontainer .fform {margin:0px;}
@@ -102,6 +102,24 @@
 }
 
 .event_status_wrapper a{
+    margin: 5px;
+}
+
+.client_status_wrapper {
+   background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    display: none;
+    padding: 15px 0 2px;
+    position: fixed;
+    right: 24px;
+    text-align: center;
+    top: 205px;
+    width: 102px;
+
+}
+
+.client_status_wrapper a{
     margin: 5px;
 }
 
@@ -258,7 +276,7 @@
 }
 
 
-.delete_exercise{
+.delete_exercise, .delete_group_client{
     background-image: url('images/delete.png');
     background-repeat: no-repeat;
     display: block;
@@ -315,11 +333,14 @@
     border-bottom: 1px dotted #cccccc ;
 }
 
-#exercise_table {
+#exercise_table, #header_exercise_table {
     border: 1px solid #cccccc ;
     padding: 0;
 }
 
+#header_exercise_table {
+    background-color:#BBBBBB;
+}
 
 #exercise_table th {
   border-bottom: 1px dotted #DDDDDD;
@@ -360,7 +381,33 @@
 }
 
 #exercise_table_wrapper{
-    height: 186px;
-    margin-top: 10px;
+    max-height: 234px;
     overflow-y: auto;
+}
+
+
+#add_client_button {
+    background-color: #E8E8E8 ;
+    background-image: url("images/add_exercise.png");
+    background-repeat: no-repeat;
+    background-size: 24px auto;
+    border: 1px solid  	#989898 ;
+    color: #000000;
+    cursor: pointer;
+    display: block;
+    height: 23px;
+    margin-right: 5px;
+    margin-top: 3px;
+    padding: 1px;
+    text-decoration: none;
+    width: 91px;
+}
+
+#add_client_button div {
+    margin-left: 30px;
+    margin-top: 5px;
+}
+
+#assessment_wrapper .assessment_input {
+    width:60px;
 }
