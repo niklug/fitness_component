@@ -115,9 +115,9 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
     $db->setQuery($sql);
     $clients = $db->loadObjectList();
     ?>
-    <div id="client_select"  style="float:left;" >
-        <select multiple id="filter_client" name="client_id[]" class="inputbox">
-                <option value=""><?php echo JText::_('-Select Client-');?></option>
+    <div   style="float:left;" >
+        <select multiple size="6" id="filter_client" name="client_id[]" class="inputbox">
+                <option value=""><?php echo JText::_('-Select Clients-');?></option>
                 <?php 
                     foreach ($clients as $client) {
                         echo '<option value="' . $client->user_id . '">' . JFactory::getUser($client->user_id)->username. '</option>';
@@ -134,12 +134,90 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
     ?>
 
-    <div id="trainer_select" style="float:left;margin-left: 20px;">
-        <select multiple id="filter_trainer" name="trainer_id[]" class="inputbox" >
-                <option value=""><?php echo JText::_('-Select Trainer-');?></option>
+    <div  style="float:left;margin-left: 20px;">
+        <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
+                <option value=""><?php echo JText::_('-Select Trainers-');?></option>
                 <?php 
                     foreach ($primary_trainerlist as $trainer) {
                         echo '<option value="' . $trainer->id . '">' . $trainer->username . '</option>';
+                    }
+                ?>
+        </select>
+    </div>
+        
+        
+    <?php
+    $db = JFactory::getDbo();
+    $sql = "SELECT name FROM #__fitness_locations WHERE state='1'";
+    $db->setQuery($sql);
+    $locations = $db->loadObjectList();
+
+    ?>
+
+    <div  style="float:left;margin-left: 20px;">
+        <select multiple size="6" id="filter_location" name="location[]" class="inputbox" >
+                <option value=""><?php echo JText::_('-Select Locations-');?></option>
+                <?php 
+                    foreach ($locations as $location) {
+                        echo '<option value="' . $location->name . '">' . $location->name . '</option>';
+                    }
+                ?>
+        </select>
+    </div>
+        
+                
+    <?php
+    $db = JFactory::getDbo();
+    $sql = "SELECT name FROM #__fitness_categories WHERE state='1'";
+    $db->setQuery($sql);
+    $appointments = $db->loadObjectList();
+
+    ?>
+
+    <div  style="float:left;margin-left: 20px;">
+        <select multiple size="6" id="filter_appointment" name="appointment[]" class="inputbox" >
+                <option value=""><?php echo JText::_('-Select Appointments-');?></option>
+                <?php 
+                    foreach ($appointments as $appointment) {
+                        echo '<option value="' . $appointment->name . '">' . $appointment->name . '</option>';
+                    }
+                ?>
+        </select>
+    </div>
+        
+    <?php
+    $db = JFactory::getDbo();
+    $sql = "SELECT name FROM #__fitness_session_type WHERE state='1'";
+    $db->setQuery($sql);
+    $session_types = $db->loadObjectList();
+
+    ?>
+
+    <div style="float:left;margin-left: 20px;">
+        <select multiple size="6" id="filter_session_type" name="session_type[]" class="inputbox" >
+                <option value=""><?php echo JText::_('-Select Session Types-');?></option>
+                <?php 
+                    foreach ($session_types as $session_type) {
+                        echo '<option value="' . $session_type->name . '">' . $session_type->name . '</option>';
+                    }
+                ?>
+        </select>
+    </div>
+        
+    <?php
+    $db = JFactory::getDbo();
+    $sql = "SELECT name FROM #__fitness_session_focus WHERE state='1'";
+    $db->setQuery($sql);
+    $session_focuses = $db->loadObjectList();
+
+    ?>
+
+    <div style="float:left;margin-left: 20px;">
+        <select multiple size="6" id="filter_session_focus" name="session_focus[]" class="inputbox" >
+                <option value=""><?php echo JText::_('-Select Session Focuses-');?></option>
+                <?php 
+                    foreach ($session_focuses as $session_focus) {
+                        echo '<option value="' . $session_focus->name . '">' . $session_focus->name . '</option>';
                     }
                 ?>
         </select>
@@ -150,7 +228,6 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
     </form>
 </div>
 
-</br></br>
 <div id="cal<?php echo $id?>" class="multicalendar"></div>
 <script type="text/javascript">
 var pathCalendarRootPic = "<?php echo JURI::root();?>";

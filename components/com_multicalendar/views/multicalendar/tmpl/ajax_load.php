@@ -49,10 +49,14 @@ switch ($method) {
         $d2 = js2PhpTime(JRequest::getVar("enddate"));
         $client_id = JRequest::getVar("client_id");
         $trainer_id = JRequest::getVar("trainer_id");
+        $location = JRequest::getVar("location");
+        $appointment = JRequest::getVar("appointment");
+        $session_type = JRequest::getVar("session_type");
+        $session_focus = JRequest::getVar("session_focus");
 
         $d1 = mktime(0, 0, 0,  date("m", $d1), date("d", $d1), date("Y", $d1));
         $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2))+24*60*60-1;
-        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id);
+        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus);
 
         break;
     case "update":
@@ -333,7 +337,7 @@ function addDetailedCalendar(
   return $ret;
 }
 
-function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id){
+function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus){
   $ret = array();
   $ret['events'] = array();
   $ret["issort"] =true;
@@ -352,7 +356,29 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id){
     if($trainer_id[0]) {
         $sql .= " and trainer_id IN ($trainer_ids) ";
     }
+
+    $locations = "'" . implode("','", $location) . "'";
+    if($location[0]) {
+        $sql .= " and location IN ($locations) ";
+    }
     
+    $appointments = "'" . implode("','", $appointment) . "'";
+    if($appointment[0]) {
+        $sql .= " and title IN ($appointments) ";
+    }
+    
+
+    $session_types = "'" . implode("','", $session_type) . "'";
+    if($session_type[0]) {
+        $sql .= " and session_type IN ($session_types) ";
+    }
+    
+    
+    $session_focuses = "'" . implode("','", $session_focus) . "'";
+    if($session_focus[0]) {
+        $sql .= " and session_focus IN ($session_focuses) ";
+    }
+            
     $sql .=  " and ( (`".DC_MV_CAL_FROM."` between '"
         
       .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_TO."` between '"
@@ -420,7 +446,7 @@ function listCalendar($day, $type){
       break;
   }
   //echo $st . "--" . $et;
-  return listCalendarByRange($st, $et, '', '');
+  return listCalendarByRange($st, $et, '', '', '', '', '', '');
 }
 
 function updateCalendar($id, $st, $et){
