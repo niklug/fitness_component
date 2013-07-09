@@ -473,11 +473,36 @@ function updateDetailedCalendar(
   $db 	=& JFactory::getDBO();
 
   try{
-    if (checkIfOverlapping(JRequest::getVar( 'calid' ), $st, $et,$sub,$loc,$id))
+    if (checkIfOverlapping(
+            JRequest::getVar( 'calid' ),
+            $st,
+            $et,
+            $sub,
+            $loc,
+            $id
+        ))
     {
         if ($rruleType=="only")
         {
-            return addDetailedCalendar(JRequest::getVar( 'calid' ), $st, $et, $sub, $ade, $dscr, $loc, $color, "",$id,$tz);   
+            return addDetailedCalendar(
+                    JRequest::getVar( 'calid' ),
+                    $st,
+                    $et,
+                    $sub,
+                    $ade,
+                    $dscr,
+                    $session_type,
+                    $session_focus,
+                    $client_id,
+                    $trainer_id,
+                    $loc,
+                    $color,
+                    "",
+                    $id,
+                    $tz
+               );   
+    
+
         }        
         else if ($rruleType=="all")
         {
@@ -528,7 +553,23 @@ function updateDetailedCalendar(
               . "where `id`=" . $id;
             $db->setQuery( $sql );
             $db->query();
-            return addDetailedCalendar(JRequest::getVar( 'calid' ), $st, $et, $sub, $ade, $dscr, $loc, $color, $rrule,0,$tz);
+            return addDetailedCalendar(
+                    JRequest::getVar( 'calid' ),
+                    $st,
+                    $et,
+                    $sub,
+                    $ade,
+                    $dscr,
+                    $session_type,
+                    $session_focus,
+                    $client_id,
+                    $trainer_id,
+                    $loc,
+                    $color,
+                    "",
+                    $id,
+                    $tz
+             );
         }
         else 
         {
