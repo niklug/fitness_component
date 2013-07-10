@@ -134,7 +134,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
     ?>
 
-    <div  style="float:left;margin-left: 20px;">
+    <div  style="float:left;margin-left: 10px;">
         <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
                 <option value=""><?php echo JText::_('-Select Trainers-');?></option>
                 <?php 
@@ -154,7 +154,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
     ?>
 
-    <div  style="float:left;margin-left: 20px;">
+    <div  style="float:left;margin-left: 10px;">
         <select multiple size="6" id="filter_location" name="location[]" class="inputbox" >
                 <option value=""><?php echo JText::_('-Select Locations-');?></option>
                 <?php 
@@ -168,13 +168,13 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                 
     <?php
     $db = JFactory::getDbo();
-    $sql = "SELECT name FROM #__fitness_categories WHERE state='1'";
+    $sql = "SELECT id, name, color FROM #__fitness_categories WHERE state='1'";
     $db->setQuery($sql);
     $appointments = $db->loadObjectList();
 
     ?>
 
-    <div  style="float:left;margin-left: 20px;">
+    <div  style="float:left;margin-left: 10px;">
         <select multiple size="6" id="filter_appointment" name="appointment[]" class="inputbox" >
                 <option value=""><?php echo JText::_('-Select Appointments-');?></option>
                 <?php 
@@ -193,7 +193,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
     ?>
 
-    <div style="float:left;margin-left: 20px;">
+    <div style="float:left;margin-left: 10px;">
         <select multiple size="6" id="filter_session_type" name="session_type[]" class="inputbox" >
                 <option value=""><?php echo JText::_('-Select Session Types-');?></option>
                 <?php 
@@ -212,7 +212,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
     ?>
 
-    <div style="float:left;margin-left: 20px;">
+    <div style="float:left;margin-left: 10px;">
         <select multiple size="6" id="filter_session_focus" name="session_focus[]" class="inputbox" >
                 <option value=""><?php echo JText::_('-Select Session Focuses-');?></option>
                 <?php 
@@ -227,8 +227,46 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
     <input style="margin-left: 20px;" type="button" value="Reset" name="freset_filtered" id="reset_filtered"/>
     </form>
 </div>
+<table border="0">
+    <tbody>
+        <tr>
+            <td>
+                <div id="cal<?php echo $id?>" style="width:918px;" class="multicalendar"></div>
+            </td>
+            <td>
+                <table border="0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                
+                                <div id="add_appointment">
+                                    <h4 >Add Appointment To Calendar</h4>
+                                    <ul style="list-style:none;padding-left: 0;">
+                                    <?php 
+                                        foreach ($appointments as $appointment) {
+                                            echo '<li class="drag" title="' . $appointment->name . '" style="cursor:move;width:200px; height:15px;background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
+                                        }
+                                    
+                                    ?>
+                                    </ul>
 
-<div id="cal<?php echo $id?>" class="multicalendar"></div>
+                                </div>
+                            </td>
+                       
+                        </tr>
+                        <tr>
+                            <td></td>
+                         
+                        </tr>
+                    </tbody>
+                </table>
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
 <script type="text/javascript">
 var pathCalendarRootPic = "<?php echo JURI::root();?>";
 initMultiViewCal("cal<?php echo $id?>",<?php echo $id?>,
