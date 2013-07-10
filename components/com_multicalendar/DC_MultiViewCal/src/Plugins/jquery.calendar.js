@@ -1892,6 +1892,13 @@
                 populate();
                 option.url = default_option_url;
             });
+            
+            $(".appointment_drag").mousedown(function(){
+                appointment_field = $(this).data('name');
+               
+               console.log(appointment_field);
+            });
+            
 
         });
         //to populate the data
@@ -1920,7 +1927,7 @@
                 }
                 
                 //option.url = option.url +'&client_id=733'
-                console.log(option.url);
+                //console.log(option.url);
                 $.ajax({
                     type: option.method, //
                     url: option.url,
@@ -2930,6 +2937,30 @@
                 if (option.readonly == false && option.userAdd) {
                     $("td.tg-col", gridcontainer).each(function(i) {
                         $(this).mousedown(function(e) { dragStart.call(this, "dw1", e); return false; });
+                        
+                        //npkorban
+                        appointment_field = false;
+                        $(this).mouseup(function(e) { 
+                            if(appointment_field ) {
+                                console.log(appointment_field);
+                                var _dragdata = { type: 1, target: $(this), sx: e.pageX, sy: e.pageY };
+                                var d = _dragdata;
+                                var wrapid = new Date().getTime();
+                                var tp = d.target.offset().top;
+                                if (!d.cpwrap) {
+                                    var gh = gH(d.sy, d.sy + option.cellheight, tp);
+                                    var ny = gP(gh.sh, gh.sm);
+                                    var tempdata = buildtempdayevent(gh.sh, gh.sm, gh.eh, gh.em, gh.h);
+                                    d.cpwrap = $("<div class='ca-evpi drag-chip-wrapper' style='top:" + ny + "px'/>").html(tempdata);
+                                    d.cgh = gh;
+                                }
+                                var start = strtodate(d.target.attr("abbr") + " " + d.cgh.sh + ":" + d.cgh.sm);
+                                var start_formated = dateFormat.call(start, "M/d/yyyy HH:mm")
+                                console.log(start_formated);
+                                appointment_field = false;
+                            }
+                        });
+
                     });
                     $("#weekViewAllDaywk"+option.thecontainer).mousedown(function(e) { dragStart.call(this, "dw2", e); return false; });
                     if ( !(option.rowsList=="" || (option.dayWithTime && option.view=="day")) )
