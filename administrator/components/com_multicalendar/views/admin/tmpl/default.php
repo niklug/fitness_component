@@ -187,7 +187,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
         
     <?php
     $db = JFactory::getDbo();
-    $sql = "SELECT name FROM #__fitness_session_type WHERE state='1'";
+    $sql = "SELECT DISTINCT name FROM #__fitness_session_type WHERE state='1'";
     $db->setQuery($sql);
     $session_types = $db->loadObjectList();
 
@@ -206,7 +206,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
         
     <?php
     $db = JFactory::getDbo();
-    $sql = "SELECT name FROM #__fitness_session_focus WHERE state='1'";
+    $sql = "SELECT DISTINCT name FROM #__fitness_session_focus WHERE state='1'";
     $db->setQuery($sql);
     $session_focuses = $db->loadObjectList();
 

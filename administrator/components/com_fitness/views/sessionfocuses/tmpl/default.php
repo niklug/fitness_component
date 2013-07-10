@@ -58,7 +58,7 @@ $saveOrder	= $listOrder == 'a.ordering';
             
                 <?php
                 $db = JFactory::getDbo();
-                $sql = "SELECT id, name FROM #__fitness_session_type WHERE state='1'";
+                $sql = "SELECT id, DISTINCT name FROM #__fitness_session_type WHERE state='1'";
                 $db->setQuery($sql);
                 $session_type= $db->loadObjectList();
                 ?>

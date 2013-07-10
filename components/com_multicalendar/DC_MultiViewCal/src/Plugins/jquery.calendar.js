@@ -308,7 +308,7 @@
             render();
             var d = getRdate();
             pushER(d.start, d.end);
-            populate();
+            populate_by_filter();
         }
         else {
             //contruct HTML
@@ -1866,17 +1866,22 @@
        
             return Tp(__ALLDAYEVENTTEMP, p);
         }
+        
+        function populate_by_filter() {
+            var default_option_url = option.url;
+            var filter_options = $("#calendar_filter_form").serialize();
+            option.url = option.url + '&' + filter_options;
+            //alert(option.url);
+            populate();
+            option.url = default_option_url;
+        }
 
         // npkorban
         $(document).ready(function() {
             var default_option_url = option.url;
             
             $("#find_filtered").click(function(){
-                var filter_options = $("#calendar_filter_form").serialize();
-                option.url = option.url + '&' + filter_options;
-                //alert(option.url);
-                populate();
-                option.url = default_option_url;
+               populate_by_filter();
             });
             
             $("#reset_filtered").click(function(){
@@ -2222,7 +2227,7 @@
             var loaded = checkInEr(d.start, d.end);
             //if (!loaded) 
             {
-                populate();
+                populate_by_filter();
             }
         }
 
@@ -2320,13 +2325,13 @@
                         option.onRequestDataError && option.onRequestDataError(3, data);
                         Ind(de);
                         //render();
-                        populate();
+                        populate_by_filter();
                         option.onAfterRequestData && option.onAfterRequestData(3);
                     }
                 }
             }, "json");
             //render();
-            populate();
+            populate_by_filter();
         }
         function getbuddlepos(x, y) {
             //return { left: 0, top: 0, hide: false };
@@ -3591,7 +3596,7 @@
                 dochange();
             },
             rf: function() {
-            populate();
+            populate_by_filter();
 
             },
             gt: function(d) {
