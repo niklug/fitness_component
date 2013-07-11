@@ -557,6 +557,7 @@ function updateDetailedCalendar(
             }else{
               $ret['IsSuccess'] = true;
               $ret['Msg'] = 'Succefully';
+              $ret['Data'] = $id;
             }
         }        
         else if (substr($rruleType,0,5)=="UNTIL")
@@ -624,6 +625,7 @@ function updateDetailedCalendar(
             }else{
               $ret['IsSuccess'] = true;
               $ret['Msg'] = 'Succefully';
+              $ret['Data'] = $id;
             }
         }
     }
@@ -1230,9 +1232,27 @@ function saveDragedData() {
         $query = "UPDATE #__dc_mv_events SET $field='$value', color='$color' WHERE starttime='$starttime'";
         $db->setQuery($query);
         if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-    }
+            $ret['IsSuccess'] = false;
+            $ret['Msg'] = $db->stderr();
+        }
+    } else {
+        if($field == 'title') {
+            $obj->starttime = $post['starttime'];
+            $obj->endtime = $post['endtime'];
+            $obj->title = $value;
+            $obj->color = $color;
+            $obj->calid = JRequest::getVar('calid');
+            $obj->published = 1;
+            $db->insertObject('#__dc_mv_events', $obj, 'id');
+            $db->setQuery($query);
+            if (!$db->query()) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+            } 
+        } else {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = 'Place appointment first';
+        }
     }
     
     echo json_encode($ret);

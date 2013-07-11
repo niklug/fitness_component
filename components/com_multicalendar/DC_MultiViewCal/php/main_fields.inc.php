@@ -46,7 +46,8 @@
                                 <?php
                                 if (isset($clients[0]->name)) {
                                     echo '<select style="float:left;" id="client" name="client_id" class="required safe inputtext" ">';
-                                    echo '<option> -Select-</option>';
+                                    echo '<option>-Select-</option>';
+                                    
                                     for ($i = 0; $i < count( $clients); $i++) {
                                         echo '<option " id="' .  $clients[$i]->user_id . '" value="' . ( $clients[$i]->user_id) . '" ' . ((isset($event) && (trim($event->client_id) == trim( $clients[$i]->user_id))) ? "selected" : "") . '>' .  $clients[$i]->name . '</option>';
                                     }
@@ -67,7 +68,7 @@
                             <td>
                                 <select  id="trainers" name="trainer_id" class="required safe inputtext" >
                                     <?php
-                                    echo '<option> -Select-</option>';
+                                    echo '<option>-Select-</option>';
                                     for ($i = 0; $i < count( $trainers); $i++) {
                                         echo '<option " id="' .  $trainers[$i]->id . '" value="' . ( $trainers[$i]->id) . '" ' . ((isset($event) && (trim($event->trainer_id) == trim( $trainers[$i]->id))) ? "selected" : "") . '>' .  $trainers[$i]->username . '</option>';
                                     }
@@ -80,6 +81,7 @@
                             <td> <?php
                                 if (isset($dc_locations)) {
                                     echo '<select  id="Location" name="Location" class="required safe inputtext" >';
+                                    echo '<option>-Select-</option>';
                                     for ($i = 0; $i < count($dc_locations); $i++) {
                                         echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
                                     }

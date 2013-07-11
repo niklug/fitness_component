@@ -313,17 +313,17 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
  
                 dataType: "json",
                 success: function(data) {
-                    //alert(data.Data);
+                    //console.log(data.Data);
                     if (data.IsSuccess) {
                         
                         <?php if($event->id) { ?>
                             //window.parent.$jc('#editEvent').dialog('close');
+                            //window.parent.$jc('#editEvent').dialog('open');
                         <?php } ?>
  
                         var event_id = data.Data;
-                        
                         var current_url = window.location.href.replace('&id=0').replace('#') + '&id=' + event_id +'#';
-               
+                        //console.log(current_url);
                         $.ajax({
                             type : "POST",
                             url : current_url,
