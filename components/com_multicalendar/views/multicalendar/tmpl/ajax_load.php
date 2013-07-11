@@ -110,6 +110,8 @@ switch ($method) {
 
     case "generateFormHtml":
         generateFormHtml();
+    case "saveDragedData":
+        saveDragedData();
     case "adddetails":
 
         $st = JRequest::getVar("stpartdatelast") . " " . JRequest::getVar("stparttimelast");
@@ -1125,7 +1127,6 @@ function set_group_client_status() {
 function updateAssessmentData() {
     $ret['IsSuccess'] = true;
     $post = JRequest::get('post','','POST','STRING',JREQUEST_ALLOWHTML);
-    $info = print_r($post, true);
     $db = & JFactory::getDBO();
     $fields = array('event_id', 'as_height', 'as_weight', 'as_age', 
         'as_body_fat', 'as_lean_mass', 'as_comments', 'ha_blood_pressure',
@@ -1176,6 +1177,66 @@ function updateAssessmentData() {
         $ret['Msg'] = $db->stderr();
     }
     return $ret;
+}
+
+
+function getCategoryNameColorById($id) {
+    $result['IsSuccess'] = true;
+    $db = & JFactory::getDBO();
+    $query = "SELECT name, color FROM #__fitness_categories WHERE id='$id' AND state='1'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $result['IsSuccess'] = false;
+        $result['Msg'] = $db->stderr();
+    }
+    $result['name'] = $db->loadResultArray(0);
+    $result['color'] = $db->loadResultArray(1);
+
+    
+    return $result;
+}
+
+function saveDragedData() {
+    $post = JRequest::get('post');
+    $starttime = $post['starttime'];
+    $field = $post['field'];
+    $value = $post['value'];
+    $ret['IsSuccess'] = true;
+    $db = & JFactory::getDBO();
+    $query = "SELECT starttime FROM #__dc_mv_events WHERE starttime='$starttime'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+    }
+    $exists = $db->loadResult();
+    
+   
+    if($field == 'title') {
+
+        $category_name = getCategoryNameColorById($value);
+
+    
+        if (!$category_name['IsSuccess']) {
+            $ret['IsSuccess'] = false;
+            $ret['Msg'] = $category_name['Msg'];
+        }
+        $value = $category_name['name'][0];
+        $color = $category_name['color'][0];
+
+    }
+
+    if($exists) {
+        $query = "UPDATE #__dc_mv_events SET $field='$value', color='$color' WHERE starttime='$starttime'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+    }
+    }
+    
+    echo json_encode($ret);
+    die();
 }
 
 

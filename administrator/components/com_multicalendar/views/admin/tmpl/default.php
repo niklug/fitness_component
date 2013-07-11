@@ -244,7 +244,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                     <ul style="list-style:none;padding-left: 0;">
                                     <?php 
                                         foreach ($appointments as $appointment) {
-                                            echo '<li data-name="' . $appointment->name . '" class="appointment_drag" title="' . $appointment->name . '" style="cursor:move;width:200px; height:15px;background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
+                                            echo '<li data-name="title" data-value="' . $appointment->id . '" class="drag_data" title="' . $appointment->name . '" style="cursor:move;width:200px; height:15px;background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
                                         }
                                     
                                     ?>

@@ -1893,10 +1893,11 @@
                 option.url = default_option_url;
             });
             
-            $(".appointment_drag").mousedown(function(){
-                appointment_field = $(this).data('name');
+            $(".drag_data").mousedown(function(){
+                drag_name = $(this).data('name');
+                drag_value = $(this).data('value');
                
-               console.log(appointment_field);
+               //console.log(appointment_field);
             });
             
 
@@ -2907,6 +2908,80 @@
         function returnfalse() {
             return false;
         }
+        
+        //npkorban
+        function pad(d) {
+            return (d < 10) ? '0' + d.toString() : d.toString();
+        }
+        
+        function setEndDate(startdate, appointment_id) {
+                var endInterval;
+                switch(appointment_id) {
+                    case 1:
+                       endInterval = 45;
+                       break;
+                    case 2:
+                       endInterval = 30;
+                       break;
+                    case 3:
+                       endInterval = 45;
+                       break;
+                    case 4:
+                       endInterval = 60;
+                       break;
+                    case 5:
+                       endInterval = 60;
+                       break;
+                    case 6:
+                       endInterval = 60;
+                       break;
+                    case 7:
+                       endInterval = 60;
+                       break;
+                    case 8:
+                       endInterval = 45;
+                       break;
+                    case 9:
+                       endInterval = 60;
+                       break;
+                    default :
+                       endInterval = 60; 
+                }
+                    return DateAdd("n", endInterval , startdate);
+         }
+         
+         function saveDragedData(starttime,  endtime, field, value) {
+             //console.log(start + ', ' + end + ', ' + name + ', ' + value);
+             var url = option.url.replace('list', 'saveDragedData');
+             //console.log(url);
+             
+             $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       starttime : starttime,
+                       endtime   : endtime,
+                       field  : field,
+                       value : value
+                    },
+                    dataType : 'json',
+                    success : function(response) { 
+                        if(response.IsSuccess) {
+                           populate_by_filter();
+                        } else {
+                            alert(response.Msg);
+                        }
+                        console.log(response);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log("error");
+                    }
+                });
+         }
+         
+         //
+            
         function initevents(viewtype) {
             if (viewtype == "week" || viewtype == "day" || viewtype == "nDays") {
                 $("div.chip", gridcontainer).each(function(i) {
@@ -2939,10 +3014,11 @@
                         $(this).mousedown(function(e) { dragStart.call(this, "dw1", e); return false; });
                         
                         //npkorban
-                        appointment_field = false;
+                        drag_value = false;
+                        drag_name= false;
                         $(this).mouseup(function(e) { 
-                            if(appointment_field ) {
-                                console.log(appointment_field);
+                            if(drag_value ) {
+                                //console.log(drag_value);
                                 var _dragdata = { type: 1, target: $(this), sx: e.pageX, sy: e.pageY };
                                 var d = _dragdata;
                                 var wrapid = new Date().getTime();
@@ -2954,14 +3030,24 @@
                                     d.cpwrap = $("<div class='ca-evpi drag-chip-wrapper' style='top:" + ny + "px'/>").html(tempdata);
                                     d.cgh = gh;
                                 }
-                                var start = strtodate(d.target.attr("abbr") + " " + d.cgh.sh + ":" + d.cgh.sm);
-                                var start_formated = dateFormat.call(start, "M/d/yyyy HH:mm")
-                                console.log(start_formated);
-                                appointment_field = false;
+                                var startdate = strtodate(d.target.attr("abbr") + " " + d.cgh.sh + ":" + d.cgh.sm);
+                                var enddate = setEndDate(startdate, drag_value);
+                                var start_formated = startdate.getFullYear() + '-' + pad(startdate.getMonth() + 1) + '-' + pad(startdate.getDate()) + ' ' + pad(startdate.getHours()) + ':' + pad(startdate.getMinutes());
+                                var end_formated = enddate.getFullYear() + '-' + pad(enddate.getMonth() + 1) + '-' + pad(enddate.getDate()) + ' ' + pad(enddate.getHours()) + ':' + pad(enddate.getMinutes());
+                                //console.log(start_formated);
+                                //console.log(end_formated);
+                                
+                                saveDragedData(start_formated,  end_formated, drag_name, drag_value);
+                                
+                                drag_value = false;
                             }
+
+
                         });
 
                     });
+                    
+                    
                     $("#weekViewAllDaywk"+option.thecontainer).mousedown(function(e) { dragStart.call(this, "dw2", e); return false; });
                     if ( !(option.rowsList=="" || (option.dayWithTime && option.view=="day")) )
                         for (var i=0;i<option.rowsList.length;i++)
