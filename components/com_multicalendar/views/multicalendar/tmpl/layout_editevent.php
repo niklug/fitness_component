@@ -317,7 +317,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
                     if (data.IsSuccess) {
                         
                         <?php if($event->id) { ?>
-                            window.parent.$jc('#editEvent').dialog('close');
+                            //window.parent.$jc('#editEvent').dialog('close');
                         <?php } ?>
  
                         var event_id = data.Data;

@@ -782,14 +782,26 @@ function  get_clients() {
     $db = & JFactory::getDBO();
     $query = "SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$trainer_id' AND state='1'";
     $db->setQuery($query);
+    $status['success'] = 1;
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    
     $clients= $db->loadResultArray(0);
+    
+    if(!$clients) {
+        $status['success'] = 0;
+        $status['message'] = 'No clients assigned to this trainer.';
+    }
+
     
     foreach ($clients as $user_id) {
         $user = &JFactory::getUser($user_id);
         $clients_name[] = $user->name;
     }
     
-    $result = array_combine($clients, $clients_name);
+    $result = array( 'status' => $status, 'data' => array_combine($clients, $clients_name));
     echo  json_encode($result);
     die();
 }
@@ -828,15 +840,14 @@ function add_exercise() {
         }
     }
 
+    $post['success'] = 1;
     $insert = $db->insertObject('#__fitness_events_exercises', $obj, 'id');
     if(!$insert) {
         $post['success'] = 0;
         $post['message'] = $db->stderr();
-        echo json_encode($post);
-        return;
     }
-    $post['success'] = 1;
-    $post['id'] = $db->insertid();;
+
+    $post['id'] = $db->insertid();
     echo json_encode($post);
     die();
 }
@@ -851,11 +862,11 @@ function delete_exercise() {
     $query = "DELETE FROM #__fitness_events_exercises WHERE id='$exercise_id'";
     $db->setQuery($query);
     $post['exercise_id'] = $exercise_id;
+    $post['success'] = 1;
     if (!$db->query()) {
         $post['success'] = 0;
         $post['message'] = $db->stderr();
     }
-    $post['success'] = 1;
     echo json_encode($post);
     die();
 }

@@ -202,6 +202,21 @@ CREATE TABLE IF NOT EXISTS `#__fitness_assessments` (
 
 
 
+CREATE TABLE IF NOT EXISTS `#__fitness_events_exercises` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_id` int(11) unsigned NOT NULL,
+  `order` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `speed` varchar(255) NOT NULL,
+  `weight` varchar(255) NOT NULL,
+  `reps` varchar(255) NOT NULL,
+  `time` varchar(255) NOT NULL,
+  `sets` varchar(255) NOT NULL,
+  `rest` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `event_id` (`event_id`),
+  FOREIGN KEY (event_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 

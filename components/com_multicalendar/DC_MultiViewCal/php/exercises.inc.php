@@ -61,6 +61,7 @@ $(document).ready(function() {
                 obj.order = order;
                 obj.event_id = $("input[name=event_id]").val();
                 var data = $.param(obj)+"&method=add_exercise";
+                //console.log(data);
                 ajax_exercise("add_exercise", '', data);
             });
 
@@ -113,7 +114,7 @@ $(document).ready(function() {
             });
 
             function ajax_exercise(action, id, data){
-
+                
                 var url = DATA_FEED_URL;
                 $.ajax({
                     type : "POST",
@@ -121,6 +122,8 @@ $(document).ready(function() {
                     data : data,
                     dataType : 'json',
                     success : function(response) {
+                        console.log(response);
+   
                         $("#save_exercise").attr("disabled", false);
                         if(!response.success) {
                             alert(response.message);
@@ -164,7 +167,7 @@ $(document).ready(function() {
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
-                        //alert("error");
+                        console.log("error");
                     }
             });
 

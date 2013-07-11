@@ -241,7 +241,7 @@ $(document).ready(function() {
              */
             function setClientsSelect(trainer_id) {
                var url = DATA_FEED_URL+ "&method=get_clients";
-               
+               //console.log(trainer_id);
                 $.ajax({
                     type : "POST",
                     url : url,
@@ -249,7 +249,12 @@ $(document).ready(function() {
                        trainer_id : trainer_id
                     },
                     dataType : 'json',
-                    success : function(message) {
+                    success : function(response) {
+                        //console.log(response.status.success);
+                        if(!response.status.success) {
+                            alert(response.status.message);
+                            return;
+                        }
                         var number = $("#clients_html tr").length + 1;
                         var html = '';
                         html += '<tr>';
@@ -257,7 +262,7 @@ $(document).ready(function() {
                         html +='<td>';
                         html += '<select class="inputtext clients"   name="clients">';
                         html += '<option  value="">-Select-</option>';
-                        $.each(message, function(index, value) {
+                        $.each(response.data, function(index, value) {
                              if(index) {
                                 html += '<option  value="' + index + '">' +  value + '</option>';
                             }
