@@ -1253,8 +1253,6 @@ function saveDragedData() {
             $event_id = $event_id[0];
             $client_id = $value;
             $insertGroupClient = insertGroupClient($event_id, $client_id);
-            $ret['IsSuccess'] = $insertGroupClient['IsSuccess'];
-            $ret['Msg'] = $insertGroupClient['Msg'];
         }
         
 
@@ -1299,7 +1297,8 @@ function insertGroupClient($event_id, $client_id) {
                 $user = &JFactory::getUser($client_id);
                 $ret['IsSuccess'] = false;
                 $ret['Msg'] = $user->username . ' already added for this appointment';
-                return json_encode($ret);
+                echo json_encode($ret);
+                die();
              }
             $query = "INSERT  INTO #__fitness_appointment_clients (event_id, client_id)
                 VALUES ('$event_id', '$client_id')";
@@ -1308,6 +1307,8 @@ function insertGroupClient($event_id, $client_id) {
             if (!$db->query()) {
                 $ret['IsSuccess'] = false;
                 $ret['Msg'] = $db->stderr();
+                echo json_encode($ret);
+                die();
             }
             
             return $ret;
