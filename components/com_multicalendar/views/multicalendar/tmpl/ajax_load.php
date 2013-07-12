@@ -1058,7 +1058,7 @@ function add_update_group_client() {
     if($client == $client_id) {
         $user = &JFactory::getUser($client_id);
         $status['success'] = 0;
-        $status['message'] = $user->username . ' already added for this event';
+        $status['message'] = $user->username . ' already added for this appointment';
         echo json_encode($status);
         die();
     }
@@ -1205,13 +1205,15 @@ function saveDragedData() {
     $value = $post['value'];
     $ret['IsSuccess'] = true;
     $db = & JFactory::getDBO();
-    $query = "SELECT starttime FROM #__dc_mv_events WHERE starttime='$starttime'";
+    $query = "SELECT id, title,  starttime FROM #__dc_mv_events WHERE starttime='$starttime'";
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['IsSuccess'] = false;
         $ret['Msg'] = $db->stderr();
     }
-    $exists = $db->loadResult();
+    $event_id = $db->loadResultArray(0);
+    $event_name = $db->loadResultArray(1);
+    $exists = $db->loadResultArray(2);
     
    
     if($field == 'title') {
@@ -1229,18 +1231,47 @@ function saveDragedData() {
     }
 
     if($exists) {
+        $query = "UPDATE #__dc_mv_events SET $field='$value' WHERE starttime='$starttime'";
         if($field == 'title') {
             $query = "UPDATE #__dc_mv_events SET $field='$value', color='$color' WHERE starttime='$starttime'";
-        } else {
-             $query = "UPDATE #__dc_mv_events SET $field='$value' WHERE starttime='$starttime'";
         }
+     
+        if (($field == 'client_id') AND !(in_array($event_name, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
+            $event_id = $event_id[0];
+            $client_id = $value;
+            $status = 1;
+            
+            $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
+            $db->setQuery($query);
+            if (!$db->query()) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+                echo json_encode($ret);
+                die();
+            }
+            $client = $db->loadResult();
+            
+            if ($client == $client_id) {
+                $user = &JFactory::getUser($client_id);
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $user->username . ' already added for this appointment';
+                echo json_encode($ret);
+                die();
+            }
+            $query = "INSERT  INTO #__fitness_appointment_clients (event_id, client_id, status)
+                VALUES ('$event_id', '$client_id', '$status')";
+        }
+       
+        
         $db->setQuery($query);
         if (!$db->query()) {
             $ret['IsSuccess'] = false;
             $ret['Msg'] = $db->stderr();
         }
+
     } else {
         if($field == 'title') {
+            $obj = new stdClass();
             $obj->starttime = $post['starttime'];
             $obj->endtime = $post['endtime'];
             $obj->title = $value;
