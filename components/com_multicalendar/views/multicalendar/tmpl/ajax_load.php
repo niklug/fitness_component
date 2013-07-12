@@ -1243,20 +1243,18 @@ function saveDragedData() {
         if($field == 'title') {
             $query = "UPDATE #__dc_mv_events SET $field='$value', color='$color' WHERE starttime='$starttime'";
         }
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $ret['IsSuccess'] = false;
+            $ret['Msg'] = $db->stderr();
+        }
 
-     
         if (($field == 'client_id') AND !(in_array($event_name, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
             $event_id = $event_id[0];
             $client_id = $value;
             $insertGroupClient = insertGroupClient($event_id, $client_id);
             $ret['IsSuccess'] = $insertGroupClient['IsSuccess'];
             $ret['Msg'] = $insertGroupClient['Msg'];
-        } else {
-            $db->setQuery($query);
-            if (!$db->query()) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
-            }
         }
         
 
