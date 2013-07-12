@@ -351,7 +351,8 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid;
     $client_ids = implode($client_id, ',');
     if($client_id[0]) {
-        $sql .= " and client_id IN ($client_ids) ";
+        $sql .= " and (client_id IN ($client_ids) ";
+        $sql .= " or id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))) ";
     }
     
     $trainer_ids = implode($trainer_id, ',');
@@ -363,6 +364,12 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     if($location[0]) {
         $sql .= " and location IN ($locations) ";
     }
+    
+    
+     
+     
+     
+     
     
     $appointments = "'" . implode("','", $appointment) . "'";
     if($appointment[0]) {
@@ -1199,6 +1206,7 @@ function getCategoryNameColorById($id) {
 }
 
 function saveDragedData() {
+    $ret['IsSuccess'] = true;
     $post = JRequest::get('post');
     $starttime = $post['starttime'];
     $field = $post['field'];
@@ -1235,55 +1243,36 @@ function saveDragedData() {
         if($field == 'title') {
             $query = "UPDATE #__dc_mv_events SET $field='$value', color='$color' WHERE starttime='$starttime'";
         }
+
      
         if (($field == 'client_id') AND !(in_array($event_name, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
             $event_id = $event_id[0];
             $client_id = $value;
-            $status = 1;
-            
-            $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
+            $insertGroupClient = insertGroupClient($event_id, $client_id);
+            $ret['IsSuccess'] = $insertGroupClient['IsSuccess'];
+            $ret['Msg'] = $insertGroupClient['Msg'];
+        } else {
             $db->setQuery($query);
             if (!$db->query()) {
                 $ret['IsSuccess'] = false;
                 $ret['Msg'] = $db->stderr();
-                echo json_encode($ret);
-                die();
             }
-            $client = $db->loadResult();
-            
-            if ($client == $client_id) {
-                $user = &JFactory::getUser($client_id);
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $user->username . ' already added for this appointment';
-                echo json_encode($ret);
-                die();
-            }
-            $query = "INSERT  INTO #__fitness_appointment_clients (event_id, client_id, status)
-                VALUES ('$event_id', '$client_id', '$status')";
         }
-       
         
-        $db->setQuery($query);
-        if (!$db->query()) {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = $db->stderr();
-        }
 
     } else {
         if($field == 'title') {
-            $obj = new stdClass();
-            $obj->starttime = $post['starttime'];
-            $obj->endtime = $post['endtime'];
-            $obj->title = $value;
-            $obj->color = $color;
-            $obj->calid = JRequest::getVar('calid');
-            $obj->published = 1;
-            $db->insertObject('#__dc_mv_events', $obj, 'id');
-            $db->setQuery($query);
-            if (!$db->query()) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
-            } 
+            $post['title'] = $value;
+            $post['color'] = $color;
+            insertEvent($post);
+            if (!(in_array($event_name, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
+                $event_id = $db->insertid();
+                $client_id = $post['client_id'];
+                $insertGroupClient = insertGroupClient($event_id, $client_id);
+                $ret['IsSuccess'] = $insertGroupClient['IsSuccess'];
+                $ret['Msg'] = $insertGroupClient['Msg'];
+            }
+            
         } else {
                 $ret['IsSuccess'] = false;
                 $ret['Msg'] = 'Place appointment first';
@@ -1293,6 +1282,69 @@ function saveDragedData() {
     echo json_encode($ret);
     die();
 }
+
+
+
+function insertGroupClient($event_id, $client_id) {
+            $ret['IsSuccess'] = true;
+            $db = & JFactory::getDBO();
+            $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
+            $db->setQuery($query);
+            if (!$db->query()) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+                return json_encode($ret);
+            }
+            $client = $db->loadResult();
+            
+            if ($client == $client_id) {
+                $user = &JFactory::getUser($client_id);
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $user->username . ' already added for this appointment';
+                return json_encode($ret);
+             }
+            $query = "INSERT  INTO #__fitness_appointment_clients (event_id, client_id)
+                VALUES ('$event_id', '$client_id')";
+            
+            $db->setQuery($query);
+            if (!$db->query()) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+            }
+            
+            return $ret;
+        }
+        
+        
+        function insertEvent($post) {
+            $ret['IsSuccess'] = true;
+            $db = & JFactory::getDBO();
+            $obj = new stdClass();
+            $obj->starttime = $post['starttime'];
+            $obj->endtime = $post['endtime'];
+            if(in_array($post['title'], array('Personal Training', 'Assessment'))) {
+                $obj->client_id = $post['client_id'];
+            }
+            $obj->trainer_id = $post['trainer_id'];
+            $obj->location = $post['location'];
+            $obj->title = $post['title'];
+            $obj->color = $post['color'];
+            $obj->calid = JRequest::getVar('calid');
+            $obj->published = 1;
+            $insert = $db->insertObject('#__dc_mv_events', $obj, 'id');
+            $db->setQuery($query);
+            if (!$insert) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+                echo json_encode($ret);
+                die();
+            }
+            return $ret;
+        }
+       
+        
+
+
 
 
 

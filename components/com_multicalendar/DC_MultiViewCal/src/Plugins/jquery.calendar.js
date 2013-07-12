@@ -2964,7 +2964,13 @@
              //console.log(start + ', ' + end + ', ' + name + ', ' + value);
              var url = option.url.replace('list', 'saveDragedData');
              //console.log(url);
-             
+             var client_id =  $('#filter_client').find(':selected').val();
+             if(!client_id) client_id = '';
+             //console.log(client_id);
+             var trainer_id =  $('#filter_trainer').find(':selected').val();
+             if(!trainer_id) trainer_id = '';
+             var location =  $('#filter_location').find(':selected').val();
+             if(!location) location = '';
              $.ajax({
                     type : "POST",
                     url : url,
@@ -2972,7 +2978,10 @@
                        starttime : starttime,
                        endtime   : endtime,
                        field  : field,
-                       value : value
+                       value : value,
+                       client_id : client_id,
+                       trainer_id : trainer_id,
+                       location : location
                     },
                     dataType : 'json',
                     success : function(response) { 
