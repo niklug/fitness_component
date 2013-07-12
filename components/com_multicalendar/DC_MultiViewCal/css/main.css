@@ -411,3 +411,44 @@
 #assessment_wrapper .assessment_input {
     width:60px;
 }
+
+
+
+
+
+/* //////////////////////////////  */
+.drag_area li{
+    border: 1px solid #CCCCCC;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+    height: 20px;
+    padding-top: 5px;
+    text-align: center;
+    width: 200px;
+    font-size: 14px;
+}
+
+.drag_area li[data-name="client_id"] {
+    background-color:#99FFFF;
+    color: #000000;
+}
+
+.drag_area li[data-name="trainer_id"] {
+    background-color:#FF99FF;
+    color: #000000;
+}
+
+.drag_area li[data-name="location"] {
+    background-color:#D9DEF1;
+    color: #000000;
+    font-size: 12px;
+}
+
+.drag_area ul {
+    height: 245px;
+    list-style: none outside none; 
+    overflow-x: hidden; 
+    overflow-y: auto; 
+    padding-left: 0;
+}

@@ -233,7 +233,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
             <td>
                 <div id="cal<?php echo $id?>" style="width:918px;" class="multicalendar"></div>
             </td>
-            <td>
+            <td  style="vertical-align:top;">
                 <table border="0">
                     <tbody>
                         <tr>
@@ -241,20 +241,11 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                 
                                 <div class="drag_area">
                                     <h4 >1. Add Appointment to calendar</h4>
-                                    <ul style="list-style:none;padding-left: 0;">
+                                    <ul>
                                     <?php 
                                         foreach ($appointments as $appointment) {
-                                            echo '<li data-name="title" data-value="' . $appointment->id . '" class="drag_data" title="' . $appointment->name . '" style=" 
-                                            border: 1px solid #CCCCCC;
-                                            color: #FFFFFF;
-                                            cursor: pointer;
-                                            font-weight: bold;
-                                            height: 20px;
-                                            padding-top: 5px;
-                                            text-align: center;
-                                            width: 200px;
-                                            font-size: 14px;
-                                            background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
+                                            echo '<li data-name="title" data-value="' . $appointment->id . '" class="drag_data" title="' . $appointment->name . '" 
+                                                  style="background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
                                         }
                                     
                                     ?>
@@ -262,28 +253,50 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
                                 </div>
                             </td>
-                       
+                            
+                            <td>
+                                
+                                <div class="drag_area">
+                                    <h4 >2. Add Client to Appointment</h4>
+                                    <ul>
+                                    <?php 
+                                        foreach ($clients as $client) {
+                                            echo '<li data-name="client_id" data-value="' . $client->user_id . '" class="drag_data" title="' . JFactory::getUser($client->user_id)->username. '" >'
+                                                 . JFactory::getUser($client->user_id)->username . '</li>';
+                                        }
+                                    
+                                    ?>
+                                    </ul>
+
+                                </div>
+                            </td>
+                            <td>
+                                
+                                <div class="drag_area">
+                                    <h4 >3. Add Trainer to Appointment</h4>
+                                    <ul>
+                                    <?php 
+                                        foreach ($trainers as $trainer) {
+                                            echo '<li data-name="trainer_id" data-value="' . $trainer->id. '" class="drag_data" title="' . JFactory::getUser($trainer->id)->username  . '"        ">' 
+                                                 . JFactory::getUser($trainer->id)->username . '</li>';
+                                        }
+                                    
+                                    ?>
+                                    </ul>
+
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                              <td>
                                 
                                 <div class="drag_area">
-                                    <h4 >2. Add Client to Appointment</h4>
-                                    <ul style="list-style:none;padding-left: 0;">
+                                    <h4 >4. Add Location to Appointment</h4>
+                                    <ul>
                                     <?php 
-                                        foreach ($clients as $client) {
-                                            echo '<li data-name="client_id" data-value="' . $client->user_id . '" class="drag_data" title="' . JFactory::getUser($client->user_id)->username. '" style=" 
-                                            border: 1px solid #CCCCCC;
-                                            color: #000000;
-                                            cursor: pointer;
-                                            font-weight: bold;
-                                            height: 20px;
-                                            padding-top: 5px;
-                                            text-align: center;
-                                            width: 200px;
-                                            font-size: 14px;
-                                            background-color:#ffffff"
-                                            ">' . JFactory::getUser($client->user_id)->username . '</li>';
+                                        foreach ($locations as $location) {
+                                            echo '<li data-name="location" data-value="' . trim($location->name) . '" class="drag_data" title="' . $location->name   . '" ">' 
+                                                 . $location->name . '</li>';
                                         }
                                     
                                     ?>
@@ -291,39 +304,12 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
                                 </div>
                             </td>
-                       
-                        </tr>
-                        
-                        
-                         <tr>
-                             <td>
-                                
-                                <div class="drag_area">
-                                    <h4 >3. Add Trainer to Appointment</h4>
-                                    <ul style="list-style:none;padding-left: 0;">
-                                    <?php 
-                                        foreach ($trainers as $trainer) {
-                                            echo '<li data-name="trainer_id" data-value="' . $trainer->id. '" class="drag_data" title="' . JFactory::getUser($trainer->id)->username  . '" style=" 
-                                            border: 1px solid #CCCCCC;
-                                            color: #000000;
-                                            cursor: pointer;
-                                            font-weight: bold;
-                                            height: 20px;
-                                            padding-top: 5px;
-                                            text-align: center;
-                                            width: 200px;
-                                            font-size: 14px;
-                                            background-color:#ffffff"
-                                            ">' . JFactory::getUser($trainer->id)->username . '</li>';
-                                        }
-                                    
-                                    ?>
-                                    </ul>
+                            
 
-                                </div>
-                            </td>
                        
                         </tr>
+                        
+   
 
                     </tbody>
                 </table>
