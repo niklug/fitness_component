@@ -1229,7 +1229,11 @@ function saveDragedData() {
     }
 
     if($exists) {
-        $query = "UPDATE #__dc_mv_events SET $field='$value', color='$color' WHERE starttime='$starttime'";
+        if($field == 'title') {
+            $query = "UPDATE #__dc_mv_events SET $field='$value', color='$color' WHERE starttime='$starttime'";
+        } else {
+             $query = "UPDATE #__dc_mv_events SET $field='$value' WHERE starttime='$starttime'";
+        }
         $db->setQuery($query);
         if (!$db->query()) {
             $ret['IsSuccess'] = false;

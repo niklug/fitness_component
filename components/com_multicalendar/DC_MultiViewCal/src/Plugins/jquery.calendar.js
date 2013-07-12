@@ -1896,8 +1896,12 @@
             $(".drag_data").mousedown(function(){
                 drag_name = $(this).data('name');
                 drag_value = $(this).data('value');
-               
-               //console.log(appointment_field);
+                $(".tg-col-eventwrapper").css('cursor','crosshair');
+                $(".tg-col-eventwrapper dl").css('cursor','crosshair');
+                $(".drag_area li").css('cursor','w-resize');
+                
+                console.log(drag_name);
+                console.log(drag_value);
             });
             
 
@@ -2362,6 +2366,12 @@
             return { left: tleft, top: ttop, hide: ishide };
         }  
         function dayshow(e, data) {
+            //console.log(drag_name);
+            if (drag_name && drag_value) {
+                drag_name = false;
+                drag_value = false;
+                return false;
+            }
             if (data == undefined) {
                 data = getdata($(this));
             }
@@ -2968,6 +2978,8 @@
                     success : function(response) { 
                         if(response.IsSuccess) {
                            populate_by_filter();
+                           drag_name = false;
+                           drag_value = false;
                         } else {
                             alert(response.Msg);
                         }
@@ -2978,14 +2990,44 @@
                         console.log("error");
                     }
                 });
+                $(".tg-col-eventwrapper").css('cursor','default');
+                $(".tg-col-eventwrapper dl").css('cursor','default');
+                $(".drag_area li").css('cursor','pointer');
+         }
+         
+         function onDragEvent(e, obj) {
+             //console.log(drag_value);
+            var _dragdata = { type: 1, target: obj, sx: e.pageX, sy: e.pageY };
+            var d = _dragdata;
+            var wrapid = new Date().getTime();
+            var tp = d.target.offset().top;
+            if (!d.cpwrap) {
+                var gh = gH(d.sy, d.sy + option.cellheight, tp);
+                var ny = gP(gh.sh, gh.sm);
+                var tempdata = buildtempdayevent(gh.sh, gh.sm, gh.eh, gh.em, gh.h);
+                d.cpwrap = $("<div class='ca-evpi drag-chip-wrapper' style='top:" + ny + "px'/>").html(tempdata);
+                d.cgh = gh;
+            }
+            var startdate = strtodate(d.target.attr("abbr") + " " + d.cgh.sh + ":" + d.cgh.sm);
+            var enddate = setEndDate(startdate, drag_value);
+            var start_formated = startdate.getFullYear() + '-' + pad(startdate.getMonth() + 1) + '-' + pad(startdate.getDate()) + ' ' + pad(startdate.getHours()) + ':' + pad(startdate.getMinutes());
+            var end_formated = enddate.getFullYear() + '-' + pad(enddate.getMonth() + 1) + '-' + pad(enddate.getDate()) + ' ' + pad(enddate.getHours()) + ':' + pad(enddate.getMinutes());
+
+            saveDragedData(start_formated,  end_formated, drag_name, drag_value);
+            //drag_name = false;
+            //drag_value = false;
          }
          
          //
             
         function initevents(viewtype) {
+            //npkorban
+            drag_name= false;
+            drag_value = false;
             if (viewtype == "week" || viewtype == "day" || viewtype == "nDays") {
                 $("div.chip", gridcontainer).each(function(i) {
                     var chip = $(this);
+                    //npkorban commented
                     chip.click(dayshow);
                     if (chip.hasClass("drag")) {
                         chip.mousedown(function(e) { dragStart.call(this, "dw3", e); return false; });
@@ -3011,35 +3053,20 @@
                 });
                 if (option.readonly == false && option.userAdd) {
                     $("td.tg-col", gridcontainer).each(function(i) {
-                        $(this).mousedown(function(e) { dragStart.call(this, "dw1", e); return false; });
+                    
+                        $(this).mousedown(function(e) {
+                            if(drag_name && drag_value ) {
+                                onDragEvent(e, $(this));
+                                return false; 
+                            }
+                            dragStart.call(this, "dw1", e);
+                            return false; 
+                        });
                         
-                        //npkorban
-                        drag_value = false;
-                        drag_name= false;
+
                         $(this).mouseup(function(e) { 
-                            if(drag_value ) {
-                                //console.log(drag_value);
-                                var _dragdata = { type: 1, target: $(this), sx: e.pageX, sy: e.pageY };
-                                var d = _dragdata;
-                                var wrapid = new Date().getTime();
-                                var tp = d.target.offset().top;
-                                if (!d.cpwrap) {
-                                    var gh = gH(d.sy, d.sy + option.cellheight, tp);
-                                    var ny = gP(gh.sh, gh.sm);
-                                    var tempdata = buildtempdayevent(gh.sh, gh.sm, gh.eh, gh.em, gh.h);
-                                    d.cpwrap = $("<div class='ca-evpi drag-chip-wrapper' style='top:" + ny + "px'/>").html(tempdata);
-                                    d.cgh = gh;
-                                }
-                                var startdate = strtodate(d.target.attr("abbr") + " " + d.cgh.sh + ":" + d.cgh.sm);
-                                var enddate = setEndDate(startdate, drag_value);
-                                var start_formated = startdate.getFullYear() + '-' + pad(startdate.getMonth() + 1) + '-' + pad(startdate.getDate()) + ' ' + pad(startdate.getHours()) + ':' + pad(startdate.getMinutes());
-                                var end_formated = enddate.getFullYear() + '-' + pad(enddate.getMonth() + 1) + '-' + pad(enddate.getDate()) + ' ' + pad(enddate.getHours()) + ':' + pad(enddate.getMinutes());
-                                //console.log(start_formated);
-                                //console.log(end_formated);
-                                
-                                saveDragedData(start_formated,  end_formated, drag_name, drag_value);
-                                
-                                drag_value = false;
+                            if(drag_name && drag_value ) {
+                                onDragEvent(e, $(this));
                             }
 
 

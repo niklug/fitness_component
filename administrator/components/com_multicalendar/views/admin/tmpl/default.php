@@ -130,7 +130,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
     $db = JFactory::getDbo();
     $sql = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
     $db->setQuery($sql);
-    $primary_trainerlist = $db->loadObjectList();
+    $trainers = $db->loadObjectList();
 
     ?>
 
@@ -138,7 +138,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
         <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
                 <option value=""><?php echo JText::_('-Select Trainers-');?></option>
                 <?php 
-                    foreach ($primary_trainerlist as $trainer) {
+                    foreach ($trainers as $trainer) {
                         echo '<option value="' . $trainer->id . '">' . $trainer->username . '</option>';
                     }
                 ?>
@@ -239,12 +239,22 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                         <tr>
                             <td>
                                 
-                                <div id="add_appointment">
-                                    <h4 >Add Appointment To Calendar</h4>
+                                <div class="drag_area">
+                                    <h4 >1. Add Appointment to calendar</h4>
                                     <ul style="list-style:none;padding-left: 0;">
                                     <?php 
                                         foreach ($appointments as $appointment) {
-                                            echo '<li data-name="title" data-value="' . $appointment->id . '" class="drag_data" title="' . $appointment->name . '" style="cursor:move;width:200px; height:15px;background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
+                                            echo '<li data-name="title" data-value="' . $appointment->id . '" class="drag_data" title="' . $appointment->name . '" style=" 
+                                            border: 1px solid #CCCCCC;
+                                            color: #FFFFFF;
+                                            cursor: pointer;
+                                            font-weight: bold;
+                                            height: 20px;
+                                            padding-top: 5px;
+                                            text-align: center;
+                                            width: 200px;
+                                            font-size: 14px;
+                                            background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
                                         }
                                     
                                     ?>
@@ -255,9 +265,66 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                        
                         </tr>
                         <tr>
-                            <td></td>
-                         
+                             <td>
+                                
+                                <div class="drag_area">
+                                    <h4 >2. Add Client to Appointment</h4>
+                                    <ul style="list-style:none;padding-left: 0;">
+                                    <?php 
+                                        foreach ($clients as $client) {
+                                            echo '<li data-name="client_id" data-value="' . $client->user_id . '" class="drag_data" title="' . JFactory::getUser($client->user_id)->username. '" style=" 
+                                            border: 1px solid #CCCCCC;
+                                            color: #000000;
+                                            cursor: pointer;
+                                            font-weight: bold;
+                                            height: 20px;
+                                            padding-top: 5px;
+                                            text-align: center;
+                                            width: 200px;
+                                            font-size: 14px;
+                                            background-color:#ffffff"
+                                            ">' . JFactory::getUser($client->user_id)->username . '</li>';
+                                        }
+                                    
+                                    ?>
+                                    </ul>
+
+                                </div>
+                            </td>
+                       
                         </tr>
+                        
+                        
+                         <tr>
+                             <td>
+                                
+                                <div class="drag_area">
+                                    <h4 >3. Add Trainer to Appointment</h4>
+                                    <ul style="list-style:none;padding-left: 0;">
+                                    <?php 
+                                        foreach ($trainers as $trainer) {
+                                            echo '<li data-name="trainer_id" data-value="' . $trainer->id. '" class="drag_data" title="' . JFactory::getUser($trainer->id)->username  . '" style=" 
+                                            border: 1px solid #CCCCCC;
+                                            color: #000000;
+                                            cursor: pointer;
+                                            font-weight: bold;
+                                            height: 20px;
+                                            padding-top: 5px;
+                                            text-align: center;
+                                            width: 200px;
+                                            font-size: 14px;
+                                            background-color:#ffffff"
+                                            ">' . JFactory::getUser($trainer->id)->username . '</li>';
+                                        }
+                                    
+                                    ?>
+                                    </ul>
+
+                                </div>
+                            </td>
+                       
+                        </tr>
+
                     </tbody>
                 </table>
 
