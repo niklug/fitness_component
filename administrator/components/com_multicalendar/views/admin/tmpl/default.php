@@ -323,6 +323,8 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                             echo JHTML::calendar('','reminder_to','reminder_to','%Y-%m-%d', array('readonly'=>'true'));
                                             ?>
                                             <input id="send_emails_button" type="button" name="send_emails_button" value="Send" >
+                                            
+                                            <div id="emais_sended"></div>
                                         </div>
                                     </form>
                                 </div>

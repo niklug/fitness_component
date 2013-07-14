@@ -1913,21 +1913,29 @@
         });
         
         function sendRemindersManually(reminder_options) {
-            var url = option.url.replace('list', 'sendRemindersManually') + reminder_options;
+            var url = option.url.replace('list', 'sendRemindersManually') + '&' +reminder_options;
              $.ajax({
                     type : "POST",
                     url : url,
                     dataType : 'json',
                     success : function(response) { 
+                        //alert(response.Msg);
                         if(response.IsSuccess) {
-                            alert('ok');
+                            var emails = response.Msg.split(',');
+                            
+                            var message = 'Emails were sent to: ' +  "</br>";
+                            $.each(emails, function(index, email) { 
+                                message += email +  "</br>";
+                            });
+                            $("#emais_sended").append(message);
+              
                         } else {
-                            alert(response.Msg);
+                            response.Msg;
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
-                        alert.log("error");
+                        console.log("error");
                     }
                 });
         }

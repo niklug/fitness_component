@@ -9,9 +9,13 @@
         require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/list.inc.php' );
 
         $event_id = &JRequest::getVar('event_id');
+        
+        $client_id = &JRequest::getVar('client_id');
 
         $event_data = getEmailPdfData($event_id);
         
+        if(!$client_id) $client_id = $event_data->client_id;
+
         $width = '900px';
         
         $height = '1500px';
@@ -53,7 +57,7 @@
                             <td style="font-weight: bold;color:#D14F16;background-color:#5c5c5c; border-radius:7px;padding-left: 10px;">
                                 <i>
                                 <?php
-                                $user = &JFactory::getUser($event_data->client_id);
+                                $user = &JFactory::getUser($client_id);
                                 echo $user->name;
                                 ?>
                                 </i>

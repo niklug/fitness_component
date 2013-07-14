@@ -11,9 +11,9 @@ $(document).ready(function() {
             data : {
                event_id : event_id
             },
-            dataType : 'text',
+            dataType : 'json',
             success : function(response) {
-                alert(response);
+                alert('email sent');
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {

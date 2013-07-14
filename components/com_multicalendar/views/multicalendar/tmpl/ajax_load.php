@@ -89,7 +89,7 @@ switch ($method) {
     case "set_event_exircise_order":
         set_event_exircise_order();
     case "send_appointment_email":
-        send_appointment_email();
+        send_appointment_email(JRequest::getVar('event_id'));
     break;
     case "update_exercise_field":
         update_exercise_field();
@@ -906,20 +906,44 @@ function set_event_exircise_order() {
 /**
  * sends email to the client with appointment content, exercises , etc..
  */
-function send_appointment_email() {
-    $event_id = &JRequest::getVar('event_id');
-    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&tpml=component&event_id=' . $event_id;
+function send_appointment_email($event_id) {
+    
+    $client_ids = getClientsByEvent($event_id);
+    
 
-    $ch = curl_init();
-    curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-    curl_setopt($ch, CURLOPT_URL,$url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $contents = curl_exec ($ch);
-    curl_close ($ch);
+    
+    foreach ($client_ids as $client_id) {
+        $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
+        if(!function_exists('curl_version')) {
+            $ret['IsSuccess'] = false;
+            $ret['Msg'] = 'cURL not anabled';
+            echo json_encode($ret);
+            die();
+        }
 
-    $client_email = getClientEmailByEvent($event_id);
-    $status['success'] = 1;
-    sendEmail($client_email, 'Appointment details, elitefit.com.au', $contents);
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $contents = curl_exec ($ch);
+        curl_close ($ch);
+        
+        $email = JFactory::getUser($client_id)->email;
+        
+        $emails[] = $email;
+        
+        $send = sendEmail($email, 'Appointment details, elitefit.com.au', $contents);
+        
+        if($send != '1') {
+            $ret['IsSuccess'] = false;
+            $ret['Msg'] = 'Email function error';
+            echo json_encode($ret);
+            die();
+        }
+    }
+    return $emails;
+    
+
 }
 
 /**
@@ -948,14 +972,10 @@ function sendEmail($recipient, $Subject, $body) {
 
     $mailer->setBody($body);
 
-    $send = & $mailer->Send();
-    
-    if($send == '1') {
-        echo 'Email  sent';
-    } else {
-        echo $send;
-    }
-    die();
+    $send = &$mailer->Send();
+
+    return $send;
+
 }
 
 
@@ -964,17 +984,22 @@ function sendEmail($recipient, $Subject, $body) {
  * @param type $event_id
  * @return type
  */
-function getClientEmailByEvent($event_id) {
+function getClientsByEvent($event_id) {
+    
     $db = & JFactory::getDBO();
-    $query = "SELECT client_id FROM #__dc_mv_events WHERE id='$event_id'";
+    $query = "SELECT DISTINCT client_id FROM #__dc_mv_events WHERE id='$event_id'";
+    $query .= " UNION ";
+    $query .= "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
     $db->setQuery($query);
-        if (!$db->query()) {
-        $status['success'] = 0;
-        $status['message'] = $db->stderr();
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] =  $db->stderr();
+        echo json_encode($ret);
+        die();
     }
-    $client_id = $db->loadResult();
-    $user = &JFactory::getUser($client_id);
-    return $user->email;
+    $client_ids = $db->loadResultArray(0);
+
+    return $client_ids;
 }
 
 /**
@@ -1285,71 +1310,97 @@ function saveDragedData() {
 
 
 function insertGroupClient($event_id, $client_id) {
-            $ret['IsSuccess'] = true;
-            $db = & JFactory::getDBO();
-            $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
-            $db->setQuery($query);
-            if (!$db->query()) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
-                return json_encode($ret);
-            }
-            $client = $db->loadResult();
-            
-            if ($client == $client_id) {
-                $user = &JFactory::getUser($client_id);
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $user->username . ' already added for this appointment';
-                echo json_encode($ret);
-                die();
-             }
-            $query = "INSERT  INTO #__fitness_appointment_clients (event_id, client_id)
-                VALUES ('$event_id', '$client_id')";
-            
-            $db->setQuery($query);
-            if (!$db->query()) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
-                echo json_encode($ret);
-                die();
-            }
-            
-            return $ret;
-        }
-        
-        
-        function insertEvent($post) {
-            $ret['IsSuccess'] = true;
-            $db = & JFactory::getDBO();
-            $obj = new stdClass();
-            $obj->starttime = $post['starttime'];
-            $obj->endtime = $post['endtime'];
-            if(in_array($post['title'], array('Personal Training', 'Assessment'))) {
-                $obj->client_id = $post['client_id'];
-            }
-            $obj->trainer_id = $post['trainer_id'];
-            $obj->location = $post['location'];
-            $obj->title = $post['title'];
-            $obj->color = $post['color'];
-            $obj->calid = JRequest::getVar('calid');
-            $obj->published = 1;
-            $insert = $db->insertObject('#__dc_mv_events', $obj, 'id');
-            $db->setQuery($query);
-            if (!$insert) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
-                echo json_encode($ret);
-                die();
-            }
-            return $ret;
-        }
+    $ret['IsSuccess'] = true;
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        return json_encode($ret);
+    }
+    $client = $db->loadResult();
+
+    if ($client == $client_id) {
+        $user = &JFactory::getUser($client_id);
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $user->username . ' already added for this appointment';
+        echo json_encode($ret);
+        die();
+     }
+    $query = "INSERT  INTO #__fitness_appointment_clients (event_id, client_id)
+        VALUES ('$event_id', '$client_id')";
+
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        echo json_encode($ret);
+        die();
+    }
+
+    return $ret;
+}
+
+
+function insertEvent($post) {
+    $ret['IsSuccess'] = true;
+    $db = & JFactory::getDBO();
+    $obj = new stdClass();
+    $obj->starttime = $post['starttime'];
+    $obj->endtime = $post['endtime'];
+    if(in_array($post['title'], array('Personal Training', 'Assessment'))) {
+        $obj->client_id = $post['client_id'];
+    }
+    $obj->trainer_id = $post['trainer_id'];
+    $obj->location = $post['location'];
+    $obj->title = $post['title'];
+    $obj->color = $post['color'];
+    $obj->calid = JRequest::getVar('calid');
+    $obj->published = 1;
+    $insert = $db->insertObject('#__dc_mv_events', $obj, 'id');
+    $db->setQuery($query);
+    if (!$insert) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        echo json_encode($ret);
+        die();
+    }
+    return $ret;
+}
        
         
 function sendRemindersManually() {
+    $db = & JFactory::getDBO();
     $appointments = JRequest::getVar('appointments');
+    $appointments = "'" . implode("','", $appointments) . "'";
+    $reminder_from = JRequest::getVar('reminder_from');
+    $reminder_from_formated = $reminder_from . ' 00:00';
+    $reminder_to = JRequest::getVar('reminder_to');
+    $reminder_to_formated = $reminder_to . ' 23:59';
+
+    $query = "SELECT id FROM #__dc_mv_events WHERE title IN ($appointments) ";
+    if($reminder_from AND $reminder_to) {
+        $query .= " AND starttime BETWEEN" . $db->quote($reminder_from_formated) . "AND" . $db->quote($reminder_to_formated);
+    }
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        echo json_encode($ret);
+        die();
+    }
+    $event_ids = $db->loadResultArray(0);
     
-    $ret['IsSuccess'] = false;
-    $ret['Msg'] = print_r($appointments, true);
+    $emails = array();
+    foreach ($event_ids as $event_id) {
+        $emails = array_merge($emails, send_appointment_email($event_id));
+    }
+    
+    $emails = implode(', ', $emails);
+    //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
+    $ret['IsSuccess'] = true;
+    $ret['Msg'] = $emails;
     echo json_encode($ret);
     die();
 }
