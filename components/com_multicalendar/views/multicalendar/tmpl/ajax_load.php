@@ -112,6 +112,9 @@ switch ($method) {
         generateFormHtml();
     case "saveDragedData":
         saveDragedData();
+    case "sendRemindersManually":
+        sendRemindersManually();
+        
     case "adddetails":
 
         $st = JRequest::getVar("stpartdatelast") . " " . JRequest::getVar("stparttimelast");
@@ -1342,7 +1345,14 @@ function insertGroupClient($event_id, $client_id) {
         }
        
         
-
+function sendRemindersManually() {
+    $appointments = JRequest::getVar('appointments');
+    
+    $ret['IsSuccess'] = false;
+    $ret['Msg'] = print_r($appointments, true);
+    echo json_encode($ret);
+    die();
+}
 
 
 

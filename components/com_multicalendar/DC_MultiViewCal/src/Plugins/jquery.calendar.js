@@ -1883,6 +1883,11 @@
             $("#find_filtered").click(function(){
                populate_by_filter();
             });
+                        
+            $("#send_emails_button").click(function(){
+               var reminder_options = $("#send_reminder_form").serialize();
+               sendRemindersManually(reminder_options);
+            });
             
             $("#reset_filtered").click(function(){
                 $("#calendar_filter_form select").val('');
@@ -1900,12 +1905,33 @@
                 $(".tg-col-eventwrapper dl").css('cursor','crosshair');
                 $(".drag_area li").css('cursor','w-resize');
                 
-                console.log(drag_name);
-                console.log(drag_value);
+                //console.log(drag_name);
+                //console.log(drag_value);
             });
             
 
         });
+        
+        function sendRemindersManually(reminder_options) {
+            var url = option.url.replace('list', 'sendRemindersManually') + reminder_options;
+             $.ajax({
+                    type : "POST",
+                    url : url,
+                    dataType : 'json',
+                    success : function(response) { 
+                        if(response.IsSuccess) {
+                            alert('ok');
+                        } else {
+                            alert(response.Msg);
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert.log("error");
+                    }
+                });
+        }
+        
         //to populate the data
         function populate() {
             if (option.isloading) {
