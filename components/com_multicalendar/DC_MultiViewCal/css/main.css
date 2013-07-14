@@ -425,7 +425,7 @@
     height: 20px;
     padding-top: 5px;
     text-align: center;
-    width: 200px;
+    width: 210px;
     font-size: 14px;
 }
 
@@ -446,9 +446,25 @@
 }
 
 .drag_area ul {
-    height: 245px;
+    height: 250px;
     list-style: none outside none; 
     overflow-x: hidden; 
     overflow-y: auto; 
     padding-left: 0;
+}
+
+#reminder_from, #reminder_to {
+    width: 70px;
+    margin-top: 15px;
+}
+
+
+#reminder_to {
+    margin-left: 18px;
+}
+
+#send_emails_button {
+    margin-left: 70px;
+    margin-top: 10px;
+    cursor: pointer;
 }

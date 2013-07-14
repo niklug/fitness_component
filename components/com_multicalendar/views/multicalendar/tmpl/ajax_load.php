@@ -1261,12 +1261,12 @@ function saveDragedData() {
             $post['title'] = $value;
             $post['color'] = $color;
             insertEvent($post);
-            if (!(in_array($event_name, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
+            if (!(in_array($value, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
                 $event_id = $db->insertid();
                 $client_id = $post['client_id'];
-                $insertGroupClient = insertGroupClient($event_id, $client_id);
-                $ret['IsSuccess'] = $insertGroupClient['IsSuccess'];
-                $ret['Msg'] = $insertGroupClient['Msg'];
+                if(is_int($client_id)) {
+                    $insertGroupClient = insertGroupClient($event_id, $client_id);
+                }
             }
             
         } else {

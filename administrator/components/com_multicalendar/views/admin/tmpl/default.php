@@ -304,8 +304,26 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
                                 </div>
                             </td>
-                            
-
+                            <td colspan="2">
+                                
+                                <div style="margin-left:115px;width: 200px;" class="drag_area send_reminder_emails">
+                                    <h4 >5. Send Email Confirmations</h4>
+                                    <div style="margin-bottom:5px;">Select Appointment Type(s)</div>
+                                    <div  style="height: 238px;">
+                                        <select style="font-size: 14px; font-weight: bold;  width: 200px;" multiple size="9" id="filter_appointment_email" name="appointment_email[]" class="inputbox" >
+                                            <?php
+                                            foreach ($appointments as $appointment) {
+                                                echo '<option value="' . $appointment->name . '">' . $appointment->name . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    <?php 
+                                    echo JHTML::calendar('','reminder_from','reminder_from','%Y-%m-%d', array('readonly'=>'true'));
+                                    echo JHTML::calendar('','reminder_to','reminder_to','%Y-%m-%d', array('readonly'=>'true'));
+                                    ?>
+                                    <input id="send_emails_button" type="button" name="send_emails_button" value="Send" >
+                                </div>
+                            </td>
                        
                         </tr>
                         
