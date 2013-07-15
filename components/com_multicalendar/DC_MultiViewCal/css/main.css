@@ -468,3 +468,17 @@
     margin-top: 10px;
     cursor: pointer;
 }
+
+
+.event_tooltip {
+    background-color: #E2EFF8;
+    border-radius: 5px 5px 5px 5px;
+    color: #000000;
+    padding: 5px;
+    position: fixed;
+    width: 237px;
+    z-index: 9999;
+    border: 1px solid #AED0EA;
+    display: none;
+  
+}

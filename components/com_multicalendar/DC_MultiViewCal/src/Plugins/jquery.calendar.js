@@ -275,7 +275,7 @@
             option.columnsList = eval(option.dayWithColumns);
         //template for month and date
   
-        var __SCOLLEVENTTEMP = "<DIV style=\"WIDTH:${width};top:${top};left:${left};\" title=\"${title}\" class=\"chip chip${i} ${drag}\"><div class=\"dhdV\" style=\"display:none\">${data}</div><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}\" class=ct>&nbsp;</DIV><DL class=\"${userEdition}\" style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; HEIGHT: ${height}px; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\"><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${client_name}</DT><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${trainer_name}</DT><DD><SPAN>${location}</SPAN></DD><DIV class='resizer' style='display:${redisplay}'><DIV class=rszr_icon>&nbsp;</DIV></DIV></DL><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; BORDER-RIGHT-COLOR: ${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb1>&nbsp;</DIV><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BORDER-TOP-COLOR:${bdcolor}; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb2>&nbsp;</DIV></DIV>";
+        var __SCOLLEVENTTEMP = "<DIV style=\"WIDTH:${width};top:${top};left:${left};\" title=\"\" class=\"chip chip${i} ${drag}\"><div class=\"event_tooltip\" >${title}</div>   <div class=\"dhdV\" style=\"display:none\">${data}</div><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}\" class=ct>&nbsp;</DIV><DL class=\"${userEdition}\" style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; HEIGHT: ${height}px; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\"><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${client_name}</DT><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${trainer_name}</DT><DD><SPAN>${location}</SPAN></DD><DIV class='resizer' style='display:${redisplay}'><DIV class=rszr_icon>&nbsp;</DIV></DIV></DL><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; BORDER-RIGHT-COLOR: ${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb1>&nbsp;</DIV><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BORDER-TOP-COLOR:${bdcolor}; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb2>&nbsp;</DIV></DIV>";
         var __ALLDAYEVENTTEMP = '<div class="rb-o ${eclass}" id="${id}" title1="${title}" style="color:${color};"><div class="dhdV" style="display:none">${data}</div><div class="${extendClass} rb-m" style="background-color:${color}"><div class="rb-i t-title ${userEdition}">${client_name}</div><div class="rb-i t-title ${userEdition}">${trainer_name}</div><div class="rb-i t-title ${userEdition}">${location}</div><div class="rb-i t-desc">${description}</div></div></div>';
         var __MonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
         var __LASSOTEMP = "<div class='drag-lasso' style='left:${left}px;top:${top}px;width:${width}px;height:${height}px;'>&nbsp;</div>";
@@ -1409,6 +1409,9 @@
             }
         }
         function getTitle(event) {
+            //console.log(event);
+            
+            var group_clients = event[16];
             var timeshow, locationshow, attendsshow, eventshow;
             var showtime = event[4] != 1;
             eventshow = event[1];
@@ -1430,7 +1433,24 @@
             if (attendsshow != "") {
                 ret.push($.browser.mozilla?"":"\r\n", i18n.dcmvcal.participant + ":", attendsshow);
             }
-            return ret.join("");
+            //console.log(ret.join(""));
+            var trainer = event[15] ?  event[15] : '';
+            var html = '';
+            html += "<b> Time: </b>" + timeshow + "</br>";
+            html += "<b> Event: </b>" + eventshow + "</br>";
+            html += "<b> Location: </b>" + event[9] + "</br>";
+            html += "<b> Trainer: </b>" + trainer + "</br>";
+            html += "<b> Clients: </b>" +  "</br>";
+            console.log(event[16]);
+            $.each(event[16], function(index,  client) {
+                
+                if(client) {
+                    html += "<div style=\"margin-left:50px;font-style:italic;\">" + client + " </div>";
+                }
+            });
+            
+            
+            return html
         }
         function BuildDayEvent(theme, e, index) {
 
@@ -1908,7 +1928,7 @@
                 //console.log(drag_name);
                 //console.log(drag_value);
             });
-            
+
 
         });
         
@@ -3111,8 +3131,16 @@
                             if(drag_name && drag_value ) {
                                 onDragEvent(e, $(this));
                             }
-
-
+                        });
+                        
+                        // show tooltip
+                        $(this).find('dl').mouseover(function(e) { 
+                            $(this).siblings('.event_tooltip').show();
+                            console.log(e.pageX + ' ' +  e.pageY);
+                            $(this).siblings('.event_tooltip').css({ left:e.pageX,top:e.pageY});
+                        });
+                        $(this).find('dl').mouseout(function(e) { 
+                            $(this).siblings('.event_tooltip').hide();
                         });
 
                     });

@@ -406,12 +406,37 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
 
 
     $str = "";
+
+    
+    
     for ($i=0;$i<count($rows);$i++)
     {
-        $row = $rows[$i];
-        if (strlen($row->exdate)>0)
-            $row->rrule .= ";exdate=".$row->exdate;
-        $ev = array(
+            $clients = array();
+            $clients_names = array();
+            $row = $rows[$i];
+            if (strlen($row->exdate) > 0)
+                $row->rrule .= ";exdate=" . $row->exdate;
+
+            $id = $row->id;
+            $query = "SELECT  client_id FROM #__fitness_appointment_clients WHERE event_id='$id'";
+            $db->setQuery($query);
+            if (!$db->query()) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+            }
+            if ($row->client_id) {
+                $clients = $db->loadResultArray(0);
+            }
+            $clients[] = $row->client_id;
+
+            $clients = array_unique($clients);
+            foreach ($clients as $client) {
+                $clients_names[] = JFactory::getUser($client)->name;
+            }
+
+
+
+            $ev = array(
             $row->id,
             $row->title,
             php2JsTime(mySql2PhpTime($row->starttime)),
@@ -428,7 +453,8 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
             $row->owner,
             $row->published,
             JFactory::getUser($row->client_id)->name,
-            JFactory::getUser($row->trainer_id)->name
+            JFactory::getUser($row->trainer_id)->name,
+            $clients_names
         );
         $ret['events'][] = $ev;
     }
