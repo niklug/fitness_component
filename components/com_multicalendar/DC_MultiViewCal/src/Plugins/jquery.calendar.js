@@ -1441,7 +1441,7 @@
             html += "<b> Location: </b>" + event[9] + "</br>";
             html += "<b> Trainer: </b>" + trainer + "</br>";
             html += "<b> Clients: </b>" +  "</br>";
-            console.log(event[16]);
+            //console.log(event[16]);
             $.each(event[16], function(index,  client) {
                 
                 if(client) {
@@ -1921,16 +1921,31 @@
             $(".drag_data").mousedown(function(){
                 drag_name = $(this).data('name');
                 drag_value = $(this).data('value');
-                $(".tg-col-eventwrapper").css('cursor','crosshair');
-                $(".tg-col-eventwrapper dl").css('cursor','crosshair');
-                $(".drag_area li").css('cursor','w-resize');
-                
+                goDrag(drag_name, drag_value); 
                 //console.log(drag_name);
                 //console.log(drag_value);
             });
+            
+            
+            $("#remember_drag").click(function(){
+                var remember_drag = $("#remember_drag").is(':checked');
+                if(remember_drag == false) {
+                    populate_by_filter();
+                }
+            });
+            
+            
 
 
         });
+        
+        function goDrag(drag_name, drag_value) {
+            drag_name = drag_name;
+            drag_value = drag_value;
+            $(".tg-col-eventwrapper").css('cursor','crosshair');
+            $(".tg-col-eventwrapper dl").css('cursor','crosshair');
+            $(".drag_area li").css('cursor','w-resize');
+        }
         
         function sendRemindersManually(reminder_options) {
             var url = option.url.replace('list', 'sendRemindersManually') + '&' +reminder_options;
@@ -2421,6 +2436,10 @@
         }  
         function dayshow(e, data) {
             //console.log(drag_name);
+            var remember_drag = $("#remember_drag").is(':checked');
+            if(remember_drag) {
+                return false;
+            }
             if (drag_name && drag_value) {
                 drag_name = false;
                 drag_value = false;
@@ -3040,13 +3059,22 @@
                     dataType : 'json',
                     success : function(response) { 
                         if(response.IsSuccess) {
-                           populate_by_filter();
-                           drag_name = false;
-                           drag_value = false;
+                           var remember_drag = $("#remember_drag").is(':checked');
+                           if(remember_drag) {
+                                goDrag(drag_name, drag_value);
+                           } else {
+                                populate_by_filter();
+                                drag_name = false;
+                                drag_value = false;
+                           }
+
+                           console.log(drag_name);
+                           console.log(drag_value);
+
                         } else {
                             alert(response.Msg);
                         }
-                        console.log(response);
+                        //console.log(response);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
@@ -3136,7 +3164,7 @@
                         // show tooltip
                         $(this).find('dl').mouseover(function(e) { 
                             $(this).siblings('.event_tooltip').show();
-                            console.log(e.pageX + ' ' +  e.pageY);
+                            //console.log(e.pageX + ' ' +  e.pageY);
                             $(this).siblings('.event_tooltip').css({ left:e.pageX,top:e.pageY});
                         });
                         $(this).find('dl').mouseout(function(e) { 
