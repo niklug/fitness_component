@@ -310,7 +310,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                     <form id="send_reminder_form">
                                         <h4 >5. Send Email Confirmations</h4>
                                         <div style="margin-bottom:5px;">Select Appointment Type(s)</div>
-                                        <div  style="height: 238px;">
+                                        <div  style="height: 243px;">
                                             <select style="font-size: 14px; font-weight: bold;  width: 200px;" multiple size="9"  name="appointments[]" class="inputbox" >
                                                 <?php
                                                 foreach ($appointments as $appointment) {

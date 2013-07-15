@@ -33,6 +33,30 @@ class multicalendarViewadmin extends JView
 		$task = JRequest::getVar( 'task' );
 		$document	= & JFactory::getDocument();
 		$document->addStyleSheet('components/com_multicalendar/css/styles.css');
+                
+   
+         
+      
+                $this->addToolbar();
+                
+                ?>
+                    
+                        <ul id="submenu">
+                            <li><a class="active" href="index.php?option=com_fitness&view=dashboard">Dashboard</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=clients">Clients</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=goals">Goals</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=programs">Programs</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=nutrition_plans">Nutrition Plans</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=nutrition_diary">Nutrition Diary</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=nutrition_diary">Nutrition Diary</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=assessments">Assessments</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=settings">Settings</a></li>
+                        </ul>
+                        <div class="clr"></div>
+                        </br>
+                    
+                
+                <?php
 		
 		if ($task=="load"){
 			$tpl = "load";
@@ -45,4 +69,13 @@ class multicalendarViewadmin extends JView
 		else
 		    parent::display($tpl);
 	}
+        
+        	protected function addToolbar()
+	{
+      
+
+            JToolBarHelper::title(JText::_('Calendar'), 'calendar.png');
+
+            
+        }
 }

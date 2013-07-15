@@ -42,7 +42,7 @@
             <menu link="option=com_fitness&amp;view=dashboard" view="notifications" img="components/com_fitness/assets/images/s_notificationss.png" alt="Fitness/Notificationss">COM_FITNESS_TITLE_NOTIFICATIONSS</menu>
             <menu link="option=com_fitness&amp;view=clients" view="clients" img="components/com_fitness/assets/images/s_clients.png" alt="Fitness/Clients">COM_FITNESS_TITLE_CLIENTS</menu>
             <menu link="option=com_fitness&amp;view=goals" view="goals" img="components/com_fitness/assets/images/s_goals.png" alt="Fitness/Goals">COM_FITNESS_TITLE_GOALS</menu>
-            <menu link="option=com_fitness&amp;view=calendar" view="calendar" img="components/com_fitness/assets/images/s_calendar.png" alt="Fitness/Calendar">COM_FITNESS_TITLE_CALENDAR</menu>
+            <menu link="option=com_multicalendar&amp;view=admin&amp;task=admin" view="calendar" img="components/com_fitness/assets/images/s_calendar.png" alt="Fitness/Calendar">COM_FITNESS_TITLE_CALENDAR</menu>
             <menu link="option=com_fitness&amp;view=programs" view="programs" img="components/com_fitness/assets/images/s_programs.png" alt="Fitness/Programs">COM_FITNESS_TITLE_PROGRAMS</menu>
             <menu link="option=com_fitness&amp;view=nutrition_plans" view="nutrition_plans" img="components/com_fitness/assets/images/s_nutrition_plans.png" alt="Fitness/Nutrition Plans">COM_FITNESS_TITLE_NUTRITION_PLANS</menu>
             <menu link="option=com_fitness&amp;view=nutrition_diary" view="nutrition_diary" img="components/com_fitness/assets/images/s_nutrition_diary.png" alt="Fitness/Nutrition Diary">COM_FITNESS_TITLE_NUTRITION_DIARY</menu>
