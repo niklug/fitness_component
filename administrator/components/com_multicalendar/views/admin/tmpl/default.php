@@ -231,7 +231,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
         Remember Drag options
     </div>
     <div style="float: left;margin-left: 21px;margin-top: 20px;font-size: 12px;">
-        <input type="checkbox" id="delete_drag" name="delete_drag" value="1" /> 
+        <input type="checkbox" id="delete_event" name="delete_event" value="1" /> 
         Enable events delete on click
     </div>
 </div>

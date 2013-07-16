@@ -114,7 +114,9 @@ switch ($method) {
         saveDragedData();
     case "sendRemindersManually":
         sendRemindersManually();
-        
+    case "deleteEvent":
+        deleteEvent();        
+
     case "adddetails":
 
         $st = JRequest::getVar("stpartdatelast") . " " . JRequest::getVar("stparttimelast");
@@ -1267,7 +1269,7 @@ function saveDragedData() {
     $value = $post['value'];
     $event_id = $post['event_id'];
     $db = & JFactory::getDBO();
-    $query = "SELECT id, title,  starttime FROM #__dc_mv_events WHERE id='$event_ids'";
+    $query = "SELECT id, title,  starttime FROM #__dc_mv_events WHERE id='$event_id'";
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['IsSuccess'] = false;
@@ -1426,6 +1428,21 @@ function sendRemindersManually() {
     //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
     $ret['IsSuccess'] = true;
     $ret['Msg'] = $emails;
+    echo json_encode($ret);
+    die();
+}
+
+
+function deleteEvent() {
+    $ret['IsSuccess'] = true;
+    $event_id = JRequest::getVar('event_id');
+    $db = & JFactory::getDBO();
+    $query = "DELETE FROM #__dc_mv_events WHERE id='$event_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+    }
     echo json_encode($ret);
     die();
 }

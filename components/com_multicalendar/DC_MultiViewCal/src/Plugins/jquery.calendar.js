@@ -1935,6 +1935,16 @@
                 }
             });
             
+            
+            $("#delete_event").click(function(){
+                var delete_event = $("#delete_event").is(':checked');
+                if(delete_event == false) {
+                    populate_by_filter();
+                } else {
+                    goDrag(drag_name, drag_value);
+                }
+            });
+            
         });
         
         function goDrag(drag_name, drag_value) {
@@ -2436,6 +2446,10 @@
             //console.log(drag_name);
             var remember_drag = $("#remember_drag").is(':checked');
             if(remember_drag) {
+                return false;
+            }
+            var delete_event = $("#delete_event").is(':checked');
+            if (delete_event) {
                 return false;
             }
             if (drag_name && drag_value) {
@@ -3032,6 +3046,7 @@
          }
          
          function saveDragedData(event_id, starttime,  endtime, field, value) {
+             //console.log(event_id);
              //console.log(start + ', ' + end + ', ' + name + ', ' + value);
              var url = option.url.replace('list', 'saveDragedData');
              //console.log(url);
@@ -3067,8 +3082,8 @@
                                 drag_value = false;
                            }
 
-                           console.log(drag_name);
-                           console.log(drag_value);
+                           //console.log(drag_name);
+                           //console.log(drag_value);
 
                         } else {
                             alert(response.Msg);
@@ -3109,12 +3124,38 @@
             //drag_value = false;
          }
          
+         
+         function deleteEvent(event_id) {
+             var url = option.url.replace('list', 'deleteEvent');
+             $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       event_id : event_id
+                    },
+                    dataType : 'json',
+                    success : function(response) { 
+                        if(response.IsSuccess) {
+                            //console.log(event_id + ' deleted');
+                        } else {
+                            alert(response.Msg);
+                        }
+                        //console.log(response);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log("error");
+                    }
+                });
+         }
+         
          //
             
         function initevents(viewtype) {
             //npkorban
             drag_name= false;
             drag_value = false;
+            event_id = false;
             if (viewtype == "week" || viewtype == "day" || viewtype == "nDays") {
                 $("div.chip", gridcontainer).each(function(i) {
                     var chip = $(this);
@@ -3149,7 +3190,6 @@
                         $(this).mousedown(function(e) {
                             
                             if(drag_name && drag_value ) {
-                                onDragEvent(e, $(this), event_id);
                                 return false; 
                             }
                             dragStart.call(this, "dw1", e);
@@ -3158,9 +3198,14 @@
                         
             
                         $(this).mouseup(function(e) { 
-                            //console.log(event_id);
+                            
                             if(drag_name && drag_value ) {
+                                //console.log(event_id);
                                 onDragEvent(e, $(this), event_id);
+                            }
+                            var delete_event = $("#delete_event").is(':checked');
+                            if(delete_event) {
+                                deleteEvent(event_id);
                             }
                         });
                         
@@ -3174,6 +3219,7 @@
                         });
                         $(this).find('dl').mouseout(function(e) { 
                             $(this).siblings('.event_tooltip').hide();
+                            event_id = false;
                         });
 
                     });
