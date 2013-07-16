@@ -226,11 +226,14 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
     <input style="margin-left: 20px;" type="button" value="Go" name="find_filtered" id="find_filtered"/>
     <input style="margin-left: 20px;" type="button" value="Reset" name="freset_filtered" id="reset_filtered"/>
     </form>
-    <div style="float: left;margin-left: 21px;margin-top: 40px;font-size: 12px;">
-        Remember Drag options: 
-        <input type="checkbox" id="remember_drag" name="remember_drag" value="Remember options" /> 
+    <div style="float: left;margin-left: 21px;margin-top: 20px;font-size: 12px;">
+        <input type="checkbox" id="remember_drag" name="remember_drag" value="1" /> 
+        Remember Drag options
     </div>
-                                    
+    <div style="float: left;margin-left: 21px;margin-top: 20px;font-size: 12px;">
+        <input type="checkbox" id="delete_drag" name="delete_drag" value="1" /> 
+        Enable events delete on click
+    </div>
 </div>
 <table border="0">
     <tbody>

@@ -1265,15 +1265,15 @@ function saveDragedData() {
     $starttime = $post['starttime'];
     $field = $post['field'];
     $value = $post['value'];
-    $ret['IsSuccess'] = true;
+    $event_id = $post['event_id'];
     $db = & JFactory::getDBO();
-    $query = "SELECT id, title,  starttime FROM #__dc_mv_events WHERE starttime='$starttime'";
+    $query = "SELECT id, title,  starttime FROM #__dc_mv_events WHERE id='$event_ids'";
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['IsSuccess'] = false;
         $ret['Msg'] = $db->stderr();
     }
-    $event_id = $db->loadResultArray(0);
+
     $event_name = $db->loadResultArray(1);
     $exists = $db->loadResultArray(2);
     
@@ -1304,7 +1304,6 @@ function saveDragedData() {
         }
 
         if (($field == 'client_id') AND !(in_array($event_name, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
-            $event_id = $event_id[0];
             $client_id = $value;
             $insertGroupClient = insertGroupClient($event_id, $client_id);
         }

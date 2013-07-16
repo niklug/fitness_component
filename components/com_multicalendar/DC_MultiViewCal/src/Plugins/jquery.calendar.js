@@ -275,7 +275,7 @@
             option.columnsList = eval(option.dayWithColumns);
         //template for month and date
   
-        var __SCOLLEVENTTEMP = "<DIV style=\"WIDTH:${width};top:${top};left:${left};\" title=\"\" class=\"chip chip${i} ${drag}\"><div class=\"event_tooltip\" >${title}</div>   <div class=\"dhdV\" style=\"display:none\">${data}</div><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}\" class=ct>&nbsp;</DIV><DL class=\"${userEdition}\" style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; HEIGHT: ${height}px; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\"><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${client_name}</DT><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${trainer_name}</DT><DD><SPAN>${location}</SPAN></DD><DIV class='resizer' style='display:${redisplay}'><DIV class=rszr_icon>&nbsp;</DIV></DIV></DL><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; BORDER-RIGHT-COLOR: ${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb1>&nbsp;</DIV><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BORDER-TOP-COLOR:${bdcolor}; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb2>&nbsp;</DIV></DIV>";
+        var __SCOLLEVENTTEMP = "<DIV   style=\"WIDTH:${width};top:${top};left:${left};\" title=\"\" class=\"chip chip${i} ${drag}\"><div class=\"event_tooltip\" >${title}</div>   <div class=\"dhdV\" style=\"display:none\">${data}</div><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}\" class=ct>&nbsp;</DIV><DL data-id=\"${event_id}\" class=\"${userEdition}\" style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; HEIGHT: ${height}px; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\"><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${client_name}</DT><DT style=\"BACKGROUND-COLOR:${bgcolor2}\">${trainer_name}</DT><DD><SPAN>${location}</SPAN></DD><DIV class='resizer' style='display:${redisplay}'><DIV class=rszr_icon>&nbsp;</DIV></DIV></DL><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; BORDER-RIGHT-COLOR: ${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb1>&nbsp;</DIV><DIV style=\"BORDER-BOTTOM-COLOR:${bdcolor}; BORDER-TOP-COLOR:${bdcolor}; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}\" class=cb2>&nbsp;</DIV></DIV>";
         var __ALLDAYEVENTTEMP = '<div class="rb-o ${eclass}" id="${id}" style="color:${color};"><div class="event_tooltip" >${title}</div> <div class="dhdV" style="display:none">${data}</div><div class="${extendClass} rb-m" style="background-color:${color}"><div class="rb-i t-title ${userEdition}">${client_name}</div><div class="rb-i t-title ${userEdition}">${trainer_name}</div><div class="rb-i t-title ${userEdition}">${location}</div><div class="rb-i t-desc">${description}</div></div></div>';
         var __MonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
         var __LASSOTEMP = "<div class='drag-lasso' style='left:${left}px;top:${top}px;width:${width}px;height:${height}px;'>&nbsp;</div>";
@@ -1491,6 +1491,7 @@
             p.userEdition = ( ((option.userOwner==e.event[12]) && (option.userEditOwner || option.userDelOwner))?"uEdition":"" );
             
             //npkorban
+            p.event_id = e.event[0];
             p.client_name = (e.event[14]!=null)?e.event[14]:"";
             p.trainer_name = (e.event[15]!=null)?e.event[15]:"";
             
@@ -1934,9 +1935,6 @@
                 }
             });
             
-            
-
-
         });
         
         function goDrag(drag_name, drag_value) {
@@ -3033,7 +3031,7 @@
                     return DateAdd("n", endInterval , startdate);
          }
          
-         function saveDragedData(starttime,  endtime, field, value) {
+         function saveDragedData(event_id, starttime,  endtime, field, value) {
              //console.log(start + ', ' + end + ', ' + name + ', ' + value);
              var url = option.url.replace('list', 'saveDragedData');
              //console.log(url);
@@ -3048,6 +3046,7 @@
                     type : "POST",
                     url : url,
                     data : {
+                       event_id : event_id,
                        starttime : starttime,
                        endtime   : endtime,
                        field  : field,
@@ -3086,8 +3085,9 @@
                 $(".drag_area li").css('cursor','pointer');
          }
          
-         function onDragEvent(e, obj) {
+         function onDragEvent(e, obj, event_id) {
              //console.log(drag_value);
+            //console.log(event_id);
             var _dragdata = { type: 1, target: obj, sx: e.pageX, sy: e.pageY };
             var d = _dragdata;
             var wrapid = new Date().getTime();
@@ -3104,7 +3104,7 @@
             var start_formated = startdate.getFullYear() + '-' + pad(startdate.getMonth() + 1) + '-' + pad(startdate.getDate()) + ' ' + pad(startdate.getHours()) + ':' + pad(startdate.getMinutes());
             var end_formated = enddate.getFullYear() + '-' + pad(enddate.getMonth() + 1) + '-' + pad(enddate.getDate()) + ' ' + pad(enddate.getHours()) + ':' + pad(enddate.getMinutes());
 
-            saveDragedData(start_formated,  end_formated, drag_name, drag_value);
+            saveDragedData(event_id, start_formated,  end_formated, drag_name, drag_value);
             //drag_name = false;
             //drag_value = false;
          }
@@ -3143,26 +3143,31 @@
                     }
                 });
                 if (option.readonly == false && option.userAdd) {
+
                     $("td.tg-col", gridcontainer).each(function(i) {
                     
                         $(this).mousedown(function(e) {
+                            
                             if(drag_name && drag_value ) {
-                                onDragEvent(e, $(this));
+                                onDragEvent(e, $(this), event_id);
                                 return false; 
                             }
                             dragStart.call(this, "dw1", e);
                             return false; 
                         });
                         
-
+            
                         $(this).mouseup(function(e) { 
+                            //console.log(event_id);
                             if(drag_name && drag_value ) {
-                                onDragEvent(e, $(this));
+                                onDragEvent(e, $(this), event_id);
                             }
                         });
                         
                         // show tooltip
                         $(this).find('dl').mouseover(function(e) { 
+                            event_id = $(this).attr('data-id');
+                            
                             $(this).siblings('.event_tooltip').show();
                             //console.log(e.pageX + ' ' +  e.pageY);
                             $(this).siblings('.event_tooltip').css({ left:e.pageX,top:e.pageY});
