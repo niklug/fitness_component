@@ -28,6 +28,7 @@ $db 	=& JFactory::getDBO();
 header('Content-type:text/javascript;charset=UTF-8');
 $method = JRequest::getVar( 'method' );
 $calid = JRequest::getVar( 'calid' );
+$logged_user_id = JRequest::getVar("logged_user_id");
 
 switch ($method) {
     case "add":
@@ -56,7 +57,7 @@ switch ($method) {
 
         $d1 = mktime(0, 0, 0,  date("m", $d1), date("d", $d1), date("Y", $d1));
         $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2))+24*60*60-1;
-        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus);
+        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus, $logged_user_id);
 
         break;
     case "update":
@@ -344,7 +345,9 @@ function addDetailedCalendar(
   return $ret;
 }
 
-function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus){
+function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus, $logged_user_id){
+  
+  
   $ret = array();
   $ret['events'] = array();
   $ret["issort"] =true;
@@ -364,17 +367,19 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     if($trainer_id[0]) {
         $sql .= " and trainer_id IN ($trainer_ids) ";
     }
+    
+    if (getUserGroup($logged_user_id) != 'Super Users') {
+        if ($logged_user_id) {
+            $sql .= " and trainer_id='$logged_user_id' ";
+        }
+     }
+    
 
     $locations = "'" . implode("','", $location) . "'";
     if($location[0]) {
         $sql .= " and location IN ($locations) ";
     }
-    
-    
-     
-     
-     
-     
+
     
     $appointments = "'" . implode("','", $appointment) . "'";
     if($appointment[0]) {
@@ -486,7 +491,7 @@ function listCalendar($day, $type){
       break;
   }
   //echo $st . "--" . $et;
-  return listCalendarByRange($st, $et, '', '', '', '', '', '');
+  return listCalendarByRange($st, $et, '', '', '', '', '', '', '');
 }
 
 function updateCalendar($id, $st, $et){
@@ -1449,7 +1454,16 @@ function deleteEvent() {
 
 
 
-
+function getUserGroup($user_id) {
+    if(!$user_id) {
+        $user_id = &JFactory::getUser()->id;
+    }
+    $db = JFactory::getDBO();
+    $query = "SELECT title FROM #__usergroups WHERE id IN 
+        (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+    $db->setQuery($query);
+    return $db->loadResult();
+}
 
 
 

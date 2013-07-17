@@ -106,12 +106,31 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
 
 
+<?php
 
+
+function getUserGroup($user_id) {
+    if(!$user_id) {
+        $user_id = &JFactory::getUser()->id;
+    }
+    $db = JFactory::getDBO();
+    $query = "SELECT title FROM #__usergroups WHERE id IN 
+        (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+    $db->setQuery($query);
+    return $db->loadResult();
+}
+
+
+?>
 <div id="calendar_filters"  style="clear: both;height: 80px; width: 100%;">
     <form id="calendar_filter_form">
     <?php
     $db = JFactory::getDbo();
     $sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
+    if(getUserGroup() != 'Super Users') {
+        $user_id = &JFactory::getUser()->id;
+        $sql .= " AND primary_trainer='$user_id'";
+    }
     $db->setQuery($sql);
     $clients = $db->loadObjectList();
     ?>
@@ -128,25 +147,27 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
     <?php
     $db = JFactory::getDbo();
-    $sql = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+    $sql = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map
+        ON #__user_usergroup_map.user_id=#__users.id
+        WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
     $db->setQuery($sql);
     $trainers = $db->loadObjectList();
 
-    ?>
-
-    <div  style="float:left;margin-left: 10px;">
-        <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
-                <option value=""><?php echo JText::_('-Select Trainers-');?></option>
-                <?php 
-                    foreach ($trainers as $trainer) {
-                        echo '<option value="' . $trainer->id . '">' . $trainer->username . '</option>';
-                    }
-                ?>
-        </select>
-    </div>
-        
-        
-    <?php
+    if(getUserGroup() == 'Super Users') {
+        ?>
+        <div  style="float:left;margin-left: 10px;">
+            <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
+                    <option value=""><?php echo JText::_('-Select Trainers-');?></option>
+                    <?php 
+                        foreach ($trainers as $trainer) {
+                            echo '<option value="' . $trainer->id . '">' . $trainer->username . '</option>';
+                        }
+                    ?>
+            </select>
+        </div>
+        <?php
+    }
+    
     $db = JFactory::getDbo();
     $sql = "SELECT name FROM #__fitness_locations WHERE state='1'";
     $db->setQuery($sql);
@@ -248,7 +269,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                             <td>
                                 
                                 <div class="drag_area">
-                                    <h4 >1. Add Appointment to calendar</h4>
+                                    <h4 >Add Appointment to calendar</h4>
                                     
                                     <ul>
                                     <?php 
@@ -266,7 +287,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                             <td>
                                 
                                 <div class="drag_area">
-                                    <h4 >2. Add Client to Appointment</h4>
+                                    <h4 >Add Client to Appointment</h4>
                                     <ul>
                                     <?php 
                                         foreach ($clients as $client) {
@@ -280,9 +301,11 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                 </div>
                             </td>
                             <td>
-                                
+                                <?php 
+                                if(getUserGroup() == 'Super Users') {
+                                ?>
                                 <div class="drag_area">
-                                    <h4 >3. Add Trainer to Appointment</h4>
+                                    <h4 >Add Trainer to Appointment</h4>
                                     <ul>
                                     <?php 
                                         foreach ($trainers as $trainer) {
@@ -294,13 +317,16 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                     </ul>
 
                                 </div>
+                                <?php
+                                }
+                                ?>
                             </td>
                         </tr>
                         <tr>
                              <td>
                                 
                                 <div class="drag_area">
-                                    <h4 >4. Add Location to Appointment</h4>
+                                    <h4 >Add Location to Appointment</h4>
                                     <ul>
                                     <?php 
                                         foreach ($locations as $location) {
@@ -317,7 +343,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                 
                                 <div style="margin-left:115px;width: 200px;" class="drag_area send_reminder_emails">
                                     <form id="send_reminder_form">
-                                        <h4 >5. Send Email Confirmations</h4>
+                                        <h4 >Send Email Confirmations</h4>
                                         <div style="margin-bottom:5px;">Select Appointment Type(s)</div>
                                         <div  style="height: 243px;">
                                             <select style="font-size: 14px; font-weight: bold;  width: 200px;" multiple size="9"  name="appointments[]" class="inputbox" >
@@ -389,5 +415,6 @@ userAdd:true,
 	<input type="hidden" name="option" value="com_multicalendar" />
 	<input type="hidden" name="id" value="<?php echo $this->calendar->id; ?>" />
 	<input type="hidden" name="cid[]" value="<?php echo $this->calendar->id; ?>" />
+        <input type="hidden" id="logged_user_id" name="logged_user_id" value="<?php echo JFactory::getUser()->id; ?>" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

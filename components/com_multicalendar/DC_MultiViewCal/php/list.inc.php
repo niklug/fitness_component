@@ -1,5 +1,6 @@
 <?php
 
+
 /** get locations from fitness component
  * npkorban
  * 

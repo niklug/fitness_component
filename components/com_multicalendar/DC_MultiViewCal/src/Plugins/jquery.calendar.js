@@ -1891,7 +1891,9 @@
         function populate_by_filter() {
             var default_option_url = option.url;
             var filter_options = $("#calendar_filter_form").serialize();
-            option.url = option.url + '&' + filter_options;
+            if(filter_options) {
+                option.url = option.url + '&' + filter_options;
+            }
             //alert(option.url);
             populate();
             option.url = default_option_url;
@@ -1989,6 +1991,9 @@
                 return true;
             }
             if (option.url && option.url != "") {
+                var logged_user_id = $("#logged_user_id").val();
+                option.url = option.url + '&logged_user_id=' + logged_user_id;
+                console.log(option.url);
                 option.isloading = true;
                 //clearcontainer();
                 if (option.onBeforeRequestData && $.isFunction(option.onBeforeRequestData)) {

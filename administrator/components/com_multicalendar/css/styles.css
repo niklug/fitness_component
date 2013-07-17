@@ -10,7 +10,7 @@
 .icon-48-multicalendar-management
 { background-image: url(../images/header/icon-48-multicalendar-management.png); }
 
-.calendar_href {
+.calendar_href, .icon-48-calendar {
     background-image: url(../images/header/calendar.png); 
     background-size: 45px auto;
     display: block;
