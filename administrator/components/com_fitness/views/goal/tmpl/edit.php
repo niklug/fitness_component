@@ -72,9 +72,43 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             <legend><?php echo JText::_('COM_FITNESS_GOALS_LEGEND_GOAL'); ?></legend>
             <ul class="adminformlist">
 
-                				<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
-				<li><?php echo $this->form->getLabel('user_id'); ?>
-				<?php echo $this->form->getInput('user_id'); ?></li>
+                		<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
+                                <?php
+                                $user = &JFactory::getUser();
+                                $userGroup = $this->getUserGroup($user->id); 
+                                $db = JFactory::getDbo();
+
+                                $sql = "SELECT #__users.id AS value, #__users.username as text FROM #__users INNER JOIN #__fitness_clients ON #__fitness_clients.user_id=#__users.id WHERE #__fitness_clients.state='1'";
+                    
+                                if ($userGroup != 'Super Users') {
+                                    $sql .= "AND  #__fitness_clients.primary_trainer='$user->id'";
+                                }
+                                
+                                $db->setQuery($sql);
+                                $clients = $db->loadObjectList();
+                                ?>
+
+                                <li>
+                                    <label id="jform_user_id-lbl" class=" required" for="jform_user_id">
+                                        Client
+                                        <span class="star"> *</span>
+                                    </label>
+                                    <select id="jform_user_id" class="inputbox required" name="jform[user_id]" aria-required="true" required="required">
+                                        <option value=""><?php echo JText::_('-Select-'); ?></option>
+                                        <?php 
+                                        foreach ($clients as $option) {
+                                            if($this->item->user_id == $option->value){ 
+                                                $selected = 'selected';
+                                            } else {
+                                                $selected = '';
+                                            }
+                                            echo '<option ' . $selected . ' value="' . $option->value . '">' . $option->text . ' </option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </li>
+                                
+             
 				<li><?php echo $this->form->getLabel('goal_category_id'); ?>
 				<?php echo $this->form->getInput('goal_category_id'); ?></li>
                                 <li><?php echo $this->form->getLabel('goal_focus_id'); ?>

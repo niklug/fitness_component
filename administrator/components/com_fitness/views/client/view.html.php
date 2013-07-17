@@ -113,5 +113,13 @@ class FitnessViewClient extends JView
                     return $drawField;
         }
         
+        function getUserGroup($user_id) {
+            $db = JFactory::getDBO();
+            $query = "SELECT title FROM #__usergroups WHERE id IN 
+            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+            $db->setQuery($query);
+            return $db->loadResult();
+        }
+        
         
 }

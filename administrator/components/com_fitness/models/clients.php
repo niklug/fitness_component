@@ -116,6 +116,12 @@ class FitnessModelclients extends JModelList {
         $query->leftJoin('#__user_usergroup_map AS g ON u.id = g.user_id');
         
         $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
+        
+        // filter only for Super Users
+        $user = &JFactory::getUser();
+        if ($this->getUserGroup($user->id) != 'Super Users') {
+            $query->where('a.primary_trainer = ' . (int) $user->id);
+        }
 
         
         // Filter by published state
@@ -132,6 +138,8 @@ class FitnessModelclients extends JModelList {
         if (is_numeric($primary_trainer)) {
             $query->where('a.primary_trainer = '.(int) $primary_trainer);
         } 
+        
+        
 
 
             // Filter by group
@@ -156,6 +164,10 @@ class FitnessModelclients extends JModelList {
                     OR  a.primary_trainer LIKE '.$search.' 
                     OR  a.other_trainers LIKE '.$search.' )');
             }
+            
+            
+
+            
         }
 
         
@@ -178,6 +190,14 @@ class FitnessModelclients extends JModelList {
         
 
         return $items;
+    }
+    
+    function getUserGroup($user_id) {
+        $db = JFactory::getDBO();
+        $query = "SELECT title FROM #__usergroups WHERE id IN 
+            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+        $db->setQuery($query);
+        return $db->loadResult();
     }
 
 }

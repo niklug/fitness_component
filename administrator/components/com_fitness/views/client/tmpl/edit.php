@@ -78,12 +78,19 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     success : function(response) {
                         if(!response.status.success) {
                             alert(response.status.message);
+                            $("#jform_user_id").html('');
                             return;
                         }
+                        var client_id = '<?php echo $this->item->user_id; ?>';
+                        
                         var html = '<option  value="">-Select-</option>';
                         $.each(response.data, function(index, value) {
                              if(index) {
-                                html += '<option  value="' + index + '">' +  value + '</option>';
+                                var selected = '';
+                                if(client_id == index) {
+                                    selected = 'selected';
+                                }
+                                html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
                             }
                         });
                         $("#jform_user_id").html(html);
@@ -95,7 +102,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     }
                 });
             }
-            
+
+            var user_group = $("#user_group").find(':selected').val();
+            if(user_group) {
+                getClientsByGroup(user_group);
+            }
             
         });
     });
@@ -111,30 +122,56 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
                 $db->setQuery($sql);
                 $grouplist = $db->loadObjectList();
-                foreach ($grouplist as $option) {
-                    $group[] = JHTML::_('select.option', $option->value, $option->text );
-                }
-                var_dump($this->item->id);
+
+                $userGroup = $this->getUserGroup($this->item->user_id); 
                 ?>
 
                 <li>
                     <label id="jform_user_id-lbl" class="" for="jform_user_id">User Group</label>
                     <select id="user_group" name="user_group" class="inputbox" >
                         <option value=""><?php echo JText::_('-Select-'); ?></option>
-                        <?php echo JHtml::_('select.options', $group, "value", "text"); ?>
+                        <?php 
+                        foreach ($grouplist as $option) {
+                            if($userGroup == $option->text){ 
+                                $selected = 'selected';
+                            } else {
+                                $selected = '';
+                            }
+                            echo '<option ' . $selected . ' value="' . $option->value . '">' . $option->text . ' </option>';
+                        }
+                        ?>
                     </select>
                 </li>
+                <?php
+                    $id = $this->item->id;
+                ?>
+                <li>
+                    <label id="jform_user_id-lbl" class="" for="jform_user_id">Username</label>
+                    <select id="jform_user_id" class="inputbox" name="jform[user_id]"></select>
+                </li>
 
-		
-
-				<li><?php echo $this->form->getLabel('user_id'); ?>
-				<?php echo $this->form->getInput('user_id'); ?></li>
 				<li><?php echo $this->form->getLabel('state'); ?>
 				<?php echo $this->form->getInput('state'); ?></li>
-				<li><?php echo $this->form->getLabel('primary_trainer'); ?>
-				<?php echo $this->form->getInput('primary_trainer'); ?></li>
-				<li><?php echo $this->form->getLabel('other_trainers'); ?>
-				<?php echo $this->getInput($this->item->id); ?></li>
+                               
+                                <?php
+                                if($this->getUserGroup(JFactory::getUser()->id)== 'Super Users') {
+                                ?>
+                                    <li><?php echo $this->form->getLabel('primary_trainer'); ?>
+                                    <?php echo $this->form->getInput('primary_trainer'); ?></li>
+                                    <li><?php echo $this->form->getLabel('other_trainers'); ?>
+                                    <?php echo $this->getInput($this->item->id); ?></li>
+                                <?php
+                                } else {
+                                ?>
+                              <li>
+                                  <label id="jform_primary_trainer-lbl" class="" for="jform_primary_trainer">Primary trainer</label>
+                                      <select id="jform_primary_trainer" class="inputbox" name="jform[primary_trainer]">
+                                          <option value="<?php echo JFactory::getUser()->id?>"><?php echo JFactory::getUser()->name?></option>
+                                      </select>
+                                  </li>
+                                <?php
+                                }
+                                ?>
                        
 
 
@@ -155,5 +192,6 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         }
     </style>
 </form>
+
 
 

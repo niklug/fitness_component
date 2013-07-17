@@ -146,6 +146,7 @@ class FitnessModelgoals extends JModelList {
                 
         $query->leftJoin('#__users AS u ON u.id = a.user_id');
         
+  
         $query->leftJoin('#__user_usergroup_map AS g ON u.id = g.user_id');
         
         $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
@@ -154,6 +155,13 @@ class FitnessModelgoals extends JModelList {
         $query->leftJoin('#__fitness_goal_focus AS gf ON gf.id = a.goal_focus_id');
 
         
+        // filter only for Super Users
+        $user = &JFactory::getUser();
+        if ($this->getUserGroup($user->id) != 'Super Users') {
+
+            
+            $query->where('a.user_id IN (SELECT DISTINCT user_id FROM #__fitness_clients WHERE primary_trainer=' .  (int) $user->id . ' )');
+        }
 
         
         // Filter by published state
@@ -333,8 +341,8 @@ class FitnessModelgoals extends JModelList {
     // clients view
     public function getClientsByGroup($user_group) {
         $db = &JFactory::getDBo();
-        $query = "SELECT u.user_id FROM #__fitness_clients AS u 
-            INNER JOIN #__user_usergroup_map AS g ON g.user_id=u.user_id WHERE g.group_id='$user_group'";
+        $query = "SELECT u.id FROM #__users AS u 
+            INNER JOIN #__user_usergroup_map AS g ON g.user_id=u.id WHERE g.group_id='$user_group'";
         $db->setQuery($query);
         $status['success'] = 1;
         if (!$db->query()) {
@@ -358,6 +366,14 @@ class FitnessModelgoals extends JModelList {
         $result = array( 'status' => $status, 'data' => array_combine($clients, $clients_name));
         return  json_encode($result);
 
+    }
+    
+    function getUserGroup($user_id) {
+        $db = JFactory::getDBO();
+        $query = "SELECT title FROM #__usergroups WHERE id IN 
+            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+        $db->setQuery($query);
+        return $db->loadResult();
     }
 
 }
