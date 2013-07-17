@@ -48,4 +48,14 @@ class FitnessController extends JController
                 $view->setModel($this->getModel('goals'));
    		$view -> sendGoalEmail();
 	}
+        
+        
+        //clients view
+        //------------------------------------------------------
+	function getClientsByGroup() {
+            
+ 		$view = $this -> getView('goals', 'json');
+                $view->setModel($this->getModel('goals'));
+   		$view -> getClientsByGroup();
+	}
 }

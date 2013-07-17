@@ -326,5 +326,38 @@ class FitnessModelgoals extends JModelList {
         $result = $db->loadObject();
         return $result;
     }
+    
+    
+    
+    
+    // clients view
+    public function getClientsByGroup($user_group) {
+        $db = &JFactory::getDBo();
+        $query = "SELECT u.user_id FROM #__fitness_clients AS u 
+            INNER JOIN #__user_usergroup_map AS g ON g.user_id=u.user_id WHERE g.group_id='$user_group'";
+        $db->setQuery($query);
+        $status['success'] = 1;
+        if (!$db->query()) {
+            $status['success'] = 0;
+            $status['message'] = $db->stderr();
+        }
+
+        $clients= $db->loadResultArray(0);
+
+        if(!$clients) {
+            $status['success'] = 0;
+            $status['message'] = 'No clients assigned to this usergroup.';
+        }
+
+
+        foreach ($clients as $user_id) {
+            $user = &JFactory::getUser($user_id);
+            $clients_name[] = $user->name;
+        }
+
+        $result = array( 'status' => $status, 'data' => array_combine($clients, $clients_name));
+        return  json_encode($result);
+
+    }
 
 }

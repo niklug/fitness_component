@@ -30,5 +30,13 @@ class FitnessViewGoals extends JView {
 	    echo $model->sendGoalEmail($goal_id, $goal_status_id, $user_id);
 	}
         
+        // clients view
+        function getClientsByGroup() {
+            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
+	    $user_group = JRequest::getVar('user_group');
+            $model = $this -> getModel("goals");
+	    echo $model->getClientsByGroup($user_group);
+	}
+        
       
 }

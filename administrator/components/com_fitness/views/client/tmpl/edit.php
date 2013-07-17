@@ -36,9 +36,8 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         head.appendChild(script);
     }
     getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        js = jQuery.noConflict();
-        js(document).ready(function(){
-            
+        //jQuery = jQuery.noConflict();
+        $(document).ready(function(){
 
             Joomla.submitbutton = function(task)
             {
@@ -56,6 +55,48 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     }
                 }
             }
+            
+            //////////////////////////////////////////
+            $('#user_group').change(function(){
+               var user_group = $(this).find(':selected').val();
+               getClientsByGroup(user_group);
+            });
+            
+            
+            function getClientsByGroup(user_group) {
+                var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
+                $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       view : 'goals',
+                       format : 'text',
+                       task : 'getClientsByGroup',
+                       user_group : user_group
+                    },
+                    dataType : 'json',
+                    success : function(response) {
+                        if(!response.status.success) {
+                            alert(response.status.message);
+                            return;
+                        }
+                        var html = '<option  value="">-Select-</option>';
+                        $.each(response.data, function(index, value) {
+                             if(index) {
+                                html += '<option  value="' + index + '">' +  value + '</option>';
+                            }
+                        });
+                        $("#jform_user_id").html(html);
+                     
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
+                    }
+                });
+            }
+            
+            
         });
     });
 </script>
@@ -65,6 +106,26 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_CLIENT'); ?></legend>
             <ul class="adminformlist">
+                <?php
+                $db = JFactory::getDbo();
+                $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
+                $db->setQuery($sql);
+                $grouplist = $db->loadObjectList();
+                foreach ($grouplist as $option) {
+                    $group[] = JHTML::_('select.option', $option->value, $option->text );
+                }
+                var_dump($this->item->id);
+                ?>
+
+                <li>
+                    <label id="jform_user_id-lbl" class="" for="jform_user_id">User Group</label>
+                    <select id="user_group" name="user_group" class="inputbox" >
+                        <option value=""><?php echo JText::_('-Select-'); ?></option>
+                        <?php echo JHtml::_('select.options', $group, "value", "text"); ?>
+                    </select>
+                </li>
+
+		
 
 				<li><?php echo $this->form->getLabel('user_id'); ?>
 				<?php echo $this->form->getInput('user_id'); ?></li>
@@ -94,3 +155,5 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         }
     </style>
 </form>
+
+
