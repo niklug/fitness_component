@@ -28,7 +28,6 @@ $db 	=& JFactory::getDBO();
 header('Content-type:text/javascript;charset=UTF-8');
 $method = JRequest::getVar( 'method' );
 $calid = JRequest::getVar( 'calid' );
-$logged_user_id = JRequest::getVar("logged_user_id");
 
 switch ($method) {
     case "add":
@@ -57,7 +56,7 @@ switch ($method) {
 
         $d1 = mktime(0, 0, 0,  date("m", $d1), date("d", $d1), date("Y", $d1));
         $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2))+24*60*60-1;
-        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus, $logged_user_id);
+        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus);
 
         break;
     case "update":
@@ -345,7 +344,7 @@ function addDetailedCalendar(
   return $ret;
 }
 
-function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus, $logged_user_id){
+function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus){
   
   
   $ret = array();
@@ -363,16 +362,16 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
         $sql .= " or id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))) ";
     }
     
-    $trainer_ids = implode($trainer_id, ',');
-    if($trainer_id[0]) {
-        $sql .= " and trainer_id IN ($trainer_ids) ";
-    }
-    
-    if (getUserGroup($logged_user_id) != 'Super Users') {
-        if ($logged_user_id) {
-            $sql .= " and trainer_id='$logged_user_id' ";
+
+    $user = &JFactory::getUser();
+    if (getUserGroup($user->id) != 'Super Users') {
+        $sql .= " and trainer_id='$user->id' ";
+    } else {
+        $trainer_ids = implode($trainer_id, ',');
+        if($trainer_id[0]) {
+            $sql .= " and trainer_id IN ($trainer_ids) ";
         }
-     }
+    }
     
 
     $locations = "'" . implode("','", $location) . "'";
@@ -491,7 +490,7 @@ function listCalendar($day, $type){
       break;
   }
   //echo $st . "--" . $et;
-  return listCalendarByRange($st, $et, '', '', '', '', '', '', '');
+  return listCalendarByRange($st, $et, '', '', '', '', '', '');
 }
 
 function updateCalendar($id, $st, $et){
@@ -803,12 +802,17 @@ function  get_session_focus() {
 function  get_trainers() {
     $client_id = JRequest::getVar("client_id");
     $db = & JFactory::getDBO();
-    $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
-    $db->setQuery($query);
-    $primary_trainer= $db->loadResultArray(0);
-    $other_trainers = $db->loadResultArray(1);
-    $other_trainers = explode(',', $other_trainers[0]);
-    $all_trainers_id = array_unique(array_merge($primary_trainer, $other_trainers));
+    $user = &JFactory::getUser();
+    if (getUserGroup($user->id) == 'Super Users') {
+        $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
+        $db->setQuery($query);
+        $primary_trainer= $db->loadResultArray(0);
+        $other_trainers = $db->loadResultArray(1);
+        $other_trainers = explode(',', $other_trainers[0]);
+        $all_trainers_id = array_unique(array_merge($primary_trainer, $other_trainers));
+    } else {
+        $all_trainers_id = array($user->id);
+    }
     
     foreach ($all_trainers_id as $user_id) {
         $user = &JFactory::getUser($user_id);

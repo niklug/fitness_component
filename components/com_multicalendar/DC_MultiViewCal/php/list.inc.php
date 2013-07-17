@@ -14,6 +14,17 @@ function getLocations() {
     return $locations;
 }
 
+function getUserGroupById($user_id) {
+    if(!$user_id) {
+        $user_id = &JFactory::getUser()->id;
+    }
+    $db = JFactory::getDBO();
+    $query = "SELECT title FROM #__usergroups WHERE id IN 
+        (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+    $db->setQuery($query);
+    return $db->loadResult();
+}
+
 /** get clients from fitness component
  * npkorban
  * 
@@ -22,6 +33,10 @@ function getLocations() {
 function getClients() { 
     $db	= & JFactory::getDBO();
     $query = "SELECT #__fitness_clients.user_id, #__users.name FROM #__fitness_clients LEFT JOIN #__users ON #__fitness_clients.user_id = #__users.id";
+    $user = &JFactory::getUser();
+    if (getUserGroupById($user->id) != 'Super Users') {
+        $query .= " WHERE #__fitness_clients.primary_trainer = '$user->id'";
+    }
     $db->setQuery($query);
     $clients = $db->loadObjectList();
     return $clients;
@@ -36,6 +51,10 @@ function getClients() {
 function getTrainers() { 
     $db	= & JFactory::getDBO();
     $query = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+    $user = &JFactory::getUser();
+    if (getUserGroupById($user->id) != 'Super Users') {
+        $query .= " AND #__users.id = '$user->id'";
+    }
     $db->setQuery($query);
     $trainers = $db->loadObjectList();
     return $trainers;

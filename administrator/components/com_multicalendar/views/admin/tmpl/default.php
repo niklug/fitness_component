@@ -139,7 +139,7 @@ function getUserGroup($user_id) {
                 <option value=""><?php echo JText::_('-Select Clients-');?></option>
                 <?php 
                     foreach ($clients as $client) {
-                        echo '<option value="' . $client->user_id . '">' . JFactory::getUser($client->user_id)->username. '</option>';
+                        echo '<option value="' . $client->user_id . '">' . JFactory::getUser($client->user_id)->name. '</option>';
                     }
                 ?>
         </select>
@@ -150,23 +150,33 @@ function getUserGroup($user_id) {
     $sql = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map
         ON #__user_usergroup_map.user_id=#__users.id
         WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+    if(getUserGroup() != 'Super Users') {
+        $user_id = &JFactory::getUser()->id;
+        $sql .= " AND #__users.id='$user_id'";
+    }
     $db->setQuery($sql);
     $trainers = $db->loadObjectList();
-
-    if(getUserGroup() == 'Super Users') {
-        ?>
-        <div  style="float:left;margin-left: 10px;">
-            <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
-                    <option value=""><?php echo JText::_('-Select Trainers-');?></option>
-                    <?php 
-                        foreach ($trainers as $trainer) {
-                            echo '<option value="' . $trainer->id . '">' . $trainer->username . '</option>';
-                        }
-                    ?>
-            </select>
-        </div>
+    ?>
+    <div  style="float:left;margin-left: 10px;">
         <?php
-    }
+        if(getUserGroup() == 'Super Users') {
+        ?>
+            <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
+              <option value=""><?php echo JText::_('-Select Trainers-');?></option>
+                <?php 
+                    foreach ($trainers as $trainer) {
+                        echo '<option value="' . $trainer->id . '">' . $trainer->username . '</option>';
+                    }
+                ?>
+            </select>
+            <?php
+            } else {
+                echo '<input type="hidden" id="trainer_input" name="trainer_id" value="' . JFactory::getUser()->id . '" />';
+            }
+        ?>
+    </div>
+    <?php
+ 
     
     $db = JFactory::getDbo();
     $sql = "SELECT name FROM #__fitness_locations WHERE state='1'";
@@ -269,7 +279,7 @@ function getUserGroup($user_id) {
                             <td>
                                 
                                 <div class="drag_area">
-                                    <h4 >Add Appointment to calendar</h4>
+                                    <h4 >1. Add Appointment to calendar</h4>
                                     
                                     <ul>
                                     <?php 
@@ -287,12 +297,12 @@ function getUserGroup($user_id) {
                             <td>
                                 
                                 <div class="drag_area">
-                                    <h4 >Add Client to Appointment</h4>
+                                    <h4 >2. Add Client to Appointment</h4>
                                     <ul>
                                     <?php 
                                         foreach ($clients as $client) {
                                             echo '<li data-name="client_id" data-value="' . $client->user_id . '" class="drag_data" title="' . JFactory::getUser($client->user_id)->username. '" >'
-                                                 . JFactory::getUser($client->user_id)->username . '</li>';
+                                                 . JFactory::getUser($client->user_id)->name . '</li>';
                                         }
                                     
                                     ?>
@@ -301,32 +311,27 @@ function getUserGroup($user_id) {
                                 </div>
                             </td>
                             <td>
-                                <?php 
-                                if(getUserGroup() == 'Super Users') {
-                                ?>
-                                <div class="drag_area">
-                                    <h4 >Add Trainer to Appointment</h4>
+                                  <div class="drag_area">
+                                    <h4 >3. Add Trainer to Appointment</h4>
                                     <ul>
                                     <?php 
                                         foreach ($trainers as $trainer) {
                                             echo '<li data-name="trainer_id" data-value="' . $trainer->id. '" class="drag_data" title="' . JFactory::getUser($trainer->id)->username  . '"        ">' 
-                                                 . JFactory::getUser($trainer->id)->username . '</li>';
+                                                 . JFactory::getUser($trainer->id)->name . '</li>';
                                         }
                                     
                                     ?>
                                     </ul>
 
                                 </div>
-                                <?php
-                                }
-                                ?>
+
                             </td>
                         </tr>
                         <tr>
                              <td>
                                 
                                 <div class="drag_area">
-                                    <h4 >Add Location to Appointment</h4>
+                                    <h4 >4. Add Location to Appointment</h4>
                                     <ul>
                                     <?php 
                                         foreach ($locations as $location) {
@@ -343,7 +348,7 @@ function getUserGroup($user_id) {
                                 
                                 <div style="margin-left:115px;width: 200px;" class="drag_area send_reminder_emails">
                                     <form id="send_reminder_form">
-                                        <h4 >Send Email Confirmations</h4>
+                                        <h4 >5. Send Email Confirmations</h4>
                                         <div style="margin-bottom:5px;">Select Appointment Type(s)</div>
                                         <div  style="height: 243px;">
                                             <select style="font-size: 14px; font-weight: bold;  width: 200px;" multiple size="9"  name="appointments[]" class="inputbox" >
@@ -415,6 +420,5 @@ userAdd:true,
 	<input type="hidden" name="option" value="com_multicalendar" />
 	<input type="hidden" name="id" value="<?php echo $this->calendar->id; ?>" />
 	<input type="hidden" name="cid[]" value="<?php echo $this->calendar->id; ?>" />
-        <input type="hidden" id="logged_user_id" name="logged_user_id" value="<?php echo JFactory::getUser()->id; ?>" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

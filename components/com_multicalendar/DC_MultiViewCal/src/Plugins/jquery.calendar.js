@@ -1991,9 +1991,6 @@
                 return true;
             }
             if (option.url && option.url != "") {
-                var logged_user_id = $("#logged_user_id").val();
-                option.url = option.url + '&logged_user_id=' + logged_user_id;
-                console.log(option.url);
                 option.isloading = true;
                 //clearcontainer();
                 if (option.onBeforeRequestData && $.isFunction(option.onBeforeRequestData)) {
@@ -3059,6 +3056,8 @@
              if(!client_id) client_id = '';
              //console.log(client_id);
              var trainer_id =  $('#filter_trainer').find(':selected').val();
+             if(!trainer_id) trainer_id =  $('#trainer_input').val();
+             console.log(trainer_id);
              if(!trainer_id) trainer_id = '';
              var location =  $('#filter_location').find(':selected').val();
              if(!location) location = '';
