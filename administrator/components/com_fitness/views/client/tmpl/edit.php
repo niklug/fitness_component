@@ -153,26 +153,12 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 				<li><?php echo $this->form->getLabel('state'); ?>
 				<?php echo $this->form->getInput('state'); ?></li>
                                
-                                <?php
-                                if($this->getUserGroup(JFactory::getUser()->id)== 'Super Users') {
-                                ?>
+                       
                                     <li><?php echo $this->form->getLabel('primary_trainer'); ?>
                                     <?php echo $this->form->getInput('primary_trainer'); ?></li>
                                     <li><?php echo $this->form->getLabel('other_trainers'); ?>
                                     <?php echo $this->getInput($this->item->id); ?></li>
-                                <?php
-                                } else {
-                                ?>
-                              <li>
-                                  <label id="jform_primary_trainer-lbl" class="" for="jform_primary_trainer">Primary trainer</label>
-                                      <select id="jform_primary_trainer" class="inputbox" name="jform[primary_trainer]">
-                                          <option value="<?php echo JFactory::getUser()->id?>"><?php echo JFactory::getUser()->name?></option>
-                                      </select>
-                                  </li>
-                                <?php
-                                }
-                                ?>
-                       
+                     
 
 
             </ul>

@@ -129,7 +129,7 @@ function getUserGroup($user_id) {
     $sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
     if(getUserGroup() != 'Super Users') {
         $user_id = &JFactory::getUser()->id;
-        $sql .= " AND primary_trainer='$user_id'";
+        $sql .= " AND (primary_trainer='$user_id' OR other_trainers LIKE '%$user_id%')";
     }
     $db->setQuery($sql);
     $clients = $db->loadObjectList();

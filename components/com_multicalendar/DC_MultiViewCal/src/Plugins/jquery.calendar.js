@@ -2026,7 +2026,11 @@
                     success: function(data) {//function(datastr) {
 						//datastr =datastr.replace(/"\\\/(Date\([0-9-]+\))\\\/"/gi, 'new $1');
                         //var data = (new Function("return " + datastr))();
-                        //console.log(data);
+                        if(data.error) {
+                            alert(data.error);
+                            return;
+                        }
+                        console.log(data);
                         if (data != null && data.error != null) {
                             if (option.onRequestDataError) {
                                 option.onRequestDataError(1, data);

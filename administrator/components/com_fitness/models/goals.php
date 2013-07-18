@@ -159,8 +159,8 @@ class FitnessModelgoals extends JModelList {
         $user = &JFactory::getUser();
         if ($this->getUserGroup($user->id) != 'Super Users') {
 
-            
-            $query->where('a.user_id IN (SELECT DISTINCT user_id FROM #__fitness_clients WHERE primary_trainer=' .  (int) $user->id . ' )');
+            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
+            $query->where('a.user_id IN (SELECT DISTINCT user_id FROM #__fitness_clients WHERE primary_trainer=' .  (int) $user->id .  ' OR other_trainers LIKE ' . $other_trainers .  ' )');
         }
 
         

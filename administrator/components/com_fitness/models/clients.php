@@ -120,7 +120,8 @@ class FitnessModelclients extends JModelList {
         // filter only for Super Users
         $user = &JFactory::getUser();
         if ($this->getUserGroup($user->id) != 'Super Users') {
-            $query->where('a.primary_trainer = ' . (int) $user->id);
+            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
+            $query->where('(a.primary_trainer = ' . (int) $user->id . ' OR a.other_trainers LIKE ' . $other_trainers . ' )');
         }
 
         

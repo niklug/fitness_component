@@ -362,8 +362,11 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
         $sql .= " or id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))) ";
     }
     
-
     $user = &JFactory::getUser();
+    if($user->guest) {
+    $ret['error'] = 'Login please in Front End to proceed here.';
+    return $ret;
+    }
     if (getUserGroup($user->id) != 'Super Users') {
         $sql .= " and trainer_id='$user->id' ";
     } else {
@@ -1314,7 +1317,7 @@ function saveDragedData() {
             $ret['Msg'] = $db->stderr();
         }
 
-        if (($field == 'client_id') AND !(in_array($event_name, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
+        if (($field == 'client_id') AND !(in_array($event_name[0], array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
             $client_id = $value;
             $insertGroupClient = insertGroupClient($event_id, $client_id);
         }
@@ -1419,6 +1422,14 @@ function sendRemindersManually() {
     if($reminder_from AND $reminder_to) {
         $query .= " AND starttime BETWEEN" . $db->quote($reminder_from_formated) . "AND" . $db->quote($reminder_to_formated);
     }
+    $query .= "
+        AND title  IN (
+        'Personal Training',
+        'Semi-Private Training', 
+        'Assessment',
+        'Consultation',
+        'Special Event') 
+    ";
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['IsSuccess'] = false;
