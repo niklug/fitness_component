@@ -89,7 +89,7 @@ switch ($method) {
     case "set_event_exircise_order":
         set_event_exircise_order();
     case "send_appointment_email":
-        send_appointment_email(JRequest::getVar('event_id'));
+        send_appointment_email(JRequest::getVar('event_id'), 'workout');
     break;
     case "update_exercise_field":
         update_exercise_field();
@@ -946,14 +946,16 @@ function set_event_exircise_order() {
 /**
  * sends email to the client with appointment content, exercises , etc..
  */
-function send_appointment_email($event_id) {
+function send_appointment_email($event_id, $type) {
     
     $client_ids = getClientsByEvent($event_id);
     
-
+    $layout = '';
+    if($type == 'confirmation') $layout = '&layout=email_reminder';
     
     foreach ($client_ids as $client_id) {
-        $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
+        $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf' . $layout . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
+        
         if(!function_exists('curl_version')) {
             $ret['IsSuccess'] = false;
             $ret['Msg'] = 'cURL not anabled';
@@ -961,6 +963,7 @@ function send_appointment_email($event_id) {
             die();
         }
 
+    
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
         curl_setopt($ch, CURLOPT_URL,$url);
@@ -972,18 +975,20 @@ function send_appointment_email($event_id) {
         
         $emails[] = $email;
         
-        $send = sendEmail($email, 'Appointment details, elitefit.com.au', $contents);
-        
+        $subject = 'Workout/Training Session';
+        if($type == 'confirmation') $subject = 'Appointment Confirmation';
+        $send = sendEmail($email, $subject, $contents);
+
         if($send != '1') {
             $ret['IsSuccess'] = false;
             $ret['Msg'] = 'Email function error';
             echo json_encode($ret);
             die();
         }
-    }
-    return $emails;
-    
 
+    }
+
+    return $emails;
 }
 
 /**
@@ -1441,7 +1446,7 @@ function sendRemindersManually() {
     
     $emails = array();
     foreach ($event_ids as $event_id) {
-        $emails = array_merge($emails, send_appointment_email($event_id));
+        $emails = array_merge($emails, send_appointment_email($event_id, 'confirmation'));
     }
     
     $emails = implode(', ', $emails);

@@ -152,8 +152,8 @@ class MultiCalendarController extends JController
             curl_close ($ch);
 
             $client_email = $this->getClientEmailByEvent($event_id);
-        
-            $email_sent = $this->sendEmail($client_email, 'Appointment details, elitefit.com.au', $contents);
+            $subject = 'Appointment Confirmation';
+            $email_sent = $this->sendEmail($client_email, $subject, $contents);
             
             if($email_sent == '1') {
                 $this->setSentEmailStatus($event_id, $client_email);

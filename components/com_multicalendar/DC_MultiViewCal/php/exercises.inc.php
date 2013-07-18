@@ -290,7 +290,7 @@ $(document).ready(function() {
             <thead
                 <tr>
                     <th width="15"><a title="Drag, move and drop the row to change the ordering." href="javascript:void(0)" id="drag_exercise"></a></th>
-                    <th width="150" title="Execise/Description/Notes"><a title="Add new exercise" href="javascript:void(0)" id="add_exercise"></a><div style="padding-top: 7px;">Execise/Notes</div></th>
+                    <th width="150" title="Exercise/Description/Notes"><a title="Add new exercise" href="javascript:void(0)" id="add_exercise"></a><div style="padding-top: 7px;">Exercise/Notes</div></th>
                     <th width="40">Speed</th>
                     <th width="40">Weight</th>
                     <th width="40">Reps</th>

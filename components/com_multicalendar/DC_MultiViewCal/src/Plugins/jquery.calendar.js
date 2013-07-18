@@ -1964,7 +1964,6 @@
                     url : url,
                     dataType : 'json',
                     success : function(response) { 
-                        //alert(response.Msg);
                         if(response.IsSuccess) {
                             var emails = response.Msg.split(',');
                             
@@ -2030,7 +2029,7 @@
                             alert(data.error);
                             return;
                         }
-                        console.log(data);
+                        //console.log(data);
                         if (data != null && data.error != null) {
                             if (option.onRequestDataError) {
                                 option.onRequestDataError(1, data);

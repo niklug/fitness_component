@@ -150,10 +150,16 @@
                         </div>
                     </td>
                         <td style="vertical-align: top;" width="30%" align="right">
-                            <div style="float: right; position: absolute; right: 20px; text-align: right; top: 70px;">
+                            <div style="font-size: 11px;float: right; position: absolute; right: 20px; text-align: right; top: 70px;">
                                 <span>www.elitefit.com.au</span><br/>
                                 <span>info@elitefit.com.au</span><br/>
-                                <span>0422 050 590</span>
+                                <span>0422 050 590</span><br/><br/>
+                                
+                                <span>facebook.com/EliteTraining</span><br/>
+                                <span>twitter.com/EliteMelbourne</span><br/>
+                                <span>youtube.com/EliteFitnessPT</span><br/>
+                                <span>instagram.com/EliteMelbourne</span><br/>
+                                
                             </div>
                         </td>
                     </tr>
