@@ -229,14 +229,29 @@ $(document).ready(function() {
 
         
         $("#exercise_table td input").live('keypress', function(e) {
-            if (e.keyCode == 13) {
+            if ((e.keyCode == 13) || (e.keyCode == 8)) {
                   
                   var nexttd = $(this).parent().next("td");
+                  if (e.keyCode == 8) {
+                    nexttd = $(this).parent().prev("td");
+                  }
+                  //console.log(nexttd);
+                  
                   var newContent = $(this).val();
                   var exercise_id = nexttd.closest("tr").attr("id").replace('exercise_row_', '');
                   var exercise_column = $(this).parent().index();
                   var nextindex =  nexttd.index();
                   if((nextindex == 9)) return false;
+                  if((nextindex == 0)) {
+                        if(nexttd.closest("tr").prev().length == 0) {
+                          $(this).parent().text(newContent);
+                          $(this).parent().removeClass("cellEditing");
+                          update_exercise_field(exercise_id, Math.abs(exercise_column), newContent);
+                          return false;
+                        }
+                        var nexttd = nexttd.closest("tr").prev().find("td:eq(7)");
+                      
+                  }
                   if((nextindex == 8)) {
                         if(nexttd.closest("tr").next().length == 0) {
                           $(this).parent().text(newContent);
