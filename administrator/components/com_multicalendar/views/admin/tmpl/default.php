@@ -344,9 +344,9 @@ function getUserGroup($user_id) {
 
                                 </div>
                             </td>
-                            <td colspan="2">
+                            <td >
                                 
-                                <div style="margin-left:115px;width: 200px;" class="drag_area send_reminder_emails">
+                                <div style="margin-left:5px;width: 200px;" class="drag_area send_reminder_emails">
                                     <form id="send_reminder_form">
                                         <h4 >5. Send Email Confirmations</h4>
                                         <div style="margin-bottom:5px;">Select Appointment Type(s)</div>
@@ -358,12 +358,22 @@ function getUserGroup($user_id) {
                                                 }
                                                 ?>
                                             </select>
-                                            <?php 
-                                            echo JHTML::calendar('','reminder_from','reminder_from','%Y-%m-%d', array('readonly'=>'true'));
-                                            echo JHTML::calendar('','reminder_to','reminder_to','%Y-%m-%d', array('readonly'=>'true'));
-                                            ?>
-                                            <input id="send_emails_button" type="button" name="send_emails_button" value="Send" >
-                                            
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        Select Date Range
+                                                        </br>
+                                                        <?php 
+                                                        echo "From: " . JHTML::calendar('','reminder_from','reminder_from','%Y-%m-%d', array('readonly'=>'true'));
+                                                        echo "<br/>";
+                                                        echo "To: " . JHTML::calendar('','reminder_to','reminder_to','%Y-%m-%d', array('readonly'=>'true'));
+                                                        ?>                                                       
+                                                    </td>
+                                                    <td>
+                                                       <input id="send_emails_button" type="button" name="send_emails_button" value="Send" > 
+                                                    </td>
+                                                </tr>
+                                            </table>
                                             <div id="emais_sended"></div>
                                         </div>
                                     </form>

@@ -455,16 +455,16 @@
 
 #reminder_from, #reminder_to {
     width: 70px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 
 #reminder_to {
-    margin-left: 18px;
+    margin-left: 14px;
 }
 
 #send_emails_button {
-    margin-left: 70px;
+    margin-left: 10px;
     margin-top: 10px;
     cursor: pointer;
 }

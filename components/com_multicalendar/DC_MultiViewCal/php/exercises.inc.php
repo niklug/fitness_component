@@ -229,10 +229,12 @@ $(document).ready(function() {
 
         
         $("#exercise_table td input").live('keypress', function(e) {
-            if ((e.keyCode == 13) || (e.keyCode == 8)) {
+            var keynext = 13;
+            var keyback = 38;
+            if ((e.keyCode == keynext) || (e.keyCode == keyback)) {
                   
                   var nexttd = $(this).parent().next("td");
-                  if (e.keyCode == 8) {
+                  if (e.keyCode == keyback) {
                     nexttd = $(this).parent().prev("td");
                   }
                   //console.log(nexttd);
