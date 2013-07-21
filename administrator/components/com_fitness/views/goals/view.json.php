@@ -38,5 +38,14 @@ class FitnessViewGoals extends JView {
 	    echo $model->getClientsByGroup($user_group);
 	}
         
+        
+        // programs view
+        function setFrontendPublished() {
+            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
+            $event_id = JRequest::getVar('event_id');
+	    $status = JRequest::getVar('status');
+            $model = $this -> getModel("goals");
+	    echo $model->setFrontendPublished($event_id, $status);
+	}
       
 }

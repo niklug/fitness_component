@@ -375,5 +375,27 @@ class FitnessModelgoals extends JModelList {
         $db->setQuery($query);
         return $db->loadResult();
     }
+    
+    
+    
+    // programs view
+    function setFrontendPublished($event_id, $status) {
+        if($status) {
+            $status = '0';
+        } else {
+            $status = '1';
+        }
+
+        $db = &JFactory::getDBo();
+        $query = "UPDATE #__dc_mv_events SET frontend_published='$status' WHERE id='$event_id'";
+        $db->setQuery($query);
+        $ret['success'] = 1;
+        if (!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->stderr();
+        }
+        $result = array( 'status' => $ret, 'data' => array('event_id' => $event_id, 'status' => $status));
+        return  json_encode($result);
+    }
 
 }

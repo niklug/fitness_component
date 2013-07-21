@@ -58,4 +58,15 @@ class FitnessController extends JController
                 $view->setModel($this->getModel('goals'));
    		$view -> getClientsByGroup();
 	}
+        
+        // programs view
+        //------------------------------------------------------
+	function setFrontendPublished() {
+            
+ 		$view = $this -> getView('goals', 'json');
+                $view->setModel($this->getModel('goals'));
+   		$view -> setFrontendPublished();
+	}
+        
+        
 }

@@ -26,7 +26,7 @@ defined('_JEXEC') or die;
                                 <a id="goals_href"  href="index.php?option=com_fitness&view=goals" title="Goals"></a>
                             </td>
                             <td>
-                                <a id="calendar_href"  href="index.php?option=com_fitness&view=calendar" title="Calendar"></a>
+                                <a id="calendar_href"  href="index.php?option=com_multicalendar&view=admin&task=admin" title="Calendar"></a>
                             </td>
                         </tr>
                         <tr>

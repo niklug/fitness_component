@@ -399,13 +399,15 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     if($session_focus[0]) {
         $sql .= " and session_focus IN ($session_focuses) ";
     }
+    $sql .= " AND published='1'";
             
     $sql .=  " and ( (`".DC_MV_CAL_FROM."` between '"
         
       .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_TO."` between '"
       .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_FROM."` <= '"
       .php2MySqlTime($sd)."' and `".DC_MV_CAL_TO."` >= '". php2MySqlTime($ed)."') or rrule<>'') order by uid desc,  ".DC_MV_CAL_FROM."  ";
-
+    
+    
     $db->setQuery( $sql );
     if (!$db->query()){
           $ret['IsSuccess'] = false;
