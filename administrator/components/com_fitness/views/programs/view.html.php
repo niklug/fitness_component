@@ -116,7 +116,7 @@ class FitnessViewPrograms extends JView {
     
     
     
-    public function getGroupClients($event_id) {
+    public function getGroupClients($event_id, $client_id) {
         
         $db = &JFactory::getDbo();
         $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
@@ -125,6 +125,10 @@ class FitnessViewPrograms extends JView {
             JError::raiseError( $db->stderr());
         }
         $clients = $db->loadResultArray(0);
+        if($client_id) {
+            $clients = array_merge($clients, array($client_id));
+        }
+        $clients = array_unique($clients);
         foreach ($clients as $client) {
             $user = &JFactory::getUser($client);
             $html .= $user->name . "</br>";
@@ -158,6 +162,7 @@ class FitnessViewPrograms extends JView {
                 break;
 
             default:
+                $html .= '<a onclick="openSetBox(' . $id . ', ' . $status . ')" class="event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
                 break;
         }
         

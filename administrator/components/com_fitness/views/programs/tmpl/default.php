@@ -127,7 +127,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</td>
 				<td>
 					<?php
-                                        echo $this->getGroupClients($item->id);
+                                        echo $this->getGroupClients($item->id, $item->client_id);
                                         ?>
 				</td>
 				<td>
@@ -154,6 +154,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $item->session_focus; ?>
 				</td>
 				<td id="status_button_<?php echo $item->id ?>" class="center">
+                                    
 					<?php echo $this->state_html($item->id, $item->status); ?>
 				</td>
 				<td>
