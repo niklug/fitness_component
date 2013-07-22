@@ -304,7 +304,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                                     <?php
                                     echo '<a onclick="sendGoalEmail(' . $item->id . ', ' . $item->completed . ', ' . $item->user_id . ')" class="send_email_button" href="javascript:void(0)"></a>';
                                     ?>
-					
+                                </td>	
                                 
 			</tr>
 			<?php endforeach; ?>

@@ -91,6 +91,9 @@ switch ($method) {
     case "send_appointment_email":
         send_appointment_email(JRequest::getVar('event_id'), 'workout');
     break;
+    case "sendAppointmentEmail":
+        sendAppointmentEmail();
+    break;
     case "update_exercise_field":
         update_exercise_field();
     break;
@@ -106,16 +109,18 @@ switch ($method) {
     case "set_group_client_status":
         set_group_client_status();
     break;
-
-
     case "generateFormHtml":
         generateFormHtml();
+          break;
     case "saveDragedData":
         saveDragedData();
+        break;
     case "sendRemindersManually":
         sendRemindersManually();
+         break;
     case "deleteEvent":
-        deleteEvent();        
+        deleteEvent(); 
+        break;
 
     case "adddetails":
 
@@ -1486,6 +1491,22 @@ function getUserGroup($user_id) {
     $db->setQuery($query);
     return $db->loadResult();
 }
+
+
+/*
+ * administration Programs view
+ */
+function  sendAppointmentEmail() {
+    $event_id = JRequest::getVar('event_id');
+    $emails =  send_appointment_email($event_id, 'confirmation');
+    $emails = implode(', ', $emails);
+    //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
+    $ret['IsSuccess'] = true;
+    $ret['Msg'] = $emails;
+    echo json_encode($ret);
+    die();
+}
+        
 
 
 

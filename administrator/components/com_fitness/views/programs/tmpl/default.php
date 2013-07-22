@@ -224,6 +224,12 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_PROGRAMS_STATUS', 'a.status', $listDirn, $listOrder); ?>
 				</th>
+                                <th class="nowrap">
+                                    Appointment
+                                </th>
+                                <th class="nowrap">
+                                    Notify
+                                </th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_PROGRAMS_FRONTEND_PUBLISHED', 'a.frontend_published', $listDirn, $listOrder); ?>
 				</th>
@@ -311,6 +317,16 @@ $saveOrder	= $listOrder == 'a.ordering';
                                     
 					<?php echo $this->state_html($item->id, $item->status); ?>
 				</td>
+                                <td class="center">
+                                    <?php
+                                    echo '<a onclick="sendAppointmentEmail(' . $item->id . ')" class="send_email_button" href="javascript:void(0)"></a>';
+                                    ?>
+                                </td>	
+                                <td class="center">
+                                    <?php
+                                    echo '<a onclick="sendGoalEmail(' . $item->id . ', ' . $item->completed . ', ' . $item->user_id . ')" class="send_email_button" href="javascript:void(0)"></a>';
+                                    ?>
+                                </td>	
 				<td>
                                     <?php $frontend_published =  $item->frontend_published; ?>
                                     <a id="frontend_published_<?php echo $item->id; ?>"  style="cursor:pointer;"  class="jgrid" title="Unpublish Item" >
@@ -371,6 +387,8 @@ $saveOrder	= $listOrder == 'a.ordering';
       <a data-status="4" class="event_status__button event_status_latecancel set_status" href="javascript:void(0)">late cancel</a>
       <a data-status="5" class="event_status__button event_status_noshow set_status" href="javascript:void(0)">no show</a>
 </div>
+
+<div id="emais_sended"></div>
             
 
 
@@ -492,6 +510,39 @@ $saveOrder	= $listOrder == 'a.ordering';
          if(event_status == 4)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"   class="open_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';
          if(event_status == 5)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"  class="open_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
 
+    }
+    
+    
+    
+    // appointment email
+    function sendAppointmentEmail(event_id) {
+        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=sendAppointmentEmail';
+        $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                    event_id : event_id
+                },
+                dataType : 'json',
+                success : function(response) {
+                    if(response.IsSuccess) {
+                        var emails = response.Msg.split(',');
+
+                        var message = 'Emails were sent to: ' +  "</br>";
+                        $.each(emails, function(index, email) { 
+                            message += email +  "</br>";
+                        });
+                        $("#emais_sended").append(message);
+
+                    } else {
+                        alert(response.Msg);
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert("error");
+                }
+        });
     }
     
  

@@ -1974,7 +1974,7 @@
                             $("#emais_sended").append(message);
               
                         } else {
-                            response.Msg;
+                            alert(response.Msg);
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
