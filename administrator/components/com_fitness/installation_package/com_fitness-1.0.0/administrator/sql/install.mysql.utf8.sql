@@ -45,8 +45,8 @@ PRIMARY KEY (`id`)
 
 INSERT INTO `#__fitness_categories` (`id`, `name`, `color`, `state`) VALUES
 (1, 'Personal Training', '#00BF32', 1),
-(2, 'Semi-Private Training ', '#007F01', 1),
-(3, 'Resistance Workout ', '#0070FF', 1),
+(2, 'Semi-Private Training', '#007F01', 1),
+(3, 'Resistance Workout', '#0070FF', 1),
 (4, 'Cardio Workout', '#E94E1B', 1),
 (5, 'Assessment', '#E6007E', 1),
 (6, 'Consultation', '#FFE500', 1),

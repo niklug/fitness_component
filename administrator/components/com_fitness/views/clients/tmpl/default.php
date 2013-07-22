@@ -46,6 +46,9 @@ $saveOrder	= $listOrder == 'a.ordering';
                 
                 $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
                 $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
                 $primary_trainerlist = $db->loadObjectList();
                 if(isset($primary_trainerlist)) {
                     foreach ($primary_trainerlist as $option) {
@@ -68,6 +71,9 @@ $saveOrder	= $listOrder == 'a.ordering';
                 $db = JFactory::getDbo();
                 $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
                 $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
                 $grouplist = $db->loadObjectList();
                 foreach ($grouplist as $option) {
                     $group[] = JHTML::_('select.option', $option->value, $option->text );

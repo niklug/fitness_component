@@ -10,6 +10,9 @@ function getLocations() {
     $db	= & JFactory::getDBO();
     $query = "SELECT name FROM #__fitness_locations";
     $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $locations = $db->loadResultArray();
     return $locations;
 }
@@ -22,6 +25,9 @@ function getUserGroupById($user_id) {
     $query = "SELECT title FROM #__usergroups WHERE id IN 
         (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
     $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     return $db->loadResult();
 }
 
@@ -38,6 +44,9 @@ function getClients() {
         $query .= " WHERE #__fitness_clients.primary_trainer = '$user->id'";
     }
     $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $clients = $db->loadObjectList();
     return $clients;
 }
@@ -56,6 +65,9 @@ function getTrainers() {
         $query .= " AND #__users.id = '$user->id'";
     }
     $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $trainers = $db->loadObjectList();
     return $trainers;
 }
@@ -81,6 +93,9 @@ function getEmailPdfData($event_id) {
    $db	= & JFactory::getDBO();
    $query = "SELECT * FROM #__dc_mv_events WHERE id='$event_id'";
    $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
    $result = $db->loadObject();
    return $result;
 }
@@ -121,6 +136,9 @@ function getExercises($event_id) {
     $db	= & JFactory::getDBO();
     $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$event_id'ORDER BY `#__fitness_events_exercises`.`order` ASC ";
     $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $result = $db->loadObjectList();
     return $result;
 }

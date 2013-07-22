@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `#__dc_mv_events` (
   `session_focus` varchar(255) NOT NULL,
   `client_id` int(11) NOT NULL,
   `trainer_id` int(11) NOT NULL,
-  `status` int(1) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '1',
   `frontend_published` int(1) NOT NULL DEFAULT '0',
   `isalldayevent` tinyint(3) unsigned DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,

@@ -59,7 +59,7 @@ class FitnessModelsessionfocuses extends JModelList {
         $this->setState('filter.category', $category);
         
         
-        // Filter by session focus
+        // Filter by session type
         $session_type = $app->getUserStateFromRequest($this->context . '.filter.session_type', 'filter_session_type', '', 'string');
         $this->setState('filter.session_type', $session_type);
 

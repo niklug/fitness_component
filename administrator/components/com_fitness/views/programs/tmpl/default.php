@@ -23,15 +23,19 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=programs'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
-			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Client Name:'); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+		</div>
+		
+            <div class='filter-select fltrt'>
                         <?php
                         $selected_from_date = JRequest::getVar('filter_from_date');
 			$selected_to_date = JRequest::getVar('filter_to_date');
@@ -45,29 +49,146 @@ $saveOrder	= $listOrder == 'a.ordering';
 				echo JHtml::_('calendar', $selected_to_date, 'filter_to_date', 'filter_to_deadline', '%Y-%m-%d',  'onchange="this.form.submit();"');
 			?>
                         
-                        <?php
-                        $db = JFactory::getDbo();
-
-                        $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
-                        $db->setQuery($sql);
-                        $primary_trainerlist = $db->loadObjectList();
-                        if(isset($primary_trainerlist)) {
-                            foreach ($primary_trainerlist as $option) {
-                                $primary_trainer[] = JHTML::_('select.option', $option->value, $option->text );
-                            }
-                        }
-
-                        ?>
-
-                        <div class='filter-select fltrt'>
-                                <select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
-                                        <option value=""><?php echo JText::_('-Primary Trainer-');?></option>
-                                        <?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
-                                </select>
-                        </div>
+            </div>
+        </fieldset>
+        <fieldset style="border:none;">
+                        
+            	<div class='filter-select fltrt'>
+			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-Published-');?></option>
+				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.published'), true);?>
+			</select>
 		</div>
-		
-        
+            
+                <?php
+                $workout_status[] = JHTML::_('select.option', '1', 'Published' );
+                $workout_status[] = JHTML::_('select.option', '0', 'Unpublished' );
+
+                ?>
+                <div class='filter-select fltrt'>
+                        <select name="filter_frontend_published" class="inputbox" onchange="this.form.submit()">
+                                <option value=""><?php echo JText::_('-Workout Published-');?></option>
+                                <?php echo JHtml::_('select.options', $workout_status, "value", "text", $this->state->get('filter.frontend_published'), true);?>
+                        </select>
+                </div>
+            
+            
+                <?php
+                $event_status[] = JHTML::_('select.option', '1', 'pending' );
+                $event_status[] = JHTML::_('select.option', '2', 'attended' );
+                $event_status[] = JHTML::_('select.option', '3', 'cancelled' );
+                $event_status[] = JHTML::_('select.option', '4', 'late cancel' );
+                $event_status[] = JHTML::_('select.option', '5', 'no show' );
+                ?>
+                <div class='filter-select fltrt'>
+                        <select name="filter_event_status" class="inputbox" onchange="this.form.submit()">
+                                <option value=""><?php echo JText::_('-Status-');?></option>
+                                <?php echo JHtml::_('select.options', $event_status, "value", "text", $this->state->get('filter.event_status'), true);?>
+                        </select>
+                </div>
+
+                <?php
+                $db = JFactory::getDbo();
+                $sql = "SELECT id,  name FROM #__fitness_session_focus WHERE state='1' GROUP BY name ";
+                $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
+                $session_focus= $db->loadObjectList();
+                ?>
+
+                <div class='filter-select fltrt'>
+                        <select name="filter_session_focus" class="inputbox" onchange="this.form.submit()">
+                                <option value=""><?php echo JText::_('-Session focus-');?></option>
+                                <?php echo JHtml::_('select.options', $session_focus, "name", "name", $this->state->get('filter.session_focus'), true);?>
+                        </select>
+                </div>
+
+                <?php
+                $db = JFactory::getDbo();
+                $sql = "SELECT id,  name FROM #__fitness_session_type WHERE state='1' GROUP BY name";
+                $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
+                $session_type= $db->loadObjectList();
+                ?>
+
+                <div class='filter-select fltrt'>
+                        <select name="filter_session_type" class="inputbox" onchange="this.form.submit()">
+                                <option value=""><?php echo JText::_('-Session type-');?></option>
+                                <?php echo JHtml::_('select.options', $session_type, "name", "name", $this->state->get('filter.session_type'), true);?>
+                        </select>
+                </div>
+
+                <?php
+                $db = JFactory::getDbo();
+                $sql = "SELECT id, name FROM #__fitness_categories WHERE state='1'";
+                $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
+                $categories = $db->loadObjectList();
+                ?>
+
+                <div class='filter-select fltrt'>
+                        <select name="filter_category" class="inputbox" onchange="this.form.submit()">
+                                <option value=""><?php echo JText::_('-Appointment-');?></option>
+                                <?php echo JHtml::_('select.options', $categories, "name", "name", $this->state->get('filter.category'), true);?>
+                        </select>
+                </div>
+
+                <?php
+                // Location filter
+                $db = JFactory::getDbo();
+
+                $sql = "SELECT id AS value, name AS text FROM #__fitness_locations WHERE state='1'";
+                $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
+                $locations = $db->loadObjectList();
+                if(isset($locations)) {
+                    foreach ($locations as $option) {
+                        $locations_name[] = JHTML::_('select.option', trim($option->text), trim($option->text) );
+                    }
+                }
+                ?>
+
+                <div class='filter-select fltrt'>
+                        <select name="filter_location" class="inputbox" onchange="this.form.submit()">
+                                <option value="0"><?php echo JText::_('-Location-');?></option>
+                                <?php echo JHtml::_('select.options', $locations_name, "text", "text", $this->state->get('filter.location'), true);?>
+                        </select>
+                </div>
+
+
+
+                <?php
+                // primary trainer filter
+                $db = JFactory::getDbo();
+
+                $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+                $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
+                $primary_trainerlist = $db->loadObjectList();
+                if(isset($primary_trainerlist)) {
+                    foreach ($primary_trainerlist as $option) {
+                        $primary_trainer[] = JHTML::_('select.option', $option->value, $option->text );
+                    }
+                }
+
+                ?>
+
+                <div class='filter-select fltrt'>
+                        <select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
+                                <option value=""><?php echo JText::_('-Primary Trainer-');?></option>
+                                <?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
+                        </select>
+                </div>
+
 
 	</fieldset>
 	<div class="clr"> </div>

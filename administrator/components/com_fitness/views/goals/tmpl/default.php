@@ -82,6 +82,9 @@ $saveOrder	= $listOrder == 'a.ordering';
                 $db = JFactory::getDbo();
                 $sql = "SELECT id, name FROM #__fitness_goal_categories`";
                 $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
                 $goal_category= $db->loadObjectList();
                 ?>
 
@@ -96,6 +99,9 @@ $saveOrder	= $listOrder == 'a.ordering';
                 $db = JFactory::getDbo();
                 $sql = "SELECT id, name FROM #__fitness_goal_focus``";
                 $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
                 $goal_focus= $db->loadObjectList();
                 ?>
 
@@ -112,6 +118,9 @@ $saveOrder	= $listOrder == 'a.ordering';
                 $db = JFactory::getDbo();
                 $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
                 $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
                 $grouplist = $db->loadObjectList();
                 foreach ($grouplist as $option) {
                     $group[] = JHTML::_('select.option', $option->value, $option->text );
