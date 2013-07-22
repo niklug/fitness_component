@@ -29,7 +29,7 @@ class FitnessModelprograms extends JModelList {
                                 'id', 'a.id',
                 'starttime', 'a.starttime',
                 'client_id', 'a.client_id',
-                'trainer_id', 'a.trainer_id',
+                'primary_trainer', 'a.trainer_id',
                 'location', 'a.location',
                 'title', 'a.title',
                 'session_type', 'a.session_type',
@@ -70,8 +70,14 @@ class FitnessModelprograms extends JModelList {
         
         $this->setState('filter.published', $published);
 
-        
+        //Filtering date
+        $this->setState('filter.date.from', $app->getUserStateFromRequest($this->context.'.filter.date.from', 'filter_from_date', '', 'string'));
+        $this->setState('filter.date.to', $app->getUserStateFromRequest($this->context.'.filter.date.to', 'filter_to_date', '', 'string'));
 
+        // Filter by primary trainer
+        $primary_trainer = $app->getUserStateFromRequest($this->context . '.filter.primary_trainer', 'filter_primary_trainer', '', 'string');
+        $this->setState('filter.primary_trainer', $primary_trainer);
+        
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
         $this->setState('params', $params);
@@ -136,6 +142,24 @@ class FitnessModelprograms extends JModelList {
         
 
 
+        //Filtering date
+        $filter_date_from = $this->state->get("filter.date.from");
+        if ($filter_date_from) {
+                $query->where("a.starttime >= '".$db->escape($filter_date_from)."'");
+        }
+        $filter_date_to = $this->state->get("filter.date.to");
+        if ($filter_date_to) {
+                $query->where("a.starttime <= '".$db->escape($filter_date_to)."'");
+        }
+        
+        // Filter by primary trainer
+        $primary_trainer = $this->getState('filter.primary_trainer');
+        if (is_numeric($primary_trainer)) {
+            $query->where('a.trainer_id = '.(int) $primary_trainer);
+        } 
+        
+                
+                
         // Add the list ordering clause.
         $orderCol = $this->state->get('list.ordering');
         $orderDirn = $this->state->get('list.direction');

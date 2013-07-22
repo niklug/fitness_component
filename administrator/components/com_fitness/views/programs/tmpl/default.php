@@ -32,6 +32,39 @@ $saveOrder	= $listOrder == 'a.ordering';
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+                        <?php
+                        $selected_from_date = JRequest::getVar('filter_from_date');
+			$selected_to_date = JRequest::getVar('filter_to_date');
+                        ?>
+                        <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Date from:'); ?></label>
+                        <?php
+				echo JHtml::_('calendar', $selected_from_date, 'filter_from_date', 'filter_from_deadline', '%Y-%m-%d', 'onchange="this.form.submit();"');
+                        ?>
+                        <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Date to:'); ?></label>
+                        <?php
+				echo JHtml::_('calendar', $selected_to_date, 'filter_to_date', 'filter_to_deadline', '%Y-%m-%d',  'onchange="this.form.submit();"');
+			?>
+                        
+                        <?php
+                        $db = JFactory::getDbo();
+
+                        $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+                        $db->setQuery($sql);
+                        $primary_trainerlist = $db->loadObjectList();
+                        if(isset($primary_trainerlist)) {
+                            foreach ($primary_trainerlist as $option) {
+                                $primary_trainer[] = JHTML::_('select.option', $option->value, $option->text );
+                            }
+                        }
+
+                        ?>
+
+                        <div class='filter-select fltrt'>
+                                <select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
+                                        <option value=""><?php echo JText::_('-Primary Trainer-');?></option>
+                                        <?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
+                                </select>
+                        </div>
 		</div>
 		
         
