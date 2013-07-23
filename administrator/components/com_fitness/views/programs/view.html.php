@@ -61,6 +61,7 @@ class FitnessViewPrograms extends JView {
         require_once JPATH_COMPONENT . '/helpers/fitness.php';
 
         $state = $this->get('State');
+        
         $canDo = FitnessHelper::getActions($state->get('filter.category_id'));
 
         JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_PROGRAMS'), 'programs.png');

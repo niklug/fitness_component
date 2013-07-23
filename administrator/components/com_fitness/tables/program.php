@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 /**
  * program Table class
  */
-class FitnessTableprogram extends JTable {
+class FitnessTableassessment extends JTable {
 
     /**
      * Constructor
@@ -47,9 +47,9 @@ class FitnessTableprogram extends JTable {
             $registry->loadArray($array['metadata']);
             $array['metadata'] = (string) $registry;
         }
-        if(!JFactory::getUser()->authorise('core.admin', 'com_fitness.program.'.$array['id'])){
-            $actions = JFactory::getACL()->getActions('com_fitness','program');
-            $default_actions = JFactory::getACL()->getAssetRules('com_fitness.program.'.$array['id'])->getData();
+        if(!JFactory::getUser()->authorise('core.admin', 'com_fitness.assessment.'.$array['id'])){
+            $actions = JFactory::getACL()->getActions('com_fitness','assessment');
+            $default_actions = JFactory::getACL()->getAssetRules('com_fitness.assessment.'.$array['id'])->getData();
             $array_jaccess = array();
             foreach($actions as $action){
                 $array_jaccess[$action->name] = $default_actions[$action->name];
@@ -176,7 +176,7 @@ class FitnessTableprogram extends JTable {
     */
     protected function _getAssetName() {
         $k = $this->_tbl_key;
-        return 'com_fitness.program.' . (int) $this->$k;
+        return 'com_fitness.assessment.' . (int) $this->$k;
     }
  
     /**

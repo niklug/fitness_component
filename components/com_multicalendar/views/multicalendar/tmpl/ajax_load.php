@@ -92,10 +92,13 @@ switch ($method) {
         send_appointment_email(JRequest::getVar('event_id'), 'workout');
     break;
     case "sendAppointmentEmail":
-        sendAppointmentEmail();
+        sendAppointmentEmail('confirmation');
     break;
     case "sendNotifyEmail":
-        sendNotifyEmail();
+        sendAppointmentEmail('notify');
+    break;
+    case "sendNotifyAssessmentEmail":
+        sendAppointmentEmail('notifyAssessment');
     break;
     case "update_exercise_field":
         update_exercise_field();
@@ -969,6 +972,10 @@ function send_appointment_email($event_id, $type) {
             $subject = 'Review Your Feedback';
             $layout = '&layout=email_notify';
             break;
+        case 'notifyAssessment':
+            $subject = 'Assessment Complete';
+            $layout = '&layout=email_notify_assessment';
+            break;
 
         default:
             $layout = '';
@@ -1510,9 +1517,9 @@ function getUserGroup($user_id) {
 /*
  * administration Programs view
  */
-function  sendAppointmentEmail() {
+function  sendAppointmentEmail($type) {
     $event_id = JRequest::getVar('event_id');
-    $emails =  send_appointment_email($event_id, 'confirmation');
+    $emails =  send_appointment_email($event_id, $type);
     $emails = implode(', ', $emails);
     //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
     $ret['IsSuccess'] = true;
@@ -1521,16 +1528,7 @@ function  sendAppointmentEmail() {
     die();
 }
         
-function  sendNotifyEmail() {
-    $event_id = JRequest::getVar('event_id');
-    $emails =  send_appointment_email($event_id, 'notify');
-    $emails = implode(', ', $emails);
-    //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
-    $ret['IsSuccess'] = true;
-    $ret['Msg'] = $emails;
-    echo json_encode($ret);
-    die();
-}
+
 
 
 jexit();
