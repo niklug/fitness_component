@@ -318,14 +318,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $this->state_html($item->id, $item->status); ?>
 				</td>
                                 <td class="center">
-                                    <?php
-                                    echo '<a onclick="sendAppointmentEmail(' . $item->id . ')" class="send_email_button" href="javascript:void(0)"></a>';
-                                    ?>
+                                    <a onclick="sendEmail('<?php echo $item->id ?>', 'Appointment')" class="send_email_button"></a>
                                 </td>	
                                 <td class="center">
-                                    <?php
-                                    echo '<a onclick="sendGoalEmail(' . $item->id . ', ' . $item->completed . ', ' . $item->user_id . ')" class="send_email_button" href="javascript:void(0)"></a>';
-                                    ?>
+                                   <a onclick="sendEmail('<?php echo $item->id ?>', 'Notify')" class="send_email_button"></a>
                                 </td>	
 				<td>
                                     <?php $frontend_published =  $item->frontend_published; ?>
@@ -515,8 +511,8 @@ $saveOrder	= $listOrder == 'a.ordering';
     
     
     // appointment email
-    function sendAppointmentEmail(event_id) {
-        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=sendAppointmentEmail';
+    function sendEmail(event_id, method) {
+        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
         $.ajax({
                 type : "POST",
                 url : url,

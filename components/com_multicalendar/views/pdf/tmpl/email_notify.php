@@ -4,7 +4,7 @@
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
         <meta content="en-us" http-equiv="Content-Language" />
-        <title>Appointment Confirmation</title>
+        <title>Review Your Feedback!</title>
         <style type="text/css">
             a, a:link, a:visited {
                 text-decoration:underline;
@@ -48,7 +48,6 @@
         </style>
     </head>
     <body>
-      
         <?php
 require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/functions.php' );
 require_once( JPATH_BASE . '/components/com_multicalendar/DC_MultiViewCal/php/list.inc.php' );
@@ -74,9 +73,10 @@ $start_date =  $date->toFormat('%A, %d %b %Y');
 $date = JFactory::getDate($event_data->starttime);
 $start_time = $date->format('H:i');
 
+$description = $event_data->description;
 
 $path = JUri::base() . 'components/com_multicalendar/views/pdf/tmpl/images/';
-$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_reminder&tpml=component&event_id=' . $event_id;
+$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_notify&tpml=component&event_id=' . $event_id;
         ?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
@@ -112,15 +112,15 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:40px; line-height:33pt; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">Appointment Confirmation!</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:40px; line-height:33pt; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">Review Your Feedback!</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>Hi <?php echo $client_name;?>, </br>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>Hi <?php echo $client_name;?>,</br>
                                                                     <br />
-										          Please be sure to click 'Confirm' to secure your appointment day and time. If you are unable to attend, contact your trainer  as soon as possible to avoid late cancellation penalties.<br />
+												    Your trainer <b><?php echo $trainer_name;?></b> has reviewed and assessed your recent <i><?php echo $event_data->title;?></i> session and provided feedback and/or comments for you to review. The session details are as follows...
                                                                     </p>
                                                                     <p>START DATE: <?php echo $start_date;?> <br />
                                                                         START TIME: <?php echo $start_time;?><br />
@@ -128,13 +128,16 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                                     <p>APPOINTMENT: <?php echo $event_data->title;?><br />
                                                                         SESSION TYPE: <?php echo $event_data->session_type;?><br />
                                                                         SESSION FOCUS: <?php echo $event_data->session_focus;?></p>
-                                                                    <p>TRAINER NAME: <?php echo $trainer_name;?></p></td>
+                                                                    <p>TRAINER NAME: <?php echo $trainer_name;?></p>
+                                                                    <p>FEEDBACK/COMMENTS: <?php echo $description;?></p>
+                                                                
+                                                                </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#df833e; text-align:center;">
-                                                                    <a href="<?php echo JUri::base() ?>index.php?option=com_multicalendar&task=confirm_email&event_id=<?php echo base64_encode($event_id) ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#b65106;">CLICK HERE TO CONFIRM</a>
+                                                                    <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#b65106;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -335,7 +338,6 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                             </tr>
                                                             <tr>
                                                                 <td valign="top" style="padding:0 0 0 20px;">
-                                                                    
                                                                     <a href="www.elitefit.com.au/index.php/shop">
                                                                         <img alt="image" height="100" src="<?php echo $path ?>protein1.png" width="180" border="0" vspace="0" hspace="0" /></a></td>
                                                             </tr>

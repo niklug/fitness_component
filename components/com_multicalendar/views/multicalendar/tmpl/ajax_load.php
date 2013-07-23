@@ -94,6 +94,9 @@ switch ($method) {
     case "sendAppointmentEmail":
         sendAppointmentEmail();
     break;
+    case "sendNotifyEmail":
+        sendNotifyEmail();
+    break;
     case "update_exercise_field":
         update_exercise_field();
     break;
@@ -957,9 +960,22 @@ function send_appointment_email($event_id, $type) {
     
     $client_ids = getClientsByEvent($event_id);
     
-    $layout = '';
-    if($type == 'confirmation') $layout = '&layout=email_reminder';
-    
+    switch ($type) {
+        case 'confirmation':
+            $subject = 'Appointment Confirmation';
+            $layout = '&layout=email_reminder';
+            break;
+        case 'notify':
+            $subject = 'Review Your Feedback';
+            $layout = '&layout=email_notify';
+            break;
+
+        default:
+            $layout = '';
+            $subject = 'Workout/Training Session';
+            break;
+    }
+
     foreach ($client_ids as $client_id) {
         $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf' . $layout . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
         
@@ -982,8 +998,6 @@ function send_appointment_email($event_id, $type) {
         
         $emails[] = $email;
         
-        $subject = 'Workout/Training Session';
-        if($type == 'confirmation') $subject = 'Appointment Confirmation';
         $send = sendEmail($email, $subject, $contents);
 
         if($send != '1') {
@@ -1507,7 +1521,16 @@ function  sendAppointmentEmail() {
     die();
 }
         
-
+function  sendNotifyEmail() {
+    $event_id = JRequest::getVar('event_id');
+    $emails =  send_appointment_email($event_id, 'notify');
+    $emails = implode(', ', $emails);
+    //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
+    $ret['IsSuccess'] = true;
+    $ret['Msg'] = $emails;
+    echo json_encode($ret);
+    die();
+}
 
 
 jexit();
