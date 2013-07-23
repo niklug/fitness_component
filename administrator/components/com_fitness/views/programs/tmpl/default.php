@@ -188,6 +188,8 @@ $saveOrder	= $listOrder == 'a.ordering';
                                 <?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
                         </select>
                 </div>
+            
+                <a id="add_appointment" href="javascript:void(0)"></a>
 
 
 	</fieldset>
@@ -199,6 +201,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th width="1%">
 					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
 				</th>
+                                <th>
+                                    Edit/View
+                                </th>
 
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_PROGRAMS_STARTTIME', 'a.starttime', $listDirn, $listOrder); ?>
@@ -281,7 +286,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<td class="center">
 					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 				</td>
-
+                                <td>
+                                    <a class="edit_event" data-id="<?php echo $item->id?>" href="javascript:void(0)">Edit/View</a>
+                                </td>
 				<td>
 					<?php echo $item->starttime; ?>
 				</td>
@@ -294,15 +301,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo JFactory::getUser($item->trainer_id)->name; ?>
 				</td>
 				<td>
-				<?php if (isset($item->checked_out) && $item->checked_out) : ?>
-					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'programs.', $canCheckin); ?>
-				<?php endif; ?>
-				<?php if ($canEdit) : ?>
-					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=program.edit&id='.(int) $item->id); ?>">
-					<?php echo $this->escape($item->location); ?></a>
-				<?php else : ?>
 					<?php echo $this->escape($item->location); ?>
-				<?php endif; ?>
 				</td>
 				<td>
 					<?php echo $item->title; ?>
@@ -385,9 +384,16 @@ $saveOrder	= $listOrder == 'a.ordering';
 </div>
 
 <div id="emais_sended"></div>
-            
 
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable mv_dlg mv_dlg_editevent"
+      role="dialog" aria-labelledby="ui-dialog-title-editEvent">
+    
+    <a class="ui-dialog-titlebar-close ui-corner-all" href="#" role="button">
+        <span class="ui-icon ui-icon-closethick"></span>
+    </a>
 
+    <div id="editEvent" class="ui-dialog-content ui-widget-content" style="  background-color: #F4F4F4;  overflow-y: auto;width: auto; min-height: 0px; height: 687px;" scrolltop="0" scrollleft="0"></div>
+</div>
 
 <script type="text/javascript">
     function getScript(url,success) {
@@ -415,6 +421,25 @@ $saveOrder	= $listOrder == 'a.ordering';
                 var event_status = $(this).data('status');
                 eventSetStatus(event_status, event_id);
             });
+            
+            $(".edit_event").bind('click', function(e) {
+                var event_id = $(this).data('id');
+                var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB&id=' + event_id;
+                loadAppointmentHtml(event_id, url);
+            });
+            
+            $(".ui-icon-closethick").bind('click', function(e) {
+                closeEditForm();
+            });
+            
+            $("#add_appointment").bind('click', function(e) {
+                var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB';
+                loadAppointmentHtml('', url);
+            });
+            
+            
+            
+            
         });
     });
     
@@ -542,4 +567,36 @@ $saveOrder	= $listOrder == 'a.ordering';
     }
     
  
+    function loadAppointmentHtml(event_id, url) {
+         $.ajax({
+            type : "POST",
+            url : url,
+            dataType : 'html',
+            success : function(content) {
+                $(".mv_dlg_editevent").show();
+                var height = 720;
+                var iframe_start = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="overflow-y: auto;overflow-x: hidden;border:none;width:598px;height:'+(height-60)+'px" src="'+url+'" border="0" scrolling="auto">';
+                var iframe_end = '</iframe>';
+                updateAppointmentHtml(iframe_start + iframe_end);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        });
+    }
+    
+    function updateAppointmentHtml(html) {
+        $("#editEvent").html(html);
+    }
+    
+    function closeEditForm() {
+        $(".ui-dialog").hide();
+    }
+    
+
+    
 </script>
+
+
+      

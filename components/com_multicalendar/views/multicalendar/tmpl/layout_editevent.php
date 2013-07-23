@@ -242,7 +242,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             $("#savebtn").click(function() { 
                 $("#fmEdit").submit();
             });
-            $("#closebtn").click(function() { window.parent.$jc('#editEvent').dialog('close'); });
+            $("#closebtn").click(function() { closeEdit(); });
             deleteEvent = function(){
                 var param = [{ "name": "calendarId", value: <?php echo isset($event)?$event->id:0; ?>},{ "name": "rruleType", value:$( "#rruleType" ).val() }];
                     $.ajaxSetup({
@@ -253,7 +253,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
                         param,
                         function(data){
                               if (data.IsSuccess) {
-                                    window.parent.$jc('#editEvent').dialog('close');
+                                    closeEdit();
                                 }
                                 else
                                     alert(i18n.dcmvcal.error_occurs+ ".\r\n" + ((data.Msg=='OVERLAPPING')?i18n.dcmvcal.error_overlapping:data.Msg));
@@ -332,7 +332,12 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
                                 var height = 720;
                                 var iframe_start = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="overflow-y: auto;overflow-x: hidden;border:none;width:598px;height:'+(height-60)+'px" src="'+current_url+'" border="0" scrolling="auto">';
                                 var iframe_end = '</iframe>';
-                                window.parent.$jc('#editEvent').html(iframe_start +  iframe_end);
+                                
+                                if(window.parent.$jc === undefined) {
+                                    window.parent.updateAppointmentHtml(iframe_start + iframe_end);
+                                } else {
+                                    window.parent.$jc('#editEvent').html(iframe_start +  iframe_end);
+                                }
                             },
                             error: function(XMLHttpRequest, textStatus, errorThrown)
                             {
@@ -469,7 +474,17 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
                 var form = $("#fmEdit");
                 error.appendTo(form).css(newpos);
             }  
-  
+            
+            
+            function closeEdit() {
+                if(window.parent.$jc === undefined) {
+                    window.parent.closeEditForm();
+                    window.parent.location.reload();
+                } else {
+                    window.parent.$jc('#editEvent').dialog('close');
+                }
+
+            }
        
            
         });  
