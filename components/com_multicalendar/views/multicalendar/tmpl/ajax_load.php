@@ -1252,17 +1252,12 @@ function updateAssessmentData() {
         'bsm_lean_mass', 'bsm_comments', 'nutrition_protocols', 'supplementation_protocols', 'training_protocols'
     );
     
-    //$fields_textarea = array('as_comments', 'ha_comments', 'am_comments', 'bio_comments', 'bsm_comments', 'nutrition_protocols', 'supplementation_protocols', 'training_protocols');
-    
     $obj = new stdClass();
     
     foreach ($post as $key=>$value) {
         if(in_array($key, $fields)) {
             $obj->$key = trim($value);
         }
-        //if(in_array($key, $fields_textarea)) {
-            //$obj->$key = preg_replace('/\W/', '&nbsp',trim($value));
-        //}
     }
 
     $event_id = $post['event_id'];
@@ -1275,17 +1270,18 @@ function updateAssessmentData() {
     }
     $id = $db->loadResult();
     
+
+    
     if(!$id) {
         $insert = $db->insertObject('#__fitness_assessments', $obj, 'assessment_id');
+        if(!$insert) $ret['IsSuccess'] = false;
+
     } else {
         $obj->assessment_id = $id;
         $update= $db->updateObject('#__fitness_assessments', $obj, 'assessment_id');
+        if(!$update) $ret['IsSuccess'] = false;
     }
-    
-    if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-    }
+
     return $ret;
 }
 

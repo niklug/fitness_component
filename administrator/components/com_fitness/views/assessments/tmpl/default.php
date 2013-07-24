@@ -26,7 +26,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=programs'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=assessments'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Client Name:'); ?></label>
@@ -243,7 +243,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th width="10%">
 					<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
 					<?php if ($canOrder && $saveOrder) :?>
-						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'programs.saveorder'); ?>
+						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'assessments.saveorder'); ?>
 					<?php endif; ?>
 				</th>
                 <?php } ?>
@@ -342,7 +342,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 
                 <?php if (isset($this->items[0]->published)) { ?>
 				    <td class="center">
-					    <?php echo JHtml::_('jgrid.published', $item->published, $i, 'programs.',true);?>
+					    <?php echo JHtml::_('jgrid.published', $item->published, $i, 'assessments.',true);?>
 				    </td>
                 <?php } ?>
                 <?php if (isset($this->items[0]->ordering)) { ?>
@@ -350,11 +350,11 @@ $saveOrder	= $listOrder == 'a.ordering';
 					    <?php if ($canChange) : ?>
 						    <?php if ($saveOrder) :?>
 							    <?php if ($listDirn == 'asc') : ?>
-								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'programs.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'programs.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'assessments.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'assessments.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							    <?php elseif ($listDirn == 'desc') : ?>
-								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'programs.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'programs.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'assessments.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'assessments.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							    <?php endif; ?>
 						    <?php endif; ?>
 						    <?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>

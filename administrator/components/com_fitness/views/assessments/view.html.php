@@ -94,7 +94,7 @@ class FitnessViewAssessments extends JView {
                 JToolBarHelper::archiveList('assessments.archive', 'JTOOLBAR_ARCHIVE');
             }
             if (isset($this->items[0]->checked_out)) {
-                JToolBarHelper::custom('programs.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
+                JToolBarHelper::custom('assessments.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
             }
         }
 
