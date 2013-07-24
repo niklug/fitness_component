@@ -233,14 +233,10 @@ class FitnessModelgoals extends JModelList {
                 $query->where('( a.user_id LIKE '.$search.'
                     OR  gc.name LIKE '.$search.' 
                     OR  gf.name LIKE '.$search.' 
-                    OR  a.deadline LIKE '.$search.' 
-                    OR  a.created LIKE '.$search.' 
-                    OR  a.modified LIKE '.$search.'
+                   
                     OR  u.username LIKE '.$search.' 
                     OR  u.name LIKE '.$search.' 
-                    OR  u.email LIKE '.$search.'   
-                    OR  ug.title LIKE '.$search.' 
-                              
+                             
                  )');
             }
         }

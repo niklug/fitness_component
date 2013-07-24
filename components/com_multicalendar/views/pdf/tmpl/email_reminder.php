@@ -4,7 +4,7 @@
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
         <meta content="en-us" http-equiv="Content-Language" />
-        <title>Appointment Confirmation</title>
+        <title>>Elite Fitness Training</title>
         <style type="text/css">
             a, a:link, a:visited {
                 text-decoration:underline;

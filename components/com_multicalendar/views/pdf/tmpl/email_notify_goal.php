@@ -50,33 +50,28 @@
     <body>
         <?php
 require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/functions.php' );
-require_once( JPATH_BASE . '/components/com_multicalendar/DC_MultiViewCal/php/list.inc.php' );
 
-$event_id = &JRequest::getVar('event_id');
+$goal_id = &JRequest::getVar('goal_id');
 
-$client_id = &JRequest::getVar('client_id');
 
-$event_data = getEmailPdfData($event_id);
+$goal_data = getGoalData($goal_id);
 
-if (!$client_id)
-$client_id = $event_data->client_id;
-
-$user = &JFactory::getUser($client_id);
+$user = &JFactory::getUser($goal_data->user_id);
 $client_name = $user->name;
 
-$user = &JFactory::getUser($event_data->trainer_id);
+$user = &JFactory::getUser($goal_data->primary_trainer);
 $trainer_name =  $user->name;
 
-$date = JFactory::getDate($event_data->starttime);
-$start_date =  $date->toFormat('%A, %d %b %Y');
+$date = JFactory::getDate($goal_data->created);
+$date_created =  $date->toFormat('%A, %d %b %Y') . ', ' . $date->format('H:i');
 
-$date = JFactory::getDate($event_data->starttime);
-$start_time = $date->format('H:i');
+$date = JFactory::getDate($goal_data->deadline);
+$deadline =  $date->toFormat('%A, %d %b %Y') . ', ' . $date->format('H:i');
 
-$description = $event_data->description;
+$description = $goal_data->description;
 
 $path = JUri::base() . 'components/com_multicalendar/views/pdf/tmpl/images/';
-$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_notify_assessment&tpml=component&event_id=' . $event_id;
+$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_notify_goal&tpml=component&goal_id=' . $goal_id;
         ?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
@@ -112,7 +107,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:40px; line-height:33pt; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">Assessment Complete!</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:40px; line-height:33pt; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">Review Your Feedback!</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -120,16 +115,18 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>Hi <?php echo $client_name;?>,</br>
                                                                     <br />
-												    Your trainer <b><?php echo $trainer_name;?></b>  has reviewed and finalised your recent <i><?php echo $event_data->title;?></i> and provided feedback and/or comments for you to review. The assessment details are as follows...
+												    Your trainer <b><?php echo $trainer_name;?></b> has reviewed your recently updated goals and training focus and provided </br>
+                                                                                                    feedback for you to review. </br>
+                                                                                                    Please take into account your trainers comments and action any requests or instructions.
                                                                     </p>
-                                                                    <p>START DATE: <?php echo $start_date;?> <br />
-                                                                        START TIME: <?php echo $start_time;?><br />
-                                                                        LOCATION: <?php echo $event_data->location;?></p>
-                                                                    <p>APPOINTMENT: <?php echo $event_data->title;?><br />
-                                                                        SESSION TYPE: <?php echo $event_data->session_type;?><br />
-                                                                        SESSION FOCUS: <?php echo $event_data->session_focus;?></p>
+                                                                    <p>GOAL TYPE: <?php echo $goal_data->category_name;?><br />
+                                                                        GOAL FOCUS: : <?php echo $goal_data->focus_name;?><br />
+                                                                        DATE CREATED: <?php echo $date_created;?><br />
+                                                                        ACCOMPLISH BY: <?php echo $deadline;?><br />
+                                                                        
+                                                                    <p>DETAILS: <?php echo $goal_data->details;?></p>
                                                                     <p>TRAINER NAME: <?php echo $trainer_name;?></p>
-                                                                    
+                                                                    <p>COMMENTS: <?php echo $goal_data->comments;?></p>
                                                                 
                                                                 </td>
                                                             </tr>
@@ -155,28 +152,21 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <!--End Of Main Content [row number #2]-->
                                 <!--Start Of Content [row number #3]-->
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
-                                    <tr>
-                                        <td bgcolor="#e76708" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">When is your next Assessment?...</h2>
-                                            <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                <tr>
-                                                    <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
-                                                        <img alt="image" height="125" src="<?php echo $path ?>icon6.png" width="100" border="0" vspace="0" hspace="0" /></td>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;">
-                                                        <p>Your next assessment will be scheduled by your trainer and should be discussed at <br />
-                                                            your next consultation.</p>
-                                                        <p>If you are a BioSignature client, your assessment schedule should already be </br>
-                                                            programmed into your online Appointment Calendar!
-                                                        </p>
-                                                        <p>Please remember, If you are scheduled for an assessment, please DO NOT perform a </br>
-                                                           warm up or take part in physical activity. Doing so will result with inaccurate </br>
-                                                           measurements and reading being taken!
-</p></td>
-                                                </tr>
+                                        <tr>
+                                                <td bgcolor="#e76708" style="padding:20px;">
+                                                <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">You've set your goals... now what?</h2>
+                                                <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                                                  <tr>
+                                                                <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
+                                                                <img alt="image" height="100" src="<?php echo $path ?>goals.png" width="100" border="0" vspace="0" hspace="0" /></td>
+                                                        <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;">
+                                                          <p>Get focused! Talk to your trainer about ways to improve your mindset and subsequently change your lifestyle.</p>
+                                                          <p>Begin by making small changes and encourage new healthy habits that will pave the way to health and fitness!</p></td>
+                                                  </tr>
 
-                                            </table>
-                                        </td>
-                                    </tr>
+                                                </table>
+                                                </td>
+                                        </tr>
                                 </table>
                                 <!--End Of Content [row number #3]-->
                                 <!--Start Of two Content Container [row number #4]-->
@@ -371,8 +361,8 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
-                               
-                                <!--End Of Content [row number #5]-->
+                                <!--End Of Two Column Container [row number #4]-->
+
                                 <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>

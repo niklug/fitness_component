@@ -128,16 +128,18 @@ class FitnessViewGoals extends JView
         $html = '';
         switch ($goal_status) {
             case 1:
-                $html .= '<a onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $user_id . ')" class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>';
+                $html .= '<a data-status="' . $goal_status .  '" onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $user_id . ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
                 break;
             case 2:
-                $html .= '<a onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $user_id . ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
+                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $user_id . ')" class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>';
                 break;
             case 3:
-                $html .= '<a onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $user_id . ')" class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>';
+                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $user_id . ')" class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>';
                 break;
 
+
             default:
+                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $user_id . ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
                 break;
         }
         

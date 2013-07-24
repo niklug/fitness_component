@@ -100,6 +100,17 @@ switch ($method) {
     case "sendNotifyAssessmentEmail":
         sendAppointmentEmail('notifyAssessment');
     break;
+    // goal emails
+    case "sendNotifyGoalEmail":
+        sendGoalEmail('email_notify_goal');
+    break;
+    case "sendGoalCompleteEmail":
+        sendGoalEmail('email_goal_complete');
+    break;
+    case "sendGoalIncompleteEmail":
+        sendGoalEmail('email_goal_incomplete');
+    break;
+    //
     case "update_exercise_field":
         update_exercise_field();
     break;
@@ -986,20 +997,7 @@ function send_appointment_email($event_id, $type) {
     foreach ($client_ids as $client_id) {
         $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf' . $layout . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
         
-        if(!function_exists('curl_version')) {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = 'cURL not anabled';
-            echo json_encode($ret);
-            die();
-        }
-
-    
-        $ch = curl_init();
-        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $contents = curl_exec ($ch);
-        curl_close ($ch);
+        $contents = getContentCurl($url);
         
         $email = JFactory::getUser($client_id)->email;
         
@@ -1017,6 +1015,23 @@ function send_appointment_email($event_id, $type) {
     }
 
     return $emails;
+}
+
+function getContentCurl($url) {
+        if(!function_exists('curl_version')) {
+            $ret['IsSuccess'] = false;
+            $ret['Msg'] = 'cURL not anabled';
+            echo json_encode($ret);
+            die();
+        }
+
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $contents = curl_exec ($ch);
+        curl_close ($ch);
+        return $contents;
 }
 
 /**
@@ -1522,6 +1537,56 @@ function  sendAppointmentEmail($type) {
     $ret['Msg'] = $emails;
     echo json_encode($ret);
     die();
+}
+
+function sendGoalEmail($type) {
+    $goal_id = JRequest::getVar('goal_id');
+    switch ($type) {
+        case 'email_goal_complete':
+            $subject = 'Complete Goal';
+            break;
+        case 'email_goal_incomplete':
+            $subject = 'Incomplete Goal';
+            break;
+        default:
+            $subject = 'Review Your Feedback';
+            break;
+    }
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&goal_id=' . $goal_id;
+    
+    $contents = getContentCurl($url);
+    
+    $email = getEmailByGoalId($goal_id);
+    
+    $send = sendEmail($email, $subject, $contents);
+
+    if($send != '1') {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'Email function error';
+        echo json_encode($ret);
+        die();
+    }
+    $ret['IsSuccess'] = true;
+    $ret['Msg'] = $email;
+    echo json_encode($ret);
+    die();
+}
+
+function getEmailByGoalId($goal_id) {
+    $db = & JFactory::getDBO();
+    $query = "SELECT user_id FROM #__fitness_goals WHERE id='$goal_id' AND state='1'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        echo json_encode($ret);
+        die();
+    }
+    $user_id = $db->loadResult();
+    
+    $user = &JFactory::getUser($user_id);
+    
+    return $user->email;
 }
         
 

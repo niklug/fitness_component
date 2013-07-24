@@ -28,10 +28,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=clients'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
-			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Client Name: '); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+			<button id="reset_filtered" type="button" ><?php echo JText::_('Reset All'); ?></button>
 		</div>
             
                 <div class='filter-select fltrt'>
@@ -232,3 +232,35 @@ $saveOrder	= $listOrder == 'a.ordering';
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
+
+<script type="text/javascript">
+    function getScript(url,success) {
+        var script = document.createElement('script');
+        script.src = url;
+        var head = document.getElementsByTagName('head')[0],
+        done = false;
+        // Attach handlers for all browsers
+        script.onload = script.onreadystatechange = function() {
+            if (!done && (!this.readyState
+                || this.readyState == 'loaded'
+                || this.readyState == 'complete')) {
+                done = true;
+                success();
+                script.onload = script.onreadystatechange = null;
+                head.removeChild(script);
+            }
+        };
+        head.appendChild(script);
+    }
+    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
+        $(document).ready(function(){
+            $("#reset_filtered").click(function(){
+                var form = $("#adminForm");
+                form.find("select").val('');
+                form.find("input").val('');
+                form.submit();
+            });
+ 
+        });
+    });
+</script>

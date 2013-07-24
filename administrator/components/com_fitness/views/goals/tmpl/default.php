@@ -28,10 +28,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=goals'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
-			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Client Name: '); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+			<button type="button" id="reset_filtered"><?php echo JText::_('Reset All'); ?></button>
 		</div>
 		
         
@@ -181,6 +181,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_COMPLETED', 'a.completed', $listDirn, $listOrder); ?>
 				</th>
+                                <th width="1%" class="nowrap">
+                                        Notify
+                                </th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_CREATED', 'a.created', $listDirn, $listOrder); ?>
 				</th>
@@ -193,6 +196,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th width="5%">
 					<?php echo JHtml::_('grid.sort',  'JPUBLISHED', 'a.state', $listDirn, $listOrder); ?>
 				</th>
+
                 <?php } ?>
                 <?php if (isset($this->items[0]->ordering)) { ?>
 				<th width="10%">
@@ -207,9 +211,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                     <?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
                 </th>
                 <?php } ?>
-                <th width="1%" class="nowrap">
-                    <?php echo 'Send email'; ?>
-                </th>
+
 			</tr>
 		</thead>
 		<tfoot>
@@ -263,6 +265,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<td id="goal_status_button_<?php echo $item->id ?>" class="center">
 					<?php echo $this->goal_state_html($item->id, $item->completed, $item->user_id); ?>
 				</td>
+                                <td class="center">
+                                    <a onclick="sendEmail('<?php echo $item->id ?>', 'NotifyGoal')" class="send_email_button"></a>
+                                </td>
 				<td>
 					<?php echo $item->created; ?>
 				</td>
@@ -300,11 +305,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo (int) $item->id; ?>
 				</td>
                 <?php } ?>
-                                <td class="center">
-                                    <?php
-                                    echo '<a onclick="sendGoalEmail(' . $item->id . ', ' . $item->completed . ', ' . $item->user_id . ')" class="send_email_button" href="javascript:void(0)"></a>';
-                                    ?>
-                                </td>	
+	
                                 
 			</tr>
 			<?php endforeach; ?>
@@ -323,11 +324,12 @@ $saveOrder	= $listOrder == 'a.ordering';
 <div class="goal_status_wrapper">
     <img class="hideimage " src="<?php echo JUri::base() ?>components/com_fitness/assets/images/close.png" alt="close" title="close" onclick="hide_goal_status_wrapper()">
     <span>Set Goal <b id="goal_number"></b> as:</span>
-    <a onclick="goalSetStatus('1')" class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>
-    <a onclick="goalSetStatus('2')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>
-    <a onclick="goalSetStatus('3')" class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>
+    <a onclick="goalSetStatus('1')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>
+    <a onclick="goalSetStatus('2')" class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>
+    <a onclick="goalSetStatus('3')" class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>
     <input type="checkbox" id="send_goal_email" name="send_goal_email" value=""> Send email
 </div>
+<div id="emais_sended"></div>
 
 <script type="text/javascript">
     function getScript(url,success) {
@@ -349,9 +351,14 @@ $saveOrder	= $listOrder == 'a.ordering';
         head.appendChild(script);
     }
     getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        jQuery = jQuery.noConflict();
-        jQuery(document).ready(function(){
-      
+        $(document).ready(function(){
+                  
+            $("#reset_filtered").click(function(){
+                var form = $("#adminForm");
+                form.find("select").val('');
+                form.find("input").val('');
+                form.submit();
+            });
  
         });
     });
@@ -367,12 +374,12 @@ $saveOrder	= $listOrder == 'a.ordering';
      */
     function openSetGoalBox(goal_id, goal_status, user_id) {
          goal_user_id = user_id;
-         jQuery(".goal_status_wrapper").show();
-         jQuery("#goal_number").html(goal_id);
-         jQuery(".goal_status__button").show();
-         if(goal_status == 1)  jQuery(".goal_status_wrapper .goal_status_incomplete").hide();
-         if(goal_status == 2)  jQuery(".goal_status_wrapper .goal_status_pending").hide();
-         if(goal_status == 3)  jQuery(".goal_status_wrapper .goal_status_complete").hide();
+         $(".goal_status_wrapper").show();
+         $("#goal_number").html(goal_id);
+         $(".goal_status__button").show();
+         if(goal_status == 1)  $(".goal_status_wrapper .goal_status_pending").hide();
+         if(goal_status == 2)  $(".goal_status_wrapper .goal_status_complete").hide();
+         if(goal_status == 3)  $(".goal_status_wrapper .goal_status_incomplete").hide();
     }
     
     /**
@@ -380,7 +387,7 @@ $saveOrder	= $listOrder == 'a.ordering';
      * @returns {undefined}
      */
     function hide_goal_status_wrapper() {
-        jQuery(".goal_status_wrapper").hide();
+        $(".goal_status_wrapper").hide();
     }
     
     /**
@@ -390,10 +397,10 @@ $saveOrder	= $listOrder == 'a.ordering';
      * 
      */
     function goalSetStatus(goal_status_id) {
-        var goal_id = jQuery("#goal_number").text();
+        var goal_id = $("#goal_number").text();
         var user_id = goal_user_id;
                     
-        jQuery.ajax({
+        $.ajax({
                     type : "POST",
                     url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
                     data : {
@@ -408,12 +415,25 @@ $saveOrder	= $listOrder == 'a.ordering';
                     success : function(respond_goal_status_id) {
                         if(respond_goal_status_id == goal_status_id) {
                             hide_goal_status_wrapper();
-                            jQuery("#goal_status_button_" + goal_id).html( goal_status_html(goal_id, goal_status_id, user_id) );
-                            var send_goal_email = jQuery("#send_goal_email").is(':checked');
-                            
+                            $("#goal_status_button_" + goal_id).html( goal_status_html(goal_id, goal_status_id, user_id) );
+                            var send_goal_email = $("#send_goal_email").is(':checked');
+                            var method;
+                            switch(respond_goal_status_id) {
+                                case '1' :
+                                    return;
+                                    break;
+                                case '2' :
+                                    method = 'GoalComplete';
+                                    break;
+                                case '3' :
+                                   method = 'GoalIncomplete';
+                                   break;
+                                default : 
+                                    return;
+                                    break;
+                            }
                             if(send_goal_email) {
-                                
-                                sendGoalEmail(goal_id, goal_status_id, user_id);
+                                sendEmail(goal_id, method);
                             }
                         } else {
                             alert('error');
@@ -435,11 +455,9 @@ $saveOrder	= $listOrder == 'a.ordering';
      * @param {type} user_id
      * @returns {String}     */
     function goal_status_html(goal_id, goal_status, user_id) {
-        if(goal_status == 1) return '<a class="goal_status_incomplete goal_status__button" href="javascript:void(0)" onclick="openSetGoalBox(' + goal_id + ', ' + goal_status + ', ' + user_id + ')">incomplete</a>';
-        
-        if(goal_status == 2) return '<a class="goal_status_pending goal_status__button" href="javascript:void(0)" onclick="openSetGoalBox(' + goal_id + ', ' + goal_status + ', ' + user_id + ')">pending</a>';
-        
-        if(goal_status == 3) return '<a class="goal_status_complete goal_status__button" href="javascript:void(0)" onclick="openSetGoalBox(' + goal_id + ', ' + goal_status + ', ' + user_id + ')">complete</a>';
+        if(goal_status == 1) return '<a data-status="'  + goal_status + '"  class="goal_status_pending goal_status__button" href="javascript:void(0)" onclick="openSetGoalBox(' + goal_id + ', ' + goal_status + ', ' + user_id + ')">pending</a>';
+        if(goal_status == 2) return '<a data-status="'  + goal_status + '"  class="goal_status_complete goal_status__button" href="javascript:void(0)" onclick="openSetGoalBox(' + goal_id + ', ' + goal_status + ', ' + user_id + ')">complete</a>';
+        if(goal_status == 3) return '<a data-status="'  + goal_status + '"  class="goal_status_incomplete goal_status__button" href="javascript:void(0)" onclick="openSetGoalBox(' + goal_id + ', ' + goal_status + ', ' + user_id + ')">incomplete</a>';
     }
     
     
@@ -450,31 +468,39 @@ $saveOrder	= $listOrder == 'a.ordering';
      * @param {type} user_id
      * @returns {undefined}
      */
-    function sendGoalEmail(goal_id, goal_status_id, user_id) {
-        jQuery.ajax({
-                    type : "POST",
-                    url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-                    data : {
-                        view : 'goals',
-                        format : 'text',
-                        task : 'sendGoalEmail',
-                        goal_id : goal_id,
-                        goal_status_id : goal_status_id,
-                        user_id : user_id
-                    },
-                    dataType : 'text',
-                    success : function(email_send_status) {
-                        if(email_send_status == '1') {
-                            alert('Email sent');
-                        } else {
-                            alert(email_send_status);
-                        }
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown)
-                    {
-                        alert("error");
+    function sendEmail(goal_id, method) {
+        //var goal_status_id = $("#goal_status_button_" + goal_id + " a").attr('data-status');
+        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
+        $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                    goal_id : goal_id
+                },
+                dataType : 'json',
+                success : function(response) {
+                    if(response.IsSuccess) {
+                        var emails = response.Msg.split(',');
+
+                        var message = 'Emails were sent to: ' +  "</br>";
+                        $.each(emails, function(index, email) { 
+                            message += email +  "</br>";
+                        });
+                        $("#emais_sended").append(message);
+
+                    } else {
+                        alert(response.Msg);
                     }
-                });
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert("error");
+                }
+        });
     }
+    
+    
+    
+    
     
 </script>

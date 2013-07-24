@@ -157,13 +157,9 @@ class FitnessModelclients extends JModelList {
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
                 $query->where('(
-                    a.user_id LIKE '.$search.'
-                    OR  u.username LIKE '.$search.' 
+                    u.username LIKE '.$search.' 
                     OR  u.name LIKE '.$search.' 
-                    OR  u.email LIKE '.$search.'   
-                    OR  ug.title LIKE '.$search.' 
-                    OR  a.primary_trainer LIKE '.$search.' 
-                    OR  a.other_trainers LIKE '.$search.' )');
+                 )');
             }
             
             

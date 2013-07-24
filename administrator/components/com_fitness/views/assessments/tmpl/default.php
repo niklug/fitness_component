@@ -32,7 +32,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Client Name:'); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+			<button id="reset_filtered" type="button"><?php echo JText::_('Reset All'); ?></button>
 		</div>
 		
             <div class='filter-select fltrt'>
@@ -446,7 +446,12 @@ $saveOrder	= $listOrder == 'a.ordering';
                 loadAppointmentHtml('', url);
             });
             
-            
+            $("#reset_filtered").click(function(){
+                var form = $("#adminForm");
+                form.find("select").val('');
+                form.find("input").val('');
+                form.submit();
+            });
             
             
         });

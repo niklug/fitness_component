@@ -42,11 +42,11 @@
                 
               label="COM_FITNESS_GOALS_GOALS_COMPLETED"
               description="" 
-              default="2"   
+              default="1"   
               filter="raw">
-            <option value="1">Incomplete</option>
-            <option value="2">Pending</option>
-            <option value="3">Complete</option>
+            <option value="1">Pending</option>
+            <option value="2">Complete</option>
+            <option value="3">Incomplete</option>
         </field> 
 
         <field name="details" type="editor"
