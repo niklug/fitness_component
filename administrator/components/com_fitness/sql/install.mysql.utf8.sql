@@ -696,18 +696,15 @@ INSERT INTO `#__fitness_training_period` (`id`, `name`, `color`) VALUES
 
 CREATE TABLE IF NOT EXISTS `#__fitness_mini_goals` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `primary_goal` int(11) unsigned NOT NULL,
+  `primary_goal_id` int(11) unsigned NOT NULL,
   `mini_goal_category_id` int(11) NOT NULL,
   `deadline` date NOT NULL,
   `details` text NOT NULL,
   `comments` text NOT NULL,
   `completed` int(1) NOT NULL,
   `state` tinyint(1) NOT NULL DEFAULT '1',
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `primary_goal` (`primary_goal`),
-  FOREIGN KEY (primary_goal) REFERENCES #__fitness_goals(id) ON DELETE CASCADE
+  FOREIGN KEY (primary_goal_id) REFERENCES #__fitness_goals(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 

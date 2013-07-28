@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_MINIGOAL_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="primary_goal_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_PRIMARY_GOAL_ID"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_PRIMARY_GOAL_ID" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="mini_goal_category_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_MINI_GOAL_CATEGORY_ID"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_MINI_GOAL_CATEGORY_ID" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="deadline" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00" 
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_DEADLINE"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_DEADLINE" 
+        filter="safehtml" /> 
+
+       <field name="details" type="editor" buttons="true"
+        class="inputbox"
+        filter="safehtml"
+        
+        
+        
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_DETAILS"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_DETAILS"  /> 
+
+       <field name="comments" type="editor" buttons="true"
+        class="inputbox"
+        filter="safehtml"
+        
+        
+        
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_COMMENTS"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_COMMENTS"  /> 
+
+       <field name="completed" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_COMPLETED"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_COMPLETED" 
+         default="1" 
+        
+        
+        filter="safehtml" /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>
