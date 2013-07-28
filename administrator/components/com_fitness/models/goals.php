@@ -31,6 +31,7 @@ class FitnessModelgoals extends JModelList {
                 'trainer_id', 'a.trainer_id',
                 'category_id', 'a.category_id',
                 'deadline', 'a.deadline',
+                'start_date', 'a.start_date',
                 'details', 'a.details',
                 'comments', 'a.comments',
                 'completed', 'a.completed',
@@ -60,7 +61,11 @@ class FitnessModelgoals extends JModelList {
 
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
-
+        
+        //Filtering deadline
+        $this->setState('filter.start_date.from', $app->getUserStateFromRequest($this->context.'.filter.start_date.from', 'filter_from_start_date', '', 'string'));
+        $this->setState('filter.start_date.to', $app->getUserStateFromRequest($this->context.'.filter.start_date.to', 'filter_to_start_date', '', 'string'));
+        
         
         //Filtering deadline
         $this->setState('filter.deadline.from', $app->getUserStateFromRequest($this->context.'.filter.deadline.from', 'filter_from_deadline', '', 'string'));
@@ -71,8 +76,8 @@ class FitnessModelgoals extends JModelList {
         $this->setState('filter.goal_category', $goal_category);
         
        // Filter by goal focus
-        $goal_focus = $app->getUserStateFromRequest($this->context . '.filter.goal_focus', 'filter_goal_focus', '', 'string');
-        $this->setState('filter.goal_focus', $goal_focus);
+        $training_period = $app->getUserStateFromRequest($this->context . '.filter.training_period', 'filter_training_period', '', 'string');
+        $this->setState('filter.training_period', $training_period);
                 
         // Filter by group
         $group = $app->getUserStateFromRequest($this->context . '.filter.group', 'filter_group', '', 'string');
@@ -115,7 +120,7 @@ class FitnessModelgoals extends JModelList {
         // Compile the store id.
         $id.= ':' . $this->getState('filter.search');
         $id.= ':' . $this->getState('filter.state');
-        $id.= ':' . $this->getState('filter.goal_focus');
+        $id.= ':' . $this->getState('filter.training_period');
         $id.= ':' . $this->getState('filter.goal_category');
         $id.= ':' . $this->getState('filter.group');
         $id.= ':' . $this->getState('filter.goal_status');
@@ -139,7 +144,7 @@ class FitnessModelgoals extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*,  ug.title as usergroup, gc.name as goal_category_name, gf.name as goal_focus_name'
+                        'list.select', 'a.*,  ug.title as usergroup, gc.name as goal_category_name, gf.name as training_period'
                 )
         );
         $query->from('`#__fitness_goals` AS a');
@@ -152,7 +157,7 @@ class FitnessModelgoals extends JModelList {
         $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
         
         $query->leftJoin('#__fitness_goal_categories AS gc ON gc.id = a.goal_category_id');
-        $query->leftJoin('#__fitness_goal_focus AS gf ON gf.id = a.goal_focus_id');
+        $query->leftJoin('#__fitness_training_period AS gf ON gf.id = a.training_period_id');
 
         
         // filter only for Super Users
@@ -181,9 +186,9 @@ class FitnessModelgoals extends JModelList {
         } 
         
         // Filter by goal focus
-        $goal_focus = $this->getState('filter.goal_focus');
-        if (is_numeric($goal_focus)) {
-            $query->where('gf.id = '.(int) $goal_focus);
+        $training_period = $this->getState('filter.training_period');
+        if (is_numeric($training_period)) {
+            $query->where('gf.id = '.(int) $training_period);
         } 
 
 
@@ -242,7 +247,6 @@ class FitnessModelgoals extends JModelList {
         }
 
         
-
 		//Filtering deadline
 		$filter_deadline_from = $this->state->get("filter.deadline.from");
 		if ($filter_deadline_from) {
@@ -251,6 +255,17 @@ class FitnessModelgoals extends JModelList {
 		$filter_deadline_to = $this->state->get("filter.deadline.to");
 		if ($filter_deadline_to) {
 			$query->where("a.deadline <= '".$db->escape($filter_deadline_to)."'");
+		}
+        
+
+		//Filtering start date
+		$filter_start_date_from = $this->state->get("filter.start_date.from");
+		if ($filter_start_date_from) {
+			$query->where("a.start_date >= '".$db->escape($filter_start_date_from)."'");
+		}
+		$filter_start_date_to = $this->state->get("filter.start_date.to");
+		if ($filter_deadline_to) {
+			$query->where("a.start_date <= '".$db->escape($filter_start_date_to)."'");
 		}
 
 

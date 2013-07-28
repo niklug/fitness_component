@@ -163,7 +163,7 @@
 
 
 
-#filter_from_deadline, #filter_to_deadline, #filter_created, #filter_modified{
+#filter_from_start_date, #filter_to_start_date, #filter_from_deadline, #filter_to_deadline, #filter_created, #filter_modified{
     width: 55px;
 }
 

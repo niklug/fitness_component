@@ -688,3 +688,43 @@ INSERT INTO `#__fitness_session_focus` (`id`, `name`, `category_id`, `session_ty
 (519, 'Injury/Injured', 9, 44, 1),
 (520, 'Recovery/Training Break', 9, 45, 1);
 
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_training_period` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `color` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+INSERT INTO `#__fitness_training_period` (`id`, `name`, `color`) VALUES
+(1, 'Hypertrophy', '#E4C7EA'),
+(2, 'Strength', '#FFC7E1'),
+(3, 'Power', '#CCDDFF'),
+(4, 'Crossfit', '#FFFDAB'),
+(5, 'Circuit', '#E5E2A8'),
+(6, 'Endurance', '#CDFCF7'),
+(7, 'Agility & Speed', '#DCF2C4'),
+(8, 'Rehabilitation', '#F4ABDC');
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_mini_goals` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `primary_goal` int(11) unsigned NOT NULL,
+  `mini_goal_category_id` int(11) NOT NULL,
+  `deadline` date NOT NULL,
+  `details` text NOT NULL,
+  `comments` text NOT NULL,
+  `completed` int(1) NOT NULL,
+  `state` tinyint(1) NOT NULL DEFAULT '1',
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `primary_goal` (`primary_goal`),
+  FOREIGN KEY (primary_goal) REFERENCES #__fitness_goals(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+

@@ -45,6 +45,22 @@ $saveOrder	= $listOrder == 'a.ordering';
 		
         
 		<div class='filter-select fltrt'>
+                    
+      			<?php //Filter for the field start date
+			$selected_from_start_date = JRequest::getVar('filter_from_start_date');
+			$selected_to_start_date = JRequest::getVar('filter_to_start_date');
+                        ?>
+                        <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Start from:'); ?></label>
+                        <?php
+				echo JHtml::_('calendar', $selected_from_start_date, 'filter_from_start_date', 'filter_from_start_date', '%Y-%m-%d', 'onchange="this.form.submit();"');
+                        ?>
+                        <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Start to:'); ?></label>
+                        <?php
+				echo JHtml::_('calendar', $selected_to_start_date, 'filter_to_start_date', 'filter_to_start_date', '%Y-%m-%d',  'onchange="this.form.submit();"');
+			?>              
+
+                    
+                    
 			<?php //Filter for the field deadline
 			$selected_from_deadline = JRequest::getVar('filter_from_deadline');
 			$selected_to_deadline = JRequest::getVar('filter_to_deadline');
@@ -99,25 +115,25 @@ $saveOrder	= $listOrder == 'a.ordering';
 
                 <div class='filter-select fltrt'>
 			<select name="filter_goal_category" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-Goal Type-');?></option>
+				<option value=""><?php echo JText::_('-Primary Goal-');?></option>
 				<?php echo JHtml::_('select.options', $goal_category, "id", "name", $this->state->get('filter.goal_category'), true);?>
 			</select>
 		</div>
             
                 <?php
                 $db = JFactory::getDbo();
-                $sql = "SELECT id, name FROM #__fitness_goal_focus``";
+                $sql = "SELECT id, name FROM #__fitness_training_period";
                 $db->setQuery($sql);
                 if(!$db->query()) {
                     JError::raiseError($db->getErrorMsg());
                 }
-                $goal_focus= $db->loadObjectList();
+                $training_period= $db->loadObjectList();
                 ?>
 
                 <div class='filter-select fltrt'>
-			<select name="filter_goal_focus" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-Goal Focus-');?></option>
-				<?php echo JHtml::_('select.options', $goal_focus, "id", "name", $this->state->get('filter.goal_focus'), true);?>
+			<select name="filter_training_period" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-Training Period-');?></option>
+				<?php echo JHtml::_('select.options', $training_period, "id", "name", $this->state->get('filter.training_period'), true);?>
 			</select>
 		</div>
             
@@ -155,7 +171,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 
                 <div class='filter-select fltrt'>
 			<select name="filter_goal_status" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-Goal status-');?></option>
+				<option value=""><?php echo JText::_('-Primary Goal Status-');?></option>
 				<?php echo JHtml::_('select.options', $goal_status, "value", "text", $this->state->get('filter.goal_status'), true);?>
 			</select>
 		</div>
@@ -174,21 +190,23 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_USER_ID', 'u.name', $listDirn, $listOrder); ?>
 				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Goal Type', 'gc.name', $listDirn, $listOrder); ?>
-				</th>
                                 <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Goal Focus', 'gf.name', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Training Period', 'gf.name', $listDirn, $listOrder); ?>
+				</th>
+				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Primary Goal', 'gc.name', $listDirn, $listOrder); ?>
 				</th>
                                 <th class='left'>
 				<?php echo JHtml::_('grid.sort',  'User Group', 'a.user_group', $listDirn, $listOrder); ?>
 				</th>
-			
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_DEADLINE', 'a.deadline', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Start Date', 'a.startdate', $listDirn, $listOrder); ?>
+				</th>			
+				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Accomplish By', 'a.deadline', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_COMPLETED', 'a.completed', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Primary Goal Status', 'a.completed', $listDirn, $listOrder); ?>
 				</th>
                                 <th width="1%" class="nowrap">
                                         Notify
@@ -259,14 +277,18 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $this->escape($user->name); ?></a>
                           
 				</td>
+                                <td>
+                                        <?php echo $item->training_period; ?>
+				</td>
 				<td>
                                         <?php echo $item->goal_category_name; ?>
 				</td>
-                                <td>
-                                        <?php echo $item->goal_focus_name; ?>
-				</td>
+
                                 <td>
 					<?php echo $item->usergroup; ?>
+				</td>
+                                <td>
+					<?php echo $item->start_date; ?>
 				</td>
 				<td>
 					<?php echo $item->deadline; ?>

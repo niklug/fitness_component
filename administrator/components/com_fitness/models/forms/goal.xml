@@ -16,20 +16,28 @@
               label="COM_FITNESS_GOALS_FORM_LBL_GOAL_USER_ID"
               required="true"
         /> 
+        
+        <field name="training_period_id" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_training_period`"
+              key_field="id"
+              value_field="name"
+              label="Training Period"
+        /> 
        
         <field name="goal_category_id" type="sql" class="inputbox"
               query="SELECT id, name FROM #__fitness_goal_categories`"
               key_field="id"
               value_field="name"
-              label="Goal Type"
+              label="Primary Goal"
         /> 
               
-        <field name="goal_focus_id" type="sql" class="inputbox"
-              query="SELECT id, name FROM #__fitness_goal_focus`"
-              key_field="id"
-              value_field="name"
-              label="Goal Focus"
-        /> 
+
+        
+        <field name="start_date" type="calendar"
+                
+              label="Start Date"
+              description="" 
+              filter="raw" /> 
 
 
         <field name="deadline" type="calendar"
@@ -40,7 +48,7 @@
        
         <field name="completed" type="list"
                 
-              label="COM_FITNESS_GOALS_GOALS_COMPLETED"
+              label="Status"
               description="" 
               default="1"   
               filter="raw">
@@ -51,14 +59,14 @@
 
         <field name="details" type="editor"
                 
-              label="COM_FITNESS_GOALS_FORM_LBL_GOAL_DETAILS"
-              description="COM_FITNESS_GOALS_FORM_DESC_GOAL_DETAILS" 
+              label="Goal Details"
+              description="" 
               filter="raw" /> 
 
         <field name="comments" type="editor"
                 
-              label="COM_FITNESS_GOALS_FORM_LBL_GOAL_COMMENTS"
-              description="COM_FITNESS_GOALS_FORM_DESC_GOAL_COMMENTS" 
+              label="Trainer Comments"
+              description="C" 
               filter="raw" /> 
 
 
@@ -67,7 +75,7 @@
               default="0000-00-00 00:00:00" 
         
               label="COM_FITNESS_GOALS_FORM_LBL_GOAL_CREATED"
-              description="COM_FITNESS_GOALS_FORM_DESC_GOAL_CREATED" 
+              description="" 
               filter="safehtml" /> 
 
         <field name="modified" type="calendar" class="inputbox"

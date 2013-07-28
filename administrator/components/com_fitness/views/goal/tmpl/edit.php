@@ -107,12 +107,12 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                                         ?>
                                     </select>
                                 </li>
-                                
-             
+                                <li><?php echo $this->form->getLabel('training_period_id'); ?>
+				<?php echo $this->form->getInput('training_period_id'); ?></li>                               
 				<li><?php echo $this->form->getLabel('goal_category_id'); ?>
 				<?php echo $this->form->getInput('goal_category_id'); ?></li>
-                                <li><?php echo $this->form->getLabel('goal_focus_id'); ?>
-				<?php echo $this->form->getInput('goal_focus_id'); ?></li>
+                                <li><?php echo $this->form->getLabel('start_date'); ?>
+				<?php echo $this->form->getInput('start_date'); ?></li>
                         	<li><?php echo $this->form->getLabel('deadline'); ?>
 				<?php echo $this->form->getInput('deadline'); ?></li>
                                 <li><?php echo $this->form->getLabel('completed'); ?>
