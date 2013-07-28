@@ -44,7 +44,7 @@ class FitnessViewSettings extends JView {
         FitnessHelper::addSubmenu('Dashboard', 'dashboard');
         FitnessHelper::addSubmenu('Appointments', 'categories');
         FitnessHelper::addSubmenu('Primary Goals', 'primarygoals');
-        FitnessHelper::addSubmenu('Training Periods', 'training_periods');
+        FitnessHelper::addSubmenu('Training Periods', 'trainingperiods');
         FitnessHelper::addSubmenu('Locations', 'locations');
 
 

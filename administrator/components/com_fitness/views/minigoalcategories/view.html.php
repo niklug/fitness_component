@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Fitness.
  */
-class FitnessViewPrimarygoals extends JView
+class FitnessViewMinigoalcategories extends JView
 {
 	protected $items;
 	protected $pagination;
@@ -38,10 +38,9 @@ class FitnessViewPrimarygoals extends JView
 		$this->addToolbar();
         
         $input = JFactory::getApplication()->input;
-        $view = $input->getCmd('view', '');
         FitnessHelper::addSubmenu('Dashboard', 'dashboard');
         FitnessHelper::addSubmenu('Settings', 'settings');
-        FitnessHelper::addSubmenu('Mini Goals', 'minigoalcategories');
+        FitnessHelper::addSubmenu('Primary Goals', 'primarygoals');
         
 		parent::display($tpl);
 	}
@@ -58,18 +57,18 @@ class FitnessViewPrimarygoals extends JView
 		$state	= $this->get('State');
 		$canDo	= FitnessHelper::getActions($state->get('filter.category_id'));
 
-		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_PRIMARYGOALS'), 'primarygoals.png');
+		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_MINIGOALCATEGORIES'), 'minigoalcategories.png');
 
         //Check if the form exists before showing the add/edit buttons
-        $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/primarygoal';
+        $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/minigoalcategory';
         if (file_exists($formPath)) {
 
             if ($canDo->get('core.create')) {
-			    JToolBarHelper::addNew('primarygoal.add','JTOOLBAR_NEW');
+			    JToolBarHelper::addNew('minigoalcategory.add','JTOOLBAR_NEW');
 		    }
 
 		    if ($canDo->get('core.edit') && isset($this->items[0])) {
-			    JToolBarHelper::editList('primarygoal.edit','JTOOLBAR_EDIT');
+			    JToolBarHelper::editList('minigoalcategory.edit','JTOOLBAR_EDIT');
 		    }
 
         }
@@ -78,29 +77,29 @@ class FitnessViewPrimarygoals extends JView
 
             if (isset($this->items[0]->state)) {
 			    JToolBarHelper::divider();
-			    JToolBarHelper::custom('primarygoals.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
-			    JToolBarHelper::custom('primarygoals.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
+			    JToolBarHelper::custom('minigoalcategories.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
+			    JToolBarHelper::custom('minigoalcategories.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
             } else if (isset($this->items[0])) {
                 //If this component does not use state then show a direct delete button as we can not trash
-                JToolBarHelper::deleteList('', 'primarygoals.delete','JTOOLBAR_DELETE');
+                JToolBarHelper::deleteList('', 'minigoalcategories.delete','JTOOLBAR_DELETE');
             }
 
             if (isset($this->items[0]->state)) {
 			    JToolBarHelper::divider();
-			    JToolBarHelper::archiveList('primarygoals.archive','JTOOLBAR_ARCHIVE');
+			    JToolBarHelper::archiveList('minigoalcategories.archive','JTOOLBAR_ARCHIVE');
             }
             if (isset($this->items[0]->checked_out)) {
-            	JToolBarHelper::custom('primarygoals.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
+            	JToolBarHelper::custom('minigoalcategories.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
             }
 		}
         
         //Show trash and delete for components that uses the state field
         if (isset($this->items[0]->state)) {
 		    if ($state->get('filter.state') == -2 && $canDo->get('core.delete')) {
-			    JToolBarHelper::deleteList('', 'primarygoals.delete','JTOOLBAR_EMPTY_TRASH');
+			    JToolBarHelper::deleteList('', 'minigoalcategories.delete','JTOOLBAR_EMPTY_TRASH');
 			    JToolBarHelper::divider();
 		    } else if ($canDo->get('core.edit.state')) {
-			    JToolBarHelper::trash('primarygoals.trash','JTOOLBAR_TRASH');
+			    JToolBarHelper::trash('minigoalcategories.trash','JTOOLBAR_TRASH');
 			    JToolBarHelper::divider();
 		    }
         }
