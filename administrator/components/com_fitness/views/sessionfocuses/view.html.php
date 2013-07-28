@@ -41,7 +41,7 @@ class FitnessViewSessionfocuses extends JView
         $view = $input->getCmd('view', '');
         FitnessHelper::addSubmenu('Dashboard', 'dashboard');
         FitnessHelper::addSubmenu('Settings', 'settings');
-        FitnessHelper::addSubmenu('Categories', 'categories');
+        FitnessHelper::addSubmenu('Appointments', 'categories');
         FitnessHelper::addSubmenu('Session types', 'sessiontypes');
         
 		parent::display($tpl);

@@ -25,7 +25,7 @@ $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=goalfocuses'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=primarygoals'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
@@ -41,20 +41,6 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
 			</select>
 		</div>
-            
-                <?php
-                $db = JFactory::getDbo();
-                $sql = "SELECT id, name FROM #__fitness_goal_categories";
-                $db->setQuery($sql);
-                $categories = $db->loadObjectList();
-                ?>
-
-                <div class='filter-select fltrt'>
-			<select name="filter_category" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-Goal Category-');?></option>
-				<?php echo JHtml::_('select.options', $categories, "id", "name", $this->state->get('filter.category'), true);?>
-			</select>
-		</div>
 
 
 	</fieldset>
@@ -68,10 +54,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</th>
 
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALFOCUSES_NAME', 'a.name', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALFOCUSES_GOAL_CAREGORY_ID', 'c.name', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_PRIMARYGOALS_NAME', 'a.name', $listDirn, $listOrder); ?>
 				</th>
 
 
@@ -84,7 +67,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th width="10%">
 					<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
 					<?php if ($canOrder && $saveOrder) :?>
-						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'goalfocuses.saveorder'); ?>
+						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'primarygoals.saveorder'); ?>
 					<?php endif; ?>
 				</th>
                 <?php } ?>
@@ -125,23 +108,20 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 				<td>
 				<?php if (isset($item->checked_out) && $item->checked_out) : ?>
-					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'goalfocuses.', $canCheckin); ?>
+					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'primarygoals.', $canCheckin); ?>
 				<?php endif; ?>
 				<?php if ($canEdit) : ?>
-					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=goalfocus.edit&id='.(int) $item->id); ?>">
+					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=primarygoal.edit&id='.(int) $item->id); ?>">
 					<?php echo $this->escape($item->name); ?></a>
 				<?php else : ?>
 					<?php echo $this->escape($item->name); ?>
 				<?php endif; ?>
 				</td>
-				<td>
-					<?php echo $item->goal_category_name; ?>
-				</td>
 
 
                 <?php if (isset($this->items[0]->state)) { ?>
 				    <td class="center">
-					    <?php echo JHtml::_('jgrid.published', $item->state, $i, 'goalfocuses.', $canChange, 'cb'); ?>
+					    <?php echo JHtml::_('jgrid.published', $item->state, $i, 'primarygoals.', $canChange, 'cb'); ?>
 				    </td>
                 <?php } ?>
                 <?php if (isset($this->items[0]->ordering)) { ?>
@@ -149,11 +129,11 @@ $saveOrder	= $listOrder == 'a.ordering';
 					    <?php if ($canChange) : ?>
 						    <?php if ($saveOrder) :?>
 							    <?php if ($listDirn == 'asc') : ?>
-								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'goalfocuses.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'goalfocuses.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'primarygoals.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'primarygoals.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							    <?php elseif ($listDirn == 'desc') : ?>
-								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'goalfocuses.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'goalfocuses.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'primarygoals.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'primarygoals.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							    <?php endif; ?>
 						    <?php endif; ?>
 						    <?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>

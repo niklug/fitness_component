@@ -120,7 +120,6 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                                                                     Please take into account your trainers comments and action any requests or instructions.
                                                                     </p>
                                                                     <p>GOAL TYPE: <?php echo $goal_data->category_name;?><br />
-                                                                        GOAL FOCUS: : <?php echo $goal_data->focus_name;?><br />
                                                                         DATE CREATED: <?php echo $date_created;?><br />
                                                                         ACCOMPLISH BY: <?php echo $deadline;?><br />
                                                                         

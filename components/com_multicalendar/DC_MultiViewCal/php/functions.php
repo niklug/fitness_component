@@ -54,9 +54,8 @@ function mySql2PhpTime($sqlDate){
 //npkorban
 function getGoalData($goal_id) {
     $db = JFactory::getDbo();
-    $query = "SELECT g.*, c.name AS category_name, f.name AS focus_name, u.primary_trainer FROM #__fitness_goals AS g
+    $query = "SELECT g.*, c.name AS category_name,  u.primary_trainer FROM #__fitness_goals AS g
         LEFT JOIN #__fitness_goal_categories AS c ON g.goal_category_id=c.id
-        LEFT JOIN #__fitness_goal_focus AS f ON g.goal_focus_id=f.id
         LEFT JOIN #__fitness_clients AS u ON g.user_id=u.user_id
         WHERE g.id='$goal_id'";
     $db->setQuery($query);

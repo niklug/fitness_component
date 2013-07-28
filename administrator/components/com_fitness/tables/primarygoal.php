@@ -11,9 +11,9 @@
 defined('_JEXEC') or die;
 
 /**
- * goalfocus Table class
+ * primarygoal Table class
  */
-class FitnessTablegoalfocus extends JTable {
+class FitnessTableprimarygoal extends JTable {
 
     /**
      * Constructor
@@ -21,7 +21,7 @@ class FitnessTablegoalfocus extends JTable {
      * @param JDatabase A database connector object
      */
     public function __construct(&$db) {
-        parent::__construct('#__fitness_goal_focus', 'id', $db);
+        parent::__construct('#__fitness_goal_categories', 'id', $db);
     }
 
     /**
@@ -52,9 +52,9 @@ class FitnessTablegoalfocus extends JTable {
             $registry->loadArray($array['metadata']);
             $array['metadata'] = (string) $registry;
         }
-        if(!JFactory::getUser()->authorise('core.admin', 'com_fitness.goalfocus.'.$array['id'])){
-            $actions = JFactory::getACL()->getActions('com_fitness','goalfocus');
-            $default_actions = JFactory::getACL()->getAssetRules('com_fitness.goalfocus.'.$array['id'])->getData();
+        if(!JFactory::getUser()->authorise('core.admin', 'com_fitness.primarygoal.'.$array['id'])){
+            $actions = JFactory::getACL()->getActions('com_fitness','primarygoal');
+            $default_actions = JFactory::getACL()->getAssetRules('com_fitness.primarygoal.'.$array['id'])->getData();
             $array_jaccess = array();
             foreach($actions as $action){
                 $array_jaccess[$action->name] = $default_actions[$action->name];
@@ -181,7 +181,7 @@ class FitnessTablegoalfocus extends JTable {
     */
     protected function _getAssetName() {
         $k = $this->_tbl_key;
-        return 'com_fitness.goalfocus.' . (int) $this->$k;
+        return 'com_fitness.primarygoal.' . (int) $this->$k;
     }
  
     /**

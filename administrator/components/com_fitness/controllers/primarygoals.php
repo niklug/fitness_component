@@ -13,15 +13,15 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controlleradmin');
 
 /**
- * Goalfocuses list controller class.
+ * Primarygoals list controller class.
  */
-class FitnessControllerGoalfocuses extends JControllerAdmin
+class FitnessControllerPrimarygoals extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
-	public function getModel($name = 'goalfocus', $prefix = 'FitnessModel')
+	public function getModel($name = 'primarygoal', $prefix = 'FitnessModel')
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;

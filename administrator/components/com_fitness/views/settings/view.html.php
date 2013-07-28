@@ -42,8 +42,9 @@ class FitnessViewSettings extends JView {
         $input = JFactory::getApplication()->input;
         $view = $input->getCmd('view', '');
         FitnessHelper::addSubmenu('Dashboard', 'dashboard');
-        FitnessHelper::addSubmenu('Categories', 'categories');
-        FitnessHelper::addSubmenu('Goal focuses', 'goalfocuses');
+        FitnessHelper::addSubmenu('Appointments', 'categories');
+        FitnessHelper::addSubmenu('Primary Goals', 'primarygoals');
+        FitnessHelper::addSubmenu('Training Periods', 'training_periods');
         FitnessHelper::addSubmenu('Locations', 'locations');
 
 

@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Fitness records.
  */
-class FitnessModelgoalfocuses extends JModelList {
+class FitnessModelprimarygoals extends JModelList {
 
     /**
      * Constructor.
@@ -28,8 +28,7 @@ class FitnessModelgoalfocuses extends JModelList {
             $config['filter_fields'] = array(
                                 'id', 'a.id',
                 'name', 'a.name',
-                'goal_caregory_id', 'a.goal_caregory_id',
-                'state', 'a.state', 'c.name'
+                'state', 'a.state',
 
             );
         }
@@ -53,9 +52,7 @@ class FitnessModelgoalfocuses extends JModelList {
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
 
-        // Filter by category
-        $category = $app->getUserStateFromRequest($this->context . '.filter.category', 'filter_category', '', 'string');
-        $this->setState('filter.category', $category);
+        
 
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
@@ -98,11 +95,10 @@ class FitnessModelgoalfocuses extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*,c.name as goal_category_name'
+                        'list.select', 'a.*'
                 )
         );
-        $query->from('`#__fitness_goal_focus` AS a');
-        $query->leftJoin('#__fitness_goal_categories AS c ON c.id = a.goal_caregory_id');
+        $query->from('`#__fitness_goal_categories` AS a');
 
         
 
@@ -115,13 +111,6 @@ class FitnessModelgoalfocuses extends JModelList {
         $query->where('(a.state IN (0, 1))');
     }
     
-        
-         // Filter by goal category
-        $category = $this->getState('filter.category');
-        if (is_numeric($category)) {
-            $query->where('c.id = '.(int) $category);
-        } 
-    
 
         // Filter by search in title
         $search = $this->getState('filter.search');
@@ -130,7 +119,7 @@ class FitnessModelgoalfocuses extends JModelList {
                 $query->where('a.id = ' . (int) substr($search, 3));
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('( a.name LIKE '.$search.'  OR  a.goal_caregory_id LIKE '.$search.' )');
+                $query->where('( a.name LIKE '.$search.'  OR  a.state LIKE '.$search.' )');
             }
         }
 

@@ -13,13 +13,13 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controllerform');
 
 /**
- * Goalfocus controller class.
+ * Primarygoal controller class.
  */
-class FitnessControllerGoalfocus extends JControllerForm
+class FitnessControllerPrimarygoal extends JControllerForm
 {
 
     function __construct() {
-        $this->view_list = 'goalfocuses';
+        $this->view_list = 'primarygoals';
         parent::__construct();
     }
 

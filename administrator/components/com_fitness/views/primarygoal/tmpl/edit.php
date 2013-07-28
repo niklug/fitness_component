@@ -42,14 +42,14 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
             Joomla.submitbutton = function(task)
             {
-                if (task == 'goalfocus.cancel') {
-                    Joomla.submitform(task, document.getElementById('goalfocus-form'));
+                if (task == 'primarygoal.cancel') {
+                    Joomla.submitform(task, document.getElementById('primarygoal-form'));
                 }
                 else{
                     
-                    if (task != 'goalfocus.cancel' && document.formvalidator.isValid(document.id('goalfocus-form'))) {
+                    if (task != 'primarygoal.cancel' && document.formvalidator.isValid(document.id('primarygoal-form'))) {
                         
-                        Joomla.submitform(task, document.getElementById('goalfocus-form'));
+                        Joomla.submitform(task, document.getElementById('primarygoal-form'));
                     }
                     else {
                         alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
@@ -60,16 +60,16 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     });
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="goalfocus-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="primarygoal-form" class="form-validate">
     <div class="width-60 fltlft">
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_FITNESS_LEGEND_GOALFOCUS'); ?></legend>
+            <legend><?php echo JText::_('COM_FITNESS_LEGEND_PRIMARYGOAL'); ?></legend>
             <ul class="adminformlist">
 
+                				<li><?php echo $this->form->getLabel('id'); ?>
+				<?php echo $this->form->getInput('id'); ?></li>
 				<li><?php echo $this->form->getLabel('name'); ?>
 				<?php echo $this->form->getInput('name'); ?></li>
-				<li><?php echo $this->form->getLabel('goal_caregory_id'); ?>
-				<?php echo $this->form->getInput('goal_caregory_id'); ?></li>
 				<li><?php echo $this->form->getLabel('state'); ?>
 				<?php echo $this->form->getInput('state'); ?></li>
 
