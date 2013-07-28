@@ -49,6 +49,12 @@ class FitnessViewGoals extends JView
         FitnessHelper::addSubmenu('Assessments', 'assessments');
         FitnessHelper::addSubmenu('Settings', 'settings');
         
+        $document = &JFactory::getDocument();
+	$document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+        $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.js');
+        $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.time.js');
+        
+        
 		parent::display($tpl);
 	}
 
