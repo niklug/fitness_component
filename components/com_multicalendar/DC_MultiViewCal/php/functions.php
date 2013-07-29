@@ -52,12 +52,23 @@ function mySql2PhpTime($sqlDate){
 }
 
 //npkorban
-function getGoalData($goal_id) {
+function getGoalData($goal_id, $goal_type) {
+    // $goal_type: 1-> Primary Goal; 2 -> Mini Goal
     $db = JFactory::getDbo();
     $query = "SELECT g.*, c.name AS category_name,  u.primary_trainer FROM #__fitness_goals AS g
         LEFT JOIN #__fitness_goal_categories AS c ON g.goal_category_id=c.id
         LEFT JOIN #__fitness_clients AS u ON g.user_id=u.user_id
         WHERE g.id='$goal_id'";
+    
+    if($goal_type == '2') {
+        
+        $query = "SELECT g.*, c.name AS category_name,  u.primary_trainer, p.start_date AS created FROM #__fitness_mini_goals AS g
+            LEFT JOIN #__fitness_mini_goal_categories AS c ON g.mini_goal_category_id=c.id
+            LEFT JOIN #__fitness_goals AS p ON g.primary_goal_id=p.id
+            LEFT JOIN #__fitness_clients AS u ON p.user_id=u.user_id
+            WHERE g.id='$goal_id'"; 
+    }
+    
     $db->setQuery($query);
     if (!$db->query()) {
         JError::raiseError($db->getErrorMsg());

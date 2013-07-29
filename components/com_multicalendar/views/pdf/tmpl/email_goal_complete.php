@@ -52,9 +52,10 @@
 require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/functions.php' );
 
 $goal_id = &JRequest::getVar('goal_id');
+$goal_type = JRequest::getVar('goal_type');// 1-> Primary Goal; 2 -> Mini Goal
 
 
-$goal_data = getGoalData($goal_id);
+$goal_data = getGoalData($goal_id, $goal_type);
 
 $user = &JFactory::getUser($goal_data->user_id);
 $client_name = $user->name;
@@ -62,11 +63,11 @@ $client_name = $user->name;
 $user = &JFactory::getUser($goal_data->primary_trainer);
 $trainer_name =  $user->name;
 
-$date = JFactory::getDate($goal_data->created);
-$date_created =  $date->toFormat('%A, %d %b %Y') . ', ' . $date->format('H:i');
+$date = JFactory::getDate($goal_data->start_date);
+$date_created =  $date->toFormat('%A, %d %b %Y') ;
 
 $date = JFactory::getDate($goal_data->deadline);
-$deadline =  $date->toFormat('%A, %d %b %Y') . ', ' . $date->format('H:i');
+$deadline =  $date->toFormat('%A, %d %b %Y') ;
 
 $description = $goal_data->description;
 
@@ -120,7 +121,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                                     </p>
                                                                     <p>Please take into account your trainers comments and action any requests or instructions.</p>
                                                                     <p>GOAL TYPE: <?php echo $goal_data->category_name;?><br />
-                                                                        DATE CREATED: <?php echo $date_created;?><br />
+                                                                        START DATE: <?php echo $date_created;?><br />
                                                                         ACCOMPLISH BY: <?php echo $deadline;?><br />
                                                                         
                                                                     <p>DETAILS: <?php echo $goal_data->details;?></p>

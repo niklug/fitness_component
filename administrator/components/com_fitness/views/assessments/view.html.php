@@ -42,7 +42,7 @@ class FitnessViewAssessments extends JView {
         $view = $input->getCmd('view', '');
         FitnessHelper::addSubmenu('Dashboard', 'dashboard');
         FitnessHelper::addSubmenu('Clients', 'clients');
-        FitnessHelper::addSubmenu('Goals', 'goals');
+        FitnessHelper::addSubmenu('Client Planning', 'goals');
         FitnessHelper::addSubmenu('Calendar', 'calendar');
         FitnessHelper::addSubmenu('Programs', 'programs');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');

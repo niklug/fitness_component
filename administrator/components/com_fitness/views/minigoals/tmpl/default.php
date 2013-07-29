@@ -23,6 +23,14 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
+$primary_goal_id = JRequest::getVar('id');
+$session = &JFactory::getSession();
+if($primary_goal_id) {
+    $session->set('primary_goal_id', $primary_goal_id);
+}
+
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=minigoals'); ?>" method="post" name="adminForm" id="adminForm">
@@ -52,13 +60,13 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th width="1%">
 					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
 				</th>
-
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_MINIGOALS_PRIMARY_GOAL_ID', 'a.primary_goal_id', $listDirn, $listOrder); ?>
-				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_MINIGOALS_MINI_GOAL_CATEGORY_ID', 'a.mini_goal_category_id', $listDirn, $listOrder); ?>
 				</th>
+				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_MINIGOALS_PRIMARY_GOAL_ID', 'a.primary_goal_id', $listDirn, $listOrder); ?>
+				</th>
+
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_MINIGOALS_DEADLINE', 'a.deadline', $listDirn, $listOrder); ?>
 				</th>
@@ -111,13 +119,15 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<td class="center">
 					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 				</td>
+				<td>
+                                    <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=minigoal.edit&id='.(int) $item->id); ?>">
+					<?php echo $this->escape($this->getMiniGoalName($item->mini_goal_category_id)); ?></a>
+					
+				</td>
+				<td>
+					<?php echo $this->getPrimaryGoalName($item->primary_goal_id); ?>
+				</td>
 
-				<td>
-					<?php echo $item->primary_goal_id; ?>
-				</td>
-				<td>
-					<?php echo $item->mini_goal_category_id; ?>
-				</td>
 				<td>
 					<?php echo $item->deadline; ?>
 				</td>

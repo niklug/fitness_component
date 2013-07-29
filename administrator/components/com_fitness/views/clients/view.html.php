@@ -39,7 +39,7 @@ class FitnessViewClients extends JView {
         $input = JFactory::getApplication()->input;
         $view = $input->getCmd('view', '');
         FitnessHelper::addSubmenu('Dashboard', 'dashboard');
-        FitnessHelper::addSubmenu('Goals', 'goals');
+        FitnessHelper::addSubmenu('Client Planning', 'goals');
         FitnessHelper::addSubmenu('Calendar', 'calendar');
         FitnessHelper::addSubmenu('Programs', 'programs');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');

@@ -13,11 +13,11 @@ class FitnessViewGoals extends JView {
             JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 	    $goal_id = JRequest::getVar('goal_id');
             $goal_status_id = JRequest::getVar('goal_status_id');
-            $user_id = JRequest::getVar('user_id');
+            $goal_type = JRequest::getVar('goal_type');
           
             //die($goal_id . ' ' . $goal_status_id);
             $model = $this -> getModel("goals");
-	    echo $model->setGoalStatus($goal_id, $goal_status_id, $user_id);
+	    echo $model->setGoalStatus($goal_id, $goal_status_id, $goal_type);
 	}
         
         function sendGoalEmail() {

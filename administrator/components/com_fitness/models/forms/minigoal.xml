@@ -15,19 +15,21 @@
         
         filter="safehtml" /> 
 
-       <field name="mini_goal_category_id" type="text" size="40" class="inputbox"
+  
+               
+        <field name="mini_goal_category_id" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_mini_goal_categories WHERE state='1'"
+              key_field="id"
+              value_field="name"
+              label="COM_FITNESS_FORM_LBL_MINIGOAL_MINI_GOAL_CATEGORY_ID"
+        /> 
         
-            label="COM_FITNESS_FORM_LBL_MINIGOAL_MINI_GOAL_CATEGORY_ID"
-            description="COM_FITNESS_FORM_DESC_MINIGOAL_MINI_GOAL_CATEGORY_ID" 
         
-        
-        
-        filter="safehtml" /> 
 
        <field name="deadline" type="calendar" class="inputbox"
         
         
-         default="0000-00-00" 
+         default="" 
         
             label="COM_FITNESS_FORM_LBL_MINIGOAL_DEADLINE"
             description="COM_FITNESS_FORM_DESC_MINIGOAL_DEADLINE" 
@@ -53,14 +55,16 @@
             label="COM_FITNESS_FORM_LBL_MINIGOAL_COMMENTS"
             description="COM_FITNESS_FORM_DESC_MINIGOAL_COMMENTS"  /> 
 
-       <field name="completed" type="text" size="40" class="inputbox"
-        
-            label="COM_FITNESS_FORM_LBL_MINIGOAL_COMPLETED"
-            description="COM_FITNESS_FORM_DESC_MINIGOAL_COMPLETED" 
-         default="1" 
-        
-        
-        filter="safehtml" /> 
+        <field name="completed" type="list"
+                
+              label="Status"
+              description="" 
+              default="1"   
+              filter="raw">
+            <option value="1">Pending</option>
+            <option value="2">Complete</option>
+            <option value="3">Incomplete</option>
+        </field> 
 
          <field
         name="state"

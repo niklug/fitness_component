@@ -109,4 +109,35 @@ class FitnessViewMinigoals extends JView
 
 
 	}
+        
+        function getPrimaryGoalName($goal_category_id) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT goal_category_id FROM #__fitness_goals WHERE id='$goal_category_id' AND state='1'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $id = $db->loadResult();
+            
+            $sql = "SELECT name FROM #__fitness_goal_categories WHERE id='$id' AND state='1'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+        }
+        
+        function getMiniGoalName($mini_goal_category_id) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT name FROM #__fitness_mini_goal_categories WHERE id='$mini_goal_category_id' AND state='1'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+        }
+        
+
 }

@@ -104,6 +104,11 @@ class FitnessModelminigoals extends JModelList {
                 )
         );
         $query->from('`#__fitness_mini_goals` AS a');
+        
+        $session = &JFactory::getSession();
+        $primary_goal_id = $session->get('primary_goal_id');
+        if(JRequest::getVar('id')) $primary_goal_id = JRequest::getVar('id');
+        $query->where('a.primary_goal_id = '.(int) $primary_goal_id);
 
         
 

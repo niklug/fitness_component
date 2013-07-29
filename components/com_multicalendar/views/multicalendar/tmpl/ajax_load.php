@@ -1541,6 +1541,7 @@ function  sendAppointmentEmail($type) {
 
 function sendGoalEmail($type) {
     $goal_id = JRequest::getVar('goal_id');
+    $goal_type = JRequest::getVar('goal_type');// 1-> Primary Goal; 2 -> Mini Goal
     switch ($type) {
         case 'email_goal_complete':
             $subject = 'Complete Goal';
@@ -1552,7 +1553,7 @@ function sendGoalEmail($type) {
             $subject = 'Review Your Feedback';
             break;
     }
-    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&goal_id=' . $goal_id;
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&goal_id=' . $goal_id . '&goal_type=' . $goal_type ;
     
     $contents = getContentCurl($url);
     

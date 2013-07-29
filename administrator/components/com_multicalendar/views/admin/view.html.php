@@ -44,7 +44,7 @@ class multicalendarViewadmin extends JView
                         <ul id="submenu">
                             <li><a class="active" href="index.php?option=com_fitness&view=dashboard">Dashboard</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=clients">Clients</a></li>
-                            <li><a class="active" href="index.php?option=com_fitness&view=goals">Goals</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=goals">Client Planning</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=programs">Programs</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_plans">Nutrition Plans</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_diary">Nutrition Diary</a></li>

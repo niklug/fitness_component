@@ -292,12 +292,26 @@ class FitnessModelgoals extends JModelList {
      * @param type $user_id
      * @return type
      */
-    public function setGoalStatus($goal_id, $goal_status_id, $user_id) {
+    public function setGoalStatus($goal_id, $goal_status_id, $goal_type) {
+        // $goal_type: 1-> Primary Goal; 2 -> Mini Goal
+        $ret['IsSuccess'] = true;
+        $table = '#__fitness_goals';
+
+        if($goal_type == '2') $table = '#__fitness_mini_goals';
+
         $db = &JFactory::getDBo();
-        $query = "UPDATE #__fitness_goals SET completed='$goal_status_id' WHERE id='$goal_id'";
+        $query = "UPDATE $table SET completed='$goal_status_id' WHERE id='$goal_id'";
+        if (!$db->query()) {
+            $ret['IsSuccess'] = false;
+            $ret['Msg'] = $db->stderr();
+        }
         $db->setQuery($query);
         $db->query();
-        return $goal_status_id;
+        
+        $ret['Msg'] = $goal_status_id;
+        $ret = json_encode($ret);
+
+        return $ret;
     }
     
     public function sendGoalEmail($goal_id, $goal_status_id, $user_id) {

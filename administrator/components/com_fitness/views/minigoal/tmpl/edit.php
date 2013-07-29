@@ -15,7 +15,18 @@ JHtml::_('behavior.keepalive');
 // Import CSS
 $document = JFactory::getDocument();
 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
+
+$session = &JFactory::getSession();
+
+$primary_goal_id = $session->get('primary_goal_id');
+
 ?>
+<style type="text/css">
+#jform_details-lbl, #jform_comments-lbl {
+    float: none;
+}
+
+</style>
 <script type="text/javascript">
     function getScript(url,success) {
         var script = document.createElement('script');
@@ -65,19 +76,18 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_MINIGOAL'); ?></legend>
             <ul class="adminformlist">
+                <input id="jform_primary_goal_id" class="inputbox" type="hidden" value="<?php echo $primary_goal_id?>" name="jform[primary_goal_id]">
 
-				<li><?php echo $this->form->getLabel('primary_goal_id'); ?>
-				<?php echo $this->form->getInput('primary_goal_id'); ?></li>
 				<li><?php echo $this->form->getLabel('mini_goal_category_id'); ?>
 				<?php echo $this->form->getInput('mini_goal_category_id'); ?></li>
 				<li><?php echo $this->form->getLabel('deadline'); ?>
 				<?php echo $this->form->getInput('deadline'); ?></li>
+                                <li><?php echo $this->form->getLabel('completed'); ?>
+				<?php echo $this->form->getInput('completed'); ?></li>
 				<li><?php echo $this->form->getLabel('details'); ?>
 				<?php echo $this->form->getInput('details'); ?></li>
 				<li><?php echo $this->form->getLabel('comments'); ?>
 				<?php echo $this->form->getInput('comments'); ?></li>
-				<li><?php echo $this->form->getLabel('completed'); ?>
-				<?php echo $this->form->getInput('completed'); ?></li>
 				<li><?php echo $this->form->getLabel('state'); ?>
 				<?php echo $this->form->getInput('state'); ?></li>
 

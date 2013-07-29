@@ -70,7 +70,7 @@ class FitnessViewGoals extends JView
 		$state	= $this->get('State');
 		$canDo	= FitnessHelper::getActions($state->get('filter.category_id'));
 
-		JToolBarHelper::title(JText::_('COM_FITNESS_GOALS_TITLE_GOALS'), 'goals.png');
+		JToolBarHelper::title(JText::_('Clients planing'), 'goals.png');
 
         //Check if the form exists before showing the add/edit buttons
         $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/goal';
@@ -130,26 +130,84 @@ class FitnessViewGoals extends JView
      * @param type $goal_status
      * @return string
      */   
-    public function goal_state_html($goal_id, $goal_status, $user_id) {
-        $html = '';
+    public function goal_state_html($goal_id, $goal_status, $goal_type) {
+        $html = '<div id="goal_status_button_' . $goal_id . '_' . $goal_type . '" >';
         switch ($goal_status) {
             case 1:
-                $html .= '<a data-status="' . $goal_status .  '" onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $user_id . ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
+                $html .= '<a data-status="' . $goal_status .  '" onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $goal_type .  ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
                 break;
             case 2:
-                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $user_id . ')" class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>';
+                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $goal_type .  ')" class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>';
                 break;
             case 3:
-                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $user_id . ')" class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>';
+                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $goal_type .  ')" class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>';
                 break;
 
 
             default:
-                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $user_id . ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
+                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $goal_type .  ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
                 break;
+        }
+        $html .= '</div>';
+        
+        return $html;
+    }
+    
+    function getMiniGoalName($mini_goal_category_id) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT name FROM #__fitness_mini_goal_categories WHERE id='$mini_goal_category_id' AND state='1'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+    }
+        
+    
+    function getMiniGoalsList($primary_goal_id, $type) {
+        $db = JFactory::getDbo();
+        $sql = "SELECT DISTINCT id, mini_goal_category_id, deadline, completed FROM #__fitness_mini_goals WHERE primary_goal_id='$primary_goal_id' AND state='1'";
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $ids = $db->loadResultArray(0);
+        $mini_goal_category_ids = $db->loadResultArray(1);
+        $deadlines = $db->loadResultArray(2);
+        $completed = $db->loadResultArray(3);
+        
+        if($type == 'status')  return $completed;
+        
+        if($type == 'id')  return $ids;
+        
+        if($type == 'deadline') {
+            foreach ($deadlines as $value) {
+                $html .= $value . "<br>";
+            }
+            return $html;
+        }
+
+        foreach ($mini_goal_category_ids as $value) {
+            $html .= $this->getMiniGoalName($value) . "<br>";
         }
         
         return $html;
     }
-
+    
+    function getMinigoalsStatusHtml($primary_goal_id) {
+        $statuses = $this->getMiniGoalsList($primary_goal_id, 'status');
+        $ids = $this->getMiniGoalsList($primary_goal_id, 'id');
+        $i = 0;
+        foreach ($statuses as $status) {
+            
+            $html .= $this->goal_state_html($ids[$i], $status, '2'); // 2 -> Mini Goal
+            
+            $i++;
+        }
+        return $html;
+    }
+    
+    
+    
 }
