@@ -429,7 +429,9 @@ class FitnessModelgoals extends JModelList {
     function getClientPrimaryGoals($client_id) {
 
         $db = &JFactory::getDBo();
-        $query = "SELECT pg.*, u.name AS client_name, pname.name AS primary_goal_name, tp.color AS training_period_color FROM  #__fitness_goals AS pg
+        // Primary Goals
+        $query = "SELECT pg.*, u.name AS client_name, pname.name AS primary_goal_name, tp.color AS training_period_color
+            FROM  #__fitness_goals AS pg
             LEFT JOIN #__fitness_goal_categories AS pname on pname.id=pg.goal_category_id
             LEFT JOIN #__fitness_training_period AS tp ON tp.id=pg.training_period_id
             LEFT JOIN #__users AS u ON  u.id=pg.user_id
@@ -440,9 +442,23 @@ class FitnessModelgoals extends JModelList {
             $ret['success'] = 0;
             $ret['message'] = $db->stderr();
         }
-        $data = $db->loadObjectList();
+        $primary_goals = $db->loadObjectList();
+        // Mini Goals
+        $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, pg.start_date AS start_date
+            FROM  #__fitness_mini_goals AS mg
+            LEFT JOIN #__fitness_mini_goal_categories AS mname on mname.id=mg.mini_goal_category_id
+            LEFT JOIN #__fitness_goals AS pg ON mg.primary_goal_id=pg.id
+            LEFT JOIN #__users AS u ON  u.id=pg.user_id
+            WHERE pg.user_id='$client_id'";
+        $db->setQuery($query);
+        $ret['success'] = 1;
+        if (!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->stderr();
+        }
+        $mini_goals = $db->loadObjectList();
         
-        $result = array( 'status' => $ret, 'data' => $data);
+        $result = array( 'status' => $ret, 'data' => array('primary_goals' => $primary_goals, 'mini_goals' => $mini_goals));
         return  json_encode($result);
     }
 

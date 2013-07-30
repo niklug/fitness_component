@@ -450,17 +450,25 @@ $saveOrder	= $listOrder == 'a.ordering';
                       },
                     dataType : 'json',
                     success : function(response) {
-                        console.log(response.data);
+                        console.log(response.data.mini_goals);
                         var data = {};
-                        var primary_goals = primaryDateArray(response.data);
-                        data.primary_goals = primary_goals;
-                        data.client_primary = graphItemDataArray(response.data, 'client_name');
-                        data.goal_primary = graphItemDataArray(response.data, 'primary_goal_name');
-                        data.start_primary = graphItemDataArray(response.data, 'start_date');
-                        data.finish_primary = graphItemDataArray(response.data, 'deadline');
-                        data.status_primary = graphItemDataArray(response.data, 'completed');
-                        data.training_period_colors = graphItemDataArray(response.data, 'training_period_color');
-                         
+                        
+                        // primary goals
+                        data.primary_goals = goalsDateArray(response.data.primary_goals, 2);
+                        data.client_primary = graphItemDataArray(response.data.primary_goals, 'client_name');
+                        data.goal_primary = graphItemDataArray(response.data.primary_goals, 'primary_goal_name');
+                        data.start_primary = graphItemDataArray(response.data.primary_goals, 'start_date');
+                        data.finish_primary = graphItemDataArray(response.data.primary_goals, 'deadline');
+                        data.status_primary = graphItemDataArray(response.data.primary_goals, 'completed');
+                        data.training_period_colors = graphItemDataArray(response.data.primary_goals, 'training_period_color');
+                        // mini goals
+                        data.mini_goals = goalsDateArray(response.data.mini_goals, 1);
+                        data.client_mini = graphItemDataArray(response.data.mini_goals, 'client_name');
+                        data.goal_mini = graphItemDataArray(response.data.mini_goals, 'mini_goal_name');
+                        data.start_mini = graphItemDataArray(response.data.mini_goals, 'start_date');
+                        data.finish_mini = graphItemDataArray(response.data.mini_goals, 'deadline');
+                        data.status_mini = graphItemDataArray(response.data.mini_goals, 'completed');
+                        //console.log(data.mini_goals);
                         //console.log(data.goal_primary);
                         drawGraph(data);
                         if(response.IsSuccess != true) {
@@ -496,13 +504,13 @@ $saveOrder	= $listOrder == 'a.ordering';
 
      * @param {type} data
      * @returns {Array}     */
-    function primaryDateArray(data) {
+    function goalsDateArray(data, y_value) {
  
         var primary_goals = []; 
         
         for(var i = 0; i < data.length; i++) {
             var unix_time = new Date(data[i].deadline).getTime();
-            primary_goals[i] = [unix_time, 2];
+            primary_goals[i] = [unix_time, y_value];
         }
         return primary_goals;
     }
@@ -541,10 +549,11 @@ $saveOrder	= $listOrder == 'a.ordering';
         
         var first_primary_goal_start_date = new Date(client_data.start_primary[0]).getTime();
         markings[markings.length] =  { xaxis: { from: first_primary_goal_start_date, to: d1[0][0] }, yaxis: { from: 0.5, to: 0.75 }, color: training_period_colors[0]};
-        console.log(markings);
+        //console.log(markings);
         //
         // Mini Goals
-        var d2 = [[1320376000 * 1000, 1], [1330376000 * 1000, 1], [1340376000 * 1000, 1], [1350998400 * 1000, 1], [1374710400 * 1000, 1]];
+        //var d2 = [[1320376000 * 1000, 1], [1330376000 * 1000, 1], [1340376000 * 1000, 1], [1350998400 * 1000, 1], [1374710400 * 1000, 1]];
+        var d2 = client_data.mini_goals;
         // Current Time
         var d3 = [[current_time, 3]];
 
@@ -563,11 +572,11 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 
 
-        var client_mini = ['Nick_minu', 'Roy_mini', 'John_mini', 'Dave_mini', 'Bill_mini'];
-        var goal_mini  = ['Increase Muscle Mass', 'Increase Strength', 'Increase Strength and Fitness', 'Increase Fitness for Distance', 'Increase Mind'];
-        var start_mini  = ['2013-02-03', '2013-02-14', '2013-08-03', '2013-02-22', '2013-02-05'];
-        var finish_mini  = ['2013-03-03', '2013-03-14', '2013-03-03', '2013-03-23', '2013-02-18'];
-        var status_mini  = ['Pending', 'Complete', 'Incomplete', 'Pending', 'Complete'];
+        var client_mini = client_data.client_mini;
+        var goal_mini  = client_data.goal_mini;
+        var start_mini  = client_data.start_mini;
+        var finish_mini  = client_data.finish_mini;
+        var status_mini  = client_data.status_mini;
         // END DATA
 
         // START OPTIONS
@@ -645,7 +654,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                     html +=  "Goal: " +  goal_mini[item.dataIndex] + "</br>";
                     html +=  "Start: " +  start_mini[item.dataIndex] + "</br>";
                     html +=  "Finish: " +  finish_mini[item.dataIndex] + "</br>";
-                    html +=  "Status: " +  status_mini[item.dataIndex] + "</br>";
+                    html +=  "Status: " +  getStatusById(status_mini[item.dataIndex]) + "</br>";
                 }
                 if(data_type == 2){
                     html +=  "Client: " +  client_primary[item.dataIndex] + "</br>";
