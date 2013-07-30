@@ -460,7 +460,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                         data.finish_primary = graphItemDataArray(response.data, 'deadline');
                         data.status_primary = graphItemDataArray(response.data, 'completed');
                         data.training_period_colors = graphItemDataArray(response.data, 'training_period_color');
-                
+                         
                         //console.log(data.goal_primary);
                         drawGraph(data);
                         if(response.IsSuccess != true) {
@@ -531,12 +531,17 @@ $saveOrder	= $listOrder == 'a.ordering';
 
         var training_period_colors = client_data.training_period_colors;
         
-        console.log(training_period_colors);
+        
         // Training periods 
         var markings = []; 
         for(var i = 0; i < d1.length - 1; i++) {
             markings[i] =  { xaxis: { from: d1[i][0], to: d1[i + 1][0] }, yaxis: { from: 0.5, to: 0.75 }, color: training_period_colors[i+1]};
         }
+        // first Primary Goal marking
+        
+        var first_primary_goal_start_date = new Date(client_data.start_primary[0]).getTime();
+        markings[markings.length] =  { xaxis: { from: first_primary_goal_start_date, to: d1[0][0] }, yaxis: { from: 0.5, to: 0.75 }, color: training_period_colors[0]};
+        console.log(markings);
         //
         // Mini Goals
         var d2 = [[1320376000 * 1000, 1], [1330376000 * 1000, 1], [1340376000 * 1000, 1], [1350998400 * 1000, 1], [1374710400 * 1000, 1]];
