@@ -679,6 +679,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_training_period` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `color` varchar(20) NOT NULL,
+  `state` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -713,3 +714,9 @@ CREATE TABLE IF NOT EXISTS `#__fitness_mini_goal_categories` (
   `state` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+/* 
+SET FOREIGN_KEY_CHECKS =0;# MySQL returned an empty result set (i.e. zero rows).
+DROP TABLE master_fitness_goals1;# MySQL returned an empty result set (i.e. zero rows).
+SET FOREIGN_KEY_CHECKS =1;# MySQL returned an empty result set (i.e. zero rows).
+*/

@@ -422,5 +422,28 @@ class FitnessModelgoals extends JModelList {
         $result = array( 'status' => $ret, 'data' => array('event_id' => $event_id, 'status' => $status));
         return  json_encode($result);
     }
+    
+    
+    
+    // Goals Graph
+    function getClientPrimaryGoals($client_id) {
+
+        $db = &JFactory::getDBo();
+        $query = "SELECT pg.*, u.name AS client_name, pname.name AS primary_goal_name, tp.color AS training_period_color FROM  #__fitness_goals AS pg
+            LEFT JOIN #__fitness_goal_categories AS pname on pname.id=pg.goal_category_id
+            LEFT JOIN #__fitness_training_period AS tp ON tp.id=pg.training_period_id
+            LEFT JOIN #__users AS u ON  u.id=pg.user_id
+            WHERE pg.user_id='$client_id'";
+        $db->setQuery($query);
+        $ret['success'] = 1;
+        if (!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->stderr();
+        }
+        $data = $db->loadObjectList();
+        
+        $result = array( 'status' => $ret, 'data' => $data);
+        return  json_encode($result);
+    }
 
 }

@@ -117,6 +117,9 @@ function getUserGroup($user_id) {
     $query = "SELECT title FROM #__usergroups WHERE id IN 
         (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
     $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     return $db->loadResult();
 }
 
@@ -132,6 +135,9 @@ function getUserGroup($user_id) {
         $sql .= " AND (primary_trainer='$user_id' OR other_trainers LIKE '%$user_id%')";
     }
     $db->setQuery($sql);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $clients = $db->loadObjectList();
     ?>
     <div   style="float:left;" >
@@ -155,6 +161,9 @@ function getUserGroup($user_id) {
         $sql .= " AND #__users.id='$user_id'";
     }
     $db->setQuery($sql);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $trainers = $db->loadObjectList();
     ?>
     <div  style="float:left;margin-left: 10px;">
@@ -181,6 +190,9 @@ function getUserGroup($user_id) {
     $db = JFactory::getDbo();
     $sql = "SELECT name FROM #__fitness_locations WHERE state='1'";
     $db->setQuery($sql);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $locations = $db->loadObjectList();
 
     ?>
@@ -201,6 +213,9 @@ function getUserGroup($user_id) {
     $db = JFactory::getDbo();
     $sql = "SELECT id, name, color FROM #__fitness_categories WHERE state='1'";
     $db->setQuery($sql);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $appointments = $db->loadObjectList();
 
     ?>
@@ -220,6 +235,9 @@ function getUserGroup($user_id) {
     $db = JFactory::getDbo();
     $sql = "SELECT DISTINCT name FROM #__fitness_session_type WHERE state='1'";
     $db->setQuery($sql);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $session_types = $db->loadObjectList();
 
     ?>
@@ -239,6 +257,9 @@ function getUserGroup($user_id) {
     $db = JFactory::getDbo();
     $sql = "SELECT DISTINCT name FROM #__fitness_session_focus WHERE state='1'";
     $db->setQuery($sql);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
     $session_focuses = $db->loadObjectList();
 
     ?>

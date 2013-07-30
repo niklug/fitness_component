@@ -68,5 +68,14 @@ class FitnessController extends JController
    		$view -> setFrontendPublished();
 	}
         
+        // Goals Graph
+        //------------------------------------------------------
+	function getClientPrimaryGoals() {
+            
+ 		$view = $this -> getView('goals', 'json');
+                $view->setModel($this->getModel('goals'));
+   		$view -> getClientPrimaryGoals();
+	}
+        
         
 }

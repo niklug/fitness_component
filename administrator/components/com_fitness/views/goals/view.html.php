@@ -70,7 +70,7 @@ class FitnessViewGoals extends JView
 		$state	= $this->get('State');
 		$canDo	= FitnessHelper::getActions($state->get('filter.category_id'));
 
-		JToolBarHelper::title(JText::_('Clients planing'), 'goals.png');
+		JToolBarHelper::title(JText::_('Client Planning'), 'goals.png');
 
         //Check if the form exists before showing the add/edit buttons
         $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/goal';

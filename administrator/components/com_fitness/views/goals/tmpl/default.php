@@ -33,6 +33,40 @@ $saveOrder	= $listOrder == 'a.ordering';
     <p>Zoom to: <button id="whole">Whole period</button>
         <button id="by_year">Current year</button>
         <button id="by_month">Current month</button>
+    <?php
+    function getUserGroup($user_id) {
+        if(!$user_id) {
+            $user_id = &JFactory::getUser()->id;
+        }
+        $db = JFactory::getDBO();
+        $query = "SELECT title FROM #__usergroups WHERE id IN 
+            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+        $db->setQuery($query);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        return $db->loadResult();
+    }
+
+    $db = JFactory::getDbo();
+    $sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
+    if(getUserGroup() != 'Super Users') {
+        $user_id = &JFactory::getUser()->id;
+        $sql .= " AND (primary_trainer='$user_id' OR other_trainers LIKE '%$user_id%')";
+    }
+    $db->setQuery($sql);
+    $clients = $db->loadObjectList();
+    ?>
+    
+    <select style="float:right;"  id="graph_client" name="client_id" class="inputbox">
+            <option value=""><?php echo JText::_('-Select Client for Graph-');?></option>
+            <?php 
+                foreach ($clients as $client) {
+                    echo '<option value="' . $client->user_id . '">' . JFactory::getUser($client->user_id)->name. '</option>';
+                }
+            ?>
+    </select>
+
 </div>
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=goals'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
@@ -372,6 +406,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 </div>
 <div id="emais_sended"></div>
 
+
+
 <script type="text/javascript">
     function getScript(url,success) {
         var script = document.createElement('script');
@@ -401,7 +437,82 @@ $saveOrder	= $listOrder == 'a.ordering';
             form.submit();
         });
         
+        $("#graph_client").change(function(){
+            var client_id =  $(this).find(':selected').val();
+            $.ajax({
+                    type : "POST",
+                    url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+                    data : {
+                        view : 'goals',
+                        format : 'text',
+                        task : 'getClientPrimaryGoals',
+                        client_id : client_id
+                      },
+                    dataType : 'json',
+                    success : function(response) {
+                        console.log(response.data);
+                        var data = {};
+                        var primary_goals = primaryDateArray(response.data);
+                        data.primary_goals = primary_goals;
+                        data.client_primary = graphItemDataArray(response.data, 'client_name');
+                        data.goal_primary = graphItemDataArray(response.data, 'primary_goal_name');
+                        data.start_primary = graphItemDataArray(response.data, 'start_date');
+                        data.finish_primary = graphItemDataArray(response.data, 'deadline');
+                        data.status_primary = graphItemDataArray(response.data, 'completed');
+                        data.training_period_colors = graphItemDataArray(response.data, 'training_period_color');
+                
+                        //console.log(data.goal_primary);
+                        drawGraph(data);
+                        if(response.IsSuccess != true) {
+                            //alert(response.Msg);
+                            return;
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
+                    }
+                });
+ 
+        });
         
+        
+        
+
+    });
+    
+    
+    function graphItemDataArray(data, type) {
+        var items = []; 
+        for(var i = 0; i < data.length; i++) {
+            items[i] = data[i][type];
+        }
+        return items;
+    }
+ 
+ 
+    /** get dates goals deadline
+    * 
+
+     * @param {type} data
+     * @returns {Array}     */
+    function primaryDateArray(data) {
+ 
+        var primary_goals = []; 
+        
+        for(var i = 0; i < data.length; i++) {
+            var unix_time = new Date(data[i].deadline).getTime();
+            primary_goals[i] = [unix_time, 2];
+        }
+        return primary_goals;
+    }
+    
+    /**
+    * draw Flot Graph on select client
+
+     * @param {type} data
+     * @returns {undefined}     */
+    function drawGraph(client_data) {
         
          //TIME SETTINGS
         var current_time = new Date().getTime();
@@ -415,15 +526,16 @@ $saveOrder	= $listOrder == 'a.ordering';
 
         // DATA
         // Primary Goals
-        var d1 = [[1325376000 * 1000, 2], [1335376000 * 1000, 2], [1345376000 * 1000, 2], [1356998400 * 1000, 2], [1386998400 * 1000, 2]];
+        //var d1 = [[1325376000 * 1000, 2], [1335376000 * 1000, 2], [1345376000 * 1000, 2], [1356998400 * 1000, 2], [1386998400 * 1000, 2]];
+        var d1 = client_data.primary_goals;
 
-        var training_period_colors = ["#E4C7EA", "#FFC7E1", "#CCDDFF", "#FFFDAB", "#E5E2A8", "#CDFCF7", "#DCF2C4", "#F4ABDC"];
-
-        var training_period_keys = [5, 2, 3, 4, 5, 6, 7];
+        var training_period_colors = client_data.training_period_colors;
+        
+        console.log(training_period_colors);
         // Training periods 
         var markings = []; 
         for(var i = 0; i < d1.length - 1; i++) {
-            markings[i] =  { xaxis: { from: d1[i][0], to: d1[i + 1][0] }, yaxis: { from: 0.5, to: 0.75 }, color: training_period_colors[training_period_keys[i]]};
+            markings[i] =  { xaxis: { from: d1[i][0], to: d1[i + 1][0] }, yaxis: { from: 0.5, to: 0.75 }, color: training_period_colors[i+1]};
         }
         //
         // Mini Goals
@@ -438,11 +550,11 @@ $saveOrder	= $listOrder == 'a.ordering';
         ];
 
 
-        var client_primary = ['Nick', 'Roy', 'John', 'Dave', 'Bill'];
-        var goal_primary  = ['Increase Muscle Mass', 'Increase Strength', 'Increase Strength and Fitness', 'Increase Fitness for Distance', 'Increase Mind'];
-        var start_primary  = ['2013-02-03', '2013-02-14', '2013-08-03', '2013-02-22', '2013-02-05'];
-        var finish_primary  = ['2013-03-03', '2013-03-14', '2013-03-03', '2013-03-23', '2013-02-18'];
-        var status_primary  = ['Pending', 'Complete', 'Incomplete', 'Pending', 'Complete'];
+        var client_primary = client_data.client_primary;
+        var goal_primary  = client_data.goal_primary;
+        var start_primary  = client_data.start_primary;
+        var finish_primary  = client_data.finish_primary;
+        var status_primary  = client_data.status_primary;
 
 
 
@@ -535,9 +647,9 @@ $saveOrder	= $listOrder == 'a.ordering';
                     html +=  "Goal: " +  goal_primary[item.dataIndex] + "</br>";
                     html +=  "Start: " +  start_primary[item.dataIndex] + "</br>";
                     html +=  "Finish: " +  finish_primary[item.dataIndex] + "</br>";
-                    html +=  "Status: " +  status_primary[item.dataIndex] + "</br>";
+                    html +=  "Status: " +  getStatusById(status_primary[item.dataIndex]) + "</br>";
                 }
-                if(data_type == 3) html = "Current date";
+                if(data_type == 3) html = "Current Time";
                 //console.log(item);
 
                 $("#tooltip").html(html)
@@ -548,11 +660,25 @@ $saveOrder	= $listOrder == 'a.ordering';
             }
 
         });
+    }
+    
+    function getStatusById(id) {
+    var status_name;
+        switch(id) {
+            case '1' : 
+               status_name = 'Pending';
+               break;
+            case '2' :
+               status_name = 'Complete';
+               break;
+            case '3' :
+               status_name = 'Incomplete';
+            default :
 
-    });
- 
-    
-    
+               break;
+        }
+        return status_name;
+    }
     
     /**
      * 
