@@ -439,42 +439,56 @@ $saveOrder	= $listOrder == 'a.ordering';
         
         $("#graph_client").change(function(){
             var client_id =  $(this).find(':selected').val();
+            if(!client_id) return;
             $.ajax({
                     type : "POST",
                     url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
                     data : {
                         view : 'goals',
                         format : 'text',
-                        task : 'getClientPrimaryGoals',
+                        task : 'getGraphData',
                         client_id : client_id
                       },
                     dataType : 'json',
                     success : function(response) {
-                        console.log(response.data.mini_goals);
+                        if(response.status.success != true) {
+                            alert(response.status.message);
+                            return;
+                        }
+                        //console.log(response.data.mini_goals);
                         var data = {};
                         
                         // primary goals
-                        data.primary_goals = goalsDateArray(response.data.primary_goals, 2);
-                        data.client_primary = graphItemDataArray(response.data.primary_goals, 'client_name');
-                        data.goal_primary = graphItemDataArray(response.data.primary_goals, 'primary_goal_name');
-                        data.start_primary = graphItemDataArray(response.data.primary_goals, 'start_date');
-                        data.finish_primary = graphItemDataArray(response.data.primary_goals, 'deadline');
-                        data.status_primary = graphItemDataArray(response.data.primary_goals, 'completed');
-                        data.training_period_colors = graphItemDataArray(response.data.primary_goals, 'training_period_color');
+                        var primary_goals_data = setPrimaryGoalsGraphData(response.data.primary_goals);
+                        $.extend(true,data, primary_goals_data);
+                        
                         // mini goals
-                        data.mini_goals = goalsDateArray(response.data.mini_goals, 1);
-                        data.client_mini = graphItemDataArray(response.data.mini_goals, 'client_name');
-                        data.goal_mini = graphItemDataArray(response.data.mini_goals, 'mini_goal_name');
-                        data.start_mini = graphItemDataArray(response.data.mini_goals, 'start_date');
-                        data.finish_mini = graphItemDataArray(response.data.mini_goals, 'deadline');
-                        data.status_mini = graphItemDataArray(response.data.mini_goals, 'completed');
-                        //console.log(data.mini_goals);
-                        //console.log(data.goal_primary);
+                        var mini_goals_data = setMiniGoalsGraphData(response.data.mini_goals);
+                        $.extend(true,data, mini_goals_data);
+                        
+                        // Personal training
+                        var personal_training_data = setAppointmentGraphData('personal_training', response.data.personal_training, 3);
+                        $.extend(true,data, personal_training_data);
+                        
+                        // Semi-Private Training
+                        var semi_private_data = setAppointmentGraphData('semi_private', response.data.semi_private, 4);
+                        $.extend(true,data, semi_private_data);
+                        
+                        // Resistance Workout
+                        var resistance_workout_data = setAppointmentGraphData('resistance_workout', response.data.resistance_workout, 5);
+                        $.extend(true,data, resistance_workout_data);
+                        
+                        // Cardio Workout
+                        var cardio_workout_data = setAppointmentGraphData('cardio_workout', response.data.cardio_workout, 6);
+                        $.extend(true,data, cardio_workout_data);
+                        
+                        // Assessment
+                        var assessment_data = setAppointmentGraphData('assessment', response.data.assessment, 7);
+                        $.extend(true,data, assessment_data);                       
+                        
+                        //console.log(personal_training_data);
                         drawGraph(data);
-                        if(response.IsSuccess != true) {
-                            //alert(response.Msg);
-                            return;
-                        }
+
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
@@ -490,6 +504,46 @@ $saveOrder	= $listOrder == 'a.ordering';
     });
     
     
+    function setPrimaryGoalsGraphData(primary_goals) {
+        var data = {};
+        data.primary_goals = x_axisDateArray(primary_goals, 2, 'deadline');
+        data.client_primary = graphItemDataArray(primary_goals, 'client_name');
+        data.goal_primary = graphItemDataArray(primary_goals, 'primary_goal_name');
+        data.start_primary = graphItemDataArray(primary_goals, 'start_date');
+        data.finish_primary = graphItemDataArray(primary_goals, 'deadline');
+        data.status_primary = graphItemDataArray(primary_goals, 'completed');
+        data.training_period_colors = graphItemDataArray(primary_goals, 'training_period_color');
+        return data;
+    }
+    
+    function setMiniGoalsGraphData(mini_goals) {
+        var data = {};
+        data.mini_goals = x_axisDateArray(mini_goals, 1, 'deadline');
+        data.client_mini = graphItemDataArray(mini_goals, 'client_name');
+        data.goal_mini = graphItemDataArray(mini_goals, 'mini_goal_name');
+        data.start_mini = graphItemDataArray(mini_goals, 'start_date');
+        data.finish_mini = graphItemDataArray(mini_goals, 'deadline');
+        data.status_mini = graphItemDataArray(mini_goals, 'completed');
+        return data;
+    }
+    
+    
+    function setAppointmentGraphData(type, appointment, y_axis) {
+        var data = {};
+        
+        data[type + '_xaxis'] = x_axisDateArray(appointment, y_axis, 'starttime');
+        data[type + '_session_type'] = graphItemDataArray(appointment, 'session_type');
+        data[type + '_session_focus'] = graphItemDataArray(appointment, 'session_focus');
+        data[type + '_date'] = graphItemDataArray(appointment, 'starttime');
+        data[type + '_trainer'] = graphItemDataArray(appointment, 'trainer_name');
+        data[type + '_location'] = graphItemDataArray(appointment, 'location');
+        data[type + '_appointment_color'] = graphItemDataArray(appointment, 'color');
+        
+        console.log(data);
+        return data;      
+    }
+    
+    
     function graphItemDataArray(data, type) {
         var items = []; 
         for(var i = 0; i < data.length; i++) {
@@ -499,21 +553,28 @@ $saveOrder	= $listOrder == 'a.ordering';
     }
  
  
-    /** get dates goals deadline
+    /** 
     * 
 
      * @param {type} data
      * @returns {Array}     */
-    function goalsDateArray(data, y_value) {
- 
-        var primary_goals = []; 
+    function x_axisDateArray(data, y_value, field) {
+        var x_axis_array = []; 
         
         for(var i = 0; i < data.length; i++) {
-            var unix_time = new Date(data[i].deadline).getTime();
-            primary_goals[i] = [unix_time, y_value];
+            //console.log(data[i][field]);
+            var unix_time = new Date(Date.parse(data[i][field])).getTime();
+            
+            //console.log(unix_time);
+            
+            //var date = new Date(unix_time);
+            
+            //console.log(date);
+            x_axis_array[i] = [unix_time, y_value];
         }
-        return primary_goals;
+        return x_axis_array;
     }
+
     
     /**
     * draw Flot Graph on select client
@@ -528,13 +589,14 @@ $saveOrder	= $listOrder == 'a.ordering';
         var end_year = new Date(new Date().getFullYear(), 12, 0).getTime();
 
         var date = new Date();
-        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
-        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() - 60*59*24 * 1000;
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime() + 60*59*24 * 1000;
+
         // END TIME SETTINGS
 
         // DATA
         // Primary Goals
-        //var d1 = [[1325376000 * 1000, 2], [1335376000 * 1000, 2], [1345376000 * 1000, 2], [1356998400 * 1000, 2], [1386998400 * 1000, 2]];
+        //var d1 = [[1377993600 * 1000, 2]];
         var d1 = client_data.primary_goals;
 
         var training_period_colors = client_data.training_period_colors;
@@ -556,27 +618,27 @@ $saveOrder	= $listOrder == 'a.ordering';
         var d2 = client_data.mini_goals;
         // Current Time
         var d3 = [[current_time, 3]];
-
+        
+        var d4 = client_data.personal_training_xaxis;
+        
+        var d5 = client_data.semi_private_xaxis; 
+        
+        var d6 = client_data.resistance_workout_xaxis;
+        
+        var d7 = client_data.cardio_workout_xaxis;
+        
+        var d8 = client_data.assessment_xaxis;
+        
         var data = [
             {label: "Primary Goal", data: d1},
             {label: "Mini Goal", data: d2},
-            {data: d3}
+            {data: d3},
+            {label: "Personal Training", data: d4},
+            {label: "Semi-Private Training", data: d5},
+            {label: "Resistance Workout", data: d6},
+            {label: "Cardio Workout", data: d7},
+            {label: "Assessment", data: d8},
         ];
-
-
-        var client_primary = client_data.client_primary;
-        var goal_primary  = client_data.goal_primary;
-        var start_primary  = client_data.start_primary;
-        var finish_primary  = client_data.finish_primary;
-        var status_primary  = client_data.status_primary;
-
-
-
-        var client_mini = client_data.client_mini;
-        var goal_mini  = client_data.goal_mini;
-        var start_mini  = client_data.start_mini;
-        var finish_mini  = client_data.finish_mini;
-        var status_mini  = client_data.status_mini;
         // END DATA
 
         // START OPTIONS
@@ -586,7 +648,7 @@ $saveOrder	= $listOrder == 'a.ordering';
             yaxis: {show: false},
             series: {
                 lines: {show: false },
-                points: {show: true, radius: 7, symbol: "circle", fill: true, fillColor: "#FFFFFF" },
+                points: {show: true, radius: 5, symbol: "circle", fill: true, fillColor: "#FFFFFF" },
                 bars: {show: true, lineWidth: 3},
             },
             grid: {
@@ -598,7 +660,13 @@ $saveOrder	= $listOrder == 'a.ordering';
                         markings: markings
             },
 
-            colors: ["#A3270F", "#287725", "#FFB01F"]
+            colors: ["#A3270F", "#287725", "#FFB01F", 
+                client_data.personal_training_appointment_color[0],
+                client_data.semi_private_appointment_color[0],
+                client_data.resistance_workout_appointment_color[0],
+                client_data.cardio_workout_appointment_color[0],
+                client_data.assessment_appointment_color[0]
+            ]
 
 
         };
@@ -649,22 +717,59 @@ $saveOrder	= $listOrder == 'a.ordering';
                 var data_type = item.datapoint[1];
                 var html = "<p style=\"text-align:center;\"><b>" +  item.series.label + "</b></p>";
 
-                if(data_type == 1) {
-                    html +=  "Client: " +  client_mini[item.dataIndex] + "</br>";
-                    html +=  "Goal: " +  goal_mini[item.dataIndex] + "</br>";
-                    html +=  "Start: " +  start_mini[item.dataIndex] + "</br>";
-                    html +=  "Finish: " +  finish_mini[item.dataIndex] + "</br>";
-                    html +=  "Status: " +  getStatusById(status_mini[item.dataIndex]) + "</br>";
+                switch(data_type) {
+                    case 1 : // Mini Goals
+                        html +=  "Client: " +  client_data.client_mini[item.dataIndex] + "</br>";
+                        html +=  "Goal: " +  client_data.goal_mini[item.dataIndex] + "</br>";
+                        html +=  "Start: " +  client_data.start_mini[item.dataIndex] + "</br>";
+                        html +=  "Finish: " +  client_data.finish_mini[item.dataIndex] + "</br>";
+                        html +=  "Status: " +  getStatusById(client_data.status_mini[item.dataIndex]) + "</br>"; 
+                        break;
+                    case 2 : // Primary Goals
+                        html +=  "Client: " +  client_data.client_primary[item.dataIndex] + "</br>";
+                        html +=  "Goal: " +  client_data.goal_primary[item.dataIndex] + "</br>";
+                        html +=  "Start: " +  client_data.start_primary[item.dataIndex] + "</br>";
+                        html +=  "Finish: " +  client_data.finish_primary[item.dataIndex] + "</br>";
+                        html +=  "Status: " +  getStatusById(client_data.status_primary[item.dataIndex]) + "</br>"; 
+                        break;
+                    case 3 : // Personal Training
+                        html +=  "Session Type: " +  client_data.personal_training_session_type[item.dataIndex] + "</br>";
+                        html +=  "Session Focus: " +  client_data.personal_training_session_focus[item.dataIndex] + "</br>";
+                        html +=  "Date: " +  client_data.personal_training_date[item.dataIndex] + "</br></br>";
+                        html +=  "Trainer: " +  client_data.personal_training_trainer[item.dataIndex] + "</br>";
+                        html +=  "Location: " +  client_data.personal_training_location[item.dataIndex] + "</br>";
+                        break;
+                    case 4 : // Semi-Private Training
+                        html +=  "Session Type: " +  client_data.semi_private_session_type[item.dataIndex] + "</br>";
+                        html +=  "Session Focus: " +  client_data.semi_private_session_focus[item.dataIndex] + "</br>";
+                        html +=  "Date: " +  client_data.semi_private_date[item.dataIndex] + "</br></br>";
+                        html +=  "Trainer: " +  client_data.semi_private_trainer[item.dataIndex] + "</br>";
+                        html +=  "Location: " +  client_data.semi_private_location[item.dataIndex] + "</br>";
+                        break;
+                    case 5 : // Resistance Workout
+                        html +=  "Session Type: " +  client_data.resistance_workout_session_type[item.dataIndex] + "</br>";
+                        html +=  "Session Focus: " +  client_data.resistance_workout_session_focus[item.dataIndex] + "</br>";
+                        html +=  "Date: " +  client_data.resistance_workout_date[item.dataIndex] + "</br></br>";
+                        html +=  "Trainer: " +  client_data.resistance_workout_trainer[item.dataIndex] + "</br>";
+                        html +=  "Location: " +  client_data.resistance_workout_location[item.dataIndex] + "</br>";
+                        break;
+                    case 6 : //  Cardio Workout
+                        html +=  "Session Type: " +  client_data.cardio_workout_session_type[item.dataIndex] + "</br>";
+                        html +=  "Session Focus: " +  client_data.cardio_workout_session_focus[item.dataIndex] + "</br>";
+                        html +=  "Date: " +  client_data.cardio_workout_date[item.dataIndex] + "</br></br>";
+                        html +=  "Trainer: " +  client_data.cardio_workout_trainer[item.dataIndex] + "</br>";
+                        html +=  "Location: " +  client_data.cardio_workout_location[item.dataIndex] + "</br>";
+                        break;
+                    case 7 : // Assessment
+                        html +=  "Assessment Type: " +  client_data.assessment_session_type[item.dataIndex] + "</br>";
+                        html +=  "Assessment Focus: " +  client_data.assessment_session_focus[item.dataIndex] + "</br>";
+                        html +=  "Date: " +  client_data.assessment_date[item.dataIndex] + "</br></br>";
+                        html +=  "Trainer: " +  client_data.assessment_trainer[item.dataIndex] + "</br>";
+                        html +=  "Location: " +  client_data.assessment_location[item.dataIndex] + "</br>";
+                        break;
+                    default :
+                        break;
                 }
-                if(data_type == 2){
-                    html +=  "Client: " +  client_primary[item.dataIndex] + "</br>";
-                    html +=  "Goal: " +  goal_primary[item.dataIndex] + "</br>";
-                    html +=  "Start: " +  start_primary[item.dataIndex] + "</br>";
-                    html +=  "Finish: " +  finish_primary[item.dataIndex] + "</br>";
-                    html +=  "Status: " +  getStatusById(status_primary[item.dataIndex]) + "</br>";
-                }
-                if(data_type == 3) html = "Current Time";
-                //console.log(item);
 
                 $("#tooltip").html(html)
                     .css({top: item.pageY+5, left: item.pageX+5})

@@ -425,11 +425,96 @@ class FitnessModelgoals extends JModelList {
     
     
     
-    // Goals Graph
-    function getClientPrimaryGoals($client_id) {
+    /**
+     * 
+     * @param type $client_id
+     * @return type
+     */
+    function getGraphData($client_id) {
 
+        // primary goals
+        $primary_goals = $this->getPrimaryGoalsGraphData($client_id);
+        if($primary_goals['status']['success'] == false) {
+            $ret['success'] = 0;
+            $ret['message'] = $primary_goals['status']['message'];
+            return  json_encode(array('status' => $ret));
+        }
+        
+        //mini goals
+        $mini_goals = $this->getMiniGoalsGraphData($client_id);
+        if($mini_goals['status']['success'] == false) {
+            $ret['success'] = 0;
+            $ret['message'] = $mini_goals['status']['message'];
+            return  json_encode(array('status' => $ret));
+        }
+        
+        
+        // appointment data
+        $personal_training = $this->getAppointmentsGraphData($client_id, 'Personal Training');
+        if($personal_training['status']['success'] == false) {
+            $ret['success'] = 0;
+            $ret['message'] = $appointments_data['status']['message'];
+            return  json_encode(array('status' => $ret));
+        }
+        
+        // Semi-Private Training
+        $semi_private = $this->getAppointmentsGraphData($client_id, 'Semi-Private Training');
+        if($semi_private['status']['success'] == false) {
+            $ret['success'] = 0;
+            $ret['message'] = $semi_private['status']['message'];
+            return  json_encode(array('status' => $ret));
+        }
+        
+          
+        // Resistance Workout
+        $resistance_workout = $this->getAppointmentsGraphData($client_id, 'Resistance Workout');
+        if($resistance_workout['status']['success'] == false) {
+            $ret['success'] = 0;
+            $ret['message'] = $resistance_workout['status']['message'];
+            return  json_encode(array('status' => $ret));
+        }      
+
+        // Cardio Workout
+        $cardio_workout = $this->getAppointmentsGraphData($client_id, 'Cardio Workout');
+        if($cardio_workout['status']['success'] == false) {
+            $ret['success'] = 0;
+            $ret['message'] = $cardio_workout['status']['message'];
+            return  json_encode(array('status' => $ret));
+        }  
+ 
+        // Assessment
+        $assessment = $this->getAppointmentsGraphData($client_id, 'Assessment');
+        if($assessment['status']['success'] == false) {
+            $ret['success'] = 0;
+            $ret['message'] = $assessment['status']['message'];
+            return  json_encode(array('status' => $ret));
+        }  
+        
+        $ret['success'] = 1;
+        
+        $result = array('status' => $ret, 
+            'data' => array(
+                'primary_goals' => $primary_goals['data'], 
+                'mini_goals' => $mini_goals['data'],
+                'personal_training' => $personal_training['data'],
+                'semi_private' => $semi_private['data'],
+                'resistance_workout' => $resistance_workout['data'],
+                'cardio_workout' => $cardio_workout['data'],
+                'assessment' => $assessment['data']
+             ) 
+        );
+                
+        return  json_encode($result);
+    }
+    
+    
+    /**
+     * 
+     * @param type $client_id
+     * @return type
+     */
+    function getPrimaryGoalsGraphData($client_id) {
         $db = &JFactory::getDBo();
-        // Primary Goals
         $query = "SELECT pg.*, u.name AS client_name, pname.name AS primary_goal_name, tp.color AS training_period_color
             FROM  #__fitness_goals AS pg
             LEFT JOIN #__fitness_goal_categories AS pname on pname.id=pg.goal_category_id
@@ -442,8 +527,17 @@ class FitnessModelgoals extends JModelList {
             $ret['success'] = 0;
             $ret['message'] = $db->stderr();
         }
-        $primary_goals = $db->loadObjectList();
-        // Mini Goals
+        $primary_goals = array('status' => $ret, 'data' => $db->loadObjectList());
+        return  $primary_goals;
+    }
+    
+    /** 
+     * 
+     * @param type $client_id
+     * @return type
+     */
+     function getMiniGoalsGraphData($client_id) {
+        $db = &JFactory::getDBo();
         $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, pg.start_date AS start_date
             FROM  #__fitness_mini_goals AS mg
             LEFT JOIN #__fitness_mini_goal_categories AS mname on mname.id=mg.mini_goal_category_id
@@ -456,10 +550,25 @@ class FitnessModelgoals extends JModelList {
             $ret['success'] = 0;
             $ret['message'] = $db->stderr();
         }
-        $mini_goals = $db->loadObjectList();
-        
-        $result = array( 'status' => $ret, 'data' => array('primary_goals' => $primary_goals, 'mini_goals' => $mini_goals));
-        return  json_encode($result);
+        $mini_goals = array('status' => $ret, 'data' => $db->loadObjectList());
+        return  $mini_goals;
+    }
+    
+    
+    function getAppointmentsGraphData($client_id, $title) {
+        $db = &JFactory::getDBo();
+        $query = "SELECT e.*, u.name AS trainer_name FROM #__dc_mv_events AS e
+            LEFT JOIN #__users AS u ON  e.trainer_id=u.id
+            WHERE (e.client_id='$client_id' OR e.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id='$client_id'))
+                AND title='$title' AND status='1'";
+        $db->setQuery($query);
+        $ret['success'] = 1;
+        if (!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->stderr();
+        }
+        $result = array('status' => $ret, 'data' => $db->loadObjectList());
+        return  $result;
     }
 
 }

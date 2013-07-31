@@ -49,12 +49,12 @@ class FitnessViewGoals extends JView {
 	}
         
         // Goals Graph
-        function getClientPrimaryGoals() {
+        function getGraphData() {
             JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
             $client_id = JRequest::getVar('client_id');
 	    $status = JRequest::getVar('status');
             $model = $this -> getModel("goals");
-	    echo $model->getClientPrimaryGoals($client_id);
+	    echo $model->getGraphData($client_id);
 	}
       
 }
