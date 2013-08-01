@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_PROGRAM_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="starttime" type="calendar" class="inputbox"
+        
+        
+         default="NULL" 
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_STARTTIME"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_STARTTIME" 
+        filter="safehtml" /> 
+
+       <field name="client_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_CLIENT_ID"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_CLIENT_ID" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="trainer_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_TRAINER_ID"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_TRAINER_ID" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="location" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_LOCATION"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_LOCATION" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="title" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_TITLE"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_TITLE" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="session_type" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_SESSION_TYPE"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_SESSION_TYPE" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="session_focus" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_SESSION_FOCUS"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_SESSION_FOCUS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="status" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_STATUS"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_STATUS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="frontend_published" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_FRONTEND_PUBLISHED"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_FRONTEND_PUBLISHED" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="published" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_PUBLISHED"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_PUBLISHED" 
+         default="1" 
+        
+        
+        filter="safehtml" /> 
+
+       <field name="calid" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_CALID"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_CALID" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="endtime" type="calendar" class="inputbox"
+        
+        
+         default="NULL" 
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_ENDTIME"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_ENDTIME" 
+        filter="safehtml" /> 
+
+       <field name="description" type="editor" buttons="true"
+        class="inputbox"
+        filter="safehtml"
+        
+        
+        
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_DESCRIPTION"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_DESCRIPTION"  /> 
+
+       <field name="isalldayevent" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_ISALLDAYEVENT"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_ISALLDAYEVENT" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="color" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_COLOR"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_COLOR" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="owner" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_OWNER"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_OWNER" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="rrule" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_RRULE"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_RRULE" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="uid" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_UID"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_UID" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="exdate" type="calendar" class="inputbox"
+        
+        
+         default="NULL" 
+        
+            label="COM_FITNESS_FORM_LBL_PROGRAM_EXDATE"
+            description="COM_FITNESS_FORM_DESC_PROGRAM_EXDATE" 
+        filter="safehtml" />
+
+	</fieldset>
+
+</form>

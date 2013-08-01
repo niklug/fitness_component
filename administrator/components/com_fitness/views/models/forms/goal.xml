@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset>
+
+        <field name="id" type="text" default="0" label="COM_FITNESS_GOALS_FORM_LBL_GOAL_ID"
+                     readonly="true" class="readonly"
+                     description="JGLOBAL_FIELD_ID_DESC"
+        /> 
+
+
+       
+        <field name="user_id" type="sql" class="inputbox"
+              query="SELECT #__users.id, #__users.username FROM #__users INNER JOIN #__fitness_clients ON #__fitness_clients.user_id=#__users.id WHERE #__fitness_clients.state='1'"
+              key_field="id"
+              value_field="username"
+              label="COM_FITNESS_GOALS_FORM_LBL_GOAL_USER_ID"
+              required="true"
+        /> 
+        
+        <field name="training_period_id" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_training_period`"
+              key_field="id"
+              value_field="name"
+              label="Training Period"
+        /> 
+       
+        <field name="goal_category_id" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_goal_categories`"
+              key_field="id"
+              value_field="name"
+              label="Primary Goal"
+        /> 
+              
+
+        
+        <field name="start_date" type="calendar"
+                
+              label="Start Date"
+              description="" 
+              filter="raw" /> 
+
+
+        <field name="deadline" type="calendar"
+                
+              label="COM_FITNESS_GOALS_FORM_LBL_GOAL_DEADLINE"
+              description="COM_FITNESS_GOALS_FORM_DESC_GOAL_DEADLINE" 
+              filter="raw" /> 
+       
+        <field name="completed" type="list"
+                
+              label="Status"
+              description="" 
+              default="1"   
+              filter="raw">
+            <option value="1">Pending</option>
+            <option value="2">Complete</option>
+            <option value="3">Incomplete</option>
+        </field> 
+
+        <field name="details" type="editor"
+                
+              label="Goal Details"
+              description="" 
+              filter="raw" /> 
+
+        <field name="comments" type="editor"
+                
+              label="Trainer Comments"
+              description="C" 
+              filter="raw" /> 
+
+
+
+        <field name="created" type="calendar" class="inputbox"
+              default="0000-00-00 00:00:00" 
+        
+              label="COM_FITNESS_GOALS_FORM_LBL_GOAL_CREATED"
+              description="" 
+              filter="safehtml" /> 
+
+        <field name="modified" type="calendar" class="inputbox"
+        
+        
+              default="0000-00-00 00:00:00" 
+        
+              label="COM_FITNESS_GOALS_FORM_LBL_GOAL_MODIFIED"
+              description="COM_FITNESS_GOALS_FORM_DESC_GOAL_MODIFIED" 
+              filter="safehtml" /> 
+
+        <field
+            name="state"
+            type="list"
+            label="JSTATUS"
+            description="JFIELD_PUBLISHED_DESC"
+            class="inputbox"
+            size="1"
+            default="1">
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+
+    </fieldset>
+
+</form>

@@ -31,8 +31,10 @@ $saveOrder	= $listOrder == 'a.ordering';
     </div>
 
     <p>Zoom to: <button id="whole">Whole period</button>
-        <button id="by_year">Current year</button>
-        <button id="by_month">Current month</button>
+        <button id="by_year">Current Year</button>
+        <button id="by_month">Current Month</button>
+        <button id="by_week">Current Week</button>
+        <button id="by_day">Current Day</button>
     <?php
     function getUserGroup($user_id) {
         if(!$user_id) {
@@ -469,6 +471,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                         // Personal training
                         var personal_training_data = setAppointmentGraphData('personal_training', response.data.personal_training, 3);
                         $.extend(true,data, personal_training_data);
+                        //console.log(personal_training_data);
                         
                         // Semi-Private Training
                         var semi_private_data = setAppointmentGraphData('semi_private', response.data.semi_private, 4);
@@ -497,9 +500,6 @@ $saveOrder	= $listOrder == 'a.ordering';
                 });
  
         });
-        
-        
-        
 
     });
     
@@ -539,7 +539,7 @@ $saveOrder	= $listOrder == 'a.ordering';
         data[type + '_location'] = graphItemDataArray(appointment, 'location');
         data[type + '_appointment_color'] = graphItemDataArray(appointment, 'color');
         
-        console.log(data);
+        //console.log(data);
         return data;      
     }
     
@@ -592,6 +592,17 @@ $saveOrder	= $listOrder == 'a.ordering';
         var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() - 60*59*24 * 1000;
         var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime() + 60*59*24 * 1000;
 
+      
+        //var start_week = 1375056000000;
+        //var end_week = 1375574400000;
+        
+        var start_week = startAndEndOfWeek(new Date())[0];
+        var end_week = startAndEndOfWeek(new Date())[1];
+
+        var start_day = (new Date(date.getFullYear(), date.getMonth(),date.getDate())).getTime();
+        var end_day = (new Date(date.getFullYear(), date.getMonth(), date.getDate())).getTime() + 60*60*24 * 1000;
+        //alert(date.getDate());
+       
         // END TIME SETTINGS
 
         // DATA
@@ -616,28 +627,29 @@ $saveOrder	= $listOrder == 'a.ordering';
         // Mini Goals
         //var d2 = [[1320376000 * 1000, 1], [1330376000 * 1000, 1], [1340376000 * 1000, 1], [1350998400 * 1000, 1], [1374710400 * 1000, 1]];
         var d2 = client_data.mini_goals;
+       
+        var d3 = client_data.personal_training_xaxis;
+        
+        var d4 = client_data.semi_private_xaxis; 
+        
+        var d5 = client_data.resistance_workout_xaxis;
+        
+        var d6 = client_data.cardio_workout_xaxis;
+        
+        var d7 = client_data.assessment_xaxis;
+        
         // Current Time
-        var d3 = [[current_time, 3]];
-        
-        var d4 = client_data.personal_training_xaxis;
-        
-        var d5 = client_data.semi_private_xaxis; 
-        
-        var d6 = client_data.resistance_workout_xaxis;
-        
-        var d7 = client_data.cardio_workout_xaxis;
-        
-        var d8 = client_data.assessment_xaxis;
+        var d8 = [[current_time, 8]];
         
         var data = [
             {label: "Primary Goal", data: d1},
             {label: "Mini Goal", data: d2},
-            {data: d3},
-            {label: "Personal Training", data: d4},
-            {label: "Semi-Private Training", data: d5},
-            {label: "Resistance Workout", data: d6},
-            {label: "Cardio Workout", data: d7},
-            {label: "Assessment", data: d8},
+            {label: "Personal Training", data: d3},
+            {label: "Semi-Private Training", data: d4},
+            {label: "Resistance Workout", data: d5},
+            {label: "Cardio Workout", data: d6},
+            {label: "Assessment", data: d7},
+            {data: d8}
         ];
         // END DATA
 
@@ -660,12 +672,15 @@ $saveOrder	= $listOrder == 'a.ordering';
                         markings: markings
             },
 
-            colors: ["#A3270F", "#287725", "#FFB01F", 
-                client_data.personal_training_appointment_color[0],
-                client_data.semi_private_appointment_color[0],
-                client_data.resistance_workout_appointment_color[0],
-                client_data.cardio_workout_appointment_color[0],
-                client_data.assessment_appointment_color[0]
+            colors: [
+                "#A3270F",// Primary Goal
+                "#287725", // Mimi Goal
+                client_data.personal_training_appointment_color[0] ||"#00BF32",
+                client_data.semi_private_appointment_color[0] || "#007F01",
+                client_data.resistance_workout_appointment_color[0] || "#0070FF",
+                client_data.cardio_workout_appointment_color[0] || "#E94E1B",
+                client_data.assessment_appointment_color[0] || "#E6007E",
+                "#FFB01F"// Current Time
             ]
 
 
@@ -674,16 +689,22 @@ $saveOrder	= $listOrder == 'a.ordering';
         // month options
         var options_year = { xaxis: {tickSize: [1, "month"], min: start_year, max: end_year}};
         Object.deepExtend(options_year, options);
-        // week options
+        // month options
         var options_month = { xaxis: {tickSize: [1, "day"], min:  firstDay, max: lastDay, timeformat: "%d"}};
         Object.deepExtend(options_month, options);
+        // week options
+        var options_week= { xaxis: {tickSize: [1, "day"], min:  start_week, max: end_week, timeformat: "%a"}};
+        Object.deepExtend(options_week, options);      
+        // day options
+        var options_day = { xaxis: {minTickSize: [1, "hour"],min: start_day, max: end_day, twelveHourClock: true}};
+        Object.deepExtend(options_day, options);
 
 
         // END OPTIONS
 
         // START RUN BY PERIOD
         // default
-        $.plot("#placeholder", data, options);
+        $.plot("#placeholder", data, options_year);
 
         // whole 
         $("#whole").click(function() {
@@ -700,12 +721,22 @@ $saveOrder	= $listOrder == 'a.ordering';
         $("#by_month").click(function() {
             $.plot("#placeholder", data, options_month);
         });
+        
+        // by week
+        $("#by_week").click(function() {
+            $.plot("#placeholder", data, options_week);
+        });
+        
+        // by day
+        $("#by_day").click(function() {
+            $.plot("#placeholder", data, options_day);
+        });
         // END START RUN BY PERIOD
 
         $("<div id='tooltip'></div>").css({
                 position: "absolute",
                 display: "none",
-                border: "2px solid #A3270F",
+                border: "2px solid #cccccc",
                 "border-radius": "10px",
                 padding: "5px",
                 "background-color": "#fee",
@@ -724,6 +755,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                         html +=  "Start: " +  client_data.start_mini[item.dataIndex] + "</br>";
                         html +=  "Finish: " +  client_data.finish_mini[item.dataIndex] + "</br>";
                         html +=  "Status: " +  getStatusById(client_data.status_mini[item.dataIndex]) + "</br>"; 
+                        $("#tooltip").css("background-color", "#287725");
                         break;
                     case 2 : // Primary Goals
                         html +=  "Client: " +  client_data.client_primary[item.dataIndex] + "</br>";
@@ -731,41 +763,26 @@ $saveOrder	= $listOrder == 'a.ordering';
                         html +=  "Start: " +  client_data.start_primary[item.dataIndex] + "</br>";
                         html +=  "Finish: " +  client_data.finish_primary[item.dataIndex] + "</br>";
                         html +=  "Status: " +  getStatusById(client_data.status_primary[item.dataIndex]) + "</br>"; 
+                        $("#tooltip").css("background-color", "#A3270F");
                         break;
                     case 3 : // Personal Training
-                        html +=  "Session Type: " +  client_data.personal_training_session_type[item.dataIndex] + "</br>";
-                        html +=  "Session Focus: " +  client_data.personal_training_session_focus[item.dataIndex] + "</br>";
-                        html +=  "Date: " +  client_data.personal_training_date[item.dataIndex] + "</br></br>";
-                        html +=  "Trainer: " +  client_data.personal_training_trainer[item.dataIndex] + "</br>";
-                        html +=  "Location: " +  client_data.personal_training_location[item.dataIndex] + "</br>";
+                        html =  setAppointmentsTooltip(html, client_data, item, 'personal_training');
                         break;
                     case 4 : // Semi-Private Training
-                        html +=  "Session Type: " +  client_data.semi_private_session_type[item.dataIndex] + "</br>";
-                        html +=  "Session Focus: " +  client_data.semi_private_session_focus[item.dataIndex] + "</br>";
-                        html +=  "Date: " +  client_data.semi_private_date[item.dataIndex] + "</br></br>";
-                        html +=  "Trainer: " +  client_data.semi_private_trainer[item.dataIndex] + "</br>";
-                        html +=  "Location: " +  client_data.semi_private_location[item.dataIndex] + "</br>";
+                        html =  setAppointmentsTooltip(html, client_data, item, 'semi_private');
                         break;
                     case 5 : // Resistance Workout
-                        html +=  "Session Type: " +  client_data.resistance_workout_session_type[item.dataIndex] + "</br>";
-                        html +=  "Session Focus: " +  client_data.resistance_workout_session_focus[item.dataIndex] + "</br>";
-                        html +=  "Date: " +  client_data.resistance_workout_date[item.dataIndex] + "</br></br>";
-                        html +=  "Trainer: " +  client_data.resistance_workout_trainer[item.dataIndex] + "</br>";
-                        html +=  "Location: " +  client_data.resistance_workout_location[item.dataIndex] + "</br>";
+                        html =  setAppointmentsTooltip(html, client_data, item, 'resistance_workout');
                         break;
                     case 6 : //  Cardio Workout
-                        html +=  "Session Type: " +  client_data.cardio_workout_session_type[item.dataIndex] + "</br>";
-                        html +=  "Session Focus: " +  client_data.cardio_workout_session_focus[item.dataIndex] + "</br>";
-                        html +=  "Date: " +  client_data.cardio_workout_date[item.dataIndex] + "</br></br>";
-                        html +=  "Trainer: " +  client_data.cardio_workout_trainer[item.dataIndex] + "</br>";
-                        html +=  "Location: " +  client_data.cardio_workout_location[item.dataIndex] + "</br>";
-                        break;
+                        html =  setAppointmentsTooltip(html, client_data, item, 'cardio_workout');
+                          break;
                     case 7 : // Assessment
-                        html +=  "Assessment Type: " +  client_data.assessment_session_type[item.dataIndex] + "</br>";
-                        html +=  "Assessment Focus: " +  client_data.assessment_session_focus[item.dataIndex] + "</br>";
-                        html +=  "Date: " +  client_data.assessment_date[item.dataIndex] + "</br></br>";
-                        html +=  "Trainer: " +  client_data.assessment_trainer[item.dataIndex] + "</br>";
-                        html +=  "Location: " +  client_data.assessment_location[item.dataIndex] + "</br>";
+                        html =  setAppointmentsTooltip(html, client_data, item, 'assessment');
+                        break;
+                    case 8 : // Current Time
+                        html =  "Current Time" ;
+                        $("#tooltip").css("background-color", "#FFB01F");
                         break;
                     default :
                         break;
@@ -777,9 +794,22 @@ $saveOrder	= $listOrder == 'a.ordering';
             } else {
                     $("#tooltip").hide();
             }
-
+            
         });
     }
+    
+   function setAppointmentsTooltip(html, client_data, item, type) {
+   
+       $("#tooltip").css("background-color", client_data[type + '_appointment_color'][0]);
+    
+       html +=  "Session Type: " +  client_data[type + '_session_type'][item.dataIndex] + "</br>";
+       html +=  "Session Focus: " +  client_data[type + '_session_focus'][item.dataIndex] + "</br>";
+       html +=  "Date: " +  client_data[type + '_date'][item.dataIndex] + "</br></br>";
+       html +=  "Trainer: " +  client_data[type + '_trainer'][item.dataIndex] + "</br>";
+       html +=  "Location: " +  client_data[type + '_location'][item.dataIndex] + "</br>"; 
+
+       return html;
+   }
     
     function getStatusById(id) {
     var status_name;
@@ -968,6 +998,28 @@ $saveOrder	= $listOrder == 'a.ordering';
       }
       return destination;
     };
+
+
+    function startAndEndOfWeek(date) {
+
+      // If no date object supplied, use current date
+      // Copy date so don't modify supplied date
+      var now = date? new Date(date) : new Date();
+
+      // set time to some convenient value
+      now.setHours(0,0,0,0);
+
+      // Get the previous Monday
+      var monday = new Date(now);
+      monday.setDate(monday.getDate() - monday.getDay() + 1);
+
+      // Get next Sunday
+      var sunday = new Date(now);
+      sunday.setDate(sunday.getDate() - sunday.getDay() + 7);
+
+      // Return array of date objects
+      return [monday, sunday];
+    }
     // END HELP LIBRARY
 
     
