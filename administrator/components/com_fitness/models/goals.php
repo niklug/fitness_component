@@ -560,7 +560,7 @@ class FitnessModelgoals extends JModelList {
         $query = "SELECT e.*, u.name AS trainer_name FROM #__dc_mv_events AS e
             LEFT JOIN #__users AS u ON  e.trainer_id=u.id
             WHERE (e.client_id='$client_id' OR e.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id='$client_id'))
-                AND title='$title' AND status='1'";
+                AND title='$title' AND published='1'";
         $db->setQuery($query);
         $ret['success'] = 1;
         if (!$db->query()) {

@@ -23,51 +23,93 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
-?>
-<div id="content">
 
-    <div class="graph-container">
-        <div id="placeholder" class="graph-placeholder"></div>
-    </div>
-
-    <p>Zoom to: <button id="whole">Whole period</button>
-        <button id="by_year">Current Year</button>
-        <button id="by_month">Current Month</button>
-        <button id="by_week">Current Week</button>
-        <button id="by_day">Current Day</button>
-    <?php
-    function getUserGroup($user_id) {
-        if(!$user_id) {
-            $user_id = &JFactory::getUser()->id;
-        }
-        $db = JFactory::getDBO();
-        $query = "SELECT title FROM #__usergroups WHERE id IN 
-            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
-        $db->setQuery($query);
-        if(!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        return $db->loadResult();
-    }
-
-    $db = JFactory::getDbo();
-    $sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
-    if(getUserGroup() != 'Super Users') {
+function getUserGroup($user_id) {
+    if(!$user_id) {
         $user_id = &JFactory::getUser()->id;
-        $sql .= " AND (primary_trainer='$user_id' OR other_trainers LIKE '%$user_id%')";
     }
+    $db = JFactory::getDBO();
+    $query = "SELECT title FROM #__usergroups WHERE id IN 
+        (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+    $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
+    return $db->loadResult();
+}
+
+$db = JFactory::getDbo();
+$sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
+if(getUserGroup() != 'Super Users') {
+    $user_id = &JFactory::getUser()->id;
+    $sql .= " AND (primary_trainer='$user_id' OR other_trainers LIKE '%$user_id%')";
+}
+$db->setQuery($sql);
+$clients = $db->loadObjectList();
+
+function getTrainingPeriods() {
+    // Training Period List
+    $db = JFactory::getDbo();
+    $sql = "SELECT * FROM #__fitness_training_period WHERE state='1'";
     $db->setQuery($sql);
-    $clients = $db->loadObjectList();
-    ?>
+    $training_periods = $db->loadObjectList();
+
+    foreach ($training_periods as $item) {
+        $color = '<div style="float:left;margin-right:5px;width:15px; height:15px;background-color:' . $item->color . '" ></div>';
+        $name = '<div> ' . $item->name . '</div>';
+        $html .= $color . $name .  "<br/>";
+    }
+    return $html;
+}
+
+
+?>
+
+<div id="content">
+    <table>
+        <tr>
+            <td>
+                <div id="choices" style=" width:135px;"></div>
+            </td>
+            <td>
+                <div class="graph-container" style="width:900px;">
+
+                    <div id="placeholder" class="graph-placeholder"></div>
+
+                </div>
+            </td>
+            <td>
+                <fieldset style="width:140px; margin-left: 150px; ">
+                    <legend>Training Period Keys</legend>
+                    <?php echo getTrainingPeriods();?>
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                Zoom Scale to: <button id="whole">Whole period</button>
+                <button id="by_year">Current Year</button>
+                <button id="by_month">Current Month</button>
+                <button id="by_week">Current Week</button>
+                <button id="by_day">Current Day</button>
+            </td>
+            <td>
+                Select Client to display on Graph: &nbsp;
+                <select style="float:right;"  id="graph_client" name="client_id" class="inputbox">
+                        <option value=""><?php echo JText::_('-Select-');?></option>
+                        <?php 
+                            foreach ($clients as $client) {
+                                echo '<option value="' . $client->user_id . '">' . JFactory::getUser($client->user_id)->name. '</option>';
+                            }
+                        ?>
+                </select>
+            </td>
+        </tr>
+    </table>
     
-    <select style="float:right;"  id="graph_client" name="client_id" class="inputbox">
-            <option value=""><?php echo JText::_('-Select Client for Graph-');?></option>
-            <?php 
-                foreach ($clients as $client) {
-                    echo '<option value="' . $client->user_id . '">' . JFactory::getUser($client->user_id)->name. '</option>';
-                }
-            ?>
-    </select>
+
+
 
 </div>
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=goals'); ?>" method="post" name="adminForm" id="adminForm">
@@ -442,6 +484,7 @@ $saveOrder	= $listOrder == 'a.ordering';
         $("#graph_client").change(function(){
             var client_id =  $(this).find(':selected').val();
             if(!client_id) return;
+            $("#choices").html('');
             $.ajax({
                     type : "POST",
                     url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
@@ -459,7 +502,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                         }
                         //console.log(response.data.mini_goals);
                         var data = {};
-                        
+                        console.log(response.data);
                         // primary goals
                         var primary_goals_data = setPrimaryGoalsGraphData(response.data.primary_goals);
                         $.extend(true,data, primary_goals_data);
@@ -616,12 +659,14 @@ $saveOrder	= $listOrder == 'a.ordering';
         // Training periods 
         var markings = []; 
         for(var i = 0; i < d1.length - 1; i++) {
-            markings[i] =  { xaxis: { from: d1[i][0], to: d1[i + 1][0] }, yaxis: { from: 0.5, to: 0.75 }, color: training_period_colors[i+1]};
+            markings[i] =  { xaxis: { from: d1[i][0], to: d1[i + 1][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i+1]};
         }
         // first Primary Goal marking
         
         var first_primary_goal_start_date = new Date(client_data.start_primary[0]).getTime();
-        markings[markings.length] =  { xaxis: { from: first_primary_goal_start_date, to: d1[0][0] }, yaxis: { from: 0.5, to: 0.75 }, color: training_period_colors[0]};
+        if(first_primary_goal_start_date) {
+            markings[markings.length] =  { xaxis: { from: first_primary_goal_start_date, to: d1[0][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[0]};
+        }
         //console.log(markings);
         //
         // Mini Goals
@@ -649,10 +694,10 @@ $saveOrder	= $listOrder == 'a.ordering';
             {label: "Resistance Workout", data: d5},
             {label: "Cardio Workout", data: d6},
             {label: "Assessment", data: d7},
-            {data: d8}
+            {label: "Current Time", data: d8}
         ];
         // END DATA
-
+        
         // START OPTIONS
         // base common options
         var options = {
@@ -671,6 +716,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                         },
                         markings: markings
             },
+            legend: {show: true, margin: [-170, 0]},
 
             colors: [
                 "#A3270F",// Primary Goal
@@ -699,38 +745,59 @@ $saveOrder	= $listOrder == 'a.ordering';
         var options_day = { xaxis: {minTickSize: [1, "hour"],min: start_day, max: end_day, twelveHourClock: true}};
         Object.deepExtend(options_day, options);
 
-
+        var current_options = {
+            get : function() {return this.options;},
+            set : function(options) {this.options = options}
+        };
+        current_options = options_year;
         // END OPTIONS
 
         // START RUN BY PERIOD
-        // default
-        $.plot("#placeholder", data, options_year);
-
         // whole 
         $("#whole").click(function() {
-            $.plot("#placeholder", data, options);
+            current_options = options;
+            plotAccordingToChoices(data, current_options);
         });
 
          // by year
         $("#by_year").click(function() {
-            $.plot("#placeholder", data, options_year);
+            current_options = options_year;
+            plotAccordingToChoices(data, current_options);
         });
 
 
        // by month
         $("#by_month").click(function() {
-            $.plot("#placeholder", data, options_month);
+            current_options = options_month;
+            plotAccordingToChoices(data, current_options);
         });
         
         // by week
         $("#by_week").click(function() {
-            $.plot("#placeholder", data, options_week);
+            current_options = options_week;
+            plotAccordingToChoices(data, current_options);
         });
         
         // by day
         $("#by_day").click(function() {
-            $.plot("#placeholder", data, options_day);
+            current_options = options_day
+            plotAccordingToChoices(data, current_options);
         });
+        
+         // TOOGLE
+        // insert checkboxes 
+        $.each(data, function(key, val) {
+            $("#choices").append("<br/><input type='checkbox' name='" + key +
+                    "' checked='checked' id='id" + key + "'></input>" +
+                    "<label for='id" + key + "'>"
+                    + val.label + "</label>");
+        });
+        $("#choices").find("input").click(function() {
+            plotAccordingToChoices(data, current_options);
+        });
+        plotAccordingToChoices(data, current_options);
+        //END TOOGLE
+        //
         // END START RUN BY PERIOD
 
         $("<div id='tooltip'></div>").css({
@@ -798,7 +865,26 @@ $saveOrder	= $listOrder == 'a.ordering';
         });
     }
     
-   function setAppointmentsTooltip(html, client_data, item, type) {
+    function plotAccordingToChoices(data, options) {
+        var data_temp = [];
+        $("#choices").find("input:checked").each(function () {
+                var key = $(this).attr("name");
+                if (key && data[key]) {
+                        data_temp.push(data[key]);
+                        
+                } else {
+                    data_temp.push(null);
+                }
+        });
+console.log(data_temp);
+        if (data_temp.length > 0) {
+                $.plot("#placeholder", data_temp, options);
+        }
+    }
+    
+
+    
+    function setAppointmentsTooltip(html, client_data, item, type) {
    
        $("#tooltip").css("background-color", client_data[type + '_appointment_color'][0]);
     
@@ -809,7 +895,7 @@ $saveOrder	= $listOrder == 'a.ordering';
        html +=  "Location: " +  client_data[type + '_location'][item.dataIndex] + "</br>"; 
 
        return html;
-   }
+    }
     
     function getStatusById(id) {
     var status_name;
