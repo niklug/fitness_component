@@ -514,7 +514,7 @@ $(document).ready(function() {
                        unavailableForm();
                        break;
                     default :
-                       personalTrainingForm(); 
+                       //personalTrainingForm(); 
                 }
             }
             
@@ -539,6 +539,7 @@ $(document).ready(function() {
                 $("#assessment_wrapper").hide();
                 $("#details_wrapper").show();
                 $("#exercises_wrapper").show();
+                $("#comments_wrapper").show();
                 //client personal
                 $("#client_select_tr").show();
                 $("#client").attr('disabled', false);
@@ -561,6 +562,7 @@ $(document).ready(function() {
                 $("#assessment_wrapper").hide();
                 $("#details_wrapper").show();
                 $("#exercises_wrapper").show();
+                $("#comments_wrapper").show();
                 //client personal
                 $("#client_select_tr").hide();
                 $("#client").attr('disabled', true);
@@ -593,6 +595,7 @@ $(document).ready(function() {
                 
                 $("#details_wrapper").hide();
                 $("#exercises_wrapper").hide();
+                $("#comments_wrapper").hide();
                 //client personal
                 $("#client_select_tr").show();
                 $("#client").attr('disabled', false);
@@ -611,6 +614,7 @@ $(document).ready(function() {
             function consultationForm() {
                 semiPrivateForm();
                 $("#exercises_wrapper").hide();
+                $("#comments_wrapper").hide();
             }
             
             function specialEventForm() {

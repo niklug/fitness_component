@@ -404,7 +404,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
         <span class="ui-icon ui-icon-closethick"></span>
     </a>
 
-    <div id="editEvent" class="ui-dialog-content ui-widget-content" style="  background-color: #F4F4F4;  overflow-y: auto;width: auto; min-height: 0px; height: 687px;" scrolltop="0" scrollleft="0"></div>
+    <div id="editEvent" class="ui-dialog-content ui-widget-content" style="  background-color: #F4F4F4;  overflow-y: auto;width: auto; min-height: 0px; height: 787px;" scrolltop="0" scrollleft="0"></div>
 </div>
 
 <script type="text/javascript">
@@ -571,7 +571,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
             dataType : 'html',
             success : function(content) {
                 $(".mv_dlg_editevent").show();
-                var height = 720;
+                var height = 820;
                 var iframe_start = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="overflow-y: auto;overflow-x: hidden;border:none;width:598px;height:'+(height-60)+'px" src="'+url+'" border="0" scrolling="auto">';
                 var iframe_end = '</iframe>';
                 updateAppointmentHtml(iframe_start + iframe_end);

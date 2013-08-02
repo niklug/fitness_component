@@ -169,6 +169,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
         
             //debugger;
             $("#Description").cleditor({width:450, height:150, useCSS:true})[0].focus();
+            $("#trainer_comments").cleditor({width:560, height:150, useCSS:true})[0];
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
             var arrT = [];
             var tt = "{0}:{1}";
@@ -235,13 +236,20 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             $( "#s_all_day_event" ).html(i18n.dcmvcal.all_day_event);
             $( "#s_location" ).html(i18n.dcmvcal.location);
             $( "#s_remark" ).html(i18n.dcmvcal.remark);
-            $("#savebtn,#closebtn,#deletebtn" ).button();
+            $("#savebtn,#saveclosebtn,#closebtn,#deletebtn" ).button();
             $( "#savebtn" ).button( "option", "label", i18n.dcmvcal.i_save );
             $( "#closebtn" ).button( "option", "label", i18n.dcmvcal.i_close );
             $( "#deletebtn" ).button( "option", "label", i18n.dcmvcal.i_delete );
             $("#savebtn").click(function() { 
                 $("#fmEdit").submit();
             });
+            
+            $("#saveclosebtn").click(function() { 
+                close_status = true;
+                $("#fmEdit").submit();
+            });
+            
+            
             $("#closebtn").click(function() { closeEdit(); });
             deleteEvent = function(){
                 var param = [{ "name": "calendarId", value: <?php echo isset($event)?$event->id:0; ?>},{ "name": "rruleType", value:$( "#rruleType" ).val() }];
@@ -315,12 +323,6 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
                 success: function(data) {
                     //console.log(data.Data);
                     if (data.IsSuccess) {
-                        
-                        <?php if($event->id) { ?>
-                            //window.parent.$jc('#editEvent').dialog('close');
-                            //window.parent.$jc('#editEvent').dialog('open');
-                        <?php } ?>
- 
                         var event_id = data.Data;
                         var current_url = window.location.href.replace('&id=0').replace('#') + '&id=' + event_id +'#';
                         //console.log(current_url);
@@ -329,9 +331,13 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
                             url : current_url,
                             dataType : 'html',
                             success : function(content) {
-                                var height = 720;
+                                var height = 820;
                                 var iframe_start = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="overflow-y: auto;overflow-x: hidden;border:none;width:598px;height:'+(height-60)+'px" src="'+current_url+'" border="0" scrolling="auto">';
                                 var iframe_end = '</iframe>';
+                                
+                                if(close_status) {
+                                    closeEdit();
+                                }
                                 
                                 if(window.parent.$jc === undefined) {
                                     window.parent.updateAppointmentHtml(iframe_start + iframe_end);
@@ -516,6 +522,10 @@ $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addCl
     if (isset($event->status)) {
         require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/exercises.inc.php' );
     }
+    ?>
+    <!-- Trainer Feedback / Comments -->
+    <?php
+    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/comments.inc.php' );
     ?>
     <!-- Bottom form --> 
     <?php

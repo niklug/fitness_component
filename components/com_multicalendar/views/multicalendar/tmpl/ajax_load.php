@@ -152,6 +152,7 @@ switch ($method) {
                         JRequest::getVar("Subject"),
                         (JRequest::getVar("IsAllDayEvent")==1)?1:0, 
                         JRequest::getVar('Description','','POST','STRING',JREQUEST_ALLOWHTML) ,
+                        JRequest::getVar('comments','','POST','STRING',JREQUEST_ALLOWHTML) ,
                         JRequest::getVar('session_type','','POST','STRING',JREQUEST_ALLOWHTML) ,
                         JRequest::getVar('session_focus','','POST','STRING',JREQUEST_ALLOWHTML) ,
                         JRequest::getVar("client_id"),
@@ -159,6 +160,7 @@ switch ($method) {
                         JRequest::getVar("Location"), 
                         JRequest::getVar("colorvalue"), 
                         JRequest::getVar("frontend_published"), 
+                        JRequest::getVar("published"), 
                         JRequest::getVar("rrule"),
                         JRequest::getVar("rruleType"),
                         JRequest::getVar("timezone")
@@ -421,7 +423,7 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     if($session_focus[0]) {
         $sql .= " and session_focus IN ($session_focuses) ";
     }
-    $sql .= " AND published='1'";
+    //$sql .= " AND published='1'";
             
     $sql .=  " and ( (`".DC_MV_CAL_FROM."` between '"
         
@@ -555,6 +557,7 @@ function updateDetailedCalendar(
         $sub, 
         $ade, 
         $dscr,
+        $comments,
         $session_type,
         $session_focus,
         $client_id,
@@ -562,6 +565,7 @@ function updateDetailedCalendar(
         $loc, 
         $color,
         $frontend_published,
+        $published,
         $rrule,
         $rruleType,
         $tz
@@ -610,6 +614,7 @@ function updateDetailedCalendar(
               . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
               . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
               . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
+              . " `comments`=" . $db->Quote($comments) . ", "
               . " `session_type`=" . $db->Quote($session_type) . ", "
               . " `session_focus`=" . $db->Quote($session_focus) . ", "
               . " `client_id`=" . $db->Quote($client_id) . ", "
@@ -617,6 +622,7 @@ function updateDetailedCalendar(
               . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
               . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
               . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
+              . " `published`=" . $db->Quote($published) . ", "
               . " `rrule`=" . $db->Quote($rrule) . " "
               . "where `id`=" . $id;
             $db->setQuery( $sql );
@@ -678,6 +684,7 @@ function updateDetailedCalendar(
               . " `".DC_MV_CAL_TITLE."`=" . $db->Quote($sub) . ", "
               . " `".DC_MV_CAL_ISALLDAY."`=" . $db->Quote($ade) . ", "
               . " `".DC_MV_CAL_DESCRIPTION."`=" . $db->Quote($dscr) . ", "
+              . " `comments`=" . $db->Quote($comments) . ", "
               . " `session_type`=" . $db->Quote($session_type) . ", "
               . " `session_focus`=" . $db->Quote($session_focus) . ", "
               . " `client_id`=" . $db->Quote($client_id) . ", "
@@ -685,6 +692,7 @@ function updateDetailedCalendar(
               . " `".DC_MV_CAL_LOCATION."`=" . $db->Quote($loc) . ", "
               . " `".DC_MV_CAL_COLOR."`=" . $db->Quote($color) . ", "
               . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
+              . " `published`=" . $db->Quote($published) . ", "
               . " `rrule`=" . $db->Quote($rrule) . " "
               . "where `id`=" . $id;
             $db->setQuery( $sql );

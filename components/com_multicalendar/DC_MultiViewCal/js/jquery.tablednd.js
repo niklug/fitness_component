@@ -244,11 +244,11 @@ window.jQuery.tableDnD = {
                 // Iterate through each row, the row is bound to "this"
                 if (! $(this).hasClass("nodrag")) {
                     $(this).bind(startEvent, function(e) {
-                        if (e.target.tagName == "TD") {
+                        if (e.target.tagName == "TD" && $(e.target).hasClass('drag_exercise_item')) {
                             $.tableDnD.initialiseDrag(this, table, this, e, config);
                             return false;
                         }
-                    }).css("cursor", "move"); // Store the tableDnD object
+                    })
                 }
             });
     },
