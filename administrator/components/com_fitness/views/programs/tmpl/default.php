@@ -24,6 +24,10 @@ $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
 
+// GRAPH
+require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . 'tmpl' . DS .  'default_graph.php';
+
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=programs'); ?>" method="post" name="adminForm" id="adminForm">
@@ -396,58 +400,39 @@ $saveOrder	= $listOrder == 'a.ordering';
 </div>
 
 <script type="text/javascript">
-    function getScript(url,success) {
-        var script = document.createElement('script');
-        script.src = url;
-        var head = document.getElementsByTagName('head')[0],
-        done = false;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState
-                || this.readyState == 'loaded'
-                || this.readyState == 'complete')) {
-                done = true;
-                success();
-                script.onload = script.onreadystatechange = null;
-                head.removeChild(script);
-            }
-        };
-        head.appendChild(script);
-    }
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        $(document).ready(function(){
+    $(document).ready(function(){
 
-             $(".set_status").bind('click', function(e) {
-                var event_status = $(this).data('status');
-                eventSetStatus(event_status, event_id);
-            });
-            
-            $(".edit_event").bind('click', function(e) {
-                var event_id = $(this).data('id');
-                var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB&id=' + event_id;
-                loadAppointmentHtml(event_id, url);
-            });
-            
-            $(".ui-icon-closethick").bind('click', function(e) {
-                closeEditForm();
-            });
-            
-            $("#add_appointment").bind('click', function(e) {
-                var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB';
-                loadAppointmentHtml('', url);
-            });
-            
-            $("#reset_filtered").click(function(){
-                var form = $("#adminForm");
-                form.find("select").val('');
-                form.find("input").val('');
-                form.submit();
-            });
-            
-            
-            
+         $(".set_status").bind('click', function(e) {
+            var event_status = $(this).data('status');
+            eventSetStatus(event_status, event_id);
         });
+
+        $(".edit_event").bind('click', function(e) {
+            var event_id = $(this).data('id');
+            var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB&id=' + event_id;
+            loadAppointmentHtml(event_id, url);
+        });
+
+        $(".ui-icon-closethick").bind('click', function(e) {
+            closeEditForm();
+        });
+
+        $("#add_appointment").bind('click', function(e) {
+            var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB';
+            loadAppointmentHtml('', url);
+        });
+
+        $("#reset_filtered").click(function(){
+            var form = $("#adminForm");
+            form.find("select").val('');
+            form.find("input").val('');
+            form.submit();
+        });
+
+
+
     });
+
     
     
 
