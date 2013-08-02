@@ -502,7 +502,7 @@ function getTrainingPeriods() {
                         }
                         //console.log(response.data.mini_goals);
                         var data = {};
-                        console.log(response.data);
+                        //console.log(response.data);
                         // primary goals
                         var primary_goals_data = setPrimaryGoalsGraphData(response.data.primary_goals);
                         $.extend(true,data, primary_goals_data);
@@ -867,18 +867,28 @@ function getTrainingPeriods() {
     
     function plotAccordingToChoices(data, options) {
         var data_temp = [];
+        var colors = [];
         $("#choices").find("input:checked").each(function () {
                 var key = $(this).attr("name");
                 if (key && data[key]) {
                         data_temp.push(data[key]);
+                        colors.push(options.colors[key]);
                         
-                } else {
-                    data_temp.push(null);
                 }
         });
-console.log(data_temp);
+        
+        var choosen_options = {};
+        
+        $.extend(true, choosen_options, options);
+        
+        choosen_options.colors = [];
+        
+        choosen_options.colors = colors;
+        
+        //console.log(choosen_options.colors);
+        //console.log(options.colors);
         if (data_temp.length > 0) {
-                $.plot("#placeholder", data_temp, options);
+                $.plot("#placeholder", data_temp, choosen_options);
         }
     }
     
