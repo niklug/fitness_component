@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `#__dc_mv_events` (
   `title` varchar(250) DEFAULT NULL,
   `location` varchar(250) DEFAULT NULL,
   `description` text,
+  `comments` text,
   `session_type` varchar(255) NOT NULL,
   `session_focus` varchar(255) NOT NULL,
   `client_id` int(11) NOT NULL,

@@ -158,6 +158,12 @@
     color: #006C09 !important;
 }
 
+.event_status_complete {
+    background-color: #DEFFE2;
+    border: 1px solid #1BC721;
+    color: #006C09 !important;
+}
+
 
 .event_status__button {
     display: block;

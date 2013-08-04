@@ -1,9 +1,18 @@
 <script type="text/javascript">  
-$(document).ready(function() {
-    var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
-    
-    $("#email_button").on('click', function() {
-        var event_id = '<?php echo $event->id; ?>';
+    $(document).ready(function() {
+        $("#email_button").on('click', function() {
+            var event_id = '<?php echo $event->id; ?>';
+            senSessionDetailsEmail(event_id);
+        });
+
+        $("#pdf_button").on('click', function() {
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&event_id=<?php echo $event->id?>';
+            printPage(htmlPage);
+        });
+    });  
+
+    function senSessionDetailsEmail(event_id) {
+        var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
         var url = DATA_FEED_URL+ "&method=send_appointment_email";
         $.ajax({
             type : "POST",
@@ -13,26 +22,25 @@ $(document).ready(function() {
             },
             dataType : 'json',
             success : function(response) {
-                alert('email sent');
+                //console.log(response);
+                if(response.IsSuccess != true) {
+                    alert(response.Msg);
+                    return;
+                } 
+                alert('Email sent');  
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
                 alert("error");
             }
-        });
-    });
-    
-    $("#pdf_button").on('click', function() {
-        var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&event_id=<?php echo $event->id?>';
-        printPage(htmlPage);
-    });
-    
-    function printPage(htmlPage)
-        {
-            var w = window.open(htmlPage);
-            w.print();
-        }
-});  
+        }); 
+      
+    }
+
+    function printPage(htmlPage) {
+        var w = window.open(htmlPage);
+        w.print();
+    }
 
 </script> 
 <div id="details_wrapper">

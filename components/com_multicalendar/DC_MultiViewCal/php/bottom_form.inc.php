@@ -1,38 +1,40 @@
-          <input id="timezone" name="timezone" type="hidden" value="" />
-          <br /> 
-          
+         <input id="timezone" name="timezone" type="hidden" value="" />
+         <?php
+           if (isset($event->status)) {
+         ?>
+         <div class="checkp">
+              <input id="repeatcheckbox" name="repeatcheckbox" type="checkbox" value="1" <?php if (isset($event) && $event->rrule != "") {
+              echo "checked";
+          } ?>/><span class="inl"><span style="font-size:11px;" id="repeat1" class="inl">Repeat</span> <span id="repeatspan" class="inl"></span> <a href="#" id="repeatanchor">Edit</a></span>
+          </div> 
+
+          <?php
+            }
+          ?>
+          <br/>
           <a href="#" id="savebtn">Save</a>
           <a href="#" id="saveclosebtn">Save/Close</a>
           <?php if(isset($event) && (JRequest::getVar("delete")=="1")){ ?>
-        <a href="#" id="deletebtn">Delete</a>
-        <?php } ?>  
+             <a href="#" id="deletebtn">Delete</a>
+          <?php } ?>  
           <a href="#" id="closebtn">Close</a>
           <?php
             if (isset($event->status)) {
           ?>
-            
           <label class="checkp">
               <input id="frontend_published" name="frontend_published" type="checkbox" value="1" <?php if (isset($event) && $event->frontend_published != "0") {
               echo "checked";
           } ?>/><span  style="font-size:11px;" class="inl">Publish Workout</span>
           </label> 
-         
+
           <label class="checkp">
               <input  name="published" type="checkbox" value="1" <?php if (isset($event) && $event->published != "0") {
               echo "checked";
           } ?>/><span style="font-size:11px;" class="inl">Publish Appointment</span>
           </label> 
-          
-         <label class="checkp">
-              <input id="repeatcheckbox" name="repeatcheckbox" type="checkbox" value="1" <?php if (isset($event) && $event->rrule != "") {
-              echo "checked";
-          } ?>/><span class="inl"><span style="font-size:11px;" id="repeat1" class="inl">Repeat</span> <span id="repeatspan" class="inl"></span> <a href="#" id="repeatanchor">Edit</a></span>
-          </label> 
-           <br /> 
           <?php
             }
-          ?>
-           
+          ?> 
       </form>  
     </div>  
     <div id="repeatsave">
