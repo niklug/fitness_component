@@ -47,6 +47,7 @@ class FitnessViewAssessments extends JView {
         FitnessHelper::addSubmenu('Programs', 'programs');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
         FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diary');
+        FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
         FitnessHelper::addSubmenu('Settings', 'settings');
 
         $document = &JFactory::getDocument();

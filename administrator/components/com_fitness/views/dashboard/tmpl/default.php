@@ -45,7 +45,7 @@ defined('_JEXEC') or die;
                                 <a id="assessments_href"  href="index.php?option=com_fitness&view=assessments" title="Assessments"></a>
                             </td>
                             <td>
-                                <a id="nutrition_database_href"  href="#" title="Nutrition Database"></a>
+                                <a id="nutrition_database_href"  href="index.php?option=com_fitness&view=nutritiondatabases" title="Nutrition Database"></a>
                             </td>
                             <td>
                                 <a id="settings_href"  href="index.php?option=com_fitness&view=settings" title="Settings"></a>

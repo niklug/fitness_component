@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="ingredient_name" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_INGREDIENT_NAME"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_INGREDIENT_NAME" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="calories" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_CALORIES"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_CALORIES" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="energy" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_ENERGY"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_ENERGY" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="protein" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_PROTEIN"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_PROTEIN" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="fats" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_FATS"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_FATS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="carbs" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_CARBS"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_CARBS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="saturated_fat" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_SATURATED_FAT"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_SATURATED_FAT" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="total_sugars" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_TOTAL_SUGARS"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_TOTAL_SUGARS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="sodium" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_SODIUM"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_SODIUM" 
+
+        filter="safehtml" /> 
+       
+       <field name="specific_gravity" type="text" size="10" class="inputbox"
+        
+            label="Specific Gravity"
+            description="" 
+
+        filter="safehtml" /> 
+              
+              
+
+       <field name="description" type="editor" buttons="true"
+        class="inputbox"
+        filter="safehtml"
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_DESCRIPTION"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_DESCRIPTION"  /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

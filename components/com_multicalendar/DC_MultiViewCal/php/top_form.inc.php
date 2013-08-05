@@ -15,6 +15,9 @@
                setupSessionType(catid);
                hide_event_status_wrapper();
             });
+            
+            var catid = $(this).find(':selected').data('catid');
+            generateFormHtml(catid);
 
             $('#session_type').change(function(){
                 var catid = $('#Subject').find(':selected').data('catid');

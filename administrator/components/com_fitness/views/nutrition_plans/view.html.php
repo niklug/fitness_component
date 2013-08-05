@@ -47,6 +47,7 @@ class FitnessViewNutrition_plans extends JView {
         FitnessHelper::addSubmenu('Calendar', 'calendar');
         FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diary');
         FitnessHelper::addSubmenu('Assessments', 'assessments');
+        FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
         FitnessHelper::addSubmenu('Settings', 'settings');
 
         parent::display($tpl);

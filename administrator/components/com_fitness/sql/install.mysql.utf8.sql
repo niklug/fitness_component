@@ -720,3 +720,21 @@ SET FOREIGN_KEY_CHECKS =0;# MySQL returned an empty result set (i.e. zero rows).
 DROP TABLE master_fitness_goals1;# MySQL returned an empty result set (i.e. zero rows).
 SET FOREIGN_KEY_CHECKS =1;# MySQL returned an empty result set (i.e. zero rows).
 */
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_database` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`ingredient_name` VARCHAR(255)  NOT NULL ,
+`calories` FLOAT NOT NULL ,
+`energy` FLOAT NOT NULL ,
+`protein` FLOAT NOT NULL ,
+`fats` FLOAT NOT NULL ,
+`carbs` FLOAT NOT NULL ,
+`saturated_fat` FLOAT NOT NULL ,
+`total_sugars` FLOAT NOT NULL ,
+`sodium` FLOAT NOT NULL ,
+`specific_gravity` FLOAT NOT NULL ,
+`description` TEXT NOT NULL ,
+`state` TINYINT(1)  NOT NULL DEFAULT '1',
+PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;

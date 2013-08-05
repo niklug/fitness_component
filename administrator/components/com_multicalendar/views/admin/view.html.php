@@ -50,6 +50,7 @@ class multicalendarViewadmin extends JView
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_diary">Nutrition Diary</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_diary">Nutrition Diary</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=assessments">Assessments</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=dashboard">Nutrition Database</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=settings">Settings</a></li>
                         </ul>
                         <div class="clr"></div>
