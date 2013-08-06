@@ -10,24 +10,16 @@
         
             label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_INGREDIENT_NAME"
             description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_INGREDIENT_NAME" 
-        
+            required="true"
         
         
         filter="safehtml" /> 
 
-       <field name="calories" type="text" size="10" class="inputbox"
-        
-            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_CALORIES"
-            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_CALORIES" 
-        
-        
-        
-        filter="safehtml" /> 
 
        <field name="energy" type="text" size="10" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_ENERGY"
-            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_ENERGY" 
+            description="" 
         
         
         
@@ -45,7 +37,7 @@
        <field name="fats" type="text" size="10" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_FATS"
-            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_FATS" 
+            description="" 
         
         
         
@@ -54,7 +46,7 @@
        <field name="carbs" type="text" size="10" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_CARBS"
-            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_CARBS" 
+            description="" 
         
         
         
@@ -72,7 +64,7 @@
        <field name="total_sugars" type="text" size="10" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_TOTAL_SUGARS"
-            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_TOTAL_SUGARS" 
+            description="" 
         
         
         
@@ -100,6 +92,24 @@
             label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_DESCRIPTION"
             description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_DESCRIPTION"  /> 
 
+       
+       
+       
+       <field
+        name="measurement_unit"
+        type="list"
+        label="Measurement Unit"
+        description=""
+        class="inputbox"
+        size="1"
+        default="0">
+        <option value="0">-Select-</option>
+        <option value="1">GRAMS</option>
+        <option value="2">MILLILITRES</option>
+    </field>
+    
+    
+    
          <field
         name="state"
         type="list"

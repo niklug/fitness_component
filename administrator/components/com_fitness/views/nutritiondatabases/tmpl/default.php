@@ -57,9 +57,6 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_INGREDIENT_NAME', 'a.ingredient_name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_CALORIES', 'a.calories', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_ENERGY', 'a.energy', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
@@ -68,20 +65,18 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_FATS', 'a.fats', $listDirn, $listOrder); ?>
 				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_SATURATED_FAT', 'a.saturated_fat', $listDirn, $listOrder); ?>
+				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_CARBS', 'a.carbs', $listDirn, $listOrder); ?>
 				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_SATURATED_FAT', 'a.saturated_fat', $listDirn, $listOrder); ?>
-				</th>
+
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_TOTAL_SUGARS', 'a.total_sugars', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_SODIUM', 'a.sodium', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Description', 'a.description', $listDirn, $listOrder); ?>
 				</th>
                                 <th class='left'>
 				<?php echo JHtml::_('grid.sort',  'Specific Gravity', 'a.specific_gravity', $listDirn, $listOrder); ?>
@@ -149,9 +144,6 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php endif; ?>
 				</td>
 				<td>
-					<?php echo $item->calories; ?>
-				</td>
-				<td>
 					<?php echo $item->energy; ?>
 				</td>
 				<td>
@@ -160,22 +152,19 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<td>
 					<?php echo $item->fats; ?>
 				</td>
+                                <td>
+					<?php echo $item->saturated_fat; ?>
+				</td>
 				<td>
 					<?php echo $item->carbs; ?>
 				</td>
-				<td>
-					<?php echo $item->saturated_fat; ?>
-				</td>
+
 				<td>
 					<?php echo $item->total_sugars; ?>
 				</td>
 				<td>
 					<?php echo $item->sodium; ?>
 				</td>
-				<td>
-					<?php echo $item->description; ?>
-				</td>
-
                                 <td>
 					<?php echo $item->specific_gravity; ?>
 				</td>

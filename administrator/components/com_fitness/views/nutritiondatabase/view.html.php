@@ -32,9 +32,10 @@ class FitnessViewNutritiondatabase extends JView
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
-            throw new Exception(implode("\n", $errors));
+                    throw new Exception(implode("\n", $errors));
 		}
-
+                $document = &JFactory::getDocument();
+                $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
 		$this->addToolbar();
 		parent::display($tpl);
 	}
