@@ -11,4 +11,6 @@ DROP TABLE IF EXISTS `#__fitness_appointment_clients`
 DROP TABLE IF EXISTS  `#__fitness_training_period`
 DROP TABLE IF EXISTS  `#__fitness_mini_goals`
 DROP TABLE IF EXISTS  `#__fitness_mini_goal_categories`
+DROP TABLE IF EXISTS `#__fitness_recipe_types`;
+DROP TABLE IF EXISTS `#__fitness_nutrition_recipes`;
 

@@ -27,14 +27,18 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutritiondatabases'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
-		<div class="filter-search fltlft">
+                <div class='filter-select fltrt'>
+                    <a class="active menu_link" href="index.php?option=com_fitness&view=nutrition_recipes">Nutrition Recipes</a>
+                </div>
+                <div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 		</div>
 		
-        
+        </fieldset> 
+        <fieldset id="filter-bar"> 
 		<div class='filter-select fltrt'>
 			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>

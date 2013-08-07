@@ -180,7 +180,9 @@
 
 
 
-#filter_from_start_date, #filter_to_start_date, #filter_from_deadline, #filter_to_deadline, #filter_created, #filter_modified{
+#filter_from_start_date, #filter_to_start_date, #filter_from_deadline,
+#filter_to_deadline, #filter_created, #filter_modified,
+#filter_from_created, #filter_to_created{
     width: 55px;
 }
 
@@ -382,6 +384,17 @@
 	height: 100%;
 	font-size: 14px;
 	line-height: 1.2em;
+}
+
+.menu_link{
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #146295;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    height: 12px;
+    line-height: 14px;
+    padding: 0 15px;
 }
 
 
