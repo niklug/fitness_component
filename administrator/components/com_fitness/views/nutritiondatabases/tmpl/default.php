@@ -56,6 +56,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_INGREDIENT_NAME', 'a.ingredient_name', $listDirn, $listOrder); ?>
 				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_CALORIES', 'a.calories', $listDirn, $listOrder); ?>
+				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_ENERGY', 'a.energy', $listDirn, $listOrder); ?>
 				</th>
@@ -142,6 +145,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php else : ?>
 					<?php echo $this->escape($item->ingredient_name); ?>
 				<?php endif; ?>
+				</td>
+				<td>
+					<?php echo $item->calories; ?>
 				</td>
 				<td>
 					<?php echo $item->energy; ?>

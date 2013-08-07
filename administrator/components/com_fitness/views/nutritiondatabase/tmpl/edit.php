@@ -120,6 +120,14 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         //
         
         // input focus out events
+        $("#jform_calories").on('focusout', function() {
+            calculate_energy();
+        });
+        
+        $("#jform_energy").on('focusout', function() {
+            calculate_calories();
+        });
+        
         $("#jform_saturated_fat").on('focusout', function() {
             validate_saturated_fat();
         });
@@ -240,5 +248,19 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     
     function parse_comma_number(str) {
         return str.replace(',' ,'.');
+    }
+    
+    function calculate_energy() {
+        var calories = parse_comma_number($("#jform_calories").val());
+        var energy = calories * 4.184;
+        energy = Math.round(energy * 100)/100;
+        $("#jform_energy").val(energy);
+    }
+    
+    function calculate_calories() {
+        var energy = parse_comma_number($("#jform_energy").val());
+        var calories = energy / 4.184;
+        calories = Math.round(calories * 100)/100;
+        $("#jform_calories").val(calories);
     }
 </script>

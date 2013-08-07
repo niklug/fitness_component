@@ -12,4 +12,3 @@ DROP TABLE IF EXISTS  `#__fitness_training_period`
 DROP TABLE IF EXISTS  `#__fitness_mini_goals`
 DROP TABLE IF EXISTS  `#__fitness_mini_goal_categories`
 
-DROP TABLE IF EXISTS `#__fitness_nutrition_database`;

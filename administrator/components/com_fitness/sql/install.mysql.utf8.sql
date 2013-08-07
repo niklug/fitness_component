@@ -721,18 +721,4 @@ DROP TABLE master_fitness_goals1;# MySQL returned an empty result set (i.e. zero
 SET FOREIGN_KEY_CHECKS =1;# MySQL returned an empty result set (i.e. zero rows).
 */
 
-CREATE TABLE IF NOT EXISTS `master_fitness_nutrition_database` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ingredient_name` varchar(255) NOT NULL,
-  `energy` varchar(10) NOT NULL,
-  `protein` varchar(10) NOT NULL,
-  `fats` varchar(10) NOT NULL,
-  `saturated_fat` varchar(10) NOT NULL,
-  `carbs` varchar(10) NOT NULL,
-  `total_sugars` varchar(10) NOT NULL,
-  `sodium` varchar(10) NOT NULL,
-  `description` text NOT NULL,
-  `specific_gravity` varchar(10) NOT NULL,
-  `state` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+

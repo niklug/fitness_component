@@ -15,7 +15,15 @@
         
         filter="safehtml" /> 
 
-
+       <field name="calories" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_NUTRITIONDATABASES_CALORIES"
+            description="" 
+        
+        
+        
+        filter="safehtml" /> 
+       
        <field name="energy" type="text" size="10" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_ENERGY"
