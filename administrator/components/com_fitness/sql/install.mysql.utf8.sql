@@ -721,4 +721,11 @@ DROP TABLE master_fitness_goals1;# MySQL returned an empty result set (i.e. zero
 SET FOREIGN_KEY_CHECKS =1;# MySQL returned an empty result set (i.e. zero rows).
 */
 
+CREATE TABLE IF NOT EXISTS `#__fitness_recipe_types` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL DEFAULT '1',
+PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
 
