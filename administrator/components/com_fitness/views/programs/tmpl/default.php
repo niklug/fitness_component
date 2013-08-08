@@ -83,6 +83,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
                 $event_status[] = JHTML::_('select.option', '3', 'cancelled' );
                 $event_status[] = JHTML::_('select.option', '4', 'late cancel' );
                 $event_status[] = JHTML::_('select.option', '5', 'no show' );
+                $event_status[] = JHTML::_('select.option', '6', 'completed' );
                 ?>
                 <div class='filter-select fltrt'>
                         <select name="filter_event_status" class="inputbox" onchange="this.form.submit()">
@@ -307,7 +308,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
 				<td>
 					<?php echo $this->escape($item->location); ?>
 				</td>
-				<td>
+				<td id="appointment_title_<?php echo $item->id?>" data-appointment="<?php echo $item->title; ?>">
 					<?php echo $item->title; ?>
 				</td>
 				<td>
@@ -378,16 +379,8 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
 	</div>
 </form>
 
-<div class="event_status_wrapper">
-  <img class="hideimage " src="<?php echo JUri::base() ?>components/com_fitness/assets/images/close.png" alt="close" title="close"  onclick="hide_status_wrapper()">
-      <a data-status="1" class="event_status__button event_status_pending set_status" href="javascript:void(0)">pending</a>
-      <a data-status="2" class="event_status__button event_status_attended set_status" href="javascript:void(0)">attended</a>
-      <a data-status="3" class="event_status__button event_status_cancelled set_status" href="javascript:void(0)">cancelled</a>
-      <a data-status="4" class="event_status__button event_status_latecancel set_status" href="javascript:void(0)">late cancel</a>
-      <a data-status="5" class="event_status__button event_status_noshow set_status" href="javascript:void(0)">no show</a>
-</div>
-
 <div id="emais_sended"></div>
+<div class="event_status_wrapper"> </div>
 
 <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable mv_dlg mv_dlg_editevent"
       role="dialog" aria-labelledby="ui-dialog-title-editEvent">
@@ -402,22 +395,22 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
 <script type="text/javascript">
     $(document).ready(function(){
 
-         $(".set_status").bind('click', function(e) {
+         $(".set_status").live('click', function(e) {
             var event_status = $(this).data('status');
             eventSetStatus(event_status, event_id);
         });
 
-        $(".edit_event").bind('click', function(e) {
+        $(".edit_event").live('click', function(e) {
             var event_id = $(this).data('id');
             var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB&id=' + event_id;
             loadAppointmentHtml(event_id, url);
         });
 
-        $(".ui-icon-closethick").bind('click', function(e) {
+        $(".ui-icon-closethick").live('click', function(e) {
             closeEditForm();
         });
 
-        $("#add_appointment").bind('click', function(e) {
+        $("#add_appointment").live('click', function(e) {
             var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB';
             loadAppointmentHtml('', url);
         });
@@ -429,8 +422,10 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
             form.submit();
         });
 
-
-
+        $(".event_status_wrapper .hideimage").live('click', function(e) {
+            hide_status_wrapper();
+        });
+        
     });
 
     
@@ -475,16 +470,45 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
     
     
     
-    function openSetBox(id, status) {
+    function openSetBox(id, event_status) {
          event_id = id;
+         $(".event_status_wrapper").html(generateStatusBoxHtml(id, event_status));
          $(".event_status_wrapper").show();
          $(".event_status__button").show();
-         if(status == 1)  $(".event_status_wrapper .event_status_pending").hide();
-         if(status == 2)  $(".event_status_wrapper .event_status_attended").hide();
-         if(status == 3)  $(".event_status_wrapper .event_status_cancelled ").hide();
-         if(status == 4)  $(".event_status_wrapper .event_status_latecancel").hide();
-         if(status == 5)  $(".event_status_wrapper .event_status_noshow").hide();
+         if(event_status == 1)  $(".event_status_wrapper .event_status_pending").hide();
+         if(event_status == 2)  $(".event_status_wrapper .event_status_attended").hide();
+         if(event_status == 3)  $(".event_status_wrapper .event_status_cancelled").hide();
+         if(event_status == 4)  $(".event_status_wrapper .event_status_latecancel").hide();
+         if(event_status == 5)  $(".event_status_wrapper .event_status_noshow").hide();
+         if(event_status == 6)  $(".event_status_wrapper .event_status_complete").hide();
 
+    }
+    
+    function generateStatusBoxHtml(id, event_status) {
+        var appointment_title = $("#appointment_title_" + id).attr('data-appointment');
+        if(appointment_title == 'Personal Training') return  generatePrivateStatusBoxHtml(event_status);
+        return generateSemiStatusBoxHtml(event_status);
+    }
+    
+    function generatePrivateStatusBoxHtml(event_status) {
+        var html = '';
+        html += '<img class="hideimage " src="<?php echo JUri::base() ?>components/com_fitness/assets/images/close.png" alt="close" title="close" >';
+        html += '<a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';  
+        html += '<a data-status="2" class="set_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';      
+        html += '<a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';     
+        html += '<a data-status="4" class="set_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';      
+        html += '<a data-status="5" class="set_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';      
+        html += '<input type="checkbox" class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>';      
+        return html;     
+    }
+
+    function generateSemiStatusBoxHtml(event_status) {
+        var html = '';
+        html += '<img class="hideimage " src="<?php echo JUri::base() ?>components/com_fitness/assets/images/close.png" alt="close" title="close" >';
+        html += '<a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';  
+        html += '<a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>'; 
+        html += '<a data-status="6" class="set_status event_status_complete event_status__button" href="javascript:void(0)">complete</a>'; 
+        return html;     
     }
     
     function hide_status_wrapper() {
@@ -505,6 +529,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
                 success : function(event_status) {
                     hide_status_wrapper();
                     $("#status_button_" + event_id).html(event_status_html(event_status, event_id));
+                    appointmentEmailLogic(event_id, event_status, 'personal');
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown)
                 {
@@ -515,12 +540,70 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
     }
     
     
+    function appointmentEmailLogic(event_id, event_status, appointment_client_id){
+        var send_appointment_email = $(".send_appointment_email").is(':checked');
+        var method;
+        switch(event_status) {
+            case '1' :
+                return;
+                break;
+            case '2' :
+                method = 'AppointmentAttended';
+                break;
+            case '3' :
+               method = 'AppointmentCancelled';
+               break;
+            case '4' :
+               method = 'AppointmentLatecancel';
+               break;
+            case '5' :
+               method = 'AppointmentNoshow';
+               break;
+            default : 
+                return;
+                break;
+        }
+        if(send_appointment_email) {
+            sendAppointmentStatusEmail(event_id, method, appointment_client_id);
+        }
+    }
+    
+    
+    
+    function sendAppointmentStatusEmail(event_id, method, appointment_client_id) {
+        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : {
+               event_id : event_id,
+               appointment_client_id : appointment_client_id
+            },
+            dataType : 'json',
+            success : function(response) {
+                //console.log(response);
+                if(response.IsSuccess != true) {
+                    alert(response.Msg);
+                    return;
+                } 
+                alert('Email sent');  
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        }); 
+
+    }
+    
+    
     function event_status_html(event_status, event_id) {
          if(event_status == 1)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"  class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
          if(event_status == 2)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"  class="open_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';
          if(event_status == 3)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"   class="open_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';
          if(event_status == 4)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"   class="open_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';
          if(event_status == 5)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"  class="open_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
+         if(event_status == 6)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"  class="open_status event_status_complete event_status__button" href="javascript:void(0)">completed</a>';
 
     }
     

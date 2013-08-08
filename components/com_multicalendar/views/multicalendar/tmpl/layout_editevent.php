@@ -241,6 +241,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             $( "#closebtn" ).button( "option", "label", i18n.dcmvcal.i_close );
             $( "#deletebtn" ).button( "option", "label", i18n.dcmvcal.i_delete );
             $("#savebtn").click(function() { 
+                close_status = false;
                 $("#fmEdit").submit();
             });
             

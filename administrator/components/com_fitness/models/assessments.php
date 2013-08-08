@@ -148,7 +148,7 @@ class FitnessModelassessments extends JModelList {
                 )
         );
         $query->from('`#__dc_mv_events` AS a');
-        $query->innerJoin('#__fitness_assessments AS ass ON a.id = ass.event_id');
+        $query->leftJoin('#__fitness_assessments AS ass ON a.id = ass.event_id');
         $query->leftJoin('#__users AS u ON u.id = a.client_id');
        
 

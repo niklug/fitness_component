@@ -393,6 +393,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
       <a data-status="3" class="event_status__button event_status_cancelled set_status" href="javascript:void(0)">cancelled</a>
       <a data-status="4" class="event_status__button event_status_latecancel set_status" href="javascript:void(0)">late cancel</a>
       <a data-status="5" class="event_status__button event_status_noshow set_status" href="javascript:void(0)">no show</a>
+      <input type="checkbox" class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>
 </div>
 
 <div id="emais_sended"></div>
@@ -511,6 +512,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
                 success : function(event_status) {
                     hide_status_wrapper();
                     $("#status_button_" + event_id).html(event_status_html(event_status, event_id));
+                    appointmentEmailLogic(event_id, event_status, 'personal');
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown)
                 {
@@ -520,6 +522,62 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
 
     }
     
+    
+        
+    function appointmentEmailLogic(event_id, event_status, appointment_client_id){
+        var send_appointment_email = $(".send_appointment_email").is(':checked');
+        var method;
+        switch(event_status) {
+            case '1' :
+                return;
+                break;
+            case '2' :
+                method = 'AppointmentAttended';
+                break;
+            case '3' :
+               method = 'AppointmentCancelled';
+               break;
+            case '4' :
+               method = 'AppointmentLatecancel';
+               break;
+            case '5' :
+               method = 'AppointmentNoshow';
+               break;
+            default : 
+                return;
+                break;
+        }
+        if(send_appointment_email) {
+            sendAppointmentStatusEmail(event_id, method, appointment_client_id);
+        }
+    }
+    
+    
+    function sendAppointmentStatusEmail(event_id, method, appointment_client_id) {
+        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : {
+               event_id : event_id,
+               appointment_client_id : appointment_client_id
+            },
+            dataType : 'json',
+            success : function(response) {
+                //console.log(response);
+                if(response.IsSuccess != true) {
+                    alert(response.Msg);
+                    return;
+                } 
+                alert('Email sent');  
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        }); 
+
+    }
     
     function event_status_html(event_status, event_id) {
          if(event_status == 1)  return '<a onclick="openSetBox(' + event_id +  ', ' + event_status + ')"  class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';

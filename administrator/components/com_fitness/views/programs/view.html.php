@@ -169,6 +169,10 @@ class FitnessViewPrograms extends JView {
             case 5:
                 $html .= '<a onclick="openSetBox(' . $id . ', ' . $status . ')" class="event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
                 break;
+            
+            case 6:
+                $html .= '<a onclick="openSetBox(' . $id . ', ' . $status . ')" class="event_status_complete event_status__button" href="javascript:void(0)">completed</a>';
+                break;
 
             default:
                 $html .= '<a onclick="openSetBox(' . $id . ', ' . $status . ')" class="event_status_pending event_status__button" href="javascript:void(0)">pending</a>';

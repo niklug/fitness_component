@@ -63,7 +63,7 @@
                                 <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
                             </td>
                         </tr>
-                        <tr id="trainers_select_tr">
+                        <tr style="display:none;" id="trainers_select_tr">
                             <td>Trainer:</td>
                             <td>
                                 <select  id="trainers" name="trainer_id" class="required safe inputtext" >
