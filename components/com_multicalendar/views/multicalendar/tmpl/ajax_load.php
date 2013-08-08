@@ -111,6 +111,21 @@ switch ($method) {
         sendGoalEmail('email_goal_incomplete');
     break;
     //
+
+    // appointment status emails
+    case "sendAppointmentAttendedEmail":
+        sendAppointmentStatusEmail('email_status_attended');
+    break;
+    case "sendAppointmentCancelledEmail":
+        sendAppointmentStatusEmail('email_status_cancelled');
+    break;
+    case "sendAppointmentLatecancelEmail":
+        sendAppointmentStatusEmail('email_status_late_cancel');
+    break;
+    case "sendAppointmentNoshowEmail":
+        sendAppointmentStatusEmail('email_status_no_show');
+    break;
+    //
     case "update_exercise_field":
         update_exercise_field();
     break;
@@ -980,7 +995,7 @@ function set_event_exircise_order() {
  */
 function send_appointment_email($event_id, $type) {
     
-    $client_ids = getClientsByEvent($event_id);
+    $client_ids = getClientsByEvent($event_id, true);
     
     switch ($type) {
         case 'confirmation':
@@ -1080,12 +1095,14 @@ function sendEmail($recipient, $Subject, $body) {
  * @param type $event_id
  * @return type
  */
-function getClientsByEvent($event_id) {
+function getClientsByEvent($event_id, $group_clients) {
     
     $db = & JFactory::getDBO();
     $query = "SELECT DISTINCT client_id FROM #__dc_mv_events WHERE id='$event_id'";
-    $query .= " UNION ";
-    $query .= "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
+    if($group_clients) {
+        $query .= " UNION ";
+        $query .= "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
+    }
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['IsSuccess'] = false;
@@ -1598,7 +1615,68 @@ function getEmailByGoalId($goal_id) {
     return $user->email;
 }
         
+// Appointments status emails
+function sendAppointmentStatusEmail($type) {
+    $ret['IsSuccess'] = true;
+    $event_id = JRequest::getVar('event_id');
+    $appointment_client_id = JRequest::getVar('appointment_client_id');
+    
+    if($appointment_client_id == 'personal') {
+        $client_id = getClientsByEvent($event_id, false);
+        $client_id = $client_id[0];
+    } else {
+        $client_id = getClientIdByAppointmentId($appointment_client_id);
+    }
+    
+    switch ($type) {
+        case 'email_status_attended':
+            $subject = 'Session Complete';
+            break;
+        case 'email_status_cancelled':
+            $subject = 'Appointment Cancelled';
+            break;
+        case 'email_status_late_cancel':
+            $subject = 'Appointment Late Cansellation';
+            break;
+        case 'email_status_no_show':
+            $subject = 'Missed Appointment';
+            break;
+        default:
+            return;
+            break;
+    }
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
+    
+    $contents = getContentCurl($url);
+    
+    $email = JFactory::getUser($client_id)->email;
 
+    $send = sendEmail($email, $subject, $contents);
+
+    if($send != '1') {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'Email function error';
+        echo json_encode($ret);
+        die();
+    }
+    echo json_encode($ret);
+    die();
+
+}
+
+function getClientIdByAppointmentId($appointment_client_id) {
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE id='$appointment_client_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        echo json_encode($ret);
+        die();
+    } 
+    $client_id = $db->loadResult();
+    return $client_id;
+}
 
 
 jexit();

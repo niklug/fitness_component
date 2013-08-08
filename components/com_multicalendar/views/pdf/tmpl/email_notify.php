@@ -76,7 +76,7 @@ $start_time = $date->format('H:i');
 $description = $event_data->description;
 
 $path = JUri::base() . 'components/com_multicalendar/views/pdf/tmpl/images/';
-$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_notify&tpml=component&event_id=' . $event_id;
+$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_notify&tpml=component&event_id=' . $event_id. '&client_id=' . $client_id;
         ?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>

@@ -70,10 +70,14 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 				<?php echo $this->form->getInput('recipe_name'); ?></li>
 				<li><?php echo $this->form->getLabel('recipe_type'); ?>
 				<?php echo $this->form->getInput('recipe_type'); ?></li>
+                                
+                                <div style="display:none;">
 				<li><?php echo $this->form->getLabel('created_by'); ?>
 				<?php echo $this->form->getInput('created_by'); ?></li>
 				<li><?php echo $this->form->getLabel('created'); ?>
 				<?php echo $this->form->getInput('created'); ?></li>
+                                </div>
+                                
 				<li><?php echo $this->form->getLabel('state'); ?>
 				<?php echo $this->form->getInput('state'); ?></li>
 

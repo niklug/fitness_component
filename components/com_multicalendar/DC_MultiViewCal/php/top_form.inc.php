@@ -441,7 +441,7 @@
                         hide_event_status_wrapper();
                         $("#event_status").html( 'Appointment status' + event_status_html(event_status) );
 
-                        appointmentEmailLogic(event_id, event_status);
+                        appointmentEmailLogic(event_id, event_status, 'personal');
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
@@ -451,7 +451,7 @@
 
         }
 
-        function appointmentEmailLogic(event_id, event_status){
+        function appointmentEmailLogic(event_id, event_status, appointment_client_id){
             var send_appointment_email = $(".send_appointment_email").is(':checked');
             var method;
             switch(event_status) {
@@ -459,37 +459,35 @@
                     return;
                     break;
                 case '2' :
-                    method = 'appointmentAttended';
+                    method = 'AppointmentAttended';
                     break;
                 case '3' :
-                   method = 'appointmentCancelled';
+                   method = 'AppointmentCancelled';
                    break;
                 case '4' :
-                   method = 'appointmentLatecancel';
+                   method = 'AppointmentLatecancel';
                    break;
                 case '5' :
-                   method = 'appointmentNoshow';
-                   break;
-                case '6' :
-                   method = 'appointmentComplete';
+                   method = 'AppointmentNoshow';
                    break;
                 default : 
                     return;
                     break;
             }
             if(send_appointment_email) {
-                sendAppointmentStatusEmail(event_id, method);
+                sendAppointmentStatusEmail(event_id, method, appointment_client_id);
             }
         }
 
-        function sendAppointmentStatusEmail(event_id) {
+        function sendAppointmentStatusEmail(event_id, method, appointment_client_id) {
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
-            var url = DATA_FEED_URL+ "&method=send_appointment_status_email";
+            var url = DATA_FEED_URL+ "&method=send" + method + 'Email';
             $.ajax({
                 type : "POST",
                 url : url,
                 data : {
-                   event_id : event_id
+                   event_id : event_id,
+                   appointment_client_id : appointment_client_id
                 },
                 dataType : 'json',
                 success : function(response) {
@@ -570,7 +568,8 @@
                             alert(response.message);
                         }
                         var event_id = '<?php echo $event->id; ?>';
-                        appointmentEmailLogic(event_id, client_status);
+         
+                        appointmentEmailLogic(event_id, client_status, id);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
