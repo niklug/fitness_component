@@ -48,8 +48,7 @@
         </style>
     </head>
     <body>
-      
-        <?php
+<?php
 require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/functions.php' );
 require_once( JPATH_BASE . '/components/com_multicalendar/DC_MultiViewCal/php/list.inc.php' );
 
@@ -74,10 +73,11 @@ $start_date =  $date->toFormat('%A, %d %b %Y');
 $date = JFactory::getDate($event_data->starttime);
 $start_time = $date->format('H:i');
 
+$description = $event_data->description;
 
 $path = JUri::base() . 'components/com_multicalendar/views/pdf/tmpl/images/';
-$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_reminder&tpml=component&event_id=' . $event_id;
-        ?>
+$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_notify_assessment&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
+?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
                 <td bgcolor="#dddddd" style="padding:20px 0">
@@ -112,48 +112,32 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:28px; line-height:33pt; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">APPOINTMENT CONFIRMATION!</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:40px; line-height:33pt; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">Assessment Complete!</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
-
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>Hi <?php echo $client_name;?>,</p>
-                                                                    <p>Please be sure to click 'Confirm' to secure your appointment day and time. If you are unable to attend, contact your trainer  as soon as possible to avoid late cancellation penalties. </p></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="29%" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>
-                                                                        START DATE:<br />
-                                                                        START TIME:<br />
-                                                                        LOCATION:
-                                                                    </p></td>
-                                                                <td width="71%" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>
-                                                                        <?php echo $start_date;?><br />
-                                                                        <?php echo $start_time;?><br />
-                                                                        <?php echo $event_data->location;?>
-                                                                    </p></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">APPOINTMENT:<br />
-                                                                    SESSION TYPE:<br />
-                                                                    SESSION FOCUS:</td>
-                                                                <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><?php echo $event_data->title;?><br />
-                                                                    <?php echo $event_data->session_type;?><br />
-                                                                    <?php echo $event_data->session_focus;?></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="margin:0; padding:15px 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">TRAINER NAME:</td>
-                                                                <td style="margin:0; padding:15px 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><?php echo $trainer_name;?></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>Hi <?php echo $client_name;?>,</br>
+                                                                    <br />
+                                                                    Your trainer <b><?php echo $trainer_name;?></b>  has reviewed and finalised your recent <i><?php echo $event_data->title;?></i> and provided feedback and/or comments for you to review. The assessment details are as follows...
+                                                                    </p>
+                                                                    <p>START DATE: <?php echo $start_date;?> <br />
+                                                                        START TIME: <?php echo $start_time;?><br />
+                                                                        LOCATION: <?php echo $event_data->location;?></p>
+                                                                    <p>APPOINTMENT: <?php echo $event_data->title;?><br />
+                                                                        SESSION TYPE: <?php echo $event_data->session_type;?><br />
+                                                                        SESSION FOCUS: <?php echo $event_data->session_focus;?></p>
+                                                                    <p>TRAINER NAME: <?php echo $trainer_name;?></p>
+                                                                    
+                                                                
+                                                                </td>
                                                             </tr>
                                                         </table>
-                                                        
-                                                        
-                                                        
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#df833e; text-align:center;">
-                                                                    <a href="<?php echo JUri::base() ?>index.php?option=com_multicalendar&task=confirm_email&event_id=<?php echo base64_encode($event_id) ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#b65106;">CLICK HERE TO CONFIRM</a>
+                                                                    <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#b65106;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -173,16 +157,21 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td bgcolor="#e76708" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">What you need to know (and do) before your appointment...</h2>
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">When is your next Assessment?...</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
                                                         <img alt="image" height="125" src="<?php echo $path ?>icon6.png" width="100" border="0" vspace="0" hspace="0" /></td>
                                                     <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;">
-                                                        <p>Make sure you bring your workout clothes and appropriate shoes with you! You should also bring a sweat towel and water bottle to stay hydrated.<br />
-                                                            This will keep unnecessary trips to the water fountain to a minimum and reduce breaks in the workout.</p>
-                                                        <p>Don't forget to arrive 10 minutes early and warm up before your scheduled appointment time. Doing so will maximise training time with your coach!</p>
-                                                        <p>If you are scheduled for an assessment, please DO NOT perform a warm up!</p></td>
+                                                        <p>Your next assessment will be scheduled by your trainer and should be discussed at <br />
+                                                            your next consultation.</p>
+                                                        <p>If you are a BioSignature client, your assessment schedule should already be </br>
+                                                            programmed into your online Appointment Calendar!
+                                                        </p>
+                                                        <p>Please remember, If you are scheduled for an assessment, please DO NOT perform a </br>
+                                                           warm up or take part in physical activity. Doing so will result with inaccurate </br>
+                                                           measurements and reading being taken!
+</p></td>
                                                 </tr>
 
                                             </table>
@@ -354,7 +343,6 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                             </tr>
                                                             <tr>
                                                                 <td valign="top" style="padding:0 0 0 20px;">
-                                                                    
                                                                     <a href="www.elitefit.com.au/index.php/shop">
                                                                         <img alt="image" height="100" src="<?php echo $path ?>protein1.png" width="180" border="0" vspace="0" hspace="0" /></a></td>
                                                             </tr>
@@ -383,37 +371,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
-                                <!--End Of Two Column Container [row number #4]-->
-                                <!--Start Of Content [row number #5]-->
-                                <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
-                                    <tr>
-                                        <td bgcolor="#e76708" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">CANCELLATION POLICY</h2>
-                                            <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                <tr>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;"><p>24 hours notice is required to reschedule or cancel any training session or appointment.</p>
-                                                        <p> If less than 24 hours notice is given, FULL FEES will apply for that appointment, unless...<br />
-                                                            - your appointment time can be filled by another client.<br />
-                                                            - your appointment is able to be rescheduled to another time on the same day (availability depending).</p>
-                                                        <p>If you are late to your appointment, your appointment will still end at the scheduled time.</p>
-                                                        <p>If you do no show up to your appointment or cancel last minute, FULL FEES apply.</p>
-                                                        <p>If you are training early to mid-morning and you need to cancel or reschedule your appointment, you must do so BEFORE 3pm the preceding day to allow time to fill your appointment. Failure to do so will incur FULL SESSION FEES if you cancel too late!</p></td>
-                                                </tr>
-
-                                            </table>
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">&nbsp;</h2>
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter;">3 'STRIKES' POLICY</h2>
-                                            <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                <tr>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;"><p>If you break any of the before mentioned policies, one 'Strike' will be recorded against you.</p>
-                                                        <p>Each 'Strike' is cumulative and will remain on your record for a period of 1 month.</p>
-                                                        <p>Gaining a 3rd 'Strike' will result in your training being suspended for a length of time determined by your trainer. If this continues, you will no longer be able to continue training with Elite Fitness.</p></td>
-                                                </tr>
-
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
+                               
                                 <!--End Of Content [row number #5]-->
                                 <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">

@@ -1016,8 +1016,11 @@ function send_appointment_email($event_id, $type) {
             $subject = 'Workout/Training Session';
             break;
     }
+    
 
     foreach ($client_ids as $client_id) {
+        if(!$client_id) continue;
+        
         $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf' . $layout . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
         
         $contents = getContentCurl($url);
@@ -1630,16 +1633,16 @@ function sendAppointmentStatusEmail($type) {
     
     switch ($type) {
         case 'email_status_attended':
-            $subject = 'Session Complete';
+            $subject = 'Appointment Complete';
             break;
         case 'email_status_cancelled':
             $subject = 'Appointment Cancelled';
             break;
         case 'email_status_late_cancel':
-            $subject = 'Appointment Late Cansellation';
+            $subject = 'Late Appointment Cancellation';
             break;
         case 'email_status_no_show':
-            $subject = 'Missed Appointment';
+            $subject = 'You Missed Your Appointment';
             break;
         default:
             return;

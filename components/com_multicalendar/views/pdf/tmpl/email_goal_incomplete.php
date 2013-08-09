@@ -4,7 +4,7 @@
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
         <meta content="en-us" http-equiv="Content-Language" />
-        <title>>Elite Fitness Training</title>
+        <title>Elite Fitness Training</title>
         <style type="text/css">
             a, a:link, a:visited {
                 text-decoration:underline;
@@ -19,19 +19,19 @@
                 color:#0e0601 !important;
             }
             .darkContainer a, .darkContainer a:visited {
-                color:#df833e;
+                color:#790010;
             }
             .darkContainer a:hover {
-                color:#ffba87 !important;
+                color:#790010 !important;
             }
             .readMore a:hover {
-                background-color:#562704 !important;
-                color: #fe720a !important;
+                background-color:#410009 !important;
+                color: #790010 !important;
             }
             body {
                 margin:0;
                 background-color:#dddddd;
-                color:#df833e;
+                color:#790010;
                 font-family:Arial, Helvetica, sans-serif;
                 font-size:12px;
                 -webkit-text-size-adjust: none;
@@ -48,7 +48,7 @@
         </style>
     </head>
     <body>
-        <?php
+<?php
 require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/functions.php' );
 
 $goal_id = &JRequest::getVar('goal_id');
@@ -75,7 +75,7 @@ $description = $goal_data->description;
 
 $path = JUri::base() . 'components/com_multicalendar/views/pdf/tmpl/images/';
 $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_goal_incomplete&tpml=component&goal_id=' . $goal_id;
-        ?>
+?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
                 <td bgcolor="#dddddd" style="padding:20px 0">
@@ -90,7 +90,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <!--Start Of Company Name And Slogan [row number #1]-->
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#e76708" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
+                                        <td bgcolor="#78000D" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
                                             <img alt="Elite Fitness Training" height="78" src="<?php echo $path ?>logo.png" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
@@ -110,41 +110,45 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:40px; line-height:33pt; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">You Almost Made it!</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">YOU ALMOST MADE IT!</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>Hi <?php echo $client_name;?>, </p>  
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $client_name;?>,</p>
                                                                     <p>You ALMOST made it to achieving this goal... but you still have a little more work to do!</p>
-                                                                    <p>You should now discuss with your trainer on what further actions need to be taken towards getting you  </br>
-                                                                       closer to what you want out of your health and fitness.
-                                                                    </p>
-                                                                    <p>Start by recognizing the positives changes you have achieved so far. Book an 'Elite Progression' </br>
-                                                                    consultation with your trainer to discuss your mindset and lifestyle choices as this has a dramatic impact </br>
-                                                                    on achieving results.
-                                                                    </p>
-                                                                
-                                                                    <p>Review this goal now, start taking notes of what else you think you could have done to achieve this and </br>
-                                                                    present your ideas to your trainer.
-                                                                    </p>
-                                                             
-                                                                    <p>GOAL TYPE: <?php echo $goal_data->category_name;?><br />
-                                                                        START DATE: <?php echo $date_created;?><br />
-                                                                        ACCOMPLISH BY: <?php echo $deadline;?><br />
-                                                                        
-                                                                    <p>DETAILS: <?php echo $goal_data->details;?></p>
-                                                                    <p>TRAINER NAME: <?php echo $trainer_name;?></p>
-                                                                    <p>COMMENTS: <?php echo $goal_data->comments;?></p>
-                                                                
-                                                                </td>
+                                                                    <p>You should now discuss with your trainer on what further actions need to be taken towards getting you closer to what you want out of your health and fitness.</p>
+                                                                    <p> Start by recognizing the positives changes you have achieved so far. Book an 'Elite Progression' consultation with your trainer to discuss your mindset and lifestyle choices as this has a dramatic impact on achieving results.</p>
+                                                                    <p>Review this goal now, start taking notes of what else you think you could have done to achieve this and present your ideas to your trainer.</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    GOAL TYPE: <br />
+                                                                    DATE CREATED: <br />
+                                                                    ACCOMPLISH BY: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <?php echo $goal_data->category_name;?><br />
+                                                                    <?php echo $date_created;?><br />
+                                                                    <?php echo $deadline;?> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">DETAILS: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $goal_data->details;?> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">TRAINER NAME: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $trainer_name;?> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>COMMENTS: </p></td>
+                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p><?php echo $goal_data->comments;?> </p></td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#df833e; text-align:center;">
-                                                                    <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#b65106;">CLICK HERE TO OPEN</a>
+                                                                <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFF; text-align:center;">
+                                                                    <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:78000D;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -161,218 +165,27 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 </table>
                                 <!--End Of Main Content [row number #2]-->
                                 <!--Start Of Content [row number #3]-->
-						<table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
-							<tr>
-								<td bgcolor="#e76708" style="padding:20px;">
-								<h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">What should you do now?</h2>
-								<table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-								  <tr>
-										<td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
-										<img alt="image" height="100" src="<?php echo $path ?>goals.png" width="100" border="0" vspace="0" hspace="0" /></td>
-									<td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;">
-									  <p>Stay focused! Talk to your trainer about ways to improve your mindset and subsequently change your lifestyle.</p>
-									  <p>Discuss with your trainer the next phase of your training and set yourself new goals so you keep on achieving great results!</p></td>
-								  </tr>
-									
-								</table>
-								</td>
-							</tr>
-						</table>
-                                <!--End Of Content [row number #3]-->
-                                <!--Start Of two Content Container [row number #4]-->
-                                <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
+                                <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#140901" style="padding:0 20px;">
-
+                                        <td bgcolor="#78000D" style="padding:20px;">
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">What should you do now?</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
-                                                    <td width="360" height="10" style="height:10px; max-height:10px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                    <td width="10" height="10" style="height:10px; max-height:10px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                    <td width="8" valign="middle" style="height:8px; max-height:8px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                    <td width="1" height="10" bgcolor="#090400" style="width:1px; max-width:1px; line-height:0;padding:0;margin:0;" valign="top">
-                                                        <img alt="" height="10" src="<?php echo $path ?>middleLineTop1.png" width="1" border="0" vspace="0" hspace="0" /></td>
-                                                    <td width="1" height="10" bgcolor="#231002" style="width:1px; max-width:1px; line-height:0;padding:0;margin:0;" valign="top">
-                                                        <img alt="" height="10" src="<?php echo $path ?>middleLineTop2.png" width="1" border="0" vspace="0" hspace="0" /></td>
-                                                    <td width="200"  height="10" style="height:10px; max-height:10px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
+                                                    <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
+                                                        <img alt="image" height="100" src="<?php echo $path ?>goals.png" width="100" border="0" vspace="0" hspace="0" /></td>
+                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                        <p>Stay focused! Talk to your trainer about ways to improve your mindset and subsequently change your lifestyle.</p>
+                                                        <p>Discuss with your trainer the next phase of your training and set yourself new goals so you keep on achieving great results!</p></td>
                                                 </tr>
-                                                <tr>
-                                                    <!--Start Of Left Column-->
-                                                    <td width="360" valign="top">
-                                                        <!--Start Of Content #1 in the Left Column [Don't delete or duplicate, rather delete or duplicate the next content]-->
 
-                                                        <table width="360" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                            <tr>
-                                                                <td style="padding:0 0 10px 0;">
-                                                                    <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">Appointment Calendar &amp; Workout Planning</h2>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-
-                                                                    <table width="360" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                                        <tr>
-                                                                            <td width="50" valign="middle">
-                                                                                <img alt="image" height="50" src="<?php echo $path ?>planner.png" width="50"  border="0" vspace="0" hspace="0" /></td>
-                                                                            <td style="padding:0 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;" valign="top">
-                                                                                Dont forget to login to your VIP Client account to access your online Appointment Calendar.<br />
-                                                                                From here you can view your entire upcoming schedule including future workout planning. You can also schedule your own training sessions!</td>
-                                                                        </tr>
-                                                                    </table>
-
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td valign="top" style="padding:15px 0 0 70px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
-                                                                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                                        <tr>
-                                                                            <td class="readMore" width="75" height="22" bgcolor="#241002" valign="middle" style="padding:0px ; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#df833e; text-align:center;">
-                                                                                <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#b65106;">LOGIN</a>
-                                                                            </td>
-                                                                            <td>&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <!--End Of Content #1 in the Left Column-->
-                                                        <!--Start Of Content #2 in the Left Column [you can delete/ duplicate this content row]-->
-                                                        <table width="360" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                            <tr>
-                                                                <td style="padding:18px 0 10px 0;">
-                                                                    <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">Nutrition Planning &amp; Daily Nutrition Diary</h2>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-
-                                                                    <table width="360" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                                        <tr>
-                                                                            <td width="50" valign="middle">
-                                                                                <img alt="image" height="50" src="<?php echo $path ?>diary.png" width="50" border="0" vspace="0" hspace="0" /></td>
-                                                                            <td style="padding:0 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;" valign="top">Review your nutrition plan on a regular basis and fuel your body to ignite the fat burning and muscle building process. Allow your trainer to guide you by making daily nutrition diary entries.</td>
-                                                                        </tr>
-                                                                    </table>
-
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td valign="top" style="padding:15px 0 0 70px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
-                                                                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                                        <tr>
-                                                                            <td class="readMore" width="75" height="22" bgcolor="#241002" valign="middle" style="padding:0px ; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#df833e; text-align:center;">
-                                                                                <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#b65106;">LOGIN</a>
-                                                                            </td>
-                                                                            <td>&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <!--End Of Content #2 in the Left Column-->
-                                                    </td>
-                                                    <!--End Of Left Column-->
-                                                    <td width="10">&nbsp;</td>
-                                                    <td width="8" valign="middle">
-                                                        <img alt="" height="355" src="<?php echo $path ?>middleLineShadow.png" width="8"  border="0" vspace="0" hspace="0" /></td>
-                                                    <td width="1" bgcolor="#090400" style="width:1px; max-width:1px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                    <td width="1" bgcolor="#231002" style="width:1px; max-width:1px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                    <!--Start Of Right Sidebar-->
-                                                    <td width="200" valign="top">
-
-                                                        <table width="200" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
-                                                            <tr>
-                                                                <td style="padding:0 0 15px 20px;">
-                                                                    <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">Useful  Links...</h2>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td height="1" valign="top" style="padding:0 0 10px 0; line-height:0;">
-                                                                    <img alt="" height="1" src="<?php echo $path ?>hLine.png" width="200" border="0" vspace="0" hspace="0" /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding:0 0 10px 20px;">
-                                                                    <a href="www.elitefit.com.au/index.php/train-elite/elite-progression" style="color:#df833e;">Elite Fitness Progression
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td height="1" valign="top" style="padding:0 0 10px 0; line-height:0;">
-                                                                    <img alt="" height="1" src="<?php echo $path ?>hLine.png" width="200" border="0" vspace="0" hspace="0" /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding:0 0 10px 20px;">
-                                                                    <a href="www.elitefit.com.au/index.php/team-elite/semi-private-training" style="color:#df833e;">Semi-Private Training</a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td height="1" valign="top" style="padding:0 0 10px 0; line-height:0;">
-                                                                    <img alt="" height="1" src="<?php echo $path ?>hLine.png" width="200" border="0" vspace="0" hspace="0" /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding:0 0 10px 20px;">
-                                                                    <a href="www.elitefit.com.au/index.php/train-elite/biosignature-modulation" style="color:#df833e;">BioSignature Modulation</a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td height="1" valign="top" style="padding:0 0 10px 0; line-height:0;">
-                                                                    <img alt="" height="1" src="<?php echo $path ?>hLine.png" width="200" border="0" vspace="0" hspace="0" /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding:0 0 10px 20px;">
-                                                                    <a href="www.elitefit.com.au/index.php/elite-online" style="color:#df833e;">Transformation Programmes
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td height="1" valign="top" style="padding:0 0 10px 0; line-height:0;">
-                                                                    <img alt="" height="1" src="<?php echo $path ?>hLine.png" width="200" border="0" vspace="0" hspace="0" /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td valign="top" style="padding:5px 0 10px 20px; font-size:8pt; line-height:100%; color:#5e2b06;">
-                                                                    Advertisement
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td valign="top" style="padding:0 0 0 20px;">
-                                                                    <a href="www.elitefit.com.au/index.php/shop">
-                                                                        <img alt="image" height="100" src="<?php echo $path ?>protein1.png" width="180" border="0" vspace="0" hspace="0" /></a></td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                    <!--End Of Right Sidebar-->
-                                                </tr>
-                                                <tr>
-                                                    <td width="360" height="10" style="height:10px; max-height:10px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                    <td width="10" height="10" style="height:10px; max-height:10px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                    <td width="8" valign="middle" style="height:8px; max-height:8px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                    <td width="1" height="10" bgcolor="#090400" style="width:1px; max-width:1px; line-height:0;padding:0;margin:0;" valign="top">
-                                                        <img alt="" height="10" src="<?php echo $path ?>middleLineBottom1.png" width="1" border="0" vspace="0" hspace="0" /></td>
-                                                    <td width="1" height="10" bgcolor="#231002" style="width:1px; max-width:1px; line-height:0;padding:0;margin:0;" valign="top">
-                                                        <img alt="" height="10" src="<?php echo $path ?>middleLineBottom2.png" width="1" border="0" vspace="0" hspace="0" /></td>
-                                                    <td width="200"  height="10" style="height:10px; max-height:10px; line-height:0;padding:0;margin:0;">&nbsp;
-                                                    </td>
-                                                </tr>
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
-                                    </tr>
                                 </table>
-                                <!--End Of Two Column Container [row number #4]-->
+                                <!--End Of Content [row number #3]-->
+                                <!--Start Of two Content Container [row number #4]-->
 
+                                <!--End Of Two Column Container [row number #4]-->
                                 <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
@@ -385,7 +198,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                 <tr>
                                                     <td width="20" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e; margin:0; padding:0; text-align:left;" valign="top">
                                                         <img alt="image" height="16" src="<?php echo $path ?>bulb.png" width="13" /></td>
-                                                    <td width="450" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e; margin:0; padding:0 10px 0 0; text-align:left;" valign="top">
+                                                    <td width="450" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF; margin:0; padding:0 10px 0 0; text-align:left;" valign="top">
                                                         Want to tell your friends about us?...</td>
                                                     <td width="26" valign="middle">
                                                         <a href="http://www.facebook.com/EliteTraining"><img alt="Facebook" height="16" src="<?php echo $path ?>facebook.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
@@ -413,10 +226,10 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                             <img alt="" height="2" src="<?php echo $path ?>hr.png" width="620" /></td>
                                     </tr>
                                     <tr>
-                                        <td bgcolor="#140901" style="padding:0px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
+                                        <td bgcolor="#140901" style="padding:0px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF;">
                                             Copyright © ELITE FITNESS TRAINING<br />
-                                            <a href="www.elitefit.com.au" style="color:#df833e;">www.elitefit.com.au</a> | <a href="mailto:info@elitefit.com.au" style="color:#df833e;">info@elitefit.com.au</a> | +64 2205 0590<br />
-                                            Having trouble viewing this email? <a href="<?php echo $sitelink ?>" style="color:#df833e;">Click Here</a> to open in your web browser.
+                                            <a href="www.elitefit.com.au" style="color:#FFF;">www.elitefit.com.au</a> | <a href="mailto:info@elitefit.com.au" style="color:#FFF;">info@elitefit.com.au</a> | +64 2205 0590<br />
+                                            Having trouble viewing this email? <a href="<?php echo $sitelink ?>" style="color:#FFF;">Click Here</a> to open in your web browser.
                                         </td>
                                     </tr>
                                 </table>

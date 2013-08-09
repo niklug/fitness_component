@@ -13,7 +13,7 @@
                 text-decoration:none;
             }
             .lightContainer a, .lightContainer a:visited{
-                color:#482104;
+                color:#000;
             }
             .lightContainer a:hover {
                 color:#0e0601 !important;
@@ -26,7 +26,7 @@
             }
             .readMore a:hover {
                 background-color:#562704 !important;
-                color: #fe720a !important;
+                color: #FFA600 !important;
             }
             body {
                 margin:0;
@@ -93,7 +93,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td bgcolor="#FFA600" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
-                                            <img alt="Elite Fitness Training" height="78" src="<?php echo $path ?>/logo.png" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
+                                            <img alt="Elite Fitness Training" height="78" src="<?php echo $path ?>logo.png" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
                                 </table>
@@ -101,7 +101,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <!--Start Of Main Content [row number #2]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px;">
@@ -124,7 +124,8 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                                     </p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>START DATE: <br />
+                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <p>START DATE: <br />
                                                                         START TIME: <br />
                                                                         LOCATION: </p>
                                                                     <p>APPOINTMENT: <br />
@@ -135,9 +136,9 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                                     <p><?php echo $start_date;?><br />
                                                                         <?php echo $start_time;?> <br />
                                                                         <?php echo $event_data->location;?> </p>
-                                                                    <p><?php echo $event_data->title;?><br />
+                                                                    <p><?php echo $event_data->title;?> <br />
                                                                         <?php echo $event_data->session_type;?> <br />
-                                                                        <?php echo $event_data->session_focus;?>  </p>
+                                                                        <?php echo $event_data->session_focus;?> </p>
                                                                     <p><?php echo $trainer_name;?> </p></td>
                                                             </tr>
                                                         </table>
@@ -151,7 +152,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>/borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
                                 <!--End Of Main Content [row number #2]-->
@@ -163,7 +164,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
-                                                        <img alt="image" height="125" src="<?php echo $path ?>/clock_green.png" width="100" border="0" vspace="0" hspace="0" /></td>
+                                                        <img alt="image" height="125" src="<?php echo $path ?>clock_green.png" width="100" border="0" vspace="0" hspace="0" /></td>
                                                     <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#333;">
                                                         <p>With every professional business there is a serious side...</p>
                                                         <p>Thank you for taking the time to read, understand and appreciate how we continually maintain the highest standard of customer service to all our clients. Please help us maintain this professional standard by providing us with the following small courtesies that are detailed in our Cancelation Policy.</p></td>
@@ -211,7 +212,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
@@ -219,25 +220,25 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                             <table align="center" width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse; text-align:right;">
                                                 <tr>
                                                     <td width="20" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e; margin:0; padding:0; text-align:left;" valign="top">
-                                                        <img alt="image" height="16" src="<?php echo $path ?>/bulb.png" width="13" /></td>
+                                                        <img alt="image" height="16" src="<?php echo $path ?>bulb.png" width="13" /></td>
                                                     <td width="450" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF; margin:0; padding:0 10px 0 0; text-align:left;" valign="top">
                                                         Want to tell your friends about us?...</td>
                                                     <td width="26" valign="middle">
-                                                        <a href="http://www.facebook.com/EliteTraining"><img alt="Facebook" height="16" src="<?php echo $path ?>/facebook.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                        <a href="http://www.facebook.com/EliteTraining"><img alt="Facebook" height="16" src="<?php echo $path ?>facebook.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
-                                                        <a href="http://www.twitter.com/EliteMelbourne"><img alt="Twitter" height="16" src="<?php echo $path ?>/twitter.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                        <a href="http://www.twitter.com/EliteMelbourne"><img alt="Twitter" height="16" src="<?php echo $path ?>twitter.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
                                                         <a href="http://www.youtube.com/EliteFitnessPT">
-                                                            <img alt="YouTube" height="16" src="<?php echo $path ?>/youtube.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                            <img alt="YouTube" height="16" src="<?php echo $path ?>youtube.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
                                                         <a href="http://www.instagram.com/EliteMelbourne">
-                                                            <img alt="Instagram" height="16" src="<?php echo $path ?>/instagram.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                            <img alt="Instagram" height="16" src="<?php echo $path ?>instagram.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
                                                         <a href="https://plus.google.com/117163734672496632130/about">
-                                                            <img alt="Google" height="16" src="<?php echo $path ?>/google.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                            <img alt="Google" height="16" src="<?php echo $path ?>google.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
                                                         <a href="http://www.linkedin.com/pub/paul-meier/21/785/b1">
-                                                            <img alt="Linkedin" height="16" src="<?php echo $path ?>/in.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                            <img alt="Linkedin" height="16" src="<?php echo $path ?>in.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                 </tr>
                                             </table>
 
@@ -245,7 +246,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                     </tr>
                                     <tr>
                                         <td height="2" bgcolor="#140901" style="padding:0 0 15px 0; line-height:0;">
-                                            <img alt="" height="2" src="<?php echo $path ?>/hr.png" width="620" /></td>
+                                            <img alt="" height="2" src="<?php echo $path ?>hr.png" width="620" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:0px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
