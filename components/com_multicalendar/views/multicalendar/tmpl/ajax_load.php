@@ -995,7 +995,7 @@ function set_event_exircise_order() {
  */
 function send_appointment_email($event_id, $type) {
     
-    $client_ids = getClientsByEvent($event_id, true);
+    $client_ids = getClientsByEvent($event_id);
     
     switch ($type) {
         case 'confirmation':
@@ -1037,12 +1037,28 @@ function send_appointment_email($event_id, $type) {
             echo json_encode($ret);
             die();
         }
-
+        if($type == 'confirmation') {
+            setSentEmailStatus($event_id, $client_id);
+        }
     }
 
     return $emails;
 }
 
+
+function setSentEmailStatus($event_id, $client_id) {
+    $db = & JFactory::getDBO();
+    $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] =  $db->stderr();
+        echo json_encode($ret);
+        die();
+    } 
+}
+        
+        
 function getContentCurl($url) {
         if(!function_exists('curl_version')) {
             $ret['IsSuccess'] = false;
@@ -1098,14 +1114,13 @@ function sendEmail($recipient, $Subject, $body) {
  * @param type $event_id
  * @return type
  */
-function getClientsByEvent($event_id, $group_clients) {
+function getClientsByEvent($event_id) {
     
     $db = & JFactory::getDBO();
-    $query = "SELECT DISTINCT client_id FROM #__dc_mv_events WHERE id='$event_id'";
-    if($group_clients) {
-        $query .= " UNION ";
-        $query .= "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
-    }
+    $query = "SELECT DISTINCT client_id FROM #__dc_mv_events WHERE id='$event_id' AND client_id !='0'";
+    $query .= " UNION ";
+    $query .= "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id !='0'";
+
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['IsSuccess'] = false;
@@ -1114,7 +1129,7 @@ function getClientsByEvent($event_id, $group_clients) {
         die();
     }
     $client_ids = $db->loadResultArray(0);
-
+    $client_ids = array_unique($client_ids);
     return $client_ids;
 }
 
@@ -1625,7 +1640,7 @@ function sendAppointmentStatusEmail($type) {
     $appointment_client_id = JRequest::getVar('appointment_client_id');
     
     if($appointment_client_id == 'personal') {
-        $client_id = getClientsByEvent($event_id, false);
+        $client_id = getClientsByEvent($event_id);
         $client_id = $client_id[0];
     } else {
         $client_id = getClientIdByAppointmentId($appointment_client_id);

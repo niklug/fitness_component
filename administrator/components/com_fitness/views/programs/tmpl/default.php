@@ -214,7 +214,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_PROGRAMS_STARTTIME', 'a.starttime', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_PROGRAMS_CLIENT_ID', 'a.client_id', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Client' . ' (Sent/Confirmed)', 'a.client_id', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_PROGRAMS_TRAINER_ID', 'a.trainer_id', $listDirn, $listOrder); ?>
@@ -299,7 +299,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
 				</td>
 				<td>
 					<?php
-                                        echo $this->getGroupClients($item->id, $item->client_id);
+                                        echo $this->getGroupClientsData($item->id, $item->client_id);
                                         ?>
 				</td>
 				<td>

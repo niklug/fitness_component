@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goal_categories` (
 CREATE TABLE IF NOT EXISTS `#__fitness_email_reminder` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `event_id` int(10) unsigned NOT NULL,
+  `client_id` int(10)  NOT NULL,
   `sent` int(1) NOT NULL DEFAULT '0',
   `confirmed` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),

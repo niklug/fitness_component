@@ -124,10 +124,11 @@ class FitnessViewAssessments extends JView {
     
     
     
-    public function getGroupClients($event_id, $client_id) {
+    public function getGroupClientsData($event_id, $client_id) {
         
         $db = &JFactory::getDbo();
         $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
+ 
         $db->setQuery($query);
         if (!$db->query()) {
             JError::raiseError( $db->stderr());
@@ -137,11 +138,59 @@ class FitnessViewAssessments extends JView {
             $clients = array_merge($clients, array($client_id));
         }
         $clients = array_unique($clients);
+        
+        $html = '<table>';
+        
         foreach ($clients as $client) {
             $user = &JFactory::getUser($client);
-            $html .= $user->name . "</br>";
+            $sentConfirmEmailData = $this->getSentConfirmEmailData($event_id, $client);
+            $sentConfirmEmailData = $sentConfirmEmailData[0];
+            if($sentConfirmEmailData->sent) {
+                $sent_class = 'publish';
+            } else {
+                $sent_class = 'unpublish';
+            }
+            
+            if($sentConfirmEmailData->confirmed) {
+                $confirmed_class = 'publish';
+            } else {
+                $confirmed_class = 'unpublish';
+            }
+            $html .= '<tr>';
+            $html .= '<td>';
+            $html .= $user->name;
+            $html .= '</td>'; 
+            $html .= '<td>';
+            $html .= '<span class="jgrid"><span class="state ' . $sent_class . '" ></span></span>';
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= '<span class="jgrid"><span class="state ' . $confirmed_class . '" ></span></span>';
+            $html .= '</td>';
+            $html .= '</tr>';
         }
+        
+        $html .= '</table>';
         return $html;
+    }
+    
+    
+    public function getSentConfirmEmailData($event_id, $client_id) {
+        
+        $db = &JFactory::getDbo();
+        $query = "SELECT sent, confirmed
+            FROM  #__fitness_email_reminder
+            WHERE event_id='$event_id'
+            AND client_id='$client_id'
+            LIMIT 1
+         ";
+        
+        $db->setQuery($query);
+        if (!$db->query()) {
+            JError::raiseError( $db->stderr());
+        }
+        $result = $db->loadObjectList();
+        
+        return $result;
     }
     
         /**

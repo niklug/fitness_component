@@ -58,8 +58,9 @@ $client_id = &JRequest::getVar('client_id');
 
 $event_data = getEmailPdfData($event_id);
 
-if (!$client_id)
-$client_id = $event_data->client_id;
+if (!$client_id) {
+    $client_id = $event_data->client_id;
+}
 
 $user = &JFactory::getUser($client_id);
 $client_name = $user->name;
