@@ -39,48 +39,168 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_NUTRITIONDATABASE'); ?></legend>
             <ul class="adminformlist">
 
-				<li><?php echo $this->form->getLabel('ingredient_name'); ?>
-				<?php echo $this->form->getInput('ingredient_name'); ?></li>
-                                <li><?php echo $this->form->getLabel('description'); ?>
-				<?php echo $this->form->getInput('description'); ?></li>
-                                <br/><br/><br/>
-                                <p>NOTE: Enter ALL nutrient values based on 100g Edible Portion (EP)</p>
-				<li><?php echo $this->form->getLabel('calories'); ?>
-				<?php echo $this->form->getInput('calories'); ?></li>
-				<li><?php echo $this->form->getLabel('energy'); ?>
-				<?php echo $this->form->getInput('energy'); ?></li>
-				<li><?php echo $this->form->getLabel('protein'); ?>
-				<?php echo $this->form->getInput('protein'); ?></li>
-				<li><?php echo $this->form->getLabel('fats'); ?>
-				<?php echo $this->form->getInput('fats'); ?></li>
-                                <li><?php echo $this->form->getLabel('saturated_fat'); ?>
-				<?php echo $this->form->getInput('saturated_fat'); ?></li>
-				<li><?php echo $this->form->getLabel('carbs'); ?>
-				<?php echo $this->form->getInput('carbs'); ?></li>
-				<li><?php echo $this->form->getLabel('total_sugars'); ?>
-				<?php echo $this->form->getInput('total_sugars'); ?></li>
-				<li><?php echo $this->form->getLabel('sodium'); ?>
-				<?php echo $this->form->getInput('sodium'); ?></li>
-                                <li><?php echo $this->form->getLabel('measurement_unit'); ?>
-				<?php echo $this->form->getInput('measurement_unit'); ?></li>
+                <li><?php echo $this->form->getLabel('ingredient_name'); ?>
+                <?php echo $this->form->getInput('ingredient_name'); ?></li>
+                <li><?php echo $this->form->getLabel('description'); ?>
+                <?php echo $this->form->getInput('description'); ?></li>
+                <br/><br/><br/>
+                <p><b>NOTE: Enter ALL nutrient values based on 100g Edible Portion (EP)</b></p>
 
-                                <li id="measurement_unit_wrapper" style="display:none;">
-                                    <label id="jform_specific_gravity-lbl" class="" for="jform_specific_gravity">Specific Gravity</label>
-                                    <input id="jform_specific_gravity" class="inputbox" type="text" size="10" value="" name="jform[specific_gravity]">
-                                    <input readonly id="specific_gravity_grams" class="inputbox" type="text" size="10" value="" name="specific_gravity_grams"><span style="position: absolute;padding-top:5px;">g</span>
-                                    <br/><br/>
-                                    <p style="font-style:italic;">
-                                    You are entering a liquid ingredient. See this <a target="_blank" href="<?php echo  JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS . 'includes' . DS . 'Specific gravity appendix.pdf' ?>">LIST</a> for a suitable specific gravity
-                                    <br/>for your product. Is this the correct ‘specific gravity’ for this ingredient?
-                                    </p>
-                                </li>
+
+                <li><?php echo $this->form->getLabel('measurement_unit'); ?>
+                <?php echo $this->form->getInput('measurement_unit'); ?></li>
+
+                <li id="measurement_unit_wrapper" style="display:none;">
+                    <p style="font-style:italic;">
+                        You are entering a liquid ingredient. See this <a target="_blank" href="<?php echo  JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS . 'includes' . DS . 'Specific gravity appendix.pdf' ?>">LIST</a> for a suitable specific gravity
+                        <br/>for your product. Is this the correct ‘specific gravity’ for this ingredient?
+                    </p>
+                    <table>
+                        <tr>
+                            <td>
+                                <label id="jform_specific_gravity-lbl" class="" for="jform_specific_gravity">Specific Gravity</label> 
+                            </td>
+                            <td>
+                                <input id="jform_specific_gravity" class="inputbox" type="text" size="10" value="" name="jform[specific_gravity]">
+                            </td>
+                            <td>
+                                SG = ml for 100 grams 
+                            </td>
+                            <td>
+                                <input readonly id="specific_gravity_grams" class="inputbox" type="text" size="10" value="" name="specific_gravity_grams"><span style="position: absolute;padding-top:5px;">ml</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <p>
+                        To correctly enter the nutritional values of this liquid ingredient into the
+                        database, you must enter the product nutritional values (from the nutrition panel
+                        on the product) taken from the "average quantity per 100ml" serving size column...
+                    </p>
+                </li>
+                <div class="clr"></div>
                                 
-                                
-				<li><?php echo $this->form->getLabel('state'); ?>
-				<?php echo $this->form->getInput('state'); ?></li>
 
 
             </ul>
+            <div class="clr"></div>
+            <table id="ingradient_fields" width="100%">
+                <tr>
+                    <td class="millilitres_column" width="50%">
+                        <b>Enter Nutrition Info</b><br/>
+                        (as on product label: “average per 100ml”)
+                    </td>
+                    <td id="right_title"  width="50%">
+                        <b>Values as 100g Edible Portion (EP)</b><br/>
+                        (stored in nutrition database)                       
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="millilitres_column">
+                        
+                    </td>
+                    <td>
+                        <?php echo $this->form->getLabel('calories'); ?>
+			<?php echo $this->form->getInput('calories'); ?>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="millilitres_column">
+                        <?php echo $this->form->getLabel('energy'); ?>
+                        <input id="enter_energy" class="inputbox" type="text" size="10" value="" name="enter_energy">
+                    </td>
+                    <td>
+                        <?php echo $this->form->getLabel('energy'); ?>
+                        <?php echo $this->form->getInput('energy'); ?>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="millilitres_column">
+                        <?php echo $this->form->getLabel('protein'); ?>
+                        <input id="enter_protein" class="inputbox" type="text" size="10" value="" name="enter_protein">
+                    </td>
+                    <td>
+                        <?php echo $this->form->getLabel('protein'); ?>
+                        <?php echo $this->form->getInput('protein'); ?>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="millilitres_column">
+                        <?php echo $this->form->getLabel('fats'); ?>
+                        <input id="enter_fats" class="inputbox" type="text" size="10" value="" name="enter_fats">
+                    </td>
+                    <td>
+                        <?php echo $this->form->getLabel('fats'); ?>
+                        <?php echo $this->form->getInput('fats'); ?>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="millilitres_column">
+                        <?php echo $this->form->getLabel('saturated_fat'); ?>
+                        <input id="enter_saturated_fat" class="inputbox" type="text" size="10" value="" name="enter_saturated_fat">
+                        <div class="clr"></div>
+                    </td>
+                    <td>
+                        <?php echo $this->form->getLabel('saturated_fat'); ?>
+                        <?php echo $this->form->getInput('saturated_fat'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                       <div id="saturated_error" class="error_message"></div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="millilitres_column">
+                        <?php echo $this->form->getLabel('carbs'); ?>
+                        <input id="enter_carbs" class="inputbox" type="text" size="10" value="" name="enter_carbs">
+                    </td>
+                    <td>
+                        <?php echo $this->form->getLabel('carbs'); ?>
+                        <?php echo $this->form->getInput('carbs'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                       <div id="sum_100_error" class="error_message"></div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="millilitres_column">
+                        <?php echo $this->form->getLabel('total_sugars'); ?>
+                        <input id="enter_total_sugars" class="inputbox" type="text" size="10" value="" name="enter_total_sugars">
+                    </td>
+                    <td>
+                        <?php echo $this->form->getLabel('total_sugars'); ?>
+                        <?php echo $this->form->getInput('total_sugars'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                       <div id="sugars_error" class="error_message"></div> 
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="millilitres_column">
+                        <?php echo $this->form->getLabel('sodium'); ?>
+                        <input id="enter_sodium" class="inputbox" type="text" size="10" value="" name="enter_sodium">
+                    </td>
+                    <td>
+                        <?php echo $this->form->getLabel('sodium'); ?>
+                        <?php echo $this->form->getInput('sodium'); ?>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <?php echo $this->form->getLabel('state'); ?>
+            <?php echo $this->form->getInput('state'); ?>
         </fieldset>
     </div>
 
@@ -112,13 +232,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 }
             }
         }
-        
-        // append error divs
-        $("#jform_saturated_fat-lbl").parent().append('<div id="saturated_error" class="error_message"></div>');
-        $("#jform_carbs-lbl").parent().append('<div id="sum_100_error" class="error_message"></div>');
-        $("#jform_total_sugars-lbl").parent().append('<div id="sugars_error" class="error_message"></div>');
-        //
-        
+
         // input focus out events
         $("#jform_calories").on('focusout', function() {
             calculate_energy();
@@ -168,6 +282,48 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         });
         
         check_specific_gravity();
+        
+        
+        ///////////////// 
+        
+        $("#enter_energy").on('focusout', function() {
+            set_converted_value($(this).val(), 'jform_energy');
+        });
+        
+        $("#enter_protein").on('focusout', function() {
+            set_converted_value($(this).val(), 'jform_protein');
+        });
+                
+        $("#enter_fats").on('focusout', function() {
+            set_converted_value($(this).val(), 'jform_fats');
+        });
+        
+                        
+        $("#enter_saturated_fat").on('focusout', function() {
+            set_converted_value($(this).val(), 'jform_saturated_fat');
+        });
+        
+        $("#enter_carbs").on('focusout', function() {
+            set_converted_value($(this).val(), 'jform_carbs');
+        });
+
+        $("#enter_total_sugars").on('focusout', function() {
+            set_converted_value($(this).val(), 'jform_total_sugars');
+        });
+        
+        
+        $("#enter_sodium").on('focusout', function() {
+            set_converted_value($(this).val(), 'jform_sodium');
+        });
+        
+        $("#enter_energy").on('focusout', function() {
+            calculate_calories();
+        });
+        
+        $("#jform_specific_gravity").on('focusout', function() {
+            on_specific_gravity_change();
+        });        
+        
         
     });
     
@@ -223,26 +379,34 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     
     function check_specific_gravity() {
         var specific_gravity = parse_comma_number('<?php echo $this->item->specific_gravity; ?>');
-        if(specific_gravity) {
+        var measurement_unit =  $("#jform_measurement_unit").val();
+        hide_left_column();
+        if(specific_gravity || (measurement_unit == '2')) {
             $("#jform_measurement_unit").val('2');
             $("#jform_specific_gravity").val(specific_gravity);
             $("#measurement_unit_wrapper").show();
             set_measurement_unit('2');
-            specific_gravity_set_grams(specific_gravity)
+            specific_gravity_set_grams(specific_gravity);
+            show_left_column();
         }
     }
     
     function specific_gravity_set_grams(specific_gravity) {
-        $("#specific_gravity_grams").val(Math.round(parseFloat(specific_gravity) * 100 * 100)/100);
+        if(specific_gravity == 0) return;
+        $("#specific_gravity_grams").val(round_2_sign(parseFloat(100/specific_gravity)));
     }
     
     function set_measurement_unit(measurement_unit) {
         if(measurement_unit == '2') {
             $("#measurement_unit_wrapper").show();
+            show_left_column();
+            $("#right_title").html("<b>Values as 100g Edible Portion (EP)</b><br/>(stored in nutrition database) ");
         } else {
             $("#jform_specific_gravity").val('');
             $("#specific_gravity_grams").val('');
             $("#measurement_unit_wrapper").hide();
+            hide_left_column();
+            $("#right_title").html("<b>Enter Nutrition Info</b><br/>(as on product label: “average per 100g”) ");
         }
     }
     
@@ -253,14 +417,56 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     function calculate_energy() {
         var calories = parse_comma_number($("#jform_calories").val());
         var energy = calories * 4.184;
-        energy = Math.round(energy * 100)/100;
+        energy = round_2_sign(energy);
         $("#jform_energy").val(energy);
     }
     
-    function calculate_calories() {
-        var energy = parse_comma_number($("#jform_energy").val());
+    function calculate_calories(type) {
+        var energy = parse_comma_number($("#jform_energy").val());;
         var calories = energy / 4.184;
-        calories = Math.round(calories * 100)/100;
+        calories = round_2_sign(calories);
         $("#jform_calories").val(calories);
+    }
+    
+    function round_2_sign(value) {
+        return Math.round(value * 100)/100;
+    }
+    //////////////////////////////
+    
+    function set_converted_value(value, field_id) {
+        var specific_gravity_grams = $("#specific_gravity_grams").val();
+        if(!specific_gravity_grams) {
+            alert('Set up Specific Gravity field first!');
+            return;
+        }
+        var convertedValue = (value / 100) * specific_gravity_grams;
+        convertedValue = round_2_sign(convertedValue);
+        $("#" + field_id).val(convertedValue);
+    }
+    
+    function hide_left_column() {
+        $(".millilitres_column").hide();
+    }
+    
+    function show_left_column() {
+        $(".millilitres_column").show();
+    }
+    
+    function on_specific_gravity_change() {
+        set_converted_value($("#enter_energy").val(), 'jform_energy');
+        
+        set_converted_value($("#enter_protein").val(), 'jform_protein');
+
+        set_converted_value($("#enter_fats").val(), 'jform_fats');
+
+        set_converted_value($("#enter_saturated_fat").val(), 'jform_saturated_fat');
+       
+        set_converted_value($("#enter_carbs").val(), 'jform_carbs');
+
+        set_converted_value($("#enter_total_sugars").val(), 'jform_total_sugars');
+        
+        set_converted_value($("#enter_sodium").val(), 'jform_sodium');
+        
+        calculate_calories();
     }
 </script>
