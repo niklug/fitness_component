@@ -61,33 +61,103 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="nutrition_recipe-form" class="form-validate">
-    <div class="width-60 fltlft">
+    <div class="width-100 fltlft">
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_NUTRITION_RECIPE'); ?></legend>
-            <ul class="adminformlist">
+            <table>
+                <thead>
+                    <tr>
+                        <td>
+                            <?php echo $this->form->getLabel('recipe_name'); ?>
+                        </td>
+                        <td>
+                            <?php echo $this->form->getLabel('recipe_type'); ?>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <?php echo $this->form->getInput('recipe_name'); ?>
+                        </td>
+                        <td>
+                            <?php echo $this->form->getInput('recipe_type'); ?> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th>MEAL ITEM DESCRIPTION</th>
+                        <th>QUANTITY</th>
+                        <th>PRO (g)</th>
+                        <th>FAT (g)</th>
+                        <th>CARB (g)</th>
+                        <th>CALS</th>
+                        <th>ENRG (kJ)</th>
+                        <th>FAT, SAT (g)</th>
+                        <th>SUG (g)</th>
+                        <th>SOD (mg)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input size="60" type="text"  name="meal_description[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text"  name="meal_quantity[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text" name="meal_pro[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text" name="meal_fat[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text" name="meal_carb[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text" name="meal_cals[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text" name="meal_enrg[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text" name="meal_fat_sat[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text" name="meal_sug[]" value="">
+                        </td>
+                        <td>
+                            <input size="5" type="text" name="meal_sod[]" value="">
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" class="delete_cros" title="delete"></a>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            
+            
 
-				<li><?php echo $this->form->getLabel('recipe_name'); ?>
-				<?php echo $this->form->getInput('recipe_name'); ?></li>
-				<li><?php echo $this->form->getLabel('recipe_type'); ?>
-				<?php echo $this->form->getInput('recipe_type'); ?></li>
-                                
-                                <div style="display:none;">
-				<li><?php echo $this->form->getLabel('created_by'); ?>
-				<?php echo $this->form->getInput('created_by'); ?></li>
-				<li><?php echo $this->form->getLabel('created'); ?>
-				<?php echo $this->form->getInput('created'); ?></li>
-                                </div>
-                                
-				<li><?php echo $this->form->getLabel('state'); ?>
-				<?php echo $this->form->getInput('state'); ?></li>
-
-
-            </ul>
+            <br/>
+            <?php echo $this->form->getLabel('state'); ?>
+            <?php echo $this->form->getInput('state'); ?>
         </fieldset>
     </div>
 
     
-
+    <div style="display:none;">
+    <?php echo $this->form->getLabel('created_by'); ?>
+    <?php echo $this->form->getInput('created_by'); ?>
+    <?php echo $this->form->getLabel('created'); ?>
+    <?php echo $this->form->getInput('created'); ?>
+    </div>
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>

@@ -248,25 +248,20 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         
         $("#jform_fats").on('focusout', function() {
             validate_saturated_fat();
-        });
-        
-        $("#jform_fats").on('focusout', function() {
             validate_sum_100();
         });
         
+       
         $("#jform_protein").on('focusout', function() {
             validate_sum_100();
         });
         
         $("#jform_carbs").on('focusout', function() {
             validate_sum_100();
-        });
-        
-        $("#jform_total_sugars").on('focusout', function() {
             validate_sugars();
         });
         
-        $("#jform_carbs").on('focusout', function() {
+        $("#jform_total_sugars").on('focusout', function() {
             validate_sugars();
         });
         
@@ -292,23 +287,30 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         
         $("#enter_protein").on('focusout', function() {
             set_converted_value($(this).val(), 'jform_protein');
+            validate_sum_100();
         });
                 
         $("#enter_fats").on('focusout', function() {
             set_converted_value($(this).val(), 'jform_fats');
+            validate_saturated_fat();
+            validate_sum_100();
         });
         
                         
         $("#enter_saturated_fat").on('focusout', function() {
             set_converted_value($(this).val(), 'jform_saturated_fat');
+            validate_saturated_fat();
         });
         
         $("#enter_carbs").on('focusout', function() {
             set_converted_value($(this).val(), 'jform_carbs');
+            validate_sum_100();
+            validate_sugars();
         });
 
         $("#enter_total_sugars").on('focusout', function() {
             set_converted_value($(this).val(), 'jform_total_sugars');
+            validate_sugars();
         });
         
         
@@ -381,6 +383,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         var specific_gravity = parse_comma_number('<?php echo $this->item->specific_gravity; ?>');
         var measurement_unit =  $("#jform_measurement_unit").val();
         hide_left_column();
+        $("#right_title").html("<b>Enter Nutrition Info</b><br/>(as on product label: “average per 100g”) ");
         if(specific_gravity || (measurement_unit == '2')) {
             $("#jform_measurement_unit").val('2');
             $("#jform_specific_gravity").val(specific_gravity);

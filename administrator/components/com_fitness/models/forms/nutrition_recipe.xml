@@ -6,7 +6,7 @@
             readonly="true" class="readonly"
             description="JGLOBAL_FIELD_ID_DESC" /> 
 
-       <field name="recipe_name" type="text" size="40" class="inputbox"
+       <field name="recipe_name" type="text" size="60" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_RECIPE_NAME"
             description="COM_FITNESS_FORM_DESC_NUTRITION_RECIPE_RECIPE_NAME" 

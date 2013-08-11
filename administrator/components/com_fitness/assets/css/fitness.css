@@ -404,4 +404,12 @@
     padding: 0 15px;
 }
 
+.delete_cros {
+    background-image: url("../images/cross.png");
+    background-size: 15px auto;
+    display: block;
+    height: 15px;
+    width: 15px;
+}
+
 
