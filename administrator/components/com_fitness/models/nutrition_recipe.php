@@ -119,5 +119,48 @@ class FitnessModelnutrition_recipe extends JModelAdmin
 
 		}
 	}
+        
+        
+        
+        public function getSearchIngredients($search_text) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "SELECT id, ingredient_name FROM #__fitness_nutrition_database WHERE ingredient_name LIKE '%$search_text%'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $ingredients = $db->loadObjectList();
+
+            foreach ($ingredients as $ingredient) {
+                
+                $html .= '<option value="' . $ingredient->id . '" >' . $ingredient->ingredient_name . '</option>';
+            }
+            
+            $result = array('status' => $ret, 'html' => $html, 'count' => count($ingredients));
+            
+            return json_encode($result);      
+        }
+        
+        
+        public function getIngredientData($id) {
+           $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "SELECT * FROM #__fitness_nutrition_database WHERE id='$id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $ingredient = $db->loadObject();
+
+            $result = array('status' => $ret, 'ingredient' => $ingredient);
+            
+            return json_encode($result);      
+        }
+        
+        
+        
 
 }

@@ -327,7 +327,7 @@
 .ui-dialog .ui-dialog-titlebar-close, .ui-icon-closethick {
     height: 20px !important;
     position: absolute;
-    right: 3px;
+    right: -2px;
     top: 1px;
     width: 20px !important;
 }
@@ -412,4 +412,44 @@
     width: 15px;
 }
 
+#select_meal_form{
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    margin-left: -250px;
+    margin-top: -250px;
+    padding: 5px;
+}
+
+#ingredients_results{
+    width: 100%;
+    margin-top: 10px;
+    border:1px solid #000000;
+}
+
+#meal_search_cancel {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+#meal_search_next{
+    position: absolute;
+    bottom: 5px;
+    right: 5px; 
+}
+
+#ingred_select_error_message{
+    color:red;
+    margin-top: 2px;
+    text-align: center;
+}
+
+#quantity_wrapper {
+    text-align: center;
+    margin: 5px 0;
+}
 
