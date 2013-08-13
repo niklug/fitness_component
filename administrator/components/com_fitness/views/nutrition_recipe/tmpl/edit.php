@@ -86,11 +86,24 @@ JHtml::_('behavior.keepalive');
                     </tr>
                 </thead>
                 <tbody id="meals_content">
-
                 </tbody>
+                <tfoot>
+                    <tr id="totals_row">
+                        <td></td>
+                        <td><b>TOTALS</b></td>
+                        <td><input readonly size="5" type="text"  id="meal_protein_input_total" value=""></td>
+                        <td><input readonly size="5" type="text"  id="meal_fats_input_total" value=""></td>
+                        <td><input readonly size="5" type="text"  id="meal_carbs_input_total" value=""></td>
+                        <td><input readonly size="5" type="text"  id="meal_calories_input_total" value=""></td>
+                        <td><input readonly size="5" type="text"  id="meal_energy_input_total" value=""></td>
+                        <td><input readonly size="5" type="text"  id="meal_saturated_fat_input_total" value=""></td>
+                        <td><input readonly size="5" type="text"  id="meal_total_sugars_input_total" value=""></td>
+                        <td><input readonly size="5" type="text"  id="meal_sodium_input_total" value=""></td>
+                    </tr>
+                </tfoot>
             </table>
             <br/><br/>
-            <input class="open_popup" type="button" id="add_item" value="Add New Item">
+            <input class="add_meal" type="button" id="add_item" value="Add New Item">
             
 
             <br/>
@@ -112,36 +125,19 @@ JHtml::_('behavior.keepalive');
 
 </form>
 
-<div id="select_meal_form" style="display:none;">
-    <a class="ui-dialog-titlebar-close ui-corner-all" role="button" href="#">
-        <span class="close_popup ui-icon ui-icon-closethick"></span>
-    </a>
-    <br/>
-    Find ingredient
-    <br/>
-    <input size="40" type="text"  id="meal_search_input" value="">
-    <span id="results_count"></span>
-    <br/>
-    
-    <select size="31" id="ingredients_results">
-        
-    </select>
-    <div id="quantity_wrapper">Quantity <input size="2" type="text" id="quantity" name="quantity" value="100"></div>
-    <input class="close_popup" type="button" id="meal_search_cancel" value="Cancel">
-    <div id="ingred_select_error_message"></div>
-    <input type="button" id="meal_search_next" value="Next">
-</div>
-
 <script type="text/javascript">
     
     // SET VARIABLES AND CONSTANTS
     var _meal_form = $("#select_meal_form");
-    var _close_popup = $(".close_popup");
-    var _open_popup = $(".open_popup");
-    var _meal_search_input = $("#meal_search_input");
-    var _ingredients_results = $("#ingredients_results");
-    var _next_button = $("#meal_search_next");
-    var select_error_message = $("#ingred_select_error_message");
+    var _add_meal = $(".add_meal");
+    var _meals_content = $("#meals_content");
+    var _meal_name_input = $(".meal_name_input");
+    var _meal_quantity_input = $(".meal_quantity_input");
+    var _selected_option = $("#ingredients_results option");
+    
+    var ingredient_obj = {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""};
+    
+    var _results_template = '<div id="select_meal_form"><span id="results_count"></span><select size="25" id="ingredients_results"></select></div>';
   
     var typingTimer;
     var doneTypingInterval = 1000;
@@ -150,36 +146,58 @@ JHtml::_('behavior.keepalive');
     // ATTACH EVENTS
     $(document).ready(function(){
     
-        _open_popup.on('click', function() {open_popup(_meal_form)});
-        
-        _close_popup.on('click', function() {close_popup(_meal_form)});
-        
-        _meal_search_input.on('keyup', function() {
+        _meal_name_input.live('input', function() {
+            var search_text = $(this).val();
+            if($('#select_meal_form').length == 0) {
+                $(this).parent().append(_results_template);
+            }
+ 
             clearTimeout(typingTimer);
-            if (_meal_search_input.val()) {
+            if (search_text) {
                 typingTimer = setTimeout(
-                        function() {getSearchIngredients(_meal_search_input.val(), _ingredients_results)},
-                        doneTypingInterval
+                    function() {getSearchIngredients(search_text, $("#ingredients_results"))},
+                    doneTypingInterval
                 );
             }
         });
         
-        _next_button.on('click', function() {
-            var ingredient_id = _ingredients_results.find(":selected").val();
-            var quantity = $("#quantity").val();
-            onClickNext(ingredient_id, select_error_message, parseFloat(quantity));
+        _selected_option.live('click', function() {
+            var ingredient_id = $(this).val();
+            var selected_ingredient_name = $(this).text();
+            var closest_TR = $(this).closest("tr");
+            
+            setupTrDataId($(this));
+            
+            getIngredientData(ingredient_id, closest_TR, '');
+            close_popup($("#select_meal_form"));
+            closest_TR.find("input").val('');
+            closest_TR.find(".meal_name_input").val(selected_ingredient_name);
+            closest_TR.find(".meal_quantity_input").focus();
+
         });
         
+        _add_meal.on('click', function() {
+            var tr_html = createIngredientTR(ingredient_obj);
+            _meals_content.append(tr_html);
+            _meals_content.find("tr:last td:first input").focus();
+        });
+        
+        _meal_quantity_input.live('keypress', function(e){
+            if (e.keyCode == 13) {
+                var quantity = $(this).val();
+                var closest_TR = $(this).closest("tr");
+                var ingredient_id = closest_TR.attr('data-ingredient_id');
+                getIngredientData(ingredient_id, closest_TR, quantity);
+            }
+        })
+
     });
     
 
     // FUNCTIONS 
-    function open_popup(element) {
-        element.fadeIn();
-    }
     
     function close_popup(element) {
-        element.fadeOut();
+        element.remove();
     }
     
     function getSearchIngredients(search_text, destination) {
@@ -198,7 +216,9 @@ JHtml::_('behavior.keepalive');
                     alert(response.status.Msg);
                     return;
                 }
-                $("#results_count").html('Search returned ' + response.count + ' ingredients.');
+                
+                $("#results_count").html('Search returned ' + response.count + ' ingredients.'); 
+                
                 destination.html(response.html);
                 destination.find(":odd").css("background-color", "#F0F0EE")
             },
@@ -208,23 +228,9 @@ JHtml::_('behavior.keepalive');
             }
         });
     }
+
     
-    
-    function onClickNext(ingredient_id, select_error_message, quantity) {
-        select_error_message.html('');
-        if(!ingredient_id) {
-            select_error_message.html('Select ingredient to proceed.');
-            return;
-        }
-        
-        if(!quantity || quantity < 1) {
-            select_error_message.html('Set up quantity!');
-            return;           
-        }
-        getIngredientData(ingredient_id, quantity);
-    }
-    
-    function getIngredientData(id, quantity) {
+    function getIngredientData(id, closest_TR, quantity) {
        $.ajax({
             type : "POST",
             url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
@@ -240,14 +246,16 @@ JHtml::_('behavior.keepalive');
                     alert(response.status.Msg);
                     return;
                 }
-                var  calculatedIngredient = calculatedIngredientItems(response.ingredient, quantity);
-                var tr_html = createIngredientTR(calculatedIngredient);
-                
-                $("#meals_content").append(tr_html);
-                
-                close_popup($("#select_meal_form"));
-                //console.log(tr_html);
-            },
+                if(!response.ingredient) return;
+                var measurement = getMeasurement(response.ingredient.specific_gravity);
+                closest_TR.find(".grams_mil").html(measurement);
+                if(quantity) {
+                    var  calculatedIngredient = calculatedIngredientItems(response.ingredient, quantity);
+                    var TR_html = createIngredientTR(calculatedIngredient);
+                    closest_TR.replaceWith(TR_html);
+                    calculate_totals();
+                }
+              },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
                 alert("error");
@@ -258,46 +266,47 @@ JHtml::_('behavior.keepalive');
     function createIngredientTR(calculatedIngredient) {
 
         var html = '';
-        html += '<tr>'
+        html += '<tr data-ingredient_id="' + calculatedIngredient.id + '">'
         
         html += '<td>';
-        html += calculatedIngredient.meal_description;
-        html += '</td>';
-        
-        html += '<td>';
-        html += calculatedIngredient.quantity;
+        html += '<input  size="60" type="text"  class="meal_name_input" value="' + calculatedIngredient.meal_name + '">';
         html += '</td>';
         
         html += '<td>';
-        html += calculatedIngredient.protein;
+        html += '<input size="5" type="text"  class="meal_quantity_input" value="' + calculatedIngredient.quantity + '">';
+        html += '<span class="grams_mil">' + calculatedIngredient.measurement + '</span>';
         html += '</td>';
         
         html += '<td>';
-        html += calculatedIngredient.fats;
-        html += '</td>';
-
-        html += '<td>';
-        html += calculatedIngredient.carbs;
-        html += '</td>';
-
-        html += '<td>';
-        html += calculatedIngredient.calories;
+        html += '<input readonly size="5" type="text"  class="meal_protein_input" value="' + calculatedIngredient.protein + '">';
         html += '</td>';
         
         html += '<td>';
-        html += calculatedIngredient.energy;
+        html += '<input readonly size="5" type="text"  class="meal_fats_input" value="' + calculatedIngredient.fats + '">';
         html += '</td>';
 
         html += '<td>';
-        html += calculatedIngredient.saturated_fat;
+        html += '<input readonly size="5" type="text"  class="meal_carbs_input" value="' + calculatedIngredient.carbs + '">';
         html += '</td>';
 
         html += '<td>';
-        html += calculatedIngredient.total_sugars;
+        html += '<input readonly size="5" type="text"  class="meal_calories_input" value="' + calculatedIngredient.calories + '">';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input readonly size="5" type="text"  class="meal_energy_input" value="' + calculatedIngredient.energy + '">';
         html += '</td>';
 
         html += '<td>';
-        html += calculatedIngredient.sodium;
+        html += '<input readonly size="5" type="text"  class="meal_saturated_fat_input" value="' + calculatedIngredient.saturated_fat + '">';
+        html += '</td>';
+
+        html += '<td>';
+        html += '<input readonly size="5" type="text"  class="meal_total_sugars_input" value="' + calculatedIngredient.total_sugars + '">';
+        html += '</td>';
+
+        html += '<td>';
+        html += '<input readonly size="5" type="text"  class="meal_sodium_input" value="' + calculatedIngredient.sodium + '">';
         html += '</td>';
         
         html += '<td>';
@@ -321,9 +330,13 @@ JHtml::_('behavior.keepalive');
         //quantity = 100;
         //specific_gravity = 1.03;
         //ingredient.protein = 3.2;
-        calculated_ingredient.meal_description = ingredient.ingredient_name;
+        calculated_ingredient.id = ingredient.id;
+        
+        calculated_ingredient.meal_name = ingredient.ingredient_name;
         
         calculated_ingredient.quantity = quantity;
+        
+        calculated_ingredient.measurement = getMeasurement(ingredient.specific_gravity);
         
         calculated_ingredient.protein = calculateDependsOnGravity(ingredient.protein, quantity, specific_gravity);
         
@@ -365,6 +378,53 @@ JHtml::_('behavior.keepalive');
     function millilitresFormula(value, quantity, specific_gravity) {
         return round_2_sign (value / 100 * quantity * specific_gravity );
     }
+    
+    function setupTrDataId(current_obj) {
+        current_obj.closest("tr").attr('data-ingredient_id', current_obj.val());
+    }
+    
+    function getMeasurement(specific_gravity) {
+        if(parseFloat(specific_gravity) > 0) {
+            return 'millilitres';
+        } 
+        return 'grams';
+    }
 
+    function calculate_totals() {
+       set_item_total(get_item_total('meal_protein_input'), 'meal_protein_input_total');
+       
+       set_item_total(get_item_total('meal_fats_input'), 'meal_fats_input_total');
+       
+       set_item_total(get_item_total('meal_carbs_input'), 'meal_carbs_input_total');
+       
+       set_item_total(get_item_total('meal_calories_input'), 'meal_calories_input_total');
+       
+       set_item_total(get_item_total('meal_energy_input'), 'meal_energy_input_total');
+       
+       set_item_total(get_item_total('meal_saturated_fat_input'), 'meal_saturated_fat_input_total');
+       
+       set_item_total(get_item_total('meal_total_sugars_input'), 'meal_total_sugars_input_total');
+       
+       set_item_total(get_item_total('meal_sodium_input'), 'meal_sodium_input_total');
+    }
+    
+    function get_item_total(element) {
+       var item_array = $("." +element);
+       var sum = 0;
+       item_array.each(function(){
+           var value = parseFloat($(this).val());
+           if(value > 0) {
+              sum += parseFloat(value); 
+           }
+           
+       });
+       return round_2_sign(sum);
+    }
+    
+    function set_item_total(value, element) {
+        $("#" + element).val(value);
+    }
+    
+    
 </script>
 

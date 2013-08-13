@@ -124,8 +124,19 @@ class FitnessModelnutrition_recipe extends JModelAdmin
         
         public function getSearchIngredients($search_text) {
             $ret['IsSuccess'] = 1;
+            
+            $search_text_array = preg_split("/[\s,]+/", $search_text);
+            
             $db = JFactory::getDbo();
-            $query = "SELECT id, ingredient_name FROM #__fitness_nutrition_database WHERE ingredient_name LIKE '%$search_text%'";
+            $query = "SELECT id, ingredient_name FROM #__fitness_nutrition_database WHERE ";
+
+            
+            foreach ($search_text_array as $search_text_part) {
+                $query .= "   ingredient_name LIKE '%$search_text_part%' AND ";
+            }
+            
+            $query .= " state='1'";
+            
             $db->setQuery($query);
             if(!$db->query()) {
                 $ret['IsSuccess'] = 0;
@@ -138,6 +149,7 @@ class FitnessModelnutrition_recipe extends JModelAdmin
                 $html .= '<option value="' . $ingredient->id . '" >' . $ingredient->ingredient_name . '</option>';
             }
             
+               
             $result = array('status' => $ret, 'html' => $html, 'count' => count($ingredients));
             
             return json_encode($result);      
