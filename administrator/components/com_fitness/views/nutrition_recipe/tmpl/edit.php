@@ -41,6 +41,16 @@ JHtml::_('behavior.keepalive');
     .adminformlist li {
         clear: both;
     }
+
+    #jform_instructions-lbl{
+        float: none;
+    }
+
+    .error_message{
+        color:#C00;
+        padding-top: 7px;
+}
+
 </style>
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="nutrition_recipe-form" class="form-validate">
     <div class="width-100 fltlft">
@@ -68,11 +78,11 @@ JHtml::_('behavior.keepalive');
                     </tr>
                 </tbody>
             </table>
-            
+            <hr>
             <table width="100%">
                 <thead>
                     <tr>
-                        <th>MEAL ITEM DESCRIPTION</th>
+                        <th width="450">MEAL ITEM DESCRIPTION</th>
                         <th>QUANTITY</th>
                         <th>PRO (g)</th>
                         <th>FAT (g)</th>
@@ -89,7 +99,7 @@ JHtml::_('behavior.keepalive');
                 </tbody>
                 <tfoot>
                     <tr id="totals_row">
-                        <td></td>
+                        <td><input class="add_meal" type="button" id="add_item" value="Add New Item"></td>
                         <td><b>TOTALS</b></td>
                         <td><input readonly size="5" type="text"  id="meal_protein_input_total" value=""></td>
                         <td><input readonly size="5" type="text"  id="meal_fats_input_total" value=""></td>
@@ -102,11 +112,22 @@ JHtml::_('behavior.keepalive');
                     </tr>
                 </tfoot>
             </table>
-            <br/><br/>
-            <input class="add_meal" type="button" id="add_item" value="Add New Item">
-            
+            <div class="clr"></div>
+            <hr>
 
             <br/>
+            <?php echo $this->form->getLabel('number_serves'); ?>
+            <?php echo $this->form->getInput('number_serves'); ?>
+            <br/>
+            <?php echo $this->form->getLabel('instructions'); ?>
+            <?php echo $this->form->getInput('instructions'); ?>
+            <div class="clr"></div>
+            <hr>
+            <div id="comments_wrapper"></div>
+            <div class="clr"></div>
+            <input type="button" id="add_comment" value="New Comment">
+            <div class="clr"></div>
+            <hr>
             <?php echo $this->form->getLabel('state'); ?>
             <?php echo $this->form->getInput('state'); ?>
         </fieldset>
@@ -125,20 +146,33 @@ JHtml::_('behavior.keepalive');
 
 </form>
 
+
+
+
 <script type="text/javascript">
     
     // SET VARIABLES AND CONSTANTS
+    var _recipe_id = '<?php echo (int) $this->item->id;?>';
     var _meal_form = $("#select_meal_form");
     var _add_meal = $(".add_meal");
     var _meals_content = $("#meals_content");
     var _meal_name_input = $(".meal_name_input");
     var _meal_quantity_input = $(".meal_quantity_input");
     var _selected_option = $("#ingredients_results option");
+    var _delete_meal = $(".delete_meal");
+    var _add_comment = $("#add_comment");
+    var _comments_wrapper = $("#comments_wrapper");
+    
+    var _user_name = '<?php echo JFactory::getUser()->name;?>'
     
     var ingredient_obj = {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""};
+    var _comment_obj = {'user_name' : _user_name, 'date' : "", 'content' : ""};
     
     var _results_template = '<div id="select_meal_form"><span id="results_count"></span><select size="25" id="ingredients_results"></select></div>';
-  
+    
+
+
+    
     var typingTimer;
     var doneTypingInterval = 1000;
  
@@ -168,7 +202,7 @@ JHtml::_('behavior.keepalive');
             
             setupTrDataId($(this));
             
-            getIngredientData(ingredient_id, closest_TR, '');
+            getIngredientData(_recipe_id, ingredient_id, closest_TR, '');
             close_popup($("#select_meal_form"));
             closest_TR.find("input").val('');
             closest_TR.find(".meal_name_input").val(selected_ingredient_name);
@@ -177,19 +211,37 @@ JHtml::_('behavior.keepalive');
         });
         
         _add_meal.on('click', function() {
+            if(_recipe_id == 0) {
+                alert("Please save this Recipe before proceeding to add items/ingredients");
+                return;
+            }
             var tr_html = createIngredientTR(ingredient_obj);
             _meals_content.append(tr_html);
             _meals_content.find("tr:last td:first input").focus();
         });
         
-        _meal_quantity_input.live('keypress', function(e){
-            if (e.keyCode == 13) {
-                var quantity = $(this).val();
-                var closest_TR = $(this).closest("tr");
-                var ingredient_id = closest_TR.attr('data-ingredient_id');
-                getIngredientData(ingredient_id, closest_TR, quantity);
-            }
-        })
+        _meal_quantity_input.live('focusout', function(e){
+            var quantity = $(this).val();
+            var closest_TR = $(this).closest("tr");
+            var ingredient_id = closest_TR.attr('data-ingredient_id');
+            getIngredientData(_recipe_id, ingredient_id, closest_TR, quantity);
+ 
+        });
+        
+        _delete_meal.live('click', function(){
+            var closest_TR = $(this).closest("tr");
+            var meal_id = closest_TR.attr('data-id');
+            deleteMeal(meal_id, closest_TR);
+        });
+        
+        populateTable(_recipe_id);
+        
+        // comments
+        _add_comment.live('click', function() {
+            var comment_template = createCommentTemplate(_comment_obj);
+            _comments_wrapper.append(comment_template);
+           
+        });
 
     });
     
@@ -230,8 +282,9 @@ JHtml::_('behavior.keepalive');
     }
 
     
-    function getIngredientData(id, closest_TR, quantity) {
-       $.ajax({
+    function getIngredientData(recipe_id, id, closest_TR, quantity) {
+        var recipe_id = recipe_id;
+        $.ajax({
             type : "POST",
             url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             data : {
@@ -251,9 +304,21 @@ JHtml::_('behavior.keepalive');
                 closest_TR.find(".grams_mil").html(measurement);
                 if(quantity) {
                     var  calculatedIngredient = calculatedIngredientItems(response.ingredient, quantity);
-                    var TR_html = createIngredientTR(calculatedIngredient);
-                    closest_TR.replaceWith(TR_html);
-                    calculate_totals();
+                    
+                    calculatedIngredient.recipe_id = recipe_id;
+                    
+                    var id = closest_TR.attr('data-id');
+                    calculatedIngredient.id = id;             
+                    saveMeal(calculatedIngredient, function(output){
+                        var inserted_id = output;
+                        if(inserted_id) {
+                            calculatedIngredient.id = inserted_id;
+                            var TR_html = createIngredientTR(calculatedIngredient);
+                            closest_TR.replaceWith(TR_html);
+                            calculate_totals();
+                         }
+                    });
+                    
                 }
               },
             error: function(XMLHttpRequest, textStatus, errorThrown)
@@ -266,7 +331,7 @@ JHtml::_('behavior.keepalive');
     function createIngredientTR(calculatedIngredient) {
 
         var html = '';
-        html += '<tr data-ingredient_id="' + calculatedIngredient.id + '">'
+        html += '<tr data-ingredient_id="' + calculatedIngredient.ingredient_id + '"  data-id="' + calculatedIngredient.id + '">'
         
         html += '<td>';
         html += '<input  size="60" type="text"  class="meal_name_input" value="' + calculatedIngredient.meal_name + '">';
@@ -310,7 +375,7 @@ JHtml::_('behavior.keepalive');
         html += '</td>';
         
         html += '<td>';
-        html += '<a href="javascript:void(0)" class="delete_cros" title="delete"></a>';
+        html += '<a href="javascript:void(0)" class="delete_meal" title="delete"></a>';
         html += '</td>';
 
         html += '</tr>';
@@ -330,7 +395,7 @@ JHtml::_('behavior.keepalive');
         //quantity = 100;
         //specific_gravity = 1.03;
         //ingredient.protein = 3.2;
-        calculated_ingredient.id = ingredient.id;
+        calculated_ingredient.ingredient_id = ingredient.id;
         
         calculated_ingredient.meal_name = ingredient.ingredient_name;
         
@@ -425,6 +490,127 @@ JHtml::_('behavior.keepalive');
         $("#" + element).val(value);
     }
     
+    function saveMeal(calculatedIngredient, handleData) {
+        var ingredient_encoded = JSON.stringify(calculatedIngredient);
+        //console.log(calculatedIngredient);
+        $.ajax({
+            type : "POST",
+            url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            data : {
+                view : 'nutrition_recipe',
+                format : 'text',
+                task : 'saveMeal',
+                ingredient_encoded : ingredient_encoded
+              },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                handleData(response.inserted_id);
+              },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        }); 
+     }
     
+    function deleteMeal(id, closest_TR) {
+        $.ajax({
+            type : "POST",
+            url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            data : {
+                view : 'nutrition_recipe',
+                format : 'text',
+                task : 'deleteMeal',
+                id : id
+              },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                closest_TR.remove();
+                calculate_totals();
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        }); 
+    }
+    
+    function populateTable(recipe_id) {
+        if(!recipe_id) return;
+        $.ajax({
+            type : "POST",
+            url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            data : {
+                view : 'nutrition_recipe',
+                format : 'text',
+                task : 'populateTable',
+                recipe_id : recipe_id
+              },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                var recipe_meals = response.recipe_meals;
+                if(!recipe_meals) return;
+                
+                var html = '';
+                recipe_meals.each(function(meal){
+                    html += createIngredientTR(meal);
+                });
+                $("#meals_content").html(html);
+                calculate_totals();
+                //console.log(html);
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        }); 
+    }
+    
+    function pad(d) {
+        return (d < 10) ? '0' + d.toString() : d.toString();
+    }
+    
+    function createCommentTemplate(comment_obj) {
+        var d1 = new Date();
+        if(comment_obj.date) {
+            d1 = new Date(Date.parse(comment_obj.date));
+        }
+        
+        var current_time = getCurrentDate(d1);
+        var comment_template = '<div class="comment_wrapper">';
+        comment_template += '<table width="100%">';
+        comment_template += '<tr>';
+        comment_template += '<td><b>Comment by: </b><span class="comment_by">' + comment_obj.user_name +  '</span></td>';
+        comment_template += '<td><b>Date: </b> <span class="comment_date">' + current_time.date +  '</span></td>';
+        comment_template += '<td><b>Time: </b> <span class="comment_time">' + current_time.time_short +  '</span></td>';
+        comment_template += '<td><input class="save_comment" type="button"  value="Save/Edit"></td>'
+        comment_template += '<td align="right"><a href="javascript:void(0)" class="delete_comment" title="delete"></a></td>';
+        comment_template += '</tr>';
+        comment_template += '</table>';
+        comment_template += '<div class="clr"></div>';
+        comment_template += '<textarea  class="comment_textarea" cols="100" rows="3">' + comment_obj.content +  '</textarea>';
+        comment_template += '</div>';
+        comment_template += '<div class="clr"></div>';
+        return comment_template;
+    }
+    
+    function getCurrentDate(d1) {
+        var date = d1.getFullYear() + "-" + (pad(d1.getMonth()+1)) + "-" + pad(d1.getDate()); 
+        var time = pad(d1.getHours()) + ":" + pad(d1.getMinutes()) + ":" + pad(d1.getSeconds());
+        var time_short = pad(d1.getHours()) + ":" + pad(d1.getMinutes());
+        return {'date' : date, 'time' : time, 'time_short' : time_short};
+    }
 </script>
 

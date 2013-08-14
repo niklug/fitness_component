@@ -81,17 +81,33 @@ class FitnessController extends JController
         // Recipes
         //------------------------------------------------------
 	function getSearchIngredients() {
-            
- 		$view = $this -> getView('nutrition_recipe', 'json');
-                $view->setModel($this->getModel('nutrition_recipe'));
-   		$view -> getSearchIngredients();
+            $view = $this -> getView('nutrition_recipe', 'json');
+            $view->setModel($this->getModel('nutrition_recipe'));
+            $view -> getSearchIngredients();
 	}
         
         function getIngredientData() {
-            
- 		$view = $this -> getView('nutrition_recipe', 'json');
-                $view->setModel($this->getModel('nutrition_recipe'));
-   		$view -> getIngredientData();
+            $view = $this -> getView('nutrition_recipe', 'json');
+            $view->setModel($this->getModel('nutrition_recipe'));
+            $view -> getIngredientData();
+	}
+        
+        function saveMeal() {
+            $view = $this -> getView('nutrition_recipe', 'json');
+            $view->setModel($this->getModel('nutrition_recipe'));
+            $view -> saveMeal();
+	}
+        
+        function deleteMeal() {
+            $view = $this -> getView('nutrition_recipe', 'json');
+            $view->setModel($this->getModel('nutrition_recipe'));
+            $view -> deleteMeal();
+	}
+        
+        function populateTable() {
+            $view = $this -> getView('nutrition_recipe', 'json');
+            $view->setModel($this->getModel('nutrition_recipe'));
+            $view -> populateTable();
 	}
         
         

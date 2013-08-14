@@ -732,13 +732,46 @@ PRIMARY KEY (`id`)
 
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes` (
-`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-
-`recipe_name` VARCHAR(255)  NOT NULL ,
-`recipe_type` INT(11)  NOT NULL ,
-`created_by` INT(11)  NOT NULL ,
-`created` DATETIME NOT NULL ,
-`state` TINYINT(1)  NOT NULL DEFAULT '1',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `recipe_name` varchar(255) NOT NULL,
+  `recipe_type` int(11) NOT NULL,
+  `number_serves` int(3) NOT NULL,
+  `instructions` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `state` tinyint(1) NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_meals` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `recipe_id` int(11) unsigned NOT NULL,
+  `ingredient_id` int(11) unsigned NOT NULL,
+  `meal_name` varchar(255) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `measurement` varchar(20) NOT NULL,
+  `protein` float NOT NULL,
+  `fats` float NOT NULL,
+  `carbs` float NOT NULL,
+  `calories` float NOT NULL,
+  `energy` float NOT NULL,
+  `saturated_fat` float NOT NULL,
+  `total_sugars` float NOT NULL,
+  `sodium` float NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `recipe_id` (`recipe_id`),
+  FOREIGN KEY (recipe_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_comments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `recipe_id` int(11) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `recipe_id` (`recipe_id`),
+  FOREIGN KEY (recipe_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

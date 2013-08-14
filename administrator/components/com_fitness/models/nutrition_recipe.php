@@ -157,7 +157,7 @@ class FitnessModelnutrition_recipe extends JModelAdmin
         
         
         public function getIngredientData($id) {
-           $ret['IsSuccess'] = 1;
+            $ret['IsSuccess'] = 1;
             $db = JFactory::getDbo();
             $query = "SELECT * FROM #__fitness_nutrition_database WHERE id='$id'";
             $db->setQuery($query);
@@ -172,7 +172,62 @@ class FitnessModelnutrition_recipe extends JModelAdmin
             return json_encode($result);      
         }
         
+        public function saveMeal($ingredient_encoded) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            
+            $ingredient = json_decode($ingredient_encoded);
+            
+            if($ingredient->id) {
+                $insert = $db->updateObject('#__fitness_nutrition_recipes_meals', $ingredient, 'id');
+            } else {
+                $insert = $db->insertObject('#__fitness_nutrition_recipes_meals', $ingredient, 'id');
+            }
+
+            if (!$insert) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+            }
+            
+            $inserted_id = $db->insertid();
+            //$ret['IsSuccess'] = 0;
+            
+            //$ret['Msg'] = print_r($ingredient, true);
+            
+            $result = array('status' => $ret, 'inserted_id' => $inserted_id);
+            
+            return json_encode($result);     
+        }
         
         
+        public function deleteMeal($id) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "DELETE FROM #__fitness_nutrition_recipes_meals WHERE id='$id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $result = array('status' => $ret);
+            
+            return json_encode($result);  
+        }
+        
+        public function populateTable($recipe_id) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "SELECT * FROM #__fitness_nutrition_recipes_meals WHERE recipe_id='$recipe_id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $recipe_meals = $db->loadObjectList();
+
+            $result = array('status' => $ret, 'recipe_meals' => $recipe_meals);
+            
+            return json_encode($result);      
+        }
 
 }

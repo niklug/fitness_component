@@ -404,7 +404,7 @@
     padding: 0 15px;
 }
 
-.delete_cros {
+.delete_meal, .delete_comment {
     background-image: url("../images/cross.png");
     background-size: 15px auto;
     display: block;
@@ -420,6 +420,7 @@
     width: 415px;
     border: 1px solid #cccccc;
     text-align: center;
+    z-index: 999;
 }
 
 #ingredients_results{
@@ -457,3 +458,10 @@
 }
 
 
+#totals_row {
+    background-color:#E1E9E9;
+}
+
+.comment_wrapper, .comment_textarea {
+    width: 600px !important;
+}

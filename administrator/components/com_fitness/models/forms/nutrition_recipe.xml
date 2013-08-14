@@ -21,7 +21,16 @@
               value_field="name"
               label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_RECIPE_TYPE"
         /> 
+       
+        <field name="number_serves"  size="3" class="inputbox" type="text" default="1" label="NUMBER OF SERVES"
+            description="" /> 
 
+        <field name="instructions" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+            label="Cooking Instructions / Method"
+            description=""  /> 
+       
        <field name="created_by" type="createdby" default="" 
             label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_CREATED_BY"
             description="COM_FITNESS_FORM_DESC_NUTRITION_RECIPE_CREATED_BY"  /> 

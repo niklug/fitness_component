@@ -219,31 +219,31 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $item->created; ?>
 				</td>
                                 <td>
-                                    
+                                        <?php echo $item->calories; ?>
                                 </td>
                                 <td>
-                                    
+                                        <?php echo $item->energy; ?>
                                 </td>
                                 <td>
-                                    
+                                        <?php echo $item->protein; ?>
                                 </td>
                                 <td>
-                                    
+                                        <?php echo $item->fats; ?>
                                 </td>
                                 <td>
-                                    
+                                        <?php echo $item->saturated_fat; ?>
                                 </td>
                                 <td>
-                                    
+                                        <?php echo $item->carbs; ?>
                                 </td>
                                 <td>
-                                    
+                                        <?php echo $item->total_sugars; ?>
                                 </td>
                                 <td>
-                                    
+                                        <?php echo $item->sodium; ?>
                                 </td>
                                 <td>
-                                    
+                                        
                                 </td>
 
                 <?php if (isset($this->items[0]->state)) { ?>
