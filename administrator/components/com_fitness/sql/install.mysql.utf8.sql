@@ -775,3 +775,11 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_comments` (
   KEY `recipe_id` (`recipe_id`),
   FOREIGN KEY (recipe_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_focus` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL DEFAULT '1',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
