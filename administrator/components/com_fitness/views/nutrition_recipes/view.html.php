@@ -34,19 +34,21 @@ class FitnessViewNutrition_recipes extends JView
 		if (count($errors = $this->get('Errors'))) {
 			throw new Exception(implode("\n", $errors));
 		}
-        
+                $document = &JFactory::getDocument();
+                $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 		$this->addToolbar();
         
-        $input = JFactory::getApplication()->input;
-        FitnessHelper::addSubmenu('Dashboard', 'dashboard');
-        FitnessHelper::addSubmenu('Clients', 'clients');
-        FitnessHelper::addSubmenu('Client Planning', 'goals');
-        FitnessHelper::addSubmenu('Calendar', 'calendar');
-        FitnessHelper::addSubmenu('Programs', 'programs');
-        FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
-        FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diary');
-        FitnessHelper::addSubmenu('Assessments', 'assessments');
-        FitnessHelper::addSubmenu('Settings', 'settings');
+                $input = JFactory::getApplication()->input;
+                FitnessHelper::addSubmenu('Dashboard', 'dashboard');
+                FitnessHelper::addSubmenu('Clients', 'clients');
+                FitnessHelper::addSubmenu('Client Planning', 'goals');
+                FitnessHelper::addSubmenu('Calendar', 'calendar');
+                FitnessHelper::addSubmenu('Programs', 'programs');
+                FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
+                FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diary');
+                FitnessHelper::addSubmenu('Assessments', 'assessments');
+                FitnessHelper::addSubmenu('Settings', 'settings');
         
 		parent::display($tpl);
 	}

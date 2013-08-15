@@ -125,7 +125,13 @@ switch ($method) {
     case "sendAppointmentNoshowEmail":
         sendAppointmentStatusEmail('email_status_no_show');
     break;
+
+    // Recipe approved email
+    case "sendRecipeEmail":
+        sendRecipeEmail();
+    break;
     //
+
     case "update_exercise_field":
         update_exercise_field();
     break;
@@ -1696,6 +1702,47 @@ function getClientIdByAppointmentId($appointment_client_id) {
     return $client_id;
 }
 
+function sendRecipeEmail() {
+    $recipe_id= JRequest::getVar('recipe_id');
+    
+    $subject = 'Your Recipe Approved!';
+    
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=email_recipe_approved&tpml=component&recipe_id=' . $recipe_id ;
+    
+    $contents = getContentCurl($url);
+    
+    $email = getEmailByRecipeId($recipe_id);
+    
+    $send = sendEmail($email, $subject, $contents);
+
+    if($send != '1') {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'Email function error';
+        echo json_encode($ret);
+        die();
+    }
+    $ret['IsSuccess'] = true;
+    $ret['Msg'] = $email;
+    echo json_encode($ret);
+    die();
+}
+
+function getEmailByRecipeId($recipe_id) {
+    $db = & JFactory::getDBO();
+    $query = "SELECT created_by FROM #__fitness_nutrition_recipes WHERE id='$recipe_id' AND state='1'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        echo json_encode($ret);
+        die();
+    }
+    $user_id = $db->loadResult();
+    
+    $user = &JFactory::getUser($user_id);
+    
+    return $user->email; 
+}
 
 jexit();
 ?>

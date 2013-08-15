@@ -44,5 +44,24 @@ class FitnessViewNutrition_recipe extends JView {
 	    echo $model->populateTable($recipe_id);
 	}
         
-
+        function saveComment() {
+            $id = JRequest::getVar('id');
+            $comment_text = JRequest::getVar('comment_text','','POST','STRING',JREQUEST_ALLOWHTML);
+            $created = JRequest::getVar('created');
+            $recipe_id = JRequest::getVar('recipe_id');
+            $model = $this -> getModel("nutrition_recipe");
+	    echo $model->saveComment($id, $comment_text, $recipe_id, $created);
+	}
+        
+        function deleteComment() {
+	    $id= JRequest::getVar('id');
+            $model = $this -> getModel("nutrition_recipe");
+	    echo $model->deleteComment($id);
+	}
+        
+        function populateComments() {
+	    $recipe_id = JRequest::getVar('recipe_id');
+            $model = $this -> getModel("nutrition_recipe");
+	    echo $model->populateComments($recipe_id);
+	}
 }

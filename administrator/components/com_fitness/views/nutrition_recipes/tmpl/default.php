@@ -13,9 +13,6 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.tooltip');
 JHTML::_('script','system/multiselect.js',false,true);
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 $user	= JFactory::getUser();
 $userId	= $user->get('id');
@@ -243,7 +240,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                                         <?php echo $item->sodium; ?>
                                 </td>
                                 <td>
-                                        
+                                      <a onclick="sendEmail('<?php echo $item->id ?>', 'Recipe')" class="send_email_button"></a>  
                                 </td>
 
                 <?php if (isset($this->items[0]->state)) { ?>
@@ -288,36 +285,48 @@ $saveOrder	= $listOrder == 'a.ordering';
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
-
+<div id="emais_sended"></div>
 
 <script type="text/javascript">
-    function getScript(url,success) {
-        var script = document.createElement('script');
-        script.src = url;
-        var head = document.getElementsByTagName('head')[0],
-        done = false;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState
-                || this.readyState == 'loaded'
-                || this.readyState == 'complete')) {
-                done = true;
-                success();
-                script.onload = script.onreadystatechange = null;
-                head.removeChild(script);
-            }
-        };
-        head.appendChild(script);
-    }
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        $(document).ready(function(){
-            $("#reset_filtered").click(function(){
-                var form = $("#adminForm");
-                form.find("select").val('');
-                form.find("input").val('');
-                form.submit();
-            });
- 
+
+    $(document).ready(function(){
+        $("#reset_filtered").click(function(){
+            var form = $("#adminForm");
+            form.find("select").val('');
+            form.find("input").val('');
+            form.submit();
         });
+
     });
+  
+    
+    function sendEmail(recipe_id, method) {
+        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
+        $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                    recipe_id : recipe_id
+                },
+                dataType : 'json',
+                success : function(response) {
+                    if(response.IsSuccess) {
+                        var emails = response.Msg.split(',');
+
+                        var message = 'Emails were sent to: ' +  "</br>";
+                        $.each(emails, function(index, email) { 
+                            message += email +  "</br>";
+                        });
+                        $("#emais_sended").append(message);
+
+                    } else {
+                        alert(response.Msg);
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert("error");
+                }
+        });
+    }
 </script>

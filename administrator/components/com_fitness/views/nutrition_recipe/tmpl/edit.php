@@ -162,11 +162,12 @@ JHtml::_('behavior.keepalive');
     var _delete_meal = $(".delete_meal");
     var _add_comment = $("#add_comment");
     var _comments_wrapper = $("#comments_wrapper");
-    
+    var _save_comment = $(".save_comment");
+    var _delete_comment = $(".delete_comment");
     var _user_name = '<?php echo JFactory::getUser()->name;?>'
     
     var ingredient_obj = {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""};
-    var _comment_obj = {'user_name' : _user_name, 'date' : "", 'content' : ""};
+    var _comment_obj = {'user_name' : _user_name, 'created' : "", 'comment' : ""};
     
     var _results_template = '<div id="select_meal_form"><span id="results_count"></span><select size="25" id="ingredients_results"></select></div>';
     
@@ -234,7 +235,7 @@ JHtml::_('behavior.keepalive');
             deleteMeal(meal_id, closest_TR);
         });
         
-        populateTable(_recipe_id);
+        populateTable(_recipe_id, _meals_content);
         
         // comments
         _add_comment.live('click', function() {
@@ -242,6 +243,34 @@ JHtml::_('behavior.keepalive');
             _comments_wrapper.append(comment_template);
            
         });
+        
+        _save_comment.live('click', function() {
+            var comment_wrapper = $(this).closest("table").parent();
+            var id = comment_wrapper.attr("data-id");
+            var comment_text = $(this).closest("table").find("textarea.comment_textarea").val();
+            var date = $(this).closest("table").find(".comment_date").text();
+            var time = $(this).closest("table").find(".comment_time").text();
+            var created = date + ' ' + time;
+            if(_recipe_id == 0) {
+                alert("Please save this Recipe before proceeding");
+                return;
+            }
+            saveComment(id, comment_text, _recipe_id, created, function(output){
+                var comment_obj = output;
+                var comment_html = createCommentTemplate(comment_obj);
+                comment_wrapper.replaceWith(comment_html);
+                console.log(comment_obj);
+                console.log(comment_html);
+            });
+        });
+        
+        _delete_comment.live('click', function(){
+            var comment_wrapper = $(this).closest("table").parent();
+            var id = comment_wrapper.attr('data-id');
+            deleteComment(id, comment_wrapper);
+        });
+        
+        populateComments(_recipe_id, _comments_wrapper);
 
     });
     
@@ -543,7 +572,7 @@ JHtml::_('behavior.keepalive');
         }); 
     }
     
-    function populateTable(recipe_id) {
+    function populateTable(recipe_id, meals_content) {
         if(!recipe_id) return;
         $.ajax({
             type : "POST",
@@ -567,7 +596,7 @@ JHtml::_('behavior.keepalive');
                 recipe_meals.each(function(meal){
                     html += createIngredientTR(meal);
                 });
-                $("#meals_content").html(html);
+                meals_content.html(html);
                 calculate_totals();
                 //console.log(html);
                 },
@@ -584,25 +613,25 @@ JHtml::_('behavior.keepalive');
     
     function createCommentTemplate(comment_obj) {
         var d1 = new Date();
-        if(comment_obj.date) {
-            d1 = new Date(Date.parse(comment_obj.date));
+        if(comment_obj.created) {
+            d1 = new Date(Date.parse(comment_obj.created));
         }
         
         var current_time = getCurrentDate(d1);
-        var comment_template = '<div class="comment_wrapper">';
+        var comment_template = '<div data-id="' + comment_obj.id + '" class="comment_wrapper">';
         comment_template += '<table width="100%">';
         comment_template += '<tr>';
         comment_template += '<td><b>Comment by: </b><span class="comment_by">' + comment_obj.user_name +  '</span></td>';
         comment_template += '<td><b>Date: </b> <span class="comment_date">' + current_time.date +  '</span></td>';
         comment_template += '<td><b>Time: </b> <span class="comment_time">' + current_time.time_short +  '</span></td>';
-        comment_template += '<td><input class="save_comment" type="button"  value="Save/Edit"></td>'
-        comment_template += '<td align="right"><a href="javascript:void(0)" class="delete_comment" title="delete"></a></td>';
+        comment_template += '<td><input class="save_comment" type="button"  value="Save"></td>'
+        comment_template += '<td align="center"><a href="javascript:void(0)" class="delete_comment" title="delete"></a></td>';
+        comment_template += '</tr>';
+        comment_template += '<tr>';
+        comment_template += '<td colspan="5"><textarea  class="comment_textarea" cols="100" rows="3">' + comment_obj.comment +  '</textarea></td>';
         comment_template += '</tr>';
         comment_template += '</table>';
-        comment_template += '<div class="clr"></div>';
-        comment_template += '<textarea  class="comment_textarea" cols="100" rows="3">' + comment_obj.content +  '</textarea>';
         comment_template += '</div>';
-        comment_template += '<div class="clr"></div>';
         return comment_template;
     }
     
@@ -611,6 +640,95 @@ JHtml::_('behavior.keepalive');
         var time = pad(d1.getHours()) + ":" + pad(d1.getMinutes()) + ":" + pad(d1.getSeconds());
         var time_short = pad(d1.getHours()) + ":" + pad(d1.getMinutes());
         return {'date' : date, 'time' : time, 'time_short' : time_short};
+    }
+    
+    function saveComment(id, comment_text, recipe_id, created, handleData) {
+        if(id === 'undefined') var id = ""; 
+        $.ajax({
+            type : "POST",
+            url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            data : {
+                view : 'nutrition_recipe',
+                format : 'text',
+                task : 'saveComment',
+                id : id,
+                comment_text : comment_text,
+                recipe_id : recipe_id,
+                created : created
+              },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                handleData(response.data);
+              },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        });  
+    }
+    
+    function deleteComment(id, comment_wrapper) {
+        $.ajax({
+            type : "POST",
+            url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            data : {
+                view : 'nutrition_recipe',
+                format : 'text',
+                task : 'deleteComment',
+                id : id
+              },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                comment_wrapper.remove();
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        }); 
+    }
+    
+    function populateComments(recipe_id, comments_wrapper) {
+        if(!recipe_id) return;
+        $.ajax({
+            type : "POST",
+            url : '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            data : {
+                view : 'nutrition_recipe',
+                format : 'text',
+                task : 'populateComments',
+                recipe_id : recipe_id
+              },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                var comments = response.comments;
+                if(!comments) return;
+                
+                var html = '';
+                comments.each(function(comment_obj){
+                //console.log(comment_obj);            
+                html += createCommentTemplate(comment_obj);
+                });
+                comments_wrapper.html(html);
+                //console.log(html);
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error");
+            }
+        }); 
     }
 </script>
 

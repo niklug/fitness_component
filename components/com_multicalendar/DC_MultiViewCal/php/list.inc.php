@@ -99,6 +99,19 @@ function getEmailPdfData($event_id) {
    $result = $db->loadObject();
    return $result;
 }
+
+function getRecipeData($recipe_id) {
+   $db	= & JFactory::getDBO();
+   $query = "SELECT r.*, t.name AS recipe_type FROM #__fitness_nutrition_recipes AS r
+    LEFT JOIN #__fitness_recipe_types AS t  ON r.recipe_type=t.id
+    WHERE r.id='$recipe_id'";
+   $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
+   $result = $db->loadObject();
+   return $result;
+}
 /**
  * npkorban
  * @param type $event_id
