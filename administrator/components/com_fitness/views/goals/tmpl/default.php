@@ -100,7 +100,7 @@ echo $this->loadTemplate('graph');?>
                 
                 <?php
                 $db = JFactory::getDbo();
-                $sql = "SELECT id, name FROM #__fitness_goal_categories`";
+                $sql = "SELECT id, name FROM #__fitness_goal_categories WHERE state='1'";
                 $db->setQuery($sql);
                 if(!$db->query()) {
                     JError::raiseError($db->getErrorMsg());
@@ -117,7 +117,7 @@ echo $this->loadTemplate('graph');?>
             
                 <?php
                 $db = JFactory::getDbo();
-                $sql = "SELECT id, name FROM #__fitness_training_period";
+                $sql = "SELECT id, name FROM #__fitness_training_period WHERE state='1'";
                 $db->setQuery($sql);
                 if(!$db->query()) {
                     JError::raiseError($db->getErrorMsg());

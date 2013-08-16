@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="client_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_CLIENT_ID"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_CLIENT_ID" 
+         required="true" 
+        filter="safehtml" /> 
+
+       <field name="trainer_id" type="sql" class="inputbox"
+            query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')"
+            key_field="id"
+            value_field="username"
+            label="COM_FITNESS_FORM_LBL_CLIENT_PRIMARY_TRAINER"
+            required="true"
+       /> 
+
+       <field name="active_start" type="calendar"
+                
+            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE_START"
+            description="" 
+                
+                
+                
+            filter="raw" /> 
+
+       <field name="active_finish" type="calendar"
+                
+            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE_FINISH"
+            description="" 
+                
+                
+                
+            filter="raw" /> 
+
+       <field name="active" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_ACTIVE" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="force_active" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_FORCE_ACTIVE"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_FORCE_ACTIVE" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="primary_goal" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_PRIMARY_GOAL"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_PRIMARY_GOAL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="nutrition_focus" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_NUTRITION_FOCUS"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_NUTRITION_FOCUS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

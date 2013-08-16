@@ -128,4 +128,7 @@ class FitnessController extends JController
             $view -> populateComments();
 	}
         
+        // nutrition plan
+
+        
 }

@@ -857,11 +857,17 @@ function  get_session_focus() {
 */
 function  get_trainers() {
     $client_id = JRequest::getVar("client_id");
+    $secondary_only = JRequest::getVar("secondary_only");
     $db = & JFactory::getDBO();
     $user = &JFactory::getUser();
     if (getUserGroup($user->id) == 'Super Users') {
         $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
         $db->setQuery($query);
+            $status['success'] = 1;
+        if (!$db->query()) {
+            $status['success'] = 0;
+            $status['message'] = $db->stderr();
+        }
         $primary_trainer= $db->loadResultArray(0);
         $other_trainers = $db->loadResultArray(1);
         $other_trainers = explode(',', $other_trainers[0]);
@@ -870,12 +876,21 @@ function  get_trainers() {
         $all_trainers_id = array($user->id);
     }
     
+    if($secondary_only) {
+        $all_trainers_id = $other_trainers;
+    }
+    
+    if(!$all_trainers_id) {
+        $status['success'] = 0;
+        $status['message'] = 'No trainers assigned to this client.';
+    }
+    
     foreach ($all_trainers_id as $user_id) {
         $user = &JFactory::getUser($user_id);
         $all_trainers_name[] = $user->name;
     }
     
-    $result = array_combine($all_trainers_id, $all_trainers_name);
+    $result = array( 'status' => $status, 'data' => array_combine($all_trainers_id, $all_trainers_name));
     echo  json_encode($result);
     die();
 }

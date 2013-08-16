@@ -264,8 +264,12 @@
                 },
                 dataType : 'json',
                 success : function(message) {
+                    if(!message.status.success) {
+                        alert(message.status.message);
+                        return;
+                    }
                     $('#trainer').html('<option value="" >-Select-</option>');
-                    $.each(message, function(index, value) {
+                    $.each(message.data, function(index, value) {
                         var client_id = '<?php echo $event->trainer_id; ?>';
                         if(client_id == index) {
                            var selected = 'selected';

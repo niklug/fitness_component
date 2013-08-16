@@ -783,3 +783,23 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_focus` (
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`client_id` INT(255)  NOT NULL ,
+`trainer_id` INT(11)  NOT NULL ,
+`active_start` DATE NOT NULL ,
+`active_finish` DATE NOT NULL ,
+`active` TINYINT(1)  NOT NULL ,
+`force_active` TINYINT(1)  NOT NULL ,
+`primary_goal` INT(11)  NOT NULL ,
+`nutrition_focus` INT(11)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL DEFAULT '1',
+PRIMARY KEY (`id`),
+KEY `client_id` (`client_id`),
+KEY `trainer_id` (`trainer_id`),
+FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE,
+FOREIGN KEY (trainer_id) REFERENCES #__users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
