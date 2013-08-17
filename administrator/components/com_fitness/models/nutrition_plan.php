@@ -119,5 +119,41 @@ class FitnessModelnutrition_plan extends JModelAdmin
 
 		}
 	}
-
+        
+        public function getClientPrimaryGoals($client_id) {
+            $db = & JFactory::getDBO();
+            $query = "SELECT g.id, c.name
+                FROM #__fitness_goals AS g
+                LEFT JOIN #__fitness_goal_categories AS c
+                ON g.goal_category_id = c.id
+                WHERE g.user_id='$client_id' AND g.state='1'";
+            $db->setQuery($query);
+            $status['success'] = 1;
+            if (!$db->query()) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+            }
+            $ids = $db->loadResultArray(0);
+            $names = $db->loadResultArray(1);
+            $result = array('status' => $status, 'data' => array_combine($ids, $names));
+            return json_encode($result);
+        }
+        
+        public function getGoalData($id) {
+            $db = & JFactory::getDBO();
+            $query = "SELECT g.*, p.name AS training_period_name
+                FROM #__fitness_goals as g
+                LEFT JOIN #__fitness_training_period AS p
+                ON g.training_period_id = p.id
+                WHERE g.id='$id' AND g.state='1'";
+            $db->setQuery($query);
+            $status['success'] = 1;
+            if (!$db->query()) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+            }
+            $data = $db->loadObject();
+            $result = array('status' => $status, 'data' => $data);
+            return json_encode($result); 
+        }
 }

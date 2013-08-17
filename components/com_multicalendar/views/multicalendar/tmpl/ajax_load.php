@@ -860,7 +860,7 @@ function  get_trainers() {
     $secondary_only = JRequest::getVar("secondary_only");
     $db = & JFactory::getDBO();
     $user = &JFactory::getUser();
-    if (getUserGroup($user->id) == 'Super Users') {
+    if ((getUserGroup($user->id) == 'Super Users') OR $secondary_only) {
         $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
         $db->setQuery($query);
             $status['success'] = 1;

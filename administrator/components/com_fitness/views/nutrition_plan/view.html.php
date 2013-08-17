@@ -80,4 +80,16 @@ class FitnessViewNutrition_plan extends JView
 		}
 
 	}
+        
+        function getPrimaryGoalName($id) {
+            $db = JFactory::getDbo();
+     
+            $sql = "SELECT name FROM #__fitness_goal_categories WHERE id='$id' AND state='1'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+        }
 }

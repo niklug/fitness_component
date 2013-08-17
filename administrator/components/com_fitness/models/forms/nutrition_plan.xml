@@ -1,92 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset>
+    <fieldset>
 
-              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ID"
-            readonly="true" class="readonly"
-            description="JGLOBAL_FIELD_ID_DESC" /> 
+        <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ID"
+                     readonly="true" class="readonly"
+                     description="JGLOBAL_FIELD_ID_DESC" /> 
 
-       <field name="client_id" type="text" size="40" class="inputbox"
+        <field name="client_id" type="text" size="40" class="inputbox"
         
-            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_CLIENT_ID"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_CLIENT_ID" 
-         required="true" 
-        filter="safehtml" /> 
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_CLIENT_ID"
+              description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_CLIENT_ID" 
+              required="true" 
+              filter="safehtml" /> 
 
-       <field name="trainer_id" type="sql" class="inputbox"
-            query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')"
-            key_field="id"
-            value_field="username"
-            label="COM_FITNESS_FORM_LBL_CLIENT_PRIMARY_TRAINER"
-            required="true"
-       /> 
+        <field name="trainer_id" type="sql" class="inputbox"
+              query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')"
+              key_field="id"
+              value_field="username"
+              label="COM_FITNESS_FORM_LBL_CLIENT_PRIMARY_TRAINER"
+              required="true"
+        /> 
+        
+        <field name="training_period" type="text" size="50" default="" label="COM_FITNESS_TITLE_TRAININGPERIOD"
+             readonly="true" class="readonly  inputbox"
+             description="COM_FITNESS_TITLE_TRAININGPERIOD" /> 
 
-       <field name="active_start" type="calendar"
+        <field name="active_start" type="calendar"
                 
-            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE_START"
-            description="" 
-                
-                
-                
-            filter="raw" /> 
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE_START"
+              description="" 
+              filter="raw" /> 
 
-       <field name="active_finish" type="calendar"
+        <field name="active_finish" type="calendar"
                 
-            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE_FINISH"
-            description="" 
-                
-                
-                
-            filter="raw" /> 
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE_FINISH"
+              description="" 
+              filter="raw" /> 
 
-       <field name="active" type="text" size="40" class="inputbox"
+        <field name="active" type="text" size="40" class="inputbox"
         
-            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_ACTIVE" 
-        
-        
-        
-        filter="safehtml" /> 
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE"
+              description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_ACTIVE" 
+              filter="safehtml" /> 
 
-       <field name="force_active" type="text" size="40" class="inputbox"
         
-            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_FORCE_ACTIVE"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_FORCE_ACTIVE" 
-        
-        
-        
-        filter="safehtml" /> 
+        <field name="force_active" type="radio" default="0" label="Override/Force Active" description="">
+          <option value="1">JYES</option>
+          <option value="0">JNO</option>
+        </field>
+       
+        <field name="no_end_date" type="radio" default="0" label="No End Date" description="">
+          <option value="1">JYES</option>
+          <option value="0">JNO</option>
+        </field>
 
-       <field name="primary_goal" type="text" size="40" class="inputbox"
+        <field name="primary_goal" type="text" size="40" class="inputbox"
         
-            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_PRIMARY_GOAL"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_PRIMARY_GOAL" 
-        
-        
-        
-        filter="safehtml" /> 
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_PRIMARY_GOAL"
+              description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_PRIMARY_GOAL" 
+              required="true" 
+              filter="safehtml" /> 
 
-       <field name="nutrition_focus" type="text" size="40" class="inputbox"
         
-            label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_NUTRITION_FOCUS"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_NUTRITION_FOCUS" 
+        <field name="nutrition_focus" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_nutrition_focus WHERE state='1'"
+              key_field="id"
+              value_field="name"
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_NUTRITION_FOCUS"
+              required="true"
+        /> 
         
         
-        
-        filter="safehtml" /> 
-
-         <field
-        name="state"
-        type="list"
-        label="JSTATUS"
-        description="JFIELD_PUBLISHED_DESC"
+       <field name="trainer_comments" type="editor" buttons="false" width="700px" height="150px"
         class="inputbox"
-        size="1"
-        default="1">
-        <option value="1">JPUBLISHED</option>
-        <option value="0">JUNPUBLISHED</option>
-    </field>
+        filter="safehtml"
+            label="Trainer Comments"
+            description=""  /> 
+                
+                
 
-	</fieldset>
+        <field
+            name="state"
+            type="radio"
+            label=""
+            description="JFIELD_PUBLISHED_DESC"
+            class="inputbox"
+            size="1"
+            default="1">
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+
+    </fieldset>
 
 </form>

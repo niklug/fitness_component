@@ -786,15 +786,16 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-
 `client_id` INT(255)  NOT NULL ,
 `trainer_id` INT(11)  NOT NULL ,
 `active_start` DATE NOT NULL ,
 `active_finish` DATE NOT NULL ,
 `active` TINYINT(1)  NOT NULL ,
 `force_active` TINYINT(1)  NOT NULL ,
+`no_end_date` TINYINT(1)  NOT NULL ,
 `primary_goal` INT(11)  NOT NULL ,
 `nutrition_focus` INT(11)  NOT NULL ,
+`trainer_comments` text NOT NULL,
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`),
 KEY `client_id` (`client_id`),

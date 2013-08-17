@@ -48,31 +48,37 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         <table width="100%">
             <tr>
                 <td width="30%">
-                    <fieldset class="adminform">
+                    <fieldset style="height:410px;" class="adminform">
                         <legend>CLIENT & TRAINER(S)</legend>
-                            <?php
-                            $db = JFactory::getDbo();
+                        <?php
+                        $db = JFactory::getDbo();
 
-                            $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
-                            $db->setQuery($sql);
-                            if(!$db->query()) {
-                                JError::raiseError($db->getErrorMsg());
-                            }
-                            $primary_trainerlist = $db->loadObjectList();
-                            ?>
-
+                        $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+                        $db->setQuery($sql);
+                        if(!$db->query()) {
+                            JError::raiseError($db->getErrorMsg());
+                        }
+                        $primary_trainerlist = $db->loadObjectList();
+                        ?>
+                        <ul>
                             <li><?php echo $this->form->getLabel('trainer_id'); ?>
                                 <div class='filter-select fltrt'>
                                     <select id="jform_trainer_id" class="inputbox" name="jform[trainer_id]">
                                         <option value=""><?php echo JText::_('-Select-');?></option>
-                                        <?php echo JHtml::_('select.options', $primary_trainerlist, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
+                                        <?php echo JHtml::_('select.options', $primary_trainerlist, "value", "text", $this->item->trainer_id, true);?>
                                     </select>
                                 </div>
                             </li>
                             <li><?php echo $this->form->getLabel('client_id'); ?>
                                 <div class='filter-select fltrt'>
                                     <select id="jform_client_id" class="inputbox" name="jform[client_id]">
-                                        <option value=""><?php echo JText::_('-Select-');?></option>
+                                        <?php
+                                        if($this->item->client_id) {
+                                            echo '<option value="' . $this->item->client_id . '">'. JFactory::getUser($this->item->client_id)->name .'</option>';
+                                        } else {
+                                            echo '<option value="">' . JText::_('-Select-')  . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </li>
@@ -88,39 +94,85 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <td width="70%">
                     <fieldset  class="adminform">
                         <legend>NUTRITION PLAN (PERIODIZATION)</legend>
-                        
+                        <table>
+                            <tr>
+                                <td>
+                                    <?php echo $this->form->getLabel('primary_goal'); ?>
+                                    <select id="jform_primary_goal" class="inputbox" name="jform[primary_goal]">
+                                        <?php
+                                        if($this->item->primary_goal) {
+                                            echo '<option value="' . $this->item->primary_goal. '">'. $this->getPrimaryGoalName($this->item->primary_goal) .'</option>';
+                                        } else {
+                                            echo '<option value="">' . JText::_('-Select-')  . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <?php echo $this->form->getLabel('state'); ?>
+                                    <?php echo $this->form->getInput('state'); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <?php echo $this->form->getLabel('training_period'); ?>
+                                    <?php echo $this->form->getInput('training_period'); ?>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <?php echo $this->form->getLabel('active_start'); ?>
+                                    <?php echo $this->form->getInput('active_start'); ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->form->getLabel('force_active'); ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->form->getInput('force_active'); ?>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <?php echo $this->form->getLabel('active_finish'); ?>
+                                    <?php echo $this->form->getInput('active_finish'); ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->form->getLabel('no_end_date'); ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->form->getInput('no_end_date'); ?>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <?php echo $this->form->getLabel('nutrition_focus'); ?>
+                                    <?php echo $this->form->getInput('nutrition_focus'); ?>
+                                </td>
+                                <td></td>
+                            </tr>
+                            
+                            <td colspan="4">
+                                    <?php echo $this->form->getLabel('trainer_comments'); ?>
+                                    <?php echo $this->form->getInput('trainer_comments'); ?>
+                                </td>
+                            </tr>
+                        </table>
                     </fieldset>
                 </td>
             </tr>
             
         </table>
-        
-        <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_FITNESS_LEGEND_NUTRITION_PLAN'); ?></legend>
-            <ul class="adminformlist">
-                <li><?php echo $this->form->getLabel('active_start'); ?>
-                <?php echo $this->form->getInput('active_start'); ?></li>
-                <li><?php echo $this->form->getLabel('active_finish'); ?>
-                <?php echo $this->form->getInput('active_finish'); ?></li>
-                <li><?php echo $this->form->getLabel('active'); ?>
-                <?php echo $this->form->getInput('active'); ?></li>
-                <li><?php echo $this->form->getLabel('force_active'); ?>
-                <?php echo $this->form->getInput('force_active'); ?></li>
-                <li><?php echo $this->form->getLabel('primary_goal'); ?>
-                <?php echo $this->form->getInput('primary_goal'); ?></li>
-                <li><?php echo $this->form->getLabel('nutrition_focus'); ?>
-                <?php echo $this->form->getInput('nutrition_focus'); ?></li>
-                <li><?php echo $this->form->getLabel('state'); ?>
-                <?php echo $this->form->getInput('state'); ?></li>
-
-
-            </ul>
-        </fieldset>
     </div>
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 </form>
+
 
 <script type="text/javascript">
     
@@ -129,7 +181,19 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         'trainer_select' : $("#jform_trainer_id"),
         'client_select' : $("#jform_client_id"),
         'secondary_trainers_wrapper' : $("#secondary_trainers"),
-        'calendar_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_multicalendar&task=load&calid=0'
+        'primary_goal_select' : $("#jform_primary_goal"),
+        'training_period_select' : $("#jform_training_period"),
+        'calendar_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_multicalendar&task=load&calid=0',
+        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'client_selected' : '<?php echo $this->item->client_id;?>',
+        'primary_goal_selected' : '<?php echo $this->item->primary_goal;?>',
+        'active_start_field' : $("#jform_active_start"),
+        'active_finish_field' : $("#jform_active_finish"),
+        'active_start_img' : $("#jform_active_start_img"),
+        'active_finish_img' : $("#jform_active_finish_img"),
+        'force_active_yes' : $("#jform_force_active0"),
+        'force_active_no' : $("#jform_force_active1"),
+        'force_active_value' : '<?php echo $this->item->force_active;?>'
     }
     // cteate main object
     var nutrition_plan = new NutritionPlan(options);
@@ -137,6 +201,35 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     // attach listeners on document ready
     $(document).ready(function(){
        nutrition_plan.setEventListeners();
+       
+       // populate clients select onload
+       nutrition_plan.getTrainerClients(options.trainer_select, function(output) {
+            var selected_option = nutrition_plan.options.client_selected
+            nutrition_plan.populateSelect(output, nutrition_plan.options.client_select, selected_option);
+        });
+       
+       // populate secondary trainers  onload
+       nutrition_plan.getClientSecondaryTrainers(options.client_select, function(output) {
+            nutrition_plan.populateSecondaryTrainers(output, nutrition_plan.options.secondary_trainers_wrapper);
+        });
+       
+       // populate primary goals select onload
+       nutrition_plan.getClientPrimaryGoals(options.client_select, function(output) {
+            var selected_option = nutrition_plan.options.primary_goal_selected;
+            nutrition_plan.populateSelect(output, nutrition_plan.options.primary_goal_select, selected_option);
+        });
+        
+        // set  Active Start field inactive/active
+        nutrition_plan.options.active_start_img.css('display', 'none');
+        nutrition_plan.options.active_start_field.attr('readonly', true);
+        if(parseInt(nutrition_plan.options.force_active_value)) {
+            nutrition_plan.options.active_start_img.css('display', 'block');
+            nutrition_plan.options.active_start_field.attr('readonly', false); 
+        }
+        
+        // set  Active Finish field inactive
+        nutrition_plan.options.active_finish_img.css('display', 'none');
+        nutrition_plan.options.active_finish_field.attr('readonly', true);
     });
     
     // Constructor
@@ -155,22 +248,81 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         this.options.client_select.on('change', function(){
             self.clientChangeEvent($(this));
         });
+        
+        // on primary goal select
+        this.options.primary_goal_select.on('change', function(){
+            self.primaryGoalChangeEvent($(this));
+        });
+        
+        // on Active start 'yes' click
+        this.options.force_active_yes.on('click', function(){
+            self.options.active_start_img.css('display', 'block');
+            self.options.active_start_field.attr('readonly', false);
+        });
+        
+        // on Active start 'no' click
+        this.options.force_active_no.on('click', function(){
+            self.options.active_start_img.css('display', 'none');
+            self.options.active_start_field.attr('readonly', true);
+        });
+        
     }
     
     NutritionPlan.prototype.trainerChangeEvent = function(e) {
-        this.getTrainerClients(e);
+        // reset fields
         this.populateSecondaryTrainers({}, this.options.secondary_trainers_wrapper);
+        this.populateSelect({}, this.options.client_select);
+        this.populateSelect({}, this.options.primary_goal_select);
+        this.options.active_start_field.val('');
+        this.options.active_finish_field.val('');
+        //
+        var self = this;
+        this.getTrainerClients(e, function(output) {
+            if(output) {
+                var selected_option = self.options.client_selected
+                self.populateSelect(output, self.options.client_select, selected_option);
+            }
+        });
     }
     
     NutritionPlan.prototype.clientChangeEvent = function(e) {
-        this.getClientSecondaryTrainers(e);
+        // reset fields
+        this.populateSecondaryTrainers({}, this.options.secondary_trainers_wrapper);
+        this.populateSelect({}, this.options.primary_goal_select);
+        this.options.active_start_field.val('');
+        this.options.active_finish_field.val('');
+        //
+        var self = this;
+        this.getClientSecondaryTrainers(e, function(output) {
+            self.populateSecondaryTrainers(output, self.options.secondary_trainers_wrapper);
+        });
+        this.getClientPrimaryGoals(e, function(output) {
+            //console.log(output);
+            if(output) {
+                var selected_option = self.options.primary_goal_selected;
+                self.populateSelect(output, self.options.primary_goal_select, selected_option);
+            }
+        });
     }
     
-    NutritionPlan.prototype.getTrainerClients = function(e) {
+    NutritionPlan.prototype.primaryGoalChangeEvent = function(e) {
+        this.options.training_period_select.val('');
+        this.options.active_start_field.val('');
+        this.options.active_finish_field.val('');
+        var self = this;
+        this.getGoalData(e, function(output) {
+            if(output) {
+                self.options.training_period_select.val(output.training_period_name);
+                self.options.active_start_field.val(output.start_date);
+                self.options.active_finish_field.val(output.deadline);
+            }
+        });
+    }
+    
+    NutritionPlan.prototype.getTrainerClients = function(e, handleData) {
         var trainer_id = e.find(":selected").val();
         if(!trainer_id) return;
         var url = this.options.calendar_frontend_url;
-        var self = this;
         $.ajax({
             type : "POST",
             url : url,
@@ -180,13 +332,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             },
             dataType : 'json',
             success : function(response) {
-                
                 if(!response.status.success) {
-                    self.populateSelect({}, self.options.client_select);
                     alert(response.status.message);
                     return;
                 }
-                self.populateSelect(response.data, self.options.client_select);
+                handleData(response.data);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
@@ -196,11 +346,10 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
       
     }
     
-    NutritionPlan.prototype.getClientSecondaryTrainers = function(e) {
+    NutritionPlan.prototype.getClientSecondaryTrainers = function(e, handleData) {
         var client_id = e.find(":selected").val();
         if(!client_id) return;
         var url = this.options.calendar_frontend_url;
-        var self = this;
         $.ajax({
             type : "POST",
             url : url,
@@ -215,21 +364,84 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     alert(response.status.message);
                     return;
                 }
-                self.populateSecondaryTrainers(response.data, self.options.secondary_trainers_wrapper);
+                handleData(response.data);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
                 alert("error");
             }
         });
-      
     }
     
-    NutritionPlan.prototype.populateSelect = function(data, destination) {
+    NutritionPlan.prototype.getClientPrimaryGoals = function(e, handleData) {
+        var client_id = e.find(":selected").val();
+        if(!client_id) return;
+        var url = this.options.fitness_administration_url;
+        var self = this;
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : {
+               view : 'nutrition_plan',
+               format : 'text',
+               task : 'getClientPrimaryGoals',
+               client_id : client_id
+            },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.success) {
+                    alert(response.status.message);
+                    return;
+                }
+                //console.log(response.data);
+                handleData(response.data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error getClientPrimaryGoals");
+            }
+        });
+    }
+    
+    NutritionPlan.prototype.getGoalData = function(e, handleData) {
+        var id = e.find(":selected").val();
+        if(!id) return;
+        var url = this.options.fitness_administration_url;
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : {
+               view : 'nutrition_plan',
+               format : 'text',
+               task : 'getGoalData',
+               id : id
+            },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.success) {
+                    alert(response.status.message);
+                    return;
+                }
+                handleData(response.data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error getGoalData");
+            }
+        });
+    }
+    
+    NutritionPlan.prototype.populateSelect = function(data, destination, selected_option) {
+        var selected;
         var html = '<option  value="">-Select-</option>';
         $.each(data, function(index, value) {
              if(index) {
-                html += '<option  value="' + index + '">' +  value + '</option>';
+                 if(index == selected_option) {
+                     selected = 'selected';
+                 } else {
+                     selected = '';
+                 }
+                html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
             }
         });
         destination.html(html);
@@ -246,6 +458,8 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         html += '</ul>';
         destination.html(html);
     };
+    
+
     
     
     
