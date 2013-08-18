@@ -31,17 +31,19 @@ class FitnessModelnutrition_plans extends JModelList {
                 'trainer_id', 'a.trainer_id',
                 'active_start', 'a.active_start',
                 'active_finish', 'a.active_finish',
-                'active', 'a.active',
                 'force_active', 'a.force_active',
                 'primary_goal', 'a.primary_goal',
                 'nutrition_focus', 'a.nutrition_focus',
+                'created', 'a.created',
                 'state', 'a.state',
 
             );
         }
 
+
         parent::__construct($config);
     }
+    
 
     /**
      * Method to auto-populate the model state.
@@ -75,6 +77,10 @@ class FitnessModelnutrition_plans extends JModelList {
                 // Filter by active
                 $active = $app->getUserStateFromRequest($this->context . '.filter.active', 'filter_active', '', 'string');
                 $this->setState('filter.active', $active);
+                
+                // Filter by force active
+                $force_active = $app->getUserStateFromRequest($this->context . '.filter.force_active', 'filter_force_active', '', 'string');
+                $this->setState('filter.force_active', $force_active);
                 
                 // Filter by goal category
                 $goal_category = $app->getUserStateFromRequest($this->context . '.filter.goal_category', 'filter_goal_category', '', 'string');
@@ -126,15 +132,18 @@ class FitnessModelnutrition_plans extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*, gc.name AS primary_goal_name, nf.name AS nutrition_focus_name'
+                        'list.select', 'a.*, 
+                         (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
+                         nf.name AS nutrition_focus_name'
                 )
         );
         $query->from('`#__fitness_nutrition_plan` AS a');
         
         $query->leftJoin('#__users AS u ON u.id = a.client_id');
         
-
-        $query->leftJoin('#__fitness_goal_categories AS gc ON gc.id = a.primary_goal');
+        $query->leftJoin('#__fitness_goals AS gc ON gc.id = a.primary_goal');
+        
+        $query->leftJoin('#__fitness_goal_categories AS gn ON gn.id = gc.goal_category_id');
         
         $query->leftJoin('#__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus');
         
@@ -197,11 +206,7 @@ class FitnessModelnutrition_plans extends JModelList {
                 $query->where("a.active_finish <= '".$db->escape($filter_active_finish_to)."'");
         }
         
-        // Filter by active
-        $active = $this->getState('filter.active');
-        if (is_numeric($active)) {
-            $query->where('a.active = '.(int) $active);
-        }    
+
 
         // Filter by primary trainer
         $primary_trainer = $this->getState('filter.primary_trainer');
@@ -212,16 +217,50 @@ class FitnessModelnutrition_plans extends JModelList {
         // Filter by goal category
         $goal_category = $this->getState('filter.goal_category');
         if (is_numeric($goal_category)) {
-            $query->where('gc.id = '.(int) $goal_category);
+            $query->where('gn.id = '.(int) $goal_category);
         }    
         
         
         
         // Filter by nutrition focus
         $nutrition_focus = $this->getState('filter.nutrition_focus');
-        if (is_numeric($goal_category)) {
+        if (is_numeric($nutrition_focus)) {
             $query->where('a.nutrition_focus = '.(int) $nutrition_focus);
-        }          
+        }  
+        
+                
+        // Filter by force active
+        $force_active = $this->getState('filter.force_active');
+        if (is_numeric($force_active)) {
+            if($force_active == '1') {
+            $query->where('a.force_active = 1');
+            } else {
+                $query->where('a.force_active = 0');
+            }
+        }  
+        
+        
+        // Filter by  active
+        $active = $this->getState('filter.active');
+        if (is_numeric($active)) {
+            $db = JFactory::getDBO();
+            $sql1 = "SELECT DISTINCT client_id FROM #__fitness_nutrition_plan";
+            $db->setQuery($sql1);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $clients =  $db->loadResultArray();
+            foreach ($clients as $client) {
+                $ids[] =  $this->getUserActivePlanId($client);
+            }
+
+            $ids = implode(',', $ids);
+            if($active == '1') {
+                $query->where('a.id IN ('. $ids . ')');
+            } else {
+                $query->where('a.id NOT IN ('. $ids . ')');
+            }
+        }  
 
 
         // Add the list ordering clause.
@@ -240,12 +279,52 @@ class FitnessModelnutrition_plans extends JModelList {
         return $items;
     }
     
-     function getUserGroup($user_id) {
+     private function getUserGroup($user_id) {
         $db = JFactory::getDBO();
         $query = "SELECT title FROM #__usergroups WHERE id IN 
             (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
         $db->setQuery($query);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
         return $db->loadResult();
+    }
+    
+    public function getCurrentDate($format = "Y-m-d H:i:s") {
+        $time_created = date("Y-m-d H:i:s");
+        $jdate = new JDate($time_created);
+        $pretty_date = $jdate->format($format);
+        return $pretty_date;
+    }
+
+    
+    public function getUserActivePlanId($client_id) {
+        $current_date = $this->getCurrentDate();
+        $db = JFactory::getDBO();
+        $query = "SELECT id, force_active, created  FROM #__fitness_nutrition_plan  WHERE 
+            " . $db->quote($current_date) . "
+            BETWEEN active_start AND active_finish
+            AND client_id='$client_id'
+            AND state='1'
+        ";
+        $db->setQuery($query);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $result = $db->loadObjectList();
+        
+        foreach ($result as $item) {
+            if($item->force_active == '1') {
+                return $item->id;
+            }
+            $created[] = $item->created;
+        }
+        
+        foreach ($result as $item) {
+            if($item->created == max($created)) {
+                return $item->id;
+            }
+        }
     }
 
 }

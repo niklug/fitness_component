@@ -23,6 +23,10 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
+        
+
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_plans'); ?>" method="post" name="adminForm" id="adminForm">
@@ -111,6 +115,17 @@ $saveOrder	= $listOrder == 'a.ordering';
             </div>
             
             <?php
+            $force_active[] = JHTML::_('select.option', '1', 'Force Active' );
+            $force_active[] = JHTML::_('select.option', '2', 'Force Inactive' );
+            ?>
+            <div class='filter-select fltrt'>
+                    <select name="filter_force_active" class="inputbox" onchange="this.form.submit()">
+                            <option value=""><?php echo JText::_('-Force Active-');?></option>
+                            <?php echo JHtml::_('select.options', $force_active, "value", "text", $this->state->get('filter.force_active'), true);?>
+                    </select>
+            </div>
+            
+            <?php
             $active[] = JHTML::_('select.option', '1', 'Active' );
             $active[] = JHTML::_('select.option', '2', 'Inactive' );
             ?>
@@ -120,6 +135,8 @@ $saveOrder	= $listOrder == 'a.ordering';
                             <?php echo JHtml::_('select.options', $active, "value", "text", $this->state->get('filter.active'), true);?>
                     </select>
             </div>
+            
+
 
             <?php
             $db = JFactory::getDbo();
@@ -176,6 +193,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_NUTRITION_FOCUS', 'a.nutrition_focus_name', $listDirn, $listOrder); ?>
+				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_RECIPES_CREATED', 'a.created', $listDirn, $listOrder); ?>
 				</th>
 
 
@@ -238,10 +258,17 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $item->active_start; ?>
 				</td>
 				<td>
-					<?php echo $item->active_finish; ?>
+					<?php 
+                                        $active_finish =  $item->active_finish;
+                                        if($active_finish == '9999-12-31') $active_finish = 'Infinitely';
+                                        echo $active_finish;
+                                        ?>
 				</td>
 				<td>
-					<?php echo $this->showStatus($item->active); ?>
+					<?php
+                                        
+                                        $active_plan_id = $this->model->getUserActivePlanId($item->client_id);
+                                        echo $this->showActiveStatus($item->id, $active_plan_id); ?>
 				</td>
 				<td>
 					<?php echo $this->showStatus($item->force_active); ?>
@@ -251,6 +278,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</td>
 				<td>
 					<?php echo $item->nutrition_focus_name; ?>
+				</td>
+                                <td>
+					<?php echo $item->created; ?>
 				</td>
 
 

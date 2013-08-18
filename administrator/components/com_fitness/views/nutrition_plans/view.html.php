@@ -26,31 +26,34 @@ class FitnessViewNutrition_plans extends JView
 	 */
 	public function display($tpl = null)
 	{
-		$this->state		= $this->get('State');
-		$this->items		= $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
+            $this->state		= $this->get('State');
+            $this->items		= $this->get('Items');
+            $this->pagination	= $this->get('Pagination');
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			throw new Exception(implode("\n", $errors));
-		}
-        
-		$this->addToolbar();
-        
-        $input = JFactory::getApplication()->input;
-        FitnessHelper::addSubmenu('Dashboard', 'dashboard');
-        FitnessHelper::addSubmenu('Clients', 'clients');
-        FitnessHelper::addSubmenu('Client Planning', 'goals');
-        FitnessHelper::addSubmenu('Calendar', 'calendar');
-        FitnessHelper::addSubmenu('Programs', 'programs');
-        FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diary');
-        FitnessHelper::addSubmenu('Assessments', 'assessments');
-        FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
-        FitnessHelper::addSubmenu('Settings', 'settings');
-        
-        $document = &JFactory::getDocument();
-	$document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
-		parent::display($tpl);
+            // Check for errors.
+            if (count($errors = $this->get('Errors'))) {
+                    throw new Exception(implode("\n", $errors));
+            }
+
+            $this->addToolbar();
+
+            $input = JFactory::getApplication()->input;
+            FitnessHelper::addSubmenu('Dashboard', 'dashboard');
+            FitnessHelper::addSubmenu('Clients', 'clients');
+            FitnessHelper::addSubmenu('Client Planning', 'goals');
+            FitnessHelper::addSubmenu('Calendar', 'calendar');
+            FitnessHelper::addSubmenu('Programs', 'programs');
+            FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diary');
+            FitnessHelper::addSubmenu('Assessments', 'assessments');
+            FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
+            FitnessHelper::addSubmenu('Settings', 'settings');
+            
+            $model = $this->getModel();
+            $this->assign('model', $model);
+
+            $document = &JFactory::getDocument();
+            $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                    parent::display($tpl);
 	}
 
 	/**
@@ -121,10 +124,19 @@ class FitnessViewNutrition_plans extends JView
         
         public function showStatus($status) {
             $class = 'unpublish';
-            if($status == '2') {
+            if($status == '1') {
                 $class = 'publish';
             } 
             $html = '<span class="jgrid"><span class="state ' . $class . '" ></span></span>';
             return $html;
+        }
+        
+        public function showActiveStatus($id, $active_id) {
+            $class = 'unpublish';
+            if((int)$id == (int)$active_id) {
+                $class = 'publish';
+            } 
+            $html = '<span class="jgrid"><span class="state ' . $class . '" ></span></span>';
+            return $html; 
         }
 }

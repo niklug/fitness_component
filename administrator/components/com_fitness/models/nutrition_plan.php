@@ -156,4 +156,20 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $result = array('status' => $status, 'data' => $data);
             return json_encode($result); 
         }
+        
+        public function resetAllForceActive() {
+            $db = & JFactory::getDBO();
+            $query = "UPDATE #__fitness_nutrition_plan SET force_active='0'";
+            $db->setQuery($query);
+            $status['success'] = 1;
+            if (!$db->query()) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+            }
+            $data = $db->loadObject();
+            $result = array('status' => $status, 'data' => true);
+            return json_encode($result); 
+        }
+        
+        
 }

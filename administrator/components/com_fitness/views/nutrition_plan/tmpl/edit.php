@@ -22,26 +22,6 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         clear: both;
     }
 </style>
-<script type="text/javascript">
-    $(document).ready(function(){
-        Joomla.submitbutton = function(task)
-        {
-            if (task == 'nutrition_plan.cancel') {
-                Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
-            }
-            else{
-
-                if (task != 'nutrition_plan.cancel' && document.formvalidator.isValid(document.id('nutrition_plan-form'))) {
-
-                    Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
-                }
-                else {
-                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                }
-            }
-        }
-    });
-</script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="nutrition_plan-form" class="form-validate">
     <div class="width-100 fltlft">
@@ -168,6 +148,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             
         </table>
     </div>
+        
+    <div style="display:none;">
+    <?php echo $this->form->getLabel('created'); ?>
+    <?php echo $this->form->getInput('created'); ?>
+    </div>
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
@@ -193,7 +178,13 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         'active_finish_img' : $("#jform_active_finish_img"),
         'force_active_yes' : $("#jform_force_active0"),
         'force_active_no' : $("#jform_force_active1"),
-        'force_active_value' : '<?php echo $this->item->force_active;?>'
+        'force_active_value' : '<?php echo $this->item->force_active;?>',
+        'active_finish_value' : '<?php echo $this->item->active_finish;?>',
+        'no_end_date_label': $("#jform_no_end_date-lbl"),
+        'no_end_fieldset' : $("#jform_no_end_date"),
+        'no_end_date_yes' : $("#jform_no_end_date0"),
+        'no_end_date_no' : $("#jform_no_end_date1"),
+        'max_possible_date' : '9999-12-31'
     }
     // cteate main object
     var nutrition_plan = new NutritionPlan(options);
@@ -219,17 +210,24 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             nutrition_plan.populateSelect(output, nutrition_plan.options.primary_goal_select, selected_option);
         });
         
-        // set  Active Start field inactive/active
-        nutrition_plan.options.active_start_img.css('display', 'none');
-        nutrition_plan.options.active_start_field.attr('readonly', true);
-        if(parseInt(nutrition_plan.options.force_active_value)) {
-            nutrition_plan.options.active_start_img.css('display', 'block');
-            nutrition_plan.options.active_start_field.attr('readonly', false); 
-        }
+        // set  Active Start/Finish field inactive/active and No End Date
         
-        // set  Active Finish field inactive
-        nutrition_plan.options.active_finish_img.css('display', 'none');
-        nutrition_plan.options.active_finish_field.attr('readonly', true);
+        if(parseInt(nutrition_plan.options.force_active_value)) {
+            nutrition_plan.forceActiveYes();
+        } else {
+            nutrition_plan.forceActiveNo();
+        }
+
+        
+        if(nutrition_plan.options.active_finish_value == nutrition_plan.options.max_possible_date) {
+            nutrition_plan.forceNoEndDateYes();
+            nutrition_plan.options.no_end_date_yes.attr('checked', true);
+
+        } else {
+            nutrition_plan.forceNoEndDateNo();
+            nutrition_plan.options.no_end_date_yes.attr('checked', false);
+        }
+
     });
     
     // Constructor
@@ -256,18 +254,58 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         
         // on Active start 'yes' click
         this.options.force_active_yes.on('click', function(){
-            self.options.active_start_img.css('display', 'block');
-            self.options.active_start_field.attr('readonly', false);
+            self.forceActiveYes();
         });
         
         // on Active start 'no' click
         this.options.force_active_no.on('click', function(){
-            self.options.active_start_img.css('display', 'none');
-            self.options.active_start_field.attr('readonly', true);
+            self.forceActiveNo();
+        });
+        
+        // on No End Date 'yes' click
+        this.options.no_end_date_yes.on('click', function(){
+            self.forceNoEndDateYes();
+        });
+        
+        // on No End Date start 'no' click
+        this.options.no_end_date_no.on('click', function(){
+            self.forceNoEndDateNo();
         });
         
     }
     
+    NutritionPlan.prototype.forceActiveYes = function() {
+        this.options.active_start_img.css('display', 'block');
+        this.options.active_start_field.attr('readonly', false);
+        this.options.active_finish_img.css('display', 'block');
+        this.options.active_finish_field.attr('readonly', false);
+        this.options.no_end_date_label.show();
+        this.options.no_end_fieldset.show();
+    }
+    
+    NutritionPlan.prototype.forceActiveNo = function() {
+        this.options.active_start_img.css('display', 'none');
+        this.options.active_start_field.attr('readonly', true);
+        this.options.active_finish_img.css('display', 'none');
+        this.options.active_finish_field.attr('readonly', true);
+        this.options.no_end_date_label.hide();
+        this.options.no_end_fieldset.hide(); 
+        //this.options.no_end_date_active_input.val('0');
+    }
+    
+    NutritionPlan.prototype.forceNoEndDateNo = function() {
+        this.options.active_finish_img.css('display', 'block');
+        this.options.active_finish_field.attr('readonly', false);
+    }
+    
+    NutritionPlan.prototype.forceNoEndDateYes = function() {
+        this.options.active_finish_img.css('display', 'none');
+        this.options.active_finish_field.attr('readonly', true); 
+        this.options.active_finish_field.val(this.options.max_possible_date); 
+        //this.options.active_finish_field.css('display', 'none'); 
+    }
+    
+   
     NutritionPlan.prototype.trainerChangeEvent = function(e) {
         // reset fields
         this.populateSecondaryTrainers({}, this.options.secondary_trainers_wrapper);
@@ -458,7 +496,54 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         html += '</ul>';
         destination.html(html);
     };
+
+    Joomla.submitbutton = function(task)  {
+        if (task == 'nutrition_plan.cancel') {
+            Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+        }
+        else{
+
+            if (task != 'nutrition_plan.cancel' && document.formvalidator.isValid(document.id('nutrition_plan-form'))) {
+                var force_active = nutrition_plan.options.force_active_yes.is(":checked");
+                if(force_active) {
+                    nutrition_plan.resetAllForceActive(function() {
+                        Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                    });
+                } else {
+                    Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                }
+             
+            }
+            else {
+                alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+            }
+        }
+    }
     
+    NutritionPlan.prototype.resetAllForceActive = function(handleData) {
+        var url = this.options.fitness_administration_url;
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : {
+               view : 'nutrition_plan',
+               format : 'text',
+               task : 'resetAllForceActive'
+            },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.success) {
+                    alert(response.status.message);
+                    return;
+                }
+                handleData();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error resetAllForceActive");
+            }
+        }); 
+    }
 
     
     

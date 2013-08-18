@@ -28,5 +28,9 @@ class FitnessViewNutrition_plan extends JView {
         $model = $this -> getModel("nutrition_plan");
         echo $model->getGoalData($id);
     }
-        
+    
+    function resetAllForceActive() {
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->resetAllForceActive();
+    }
  }

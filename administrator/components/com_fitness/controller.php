@@ -141,4 +141,10 @@ class FitnessController extends JController
             $view -> getGoalData();
 	}
         
+        function resetAllForceActive() {
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> resetAllForceActive();
+	}
+        
 }
