@@ -124,14 +124,19 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 	
 				<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
                                 
-                                <?php $created =  $this->item->created; 
-                                if(($created == '0000-00-00 00:00:00') OR ($created == '')) {
-                                    $created = JHTML::_('date', $date = null, $format = 'Y-m-d h:m:s', $offset = NULL );
-                                }
-                                
+                                 <div style="display:none;">
+                                <?php echo $this->form->getLabel('created'); ?>
+                                <?php echo $this->form->getInput('created'); ?>
+                                     
+                                </div>
+                                <?php
+                                $config = JFactory::getConfig();
+                                $date = new DateTime();
+                                $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+                                $time_created = $date->format('Y-m-d H:i:s');
+                              
                                 ?>
-				<input type="hidden" name="jform[created]" value="<?php echo $created ?>" />
-				<input type="hidden" name="jform[modified]" value="<?php echo JHTML::_('date', $date = null, $format = 'Y-m-d h:m:s', $offset = NULL ); ?>" />
+				<input type="hidden" name="jform[modified]" value="<?php echo $time_created; ?>" />
 
 
             </ul>

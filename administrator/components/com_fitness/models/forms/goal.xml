@@ -70,13 +70,9 @@
               filter="raw" /> 
 
 
-
-        <field name="created" type="calendar" class="inputbox"
-              default="0000-00-00 00:00:00" 
-        
-              label="COM_FITNESS_GOALS_FORM_LBL_GOAL_CREATED"
-              description="" 
-              filter="safehtml" /> 
+           <field name="created" type="timecreated" default="" 
+            label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_CREATED"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_RECIPE_CREATED"  /> 
 
         <field name="modified" type="calendar" class="inputbox"
         

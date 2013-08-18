@@ -290,11 +290,11 @@ class FitnessModelnutrition_plans extends JModelList {
         return $db->loadResult();
     }
     
-    public function getCurrentDate($format = "Y-m-d H:i:s") {
-        $time_created = date("Y-m-d H:i:s");
-        $jdate = new JDate($time_created);
-        $pretty_date = $jdate->format($format);
-        return $pretty_date;
+    public function getCurrentDate() {
+        $config = JFactory::getConfig();
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+        return $date->format('Y-m-d H:i:s');
     }
 
     

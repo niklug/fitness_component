@@ -24,9 +24,13 @@ $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
 
-        
 
-
+/*
+$config = JFactory::getConfig();
+$date = new DateTime();
+$date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+echo $date->format('Y-m-d H:i:s');
+*/
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_plans'); ?>" method="post" name="adminForm" id="adminForm">
