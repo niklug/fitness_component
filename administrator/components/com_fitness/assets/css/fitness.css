@@ -186,7 +186,7 @@
 #filter_from_active_start, #filter_to_active_start, #filter_from_active_finish, #filter_to_active_finish,
 #jform_active_start, #jform_active_finish
 {
-    width: 55px;
+    width: 70px;
 }
 
 
@@ -468,4 +468,8 @@
 
 .comment_wrapper, .comment_textarea {
     width: 600px !important;
+}
+
+.nutrition_targets_table input {
+    width: 70px;
 }

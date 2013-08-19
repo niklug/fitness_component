@@ -36,6 +36,7 @@ class FitnessViewNutrition_plan extends JView
 		}
                 $document = &JFactory::getDocument();
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'nutrition_plan_class.js');
 		$this->addToolbar();
 		parent::display($tpl);
 	}

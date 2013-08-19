@@ -61,7 +61,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                                 <label id="jform_specific_gravity-lbl" class="" for="jform_specific_gravity">Specific Gravity</label> 
                             </td>
                             <td>
-                                <input id="jform_specific_gravity" class="inputbox" type="text" size="10" value="" name="jform[specific_gravity]">
+                                <input id="jform_specific_gravity" class="inputbox validate-numeric" type="text" size="10" value="" name="jform[specific_gravity]">
                             </td>
                             <td>
                                 SG = ml for 100 grams 
@@ -108,7 +108,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <tr>
                     <td class="millilitres_column">
                         <?php echo $this->form->getLabel('energy'); ?>
-                        <input id="enter_energy" class="inputbox" type="text" size="10" value="" name="enter_energy">
+                        <input id="enter_energy" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_energy">
                     </td>
                     <td>
                         <?php echo $this->form->getLabel('energy'); ?>
@@ -119,7 +119,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <tr>
                     <td class="millilitres_column">
                         <?php echo $this->form->getLabel('protein'); ?>
-                        <input id="enter_protein" class="inputbox" type="text" size="10" value="" name="enter_protein">
+                        <input id="enter_protein" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_protein">
                     </td>
                     <td>
                         <?php echo $this->form->getLabel('protein'); ?>
@@ -130,7 +130,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <tr>
                     <td class="millilitres_column">
                         <?php echo $this->form->getLabel('fats'); ?>
-                        <input id="enter_fats" class="inputbox" type="text" size="10" value="" name="enter_fats">
+                        <input id="enter_fats" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_fats">
                     </td>
                     <td>
                         <?php echo $this->form->getLabel('fats'); ?>
@@ -141,7 +141,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <tr>
                     <td class="millilitres_column">
                         <?php echo $this->form->getLabel('saturated_fat'); ?>
-                        <input id="enter_saturated_fat" class="inputbox" type="text" size="10" value="" name="enter_saturated_fat">
+                        <input id="enter_saturated_fat" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_saturated_fat">
                         <div class="clr"></div>
                     </td>
                     <td>
@@ -158,7 +158,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <tr>
                     <td class="millilitres_column">
                         <?php echo $this->form->getLabel('carbs'); ?>
-                        <input id="enter_carbs" class="inputbox" type="text" size="10" value="" name="enter_carbs">
+                        <input id="enter_carbs" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_carbs">
                     </td>
                     <td>
                         <?php echo $this->form->getLabel('carbs'); ?>
@@ -174,7 +174,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <tr>
                     <td class="millilitres_column">
                         <?php echo $this->form->getLabel('total_sugars'); ?>
-                        <input id="enter_total_sugars" class="inputbox" type="text" size="10" value="" name="enter_total_sugars">
+                        <input id="enter_total_sugars" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_total_sugars">
                     </td>
                     <td>
                         <?php echo $this->form->getLabel('total_sugars'); ?>
@@ -190,7 +190,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <tr>
                     <td class="millilitres_column">
                         <?php echo $this->form->getLabel('sodium'); ?>
-                        <input id="enter_sodium" class="inputbox" type="text" size="10" value="" name="enter_sodium">
+                        <input id="enter_sodium" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_sodium">
                     </td>
                     <td>
                         <?php echo $this->form->getLabel('sodium'); ?>

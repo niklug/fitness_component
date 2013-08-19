@@ -145,7 +145,13 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     </fieldset>
                 </td>
             </tr>
-            
+            <tr>
+                <td colspan="2">
+                    <fieldset id="daily_micronutrient"  class="adminform">
+                        <legend>DAILY MACRONUTRIENT & CALORIE TARGETS</legend>
+                    </fieldset>
+                </td>
+            </tr>
         </table>
     </div>
         
@@ -162,7 +168,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 <script type="text/javascript">
     
     // set options
-    var options = {
+    var nutrition_plan_options = {
         'trainer_select' : $("#jform_trainer_id"),
         'client_select' : $("#jform_client_id"),
         'secondary_trainers_wrapper' : $("#secondary_trainers"),
@@ -186,317 +192,377 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         'no_end_date_no' : $("#jform_no_end_date1"),
         'max_possible_date' : '9999-12-31'
     }
+    
+    var macronutrient_targets_options = {
+        'main_wrapper' : $("#daily_micronutrient"),
+    }
+    
     // cteate main object
-    var nutrition_plan = new NutritionPlan(options);
+    var nutrition_plan = new NutritionPlan(nutrition_plan_options);
+    
+        // cteate main object
+    var macronutrient_targets_heavy = new MacronutrientTargets(macronutrient_targets_options, 'heavy', 'HEAVY TRAINING DAY');
     
     // attach listeners on document ready
     $(document).ready(function(){
-       nutrition_plan.setEventListeners();
-       
-       // populate clients select onload
-       nutrition_plan.getTrainerClients(options.trainer_select, function(output) {
-            var selected_option = nutrition_plan.options.client_selected
-            nutrition_plan.populateSelect(output, nutrition_plan.options.client_select, selected_option);
-        });
-       
-       // populate secondary trainers  onload
-       nutrition_plan.getClientSecondaryTrainers(options.client_select, function(output) {
-            nutrition_plan.populateSecondaryTrainers(output, nutrition_plan.options.secondary_trainers_wrapper);
-        });
-       
-       // populate primary goals select onload
-       nutrition_plan.getClientPrimaryGoals(options.client_select, function(output) {
-            var selected_option = nutrition_plan.options.primary_goal_selected;
-            nutrition_plan.populateSelect(output, nutrition_plan.options.primary_goal_select, selected_option);
-        });
-        
-        // set  Active Start/Finish field inactive/active and No End Date
-        
-        if(parseInt(nutrition_plan.options.force_active_value)) {
-            nutrition_plan.forceActiveYes();
-        } else {
-            nutrition_plan.forceActiveNo();
-        }
-
-        
-        if(nutrition_plan.options.active_finish_value == nutrition_plan.options.max_possible_date) {
-            nutrition_plan.forceNoEndDateYes();
-            nutrition_plan.options.no_end_date_yes.attr('checked', true);
-
-        } else {
-            nutrition_plan.forceNoEndDateNo();
-            nutrition_plan.options.no_end_date_yes.attr('checked', false);
-        }
-
+        nutrition_plan.run();
+        macronutrient_targets_heavy.run();
     });
     
     // Constructor
-    function NutritionPlan(options) {
+    function MacronutrientTargets(options, type, title) {
         this.options = options;
+        this.type = type;
+        this.title = title;
     }
     
-    NutritionPlan.prototype.setEventListeners = function() {
-        var self = this;
-        // on trainer select
-        this.options.trainer_select.on('change', function(){
-            self.trainerChangeEvent($(this));
-        });
-        
-        // on client select
-        this.options.client_select.on('change', function(){
-            self.clientChangeEvent($(this));
-        });
-        
-        // on primary goal select
-        this.options.primary_goal_select.on('change', function(){
-            self.primaryGoalChangeEvent($(this));
-        });
-        
-        // on Active start 'yes' click
-        this.options.force_active_yes.on('click', function(){
-            self.forceActiveYes();
-        });
-        
-        // on Active start 'no' click
-        this.options.force_active_no.on('click', function(){
-            self.forceActiveNo();
-        });
-        
-        // on No End Date 'yes' click
-        this.options.no_end_date_yes.on('click', function(){
-            self.forceNoEndDateYes();
-        });
-        
-        // on No End Date start 'no' click
-        this.options.no_end_date_no.on('click', function(){
-            self.forceNoEndDateNo();
-        });
-        
+    // Controller
+    MacronutrientTargets.prototype.run = function() {
+        var html = this.generateHtml();
+        this.options.main_wrapper.append(html);
+        this.setEventListeners();
     }
     
-    NutritionPlan.prototype.forceActiveYes = function() {
-        this.options.active_start_img.css('display', 'block');
-        this.options.active_start_field.attr('readonly', false);
-        this.options.active_finish_img.css('display', 'block');
-        this.options.active_finish_field.attr('readonly', false);
-        this.options.no_end_date_label.show();
-        this.options.no_end_fieldset.show();
-    }
-    
-    NutritionPlan.prototype.forceActiveNo = function() {
-        this.options.active_start_img.css('display', 'none');
-        this.options.active_start_field.attr('readonly', true);
-        this.options.active_finish_img.css('display', 'none');
-        this.options.active_finish_field.attr('readonly', true);
-        this.options.no_end_date_label.hide();
-        this.options.no_end_fieldset.hide(); 
-        //this.options.no_end_date_active_input.val('0');
-    }
-    
-    NutritionPlan.prototype.forceNoEndDateNo = function() {
-        this.options.active_finish_img.css('display', 'block');
-        this.options.active_finish_field.attr('readonly', false);
-    }
-    
-    NutritionPlan.prototype.forceNoEndDateYes = function() {
-        this.options.active_finish_img.css('display', 'none');
-        this.options.active_finish_field.attr('readonly', true); 
-        this.options.active_finish_field.val(this.options.max_possible_date); 
-        //this.options.active_finish_field.css('display', 'none'); 
-    }
-    
-   
-    NutritionPlan.prototype.trainerChangeEvent = function(e) {
-        // reset fields
-        this.populateSecondaryTrainers({}, this.options.secondary_trainers_wrapper);
-        this.populateSelect({}, this.options.client_select);
-        this.populateSelect({}, this.options.primary_goal_select);
-        this.options.active_start_field.val('');
-        this.options.active_finish_field.val('');
-        //
-        var self = this;
-        this.getTrainerClients(e, function(output) {
-            if(output) {
-                var selected_option = self.options.client_selected
-                self.populateSelect(output, self.options.client_select, selected_option);
-            }
-        });
-    }
-    
-    NutritionPlan.prototype.clientChangeEvent = function(e) {
-        // reset fields
-        this.populateSecondaryTrainers({}, this.options.secondary_trainers_wrapper);
-        this.populateSelect({}, this.options.primary_goal_select);
-        this.options.active_start_field.val('');
-        this.options.active_finish_field.val('');
-        //
-        var self = this;
-        this.getClientSecondaryTrainers(e, function(output) {
-            self.populateSecondaryTrainers(output, self.options.secondary_trainers_wrapper);
-        });
-        this.getClientPrimaryGoals(e, function(output) {
-            //console.log(output);
-            if(output) {
-                var selected_option = self.options.primary_goal_selected;
-                self.populateSelect(output, self.options.primary_goal_select, selected_option);
-            }
-        });
-    }
-    
-    NutritionPlan.prototype.primaryGoalChangeEvent = function(e) {
-        this.options.training_period_select.val('');
-        this.options.active_start_field.val('');
-        this.options.active_finish_field.val('');
-        var self = this;
-        this.getGoalData(e, function(output) {
-            if(output) {
-                self.options.training_period_select.val(output.training_period_name);
-                self.options.active_start_field.val(output.start_date);
-                self.options.active_finish_field.val(output.deadline);
-            }
-        });
-    }
-    
-    NutritionPlan.prototype.getTrainerClients = function(e, handleData) {
-        var trainer_id = e.find(":selected").val();
-        if(!trainer_id) return;
-        var url = this.options.calendar_frontend_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-               method : 'get_clients',
-               trainer_id : trainer_id
-            },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.success) {
-                    alert(response.status.message);
-                    return;
-                }
-                handleData(response.data);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error");
-            }
-        });
-      
-    }
-    
-    NutritionPlan.prototype.getClientSecondaryTrainers = function(e, handleData) {
-        var client_id = e.find(":selected").val();
-        if(!client_id) return;
-        var url = this.options.calendar_frontend_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-               method : 'get_trainers',
-               client_id : client_id,
-               secondary_only : true
-            },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.success) {
-                    alert(response.status.message);
-                    return;
-                }
-                handleData(response.data);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error");
-            }
-        });
-    }
-    
-    NutritionPlan.prototype.getClientPrimaryGoals = function(e, handleData) {
-        var client_id = e.find(":selected").val();
-        if(!client_id) return;
-        var url = this.options.fitness_administration_url;
-        var self = this;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-               view : 'nutrition_plan',
-               format : 'text',
-               task : 'getClientPrimaryGoals',
-               client_id : client_id
-            },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.success) {
-                    alert(response.status.message);
-                    return;
-                }
-                //console.log(response.data);
-                handleData(response.data);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error getClientPrimaryGoals");
-            }
-        });
-    }
-    
-    NutritionPlan.prototype.getGoalData = function(e, handleData) {
-        var id = e.find(":selected").val();
-        if(!id) return;
-        var url = this.options.fitness_administration_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-               view : 'nutrition_plan',
-               format : 'text',
-               task : 'getGoalData',
-               id : id
-            },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.success) {
-                    alert(response.status.message);
-                    return;
-                }
-                handleData(response.data);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error getGoalData");
-            }
-        });
-    }
-    
-    NutritionPlan.prototype.populateSelect = function(data, destination, selected_option) {
-        var selected;
-        var html = '<option  value="">-Select-</option>';
-        $.each(data, function(index, value) {
-             if(index) {
-                 if(index == selected_option) {
-                     selected = 'selected';
-                 } else {
-                     selected = '';
-                 }
-                html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
-            }
-        });
-        destination.html(html);
-    };
-    
-    
-    NutritionPlan.prototype.populateSecondaryTrainers = function(data, destination) {
-        var html = '<ul>';
-        $.each(data, function(index, value) {
-             if(index) {
-                html += '<li>' + value + '</li>';
-            }
-        });
-        html += '</ul>';
-        destination.html(html);
-    };
+    MacronutrientTargets.prototype.setEventListeners = function() {
 
+        this.options._calories = $("#" + this.type + "_calories");
+        this.options._water = $("#" + this.type + "_water");
+        this.options._protein = $("#" + this.type + "_protein");
+        this.options._protein_grams = $("#" + this.type + "_prorein_grams");
+        this.options._protein_cals = $("#" + this.type + "_protein_cals");
+        this.options._fats = $("#" + this.type + "_fats");
+        this.options._fats_grams = $("#" + this.type + "_fats_grams");
+        this.options._fats_cals = $("#" + this.type + "_fats_cals");
+        this.options._carbs = $("#" + this.type + "_carbs");
+        this.options._carbs_grams = $("#" + this.type + "_carbs_grams");
+        this.options._carbs_cals = $("#" + this.type + "_carbs_cals");
+        
+        var self = this;
+        
+        // calculate grams and cals values
+        $(this.options._protein).on('focusout', function(){
+            self.calculateTargetGrams($(this), self.options._protein_grams);
+            self.calculateTargetCals($(this), self.options._protein_cals);
+            self.validateSum100();
+            self.calculate_totals();
+        });
+        
+        $(this.options._fats).on('focusout', function(){
+            self.calculateTargetGrams($(this), self.options._fats_grams);
+            self.calculateTargetCals($(this), self.options._fats_cals);
+            self.validateSum100();
+            self.calculate_totals();
+        });
+        
+        $(this.options._carbs).on('focusout', function(){
+            self.calculateTargetGrams($(this), self.options._carbs_grams);
+            self.calculateTargetCals($(this), self.options._carbs_cals);
+            self.validateSum100();
+            self.calculate_totals();
+        });
+
+        
+    }
+    
+    MacronutrientTargets.prototype.validateSum100 = function() {
+        var protein = this.options._protein.val();
+        var fats = this.options._fats.val();
+        var carbohydrate  = this.options._carbs.val();
+        var sum = parseFloat(protein) + parseFloat(fats) + parseFloat(carbohydrate);
+        if(sum != 100) {
+            $("#" + this.type +  "sum_100_error").html('Protein, Fats & Carbs MUST equal (=) 100%')
+            return false;
+        } else {
+            $("#" + this.type +  "sum_100_error").html('');
+            return true;
+        } 
+    }
+    
+    MacronutrientTargets.prototype.calculateTargetGrams = function(o, destination) {
+        var calories = this.options._calories.val();
+        if(!calories) return;
+        var target_percent = parseFloat(o.val()) * 0.01;
+        var grams_value = parseFloat(calories) * (target_percent/4);
+        destination.val(this.round_2_sign(grams_value));
+    }
+      
+      
+    MacronutrientTargets.prototype.calculateTargetCals = function(o, destination) {
+        var calories = this.options._calories.val();
+        if(!calories) return;
+        var target_percent = parseFloat(o.val()) * 0.01;
+        var cals_value = parseFloat(calories) * target_percent;
+        destination.val(this.round_2_sign(cals_value));
+    }
+    
+    
+    MacronutrientTargets.prototype.calculate_totals = function() {
+        this.set_item_total(this.get_item_total(this.type + '_percent_value'), this.type + '_total');
+        this.set_item_total(this.get_item_total(this.type + '_grams_value'), this.type + '_total_grams');
+        this.set_item_total(this.get_item_total(this.type + '_cals_value'), this.type + '_total_cals');
+    }
+    
+    MacronutrientTargets.prototype.get_item_total = function(element) {
+       var item_array = $("." +element);
+       var sum = 0;
+       item_array.each(function(){
+           var value = parseFloat($(this).val());
+           if(value > 0) {
+              sum += parseFloat(value); 
+           }
+           
+       });
+       return this.round_2_sign(sum);
+    }
+    
+    
+    MacronutrientTargets.prototype.set_item_total = function(value, element) {
+        $("#" + element).val(value);
+    }
+    
+    
+    MacronutrientTargets.prototype.generateHtml = function() {
+        var html = '<fieldset id="' + this.type + 'fieldset"  class="adminform">';
+        html += '<legend>' + this.title + '</legend>';
+        html += '<table class="nutrition_targets_table" width="100%">';
+   
+        html += '<tbody>';
+        html += '<tr>';
+        html += '<td>';
+        html += 'Calorie Target';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_calories" class="required  validate-numeric" />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += 'Calories';
+        html += '</td>';
+        
+        html += '<td>';
+        html += 'Water Target';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_water" class="required  validate-numeric" />';
+        html += '</td>';
+        
+        html += '<td>';
+        html += 'millilitres';
+        html += '</td>';
+        
+        html += '<td colspan="3">';
+        html += '</td>';
+        html += '</tr>';
+        
+        
+        html += '<tr>';
+        html += '<td>';
+        html += 'Macronutrients Targets';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_protein" class="required  validate-numeric ' + this.type + '_percent_value" />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += '(%) Protein';
+        html += '</td>';
+        
+        html += '<td>';
+        html += 'Macronutrients Targets';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_prorein_grams" readonly class="' + this.type + '_grams_value" />';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '(grams) Protein';
+        html += '</td>';
+        
+        html += '<td>';
+        html += 'Macronutrients Targets';
+        html += '</td>';
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_protein_cals" readonly class="' + this.type + '_cals_value" />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += '(cals) Protein';
+        html += '</td>'
+        html += '</tr>';
+        
+        
+        html += '<tr>';
+        html += '<td>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_fats" class="required  validate-numeric ' + this.type + '_percent_value" />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += '(%) Fats';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_fats_grams" readonly class="' + this.type + '_grams_value" />';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '(grams) Fats';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '</td>';
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_fats_cals"readonly class="' + this.type + '_cals_value" />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += '(cals) Fats';
+        html += '</td>'
+        html += '</tr>';
+        
+        
+        html += '<tr>';
+        html += '<td>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_carbs" class="required  validate-numeric ' + this.type + '_percent_value" />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += '(%) Carbohydrates';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_carbs_grams" readonly class="' + this.type + '_grams_value" />';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '(grams) Carbohydrates';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '</td>';
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_carbs_cals" readonly class="' + this.type + '_cals_value" />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += '(cals) Carbohydrates';
+        html += '</td>'
+        html += '</tr>';
+        html += '</tbody>';
+        
+        
+        html += '<tfoot>';
+        html += '<tr>';
+        html += '<td>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_total" readonly />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += '(%) TOTAL';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_total_grams" readonly />';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '(grams) TOTAL';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '</td>';
+        html += '<td>';
+        html += '<input type="text" value="" id="' + this.type + '_total_cals" readonly />';
+        html += '</td>'
+        
+        html += '<td>';
+        html += '(cals) TOTAL';
+        html += '</td>'
+        html += '</tr>';      
+        html += '</tfoot>';
+        
+        html += '</table>';
+        html += '<div style="color:red;" id="' + this.type + 'sum_100_error"></div>';
+        html += '</fieldset>'; 
+        return html;
+    }
+    
+    
+    MacronutrientTargets.prototype.round_2_sign = function(value) {
+        return Math.round(value * 100)/100;
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     Joomla.submitbutton = function(task)  {
         if (task == 'nutrition_plan.cancel') {
             Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
@@ -518,31 +584,6 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
             }
         }
-    }
-    
-    NutritionPlan.prototype.resetAllForceActive = function(handleData) {
-        var url = this.options.fitness_administration_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-               view : 'nutrition_plan',
-               format : 'text',
-               task : 'resetAllForceActive'
-            },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.success) {
-                    alert(response.status.message);
-                    return;
-                }
-                handleData();
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error resetAllForceActive");
-            }
-        }); 
     }
 
     
