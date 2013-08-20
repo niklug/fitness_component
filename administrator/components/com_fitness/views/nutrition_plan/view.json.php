@@ -33,4 +33,17 @@ class FitnessViewNutrition_plan extends JView {
         $model = $this -> getModel("nutrition_plan");
         echo $model->resetAllForceActive();
     }
+    
+    function saveTargetsData() {
+        $data_encoded = JRequest::getVar('data_encoded');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->saveTargetsData($data_encoded);
+    }
+    
+        
+    function getTargetsData() {
+        $data_encoded = JRequest::getVar('data_encoded');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->getTargetsData($data_encoded);
+    }
  }

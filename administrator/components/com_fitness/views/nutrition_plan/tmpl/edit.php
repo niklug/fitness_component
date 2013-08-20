@@ -148,6 +148,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             <tr>
                 <td colspan="2">
                     <fieldset id="daily_micronutrient"  class="adminform">
+                        <?php
+                        if(!$this->item->id) {
+                            echo 'Save form to proceed add Targets';
+                        }
+                        ?>
                         <legend>DAILY MACRONUTRIENT & CALORIE TARGETS</legend>
                     </fieldset>
                 </td>
@@ -195,352 +200,35 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     
     var macronutrient_targets_options = {
         'main_wrapper' : $("#daily_micronutrient"),
+        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'protein_grams_coefficient' : 4,
+        'fats_grams_coefficient' : 9,
+        'carbs_grams_coefficient' : 4,
+        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+        'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
     }
     
     // cteate main object
     var nutrition_plan = new NutritionPlan(nutrition_plan_options);
     
-        // cteate main object
+    // append targets fieldsets
     var macronutrient_targets_heavy = new MacronutrientTargets(macronutrient_targets_options, 'heavy', 'HEAVY TRAINING DAY');
+    
+    var macronutrient_targets_light = new MacronutrientTargets(macronutrient_targets_options, 'light', 'LIGHT TRAINING DAY');
+    
+    var macronutrient_targets_rest = new MacronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
     
     // attach listeners on document ready
     $(document).ready(function(){
         nutrition_plan.run();
+
         macronutrient_targets_heavy.run();
+        macronutrient_targets_light.run();
+        macronutrient_targets_rest.run()
+
     });
-    
-    // Constructor
-    function MacronutrientTargets(options, type, title) {
-        this.options = options;
-        this.type = type;
-        this.title = title;
-    }
-    
-    // Controller
-    MacronutrientTargets.prototype.run = function() {
-        var html = this.generateHtml();
-        this.options.main_wrapper.append(html);
-        this.setEventListeners();
-    }
-    
-    MacronutrientTargets.prototype.setEventListeners = function() {
 
-        this.options._calories = $("#" + this.type + "_calories");
-        this.options._water = $("#" + this.type + "_water");
-        this.options._protein = $("#" + this.type + "_protein");
-        this.options._protein_grams = $("#" + this.type + "_prorein_grams");
-        this.options._protein_cals = $("#" + this.type + "_protein_cals");
-        this.options._fats = $("#" + this.type + "_fats");
-        this.options._fats_grams = $("#" + this.type + "_fats_grams");
-        this.options._fats_cals = $("#" + this.type + "_fats_cals");
-        this.options._carbs = $("#" + this.type + "_carbs");
-        this.options._carbs_grams = $("#" + this.type + "_carbs_grams");
-        this.options._carbs_cals = $("#" + this.type + "_carbs_cals");
-        
-        var self = this;
-        
-        // calculate grams and cals values
-        $(this.options._protein).on('focusout', function(){
-            self.calculateTargetGrams($(this), self.options._protein_grams);
-            self.calculateTargetCals($(this), self.options._protein_cals);
-            self.validateSum100();
-            self.calculate_totals();
-        });
-        
-        $(this.options._fats).on('focusout', function(){
-            self.calculateTargetGrams($(this), self.options._fats_grams);
-            self.calculateTargetCals($(this), self.options._fats_cals);
-            self.validateSum100();
-            self.calculate_totals();
-        });
-        
-        $(this.options._carbs).on('focusout', function(){
-            self.calculateTargetGrams($(this), self.options._carbs_grams);
-            self.calculateTargetCals($(this), self.options._carbs_cals);
-            self.validateSum100();
-            self.calculate_totals();
-        });
 
-        
-    }
-    
-    MacronutrientTargets.prototype.validateSum100 = function() {
-        var protein = this.options._protein.val();
-        var fats = this.options._fats.val();
-        var carbohydrate  = this.options._carbs.val();
-        var sum = parseFloat(protein) + parseFloat(fats) + parseFloat(carbohydrate);
-        if(sum != 100) {
-            $("#" + this.type +  "sum_100_error").html('Protein, Fats & Carbs MUST equal (=) 100%')
-            return false;
-        } else {
-            $("#" + this.type +  "sum_100_error").html('');
-            return true;
-        } 
-    }
-    
-    MacronutrientTargets.prototype.calculateTargetGrams = function(o, destination) {
-        var calories = this.options._calories.val();
-        if(!calories) return;
-        var target_percent = parseFloat(o.val()) * 0.01;
-        var grams_value = parseFloat(calories) * (target_percent/4);
-        destination.val(this.round_2_sign(grams_value));
-    }
-      
-      
-    MacronutrientTargets.prototype.calculateTargetCals = function(o, destination) {
-        var calories = this.options._calories.val();
-        if(!calories) return;
-        var target_percent = parseFloat(o.val()) * 0.01;
-        var cals_value = parseFloat(calories) * target_percent;
-        destination.val(this.round_2_sign(cals_value));
-    }
-    
-    
-    MacronutrientTargets.prototype.calculate_totals = function() {
-        this.set_item_total(this.get_item_total(this.type + '_percent_value'), this.type + '_total');
-        this.set_item_total(this.get_item_total(this.type + '_grams_value'), this.type + '_total_grams');
-        this.set_item_total(this.get_item_total(this.type + '_cals_value'), this.type + '_total_cals');
-    }
-    
-    MacronutrientTargets.prototype.get_item_total = function(element) {
-       var item_array = $("." +element);
-       var sum = 0;
-       item_array.each(function(){
-           var value = parseFloat($(this).val());
-           if(value > 0) {
-              sum += parseFloat(value); 
-           }
-           
-       });
-       return this.round_2_sign(sum);
-    }
-    
-    
-    MacronutrientTargets.prototype.set_item_total = function(value, element) {
-        $("#" + element).val(value);
-    }
-    
-    
-    MacronutrientTargets.prototype.generateHtml = function() {
-        var html = '<fieldset id="' + this.type + 'fieldset"  class="adminform">';
-        html += '<legend>' + this.title + '</legend>';
-        html += '<table class="nutrition_targets_table" width="100%">';
-   
-        html += '<tbody>';
-        html += '<tr>';
-        html += '<td>';
-        html += 'Calorie Target';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_calories" class="required  validate-numeric" />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += 'Calories';
-        html += '</td>';
-        
-        html += '<td>';
-        html += 'Water Target';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_water" class="required  validate-numeric" />';
-        html += '</td>';
-        
-        html += '<td>';
-        html += 'millilitres';
-        html += '</td>';
-        
-        html += '<td colspan="3">';
-        html += '</td>';
-        html += '</tr>';
-        
-        
-        html += '<tr>';
-        html += '<td>';
-        html += 'Macronutrients Targets';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_protein" class="required  validate-numeric ' + this.type + '_percent_value" />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += '(%) Protein';
-        html += '</td>';
-        
-        html += '<td>';
-        html += 'Macronutrients Targets';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_prorein_grams" readonly class="' + this.type + '_grams_value" />';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '(grams) Protein';
-        html += '</td>';
-        
-        html += '<td>';
-        html += 'Macronutrients Targets';
-        html += '</td>';
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_protein_cals" readonly class="' + this.type + '_cals_value" />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += '(cals) Protein';
-        html += '</td>'
-        html += '</tr>';
-        
-        
-        html += '<tr>';
-        html += '<td>';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_fats" class="required  validate-numeric ' + this.type + '_percent_value" />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += '(%) Fats';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_fats_grams" readonly class="' + this.type + '_grams_value" />';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '(grams) Fats';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '</td>';
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_fats_cals"readonly class="' + this.type + '_cals_value" />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += '(cals) Fats';
-        html += '</td>'
-        html += '</tr>';
-        
-        
-        html += '<tr>';
-        html += '<td>';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_carbs" class="required  validate-numeric ' + this.type + '_percent_value" />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += '(%) Carbohydrates';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_carbs_grams" readonly class="' + this.type + '_grams_value" />';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '(grams) Carbohydrates';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '</td>';
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_carbs_cals" readonly class="' + this.type + '_cals_value" />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += '(cals) Carbohydrates';
-        html += '</td>'
-        html += '</tr>';
-        html += '</tbody>';
-        
-        
-        html += '<tfoot>';
-        html += '<tr>';
-        html += '<td>';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_total" readonly />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += '(%) TOTAL';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_total_grams" readonly />';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '(grams) TOTAL';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '</td>';
-        html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_total_cals" readonly />';
-        html += '</td>'
-        
-        html += '<td>';
-        html += '(cals) TOTAL';
-        html += '</td>'
-        html += '</tr>';      
-        html += '</tfoot>';
-        
-        html += '</table>';
-        html += '<div style="color:red;" id="' + this.type + 'sum_100_error"></div>';
-        html += '</fieldset>'; 
-        return html;
-    }
-    
-    
-    MacronutrientTargets.prototype.round_2_sign = function(value) {
-        return Math.round(value * 100)/100;
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -570,15 +258,57 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         else{
 
             if (task != 'nutrition_plan.cancel' && document.formvalidator.isValid(document.id('nutrition_plan-form'))) {
-                var force_active = nutrition_plan.options.force_active_yes.is(":checked");
-                if(force_active) {
-                    nutrition_plan.resetAllForceActive(function() {
-                        Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
-                    });
-                } else {
-                    Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                
+                if(macronutrient_targets_options.nutrition_plan_id) {
+                    // Targets
+                    var heavy_validation = macronutrient_targets_heavy.validateSum100();
+                    if(heavy_validation == false) {
+                        alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
+                        return;
+                    }
+
+                    var light_validation = macronutrient_targets_light.validateSum100();
+                    if(light_validation == false) {
+                        alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
+                        return;
+                    }
+
+                    var rest_validation = macronutrient_targets_rest.validateSum100();
+                    if(rest_validation == false) {
+                        alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
+                        return;
+                    }
                 }
-             
+
+                //save targets data
+                if(macronutrient_targets_options.nutrition_plan_id) {     
+                    macronutrient_targets_heavy.saveTargetsData(function(output) {
+                        macronutrient_targets_light.saveTargetsData(function(output) {
+                            macronutrient_targets_rest.saveTargetsData(function(output) {
+                                //reset force active fields in database by ajax
+                                var force_active = nutrition_plan.options.force_active_yes.is(":checked");
+                                if(force_active) {
+                                    nutrition_plan.resetAllForceActive(function() {
+                                        Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                                    });
+                                } else {
+                                    Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                                }
+                            });
+                        });
+
+                      });
+                } else {
+                    //reset force active fields in database by ajax
+                    var force_active = nutrition_plan.options.force_active_yes.is(":checked");
+                    if(force_active) {
+                        nutrition_plan.resetAllForceActive(function() {
+                            Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                        });
+                    } else {
+                        Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                    }
+                }
             }
             else {
                 alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');

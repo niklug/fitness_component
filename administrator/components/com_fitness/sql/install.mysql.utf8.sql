@@ -803,3 +803,16 @@ FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
 FOREIGN KEY (trainer_id) REFERENCES #__users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_targets` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nutrition_plan_id` int(11) unsigned NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `calories` float NOT NULL,
+  `water` float NOT NULL,
+  `protein` float NOT NULL,
+  `fats` float NOT NULL,
+  `carbs` float NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nutrition_plan_id` (`nutrition_plan_id`),
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
+) ENGINE=InnoDB;

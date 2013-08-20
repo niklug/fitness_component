@@ -171,5 +171,54 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return json_encode($result); 
         }
         
+        public function saveTargetsData($data_encoded) {
+            $ret['success'] = 1;
+            $db = JFactory::getDbo();
+            
+            $data = json_decode($data_encoded);
+
+            $query = "SELECT id FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id='$data->nutrition_plan_id' AND type='$data->type'";
+            $db->setQuery($query);
+            if (!$db->query()) {
+                $ret['success'] = 0;
+                $ret['message'] = $db->stderr();
+                $result = array('status' => $ret);
+                return json_encode($result);  
+            }
+            $exist = $db->loadResult();  
+
+            if($exist) {
+                $data->id = $exist;
+                $insert = $db->updateObject('#__fitness_nutrition_plan_targets', $data, 'id');
+            } else {
+                $insert = $db->insertObject('#__fitness_nutrition_plan_targets', $data, 'id');
+            }
+
+            if (!$insert) {
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
+            }
+            $result = array('status' => $ret);
+            
+            return json_encode($result);  
+        }
+        
+        public function getTargetsData($data_encoded) {
+            $ret['success'] = 1;
+            $db = JFactory::getDbo();
+            
+            $data = json_decode($data_encoded);
+
+            $query = "SELECT * FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id='$data->nutrition_plan_id' AND type='$data->type'";
+            $db->setQuery($query);
+            if (!$db->query()) {
+                $ret['success'] = 0;
+                $ret['message'] = $db->stderr();
+            }
+            $data = $db->loadObject();
+            $result = array('status' => $ret, 'data' => $data);
+            return json_encode($result);  
+        }
+        
         
 }
