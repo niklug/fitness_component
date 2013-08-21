@@ -190,6 +190,10 @@ class FitnessModelnutrition_recipe extends JModelAdmin
             }
             
             $inserted_id = $db->insertid();
+            
+            if(!$inserted_id) {
+                $inserted_id = $ingredient->id;
+            }
             //$ret['IsSuccess'] = 0;
             
             //$ret['Msg'] = print_r($ingredient, true);

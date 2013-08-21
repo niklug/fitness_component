@@ -159,4 +159,24 @@ class FitnessController extends JController
             $view -> getTargetsData();
 	}
         
+        function saveIngredient() {
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> saveIngredient();
+	}
+        
+        function deleteIngredient() {
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> deleteIngredient();
+	}
+        
+        function populateItemDescription() {
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> populateItemDescription();
+	}
+        
+        
+        
 }

@@ -337,7 +337,9 @@ JHtml::_('behavior.keepalive');
                     calculatedIngredient.recipe_id = recipe_id;
                     
                     var id = closest_TR.attr('data-id');
-                    calculatedIngredient.id = id;             
+                    
+                    calculatedIngredient.id = id;  
+                    
                     saveMeal(calculatedIngredient, function(output){
                         var inserted_id = output;
                         if(inserted_id) {

@@ -46,4 +46,28 @@ class FitnessViewNutrition_plan extends JView {
         $model = $this -> getModel("nutrition_plan");
         echo $model->getTargetsData($data_encoded);
     }
+    
+    function saveIngredient() {
+        $ingredient_encoded = JRequest::getVar('ingredient_encoded');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->saveIngredient($ingredient_encoded);
+    }
+    
+        
+    function deleteIngredient() {
+        $id = JRequest::getVar('id');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->deleteIngredient($id);
+    }
+    
+    function populateItemDescription() {
+        $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
+        $meal_id = JRequest::getVar('meal_id');
+        $type = JRequest::getVar('type');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->populateItemDescription($nutrition_plan_id, $meal_id, $type);
+    }
+    
+    
+    
  }

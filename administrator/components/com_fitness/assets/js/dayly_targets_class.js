@@ -82,7 +82,7 @@ MacronutrientTargets.prototype.saveTargetsData = function(handleData) {
         type : "POST",
         url : url,
         data : {
-             view : 'nutrition_recipe',
+             view : 'nutrition_plan',
              format : 'text',
              task : 'saveTargetsData',
              data_encoded : data_encoded
@@ -114,7 +114,7 @@ MacronutrientTargets.prototype.getTargetsData = function(handleData) {
         type : "POST",
         url : url,
         data : {
-             view : 'nutrition_recipe',
+             view : 'nutrition_plan',
              format : 'text',
              task : 'getTargetsData',
              data_encoded : data_encoded

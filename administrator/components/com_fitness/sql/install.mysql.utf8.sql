@@ -816,3 +816,26 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_targets` (
   KEY `nutrition_plan_id` (`nutrition_plan_id`),
   FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
 ) ENGINE=InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_ingredients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nutrition_plan_id` int(11) unsigned NOT NULL,
+  `meal_id` int(11) unsigned NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `ingredient_id` int(11) unsigned NOT NULL,
+  `meal_name` varchar(255) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `measurement` varchar(20) NOT NULL,
+  `protein` float NOT NULL,
+  `fats` float NOT NULL,
+  `carbs` float NOT NULL,
+  `calories` float NOT NULL,
+  `energy` float NOT NULL,
+  `saturated_fat` float NOT NULL,
+  `total_sugars` float NOT NULL,
+  `sodium` float NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `recipe_id` (`nutrition_plan_id`),
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
