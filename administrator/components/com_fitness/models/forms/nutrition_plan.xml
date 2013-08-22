@@ -92,6 +92,19 @@
             <option value="1">JPUBLISHED</option>
             <option value="0">JUNPUBLISHED</option>
         </field>
+        
+        <field
+            name="activity_level"
+            type="radio"
+            label="Level of activity for this entry?"
+            description="Level of activity for this entry?"
+            class="inputbox"
+            size="1"
+            default="0">
+            <option value="1">HEAVY TRAINING DAY</option>
+            <option value="2">LIGHT TRAINING DAY</option>
+            <option value="3">RECOVERY/REST DAY</option>
+        </field>
 
     </fieldset>
 

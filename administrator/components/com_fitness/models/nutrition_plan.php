@@ -282,4 +282,68 @@ class FitnessModelnutrition_plan extends JModelAdmin
             
             return json_encode($result);      
         }
+        
+        
+        public function savePlanMeal($meal_encoded) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            
+            $meal = json_decode($meal_encoded);
+            
+            if($meal->id) {
+                $insert = $db->updateObject('#__fitness_nutrition_plan_meals', $meal, 'id');
+            } else {
+                $insert = $db->insertObject('#__fitness_nutrition_plan_meals', $meal, 'id');
+            }
+
+            if (!$insert) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+            }
+            
+            
+            $inserted_id = $db->insertid();
+            if(!$inserted_id) {
+                $inserted_id = $meal->id;
+            }
+            //$ret['IsSuccess'] = 0;
+            
+            //$ret['Msg'] = print_r($ingredient, true);
+            
+            $result = array('status' => $ret, 'inserted_id' => $inserted_id);
+            
+            return json_encode($result);     
+        }
+        
+        public function deletePlanMeal($id) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "DELETE FROM #__fitness_nutrition_plan_meals WHERE id='$id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $result = array('status' => $ret, 'id' => $id);
+            
+            return json_encode($result);  
+        }
+        
+        
+        public function populatePlanMeal($nutrition_plan_id) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "SELECT * FROM #__fitness_nutrition_plan_meals WHERE nutrition_plan_id='$nutrition_plan_id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $data = $db->loadObjectList();
+
+            $result = array('status' => $ret, 'data' => $data);
+            
+            return json_encode($result);      
+        }
+        
 }

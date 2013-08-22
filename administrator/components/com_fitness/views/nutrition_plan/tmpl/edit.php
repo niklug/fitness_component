@@ -12,9 +12,7 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
+
 ?>
 <style type="text/css">
     /* Temporary fix for drifting editor fields */
@@ -167,6 +165,19 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                         }
                         ?>
                         <legend>NUTRITION DIARY GUIDE</legend>
+                        <?php
+                        if($this->item->id) {
+                        ?>
+                        <?php echo $this->form->getLabel('activity_level'); ?>
+                        <?php echo $this->form->getInput('activity_level'); ?>
+                        <?php
+                        }
+                        ?>
+                        <div class="clr"></div>
+                        <div id="meals_wrapper"></div>
+                        <div class="clr"></div>
+                        <input style="display:none;" type="button" id="add_plan_meal" value="NEW MEAL">
+                        <div class="clr"></div>
                     </fieldset>
                 </td>
             </tr>
@@ -229,6 +240,15 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         
     }
     
+    var nutrition_meal_options = {
+        'main_wrapper' : $("#meals_wrapper"),
+        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'add_meal_button' : $("#add_plan_meal"),
+        'activity_level' : "input[name='jform[activity_level]']",
+        'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""}
+    }
+    
     // cteate main object
     var nutrition_plan = new NutritionPlan(nutrition_plan_options);
     
@@ -240,12 +260,13 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     var macronutrient_targets_rest = new MacronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
     
     // item descriptions
-    var item_description_meal = new ItemDescription(item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', 1);
-    var item_description_supplement = new ItemDescription(item_description_options, 'supplement', 'SUPPLEMENT ITEM DESCRIPTION', 2);
-    var item_description_drinks = new ItemDescription(item_description_options, 'drinks', 'DRINKS & LIQUIDS ITEM DESCRIPTION', 3);
+    //var item_description_meal = new ItemDescription(item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', 1);
+    //var item_description_supplement = new ItemDescription(item_description_options, 'supplement', 'SUPPLEMENT ITEM DESCRIPTION', 2);
+    //var item_description_drinks = new ItemDescription(item_description_options, 'drinks', 'DRINKS & LIQUIDS ITEM DESCRIPTION', 3);
     
     //
-    //
+    var nutrition_meal = new NutritionMeal(nutrition_meal_options)
+    
     // attach listeners on document ready
     $(document).ready(function(){
         nutrition_plan.run();
@@ -254,178 +275,175 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         macronutrient_targets_light.run();
         macronutrient_targets_rest.run();
         
-        item_description_meal.run()
-        item_description_supplement.run();
-        item_description_drinks.run();
+        //item_description_meal.run()
+        //item_description_supplement.run();
+        //item_description_drinks.run();
+        
+        nutrition_meal.run();
     });
     
     
     
-    function ItemDescription(options, type, title, meal_id) {
+    function NutritionMeal(options) {
         this.options = options;
-        this._type = type;
-        this._title = title;
-        this._meal_id = meal_id;
-        
-        this._description_id = '_' + this._meal_id;
-        
-        this._doneTypingInterval = 1000;
     }
     
-    ItemDescription.prototype.run = function() {
-        var item_description_html = this.generateHtml();
-        this.options.main_wrapper.append(item_description_html);
+    
+    NutritionMeal.prototype.run = function() {
+        var activity_level = this.options.activity_level;
+        if ($(activity_level +":checked").val()) {
+            this.options.add_meal_button.show();
+        }
         this.setEventListeners();
     }
     
-    ItemDescription.prototype.setEventListeners = function() {
+    NutritionMeal.prototype.setEventListeners = function() {
         var self = this;
-        $("#add_item"+ self._description_id).live('click', function() {
-            var tr_html = self.createIngredientTR(self.options.ingredient_obj);
-            $("#meals_content" + self._description_id).append(tr_html);
-            $("#meals_content" + self._description_id).find("tr:last td:first input").focus();
-
-        });
-
-        $(".meal_name_input").live('input', function() {
-            self.populateSearchResults($(this));
-        });
+        // on add meal click
+        $("#add_plan_meal").on('click', function() {
+            var meal_html = self.generateHtml(self.options.meal_obj);
+            self.options.main_wrapper.append(meal_html);
+            $('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+            $( ".meal_date" ).datepicker({ dateFormat: "yy-mm-dd" });
+        })
         
-        $(".ingredients_results option").live('click', function() {
-            var closest_TR = $(this).closest("tr");
-            self.setupTrDataId($(this));
-            self.setIngredientData($(this));
-            self.close_popup($("#select_meal_form" + self._description_id));
-            var selected_ingredient_name = $(this).text();
-            closest_TR.find(".meal_name_input").val(selected_ingredient_name);
-            closest_TR.find(".meal_quantity_input").focus();
-        });
+        // on Level of activity  choose
+        $(this.options.activity_level).on('click', function() {
+            self.options.add_meal_button.show();
+        })
         
-        $("#meal_quantity_input"+ this._description_id).live('focusout', function(e){
-            self.onQuantityInput($(this));
-        });
         
-        $(".delete_meal").live('click', function() {
-            var closest_TR = $(this).closest("tr");
-            var id = closest_TR.attr('data-id');
-            self.deleteIngredient(id, function(id) {
-                closest_TR.remove();;
-            })
-        });
+        // on save meal click
+        $(".save_plan_meal").live('click', function() {
+            var closest_table = $(this).closest("table");
+            var data =  self.validateFields(closest_table);
+            
+            if(!data) return;
+            
+            data.id = closest_table.attr('data-id');
+            data.nutrition_plan_id = self.options.nutrition_plan_id;
+            //console.log(data);
+            self.savePlanMeal(data, function(output) {
+                closest_table.attr('data-id', output.inserted_id);
+                data.id = output.inserted_id;
+                var html = self.generateHtml(data);
+                console.log(html);
+                closest_table.parent().replaceWith(html);
+            });
+        })
         
-        this.populateItemDescription(function(output) {
+        // on delete meal click
+        $(".delete_plan_meal").live('click', function() {
+            var closest_table = $(this).closest("table");
+            var id = closest_table.attr('data-id');
+            self.deletePlanMeal(id, function(output) {
+                closest_table.parent().remove();
+            });
+        })
+        
+        this.populatePlanMeal(function(output) {
             if(!output) return;
             var html = '';
-            output.each(function(ingredient){
-                html += self.createIngredientTR(ingredient);
+            output.each(function(meal){
+                html += self.generateHtml(meal);
             });
-            $("#meals_content" + self._description_id).html(html);
+            self.options.main_wrapper.html(html);
+            //console.log(html);
+            $('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+            $( ".meal_date" ).datepicker({ dateFormat: "yy-mm-dd" });
         });
+       
     }
     
-    
-    ItemDescription.prototype.generateHtml = function() {
-        var html = '<table width="100%">';
-        html += '<thead>';
+    NutritionMeal.prototype.generateHtml = function(o) {
+        var meal_id = o.id;
+        var html = '';
+        html += '<div id="meal_wrapper_' + meal_id + '">';
+        html += '<hr>';
+        html += '<table data-id="' + meal_id + '" width="100%">';
         html += '<tr>';
-        html += '<th width="450">' + this._title + '</th>';
-        html += '<th>QUANTITY</th>';
-        html += '<th>PRO (g)</th>';
-        html += '<th>FAT (g)</th>';
-        html += '<th>CARB (g)</th>';
-        html += '<th>CALS</th>';
-        html += '<th>ENRG (kJ)</th>';
-        html += '<th>FAT, SAT (g)</th>';
-        html += '<th>SUG (g)</th>';
-        html += '<th>SOD (mg)</th>';
-        html += '<th></th>';
+        
+        html += '<td>';
+        html += 'MEAL TIME';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input  size="5" type="text"  class="meal_date required" value="' + (o.meal_time).substring(0, 10) + '" readonly>';
+        html += '<input  size="4" type="text"  class="meal_time required " value="' + (o.meal_time).substring(11, 16) + '">';
+        html += '</td>';
+        
+        html += '<td>';
+        html += 'How much water did you drink only with THIS meal?';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input  size="5" type="text"  class="required water" value="' + o.water + '">';
+        html += '</td>';
+        
+        html += '<td>';
+        html += 'millilitres';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input title="Save/Update Meal" class="save_plan_meal " type="button"  value="Save">';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<a href="javascript:void(0)" class="delete_plan_meal" title="Delete Meal"></a>';
+        html += '</td>';
         html += '</tr>';
-        html += '</thead>';
-        html += '<tbody id="meals_content' + this._description_id + '">';
-        html += '</tbody>';
-        html += '<tfoot>';
-        html += '<tr id="totals_row' + this._description_id + '">';
-        html += '<td><input class="add_meal" type="button" id="add_item' + this._description_id + '" value="Add New Item"></td>';
+        
+        html += '<tr>';
+        html += '<td>';
+        html += '</td>';
+
+        html += '<td>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += 'How much water did you drink between (before) this meal and your last meal? (workout/training inclusive)';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input  size="5" type="text"  class="required previous_water" value="' + o.previous_water + '"> ';
+        html += '</td>';
+
+        
+        html += '<td>';
+        html += 'millilitres';
+        html += '</td>';
+        
+        html += '<td class="error_wrapper" style="color:red" colspan="2">';
+        html += '</td>';
+
         html += '</tr>';
-        html += '</tfoot>';
         html += '</table>';
         
-        return html;
-    }
-    
-    ItemDescription.prototype.createIngredientTR = function(calculatedIngredient) {
-
-        var html = '<tr data-ingredient_id="' + calculatedIngredient.ingredient_id + '"  data-id="' + calculatedIngredient.id + '">'
         
-        html += '<td>';
-        html += '<input  size="60" type="text"  class="meal_name_input" value="' + calculatedIngredient.meal_name + '">';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input size="5" type="text"  class="meal_quantity_input" id="meal_quantity_input' + this._description_id + '" value="' + calculatedIngredient.quantity + '">';
-        html += '<span class="grams_mil">' + calculatedIngredient.measurement + '</span>';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_protein_input" value="' + calculatedIngredient.protein + '">';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_fats_input" value="' + calculatedIngredient.fats + '">';
-        html += '</td>';
-
-        html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_carbs_input" value="' + calculatedIngredient.carbs + '">';
-        html += '</td>';
-
-        html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_calories_input" value="' + calculatedIngredient.calories + '">';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_energy_input" value="' + calculatedIngredient.energy + '">';
-        html += '</td>';
-
-        html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_saturated_fat_input" value="' + calculatedIngredient.saturated_fat + '">';
-        html += '</td>';
-
-        html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_total_sugars_input" value="' + calculatedIngredient.total_sugars + '">';
-        html += '</td>';
-
-        html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_sodium_input" value="' + calculatedIngredient.sodium + '">';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<a href="javascript:void(0)" class="delete_meal" title="delete"></a>';
-        html += '</td>';
-
-        html += '</tr>';
+        if(meal_id) {
+            //item_description_options.main_wrapper = $("#meal_wrapper_" + meal_id );
+            html += new ItemDescription(item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', meal_id).run();
+            html += new ItemDescription(item_description_options, 'supplement', 'SUPPLEMENT ITEM DESCRIPTION', meal_id).run();
+            html += new ItemDescription(item_description_options, 'drinks', 'DRINKS & LIQUIDS ITEM DESCRIPTION', meal_id).run();
+        }
+        html += '</div>'; 
         
         return html;
     }
     
-    ItemDescription.prototype.searchResultsTemplate = function(calculatedIngredient) {
-        var html = '<div class="select_meal_form" id="select_meal_form' + this._description_id + '">';
-        html += '<span id="results_count' + this._description_id + '"></span>';
-        html += '<select size="25" class="ingredients_results" id="ingredients_results' + this._description_id + '"></select>';
-        html += '</div>';
-        return html;
-    }
     
-    ItemDescription.prototype.getSearchIngredients = function(search_text, handleData) {
+    NutritionMeal.prototype.savePlanMeal = function(data, handleData) {
+        var meal_encoded = JSON.stringify(data);
         var url = this.options.fitness_administration_url;
         $.ajax({
             type : "POST",
             url : url,
             data : {
-                view : 'nutrition_recipe',
+                view : 'nutrition_plan',
                 format : 'text',
-                task : 'getSearchIngredients',
-                search_text : search_text
-              },
+                task : 'savePlanMeal',
+                meal_encoded : meal_encoded
+            },
             dataType : 'json',
             success : function(response) {
                 if(!response.status.IsSuccess) {
@@ -433,191 +451,15 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     return;
                 }
                 handleData(response);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error");
-            }
-        });
-    }
-    
-    ItemDescription.prototype.populateSearchResults = function(o) {
-        var typingTimer;
-        var search_text = o.val();
-        if($('#select_meal_form' + this._description_id).length == 0) {
-            o.parent().append(this.searchResultsTemplate());
-        }
-        clearTimeout(typingTimer);
-        var self = this;
-        if (search_text) {
-            typingTimer = setTimeout(
-                function() {
-                    self.getSearchIngredients(
-                        search_text,
-                        function(output) {
-                            //console.log(output);
-                            $("#results_count"+ self._description_id).html('Search returned ' + output.count + ' ingredients.');
-                            $("#ingredients_results" + self._description_id).html(output.html);
-                            $("#ingredients_results" + self._description_id).find(":odd").css("background-color", "#F0F0EE")
-                        })
-                    },
-                self.options.doneTypingInterval
-            );
-        }
-    }
-    
-    ItemDescription.prototype.getIngredientData = function(id, handleData) {
-        var url = this.options.fitness_administration_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-                view : 'nutrition_recipe',
-                format : 'text',
-                task : 'getIngredientData',
-                id : id
               },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.IsSuccess) {
-                    alert(response.status.Msg);
-                    return;
-                }
-                handleData(response.ingredient);
-            },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                alert("error");
+                alert("error savePlanMeal");
             }
         }); 
     }
     
-    ItemDescription.prototype.setIngredientData = function(o) {
-        var ingredient_id = o.val();
-        var selected_ingredient_name = o.text();
-        var closest_TR = o.closest("tr");
-        var self = this;
-        this.getIngredientData(
-            ingredient_id, 
-            function(ingredient) {
-                if(!ingredient) return;
-                var measurement = self.getMeasurement(ingredient.specific_gravity);
-                closest_TR.find(".grams_mil").html(measurement);
-                //console.log(ingredient);
-            }
-        );
-    }
-    
-    ItemDescription.prototype.getMeasurement = function(specific_gravity) {
-        if(parseFloat(specific_gravity) > 0) {
-            return 'millilitres';
-        } 
-        return 'grams';
-    }
-    
-    
-    ItemDescription.prototype.close_popup = function(element) {
-        element.remove();
-    }
-    
-    ItemDescription.prototype.setupTrDataId = function(o) {
-        o.closest("tr").attr('data-ingredient_id', o.val());
-    }
-    
-    ItemDescription.prototype.onQuantityInput = function(o) {
-        var quantity = o.val();
-        var closest_TR = o.closest("tr");
-        var self = this;
-        var ingredient_id = closest_TR.attr('data-ingredient_id');
-        this.getIngredientData(
-            ingredient_id, 
-            function(ingredient) {
-                if(!ingredient) return;
-                if(quantity) {
-                    var calculatedIngredient = self.calculatedIngredientItems(ingredient, quantity);
-                    
-                    calculatedIngredient.nutrition_plan_id = self.options.nutrition_plan_id;
-                    calculatedIngredient.meal_id = self._meal_id;
-                    var id = closest_TR.attr('data-id');
-                    calculatedIngredient.id = id; 
-                    calculatedIngredient.type = self._type;
-                    self.saveIngredient(calculatedIngredient, function(inserted_id) {
-                         if(inserted_id) {
-                            calculatedIngredient.id = inserted_id;
-                            var TR_html = self.createIngredientTR(calculatedIngredient);
-                            closest_TR.replaceWith(TR_html);
-                         }
-                    });
-                }
-                
-            }
-        );
-    }
-    
-    
-    ItemDescription.prototype.calculatedIngredientItems = function(ingredient, quantity) {
-        var calculated_ingredient = {};
-        var specific_gravity = ingredient.specific_gravity;
-        //quantity = 100;
-        //specific_gravity = 1.03;
-        //ingredient.protein = 3.2;
-        calculated_ingredient.ingredient_id = ingredient.id;
-        
-        calculated_ingredient.meal_name = ingredient.ingredient_name;
-        
-        calculated_ingredient.quantity = quantity;
-        
-        calculated_ingredient.measurement = this.getMeasurement(ingredient.specific_gravity);
-        
-        calculated_ingredient.protein = this.calculateDependsOnGravity(ingredient.protein, quantity, specific_gravity);
-        
-        calculated_ingredient.fats = this.calculateDependsOnGravity(ingredient.fats, quantity, specific_gravity);
-        
-        calculated_ingredient.carbs = this.calculateDependsOnGravity(ingredient.carbs, quantity, specific_gravity);
-        
-        calculated_ingredient.calories = this.calculateDependsOnGravity(ingredient.calories, quantity, specific_gravity);
-        
-        calculated_ingredient.energy = this.calculateDependsOnGravity(ingredient.energy, quantity, specific_gravity);
-        
-        calculated_ingredient.saturated_fat = this.calculateDependsOnGravity(ingredient.saturated_fat, quantity, specific_gravity);
-        
-        calculated_ingredient.total_sugars = this.calculateDependsOnGravity(ingredient.total_sugars, quantity, specific_gravity);
-        
-        calculated_ingredient.sodium = this.calculateDependsOnGravity(ingredient.sodium, quantity, specific_gravity);
-        
-        //console.log(ingredient.specific_gravity);
-        //console.log(ingredient);
-        //console.log(calculated_ingredient);
-                
-        return calculated_ingredient;
-    }
-   
-
-    ItemDescription.prototype.calculateDependsOnGravity =  function(value, quantity, specific_gravity) {
-        var calculated_value;
-        if(parseFloat(specific_gravity) > 0) {
-            calculated_value = this.millilitresFormula(value, quantity, specific_gravity);
-        } else {
-            calculated_value = this.gramsFormula(value, quantity);
-        }
-        return calculated_value;
-    }
-    
-    ItemDescription.prototype.gramsFormula = function(value, quantity) {
-        return this.round_2_sign (value / 100 * quantity );
-    }
-    
-    ItemDescription.prototype.millilitresFormula = function(value, quantity, specific_gravity) {
-        return this.round_2_sign (value / 100 * quantity * specific_gravity );
-    }
-    
-    ItemDescription.prototype.round_2_sign = function(value) {
-        return Math.round(value * 100)/100;
-    }
-    
-    
-    ItemDescription.prototype.saveIngredient = function(calculatedIngredient, handleData) {
-        var ingredient_encoded = JSON.stringify(calculatedIngredient);
+    NutritionMeal.prototype.deletePlanMeal = function(id, handleData) {
         var url = this.options.fitness_administration_url;
         $.ajax({
             type : "POST",
@@ -625,8 +467,8 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             data : {
                 view : 'nutrition_plan',
                 format : 'text',
-                task : 'saveIngredient',
-                ingredient_encoded : ingredient_encoded
+                task : 'deletePlanMeal',
+                id : id
             },
             dataType : 'json',
             success : function(response) {
@@ -634,48 +476,19 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     alert(response.status.Msg);
                     return;
                 }
-                handleData(response.inserted_id);
+                handleData(response);
               },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                alert("error saveIngredient");
-            }
-        }); 
-     }
-    
-    
-     ItemDescription.prototype.deleteIngredient = function(id, handleData) {
-        var url = this.options.fitness_administration_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-                view : 'nutrition_plan',
-                format : 'text',
-                task : 'deleteIngredient',
-                id : id
-              },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.IsSuccess) {
-                    alert(response.status.Msg);
-                    return;
-                }
-                handleData(response.id);
-                },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error deleteIngredient");
+                alert("error deletePlanMeal");
             }
         }); 
     }
     
     
-    ItemDescription.prototype.populateItemDescription =  function(handleData) {
+    NutritionMeal.prototype.populatePlanMeal =  function(handleData) {
         var url = this.options.fitness_administration_url;
         var nutrition_plan_id = this.options.nutrition_plan_id;
-        var meal_id = this._meal_id;
-        var type = this._type;
         if(!nutrition_plan_id) return;
         $.ajax({
             type : "POST",
@@ -683,11 +496,9 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             data : {
                 view : 'nutrition_plan',
                 format : 'text',
-                task : 'populateItemDescription',
-                nutrition_plan_id : nutrition_plan_id,
-                meal_id : meal_id,
-                type : type
-              },
+                task : 'populatePlanMeal',
+                nutrition_plan_id : nutrition_plan_id
+            },
             dataType : 'json',
             success : function(response) {
                 if(!response.status.IsSuccess) {
@@ -698,9 +509,75 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                alert("error");
+                alert("error populatePlanMeal");
             }
         }); 
+    }
+    
+    NutritionMeal.prototype.validateTime = function(time) {
+        var result = false, m;
+        var re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
+        if ((m = time.match(re))) {
+            result = (m[1].length == 2 ? "" : "0") + m[1] + ":" + m[2];
+        }
+        return result;
+    }
+    
+    NutritionMeal.prototype.validateFloat = function(value) {
+        return (value.match(/^-?\d*(\.\d+)?$/));
+    }
+    
+    NutritionMeal.prototype.validateFields = function(closest_table) {
+        var result = true;
+        var error_wrapper = closest_table.find(".error_wrapper");
+        error_wrapper.html('');
+        
+        var date = closest_table.find(".meal_date").val();
+        var time = closest_table.find(".meal_time").val();
+        var meal_time = date + ' ' + time;
+        var water = closest_table.find(".water").val();
+        var previous_water = closest_table.find(".previous_water").val();
+        
+        var data = {
+            'meal_time' : meal_time,
+            'water' : water,
+            'previous_water' : previous_water
+        }
+        
+        if(!date) {
+            error_wrapper.html('Dete is empty!');
+            result = false;               
+        }
+
+        if(!this.validateTime(time)) {
+            error_wrapper.html('Wrong Meal Time!');
+            result = false;
+        }
+        
+        if(!water) {
+            error_wrapper.html('Water Value Empty!');
+            result = false;
+        }
+        
+        if(!this.validateFloat(water)) {
+            error_wrapper.html('Wrong Water Value!');
+            result = false;
+        }
+        
+        if(!previous_water) {
+            error_wrapper.html('Previous Water Value Empty!');
+            result = false;
+        }
+        
+        if(!this.validateFloat(previous_water)) {
+            error_wrapper.html('Wrong Previous Water Value!');
+            result = false;
+        }
+        
+        if(result) {
+            result = data;
+        }
+        return result;
     }
     
     
@@ -709,40 +586,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
     
