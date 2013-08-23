@@ -462,8 +462,19 @@
 }
 
 
-#totals_row {
+#totals_row , .totals_row{
     background-color:#E1E9E9;
+    text-align: center;
+}
+
+.totals_row input {
+    text-align: center;
+    float: none !important;
+}
+
+.no_background{
+    background-color: #ffffff;
+    background: none;
 }
 
 .comment_wrapper, .comment_textarea {

@@ -176,6 +176,7 @@ JHtml::_('behavior.keepalive');
                         <div class="clr"></div>
                         <div id="meals_wrapper"></div>
                         <div class="clr"></div>
+                        <hr>
                         <input style="display:none;" type="button" id="add_plan_meal" value="NEW MEAL">
                         <div class="clr"></div>
                     </fieldset>
@@ -259,11 +260,7 @@ JHtml::_('behavior.keepalive');
     
     var macronutrient_targets_rest = new MacronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
     
-    // item descriptions
-    //var item_description_meal = new ItemDescription(item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', 1);
-    //var item_description_supplement = new ItemDescription(item_description_options, 'supplement', 'SUPPLEMENT ITEM DESCRIPTION', 2);
-    //var item_description_drinks = new ItemDescription(item_description_options, 'drinks', 'DRINKS & LIQUIDS ITEM DESCRIPTION', 3);
-    
+
     //
     var nutrition_meal = new NutritionMeal(nutrition_meal_options)
     
@@ -274,11 +271,7 @@ JHtml::_('behavior.keepalive');
         macronutrient_targets_heavy.run();
         macronutrient_targets_light.run();
         macronutrient_targets_rest.run();
-        
-        //item_description_meal.run()
-        //item_description_supplement.run();
-        //item_description_drinks.run();
-        
+
         nutrition_meal.run();
     });
     
@@ -303,8 +296,7 @@ JHtml::_('behavior.keepalive');
         $("#add_plan_meal").on('click', function() {
             var meal_html = self.generateHtml(self.options.meal_obj);
             self.options.main_wrapper.append(meal_html);
-            $('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
-            $( ".meal_date" ).datepicker({ dateFormat: "yy-mm-dd" });
+            self.attachDateTimeListener();
         })
         
         // on Level of activity  choose
@@ -327,8 +319,9 @@ JHtml::_('behavior.keepalive');
                 closest_table.attr('data-id', output.inserted_id);
                 data.id = output.inserted_id;
                 var html = self.generateHtml(data);
-                console.log(html);
+                //console.log(html);
                 closest_table.parent().replaceWith(html);
+                self.attachDateTimeListener();
             });
         })
         
@@ -341,17 +334,27 @@ JHtml::_('behavior.keepalive');
             });
         })
         
+        // populate meals html on document load
         this.populatePlanMeal(function(output) {
             if(!output) return;
             var html = '';
+            var meal_ids = [];
+            var i = 0;
             output.each(function(meal){
                 html += self.generateHtml(meal);
+                meal_ids[i] = meal.id;
+                i++;
             });
             self.options.main_wrapper.html(html);
-            //console.log(html);
-            $('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
-            $( ".meal_date" ).datepicker({ dateFormat: "yy-mm-dd" });
+            
+            self.attachDateTimeListener();
+            
+            // calculate totals on load
+            self.CalculateTotalsWithDelay(meal_ids);
         });
+
+
+ 
        
     }
     
@@ -421,11 +424,40 @@ JHtml::_('behavior.keepalive');
         
         
         if(meal_id) {
-            //item_description_options.main_wrapper = $("#meal_wrapper_" + meal_id );
             html += new ItemDescription(item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', meal_id).run();
             html += new ItemDescription(item_description_options, 'supplement', 'SUPPLEMENT ITEM DESCRIPTION', meal_id).run();
             html += new ItemDescription(item_description_options, 'drinks', 'DRINKS & LIQUIDS ITEM DESCRIPTION', meal_id).run();
         }
+        
+        html += '<table id="totals_' + meal_id + '" width="100%">';
+        html += '<tr style="text-align:center;">';
+        html += '<th width="515"></th>';
+        html += '<th></th>';
+        html += '<th>PRO (g)</th>';
+        html += '<th>FAT (g)</th>';
+        html += '<th>CARB (g)</th>';
+        html += '<th>CALS</th>';
+        html += '<th>ENRG (kJ)</th>';
+        html += '<th>FAT, SAT (g)</th>';
+        html += '<th>SUG (g)</th>';
+        html += '<th>SOD (mg)</th>';
+        html += '<th></th>';
+        html += '</tr>';
+        html += '<tr >';
+        html += '<td width="515" ></td>'
+        html += '<td><b>TOTALS</b></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_protein_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_fats_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_carbs_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_calories_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_energy_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_saturated_fat_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_total_sugars_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_sodium_input_total_' + meal_id + '" value=""></td>';
+        html += '<td width="40px"></td>';
+        html += '</tr>';
+        html += '</table>';
+        
         html += '</div>'; 
         
         return html;
@@ -581,17 +613,71 @@ JHtml::_('behavior.keepalive');
     }
     
     
+    NutritionMeal.prototype.attachDateTimeListener = function() {
+        $('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+        $( ".meal_date" ).datepicker({ dateFormat: "yy-mm-dd" });
+    }
+    
+        
+    NutritionMeal.prototype.calculate_totals = function(meal_id) {
+        
+
+       this.set_item_total(this.get_item_total('meal_protein_input_' + meal_id), 'meal_protein_input_total_' + meal_id);
+
+       this.set_item_total(this.get_item_total('meal_fats_input_' + meal_id), 'meal_fats_input_total_' + meal_id);
+       
+       this.set_item_total(this.get_item_total('meal_carbs_input_' + meal_id), 'meal_carbs_input_total_' + meal_id);
+       
+       this.set_item_total(this.get_item_total('meal_calories_input_' + meal_id), 'meal_calories_input_total_' + meal_id);
+       
+       this.set_item_total(this.get_item_total('meal_energy_input_' + meal_id), 'meal_energy_input_total_' + meal_id);
+       
+       this.set_item_total(this.get_item_total('meal_saturated_fat_input_' + meal_id), 'meal_saturated_fat_input_total_' + meal_id);
+       
+       this.set_item_total(this.get_item_total('meal_total_sugars_input_' + meal_id), 'meal_total_sugars_input_total_' + meal_id);
+       
+       this.set_item_total(this.get_item_total('meal_sodium_input_' + meal_id), 'meal_sodium_input_total_' + meal_id);
+    
+    }
+    
+    NutritionMeal.prototype.get_item_total = function(element) {
+       var item_array = $("." +element);
+       var sum = 0;
+       item_array.each(function(){
+           var value = parseFloat($(this).val());
+           if(value > 0) {
+              sum += parseFloat(value); 
+           }
+           
+       });
+
+       return this.round_2_sign(sum);
+    }
     
     
+    NutritionMeal.prototype.set_item_total = function(value, element) {
+        $("#" + element).val(value);
+    }
     
+    NutritionMeal.prototype.round_2_sign = function(value) {
+        return Math.round(value * 100)/100;
+    }
+
+    
+    NutritionMeal.prototype.CalculateTotalsWithDelay = function(meal_ids) {
+        var self = this;
+        setTimeout(
+            function(){
+                meal_ids.each(function(meal_id){
+                    self.calculate_totals(meal_id);
+                });
+            },
+            2000
+        );
+    }
     
     
 
-    
-    
-    
-    
-    
     
     
     

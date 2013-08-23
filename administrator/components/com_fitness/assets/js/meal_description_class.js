@@ -108,35 +108,35 @@ ItemDescription.prototype.createIngredientTR = function(calculatedIngredient) {
     html += '</td>';
 
     html += '<td>';
-    html += '<input readonly size="5" type="text"  class="meal_protein_input" value="' + calculatedIngredient.protein + '">';
+    html += '<input readonly size="5" type="text"  class="meal_protein_input_' + this._meal_id + '" value="' + calculatedIngredient.protein + '">';
     html += '</td>';
 
     html += '<td>';
-    html += '<input readonly size="5" type="text"  class="meal_fats_input" value="' + calculatedIngredient.fats + '">';
+    html += '<input readonly size="5" type="text"  class="meal_fats_input_' + this._meal_id + '" value="' + calculatedIngredient.fats + '">';
     html += '</td>';
 
     html += '<td>';
-    html += '<input readonly size="5" type="text"  class="meal_carbs_input" value="' + calculatedIngredient.carbs + '">';
+    html += '<input readonly size="5" type="text"  class="meal_carbs_input_' + this._meal_id + '" value="' + calculatedIngredient.carbs + '">';
     html += '</td>';
 
     html += '<td>';
-    html += '<input readonly size="5" type="text"  class="meal_calories_input" value="' + calculatedIngredient.calories + '">';
+    html += '<input readonly size="5" type="text"  class="meal_calories_input_' + this._meal_id + '" value="' + calculatedIngredient.calories + '">';
     html += '</td>';
 
     html += '<td>';
-    html += '<input readonly size="5" type="text"  class="meal_energy_input" value="' + calculatedIngredient.energy + '">';
+    html += '<input readonly size="5" type="text"  class="meal_energy_input_' + this._meal_id + '" value="' + calculatedIngredient.energy + '">';
     html += '</td>';
 
     html += '<td>';
-    html += '<input readonly size="5" type="text"  class="meal_saturated_fat_input" value="' + calculatedIngredient.saturated_fat + '">';
+    html += '<input readonly size="5" type="text"  class="meal_saturated_fat_input_' + this._meal_id + '" value="' + calculatedIngredient.saturated_fat + '">';
     html += '</td>';
 
     html += '<td>';
-    html += '<input readonly size="5" type="text"  class="meal_total_sugars_input" value="' + calculatedIngredient.total_sugars + '">';
+    html += '<input readonly size="5" type="text"  class="meal_total_sugars_input_' + this._meal_id + '" value="' + calculatedIngredient.total_sugars + '">';
     html += '</td>';
 
     html += '<td>';
-    html += '<input readonly size="5" type="text"  class="meal_sodium_input" value="' + calculatedIngredient.sodium + '">';
+    html += '<input readonly size="5" type="text"  class="meal_sodium_input_' + this._meal_id + '" value="' + calculatedIngredient.sodium + '">';
     html += '</td>';
 
     html += '<td>';
