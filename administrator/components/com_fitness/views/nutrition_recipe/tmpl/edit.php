@@ -721,7 +721,7 @@ JHtml::_('behavior.keepalive');
                 var html = '';
                 comments.each(function(comment_obj){
                 //console.log(comment_obj);            
-                html += createCommentTemplate(comment_obj);
+                    html += createCommentTemplate(comment_obj);
                 });
                 comments_wrapper.html(html);
                 //console.log(html);

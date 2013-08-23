@@ -346,4 +346,73 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return json_encode($result);      
         }
         
+        
+        public function savePlanComment($data_encoded) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            
+            $user = &JFactory::getUser();
+            $obj = json_decode($data_encoded);
+            $obj->created_by = $user->id;
+            
+            if($obj->id) {
+                $insert = $db->updateObject('#__fitness_nutrition_plan_comments', $obj, 'id');
+            } else {
+                $insert = $db->insertObject('#__fitness_nutrition_plan_comments', $obj, 'id');
+                $obj->id  = $db->insertid();
+            }
+
+            if (!$insert) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+            }
+            /*
+            $ret['IsSuccess'] = 0;
+            
+            $ret['Msg'] = print_r($obj, true);
+            */
+            $obj->user_name = $user->name;
+  
+            $result = array('status' => $ret, 'data' => $obj);
+            
+            return json_encode($result);     
+        }
+        
+        
+        
+        public function deletePlanComment($id) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "DELETE FROM #__fitness_nutrition_plan_comments WHERE id='$id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $result = array('status' => $ret, 'id' => $id);
+            
+            return json_encode($result);  
+        }
+        
+        
+        
+        public function populatePlanComments($nutrition_plan_id, $meal_id) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "SELECT c.*, u.name AS user_name FROM #__fitness_nutrition_plan_comments AS c
+                LEFT JOIN #__users AS u ON u.id=c.created_by
+                WHERE nutrition_plan_id='$nutrition_plan_id' 
+                AND meal_id='$meal_id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $comments = $db->loadObjectList();
+
+            $result = array('status' => $ret, 'comments' => $comments);
+            
+            return json_encode($result);      
+        }
+        
 }
