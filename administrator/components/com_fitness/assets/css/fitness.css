@@ -484,3 +484,24 @@
 .nutrition_targets_table input {
     width: 70px;
 }
+
+#recipes_list_wrapper {
+    background-color: #FFFFFF;
+    border: 7px ridge #CCCCCC;
+    height: 500px;
+    margin-left: 10px;
+    position: fixed;
+    top: 100px;
+    width: 98%;
+    z-index: 999;
+}
+
+#close_recipe_list {
+    background-image: url("../images/cross.png");
+    background-size: 15px auto;
+    display: block;
+    height: 15px;
+    width: 15px;
+    position: absolute;
+    right: 15px;
+}

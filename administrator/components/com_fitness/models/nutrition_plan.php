@@ -415,4 +415,57 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return json_encode($result);      
         }
         
+        
+                
+        public function importRecipe($data_encoded) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            
+            $user = &JFactory::getUser();
+            $obj = json_decode($data_encoded);
+            
+            $query = "SELECT * FROM #__fitness_nutrition_recipes_meals WHERE recipe_id='$obj->recipe_id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $ingredients = $db->loadObjectList();
+            
+            
+            foreach ($ingredients as $ingredient) {
+                $data = new stdClass();
+                $data->nutrition_plan_id = $obj->nutrition_plan_id;
+                $data->meal_id = $obj->meal_id;
+                $data->type = $obj->type;
+                $data->ingredient_id = $ingredient->ingredient_id;
+                $data->meal_name = $ingredient->meal_name;
+                $data->quantity = ($ingredient->quantity / $obj->number_serves_recipe) * $obj->number_serves;
+                $data->measurement = $ingredient->measurement;
+                $data->protein = $ingredient->protein;
+                $data->fats = $ingredient->fats;
+                $data->carbs = $ingredient->carbs;
+                $data->calories = $ingredient->calories;
+                $data->energy = $ingredient->energy;
+                $data->saturated_fat = $ingredient->saturated_fat;
+                $data->total_sugars = $ingredient->total_sugars;
+                $data->sodium = $ingredient->sodium;
+                
+                $insert = $db->insertObject('#__fitness_nutrition_plan_ingredients', $data, 'id');
+                if (!$insert) {
+                    $ret['IsSuccess'] = false;
+                    $ret['Msg'] = $db->stderr();
+                }
+            }
+            /*
+            $ret['IsSuccess'] = 0;
+            
+            $ret['Msg'] = print_r($data, true);
+
+            */
+            $result = array('status' => $ret);
+            
+            return json_encode($result);     
+        }
+        
 }

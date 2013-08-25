@@ -60,7 +60,7 @@ NutritionMeal.prototype.setEventListeners = function() {
     })
 
     // populate meals html on document load
-    this.papulateMealsLogic();
+    this.populateMealsLogic();
 
     //
     
@@ -73,7 +73,7 @@ NutritionMeal.prototype.setEventListeners = function() {
 
 }
 
-NutritionMeal.prototype.papulateMealsLogic = function() {
+NutritionMeal.prototype.populateMealsLogic = function() {
     var self = this;
     this.populatePlanMeal(function(output) {
         if(!output) return;

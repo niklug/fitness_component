@@ -213,5 +213,11 @@ class FitnessController extends JController
             $view -> populatePlanComments();
 	}
         
+        function importRecipe() {
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> importRecipe();
+	}
+        
         
 }

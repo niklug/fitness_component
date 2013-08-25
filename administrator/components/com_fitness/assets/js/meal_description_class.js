@@ -27,6 +27,16 @@ ItemDescription.prototype.setEventListeners = function() {
         $("#meals_content" + self._description_id).find("tr:last td:first input").focus();
 
     });
+    
+    $("#add_recipe"+ self._description_id).live('click', function() {
+        var recipesListHtml = self.recipesListHtml();
+        $("body").append(recipesListHtml);
+    });
+    
+    $("#close_recipe_list").live('click', function() {
+        $(this).parent().remove();
+    });
+    
 
     $(".meal_name_input").live('input', function() {
         self.populateSearchResults($(this));
@@ -86,7 +96,8 @@ ItemDescription.prototype.generateHtml = function() {
     html += '</tbody>';
     html += '<tfoot>';
     html += '<tr id="totals_row' + this._description_id + '">';
-    html += '<td><input  type="button" id="add_item' + this._description_id + '" value="Add New Item"></td>';
+    html += '<td><input  type="button" id="add_item' + this._description_id + '" value="Add New Item">';
+    html += '<input  type="button" id="add_recipe' + this._description_id + '" value="RECIPE"></td>';
     html += '</tr>';
     html += '</tfoot>';
     html += '</table>';
@@ -439,7 +450,22 @@ ItemDescription.prototype.populateItemDescription =  function(handleData) {
             },
         error: function(XMLHttpRequest, textStatus, errorThrown)
         {
-            alert("error");
+            alert("error populateItemDescription");
         }
     }); 
+}
+
+
+
+ItemDescription.prototype.recipesListHtml =  function() {
+    var html = '';
+    html += '<div id="recipes_list_wrapper">';
+    html += '<a href="javascript:void(0)" id="close_recipe_list" title="Close"></a>';
+    html += ' <iframe scrolling="auto" style="overflow-y: auto;overflow-x: hidden;" width="100%" height="100%"';
+    html += 'src="' + this.options.fitness_administration_url + '&view=nutrition_recipes&tmpl=component&layout=popup_view&nutrition_plan_id=';
+    html += this.options.nutrition_plan_id +'&meal_id=' + this._meal_id + '&type=' + this._type +'">'
+    html += '</iframe> ';
+    html += '</div>';
+    
+    return html;
 }

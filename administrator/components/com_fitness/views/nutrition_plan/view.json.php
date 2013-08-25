@@ -106,4 +106,10 @@ class FitnessViewNutrition_plan extends JView {
         $model = $this -> getModel("nutrition_plan");
         echo $model->populatePlanComments($nutrition_plan_id, $meal_id);
     }
+    
+    function importRecipe() {
+        $data_encoded = JRequest::getVar('data_encoded');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->importRecipe($data_encoded);
+    }
  }
