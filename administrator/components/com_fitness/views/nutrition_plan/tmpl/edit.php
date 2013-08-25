@@ -158,6 +158,23 @@ JHtml::_('behavior.keepalive');
             
             <tr>
                 <td colspan="2">
+                    <fieldset  class="adminform">
+                        <?php
+                        if(!$this->item->id) {
+                            echo 'Save form to proceed add Shopping Items';
+                        }
+                        ?>
+                        <legend>SUPPLEMENT SHOPPING LIST</legend>
+                        <div class="clr"></div>
+                        <div id="shopping_list_wrapper"></div>
+                        <div class="clr"></div>
+                        <input type="button" id="add_shopping_item" value="ADD NEW ITEM">
+                    </fieldset>
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="2">
                     <fieldset id="diary_guide"  class="adminform">
                         <?php
                         if(!$this->item->id) {
@@ -179,6 +196,13 @@ JHtml::_('behavior.keepalive');
                         <hr>
                         <input style="display:none;" type="button" id="add_plan_meal" value="NEW MEAL">
                         
+                        <div class="clr"></div>
+                        <br/>
+                        <hr>
+                        
+                        <div id="plan_comments_wrapper"></div>
+                        <div class="clr"></div>
+                        <input id="add_comment_0" class="" type="button" value="Add Comment" >
                         <div class="clr"></div>
                     </fieldset>
                 </td>
@@ -253,12 +277,25 @@ JHtml::_('behavior.keepalive');
     
     
     var nutrition_comment_options = {
-        'main_wrapper' : "",
         'nutrition_plan_id' : '<?php echo $this->item->id;?>',
         'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-
-
+        'db_table' : '#__fitness_nutrition_plan_meal_comments'
+    }
+    
+    var nutrition_bottom_comment_options = {
+        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
+        'db_table' : '#__fitness_nutrition_plan_comments'
+    }
+    
+    
+        
+    var shopping_list_options = {
+        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'item_obj' : {'name' : "", 'usage' : "", 'comments' : "", 'url' : ""}
     }
     
     // cteate main object
@@ -275,7 +312,11 @@ JHtml::_('behavior.keepalive');
     // meal blocks object
     var nutrition_meal = new NutritionMeal(nutrition_meal_options);
     
-
+    // shopping list
+    var shopping_list = new ShoppingList(shopping_list_options);
+    
+    //bottom comments
+    var plan_comments = new NutritionComment(nutrition_bottom_comment_options, nutrition_comment_options.nutrition_plan_id, 0);
     
     // attach listeners on document ready
     $(document).ready(function(){
@@ -287,13 +328,237 @@ JHtml::_('behavior.keepalive');
 
         nutrition_meal.run();
         
+        shopping_list.run();
+        
+        var plan_comments_html = plan_comments.run();
+        $("#plan_comments_wrapper").html(plan_comments_html);
+        
     });
     
     
     
+    function ShoppingList(options) {
+        this.options = options;
+    }
+    
+    
+    ShoppingList.prototype.run = function() {
+        var item_html = this.generateHtml();
+        $("#shopping_list_wrapper").append(item_html);
+        
+        this.populate();
+        
+        this.setEventListeners();
+    }
+    
+    ShoppingList.prototype.populate = function() {
+        var self = this;
+        this.getShoppingItemData(function(output) {
+            if(!output) return;
+            var html = '';
+            output.each(function(item){
+                html += self.generateItemTR(item);
+            });
+            $("#shopping_list_content").html(html);
+        });
+    }
+
+
+    ShoppingList.prototype.setEventListeners = function() {
+        var self = this;
+        
+        $("#add_shopping_item").on('click', function() {
+            var item_html = self.generateItemTR(self.options.item_obj);
+            $("#shopping_list_content").append(item_html);
+        });
+        
+        $(".save_shopping_item").live('click', function() {
+            var closest_tr = $(this).closest("tr");
+            var data = {};
+            
+            data.id = closest_tr.attr('data-id');
+            data.nutrition_plan_id = self.options.nutrition_plan_id;
+            data.name = closest_tr.find(".shopping_name").val();
+            data.usage = closest_tr.find(".shopping_usage").val();
+            data.comments = closest_tr.find(".shopping_comments").val();
+            data.url = closest_tr.find(".shopping_url").val();
+            
+            self.saveShoppingItem(data, function(output) {
+                var html = self.generateItemTR(output);
+                closest_tr.replaceWith(html);
+            });
+        });
+        
+        
+        $(".delete_shopping_item").live('click', function() {
+            var closest_tr = $(this).closest("tr");
+            var id = closest_tr.attr('data-id');
+            self.deleteShoppingItem(id, function(id) {
+            closest_tr.remove();;
+            });
+        });
+    }
+    
+    ShoppingList.prototype.generateHtml = function() {
+        var html = '';
+        html += '<table width="100%">';
+        html += '<thead>';
+        html += '<tr>';
+        html += '<th>';
+        html += 'PRODUCT NAME';
+        html += '</th>';
+        html += '<th>';
+        html += 'RECOMMENDED USAGE';
+        html += '</th>';
+        html += '<th>';
+        html += 'TRAINER COMMENTS';
+        html += '</th>';
+        html += '<th>';
+        html += 'SHOP URL';
+        html += '</th>';
+        html += '</tr>';
+        html += '</thead>';
+        
+        html += '<tbody id="shopping_list_content">';
+       
+        html += '<tbody>';
+        html += '</table>';
+        
+        return html;
+    }
+    
+    ShoppingList.prototype.generateItemTR = function(o) {
+        var html = '';
+        html += '<tr data-id="' + o.id + '" >';
+        html += '<td>';
+        html += '<input  size="60" type="text"  class=" shopping_name " value="' + o.name + '"> ';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input  size="50" type="text"  class=" shopping_usage" value="' + o.usage + '"> ';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input  size="50" type="text"  class=" shopping_comments" value="' + o.comments + '"> ';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input  size="30" type="text"  class=" shopping_url" value="' + o.url + '"> ';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<input title="Save/Update Shopping Item" class="save_shopping_item " type="button"  value="Save">';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '<a href="javascript:void(0)" class="delete_shopping_item" title="Delete Shopping Item"></a>';
+        html += '</td>';
+        html += '</tr>';
+        
+        return html;
+    }
+    
+    
+    ShoppingList.prototype.saveShoppingItem = function(o, handleData) {
+        if(o.id === 'undefined')  o.id = "";
+        var data_encoded = JSON.stringify(o);
+
+        var url = this.options.fitness_administration_url;
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : {
+                view : 'nutrition_plan',
+                format : 'text',
+                task : 'saveShoppingItem',
+                data_encoded : data_encoded
+            },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                handleData(response.data);
+              },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error saveShoppingItem");
+            }
+        }); 
+    }
+    
+     ShoppingList.prototype.deleteShoppingItem = function(id, handleData) {
+        var url = this.options.fitness_administration_url;
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : {
+                view : 'nutrition_plan',
+                format : 'text',
+                task : 'deleteShoppingItem',
+                id : id
+              },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                handleData(response.id);
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error deleteShoppingItem");
+            }
+        }); 
+    }
+
+
+
+    ShoppingList.prototype.getShoppingItemData=  function(handleData) {
+        var url = this.options.fitness_administration_url;
+        var nutrition_plan_id = this.options.nutrition_plan_id;
+        if(!nutrition_plan_id) return;
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : {
+                view : 'nutrition_plan',
+                format : 'text',
+                task : 'getShoppingItemData',
+                nutrition_plan_id : nutrition_plan_id,
+            },
+            dataType : 'json',
+            success : function(response) {
+                if(!response.status.IsSuccess) {
+                    alert(response.status.Msg);
+                    return;
+                }
+                handleData(response.data);
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                alert("error getShoppingItemData");
+            }
+        }); 
+    }
+
+
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
     
     

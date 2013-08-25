@@ -102,6 +102,7 @@ NutritionComment.prototype.pad = function pad(d) {
 }
 
 NutritionComment.prototype.savePlanComment = function(o, handleData) {
+    var table = this.options.db_table;
     if(o.id === 'undefined')  o.id = "";
     var data_encoded = JSON.stringify(o); 
     var url = this.options.fitness_administration_url;
@@ -112,7 +113,8 @@ NutritionComment.prototype.savePlanComment = function(o, handleData) {
             view : 'nutrition_plan',
             format : 'text',
             task : 'savePlanComment',
-            data_encoded : data_encoded
+            data_encoded : data_encoded,
+            table : table
         },
         dataType : 'json',
         success : function(response) {
@@ -132,6 +134,7 @@ NutritionComment.prototype.savePlanComment = function(o, handleData) {
 
 
 NutritionComment.prototype.deletePlanComment = function(id, handleData) {
+    var table = this.options.db_table;
     var url = this.options.fitness_administration_url;
     $.ajax({
         type : "POST",
@@ -140,7 +143,8 @@ NutritionComment.prototype.deletePlanComment = function(id, handleData) {
             view : 'nutrition_plan',
             format : 'text',
             task : 'deletePlanComment',
-            id : id
+            id : id,
+            table : table
           },
         dataType : 'json',
         success : function(response) {
@@ -159,6 +163,7 @@ NutritionComment.prototype.deletePlanComment = function(id, handleData) {
 
 
 NutritionComment.prototype.populatePlanComments = function(handleData) {
+    var table = this.options.db_table;
     var url = this.options.fitness_administration_url;
     var nutrition_plan_id = this.options.nutrition_plan_id;
     var meal_id = this.meal_id;
@@ -170,7 +175,8 @@ NutritionComment.prototype.populatePlanComments = function(handleData) {
             format : 'text',
             task : 'populatePlanComments',
             nutrition_plan_id : nutrition_plan_id,
-            meal_id : meal_id
+            meal_id : meal_id,
+            table : table
         },
         dataType : 'json',
         success : function(response) {

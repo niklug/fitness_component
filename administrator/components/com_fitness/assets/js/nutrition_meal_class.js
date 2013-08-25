@@ -200,9 +200,7 @@ NutritionMeal.prototype.generateHtml = function(o) {
         html += new NutritionComment(nutrition_comment_options, this.options.nutrition_plan_id, meal_id).run();
 
     }
-    html += '<div class="clr"></div>';
-    html += '<input id="add_comment_' + meal_id + '" class="" type="button" value="Add Comment" >';
-    html += '<div class="clr"></div>';
+cc
     html += '</div>'; 
 
     return html;

@@ -88,23 +88,26 @@ class FitnessViewNutrition_plan extends JView {
     }
     
    function savePlanComment() {
+        $table = JRequest::getVar('table');
         $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
         $model = $this -> getModel("nutrition_plan");
-        echo $model->savePlanComment($data_encoded);
+        echo $model->savePlanComment($data_encoded, $table);
     }
     
     
     function deletePlanComment() {
+        $table = JRequest::getVar('table');
         $id = JRequest::getVar('id');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->deletePlanComment($id);
+        echo $model->deletePlanComment($id, $table);
     }
     
     function populatePlanComments() {
+        $table = JRequest::getVar('table');
         $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
         $meal_id = JRequest::getVar('meal_id');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->populatePlanComments($nutrition_plan_id, $meal_id);
+        echo $model->populatePlanComments($nutrition_plan_id, $meal_id, $table);
     }
     
     function importRecipe() {
@@ -112,4 +115,26 @@ class FitnessViewNutrition_plan extends JView {
         $model = $this -> getModel("nutrition_plan");
         echo $model->importRecipe($data_encoded);
     }
- }
+    
+    function saveShoppingItem() {
+        $data_encoded = JRequest::getVar('data_encoded');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->saveShoppingItem($data_encoded);
+    }
+    
+    
+    function deleteShoppingItem() {
+        $id = JRequest::getVar('id');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->deleteShoppingItem($id);
+    }
+    
+    
+    function getShoppingItemData() {
+        $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
+        $model = $this -> getModel("nutrition_plan");
+        echo $model->getShoppingItemData($nutrition_plan_id);
+    }
+    
+    
+}

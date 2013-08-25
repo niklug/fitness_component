@@ -347,7 +347,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         }
         
         
-        public function savePlanComment($data_encoded) {
+        public function savePlanComment($data_encoded, $table) {
             $ret['IsSuccess'] = 1;
             $db = JFactory::getDbo();
             
@@ -356,9 +356,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $obj->created_by = $user->id;
             
             if($obj->id) {
-                $insert = $db->updateObject('#__fitness_nutrition_plan_comments', $obj, 'id');
+                $insert = $db->updateObject($table, $obj, 'id');
             } else {
-                $insert = $db->insertObject('#__fitness_nutrition_plan_comments', $obj, 'id');
+                $insert = $db->insertObject($table, $obj, 'id');
                 $obj->id  = $db->insertid();
             }
 
@@ -380,10 +380,10 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         
-        public function deletePlanComment($id) {
+        public function deletePlanComment($id, $table) {
             $ret['IsSuccess'] = 1;
             $db = JFactory::getDbo();
-            $query = "DELETE FROM #__fitness_nutrition_plan_comments WHERE id='$id'";
+            $query = "DELETE FROM $table WHERE id='$id'";
             $db->setQuery($query);
             if(!$db->query()) {
                 $ret['IsSuccess'] = 0;
@@ -396,10 +396,10 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         
-        public function populatePlanComments($nutrition_plan_id, $meal_id) {
+        public function populatePlanComments($nutrition_plan_id, $meal_id, $table) {
             $ret['IsSuccess'] = 1;
             $db = JFactory::getDbo();
-            $query = "SELECT c.*, u.name AS user_name FROM #__fitness_nutrition_plan_comments AS c
+            $query = "SELECT c.*, u.name AS user_name FROM $table AS c
                 LEFT JOIN #__users AS u ON u.id=c.created_by
                 WHERE nutrition_plan_id='$nutrition_plan_id' 
                 AND meal_id='$meal_id'";
@@ -468,4 +468,71 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return json_encode($result);     
         }
         
+        
+                
+        public function saveShoppingItem($data_encoded) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            
+            $user = &JFactory::getUser();
+            $obj = json_decode($data_encoded);
+            $obj->created_by = $user->id;
+            
+            if($obj->id) {
+                $insert = $db->updateObject('#__fitness_nutrition_plan_shopping_list', $obj, 'id');
+            } else {
+                $insert = $db->insertObject('#__fitness_nutrition_plan_shopping_list', $obj, 'id');
+                $obj->id  = $db->insertid();
+            }
+
+            if (!$insert) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+            }
+            
+            /*
+            $ret['IsSuccess'] = 0;
+            
+            $ret['Msg'] = print_r($obj, true);
+            */
+
+  
+            $result = array('status' => $ret, 'data' => $obj);
+            
+            return json_encode($result);     
+        }
+        
+        
+        
+        
+        public function deleteShoppingItem($id) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "DELETE FROM #__fitness_nutrition_plan_shopping_list WHERE id='$id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $result = array('status' => $ret, 'id' => $id);
+            
+            return json_encode($result);  
+        }
+        
+        
+        public function getShoppingItemData($nutrition_plan_id) {
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+            $query = "SELECT * FROM #__fitness_nutrition_plan_shopping_list WHERE nutrition_plan_id='$nutrition_plan_id'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                $ret['IsSuccess'] = 0;
+                $ret['Msg'] =  $db->getErrorMsg();
+            }
+            $comments = $db->loadObjectList();
+
+            $result = array('status' => $ret, 'data' => $comments);
+            
+            return json_encode($result);      
+        }
 }

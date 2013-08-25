@@ -408,7 +408,7 @@
     padding: 0 15px;
 }
 
-.delete_meal, .delete_comment , .delete_plan_meal{
+.delete_meal, .delete_comment , .delete_plan_meal, .delete_shopping_item{
     background-image: url("../images/cross.png");
     background-size: 15px auto;
     display: block;
