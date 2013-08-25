@@ -15,12 +15,12 @@ NutritionComment.prototype.run = function() {
 
 NutritionComment.prototype.setEventListeners = function() {
     var self = this;
-    $("#add_comment_" + this.meal_id).live('click', function() {
+    $("#add_comment_" + this.meal_id).die().live('click', function() {
         var comment_template = self.createCommentTemplate(self.options.comment_obj);
         $("#comments_wrapper_" + self.meal_id).append(comment_template);
     });
 
-    $("#save_comment_" + this.meal_id).live('click', function() {
+    $("#save_comment_" + this.meal_id).die().live('click', function() {
         var comment_wrapper = $(this).closest("table").parent();
         var id = comment_wrapper.attr("data-id");
         var comment_text = $(this).closest("table").find("textarea.comment_textarea").val();
@@ -36,7 +36,7 @@ NutritionComment.prototype.setEventListeners = function() {
        });
     });
 
-    $("#delete_comment_" + this.meal_id).live('click', function(){
+    $("#delete_comment_" + this.meal_id).die().live('click', function(){
         var comment_wrapper = $(this).closest("table").parent();
         var id = comment_wrapper.attr('data-id');
         self.deletePlanComment(id, function(output) {

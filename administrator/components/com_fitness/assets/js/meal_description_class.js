@@ -21,28 +21,29 @@ ItemDescription.prototype.run = function() {
 
 ItemDescription.prototype.setEventListeners = function() {
     var self = this;
-    $("#add_item"+ self._description_id).live('click', function() {
+    //$("#add_item"+ self._description_id).die()
+    $("#add_item"+ self._description_id).die().live('click', function() {
         var tr_html = self.createIngredientTR(self.options.ingredient_obj);
         $("#meals_content" + self._description_id).append(tr_html);
         $("#meals_content" + self._description_id).find("tr:last td:first input").focus();
 
     });
     
-    $("#add_recipe"+ self._description_id).live('click', function() {
+    $("#add_recipe"+ self._description_id).die().live('click', function() {
         var recipesListHtml = self.recipesListHtml();
         $("body").append(recipesListHtml);
     });
     
-    $("#close_recipe_list").live('click', function() {
+    $("#close_recipe_list").die().live('click', function() {
         $(this).parent().remove();
     });
     
 
-    $(".meal_name_input").live('input', function() {
+    $(".meal_name_input").die().live('input', function() {
         self.populateSearchResults($(this));
     });
 
-    $(".ingredients_results option").live('click', function() {
+    $(".ingredients_results option").die().live('click', function() {
         var closest_TR = $(this).closest("tr");
         self.setupTrDataId($(this));
         self.setIngredientData($(this));
@@ -52,11 +53,11 @@ ItemDescription.prototype.setEventListeners = function() {
         closest_TR.find(".meal_quantity_input").focus();
     });
 
-    $("#meal_quantity_input"+ this._description_id).live('focusout', function(e){
+    $("#meal_quantity_input"+ this._description_id).die().live('focusout', function(e){
         self.onQuantityInput($(this));
     });
 
-    $(".delete_meal").live('click', function() {
+    $(".delete_meal").die().live('click', function() {
         var closest_TR = $(this).closest("tr");
         var id = closest_TR.attr('data-id');
         self.deleteIngredient(id, function(id) {

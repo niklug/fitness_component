@@ -199,7 +199,33 @@ JHtml::_('behavior.keepalive');
                         <div class="clr"></div>
                         <br/>
                         <hr>
+                        <br/>
                         
+                        
+                        <table width="500px">
+                            <thead>
+                                <tr>
+                                    <th>PRO (g)</th>
+                                    <th>FAT (g)</th>
+                                    <th>CARB (g)</th>
+                                    <th>CALS</th>
+                                    <th>ENRG (kJ)</th>
+                                    <th>FAT, SAT (g)</th>
+                                    <th>SUG (g)</th>
+                                    <th>SOD (mg)</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="">
+                                
+                            </tbody>
+
+                        </table>
+                        
+                        
+                        
+                        
+                        <hr>
                         <div id="plan_comments_wrapper"></div>
                         <div class="clr"></div>
                         <input id="add_comment_0" class="" type="button" value="Add Comment" >
@@ -327,6 +353,7 @@ JHtml::_('behavior.keepalive');
         macronutrient_targets_rest.run();
 
         nutrition_meal.run();
+        
         
         shopping_list.run();
         
