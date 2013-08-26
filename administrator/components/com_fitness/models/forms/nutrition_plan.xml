@@ -105,6 +105,41 @@
             <option value="2">LIGHT TRAINING DAY</option>
             <option value="3">RECOVERY/REST DAY</option>
         </field>
+        
+               
+        <field name="allowed_proteins" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="ALLOWED PROTEINS"
+        description=""  /> 
+        
+                
+        <field name="allowed_fats" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="ALLOWED FATS"
+        description=""  /> 
+        
+                
+        <field name="allowed_carbs" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="ALLOWED CARBOHYDRATES"
+        description=""  /> 
+        
+                
+        <field name="allowed_liquids" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="ALLOWED LIQUIDS"
+        description=""  /> 
+        
+        <field name="other_recommendations" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="OTHER RECOMMENDATIONS / INSTRUCTIONS"
+        description=""  /> 
+        
 
     </fieldset>
 

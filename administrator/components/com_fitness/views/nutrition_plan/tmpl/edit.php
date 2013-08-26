@@ -19,6 +19,10 @@ JHtml::_('behavior.keepalive');
     .adminformlist li {
         clear: both;
     }
+    
+    #jform_allowed_proteins-lbl, #jform_allowed_fats-lbl, #jform_allowed_carbs-lbl, #jform_allowed_liquids-lbl, #jform_other_recommendations-lbl{
+        float: none;
+    }
 </style>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="nutrition_plan-form" class="form-validate">
@@ -159,6 +163,35 @@ JHtml::_('behavior.keepalive');
             <tr>
                 <td colspan="2">
                     <fieldset  class="adminform">
+                        <legend>ALLOWED FOODS SHOPPING LIST</legend>
+                        <div class="clr"></div>
+                        <?php echo $this->form->getLabel('allowed_proteins'); ?>
+                        <?php echo $this->form->getInput('allowed_proteins'); ?>
+                        <div class="clr"></div>
+                        <br/>
+                        <?php echo $this->form->getLabel('allowed_fats'); ?>
+                        <?php echo $this->form->getInput('allowed_fats'); ?>
+                        <div class="clr"></div>
+                        <br/>
+                        <?php echo $this->form->getLabel('allowed_carbs'); ?>
+                        <?php echo $this->form->getInput('allowed_carbs'); ?>
+                        <div class="clr"></div>
+                        <br/>
+                        <?php echo $this->form->getLabel('allowed_liquids'); ?>
+                        <?php echo $this->form->getInput('allowed_liquids'); ?>
+                        <div class="clr"></div>
+                        <br/>
+                        <?php echo $this->form->getLabel('other_recommendations'); ?>
+                        <?php echo $this->form->getInput('other_recommendations'); ?>
+                        <div class="clr"></div>
+                        <br/>
+                    </fieldset>
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="2">
+                    <fieldset  class="adminform">
                         <?php
                         if(!$this->item->id) {
                             echo 'Save form to proceed add Shopping Items';
@@ -201,29 +234,187 @@ JHtml::_('behavior.keepalive');
                         <hr>
                         <br/>
                         
-                        
-                        <table width="500px">
-                            <thead>
-                                <tr>
-                                    <th>PRO (g)</th>
-                                    <th>FAT (g)</th>
-                                    <th>CARB (g)</th>
-                                    <th>CALS</th>
-                                    <th>ENRG (kJ)</th>
-                                    <th>FAT, SAT (g)</th>
-                                    <th>SUG (g)</th>
-                                    <th>SOD (mg)</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="">
-                                
-                            </tbody>
-
-                        </table>
-                        
-                        
-                        
+                        <div style="float:right">
+                            <table >
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>PRO (g)</th>
+                                        <th>FAT (g)</th>
+                                        <th>CARB (g)</th>
+                                        <th>CALS</th>
+                                        <th>ENRG (kJ)</th>
+                                        <th>FAT, SAT (g)</th>
+                                        <th>SUG (g)</th>
+                                        <th>SOD (mg)</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="">
+                                    <tr>
+                                        <td width="150">
+                                            <b>DAILY TOTALS (grams)</b>
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_protein_grams" name="daily_protein_grams" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_fats_grams" name="daily_fats_grams" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_carbs_grams" name="daily_carbs_grams" value="">
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_saturated_fat_grams" name="daily_saturated_fat_grams" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_total_sugars_grams" name="daily_total_sugars_grams" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_sodium_grams"  name="daily_sodium_grams" value="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>DAILY TOTALS (%)</b>
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_protein_percents" name="daily_protein_percents" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_fats_percents" name="daily_fats_percents" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_carbs_percents" name="daily_carbs_percents" value="">
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>DAILY TOTALS</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_calories" name="daily_calories" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="daily_energy" name="daily_energy" value="">
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>DAILY TOTAL WATER</b></td>
+                                        <td><input readonly size="5" type="text"  id="daily_total_water" name="daily_total_water" value=""></td>
+                                        <td>MILLILITRES</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <br/><br/>
+                            
+                             <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>PRO (g)</th>
+                                        <th>FAT (g)</th>
+                                        <th>CARB (g)</th>
+                                        <th>CALS</th>
+                                        <th>ENRG (kJ)</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="">
+                                    <tr>
+                                        <td width="150">
+                                            <b>VARIANCE (grams)</b>
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_protein_grams" name="variance_protein_grams" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_fats_grams" name="variance_fats_grams" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_carbs_grams" name="variance_carbs_grams" value="">
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                         <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>VARIANCE (%)</b>
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_protein_percents" name="variance_protein_percents" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_fats_percents" name="variance_fats_percents" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_carbs_percents" name="variance_carbs_percents" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_calories_percents" name="variance_calories_percents" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_energy_percents" name="variance_energy_percents" value="">
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>VARIANCE</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_calories" name="variance_calories" value="">
+                                        </td>
+                                        <td>
+                                            <input readonly size="5" type="text"  id="variance_energy" name="variance_energy" value="">
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>VARIANCE (WATER)</b></td>
+                                        <td><input readonly size="5" type="text"  id="variance_daily_total_water" name="variance_daily_total_water" value=""></td>
+                                        <td>MILLILITRES</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clr"></div>
+                        <div class="clr"></div>
                         
                         <hr>
                         <div id="plan_comments_wrapper"></div>
@@ -324,6 +515,12 @@ JHtml::_('behavior.keepalive');
         'item_obj' : {'name' : "", 'usage' : "", 'comments' : "", 'url' : ""}
     }
     
+    
+     var calculate_summary_options = {
+        'activity_level' : "input[name='jform[activity_level]']"
+        
+    }
+    
     // cteate main object
     var nutrition_plan = new NutritionPlan(nutrition_plan_options);
     
@@ -344,6 +541,8 @@ JHtml::_('behavior.keepalive');
     //bottom comments
     var plan_comments = new NutritionComment(nutrition_bottom_comment_options, nutrition_comment_options.nutrition_plan_id, 0);
     
+    var calculateSummary =  new CalculateSummary(calculate_summary_options);
+    
     // attach listeners on document ready
     $(document).ready(function(){
         nutrition_plan.run();
@@ -360,224 +559,227 @@ JHtml::_('behavior.keepalive');
         var plan_comments_html = plan_comments.run();
         $("#plan_comments_wrapper").html(plan_comments_html);
         
+        calculateSummary.run();
+        
     });
     
     
     
-    function ShoppingList(options) {
+    function CalculateSummary(options) {
         this.options = options;
+        this._activity_level = this.options.activity_level;
+        this._activity_level_value = $(this._activity_level +":checked").val();
     }
     
-    
-    ShoppingList.prototype.run = function() {
-        var item_html = this.generateHtml();
-        $("#shopping_list_wrapper").append(item_html);
         
-        this.populate();
-        
-        this.setEventListeners();
-    }
     
-    ShoppingList.prototype.populate = function() {
+    CalculateSummary.prototype.run = function() {
         var self = this;
-        this.getShoppingItemData(function(output) {
-            if(!output) return;
-            var html = '';
-            output.each(function(item){
-                html += self.generateItemTR(item);
-            });
-            $("#shopping_list_content").html(html);
-        });
-    }
-
-
-    ShoppingList.prototype.setEventListeners = function() {
-        var self = this;
-        
-        $("#add_shopping_item").on('click', function() {
-            var item_html = self.generateItemTR(self.options.item_obj);
-            $("#shopping_list_content").append(item_html);
-        });
-        
-        $(".save_shopping_item").live('click', function() {
-            var closest_tr = $(this).closest("tr");
-            var data = {};
-            
-            data.id = closest_tr.attr('data-id');
-            data.nutrition_plan_id = self.options.nutrition_plan_id;
-            data.name = closest_tr.find(".shopping_name").val();
-            data.usage = closest_tr.find(".shopping_usage").val();
-            data.comments = closest_tr.find(".shopping_comments").val();
-            data.url = closest_tr.find(".shopping_url").val();
-            
-            self.saveShoppingItem(data, function(output) {
-                var html = self.generateItemTR(output);
-                closest_tr.replaceWith(html);
-            });
-        });
-        
-        
-        $(".delete_shopping_item").live('click', function() {
-            var closest_tr = $(this).closest("tr");
-            var id = closest_tr.attr('data-id');
-            self.deleteShoppingItem(id, function(id) {
-            closest_tr.remove();;
-            });
-        });
+        setInterval(function() {
+            self.calculateFields();
+        }, 2000);
     }
     
-    ShoppingList.prototype.generateHtml = function() {
-        var html = '';
-        html += '<table width="100%">';
-        html += '<thead>';
-        html += '<tr>';
-        html += '<th>';
-        html += 'PRODUCT NAME';
-        html += '</th>';
-        html += '<th>';
-        html += 'RECOMMENDED USAGE';
-        html += '</th>';
-        html += '<th>';
-        html += 'TRAINER COMMENTS';
-        html += '</th>';
-        html += '<th>';
-        html += 'SHOP URL';
-        html += '</th>';
-        html += '</tr>';
-        html += '</thead>';
-        
-        html += '<tbody id="shopping_list_content">';
-       
-        html += '<tbody>';
-        html += '</table>';
-        
-        return html;
+    CalculateSummary.prototype.calculateFields = function() {
+        this.setDailyTotalsGrams();
+        this.setDailyTotalsPercents();
+        this.setVarianceGrams();
+        this.setVariancePercents();
+        this.setVariance();
+        this.setCaloriesVariancePercents();
+        this.setEnergyVariancePercents();
+        this.setDailyTotalWater();
+        this.setDailyVarianceWater();
     }
     
-    ShoppingList.prototype.generateItemTR = function(o) {
-        var html = '';
-        html += '<tr data-id="' + o.id + '" >';
-        html += '<td>';
-        html += '<input  size="60" type="text"  class=" shopping_name " value="' + o.name + '"> ';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input  size="50" type="text"  class=" shopping_usage" value="' + o.usage + '"> ';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input  size="50" type="text"  class=" shopping_comments" value="' + o.comments + '"> ';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input  size="30" type="text"  class=" shopping_url" value="' + o.url + '"> ';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<input title="Save/Update Shopping Item" class="save_shopping_item " type="button"  value="Save">';
-        html += '</td>';
-        
-        html += '<td>';
-        html += '<a href="javascript:void(0)" class="delete_shopping_item" title="Delete Shopping Item"></a>';
-        html += '</td>';
-        html += '</tr>';
-        
-        return html;
+    CalculateSummary.prototype.setDailyVarianceWater = function() {
+        var daily_total_water  = this.getDailyTotalWater();
+        var target_kind = this.getDayKindPrefix();
+        var dayly_target_water = this.getTargetPercentsValue('water', target_kind);
+        var variance_water = this.round_2_sign(daily_total_water - dayly_target_water);
+        $("#variance_daily_total_water").val(variance_water);
+    }
+    
+    CalculateSummary.prototype.setDailyTotalWater = function() {
+        this.set_item_total(this.getDailyTotalWater(), 'daily_total_water');
+    }
+    
+    CalculateSummary.prototype.getDailyTotalWater = function() {
+        return this.get_item_total('water');
+    }
+    
+    CalculateSummary.prototype.setVariance = function() {
+         $("#variance_calories").val(this.calculateVariance('calories'));
+         $("#variance_energy").val(this.calculateVarianceEnergy());
+    }
+    
+    CalculateSummary.prototype.setEnergyVariancePercents = function() {
+        $("#variance_energy_percents").val(this.getEnergyVariancePercents());
+    }
+    
+    CalculateSummary.prototype.setCaloriesVariancePercents = function() {
+        $("#variance_calories_percents").val(this.getCaloriesVariancePercents('calories'));
+    }
+    
+    CalculateSummary.prototype.getCaloriesVariancePercents = function(name) {
+        var variance_calories = this.calculateVariance(name);
+        var target_kind = this.getDayKindPrefix();
+        var dayly_target_calories = this.getTargetPercentsValue(name, target_kind);
+
+        return this.round_2_sign((variance_calories / dayly_target_calories)*100);
     }
     
     
-    ShoppingList.prototype.saveShoppingItem = function(o, handleData) {
-        if(o.id === 'undefined')  o.id = "";
-        var data_encoded = JSON.stringify(o);
-
-        var url = this.options.fitness_administration_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-                view : 'nutrition_plan',
-                format : 'text',
-                task : 'saveShoppingItem',
-                data_encoded : data_encoded
-            },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.IsSuccess) {
-                    alert(response.status.Msg);
-                    return;
-                }
-                handleData(response.data);
-              },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error saveShoppingItem");
-            }
-        }); 
+        
+    CalculateSummary.prototype.getEnergyVariancePercents = function(name) {
+        var variance_energy = this.calculateVarianceEnergy();
+        var daily_target_energy = this.getDailyTargetEnergy();
+        return this.round_2_sign((variance_energy / daily_target_energy)*100);
     }
     
-     ShoppingList.prototype.deleteShoppingItem = function(id, handleData) {
-        var url = this.options.fitness_administration_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-                view : 'nutrition_plan',
-                format : 'text',
-                task : 'deleteShoppingItem',
-                id : id
-              },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.IsSuccess) {
-                    alert(response.status.Msg);
-                    return;
-                }
-                handleData(response.id);
-                },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error deleteShoppingItem");
-            }
-        }); 
+    
+    
+    CalculateSummary.prototype.calculateVarianceEnergy = function() {
+        var daily_target_energy = this.getDailyTargetEnergy();
+        var daily_totals_energy = this.get_item_total('meal_energy_total');
+        return this.round_2_sign(daily_totals_energy - daily_target_energy);
+    }
+    
+    
+    CalculateSummary.prototype.getDailyTargetEnergy = function() {
+        var target_kind = this.getDayKindPrefix();
+        var cals_total = $("#" + target_kind + "total_cals").val();
+        return cals_total * 4.184;
+    }
+    
+    
+    CalculateSummary.prototype.setVarianceGrams = function() {
+        $("#variance_protein_grams").val(this.calculateVarianceGrams('protein'));
+        $("#variance_fats_grams").val(this.calculateVarianceGrams('fats'));
+        $("#variance_carbs_grams").val(this.calculateVarianceGrams('carbs'));
+    }
+    
+    
+    CalculateSummary.prototype.setVariancePercents = function() {
+        $("#variance_protein_percents").val(this.calculateVariancePercents('protein'));
+        $("#variance_fats_percents").val(this.calculateVariancePercents('fats'));
+        $("#variance_carbs_percents").val(this.calculateVariancePercents('carbs'));
+    }
+    
+    CalculateSummary.prototype.calculateVarianceGrams = function(name) {
+        var total = this.get_item_total('meal_' + name + '_total');
+        var target_kind = this.getDayKindPrefix();
+        var target = this.getTargetGramsValue(name, target_kind);
+        return this.round_2_sign(total - target);
+    }
+    
+    CalculateSummary.prototype.calculateVariancePercents = function(name) {
+        var grams_value = this.calculateVarianceGrams(name)
+        var target_kind = this.getDayKindPrefix();
+        var target = this.getTargetGramsValue(name, target_kind);
+        return this.round_2_sign((grams_value / target) * 100);
+    }
+    
+    CalculateSummary.prototype.calculateVariance = function(name) {
+        var total = this.get_item_total('meal_' + name + '_total');
+        var target_kind = this.getDayKindPrefix();
+        var target = this.getTargetPercentsValue(name, target_kind);
+        return this.round_2_sign(total - target);
+    }
+    
+    
+    
+    CalculateSummary.prototype.setDailyTotalsGrams = function() {
+        this.set_item_total(this.get_item_total('meal_protein_total'), 'daily_protein_grams');
+        this.set_item_total(this.get_item_total('meal_fats_total'), 'daily_fats_grams');
+        this.set_item_total(this.get_item_total('meal_carbs_total'), 'daily_carbs_grams');
+        this.set_item_total(this.get_item_total('meal_calories_total'), 'daily_calories');
+        this.set_item_total(this.get_item_total('meal_energy_total'), 'daily_energy');
+        this.set_item_total(this.get_item_total('meal_saturated_fat_total'), 'daily_saturated_fat_grams');
+        this.set_item_total(this.get_item_total('meal_sugars_total'), 'daily_total_sugars_grams');
+        this.set_item_total(this.get_item_total('meal_sodium_total'), 'daily_sodium_grams');
+
+    }
+    
+    
+    CalculateSummary.prototype.setDailyTotalsPercents = function() {
+
+        this.setUpDailyTotalValue('protein');
+        this.setUpDailyTotalValue('fats');
+        this.setUpDailyTotalValue('carbs');
+    }
+    
+    CalculateSummary.prototype.setUpDailyTotalValue = function(name) {
+        this.setDailyTotalValue(name, this.calculateDailyTotalValue(name));
+    }
+    
+    CalculateSummary.prototype.setDailyTotalValue = function(name, value) {
+        $("#daily_" + name + "_percents").val(value)
+    }
+    
+    CalculateSummary.prototype.calculateDailyTotalValue = function(name) {
+        var target_kind = this.getDayKindPrefix();
+        var target_protein_grams = this.getTargetGramsValue(name, target_kind);
+        var target_protein_percents= this.getTargetPercentsValue(name, target_kind);
+        var daily_totals_grams = $("#daily_" + name + "_grams").val();
+        
+        var daily_total_percent_value = target_protein_percents / target_protein_grams * daily_totals_grams;
+        return this.round_2_sign(daily_total_percent_value); 
+    }
+    
+    
+    CalculateSummary.prototype.getTargetGramsValue = function(name, target_kind) {
+        return $("#" + target_kind + name + "_grams").val();
+    }
+    
+    CalculateSummary.prototype.getTargetPercentsValue = function(name, target_kind) {
+        return $("#" + target_kind + name).val();
+    }
+    
+
+    CalculateSummary.prototype.getDayKindPrefix = function() {
+        var prefix;
+        switch(this._activity_level_value) {
+            case '1' :
+                prefix = 'heavy_';
+                break;
+            case '2' :
+                prefix = 'light_';
+                break;
+            case '3' :
+                prefix = 'rest_';
+                break;
+                default :
+                    break;
+        }
+        return prefix;
+    }
+    
+    
+    CalculateSummary.prototype.get_item_total = function(element) {
+       var item_array = $("." +element);
+       var sum = 0;
+       item_array.each(function(){
+           var value = parseFloat($(this).val());
+           if(value > 0) {
+              sum += parseFloat(value); 
+           }
+
+       });
+
+       return this.round_2_sign(sum);
     }
 
 
+    CalculateSummary.prototype.set_item_total = function(value, element) {
+        $("#" + element).val(value);
+    }
 
-    ShoppingList.prototype.getShoppingItemData=  function(handleData) {
-        var url = this.options.fitness_administration_url;
-        var nutrition_plan_id = this.options.nutrition_plan_id;
-        if(!nutrition_plan_id) return;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-                view : 'nutrition_plan',
-                format : 'text',
-                task : 'getShoppingItemData',
-                nutrition_plan_id : nutrition_plan_id,
-            },
-            dataType : 'json',
-            success : function(response) {
-                if(!response.status.IsSuccess) {
-                    alert(response.status.Msg);
-                    return;
-                }
-                handleData(response.data);
-                },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error getShoppingItemData");
-            }
-        }); 
+    CalculateSummary.prototype.round_2_sign = function(value) {
+        return Math.round(value * 100)/100;
     }
 
 
-    
-    
-    
-    
-    
-    
     
     
     

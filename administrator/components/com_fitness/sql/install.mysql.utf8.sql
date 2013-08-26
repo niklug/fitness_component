@@ -795,6 +795,11 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan` (
   `nutrition_focus` int(11) NOT NULL,
   `trainer_comments` text NOT NULL,
   `activity_level` int(1) NOT NULL DEFAULT '0',
+  `allowed_proteins` text NOT NULL,
+  `allowed_fats` text NOT NULL,
+  `allowed_carbs` text NOT NULL,
+  `allowed_liquids` text NOT NULL,
+  `other_recommendations` text NOT NULL,
   `created` datetime NOT NULL,
   `state` tinyint(1) NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`),
@@ -880,3 +885,16 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_meal_comments` (
   FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
   FOREIGN KEY (meal_id) REFERENCES #__fitness_nutrition_plan_meals(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_shopping_list` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nutrition_plan_id` int(11) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `usage` varchar(255) NOT NULL,
+  `comments` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nutrition_plan_id` (`nutrition_plan_id`),
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

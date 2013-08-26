@@ -183,14 +183,14 @@ NutritionMeal.prototype.generateHtml = function(o) {
         html += '<tr >';
         html += '<td width="515" ></td>'
         html += '<td><b>TOTALS</b></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_protein_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_fats_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_carbs_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_calories_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_energy_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_saturated_fat_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_total_sugars_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text"  id="meal_sodium_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_protein_total" id="meal_protein_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_fats_total" id="meal_fats_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_carbs_total" id="meal_carbs_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_calories_total" id="meal_calories_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_energy_total" id="meal_energy_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_saturated_fat_total" id="meal_saturated_fat_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sugars_total" id="meal_total_sugars_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sodium_total" id="meal_sodium_input_total_' + meal_id + '" value=""></td>';
         html += '<td width="40px"></td>';
         html += '</tr>';
         html += '</table>';

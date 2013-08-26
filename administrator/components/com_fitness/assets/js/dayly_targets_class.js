@@ -33,7 +33,7 @@ MacronutrientTargets.prototype.setEventListeners = function() {
     this._calories = $("#" + this.type + "_calories");
     this._water = $("#" + this.type + "_water");
     this._protein = $("#" + this.type + "_protein");
-    this._protein_grams = $("#" + this.type + "_prorein_grams");
+    this._protein_grams = $("#" + this.type + "_protein_grams");
     this._protein_cals = $("#" + this.type + "_protein_cals");
     this._fats = $("#" + this.type + "_fats");
     this._fats_grams = $("#" + this.type + "_fats_grams");
@@ -272,7 +272,7 @@ MacronutrientTargets.prototype.generateHtml = function(o) {
     html += '</td>';
 
     html += '<td>';
-    html += '<input type="text" value="" id="' + this.type + '_prorein_grams" readonly class="' + this.type + '_grams_value" />';
+    html += '<input type="text" value="" id="' + this.type + '_protein_grams" readonly class="' + this.type + '_grams_value" />';
     html += '</td>';
 
     html += '<td>';
