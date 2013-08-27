@@ -505,3 +505,15 @@
     position: absolute;
     right: 15px;
 }
+
+.green_style {
+    background-color:#1BC721;
+}
+
+.orange_style {
+    background-color:#FF7570;
+}
+
+.red_style {
+    background-color:#E62C2F;
+}
