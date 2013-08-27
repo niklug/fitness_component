@@ -110,6 +110,7 @@ switch ($method) {
     case "sendGoalIncompleteEmail":
         sendGoalEmail('email_goal_incomplete');
     break;
+
     //
 
     // appointment status emails
@@ -129,6 +130,12 @@ switch ($method) {
     // Recipe approved email
     case "sendRecipeEmail":
         sendRecipeEmail();
+    break;
+    //
+
+    // nutrition plan
+    case "sendNutritionPlanNotifyEmail":
+        sendNutritionPlanEmail('email_notify_nutrition_plan');
     break;
     //
 
@@ -1745,6 +1752,56 @@ function sendRecipeEmail() {
 function getEmailByRecipeId($recipe_id) {
     $db = & JFactory::getDBO();
     $query = "SELECT created_by FROM #__fitness_nutrition_recipes WHERE id='$recipe_id' AND state='1'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        echo json_encode($ret);
+        die();
+    }
+    $user_id = $db->loadResult();
+    
+    $user = &JFactory::getUser($user_id);
+    
+    return $user->email; 
+}
+
+
+function sendNutritionPlanEmail($type) {
+    $nutrition_plan_id = JRequest::getVar('id');
+    
+    if(!$nutrition_plan_id) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'No nutrition plan id';
+        echo json_encode($ret);
+        die();
+    }
+    $subject = 'YOUR NUTRITION PLAN IS READY!';
+    
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&nutrition_plan_id=' . $nutrition_plan_id;
+    
+    $contents = getContentCurl($url);
+    
+    $email = getEmailByNutritionPlanId($nutrition_plan_id);
+    
+    $send = sendEmail($email, $subject, $contents);
+
+    if($send != '1') {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'Email function error';
+        echo json_encode($ret);
+        die();
+    }
+    $ret['IsSuccess'] = true;
+    $ret['Msg'] = $email;
+    echo json_encode($ret);
+    die();
+}
+
+
+function getEmailByNutritionPlanId($nutrition_plan_id) {
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id FROM #__fitness_nutrition_plan WHERE id='$nutrition_plan_id' AND state='1'";
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['IsSuccess'] = false;

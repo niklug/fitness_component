@@ -134,7 +134,11 @@ class FitnessModelnutrition_plans extends JModelList {
                 $this->getState(
                         'list.select', 'a.*, 
                          (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
-                         nf.name AS nutrition_focus_name'
+                         nf.name AS nutrition_focus_name,
+                         t.calories AS calories,
+                         t.protein AS protein,
+                         t.fats AS fats,
+                         t.carbs AS carbs'
                 )
         );
         $query->from('`#__fitness_nutrition_plan` AS a');
@@ -146,6 +150,10 @@ class FitnessModelnutrition_plans extends JModelList {
         $query->leftJoin('#__fitness_goal_categories AS gn ON gn.id = gc.goal_category_id');
         
         $query->leftJoin('#__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus');
+        
+        $query->leftJoin('#__fitness_nutrition_plan_targets AS t ON t.nutrition_plan_id = a.id');
+        
+        $query->where("t.type='heavy'");
         
         // filter only for Super Users
         $user = &JFactory::getUser();

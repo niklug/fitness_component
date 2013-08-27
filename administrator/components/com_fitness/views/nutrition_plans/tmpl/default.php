@@ -198,8 +198,26 @@ echo $date->format('Y-m-d H:i:s');
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_NUTRITION_FOCUS', 'a.nutrition_focus_name', $listDirn, $listOrder); ?>
 				</th>
+                                
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_CALORIES', 'a.calories', $listDirn, $listOrder); ?>
+				</th>
+				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Proteins (%)', 'a.protein', $listDirn, $listOrder); ?>
+				</th>
+				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Fats (%)', 'a.fats', $listDirn, $listOrder); ?>
+				</th>
+        			<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Carbs (%)', 'a.carbs', $listDirn, $listOrder); ?>
+				</th>
+                                
+                                
                                 <th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_RECIPES_CREATED', 'a.created', $listDirn, $listOrder); ?>
+				</th>
+                                <th style="width:1%;" class='left'>
+                                    Notify
 				</th>
 
 
@@ -283,9 +301,28 @@ echo $date->format('Y-m-d H:i:s');
 				<td>
 					<?php echo $item->nutrition_focus_name; ?>
 				</td>
+                                
+                                <td>
+                                        <?php echo $item->calories; ?>
+                                </td>
+                                <td>
+                                        <?php echo $item->protein; ?>
+                                </td>
+                                <td>
+                                        <?php echo $item->fats; ?>
+                                </td>
+                                <td>
+                                        <?php echo $item->carbs; ?>
+                                </td>
+                                
+                                
                                 <td>
 					<?php echo $item->created; ?>
 				</td>
+                                
+                                <td>
+                                      <a onclick="sendEmail('<?php echo $item->id ?>', 'NutritionPlanNotify')" class="send_email_button"></a>  
+                                </td>
 
 
                 <?php if (isset($this->items[0]->state)) { ?>
@@ -330,6 +367,7 @@ echo $date->format('Y-m-d H:i:s');
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
+<div id="emais_sended"></div>
 
 <script type="text/javascript">
 
@@ -343,4 +381,34 @@ echo $date->format('Y-m-d H:i:s');
         });
 
     });
+    
+    function sendEmail(id, method) {
+        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
+        $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                    id : id
+                },
+                dataType : 'json',
+                success : function(response) {
+                    if(response.IsSuccess) {
+                        var emails = response.Msg.split(',');
+
+                        var message = 'Emails were sent to: ' +  "</br>";
+                        $.each(emails, function(index, email) { 
+                            message += email +  "</br>";
+                        });
+                        $("#emais_sended").append(message);
+
+                    } else {
+                        alert(response.Msg);
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert("error");
+                }
+        });
+    }
 </script>

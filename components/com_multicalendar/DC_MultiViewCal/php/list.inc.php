@@ -112,6 +112,22 @@ function getRecipeData($recipe_id) {
    $result = $db->loadObject();
    return $result;
 }
+
+function getNutritionPlanData($id) {
+   $db	= & JFactory::getDBO();
+   $query = "SELECT p.*, c.name AS primary_goal, f.name AS nutrition_focus FROM #__fitness_nutrition_plan AS p
+       LEFT JOIN #__fitness_goals AS g ON g.id=p.primary_goal
+       LEFT JOIN #__fitness_goal_categories AS c ON c.id=g.goal_category_id
+       LEFT JOIN #__fitness_nutrition_focus AS f ON f.id=p.nutrition_focus
+    WHERE p.id='$id'";
+   $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
+   $result = $db->loadObject();
+   return $result;
+}
+
 /**
  * npkorban
  * @param type $event_id
