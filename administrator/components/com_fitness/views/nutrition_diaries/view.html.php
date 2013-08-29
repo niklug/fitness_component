@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Fitness.
  */
-class FitnessViewNutritiondatabases extends JView
+class FitnessViewNutrition_diaries extends JView
 {
 	protected $items;
 	protected $pagination;
@@ -37,17 +37,20 @@ class FitnessViewNutritiondatabases extends JView
         
 		$this->addToolbar();
         
-        $input = JFactory::getApplication()->input;
-        $view = $input->getCmd('view', '');
-        FitnessHelper::addSubmenu('Dashboard', 'dashboard');
-        FitnessHelper::addSubmenu('Clients', 'clients');
-        FitnessHelper::addSubmenu('Client Planning', 'goals');
-        FitnessHelper::addSubmenu('Calendar', 'calendar');
-        FitnessHelper::addSubmenu('Programs', 'programs');
-        FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
-        FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
-        FitnessHelper::addSubmenu('Assessments', 'assessments');
-        FitnessHelper::addSubmenu('Settings', 'settings');
+            $input = JFactory::getApplication()->input;
+           $view = $input->getCmd('view', '');
+            FitnessHelper::addSubmenu('Dashboard', 'dashboard');
+            FitnessHelper::addSubmenu('Clients', 'clients');
+            FitnessHelper::addSubmenu('Client Planning', 'goals');
+            FitnessHelper::addSubmenu('Calendar', 'calendar');
+            FitnessHelper::addSubmenu('Programs', 'programs');
+            FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
+            FitnessHelper::addSubmenu('Assessments', 'assessments');
+            FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
+            FitnessHelper::addSubmenu('Settings', 'settings');
+            
+            $document = &JFactory::getDocument();
+            $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
         
 		parent::display($tpl);
 	}
@@ -64,18 +67,18 @@ class FitnessViewNutritiondatabases extends JView
 		$state	= $this->get('State');
 		$canDo	= FitnessHelper::getActions($state->get('filter.category_id'));
 
-		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_NUTRITIONDATABASES'), 'nutritiondatabases.png');
+		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_NUTRITION_DIARIES'), 'nutrition_diaries.png');
 
         //Check if the form exists before showing the add/edit buttons
-        $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/nutritiondatabase';
+        $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/nutrition_diary';
         if (file_exists($formPath)) {
 
             if ($canDo->get('core.create')) {
-			    JToolBarHelper::addNew('nutritiondatabase.add','JTOOLBAR_NEW');
+			    JToolBarHelper::addNew('nutrition_diary.add','JTOOLBAR_NEW');
 		    }
 
 		    if ($canDo->get('core.edit') && isset($this->items[0])) {
-			    JToolBarHelper::editList('nutritiondatabase.edit','JTOOLBAR_EDIT');
+			    JToolBarHelper::editList('nutrition_diary.edit','JTOOLBAR_EDIT');
 		    }
 
         }
@@ -84,29 +87,29 @@ class FitnessViewNutritiondatabases extends JView
 
             if (isset($this->items[0]->state)) {
 			    JToolBarHelper::divider();
-			    JToolBarHelper::custom('nutritiondatabases.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
-			    JToolBarHelper::custom('nutritiondatabases.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
+			    JToolBarHelper::custom('nutrition_diaries.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
+			    JToolBarHelper::custom('nutrition_diaries.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
             } else if (isset($this->items[0])) {
                 //If this component does not use state then show a direct delete button as we can not trash
-                JToolBarHelper::deleteList('', 'nutritiondatabases.delete','JTOOLBAR_DELETE');
+                JToolBarHelper::deleteList('', 'nutrition_diaries.delete','JTOOLBAR_DELETE');
             }
 
             if (isset($this->items[0]->state)) {
 			    JToolBarHelper::divider();
-			    JToolBarHelper::archiveList('nutritiondatabases.archive','JTOOLBAR_ARCHIVE');
+			    JToolBarHelper::archiveList('nutrition_diaries.archive','JTOOLBAR_ARCHIVE');
             }
             if (isset($this->items[0]->checked_out)) {
-            	JToolBarHelper::custom('nutritiondatabases.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
+            	JToolBarHelper::custom('nutrition_diaries.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
             }
 		}
         
         //Show trash and delete for components that uses the state field
         if (isset($this->items[0]->state)) {
 		    if ($state->get('filter.state') == -2 && $canDo->get('core.delete')) {
-			    JToolBarHelper::deleteList('', 'nutritiondatabases.delete','JTOOLBAR_EMPTY_TRASH');
+			    JToolBarHelper::deleteList('', 'nutrition_diaries.delete','JTOOLBAR_EMPTY_TRASH');
 			    JToolBarHelper::divider();
 		    } else if ($canDo->get('core.edit.state')) {
-			    JToolBarHelper::trash('nutritiondatabases.trash','JTOOLBAR_TRASH');
+			    JToolBarHelper::trash('nutrition_diaries.trash','JTOOLBAR_TRASH');
 			    JToolBarHelper::divider();
 		    }
         }

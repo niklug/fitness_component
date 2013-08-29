@@ -75,7 +75,7 @@ class FitnessModelgoals extends JModelList {
         $goal_category = $app->getUserStateFromRequest($this->context . '.filter.goal_category', 'filter_goal_category', '', 'string');
         $this->setState('filter.goal_category', $goal_category);
         
-       // Filter by goal focus
+       // Filter by training period
         $training_period = $app->getUserStateFromRequest($this->context . '.filter.training_period', 'filter_training_period', '', 'string');
         $this->setState('filter.training_period', $training_period);
                 

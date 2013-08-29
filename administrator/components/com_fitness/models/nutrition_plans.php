@@ -26,7 +26,7 @@ class FitnessModelnutrition_plans extends JModelList {
     public function __construct($config = array()) {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                                'id', 'a.id',
+                'id', 'a.id',
                 'client_id', 'a.client_id',
                 'trainer_id', 'a.trainer_id',
                 'active_start', 'a.active_start',

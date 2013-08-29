@@ -898,3 +898,23 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_shopping_list` (
   KEY `nutrition_plan_id` (`nutrition_plan_id`),
   FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`entry_date` DATE NOT NULL ,
+`submit_date` DATE NOT NULL ,
+`client_id` INT(255)  NOT NULL ,
+`trainer_id` INT(11)  NOT NULL ,
+`assessed_by` INT(11)  NOT NULL ,
+`goal_category_id` INT(11)  NOT NULL ,
+`training_period_id` INT(11)  NOT NULL ,
+`nutrition_focus` INT(11)  NOT NULL ,
+`status` INT(1)  NOT NULL ,
+`score` FLOAT NOT NULL ,
+`trainer_comments` TEXT NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+

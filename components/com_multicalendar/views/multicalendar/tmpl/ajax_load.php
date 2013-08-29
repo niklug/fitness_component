@@ -1727,7 +1727,7 @@ function getClientIdByAppointmentId($appointment_client_id) {
 function sendRecipeEmail() {
     $recipe_id= JRequest::getVar('recipe_id');
     
-    $subject = 'Your Recipe Approved!';
+    $subject = 'Recipe Approved';
     
     $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=email_recipe_approved&tpml=component&recipe_id=' . $recipe_id ;
     
@@ -1776,7 +1776,7 @@ function sendNutritionPlanEmail($type) {
         echo json_encode($ret);
         die();
     }
-    $subject = 'YOUR NUTRITION PLAN IS READY!';
+    $subject = 'Nutrition Plan Available';
     
     $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&nutrition_plan_id=' . $nutrition_plan_id;
     

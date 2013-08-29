@@ -45,7 +45,7 @@
             <menu link="option=com_multicalendar&amp;view=admin&amp;task=admin" view="calendar" img="components/com_fitness/assets/images/s_calendar.png" alt="Fitness/Calendar">COM_FITNESS_TITLE_CALENDAR</menu>
             <menu link="option=com_fitness&amp;view=programs" view="programs" img="components/com_fitness/assets/images/s_programs.png" alt="Fitness/Programs">COM_FITNESS_TITLE_PROGRAMS</menu>
             <menu link="option=com_fitness&amp;view=nutrition_plans" view="nutrition_plans" img="components/com_fitness/assets/images/s_nutrition_plans.png" alt="Fitness/Nutrition Plans">COM_FITNESS_TITLE_NUTRITION_PLANS</menu>
-            <menu link="option=com_fitness&amp;view=nutrition_diary" view="nutrition_diary" img="components/com_fitness/assets/images/s_nutrition_diary.png" alt="Fitness/Nutrition Diary">COM_FITNESS_TITLE_NUTRITION_DIARY</menu>
+            <menu link="option=com_fitness&amp;view=nutrition_diaries" view="nutrition_diaries" img="components/com_fitness/assets/images/s_nutrition_diary.png" alt="Fitness/Nutrition Diary">COM_FITNESS_TITLE_NUTRITION_DIARY</menu>
             <menu link="option=com_fitness&amp;view=assessments" view="assessments" img="components/com_fitness/assets/images/s_assessments.png" alt="Fitness/Assessments">COM_FITNESS_TITLE_ASSESSMENTS</menu>
             <menu link="option=com_fitness&amp;view=settings" view="settings" img="components/com_fitness/assets/images/s_settings.png" alt="Fitness/Settings">COM_FITNESS_TITLE_SETTINGS</menu>
 

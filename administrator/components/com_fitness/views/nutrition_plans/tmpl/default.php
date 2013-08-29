@@ -175,13 +175,13 @@ echo $date->format('Y-m-d H:i:s');
 				</th>
 
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_CLIENT_ID', 'a.client_id', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_CLIENT_ID', 'u.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_TRAINER_ID', 'a.trainer_id', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_TRAINER_ID', 'u.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_active_start', 'a.active_start', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_active_start', 'u.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_active_finish', 'a.active_finish', $listDirn, $listOrder); ?>

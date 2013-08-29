@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @version     1.0.0
  * @package     com_fitness
@@ -7,60 +6,77 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Nikolay Korban <niklug@ukr.net> - http://
  */
+
 // No direct access
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
 
 /**
- * View class for a list of Fitness.
+ * View to edit
  */
-class FitnessViewNutrition_diary extends JView {
+class FitnessViewNutrition_diary extends JView
+{
+	protected $state;
+	protected $item;
+	protected $form;
 
-    protected $items;
-    protected $pagination;
-    protected $state;
+	/**
+	 * Display the view
+	 */
+	public function display($tpl = null)
+	{
+		$this->state	= $this->get('State');
+		$this->item		= $this->get('Item');
+		$this->form		= $this->get('Form');
 
-    /**
-     * Display the view
-     */
-    public function display($tpl = null) {
-
-        $this->state = $this->get('State');
-        $this->items = $this->get('Items');
-        $this->pagination = $this->get('Pagination');
-        $document = &JFactory::getDocument();
-        $document->addStyleSheet(JURI::base() . 'components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'fitness.css');
-
-        // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) {
             throw new Exception(implode("\n", $errors));
+		}
+
+		$this->addToolbar();
+		parent::display($tpl);
+	}
+
+	/**
+	 * Add the page title and toolbar.
+	 */
+	protected function addToolbar()
+	{
+		JFactory::getApplication()->input->set('hidemainmenu', true);
+
+		$user		= JFactory::getUser();
+		$isNew		= ($this->item->id == 0);
+        if (isset($this->item->checked_out)) {
+		    $checkedOut	= !($this->item->checked_out == 0 || $this->item->checked_out == $user->get('id'));
+        } else {
+            $checkedOut = false;
         }
+		$canDo		= FitnessHelper::getActions();
 
-        $this->addToolbar();
+		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_NUTRITION_DIARY'), 'nutrition_diary.png');
 
-        $input = JFactory::getApplication()->input;
-        $view = $input->getCmd('view', '');
-        FitnessHelper::addSubmenu('Dashboard', 'dashboard');
-        FitnessHelper::addSubmenu('Clients', 'clients');
-        FitnessHelper::addSubmenu('Client Planning', 'goals');
-        FitnessHelper::addSubmenu('Calendar', 'calendar');
-        FitnessHelper::addSubmenu('Programs', 'programs');
-        FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
-        FitnessHelper::addSubmenu('Assessments', 'assessments');
-        FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
-        FitnessHelper::addSubmenu('Settings', 'settings');
+		// If not checked out, can save the item.
+		if (!$checkedOut && ($canDo->get('core.edit')||($canDo->get('core.create'))))
+		{
 
-        parent::display($tpl);
-    }
+			JToolBarHelper::apply('nutrition_diary.apply', 'JTOOLBAR_APPLY');
+			JToolBarHelper::save('nutrition_diary.save', 'JTOOLBAR_SAVE');
+		}
+		if (!$checkedOut && ($canDo->get('core.create'))){
+			JToolBarHelper::custom('nutrition_diary.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+		}
+		// If an existing item, can save to a copy.
+		if (!$isNew && $canDo->get('core.create')) {
+			JToolBarHelper::custom('nutrition_diary.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+		}
+		if (empty($this->item->id)) {
+			JToolBarHelper::cancel('nutrition_diary.cancel', 'JTOOLBAR_CANCEL');
+		}
+		else {
+			JToolBarHelper::cancel('nutrition_diary.cancel', 'JTOOLBAR_CLOSE');
+		}
 
-    /**
-     * Add the page title and toolbar.
-     *
-     * @since	1.6
-     */
-    protected function addToolbar() {
-        JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_NUTRITION_DIARY'), 'nutrition_diary.png');
-    }
-
+	}
 }

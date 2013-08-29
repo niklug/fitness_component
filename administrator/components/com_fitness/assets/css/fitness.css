@@ -184,7 +184,8 @@
 #filter_to_deadline, #filter_created, #filter_modified,
 #filter_from_created, #filter_to_created,
 #filter_from_active_start, #filter_to_active_start, #filter_from_active_finish, #filter_to_active_finish,
-#jform_active_start, #jform_active_finish
+#jform_active_start, #jform_active_finish,
+#filter_from_submit_date, #filter_to_submit_date, #filter_from_entry_date, #filter_to_entry_date
 {
     width: 70px;
 }
