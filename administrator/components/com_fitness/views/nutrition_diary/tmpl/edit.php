@@ -12,52 +12,28 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
+
 ?>
 <script type="text/javascript">
-    function getScript(url,success) {
-        var script = document.createElement('script');
-        script.src = url;
-        var head = document.getElementsByTagName('head')[0],
-        done = false;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState
-                || this.readyState == 'loaded'
-                || this.readyState == 'complete')) {
-                done = true;
-                success();
-                script.onload = script.onreadystatechange = null;
-                head.removeChild(script);
+    $(document).ready(function(){
+        Joomla.submitbutton = function(task)
+        {
+            if (task == 'nutrition_diary.cancel') {
+                Joomla.submitform(task, document.getElementById('nutrition_diary-form'));
             }
-        };
-        head.appendChild(script);
-    }
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        js = jQuery.noConflict();
-        js(document).ready(function(){
-            
+            else{
 
-            Joomla.submitbutton = function(task)
-            {
-                if (task == 'nutrition_diary.cancel') {
+                if (task != 'nutrition_diary.cancel' && document.formvalidator.isValid(document.id('nutrition_diary-form'))) {
+
                     Joomla.submitform(task, document.getElementById('nutrition_diary-form'));
                 }
-                else{
-                    
-                    if (task != 'nutrition_diary.cancel' && document.formvalidator.isValid(document.id('nutrition_diary-form'))) {
-                        
-                        Joomla.submitform(task, document.getElementById('nutrition_diary-form'));
-                    }
-                    else {
-                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                    }
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
                 }
             }
-        });
+        }
     });
+
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="nutrition_diary-form" class="form-validate">
@@ -97,6 +73,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             </ul>
         </fieldset>
     </div>
+    
 
     
 
@@ -104,10 +81,5 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 
-    <style type="text/css">
-        /* Temporary fix for drifting editor fields */
-        .adminformlist li {
-            clear: both;
-        }
-    </style>
 </form>
+

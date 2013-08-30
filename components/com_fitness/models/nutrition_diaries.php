@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Fitness records.
  */
-class FitnessModelConfigs extends JModelList {
+class FitnessModelNutrition_diaries extends JModelList {
 
     /**
      * Constructor.
@@ -35,7 +35,7 @@ class FitnessModelConfigs extends JModelList {
      * @since	1.6
      */
     protected function populateState($ordering = null, $direction = null) {
-        
+
         // Initialise variables.
         $app = JFactory::getApplication();
 
@@ -46,11 +46,10 @@ class FitnessModelConfigs extends JModelList {
         $limitstart = JFactory::getApplication()->input->getInt('limitstart', 0);
         $this->setState('list.start', $limitstart);
         
+        $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
+        $this->setState('filter.state', $published);
         
-		if(empty($ordering)) {
-			$ordering = 'a.ordering';
-		}
-        
+
         // List state information.
         parent::populateState($ordering, $direction);
     }
@@ -72,33 +71,23 @@ class FitnessModelConfigs extends JModelList {
                         'list.select', 'a.*'
                 )
         );
-        
-        $query->from('`#__fitness_config` AS a');
-        
 
-    // Join over the users for the checked out user.
-    $query->select('uc.name AS editor');
-    $query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
-    
-		// Join over the created by field 'created_by'
-		$query->select('created_by.name AS created_by');
-		$query->join('LEFT', '#__users AS created_by ON created_by.id = a.created_by');
+        $query->from('`#__fitness_nutrition_diary` AS a');
 
+        // Filter by published state
+        $published = $this->getState('filter.state');
+        if(($published != '0') && ($published != '1') ) $published = '1';
+        $query->where('a.state = '.(int) $published);
+        
+        $user = &JFactory::getUser();
 
-		// Filter by search in title
-		$search = $this->getState('filter.search');
-		if (!empty($search)) {
-			if (stripos($search, 'id:') === 0) {
-				$query->where('a.id = '.(int) substr($search, 3));
-			} else {
-				$search = $db->Quote('%'.$db->escape($search, true).'%');
-                
-			}
-		}
-        
-        
-        
+        $query->where('a.client_id = '.(int) $user->id);
+
         return $query;
+    }
+
+    public function getItems() {
+        return parent::getItems();
     }
 
 }

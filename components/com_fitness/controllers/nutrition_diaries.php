@@ -13,15 +13,15 @@ defined('_JEXEC') or die;
 require_once JPATH_COMPONENT.'/controller.php';
 
 /**
- * Configs list controller class.
+ * Nutrition_diaries list controller class.
  */
-class FitnessControllerConfigs extends FitnessController
+class FitnessControllerNutrition_diaries extends FitnessController
 {
 	/**
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
-	public function &getModel($name = 'Configs', $prefix = 'FitnessModel')
+	public function &getModel($name = 'Nutrition_diaries', $prefix = 'FitnessModel')
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;

@@ -194,7 +194,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
                         </select>
                 </div>
             
-                <a id="add_appointment" href="javascript:void(0)"></a>
+                <a id="add_appointment" title="Add New Item" href="javascript:void(0)"></a>
 
 
 	</fieldset>

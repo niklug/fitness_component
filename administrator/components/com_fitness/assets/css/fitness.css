@@ -518,3 +518,7 @@
 .red_style {
     background-color:#E62C2F;
 }
+
+.adminformlist li {
+    clear: both;
+}
