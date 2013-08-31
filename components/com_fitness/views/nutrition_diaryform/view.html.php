@@ -103,6 +103,16 @@ class FitnessViewNutrition_diaryform extends JView {
                 $document = JFactory::getDocument();
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 $document -> addscript( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                
+
+                $model = $this->getModel();
+                $secondary_trainers = $model->get_own_trainers();
+                $active_plan_data = $model->getActivePlanData();
+                
+                
+                $this->assign('model', $model);
+                $this->assign('secondary_trainers', $secondary_trainers);
+                $this->assign('active_plan_data', $active_plan_data);
 	}        
     
 }

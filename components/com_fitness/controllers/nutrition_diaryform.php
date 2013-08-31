@@ -25,6 +25,7 @@ class FitnessControllerNutrition_diaryForm extends FitnessController
 	 */
 	public function edit()
 	{
+            
 		$app			= JFactory::getApplication();
 
 		// Get the previous edit id (if any) and the current edit id.

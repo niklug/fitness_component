@@ -904,7 +904,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 
 `entry_date` DATE NOT NULL ,
-`submit_date` DATE NOT NULL ,
+`submit_date` DATETIME NOT NULL ,
 `client_id` INT(255)  NOT NULL ,
 `trainer_id` INT(11)  NOT NULL ,
 `assessed_by` INT(11)  NOT NULL ,
@@ -914,6 +914,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
 `status` INT(1)  NOT NULL ,
 `score` FLOAT NOT NULL ,
 `trainer_comments` TEXT NOT NULL ,
+`created` DATETIME NOT NULL ,
 `state` TINYINT(1)  NOT NULL ,
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;

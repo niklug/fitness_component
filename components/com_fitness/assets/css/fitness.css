@@ -140,17 +140,17 @@ a:hover, a:active, a:focus {
     font-size: 14px;
 }
 
+
 .fitness_content_wrapper table th {
     background: none !important;
 }
 
 .fitness_block_wrapper {
     background: none;
-    background-color: #0E0704;
-    opacity: 0.85;
     color: #ffffff;
-    padding: 10px;
+    padding: 0px;
     font-size: 14px;
+    border: 1px solid #cccccc;
 }
 
 .fitness_wrapper h2, .fitness_block_wrapper h2 {
@@ -194,4 +194,31 @@ a:hover, a:active, a:focus {
 td.center, th.center, .center {
     float: none;
     text-align: center;
+}
+
+
+.fitness_wrapper h3 {
+    margin: 0px !important;
+    color: #BC4A26 !important;
+    padding: 5px;
+}
+
+.internal_wrapper {
+    padding: 5px;
+}
+
+.grey_title {
+    color:#cccccc;
+}
+
+#jform_entry_date {
+    background-color: #000000;
+    color: #FFFFFF;
+    width: 90px;
+}
+
+.calendar {
+    margin-left: 2px;
+    position: absolute;
+    cursor:pointer !important;
 }

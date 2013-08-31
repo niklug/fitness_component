@@ -18,9 +18,7 @@
                 
             label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_SUBMIT_DATE"
             description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_SUBMIT_DATE" 
-                
-                
-                 required="true"  /> 
+        /> 
 
        <field name="client_id" type="text" size="40" class="inputbox"
         
@@ -93,6 +91,10 @@
         
         
         filter="safehtml" /> 
+       
+             <field name="created" type="timecreated" default="" 
+            label="Date Created"
+            description=""  />    
 
 
          <field

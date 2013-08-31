@@ -269,4 +269,91 @@ class FitnessModelNutrition_diaryForm extends JModelForm
         return true;
     }
     
+    
+
+    function  get_own_trainers() {
+        $db = & JFactory::getDBO();
+        $user = &JFactory::getUser();
+        $user_id = $user->id;
+        $query = "SELECT  other_trainers FROM #__fitness_clients WHERE user_id='$user_id' AND state='1'";
+        $db->setQuery($query);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $other_trainers = $db->loadResultArray(0);
+        $all_trainers_id = explode(',', $other_trainers[0]);
+        if(!$all_trainers_id[0]) return;
+        foreach ($all_trainers_id as $user_id) {
+            $user = &JFactory::getUser($user_id);
+            $all_trainers_name[] = $user->name;
+        }
+
+        $result = array_combine($all_trainers_id, $all_trainers_name);
+        
+        return $result;
+    }
+    
+    function getActivePlanData() {
+        $user = &JFactory::getUser();
+        $user_id = $user->id;
+        if(!$user_id) return;
+        require_once JPATH_COMPONENT_ADMINISTRATOR .  '/models/nutrition_plans.php';
+        $nutrition_plans_model  = new FitnessModelnutrition_plans();
+        
+        $active_plan_id = $nutrition_plans_model->getUserActivePlanId($user_id);
+        
+        if(!$active_plan_id) return;
+        
+        $active_plan_data = $this->getPlanData($active_plan_id);
+        
+        return $active_plan_data;
+    }
+    
+    function getPlanData($id) {
+        $db = & JFactory::getDBO();
+        $query = "SELECT a.*, gc.id AS primary_goal_id, g.training_period_id
+            FROM #__fitness_nutrition_plan AS a
+            LEFT JOIN #__fitness_goals AS g ON g.id = a.primary_goal
+            LEFT JOIN #__fitness_goal_categories AS gc  ON g.goal_category_id=gc.id
+              
+            WHERE a.id='$id' AND a.state='1'";
+        $db->setQuery($query);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        return $db->loadObject();
+    }
+    
+        function getGoalName($id) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT name FROM #__fitness_goal_categories WHERE id='$id' AND state='1'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+    }
+    
+    function getTrainingPeriodName($id) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT name FROM #__fitness_training_period WHERE id='$id' AND state='1'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+    }
+    
+        function getNutritionFocusName($id) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT name FROM #__fitness_nutrition_focus WHERE id='$id' AND state='1'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+    }
 }
