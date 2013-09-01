@@ -102,9 +102,22 @@ class FitnessControllerNutrition_diaryForm extends FitnessController
 			$this->setRedirect(JRoute::_('index.php?option=com_fitness&view=nutrition_diaryform&layout=edit&id='.$id, false));
 			return false;
 		}
+                
+                $submit_task =&JRequest::getVar('submit');
+                
+                if($submit_task) {
+                    $config = JFactory::getConfig();
+                    $date = new DateTime($time_created);
+                    $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+                    $time_created = date("Y-m-d H:i:s");
+                    $data['submit_date'] = $time_created;
+                }
 
 		// Attempt to save the data.
 		$return	= $model->save($data);
+                
+                $id = $return;
+
 
 		// Check for errors.
 		if ($return === false) {
@@ -123,15 +136,36 @@ class FitnessControllerNutrition_diaryForm extends FitnessController
         if ($return) {
             $model->checkin($return);
         }
-        
+
         // Clear the profile id from the session.
         $app->setUserState('com_fitness.edit.nutrition_diary.id', null);
 
         // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_FITNESS_ITEM_SAVED_SUCCESSFULLY'));
+        
+        $message_text = JText::_('Entry saved successfully');
+        if($submit_task) {
+            $message_text =  JText::_('Entry submitted successfully');
+        }
+        
+        $this->setMessage($message_text);
         $menu = & JSite::getMenu();
         $item = $menu->getActive();
-        $this->setRedirect(JRoute::_($item->link, false));
+        
+        $save_close =&JRequest::getVar('save_close');
+        
+        $delete =&JRequest::getVar('delete');
+        
+        if($delete) {
+            $this->remove();
+            return;
+        }
+
+        if($save_close) {
+            $this->setRedirect(JRoute::_($item->link, false));
+        } else {
+
+            $this->setRedirect(JRoute::_('index.php?option=com_fitness&task=nutrition_diary.edit&id='.$id, false));
+        }
 
 		// Flush the data from the session.
 		$app->setUserState('com_fitness.edit.nutrition_diary.data', null);
@@ -214,7 +248,7 @@ class FitnessControllerNutrition_diaryForm extends FitnessController
         $app->setUserState('com_fitness.edit.nutrition_diary.id', null);
 
         // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_FITNESS_ITEM_DELETED_SUCCESSFULLY'));
+        $this->setMessage(JText::_('Entry deleted successfully'));
         $menu = & JSite::getMenu();
         $item = $menu->getActive();
         $this->setRedirect(JRoute::_($item->link, false));

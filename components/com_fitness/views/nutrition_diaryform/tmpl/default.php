@@ -21,11 +21,16 @@ $user = &JFactory::getUser();
 
 $trainer_id = $item->trainer_id ? $item->trainer_id : $this->active_plan_data->trainer_id;
 
-$primary_goal = $item->primary_goal ? $item->primary_goal : $this->active_plan_data->primary_goal_id;
+$goal_category_id = $item->goal_category_id ? $item->goal_category_id : $this->active_plan_data->primary_goal_id;
 
 $training_period_id = $item->training_period_id ? $item->training_period_id : $this->active_plan_data->training_period_id;
 
 $nutrition_focus = $item->nutrition_focus ? $item->nutrition_focus : $this->active_plan_data->nutrition_focus;
+
+$submitted = false;
+if ($this->item->submit_date && ($this->item->submit_date != '0000-00-00 00:00:00')) {
+    $submitted = true;
+}
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -95,7 +100,15 @@ $nutrition_focus = $item->nutrition_focus ? $item->nutrition_focus : $this->acti
                                     </td>
                                     <td>
                                         <span class="grey_title">
-                                            <?php echo $this->form->getInput('entry_date'); ?>
+                                            <?php
+                                            if ($submitted) {
+                                                $jdate = new JDate($this->item->entry_date);
+                                                echo $jdate->toFormat('%A %d %B %Y');
+                                            } else {
+                                                echo $this->form->getInput('entry_date'); 
+                                            }
+                                            
+                                            ?>
                                         </span>
                                     </td>
                                 </tr>
@@ -116,7 +129,7 @@ $nutrition_focus = $item->nutrition_focus ? $item->nutrition_focus : $this->acti
                                     <td>
                                         <span class="grey_title">
                                             <?php
-                                            if ($this->item->submit_date && ($this->item->submit_date != '0000-00-00 00:00:00')) {
+                                            if ($submitted) {
                                                 $jdate = new JDate($this->item->submit_date);
                                                 echo $jdate->format(JText::_('DATE_FORMAT_LC2'));
                                             }
@@ -155,14 +168,14 @@ $nutrition_focus = $item->nutrition_focus ? $item->nutrition_focus : $this->acti
                             <table width="100%">
                                 <tr>
                                     <td>
-                                        <table width="100%">
+                                        <table width="50%">
                                             <tr>
                                                 <td>
                                                     Primary Goal
                                                 </td>
                                                 <td>
                                                     <span class="grey_title">
-                                                        <?php echo $this->model->getGoalName($primary_goal); ?>
+                                                        <?php echo $this->model->getGoalName($goal_category_id); ?>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -189,10 +202,14 @@ $nutrition_focus = $item->nutrition_focus ? $item->nutrition_focus : $this->acti
                                         </table> 
                                     </td>
                                     <td>
-                                        <table width="100%">
+                                        <table width="50%">
                                             <tr>
                                                 <td>
-                                                    Trainer Comments
+                                                    <?php
+                                                    if($this->item->trainer_comments) {
+                                                        echo 'Trainer Comments';
+                                                    }
+                                                    ?>
                                                 </td>
                                                 <td>
                                                     <?php echo $this->item->trainer_comments;?>
@@ -216,39 +233,54 @@ $nutrition_focus = $item->nutrition_focus ? $item->nutrition_focus : $this->acti
         <input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
         <input type="hidden" name="jform[client_id]" value="<?php echo $user->id; ?>" />
         <input type="hidden" name="jform[trainer_id]" value="<?php echo $trainer_id ?>" />
-        <input type="hidden" name="jform[primary_goal]" value="<?php echo $primary_goal; ?>" />
+        <input type="hidden" name="jform[goal_category_id]" value="<?php echo $goal_category_id; ?>" />
         <input type="hidden" name="jform[training_period_id]" value="<?php echo $training_period_id; ?>" />
         <input type="hidden" name="jform[nutrition_focus]" value="<?php echo $nutrition_focus; ?>" />
 
 
 
-        <?php $canState = false; ?>
-        <?php $canState = $canState = JFactory::getUser()->authorise('core.edit.state', 'com_fitness'); ?>				<?php if (!$canState): ?>
-            <?php echo $this->form->getLabel('state'); ?>
-            <?php
-            $state_string = 'Unpublish';
-            $state_value = 0;
-            if ($this->item->state == 1):
-                $state_string = 'Publish';
-                $state_value = 1;
-            endif;
-            echo $state_string;
-            ?>
-            <input type="hidden" name="jform[state]" value="<?php echo $state_value; ?>" />				<?php else: ?>					<li><?php echo $this->form->getLabel('state'); ?>
-                <?php echo $this->form->getInput('state'); ?>
-            <?php endif; ?>
+        <input type="hidden" name="jform[state]" value="1" />
 
 
             <div>
-                <button type="submit" class="validate"><span><?php echo JText::_('JSUBMIT'); ?></span></button>
-                        <?php echo JText::_('or'); ?>
-                <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?>"><?php echo JText::_('JCANCEL'); ?></a>
+                <?php
+                    if (!$submitted) {
+                ?>
+                    <?php
+                        if ($this->item->id) {
+                    ?>
+                    <input type="submit" class="validate" name="submit" value="Submit" />
+                    <?php
+                        }
+                    ?>
+
+                    <input type="submit" class="validate" name="save" value="Save" />
+
+                    <input type="submit" class="validate" name="save_close" value="Save&Close" />
+
+                    <?php
+                        if (!$submitted && $this->item->id) {
+                    ?>
+                            <input type="submit" class="validate" name="delete" value="Delete" />
+                    <?php
+                        }
+                    ?>
+                <?php
+                    }
+                ?>               
+                <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.cancel'); ?>" title="Close Entry without saving">Close</a>
 
                 <input type="hidden" name="option" value="com_fitness" />
                 <input type="hidden" name="task" value="nutrition_diaryform.save" />
                 <?php echo JHtml::_('form.token'); ?>
             </div>
     </form>
+    
+    <?php
+
+    //var_dump($this->item->id);
+
+    ?>
 
 </div>
 

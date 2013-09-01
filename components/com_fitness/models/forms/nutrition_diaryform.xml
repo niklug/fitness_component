@@ -47,7 +47,7 @@
         
         filter="safehtml" /> 
 
-       <field name="primary_goal" type="text" size="40" class="inputbox"
+       <field name="goal_category_id" type="text" size="40" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_PRIMARY_GOAL"
             description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_PRIMARY_GOAL" 

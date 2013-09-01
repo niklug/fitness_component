@@ -243,13 +243,40 @@ class FitnessModelNutrition_diaryForm extends JModelForm
             return false;
         }
         
-        $table = $this->getTable();
-        if ($table->save($data) === true) {
-            return $id;
+        $db = JFactory::getDbo();
+
+        $table = '#__fitness_nutrition_diary';
+        
+        $object = new stdClass();
+
+        foreach ($data as $key => $value)
+        {
+            $object->$key = $value;
+        }
+
+        if($object->id) {
+            $insert = $db->updateObject($table, $object, 'id');
         } else {
-            return false;
+            $insert = $db->insertObject($table, $object, 'id');
         }
         
+        if (!$insert) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        
+        $inserted_id = $db->insertid();
+        
+        if(!$inserted_id) {
+            $inserted_id = $data['id'];
+        }
+
+
+            if ($inserted_id) {
+                return $inserted_id;
+            } else {
+                return false;
+            }
+   
 	}
     
      function delete($data)

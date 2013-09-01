@@ -66,7 +66,7 @@ defined('_JEXEC') or die;
                     <tr>
                         <td>
                             <?php
-                            $date = JFactory::getDate($item->submientry_datet_date);
+                            $date = JFactory::getDate($item->entry_date);
                             echo  $date->toFormat('%a %d %b %y');
                             ?>
                         </td>
