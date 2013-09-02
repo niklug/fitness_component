@@ -31,28 +31,27 @@ class JFormFieldTimecreated extends JFormField
 	 * @since	1.6
 	 */
 	protected function getInput() {
-        // Initialize variables.
-        $html = array();
+            // Initialize variables.
+            $html = array();
 
-        $time_created = $this->value;
-        
-        $config = JFactory::getConfig();
-        $date = new DateTime($time_created);
-        $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
-            
-            
-        if (!strtotime($time_created)) {
-            $time_created = date("Y-m-d H:i:s");
-            $html[] = '<input type="hidden" name="' . $this->name . '" value="' . $time_created . '" />';
+            $time_created = $this->value;
+
+            $config = JFactory::getConfig();
+            $date = new DateTime($time_created);
+            $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+
+            if (!strtotime($time_created)) {
+                $time_created = $date->format('Y-m-d H:i:s');
+                $html[] = '<input type="hidden" name="' . $this->name . '" value="' . $time_created . '" />';
+            }
+            $hidden = (boolean) $this->element['hidden'];
+            if ($hidden == null || !$hidden) {
+                $jdate = new JDate($time_created);
+                $pretty_date = $jdate->format(JText::_('DATE_FORMAT_LC2'));
+                $html[] = "<div>" . $pretty_date . "</div>";
+            }
+            return implode($html);
         }
-        $hidden = (boolean) $this->element['hidden'];
-        if ($hidden == null || !$hidden) {
-            $jdate = new JDate($time_created);
-            $pretty_date = $jdate->format(JText::_('DATE_FORMAT_LC2'));
-            $html[] = "<div>" . $pretty_date . "</div>";
-        }
-        return implode($html);
-    }
     
 
 }

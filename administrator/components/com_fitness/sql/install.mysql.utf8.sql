@@ -914,6 +914,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
 `status` INT(1)  NOT NULL ,
 `score` FLOAT NOT NULL ,
 `trainer_comments` TEXT NOT NULL ,
+`activity_level` int(1) NOT NULL DEFAULT '0',
 `created` DATETIME NOT NULL ,
 `state` TINYINT(1)  NOT NULL ,
 PRIMARY KEY (`id`)

@@ -31,10 +31,21 @@ $submitted = false;
 if ($this->item->submit_date && ($this->item->submit_date != '0000-00-00 00:00:00')) {
     $submitted = true;
 }
+
+$active_plan_id = $this->active_plan_data->id;
+
+
+$heavy_target = $this->model->getNutritionTarget($active_plan_id, 'heavy');
+
+$light_target = $this->model->getNutritionTarget($active_plan_id, 'light');
+
+$rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
+
 ?>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#form-nutrition_diary').submit(function(event) {
+    
+    $js(document).ready(function() {
+        $js('#form-nutrition_diary').submit(function(event) {
 
         });
     });
@@ -226,6 +237,70 @@ if ($this->item->submit_date && ($this->item->submit_date != '0000-00-00 00:00:0
                 </td>
 
             </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="fitness_block_wrapper" style="height: 300px;">
+                        <h3>MACRONUTRIENT TARGETS</h3>
+                        <hr class="orange_line">
+                        <div class="internal_wrapper">
+                            <table width="100%">
+                                <tr>
+                                    <td>
+                                    <?php
+                                    //if($this->item->id) {
+                                    ?>
+                                    <?php echo $this->form->getLabel('activity_level'); ?>
+                                    <?php echo $this->form->getInput('activity_level'); ?>
+                                    <?php
+                                    //}
+                                    ?>
+                                    </td>
+                                    <td id="pie_td" style="visibility: hidden;" class="center">
+                                        <div class="pie-container">
+                                            <h5>MACRONUTRIENT RATIOS</h5>
+                                            <div id="placeholder_targets" class="placeholder_pie"></div>
+                                        </div>
+                                    </td>
+                                    <td id="calories_td"  style="visibility: hidden;" class="center">
+                                        <table width="100%">
+                                            <tr>
+                                                <td>
+                                                   <h5>TARGET CALORIE INTAKE</h5> 
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="calories_value" style="font-size: 48px; color:#00983A; font-weight: bold;">
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td  style="font-size: 22px; color:#00983A;font-weight: bold; height: 40px;">
+                                                    calories
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <h5>TARGET WATER INTAKE</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="water_value" style="font-size:48px; color:#3F9EEB; font-weight: bold;">
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">
+                                                    millilitres
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table> 
+                        </div>
+                    </div>
+                </td>
         </table>
 
 
@@ -284,4 +359,58 @@ if ($this->item->submit_date && ($this->item->submit_date != '0000-00-00 00:00:0
 
 </div>
 
+<script type="text/javascript">
+    
+    (function($) {
+        
+        var heavy_target = <?php echo $heavy_target;?>;
+        var light_target = <?php echo $light_target;?>;
+        var rest_target = <?php echo $rest_target;?>;
+        
+        var activity_level_element =  "input[name='jform[activity_level]']";
+        
+        var activity_level = $(activity_level_element +":checked").val();
+        
+        if (activity_level) {
+           setTargetData(activity_level);
+        }
+        
+        $(activity_level_element).on('click', function() {
+            var activity_level = $(this).val();
+            setTargetData(activity_level);
+        })
 
+        
+        
+        function setTargetData(activity_level) {
+            var activity_data;
+            if(activity_level == '1') activity_data = heavy_target;
+            if(activity_level == '2') activity_data = light_target;
+            if(activity_level == '3') activity_data = rest_target;
+
+
+            var calories = activity_data.calories;
+            var water = activity_data.water;
+            
+            $("#calories_value").html(calories);
+            $("#water_value").html(water);
+            
+            $("#pie_td, #calories_td").css('visibility', 'visible');
+            
+            
+            //console.log(activity_data);
+            var data = [
+                {label: "Protein:", data: [[1, activity_data.protein]]},
+                {label: "Carbs:", data: [[1, activity_data.carbs]]},
+                {label: "Fat:", data: [[1, activity_data.fats]]}
+            ];
+
+            var container = $("#placeholder_targets");
+
+            var targets_pie = $.drawPie(data, container);
+
+            targets_pie.draw(); 
+        }
+        
+    })($js);
+</script>

@@ -92,6 +92,21 @@
         
         filter="safehtml" /> 
        
+       <field
+            name="activity_level"
+            type="radio"
+            label="What is your activity level for today?"
+            description=""
+            class="inputbox"
+            size="1"
+            default="0">
+            <option value="1">Heavy Training Day</option>
+            <option value="2">Light Training Day</option>
+            <option value="3">Recovery/Rest Day</option>
+        </field>
+        
+        
+       
              <field name="created" type="timecreated" default="" 
             label="Date Created"
             description=""  />    

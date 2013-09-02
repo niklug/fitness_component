@@ -373,7 +373,7 @@ class FitnessModelNutrition_diaryForm extends JModelForm
             return $result;
     }
     
-        function getNutritionFocusName($id) {
+    function getNutritionFocusName($id) {
             $db = JFactory::getDbo();
             $sql = "SELECT name FROM #__fitness_nutrition_focus WHERE id='$id' AND state='1'";
             $db->setQuery($sql);
@@ -382,5 +382,18 @@ class FitnessModelNutrition_diaryForm extends JModelForm
             }
             $result = $db->loadResult();
             return $result;
+    }
+    
+    function getNutritionTarget($nutrition_plan_id, $type) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT * FROM #__fitness_nutrition_plan_targets WHERE
+                nutrition_plan_id='$nutrition_plan_id'
+                AND type='$type'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadObject();
+            return json_encode($result);
     }
 }

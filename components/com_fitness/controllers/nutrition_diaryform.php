@@ -107,10 +107,12 @@ class FitnessControllerNutrition_diaryForm extends FitnessController
                 
                 if($submit_task) {
                     $config = JFactory::getConfig();
-                    $date = new DateTime($time_created);
+                    $date = new DateTime();
                     $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
-                    $time_created = date("Y-m-d H:i:s");
+                    $time_created = $date->format('Y-m-d H:i:s');
+ 
                     $data['submit_date'] = $time_created;
+                    $data['status'] = '5';
                 }
 
 		// Attempt to save the data.
