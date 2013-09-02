@@ -439,112 +439,133 @@ JHtml::_('behavior.keepalive');
 
 <script type="text/javascript">
     
-    // set options
-    var nutrition_plan_options = {
-        'trainer_select' : $("#jform_trainer_id"),
-        'client_select' : $("#jform_client_id"),
-        'secondary_trainers_wrapper' : $("#secondary_trainers"),
-        'primary_goal_select' : $("#jform_primary_goal"),
-        'training_period_select' : $("#jform_training_period"),
-        'calendar_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_multicalendar&task=load&calid=0',
-        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'client_selected' : '<?php echo $this->item->client_id;?>',
-        'primary_goal_selected' : '<?php echo $this->item->primary_goal;?>',
-        'active_start_field' : $("#jform_active_start"),
-        'active_finish_field' : $("#jform_active_finish"),
-        'active_start_img' : $("#jform_active_start_img"),
-        'active_finish_img' : $("#jform_active_finish_img"),
-        'force_active_yes' : $("#jform_force_active0"),
-        'force_active_no' : $("#jform_force_active1"),
-        'force_active_value' : '<?php echo $this->item->force_active;?>',
-        'active_finish_value' : '<?php echo $this->item->active_finish;?>',
-        'no_end_date_label': $("#jform_no_end_date-lbl"),
-        'no_end_fieldset' : $("#jform_no_end_date"),
-        'no_end_date_yes' : $("#jform_no_end_date0"),
-        'no_end_date_no' : $("#jform_no_end_date1"),
-        'max_possible_date' : '9999-12-31'
-    }
-    
-    var macronutrient_targets_options = {
-        'main_wrapper' : $("#daily_micronutrient"),
-        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'protein_grams_coefficient' : 4,
-        'fats_grams_coefficient' : 9,
-        'carbs_grams_coefficient' : 4,
-        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-        'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
-    }
-    
-    var item_description_options = {
-        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'main_wrapper' : $("#diary_guide"),
-        'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
-        
-    }
-    
-    var nutrition_meal_options = {
-        'main_wrapper' : $("#meals_wrapper"),
-        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'add_meal_button' : $("#add_plan_meal"),
-        'activity_level' : "input[name='jform[activity_level]']",
-        'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""}
-    }
     
     
-    var nutrition_comment_options = {
-        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-        'db_table' : '#__fitness_nutrition_plan_meal_comments'
-    }
-    
-    var nutrition_bottom_comment_options = {
-        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-        'db_table' : '#__fitness_nutrition_plan_comments'
-    }
     
     
-        
-    var shopping_list_options = {
-        'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'item_obj' : {'name' : "", 'usage' : "", 'comments' : "", 'url' : ""}
-    }
     
     
-     var calculate_summary_options = {
-        'activity_level' : "input[name='jform[activity_level]']"
-        
-    }
     
-    // cteate main object
-    var nutrition_plan = new NutritionPlan(nutrition_plan_options);
     
-    // append targets fieldsets
-    var macronutrient_targets_heavy = new MacronutrientTargets(macronutrient_targets_options, 'heavy', 'HEAVY TRAINING DAY');
     
-    var macronutrient_targets_light = new MacronutrientTargets(macronutrient_targets_options, 'light', 'LIGHT TRAINING DAY');
     
-    var macronutrient_targets_rest = new MacronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
     
+    
+    
+    
+    
+    
+    
+    (function($) {
 
-    // meal blocks object
-    var nutrition_meal = new NutritionMeal(nutrition_meal_options);
+
+        /*  OPTIONS  */
+        var nutrition_plan_options = {
+            'trainer_select' : $("#jform_trainer_id"),
+            'client_select' : $("#jform_client_id"),
+            'secondary_trainers_wrapper' : $("#secondary_trainers"),
+            'primary_goal_select' : $("#jform_primary_goal"),
+            'training_period_select' : $("#jform_training_period"),
+            'calendar_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_multicalendar&task=load&calid=0',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'client_selected' : '<?php echo $this->item->client_id;?>',
+            'primary_goal_selected' : '<?php echo $this->item->primary_goal;?>',
+            'active_start_field' : $("#jform_active_start"),
+            'active_finish_field' : $("#jform_active_finish"),
+            'active_start_img' : $("#jform_active_start_img"),
+            'active_finish_img' : $("#jform_active_finish_img"),
+            'force_active_yes' : $("#jform_force_active0"),
+            'force_active_no' : $("#jform_force_active1"),
+            'force_active_value' : '<?php echo $this->item->force_active;?>',
+            'active_finish_value' : '<?php echo $this->item->active_finish;?>',
+            'no_end_date_label': $("#jform_no_end_date-lbl"),
+            'no_end_fieldset' : $("#jform_no_end_date"),
+            'no_end_date_yes' : $("#jform_no_end_date0"),
+            'no_end_date_no' : $("#jform_no_end_date1"),
+            'max_possible_date' : '9999-12-31'
+        }
+
+        var macronutrient_targets_options = {
+            'main_wrapper' : $("#daily_micronutrient"),
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'protein_grams_coefficient' : 4,
+            'fats_grams_coefficient' : 9,
+            'carbs_grams_coefficient' : 4,
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
+        }
+
+        var item_description_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'main_wrapper' : $("#diary_guide"),
+            'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
+
+        }
+
+        var nutrition_meal_options = {
+            'main_wrapper' : $("#meals_wrapper"),
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'add_meal_button' : $("#add_plan_meal"),
+            'activity_level' : "input[name='jform[activity_level]']",
+            'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""}
+        }
+
+
+        var nutrition_comment_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
+            'db_table' : '#__fitness_nutrition_plan_meal_comments'
+        }
+
+        var nutrition_bottom_comment_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
+            'db_table' : '#__fitness_nutrition_plan_comments'
+        }
+
+
+
+        var shopping_list_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'item_obj' : {'name' : "", 'usage' : "", 'comments' : "", 'url' : ""}
+        }
+
+
+         var calculate_summary_options = {
+            'activity_level' : "input[name='jform[activity_level]']"
+
+        }
+        /* END  OPTIONS  */
     
-    // shopping list
-    var shopping_list = new ShoppingList(shopping_list_options);
     
-    //bottom comments
-    var plan_comments = new NutritionComment(nutrition_bottom_comment_options, nutrition_comment_options.nutrition_plan_id, 0);
-    
-    var calculateSummary =  new CalculateSummary(calculate_summary_options);
-    
-    // attach listeners on document ready
-    $(document).ready(function(){
+        // cteate main object
+        var nutrition_plan = $.nutritionPlan(nutrition_plan_options);
+
+        // append targets fieldsets
+        var macronutrient_targets_heavy = $.macronutrientTargets(macronutrient_targets_options, 'heavy', 'HEAVY TRAINING DAY');
+
+        var macronutrient_targets_light = $.macronutrientTargets(macronutrient_targets_options, 'light', 'LIGHT TRAINING DAY');
+
+        var macronutrient_targets_rest = $.macronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
+
+
+        // meal blocks object
+        var nutrition_meal = $.nutritionMeal(nutrition_meal_options, item_description_options, nutrition_comment_options);
+
+        // shopping list
+        var shopping_list = $.shoppingList(shopping_list_options);
+
+        //bottom comments
+        var plan_comments = $.nutritionComment(nutrition_bottom_comment_options, nutrition_comment_options.nutrition_plan_id, 0);
+
+        var calculateSummary =  $.calculateSummary(calculate_summary_options);
+
+
         nutrition_plan.run();
 
         macronutrient_targets_heavy.run();
@@ -552,95 +573,85 @@ JHtml::_('behavior.keepalive');
         macronutrient_targets_rest.run();
 
         nutrition_meal.run();
-        
-        
+
+
         shopping_list.run();
-        
+
         var plan_comments_html = plan_comments.run();
         $("#plan_comments_wrapper").html(plan_comments_html);
-        
+
         calculateSummary.run();
-        
-    });
-    
-    
-    
-    
-    
-    
-    
 
 
-    
-    
-    
-    Joomla.submitbutton = function(task)  {
-        if (task == 'nutrition_plan.cancel') {
-            Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
-        }
-        else{
 
-            if (task != 'nutrition_plan.cancel' && document.formvalidator.isValid(document.id('nutrition_plan-form'))) {
-                
-                if(macronutrient_targets_options.nutrition_plan_id) {
-                    // Targets
-                    var heavy_validation = macronutrient_targets_heavy.validateSum100();
-                    if(heavy_validation == false) {
-                        alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
-                        return;
+
+        Joomla.submitbutton = function(task)  {
+            if (task == 'nutrition_plan.cancel') {
+                Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+            }
+            else{
+
+                if (task != 'nutrition_plan.cancel' && document.formvalidator.isValid(document.id('nutrition_plan-form'))) {
+
+                    if(macronutrient_targets_options.nutrition_plan_id) {
+                        // Targets
+                        var heavy_validation = macronutrient_targets_heavy.validateSum100();
+                        if(heavy_validation == false) {
+                            alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
+                            return;
+                        }
+
+                        var light_validation = macronutrient_targets_light.validateSum100();
+                        if(light_validation == false) {
+                            alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
+                            return;
+                        }
+
+                        var rest_validation = macronutrient_targets_rest.validateSum100();
+                        if(rest_validation == false) {
+                            alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
+                            return;
+                        }
                     }
 
-                    var light_validation = macronutrient_targets_light.validateSum100();
-                    if(light_validation == false) {
-                        alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
-                        return;
-                    }
-
-                    var rest_validation = macronutrient_targets_rest.validateSum100();
-                    if(rest_validation == false) {
-                        alert('<?php echo $this->escape('Protein, Fats and Carbs MUST equal (=) 100%'); ?>');
-                        return;
-                    }
-                }
-
-                //save targets data
-                if(macronutrient_targets_options.nutrition_plan_id) {     
-                    macronutrient_targets_heavy.saveTargetsData(function(output) {
-                        macronutrient_targets_light.saveTargetsData(function(output) {
-                            macronutrient_targets_rest.saveTargetsData(function(output) {
-                                //reset force active fields in database by ajax
-                                var force_active = nutrition_plan.options.force_active_yes.is(":checked");
-                                if(force_active) {
-                                    nutrition_plan.resetAllForceActive(function() {
+                    //save targets data
+                    if(macronutrient_targets_options.nutrition_plan_id) {     
+                        macronutrient_targets_heavy.saveTargetsData(function(output) {
+                            macronutrient_targets_light.saveTargetsData(function(output) {
+                                macronutrient_targets_rest.saveTargetsData(function(output) {
+                                    //reset force active fields in database by ajax
+                                    var force_active = nutrition_plan.options.force_active_yes.is(":checked");
+                                    if(force_active) {
+                                        nutrition_plan.resetAllForceActive(function() {
+                                            Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                                        });
+                                    } else {
                                         Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
-                                    });
-                                } else {
-                                    Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
-                                }
+                                    }
+                                });
                             });
-                        });
 
-                      });
-                } else {
-                    //reset force active fields in database by ajax
-                    var force_active = nutrition_plan.options.force_active_yes.is(":checked");
-                    if(force_active) {
-                        nutrition_plan.resetAllForceActive(function() {
-                            Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
-                        });
+                          });
                     } else {
-                        Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                        //reset force active fields in database by ajax
+                        var force_active = nutrition_plan.options.force_active_yes.is(":checked");
+                        if(force_active) {
+                            nutrition_plan.resetAllForceActive(function() {
+                                Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                            });
+                        } else {
+                            Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
+                        }
                     }
                 }
-            }
-            else {
-                alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+                }
             }
         }
-    }
 
     
-    
+    })(jQuery);
     
     
     
