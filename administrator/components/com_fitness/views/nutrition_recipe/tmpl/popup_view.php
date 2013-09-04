@@ -151,6 +151,11 @@ JHtml::_('behavior.keepalive');
 $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
 $meal_id = JRequest::getVar('meal_id');
 $type = JRequest::getVar('type');
+$parent_view = JRequest::getVar('parent_view');
+
+if($parent_view == 'nutrition_diary_frontend') $table = '#__fitness_nutrition_diary_ingredients';
+if($parent_view == 'nutrition_plan_backend') $table = '#__fitness_nutrition_plan_ingredients';
+
 ?>
 
 <script type="text/javascript">
@@ -179,7 +184,14 @@ $type = JRequest::getVar('type');
     var _meal_id = '<?php echo $meal_id;?>';
     var _type = '<?php echo $type;?>';
     var _number_serves_recipe = '<?php echo $this->item->number_serves ?>';
-    var _import_obj = {'nutrition_plan_id' : _nutrition_plan_id, 'meal_id' : _meal_id, 'type' : _type, 'recipe_id' : _recipe_id, 'number_serves_recipe' : _number_serves_recipe};
+    var _import_obj = {
+                'nutrition_plan_id' : _nutrition_plan_id,
+                'meal_id' : _meal_id,
+                'type' : _type,
+                'recipe_id' : _recipe_id, 
+                'number_serves_recipe' : _number_serves_recipe,
+                'db_table' : '<?php echo $table;?>'
+    };
  
     // ATTACH EVENTS
     $(document).ready(function(){
@@ -205,9 +217,9 @@ $type = JRequest::getVar('type');
             $("#add_to_diary").attr('disabled', 'disabled');
             importRecipe(_import_obj, function(output) {
                 if(output) {
-                    window.parent.nutrition_meal.populateMealsLogic();
-                    //window.parent.location.reload();
-                    window.parent.$("#recipes_list_wrapper").remove();
+                    //window.parent.populateMealsLogic();
+                    window.parent.location.reload();
+                    //window.parent.closeRecipePopup();
                 }
             });
         })
@@ -218,6 +230,7 @@ $type = JRequest::getVar('type');
     // FUNCTIONS 
     
     function importRecipe(o, handleData) {
+        var table = o.db_table;
         var data_encoded = JSON.stringify(o);
         $.ajax({
             type : "POST",
@@ -226,7 +239,8 @@ $type = JRequest::getVar('type');
                 view : 'nutrition_plan',
                 format : 'text',
                 task : 'importRecipe',
-                data_encoded : data_encoded
+                data_encoded : data_encoded,
+                table : table
             },
             dataType : 'json',
             success : function(response) {

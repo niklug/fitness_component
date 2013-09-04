@@ -110,6 +110,20 @@ class FitnessViewNutrition_diaryform extends JView {
                 $document -> addscript( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'flot_pie_class.js');
                 
                 
+                $document -> addscript( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'plan_comments_class.js');
+                $document -> addscript( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'meal_description_class.js');
+                $document -> addscript( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'nutrition_meal_class.js');
+                
+                
+                $document -> addscript( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.timepicker.min.js');
+                $document -> addscript( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery-ui.js');
+                
+                
+                $document->addStyleSheet(JUri::base() . 'administrator/components/com_fitness/assets/css/fitness.css');
+                $document->addStyleSheet( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
+                
+                echo '<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />';
+                
 
                 $model = $this->getModel();
                 $secondary_trainers = $model->get_own_trainers();

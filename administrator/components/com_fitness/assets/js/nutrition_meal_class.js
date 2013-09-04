@@ -213,6 +213,7 @@
 
 
     NutritionMeal.prototype.savePlanMeal = function(data, handleData) {
+        var table = this.options.db_table;
         var meal_encoded = JSON.stringify(data);
         var url = this.options.fitness_administration_url;
         $.ajax({
@@ -222,7 +223,8 @@
                 view : 'nutrition_plan',
                 format : 'text',
                 task : 'savePlanMeal',
-                meal_encoded : meal_encoded
+                meal_encoded : meal_encoded,
+                table : table
             },
             dataType : 'json',
             success : function(response) {
@@ -240,6 +242,7 @@
     }
 
     NutritionMeal.prototype.deletePlanMeal = function(id, handleData) {
+        var table = this.options.db_table;
         var url = this.options.fitness_administration_url;
         $.ajax({
             type : "POST",
@@ -248,7 +251,8 @@
                 view : 'nutrition_plan',
                 format : 'text',
                 task : 'deletePlanMeal',
-                id : id
+                id : id,
+                table : table
             },
             dataType : 'json',
             success : function(response) {
@@ -267,6 +271,7 @@
 
 
     NutritionMeal.prototype.populatePlanMeal =  function(handleData) {
+        var table = this.options.db_table;
         var url = this.options.fitness_administration_url;
         var nutrition_plan_id = this.options.nutrition_plan_id;
         if(!nutrition_plan_id) return;
@@ -277,7 +282,8 @@
                 view : 'nutrition_plan',
                 format : 'text',
                 task : 'populatePlanMeal',
-                nutrition_plan_id : nutrition_plan_id
+                nutrition_plan_id : nutrition_plan_id,
+                table : table
             },
             dataType : 'json',
             success : function(response) {

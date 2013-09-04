@@ -500,6 +500,8 @@ JHtml::_('behavior.keepalive');
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'main_wrapper' : $("#diary_guide"),
             'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
+            'db_table' : '#__fitness_nutrition_plan_ingredients',
+            'parent_view' : 'nutrition_plan_backend'
 
         }
 
@@ -509,7 +511,8 @@ JHtml::_('behavior.keepalive');
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'add_meal_button' : $("#add_plan_meal"),
             'activity_level' : "input[name='jform[activity_level]']",
-            'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""}
+            'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
+            'db_table' : '#__fitness_nutrition_plan_meals'
         }
 
 

@@ -24,9 +24,11 @@ $saveOrder	= $listOrder == 'a.ordering';
 $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
 $meal_id = JRequest::getVar('meal_id');
 $type = JRequest::getVar('type');
+$parent_view  = JRequest::getVar('parent_view');
+
 ?>
 <h1>SELECT A RECIPE</h1>
-<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_recipes&tmpl=component&layout=popup_view&nutrition_plan_id=' . $nutrition_plan_id . '&meal_id=' + $meal_id + '&type=' . $type); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_recipes&tmpl=component&layout=popup_view&nutrition_plan_id=' . $nutrition_plan_id . '&meal_id=' + $meal_id + '&type=' . $type . '&parent_view=' . $parent_view); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Recipe Name: '); ?></label>
@@ -186,7 +188,7 @@ $type = JRequest::getVar('type');
                                 </td>
                                 <td>
                                     <?php
-                                        $url = 'index.php?option=com_fitness&tmpl=component&view=nutrition_recipe&layout=popup_view&nutrition_plan_id=' . $nutrition_plan_id . '&meal_id=' . $meal_id . '&type=' . $type . '&id='.(int) $item->id;
+                                        $url = 'index.php?option=com_fitness&tmpl=component&view=nutrition_recipe&layout=popup_view&nutrition_plan_id=' . $nutrition_plan_id . '&meal_id=' . $meal_id . '&type=' . $type . '&parent_view=' . $parent_view . '&id='.(int) $item->id;
                                     ?>
                                     <a href="<?php echo JRoute::_($url); ?>">View</a>
                                 </td>

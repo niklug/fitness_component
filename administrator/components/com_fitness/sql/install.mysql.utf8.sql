@@ -900,6 +900,8 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_shopping_list` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
+/* nutrition diary  */
+
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 
@@ -920,3 +922,57 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_meals` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nutrition_plan_id` int(11) unsigned NOT NULL,
+  `meal_time` datetime NOT NULL,
+  `water` float NOT NULL,
+  `previous_water` float NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nutrition_plan_id` (`nutrition_plan_id`),
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_diary(id) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_ingredients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nutrition_plan_id` int(11) unsigned NOT NULL,
+  `meal_id` int(11) unsigned NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `ingredient_id` int(11) unsigned NOT NULL,
+  `meal_name` varchar(255) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `measurement` varchar(20) NOT NULL,
+  `protein` float NOT NULL,
+  `fats` float NOT NULL,
+  `carbs` float NOT NULL,
+  `calories` float NOT NULL,
+  `energy` float NOT NULL,
+  `saturated_fat` float NOT NULL,
+  `total_sugars` float NOT NULL,
+  `sodium` float NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nutrition_plan_id` (`nutrition_plan_id`),
+  KEY `meal_id` (`meal_id`),
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_diary(id) ON DELETE CASCADE,
+  FOREIGN KEY (meal_id) REFERENCES #__fitness_nutrition_diary_meals(id) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_meal_comments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nutrition_plan_id` int(11) unsigned NOT NULL,
+  `meal_id` int(11) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `nutrition_plan_id` (`nutrition_plan_id`),
+  KEY `meal_id` (`meal_id`),
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_diary(id) ON DELETE CASCADE,
+  FOREIGN KEY (meal_id) REFERENCES #__fitness_nutrition_diary_meals(id) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+/* end nutrition diary  */

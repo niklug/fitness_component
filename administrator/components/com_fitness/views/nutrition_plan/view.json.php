@@ -5,11 +5,11 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
 if(!JSession::checkToken('get')) {
-    $status['success'] = 0;
-    $status['message'] = JText::_('JINVALID_TOKEN');
+    $status['IsSuccess'] = 0;
+    $status['Msg'] = JText::_('JINVALID_TOKEN');
     $result = array( 'status' => $status);
-    echo  json_encode($result);
-    die();
+    //echo  json_encode($result);
+    //die();
 }
 
 //=======================================================
@@ -48,43 +48,49 @@ class FitnessViewNutrition_plan extends JView {
     }
     
     function saveIngredient() {
+        $table = JRequest::getVar('table');
         $ingredient_encoded = JRequest::getVar('ingredient_encoded');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->saveIngredient($ingredient_encoded);
+        echo $model->saveIngredient($ingredient_encoded, $table);
     }
     
         
     function deleteIngredient() {
+        $table = JRequest::getVar('table');
         $id = JRequest::getVar('id');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->deleteIngredient($id);
+        echo $model->deleteIngredient($id, $table);
     }
     
     function populateItemDescription() {
+        $table = JRequest::getVar('table');
         $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
         $meal_id = JRequest::getVar('meal_id');
         $type = JRequest::getVar('type');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->populateItemDescription($nutrition_plan_id, $meal_id, $type);
+        echo $model->populateItemDescription($nutrition_plan_id, $meal_id, $type, $table);
     }
     
     
     function savePlanMeal() {
+        $table = JRequest::getVar('table');
         $meal_encoded = JRequest::getVar('meal_encoded');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->savePlanMeal($meal_encoded);
+        echo $model->savePlanMeal($meal_encoded, $table);
     }
     
     function deletePlanMeal() {
+        $table = JRequest::getVar('table');
         $id = JRequest::getVar('id');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->deletePlanMeal($id);
+        echo $model->deletePlanMeal($id, $table);
     }
     
     function populatePlanMeal() {
+        $table = JRequest::getVar('table');
         $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->populatePlanMeal($nutrition_plan_id);
+        echo $model->populatePlanMeal($nutrition_plan_id, $table);
     }
     
    function savePlanComment() {
@@ -111,9 +117,10 @@ class FitnessViewNutrition_plan extends JView {
     }
     
     function importRecipe() {
+        $table = JRequest::getVar('table');
         $data_encoded = JRequest::getVar('data_encoded');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->importRecipe($data_encoded);
+        echo $model->importRecipe($data_encoded, $table);
     }
     
     function saveShoppingItem() {

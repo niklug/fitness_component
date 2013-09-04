@@ -301,6 +301,23 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
                         </div>
                     </div>
                 </td>
+            </tr>
+             <tr>
+                <td colspan="2">
+                    <div class="fitness_block_wrapper" style="min-height: 300px;">
+                        <h3>MEALS, SNACKS & SUPPLEMENTS</h3>
+                        <hr class="orange_line">
+                        <div class="internal_wrapper">
+                            <div class="clr"></div>
+                            <div id="meals_wrapper"></div>
+                            <div class="clr"></div>
+                            <hr>
+                            <input style="display:none;" type="button" id="add_plan_meal" value="NEW MEAL">
+                            <div class="clr"></div>
+                            </div>
+                    </div>
+                </td>
+            </tr>
         </table>
 
 
@@ -353,7 +370,7 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
     
     <?php
 
-    //var_dump($this->item->id);
+    //var_dump($this->active_plan_data->id);
 
     ?>
 
@@ -412,5 +429,45 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
             targets_pie.draw(); 
         }
         
+        
+        /* MEALS BLOCK */
+        var item_description_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'main_wrapper' : $("#diary_guide"),
+            'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
+            'db_table' : '#__fitness_nutrition_diary_ingredients',
+            'parent_view' : 'nutrition_diary_frontend'
+
+        }
+
+        var nutrition_meal_options = {
+            'main_wrapper' : $("#meals_wrapper"),
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'add_meal_button' : $("#add_plan_meal"),
+            'activity_level' : "input[name='jform[activity_level]']",
+            'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
+            'db_table' : '#__fitness_nutrition_diary_meals'
+        }
+
+
+        var nutrition_comment_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
+            'db_table' : '#__fitness_nutrition_diary_meal_comments'
+        }
+        
+        
+        var nutrition_meal = $.nutritionMeal(nutrition_meal_options, item_description_options, nutrition_comment_options);
+        
+
+        
+        nutrition_meal.run();
+        /* END MEALS BLOCK */
+        
     })($js);
+
+    
 </script>

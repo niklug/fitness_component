@@ -371,6 +371,7 @@
 
 
     ItemDescription.prototype.saveIngredient = function(calculatedIngredient, handleData) {
+        var table = this.options.db_table;
         var ingredient_encoded = JSON.stringify(calculatedIngredient);
         var url = this.options.fitness_administration_url;
         $.ajax({
@@ -380,7 +381,8 @@
                 view : 'nutrition_plan',
                 format : 'text',
                 task : 'saveIngredient',
-                ingredient_encoded : ingredient_encoded
+                ingredient_encoded : ingredient_encoded,
+                table : table
             },
             dataType : 'json',
             success : function(response) {
@@ -399,6 +401,7 @@
 
 
      ItemDescription.prototype.deleteIngredient = function(id, handleData) {
+        var table = this.options.db_table;
         var url = this.options.fitness_administration_url;
         $.ajax({
             type : "POST",
@@ -407,7 +410,8 @@
                 view : 'nutrition_plan',
                 format : 'text',
                 task : 'deleteIngredient',
-                id : id
+                id : id,
+                table : table
               },
             dataType : 'json',
             success : function(response) {
@@ -426,6 +430,7 @@
 
 
     ItemDescription.prototype.populateItemDescription =  function(handleData) {
+        var table = this.options.db_table;
         var url = this.options.fitness_administration_url;
         var nutrition_plan_id = this.options.nutrition_plan_id;
         var meal_id = this._meal_id;
@@ -440,7 +445,8 @@
                 task : 'populateItemDescription',
                 nutrition_plan_id : nutrition_plan_id,
                 meal_id : meal_id,
-                type : type
+                type : type,
+                table : table
               },
             dataType : 'json',
             success : function(response) {
@@ -465,7 +471,7 @@
         html += '<a href="javascript:void(0)" id="close_recipe_list" title="Close"></a>';
         html += ' <iframe scrolling="auto" style="overflow-y: auto;overflow-x: hidden;" width="100%" height="100%"';
         html += 'src="' + this.options.fitness_administration_url + '&view=nutrition_recipes&tmpl=component&layout=popup_view&nutrition_plan_id=';
-        html += this.options.nutrition_plan_id +'&meal_id=' + this._meal_id + '&type=' + this._type +'">'
+        html += this.options.nutrition_plan_id +'&meal_id=' + this._meal_id + '&type=' + this._type +'&parent_view=' + this.options.parent_view + '">'
         html += '</iframe> ';
         html += '</div>';
 
