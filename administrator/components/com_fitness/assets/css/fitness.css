@@ -507,6 +507,8 @@
     right: 15px;
 }
 
+
+
 .green_style {
     background-color:#1BC721;
 }
@@ -521,4 +523,15 @@
 
 .adminformlist li {
     clear: both;
+}
+
+.ingredient_title{
+    width: 450px;
+}
+.totals_pagging {
+    width:515px;
+}
+
+.totals_right {
+    width: 40px;
 }

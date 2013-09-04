@@ -54,6 +54,11 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
     <form id="form-nutrition_diary" action="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.save'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
         <h2>NUTRITION DIARY</h2>
         <table width="100%">
+            <tr style="display:none;">
+                <td colspan="2">
+                    <fieldset id="daily_micronutrient">
+                </td>
+            </tr>
             <tr>
                 <td width="40%">
                     <div class="fitness_block_wrapper" style="min-height:200px;">
@@ -309,15 +314,220 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
                         <hr class="orange_line">
                         <div class="internal_wrapper">
                             <div class="clr"></div>
-                            <div id="meals_wrapper"></div>
+                            <?php
+                            if($this->item->id) {
+                            ?>
+                                <div id="meals_wrapper"></div>
+                                <div class="clr"></div>
+                                <hr>
+                                <?php
+                                if (!$submitted) {
+                                ?>
+                                <input style="display:none;" type="button" id="add_plan_meal" value="NEW MEAL">
+                                <?php
+                                } 
+                            } else {
+                                echo 'Save entry to proceed add Meals ';
+                            }
+                            ?>
                             <div class="clr"></div>
-                            <hr>
-                            <input style="display:none;" type="button" id="add_plan_meal" value="NEW MEAL">
-                            <div class="clr"></div>
-                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
+            <?php
+            if($this->item->id) {
+            ?>
+            <tr>
+                <td colspan="2">
+                    <div class="fitness_block_wrapper" style="min-height: 300px;">
+                        <div class="internal_wrapper">
+                            <div style="float:right; font-size: 10px;">
+                                <table >
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>PRO (g)</th>
+                                            <th>FAT (g)</th>
+                                            <th>CARB (g)</th>
+                                            <th>CALS</th>
+                                            <th>ENRG (kJ)</th>
+                                            <th>FAT, SAT (g)</th>
+                                            <th>SUG (g)</th>
+                                            <th>SOD (mg)</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="">
+                                        <tr>
+                                            <td width="150">
+                                                <b>DAILY TOTALS (grams)</b>
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_protein_grams" name="daily_protein_grams" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_fats_grams" name="daily_fats_grams" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_carbs_grams" name="daily_carbs_grams" value="">
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_saturated_fat_grams" name="daily_saturated_fat_grams" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_total_sugars_grams" name="daily_total_sugars_grams" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_sodium_grams"  name="daily_sodium_grams" value="">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b>DAILY TOTALS (%)</b>
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_protein_percents" name="daily_protein_percents" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_fats_percents" name="daily_fats_percents" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_carbs_percents" name="daily_carbs_percents" value="">
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>DAILY TOTALS</b></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_calories" name="daily_calories" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="daily_energy" name="daily_energy" value="">
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>DAILY TOTAL WATER</b></td>
+                                            <td><input class="number_input" readonly size="5" type="text"  id="daily_total_water" name="daily_total_water" value=""></td>
+                                            <td>MILLILITRES</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <br/><br/>
+
+                                 <table>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>PRO (g)</th>
+                                            <th>FAT (g)</th>
+                                            <th>CARB (g)</th>
+                                            <th>CALS</th>
+                                            <th>ENRG (kJ)</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="">
+                                        <tr>
+                                            <td width="150">
+                                                <b>VARIANCE (grams)</b>
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_protein_grams" name="variance_protein_grams" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_fats_grams" name="variance_fats_grams" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_carbs_grams" name="variance_carbs_grams" value="">
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                             <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b>VARIANCE (%)</b>
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_protein_percents" name="variance_protein_percents" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_fats_percents" name="variance_fats_percents" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_carbs_percents" name="variance_carbs_percents" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_calories_percents" name="variance_calories_percents" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_energy_percents" name="variance_energy_percents" value="">
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>VARIANCE</b></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_calories" name="variance_calories" value="">
+                                            </td>
+                                            <td>
+                                                <input class="number_input" readonly size="5" type="text"  id="variance_energy" name="variance_energy" value="">
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>VARIANCE (WATER)</b></td>
+                                            <td><input class="number_input" readonly size="5" type="text"  id="variance_daily_total_water" name="variance_daily_total_water" value=""></td>
+                                            <td>MILLILITRES</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <?php
+            }
+            ?>
         </table>
 
 
@@ -437,7 +647,8 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
             'main_wrapper' : $("#diary_guide"),
             'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
             'db_table' : '#__fitness_nutrition_diary_ingredients',
-            'parent_view' : 'nutrition_diary_frontend'
+            'parent_view' : 'nutrition_diary_frontend',
+            'read_only' : '<?php echo $submitted ?>'
 
         }
 
@@ -448,7 +659,8 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
             'add_meal_button' : $("#add_plan_meal"),
             'activity_level' : "input[name='jform[activity_level]']",
             'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
-            'db_table' : '#__fitness_nutrition_diary_meals'
+            'db_table' : '#__fitness_nutrition_diary_meals',
+            'read_only' : '<?php echo $submitted ?>'
         }
 
 
@@ -460,11 +672,39 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
         }
         
         
-        var nutrition_meal = $.nutritionMeal(nutrition_meal_options, item_description_options, nutrition_comment_options);
+        var calculate_summary_options = {
+            'activity_level' : "input[name='jform[activity_level]']"
+
+        }
         
+        var macronutrient_targets_options = {
+            'main_wrapper' : $("#daily_micronutrient"),
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'protein_grams_coefficient' : 4,
+            'fats_grams_coefficient' : 9,
+            'carbs_grams_coefficient' : 4,
+            'nutrition_plan_id' : '<?php echo $this->active_plan_data->id;?>',
+            'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
+        }
+        
+        
+        var nutrition_meal = $.nutritionMeal(nutrition_meal_options, item_description_options, nutrition_comment_options);
+        var calculateSummary =  $.calculateSummary(calculate_summary_options);
+        
+            // append targets fieldsets
+        var macronutrient_targets_heavy = $.macronutrientTargets(macronutrient_targets_options, 'heavy', 'HEAVY TRAINING DAY');
+
+        var macronutrient_targets_light = $.macronutrientTargets(macronutrient_targets_options, 'light', 'LIGHT TRAINING DAY');
+
+        var macronutrient_targets_rest = $.macronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
 
         
         nutrition_meal.run();
+        calculateSummary.run();
+        
+        macronutrient_targets_heavy.run();
+        macronutrient_targets_light.run();
+        macronutrient_targets_rest.run();
         /* END MEALS BLOCK */
         
     })($js);

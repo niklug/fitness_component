@@ -136,7 +136,7 @@ a:hover, a:active, a:focus {
     background-color: #0E0704;
     opacity: 0.85;
     color: #ffffff;
-    padding: 10px;
+    padding: 5px;
     font-size: 14px;
 }
 
@@ -285,4 +285,175 @@ display: inline-block;
 #jform_activity_level-lbl {
     display: inline-block;
     padding-bottom: 35px;
+}
+
+
+.fitness_wrapper .meal_name_input {
+    width:300px;
+    font-size: 12px;
+}
+
+.fitness_wrapper .number_input , .fitness_wrapper .meal_quantity_input, .fitness_wrapper .totals_row input, .fitness_wrapper .water, .fitness_wrapper .previous_water{
+    width: 43px;
+    font-size: 10px;
+}
+
+.fitness_wrapper #meals_wrapper th {
+    font-size: 12px;
+}
+
+
+.fitness_wrapper .ingredient_title{
+    width: 325px;
+}
+
+.fitness_wrapper .totals_pagging {
+    width:388px;
+}
+.fitness_wrapper .totals_right {
+    width: 0px;
+}
+
+.fitness_wrapper .comment_wrapper, .fitness_wrapper .comment_textarea {
+    width: 600px !important;
+}
+
+
+.delete_meal, .fitness_wrapper .delete_comment , .fitness_wrapper .delete_plan_meal, .fitness_wrapper .delete_shopping_item{
+    background-image: url("../images/cross.png");
+    background-size: 15px auto;
+    display: block;
+    height: 15px;
+    width: 15px;
+}
+
+.fitness_wrapper .meal_date{
+    font-size: 12px;
+    width: 65px;
+}
+.fitness_wrapper .meal_time {
+    font-size: 12px;
+    width: 35px;
+}
+
+.fitness_wrapper .meal_center_desc{
+    width:480px;
+}
+
+
+.fitness_wrapper #select_meal_form, .fitness_wrapper .select_meal_form{
+    background-color: #FFFFFF;
+    height: auto;
+    margin-top: 21px;
+    position: absolute;
+    min-width: 392px;
+    border: 1px solid #cccccc;
+    text-align: center;
+    z-index: 999;
+}
+
+.fitness_wrapper #ingredients_results, .fitness_wrapper .ingredients_results{
+    width: 100%;
+    margin: 0;
+    border: none;
+}
+
+.fitness_wrapper #meal_search_cancel {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+.fitness_wrapper #meal_search_next{
+    position: absolute;
+    bottom: 5px;
+    right: 5px; 
+}
+
+.fitness_wrapper #ingred_select_error_message{
+    color:red;
+    margin-top: 2px;
+    text-align: center;
+}
+
+.fitness_wrapper #quantity_wrapper {
+    text-align: center;
+    margin: 5px 0;
+}
+
+.fitness_wrapper .grams_mil{
+    display: inline-block;
+    margin-top: 6px;
+}
+
+
+.fitness_wrapper #totals_row , .fitness_wrapper .totals_row{
+    text-align: center;
+    background-color:#333333;
+}
+
+.fitness_wrapper .totals_row input {
+    text-align: center;
+    float: none !important;
+}
+
+.fitness_wrapper .no_background{
+    background-color: #ffffff;
+    background: none;
+}
+
+.fitness_wrapper .comment_wrapper, .fitness_wrapper .comment_textarea {
+    width: 600px !important;
+}
+
+.fitness_wrapper .nutrition_targets_table input {
+    width: 70px;
+}
+
+#recipes_list_wrapper {
+    background-color: #FFFFFF;
+    border: 7px ridge #CCCCCC;
+    height: 500px;
+    margin-left: 10px;
+    position: fixed;
+    top: 100px;
+    width: 98%;
+    z-index: 999;
+}
+
+.fitness_wrapper #close_recipe_list {
+    background-image: url("../images/cross.png");
+    background-size: 15px auto;
+    display: block;
+    height: 15px;
+    width: 15px;
+    position: absolute;
+    right: 15px;
+}
+.fitness_wrapper .select_meal_form span {
+    color: #000000;
+}
+
+.fitness_wrapper .green_style {
+    background-color:#1BC721;
+}
+
+.fitness_wrapper .orange_style {
+    background-color:#FF7570;
+}
+
+.fitness_wrapper .red_style {
+    background-color:#E62C2F;
+}
+
+
+.fitness_wrapper #recipes_list_wrapper {
+    background-color: #FFFFFF;
+    border: 7px ridge #CCCCCC;
+    height: 500px;
+    margin-left: 10px;
+    position: fixed;
+    top: 100px;
+    width: 98%;
+    z-index: 999;
 }

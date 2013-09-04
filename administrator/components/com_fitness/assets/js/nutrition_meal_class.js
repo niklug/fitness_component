@@ -20,48 +20,49 @@
     NutritionMeal.prototype.setEventListeners = function() {
         var self = this;
         // on add meal click
-        $("#add_plan_meal").on('click', function() {
-            var meal_html = self.generateHtml(self.options.meal_obj);
-            self.options.main_wrapper.append(meal_html);
-            self.attachDateTimeListener();
-        })
-
-        // on Level of activity  choose
-        $(this.options.activity_level).on('click', function() {
-            self.options.add_meal_button.show();
-        })
-
-
-        // on save meal click
-        $(".save_plan_meal").live('click', function() {
-            var closest_table = $(this).closest("table");
-            var data =  self.validateFields(closest_table);
-
-            if(!data) return;
-
-            data.id = closest_table.attr('data-id');
-            data.nutrition_plan_id = self.options.nutrition_plan_id;
-            //console.log(data);
-            self.savePlanMeal(data, function(output) {
-                closest_table.attr('data-id', output.inserted_id);
-                data.id = output.inserted_id;
-                var html = self.generateHtml(data);
-                //console.log(html);
-                closest_table.parent().replaceWith(html);
+        if(this.options.read_only == false) {
+            $("#add_plan_meal").on('click', function() {
+                var meal_html = self.generateHtml(self.options.meal_obj);
+                self.options.main_wrapper.append(meal_html);
                 self.attachDateTimeListener();
-                self.CalculateTotalsWithDelay([output.inserted_id]);
-            });
-        })
+            })
 
-        // on delete meal click
-        $(".delete_plan_meal").live('click', function() {
-            var closest_table = $(this).closest("table");
-            var id = closest_table.attr('data-id');
-            self.deletePlanMeal(id, function(output) {
-                closest_table.parent().remove();
-            });
-        })
+            // on Level of activity  choose
+            $(this.options.activity_level).on('click', function() {
+                self.options.add_meal_button.show();
+            })
 
+
+            // on save meal click
+            $(".save_plan_meal").live('click', function() {
+                var closest_table = $(this).closest("table");
+                var data =  self.validateFields(closest_table);
+
+                if(!data) return;
+
+                data.id = closest_table.attr('data-id');
+                data.nutrition_plan_id = self.options.nutrition_plan_id;
+                //console.log(data);
+                self.savePlanMeal(data, function(output) {
+                    closest_table.attr('data-id', output.inserted_id);
+                    data.id = output.inserted_id;
+                    var html = self.generateHtml(data);
+                    //console.log(html);
+                    closest_table.parent().replaceWith(html);
+                    self.attachDateTimeListener();
+                    self.CalculateTotalsWithDelay([output.inserted_id]);
+                });
+            })
+
+            // on delete meal click
+            $(".delete_plan_meal").live('click', function() {
+                var closest_table = $(this).closest("table");
+                var id = closest_table.attr('data-id');
+                self.deletePlanMeal(id, function(output) {
+                    closest_table.parent().remove();
+                });
+            })
+        }
         // populate meals html on document load
         this.populateMealsLogic();
 
@@ -116,7 +117,7 @@
         html += '<input  size="4" type="text"  class="meal_time required " value="' + (o.meal_time).substring(11, 16) + '">';
         html += '</td>';
 
-        html += '<td>';
+        html += '<td class="meal_center_desc">';
         html += 'How much water did you drink only with THIS meal?';
         html += '</td>';
 
@@ -129,11 +130,15 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input title="Save/Update Meal" class="save_plan_meal " type="button"  value="Save">';
+        if(this.options.read_only == false) {
+            html += '<input title="Save/Update Meal" class="save_plan_meal " type="button"  value="Save">';
+        }
         html += '</td>';
 
         html += '<td>';
-        html += '<a href="javascript:void(0)" class="delete_plan_meal" title="Delete Meal"></a>';
+        if(this.options.read_only == false) {
+            html += '<a href="javascript:void(0)" class="delete_plan_meal" title="Delete Meal"></a>';
+        }
         html += '</td>';
         html += '</tr>';
 
@@ -171,7 +176,7 @@
 
             html += '<table id="totals_' + meal_id + '" width="100%">';
             html += '<tr style="text-align:center;">';
-            html += '<th width="515"></th>';
+            html += '<th class="totals_pagging"></th>';
             html += '<th></th>';
             html += '<th>PRO (g)</th>';
             html += '<th>FAT (g)</th>';
@@ -184,7 +189,7 @@
             html += '<th></th>';
             html += '</tr>';
             html += '<tr >';
-            html += '<td width="515" ></td>'
+            html += '<td class="totals_pagging" ></td>'
             html += '<td><b>TOTALS</b></td>';
             html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_protein_total" id="meal_protein_input_total_' + meal_id + '" value=""></td>';
             html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_fats_total" id="meal_fats_input_total_' + meal_id + '" value=""></td>';
@@ -194,7 +199,7 @@
             html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_saturated_fat_total" id="meal_saturated_fat_input_total_' + meal_id + '" value=""></td>';
             html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sugars_total" id="meal_total_sugars_input_total_' + meal_id + '" value=""></td>';
             html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sodium_total" id="meal_sodium_input_total_' + meal_id + '" value=""></td>';
-            html += '<td width="40px"></td>';
+            html += '<td class="totals_right"></td>';
             html += '</tr>';
             html += '</table>';
             html += '<div class="clr"></div>';

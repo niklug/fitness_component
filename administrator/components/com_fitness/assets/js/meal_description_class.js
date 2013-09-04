@@ -23,49 +23,50 @@
     ItemDescription.prototype.setEventListeners = function() {
         var self = this;
         //$("#add_item"+ self._description_id).die()
-        $("#add_item"+ self._description_id).die().live('click', function() {
-            var tr_html = self.createIngredientTR(self.options.ingredient_obj);
-            $("#meals_content" + self._description_id).append(tr_html);
-            $("#meals_content" + self._description_id).find("tr:last td:first input").focus();
+        if(this.options.read_only == false) {
+            $("#add_item"+ self._description_id).die().live('click', function() {
+                var tr_html = self.createIngredientTR(self.options.ingredient_obj);
+                $("#meals_content" + self._description_id).append(tr_html);
+                $("#meals_content" + self._description_id).find("tr:last td:first input").focus();
 
-        });
+            });
 
-        $("#add_recipe"+ self._description_id).die().live('click', function() {
-            var recipesListHtml = self.recipesListHtml();
-            $("body").append(recipesListHtml);
-        });
+            $("#add_recipe"+ self._description_id).die().live('click', function() {
+                var recipesListHtml = self.recipesListHtml();
+                $("body").append(recipesListHtml);
+            });
 
-        $("#close_recipe_list").die().live('click', function() {
-            $(this).parent().remove();
-        });
+            $("#close_recipe_list").die().live('click', function() {
+                $(this).parent().remove();
+            });
 
 
-        $(".meal_name_input").die().live('input', function() {
-            self.populateSearchResults($(this));
-        });
+            $(".meal_name_input").die().live('input', function() {
+                self.populateSearchResults($(this));
+            });
 
-        $(".ingredients_results option").die().live('click', function() {
-            var closest_TR = $(this).closest("tr");
-            self.setupTrDataId($(this));
-            self.setIngredientData($(this));
-            self.close_popup($("#select_meal_form" + self._description_id));
-            var selected_ingredient_name = $(this).text();
-            closest_TR.find(".meal_name_input").val(selected_ingredient_name);
-            closest_TR.find(".meal_quantity_input").focus();
-        });
+            $(".ingredients_results option").die().live('click', function() {
+                var closest_TR = $(this).closest("tr");
+                self.setupTrDataId($(this));
+                self.setIngredientData($(this));
+                self.close_popup($("#select_meal_form" + self._description_id));
+                var selected_ingredient_name = $(this).text();
+                closest_TR.find(".meal_name_input").val(selected_ingredient_name);
+                closest_TR.find(".meal_quantity_input").focus();
+            });
 
-        $("#meal_quantity_input"+ this._description_id).die().live('focusout', function(e){
-            self.onQuantityInput($(this));
-        });
+            $("#meal_quantity_input"+ this._description_id).die().live('focusout', function(e){
+                self.onQuantityInput($(this));
+            });
 
-        $(".delete_meal").die().live('click', function() {
-            var closest_TR = $(this).closest("tr");
-            var id = closest_TR.attr('data-id');
-            self.deleteIngredient(id, function(id) {
-                closest_TR.remove();;
-            })
-        });
-
+            $(".delete_meal").die().live('click', function() {
+                var closest_TR = $(this).closest("tr");
+                var id = closest_TR.attr('data-id');
+                self.deleteIngredient(id, function(id) {
+                    closest_TR.remove();;
+                })
+            });
+        }
         this.populateItemDescription(function(output) {
             if(!output) return;
             var html = '';
@@ -81,7 +82,7 @@
         var html = '<table width="100%">';
         html += '<thead>';
         html += '<tr>';
-        html += '<th width="450">' + this._title + '</th>';
+        html += '<th class="ingredient_title">' + this._title + '</th>';
         html += '<th>QUANTITY</th>';
         html += '<th>PRO (g)</th>';
         html += '<th>FAT (g)</th>';
@@ -98,8 +99,10 @@
         html += '</tbody>';
         html += '<tfoot>';
         html += '<tr id="totals_row' + this._description_id + '">';
-        html += '<td><input  type="button" id="add_item' + this._description_id + '" value="Add New Item">';
-        html += '<input  type="button" id="add_recipe' + this._description_id + '" value="RECIPE"></td>';
+        if(this.options.read_only == false) {
+            html += '<td><input  type="button" id="add_item' + this._description_id + '" value="Add New Item">';
+            html += '<input  type="button" id="add_recipe' + this._description_id + '" value="RECIPE"></td>';
+        }
         html += '</tr>';
         html += '</tfoot>';
         html += '</table>';
@@ -121,39 +124,41 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_protein_input_' + this._meal_id + '" value="' + calculatedIngredient.protein + '">';
+        html += '<input readonly size="5" type="text"  class="number_input meal_protein_input_' + this._meal_id + '" value="' + calculatedIngredient.protein + '">';
         html += '</td>';
 
         html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_fats_input_' + this._meal_id + '" value="' + calculatedIngredient.fats + '">';
+        html += '<input readonly size="5" type="text"  class="number_input meal_fats_input_' + this._meal_id + '" value="' + calculatedIngredient.fats + '">';
         html += '</td>';
 
         html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_carbs_input_' + this._meal_id + '" value="' + calculatedIngredient.carbs + '">';
+        html += '<input readonly size="5" type="text"  class="number_input meal_carbs_input_' + this._meal_id + '" value="' + calculatedIngredient.carbs + '">';
         html += '</td>';
 
         html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_calories_input_' + this._meal_id + '" value="' + calculatedIngredient.calories + '">';
+        html += '<input readonly size="5" type="text"  class="number_input meal_calories_input_' + this._meal_id + '" value="' + calculatedIngredient.calories + '">';
         html += '</td>';
 
         html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_energy_input_' + this._meal_id + '" value="' + calculatedIngredient.energy + '">';
+        html += '<input readonly size="5" type="text"  class="number_input meal_energy_input_' + this._meal_id + '" value="' + calculatedIngredient.energy + '">';
         html += '</td>';
 
         html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_saturated_fat_input_' + this._meal_id + '" value="' + calculatedIngredient.saturated_fat + '">';
+        html += '<input readonly size="5" type="text"  class="number_input meal_saturated_fat_input_' + this._meal_id + '" value="' + calculatedIngredient.saturated_fat + '">';
         html += '</td>';
 
         html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_total_sugars_input_' + this._meal_id + '" value="' + calculatedIngredient.total_sugars + '">';
+        html += '<input readonly size="5" type="text"  class="number_input meal_total_sugars_input_' + this._meal_id + '" value="' + calculatedIngredient.total_sugars + '">';
         html += '</td>';
 
         html += '<td>';
-        html += '<input readonly size="5" type="text"  class="meal_sodium_input_' + this._meal_id + '" value="' + calculatedIngredient.sodium + '">';
+        html += '<input readonly size="5" type="text"  class="number_input meal_sodium_input_' + this._meal_id + '" value="' + calculatedIngredient.sodium + '">';
         html += '</td>';
 
         html += '<td>';
+        if(this.options.read_only == false) {
         html += '<a href="javascript:void(0)" class="delete_meal" title="delete"></a>';
+        }
         html += '</td>';
 
         html += '</tr>';

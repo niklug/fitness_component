@@ -14,5 +14,15 @@ jimport('joomla.application.component.controller');
 
 class FitnessController extends JController
 {
+     public function display($tpl = null) {
+         $user		= JFactory::getUser();
 
+         if($user->guest) {
+             $this->setRedirect(JRoute::_(JURI::base() . 'index.php', false));
+             $this->setMessage('Login please to proceed');
+             return false;
+      
+         }
+         parent::display();
+     }
 }

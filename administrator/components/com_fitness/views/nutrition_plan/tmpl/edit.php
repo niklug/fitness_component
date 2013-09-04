@@ -233,7 +233,9 @@ JHtml::_('behavior.keepalive');
                         <br/>
                         <hr>
                         <br/>
-                        
+                        <?php
+                        if($this->item->id) {
+                        ?>
                         <div style="float:right">
                             <table >
                                 <thead>
@@ -413,6 +415,9 @@ JHtml::_('behavior.keepalive');
                                 </tbody>
                             </table>
                         </div>
+                        <?php
+                        }
+                        ?>
                         <div class="clr"></div>
                         <div class="clr"></div>
                         
@@ -501,7 +506,8 @@ JHtml::_('behavior.keepalive');
             'main_wrapper' : $("#diary_guide"),
             'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
             'db_table' : '#__fitness_nutrition_plan_ingredients',
-            'parent_view' : 'nutrition_plan_backend'
+            'parent_view' : 'nutrition_plan_backend',
+            'read_only' : false
 
         }
 
@@ -512,7 +518,8 @@ JHtml::_('behavior.keepalive');
             'add_meal_button' : $("#add_plan_meal"),
             'activity_level' : "input[name='jform[activity_level]']",
             'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
-            'db_table' : '#__fitness_nutrition_plan_meals'
+            'db_table' : '#__fitness_nutrition_plan_meals',
+            'read_only' : false
         }
 
 
@@ -539,7 +546,7 @@ JHtml::_('behavior.keepalive');
         }
 
 
-         var calculate_summary_options = {
+        var calculate_summary_options = {
             'activity_level' : "input[name='jform[activity_level]']"
 
         }
