@@ -444,22 +444,7 @@ JHtml::_('behavior.keepalive');
 
 <script type="text/javascript">
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     (function($) {
 
@@ -661,7 +646,7 @@ JHtml::_('behavior.keepalive');
         }
 
     
-    })(jQuery);
+    })($js);
     
     
     

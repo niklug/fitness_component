@@ -28,7 +28,7 @@ $parent_view  = JRequest::getVar('parent_view');
 
 ?>
 <h1>SELECT A RECIPE</h1>
-<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_recipes&tmpl=component&layout=popup_view&nutrition_plan_id=' . $nutrition_plan_id . '&meal_id=' + $meal_id + '&type=' . $type . '&parent_view=' . $parent_view); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_recipes&tmpl=component&layout=popup_view&nutrition_plan_id=' . $nutrition_plan_id . '&meal_id=' . $meal_id . '&type=' . $type . '&parent_view=' . $parent_view); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Recipe Name: '); ?></label>
@@ -82,9 +82,6 @@ $parent_view  = JRequest::getVar('parent_view');
 	<table class="adminlist">
 		<thead>
 			<tr>
-				<th width="1%">
-					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
-				</th>
 
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_RECIPES_RECIPE_NAME', 'a.recipe_name', $listDirn, $listOrder); ?>
@@ -148,9 +145,7 @@ $parent_view  = JRequest::getVar('parent_view');
 			$canChange	= $user->authorise('core.edit.state',	'com_fitness');
 			?>
 			<tr class="row<?php echo $i % 2; ?>">
-				<td class="center">
-					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
-				</td>
+		
 
 				<td>
         				<?php echo $this->escape($item->recipe_name); ?></a>

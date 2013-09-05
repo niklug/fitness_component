@@ -19,6 +19,8 @@ $lang->load('com_fitness', JPATH_ADMINISTRATOR);
 
 $user = &JFactory::getUser();
 
+$nutrition_plan_id = $this->nutrition_plan_id;
+
 $trainer_id = $item->trainer_id ? $item->trainer_id : $this->active_plan_data->trainer_id;
 
 $goal_category_id = $item->goal_category_id ? $item->goal_category_id : $this->active_plan_data->primary_goal_id;
@@ -32,24 +34,14 @@ if ($this->item->submit_date && ($this->item->submit_date != '0000-00-00 00:00:0
     $submitted = true;
 }
 
-$active_plan_id = $this->active_plan_data->id;
 
+$heavy_target = $this->model->getNutritionTarget($nutrition_plan_id, 'heavy');
 
-$heavy_target = $this->model->getNutritionTarget($active_plan_id, 'heavy');
+$light_target = $this->model->getNutritionTarget($nutrition_plan_id, 'light');
 
-$light_target = $this->model->getNutritionTarget($active_plan_id, 'light');
-
-$rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
+$rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
 
 ?>
-<script type="text/javascript">
-    
-    $js(document).ready(function() {
-        $js('#form-nutrition_diary').submit(function(event) {
-
-        });
-    });
-</script>
 <div class="fitness_wrapper">
     <form id="form-nutrition_diary" action="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.save'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
         <h2>NUTRITION DIARY</h2>
@@ -533,6 +525,7 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
 
 
         <input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
+        <input type="hidden" name="jform[nutrition_plan_id]" value="<?php echo $nutrition_plan_id; ?>" />
         <input type="hidden" name="jform[client_id]" value="<?php echo $user->id; ?>" />
         <input type="hidden" name="jform[trainer_id]" value="<?php echo $trainer_id ?>" />
         <input type="hidden" name="jform[goal_category_id]" value="<?php echo $goal_category_id; ?>" />
@@ -643,7 +636,7 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
         /* MEALS BLOCK */
         var item_description_options = {
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'main_wrapper' : $("#diary_guide"),
             'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
             'db_table' : '#__fitness_nutrition_diary_ingredients',
@@ -655,7 +648,7 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
         var nutrition_meal_options = {
             'main_wrapper' : $("#meals_wrapper"),
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'add_meal_button' : $("#add_plan_meal"),
             'activity_level' : "input[name='jform[activity_level]']",
             'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
@@ -666,7 +659,7 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
 
         var nutrition_comment_options = {
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_nutrition_diary_meal_comments'
         }
@@ -679,11 +672,11 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
         
         var macronutrient_targets_options = {
             'main_wrapper' : $("#daily_micronutrient"),
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'protein_grams_coefficient' : 4,
             'fats_grams_coefficient' : 9,
             'carbs_grams_coefficient' : 4,
-            'nutrition_plan_id' : '<?php echo $this->active_plan_data->id;?>',
+            'nutrition_plan_id' : '<?php echo $nutrition_plan_id;?>',
             'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
         }
         
@@ -706,6 +699,16 @@ $rest_target = $this->model->getNutritionTarget($active_plan_id, 'rest');
         macronutrient_targets_light.run();
         macronutrient_targets_rest.run();
         /* END MEALS BLOCK */
+        
+        // on save
+        $('#form-nutrition_diary').submit(function(event) {
+            var activity_level_element =  "input[name='jform[activity_level]']";
+            var activity_level = $(activity_level_element +":checked").val();
+            if(! activity_level) {
+                alert('Choose your Activity Level first!');
+                return false;
+            }
+        });
         
     })($js);
 

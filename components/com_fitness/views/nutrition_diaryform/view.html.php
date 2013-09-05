@@ -50,7 +50,15 @@ class FitnessViewNutrition_diaryform extends JView {
            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
         }    
         
-        $this->_prepareDocument();
+        $nutrition_plan_id = $this->_prepareDocument();
+        
+        if(!$nutrition_plan_id) {
+            JError::raiseNotice( 100, 'Please contact your Trainer and discuss your current Nutrition Plan before proceeding with your Nutrition Diary' );
+            ?>
+            <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.cancel'); ?>" title="">Back</a>
+            <?php
+            return;
+        }
 
         parent::display($tpl);
     }
@@ -129,9 +137,15 @@ class FitnessViewNutrition_diaryform extends JView {
                 $active_plan_data = $model->getActivePlanData();
                 
                 
+                
+                $nutrition_plan_id = $this->item->nutrition_plan_id ? $this->item->nutrition_plan_id : $active_plan_data->id;
+                
                 $this->assign('model', $model);
                 $this->assign('secondary_trainers', $secondary_trainers);
                 $this->assign('active_plan_data', $active_plan_data);
+                $this->assign('nutrition_plan_id', $nutrition_plan_id);
+                
+                return $nutrition_plan_id;
 	}        
     
 }

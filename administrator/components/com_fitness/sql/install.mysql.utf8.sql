@@ -904,7 +904,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_shopping_list` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-
+`nutrition_plan_id` int(11) unsigned NOT NULL,
 `entry_date` DATE NOT NULL ,
 `submit_date` DATETIME NOT NULL ,
 `client_id` INT(255)  NOT NULL ,
@@ -919,7 +919,9 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
 `activity_level` int(1) NOT NULL DEFAULT '0',
 `created` DATETIME NOT NULL ,
 `state` TINYINT(1)  NOT NULL ,
-PRIMARY KEY (`id`)
+PRIMARY KEY (`id`),
+KEY `nutrition_plan_id` (`nutrition_plan_id`),
+FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_meals` (
