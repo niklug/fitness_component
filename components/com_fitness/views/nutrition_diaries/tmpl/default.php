@@ -77,19 +77,33 @@ defined('_JEXEC') or die;
                             <?php echo $item->score ? $item->score . '%' : '-' ?>
                         </td>
                         <td>
-                            <?php echo JFactory::getUser($item->assessed_by)->name; ?>
+                            <?php
+                            if($item->assessed_by) {
+                                echo JFactory::getUser($item->assessed_by)->name;
+                            } else {
+                                echo ' - ';
+                            }
+                            ?>
                         </td>
                         <td>
                             <?php 
                             $date = JFactory::getDate($item->submit_date);
                             $submit_date = $date->toFormat('%a %d %b %y');
-                            echo $submit_date ? $submit_date : '-';
+                            if($item->submit_date != '0000-00-00 00:00:00') {
+                                $submit_date;
+                            } else {
+                                echo ' - ';
+                            }
                             ?>
                         </td>
                         <td>
                             <?php 
                             $submit_time =  $date->format('H:i'); 
-                            echo $submit_time ? $submit_time : '-';
+                            if($item->submit_date != '0000-00-00 00:00:00') {
+                                echo $submit_time;
+                            } else {
+                                echo ' - ';
+                            }
                             ?>
                         </td>
                         <td>

@@ -199,6 +199,7 @@ a:hover, a:active, a:focus {
 .fitness_wrapper table thead{
     background-color: #313031;
     height: 25px;
+    text-align: left;
 }
 
 td.center, th.center, .center {

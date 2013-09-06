@@ -20,6 +20,18 @@ defined('_JEXEC') or die;
     .left {
         float: none !important;
     }
+    
+    #rt-main, .rt-container {
+        width: 100% !important;
+    }
+    
+    body {
+        background-color: #F7F7F7 !important;
+    }
+    
+    #filter_search {
+        background-color: #ffffff;
+    }
 
 </style>
 <?php
