@@ -2,7 +2,7 @@
 <form>
 	<fieldset>
 
-              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_ID"
+              <field name="id" type="hidden" default="0" label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_ID"
             readonly="true" class="readonly"
             description="JGLOBAL_FIELD_ID_DESC" /> 
 
@@ -10,34 +10,31 @@
                 
             label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_ENTRY_DATE"
             description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_ENTRY_DATE" 
-                
-                
-                 required="true"  /> 
+       /> 
 
        <field name="submit_date" type="calendar"
                 
             label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_SUBMIT_DATE"
             description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_SUBMIT_DATE" 
-                
-                
-                 required="true"  /> 
+         /> 
+       
+        <field name="created" type="calendar"
+            label="Date Created"
+            description="" 
+         /> 
+              
+              
 
        <field name="client_id" type="text" size="40" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_CLIENT_ID"
             description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_CLIENT_ID" 
-        
-        
-         required="true" 
         filter="safehtml" /> 
 
        <field name="trainer_id" type="text" size="40" class="inputbox"
         
             label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_TRAINER_ID"
             description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_TRAINER_ID" 
-        
-        
-         required="true" 
         filter="safehtml" /> 
 
        <field name="assessed_by" type="text" size="40" class="inputbox"
@@ -62,9 +59,7 @@
         
             label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_TRAINING_PERIOD"
             description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_TRAINING_PERIOD" 
-        
-        
-        
+         
         filter="safehtml" /> 
 
        <field name="nutrition_focus" type="text" size="40" class="inputbox"
@@ -94,7 +89,7 @@
         
         filter="safehtml" /> 
 
-       <field name="trainer_comments" type="editor"
+       <field name="trainer_comments" type="editor" width="100%" height="150px"
                 
             label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_TRAINER_COMMENTS"
             description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_TRAINER_COMMENTS" 
@@ -113,6 +108,19 @@
         <option value="1">JPUBLISHED</option>
         <option value="0">JUNPUBLISHED</option>
     </field>
+    
+            <field
+            name="activity_level"
+            type="radio"
+            label="Level of activity for this entry?"
+            description="Level of activity for this entry?"
+            class="inputbox"
+            size="1"
+            default="0">
+            <option value="1">HEAVY TRAINING DAY</option>
+            <option value="2">LIGHT TRAINING DAY</option>
+            <option value="3">RECOVERY/REST DAY</option>
+        </field>
 
 	</fieldset>
 

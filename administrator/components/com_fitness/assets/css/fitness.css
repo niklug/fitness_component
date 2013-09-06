@@ -535,3 +535,44 @@
 .totals_right {
     width: 40px;
 }
+
+
+
+
+.status_inprogress {
+    background-color: #F9DEA4;
+    border: 2px solid #C79700;
+}
+
+.status_pass {
+    background-color: #DBFFDB;
+    border: 2px solid #429625;
+}
+
+.status_fail {
+    background-color: #E4B4B4;
+    border: 2px solid #A71313;
+}
+
+.status_distinction {
+    background-color: #DBFFDB;
+    border: 2px solid #429625;
+}
+
+.status_submitted {
+    background-color: #D2D2D2;
+    border: 2px solid #4C4C4C;
+}
+
+.status_button {
+    display: block;
+    font-size: 10px !important;
+    height: 11px;
+    margin: 0;
+    padding: 2px 0 7px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 80px;
+    color:#000000;
+    line-height: 19px;
+}

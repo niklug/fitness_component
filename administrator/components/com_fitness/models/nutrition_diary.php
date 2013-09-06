@@ -121,5 +121,25 @@ class FitnessModelnutrition_diary extends JModelAdmin
 
 		}
 	}
+        
+        function  get_client_trainers($user_id) {
+            $db = & JFactory::getDBO();
+            $query = "SELECT  other_trainers FROM #__fitness_clients WHERE user_id='$user_id' AND state='1'";
+            $db->setQuery($query);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $other_trainers = $db->loadResultArray(0);
+            
+            $all_trainers_id = explode(',', $other_trainers[0]);
+            if(!$all_trainers_id[0]) return;
+            foreach ($all_trainers_id as $user_id) {
+                $user = &JFactory::getUser($user_id);
+                $all_trainers_name[] = $user->name;
+            }
+
+            $result = array_combine($all_trainers_id, $all_trainers_name);
+            return $result;
+        }
 
 }

@@ -71,7 +71,7 @@ defined('_JEXEC') or die;
                             ?>
                         </td>
                         <td>
-                            <?php echo $this->status_html($item->status); ?>
+                            <?php echo $this->model->status_html($item->status); ?>
                         </td>
                         <td>
                             <?php echo $item->score ? $item->score . '%' : '-' ?>

@@ -48,7 +48,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
         <table width="100%">
             <tr style="display:none;">
                 <td colspan="2">
-                    <fieldset id="daily_micronutrient">
+                    <fieldset id="daily_micronutrient"></fieldset>
                 </td>
             </tr>
             <tr>
@@ -517,6 +517,15 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                     </div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                        <div class="clr"></div>
+                        <div id="plan_comments_wrapper"></div>
+                        <div class="clr"></div>
+                        <input id="add_comment_0" class="" type="button" value="Add Comment" >
+                        <div class="clr"></div>
+                </td>
+            </tr>
             <?php
             }
             ?>
@@ -680,6 +689,12 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
             'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
         }
         
+        var nutrition_bottom_comment_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
+            'db_table' : '#__fitness_nutrition_diary_comments'
+        }
         
         var nutrition_meal = $.nutritionMeal(nutrition_meal_options, item_description_options, nutrition_comment_options);
         var calculateSummary =  $.calculateSummary(calculate_summary_options);
@@ -690,7 +705,8 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
         var macronutrient_targets_light = $.macronutrientTargets(macronutrient_targets_options, 'light', 'LIGHT TRAINING DAY');
 
         var macronutrient_targets_rest = $.macronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
-
+        //bottom comments
+        var plan_comments = $.nutritionComment(nutrition_bottom_comment_options, nutrition_comment_options.nutrition_plan_id, 0);
         
         nutrition_meal.run();
         calculateSummary.run();
@@ -698,6 +714,9 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
         macronutrient_targets_heavy.run();
         macronutrient_targets_light.run();
         macronutrient_targets_rest.run();
+        
+        var plan_comments_html = plan_comments.run();
+        $("#plan_comments_wrapper").html(plan_comments_html);
         /* END MEALS BLOCK */
         
         // on save

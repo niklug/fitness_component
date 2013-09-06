@@ -535,4 +535,5 @@ class FitnessModelnutrition_plan extends JModelAdmin
             
             return json_encode($result);      
         }
+        
 }

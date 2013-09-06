@@ -51,8 +51,14 @@ class FitnessViewNutrition_diaries extends JView
             
             $document = &JFactory::getDocument();
             $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
-        
-		parent::display($tpl);
+            
+            
+            $model = $this->getModel();
+
+            $this->assign('model', $model);
+            
+
+            parent::display($tpl);
 	}
 
 	/**

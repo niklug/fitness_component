@@ -35,9 +35,10 @@ class FitnessViewNutrition_diary extends JView
             throw new Exception(implode("\n", $errors));
 		}
                 
-                                // Import CSS
+                         
                 $document = JFactory::getDocument();
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'plan_summary_class.js');
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'nutrition_plan_class.js');
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'dayly_targets_class.js');
@@ -53,7 +54,15 @@ class FitnessViewNutrition_diary extends JView
                 $document->addStyleSheet( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
                 
                 echo '<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />';
-
+                
+                // connect frontend model
+                require_once JPATH_COMPONENT_SITE . DS .  'models' . DS . 'nutrition_diaryform.php';
+                $frontend_model  = new FitnessModelNutrition_diaryForm();
+                
+                $model = $this->getModel();
+                
+                $this->assign('model', $model);
+                $this->assign('frontend_model', $frontend_model);
 		$this->addToolbar();
 		parent::display($tpl);
 	}

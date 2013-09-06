@@ -351,7 +351,7 @@ class FitnessModelNutrition_diaryForm extends JModelForm
         return $db->loadObject();
     }
     
-        function getGoalName($id) {
+     function getGoalName($id) {
             $db = JFactory::getDbo();
             $sql = "SELECT name FROM #__fitness_goal_categories WHERE id='$id' AND state='1'";
             $db->setQuery($sql);

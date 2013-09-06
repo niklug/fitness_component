@@ -279,7 +279,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</td>
 
 				<td>
+                                    
 					<?php echo $item->entry_date; ?>
+   
 				</td>
 				<td>
 					<?php echo $item->submit_date; ?>
@@ -303,7 +305,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $item->nutrition_focus_name; ?>
 				</td>
 				<td>
-					<?php echo $item->status; ?>
+                                    <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.edit&id='.(int) $item->id); ?>">
+					<?php echo $this->model->status_html($item->status); ?>
+                                    </a>
 				</td>
 				<td>
 					<?php echo $item->score; ?>

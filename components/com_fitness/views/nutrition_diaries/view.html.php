@@ -93,40 +93,11 @@ class FitnessViewNutrition_diaries extends JView
                 $document = JFactory::getDocument();
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 
+                $model = $this->getModel();
+                $this->assign('model', $model);
+                
 	}    
         
         
-        function status_html($status) {
-            switch($status) {
-                case '1' :
-                    $class = 'status_inprogress';
-                    $text = 'IN PROGRESS';
-                    break;
-                case '2' :
-                    $class = 'status_pass';
-                    $text = 'PASS';
-                    break;
-                case '3' :
-                    $class = 'status_fail';
-                    $text = 'FAIL';
-                    break;
-                case '4' :
-                    $class = 'status_distinction';
-                    $text = 'DISTINCTION';
-                    break;
-                case '5' :
-                    $class = 'status_submitted';
-                    $text = 'SUBMITTED';
-                    break;
-                default :
-                    $class = 'status_inprogress';
-                    $text = 'IN PROGRESS';
-                    break;
-            }
-            
-            $html = '<div class="status_button ' . $class . '">' . $text . '</div>';
-            
-            return $html;
-        }
-    	
+   	
 }
