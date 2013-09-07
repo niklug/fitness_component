@@ -32,13 +32,14 @@ class FitnessViewNutrition_diary extends JView
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
-            throw new Exception(implode("\n", $errors));
+                    throw new Exception(implode("\n", $errors));
 		}
                 
                          
                 $document = JFactory::getDocument();
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'underscore-min.js');
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'plan_summary_class.js');
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'nutrition_plan_class.js');
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'dayly_targets_class.js');
@@ -49,20 +50,30 @@ class FitnessViewNutrition_diary extends JView
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.timepicker.min.js');
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery-ui.js');
                 
+                echo '<!--[if IE]><script type="text/javascript" src="' . JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.pie.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'flot_pie_class.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'status_class.js');
                 
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 $document->addStyleSheet( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
                 
                 echo '<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />';
                 
-                // connect frontend model
+                // connect frontend form model
                 require_once JPATH_COMPONENT_SITE . DS .  'models' . DS . 'nutrition_diaryform.php';
-                $frontend_model  = new FitnessModelNutrition_diaryForm();
+                $frontend_form_model  = new FitnessModelNutrition_diaryForm();
+                
+                // connect frontend list model
+                require_once JPATH_COMPONENT_ADMINISTRATOR . DS .  'models' . DS . 'nutrition_diaries.php';
+                $backend_list_model  = new FitnessModelNutrition_diaries();
                 
                 $model = $this->getModel();
                 
                 $this->assign('model', $model);
-                $this->assign('frontend_model', $frontend_model);
+                $this->assign('frontend_form_model', $frontend_form_model);
+                $this->assign('backend_list_model', $backend_list_model);
 		$this->addToolbar();
 		parent::display($tpl);
 	}

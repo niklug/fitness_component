@@ -532,7 +532,8 @@ JHtml::_('behavior.keepalive');
 
 
         var calculate_summary_options = {
-            'activity_level' : "input[name='jform[activity_level]']"
+            'activity_level' : "input[name='jform[activity_level]']",
+            'draw_chart' : false
 
         }
         /* END  OPTIONS  */

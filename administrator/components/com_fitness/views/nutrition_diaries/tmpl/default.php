@@ -279,8 +279,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</td>
 
 				<td>
-                                    
+                                    <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.edit&id='.(int) $item->id); ?>">
 					<?php echo $item->entry_date; ?>
+                                    </a>
    
 				</td>
 				<td>
@@ -305,9 +306,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $item->nutrition_focus_name; ?>
 				</td>
 				<td>
-                                    <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.edit&id='.(int) $item->id); ?>">
+                                    
 					<?php echo $this->model->status_html($item->status); ?>
-                                    </a>
+                                    
 				</td>
 				<td>
 					<?php echo $item->score; ?>

@@ -27,7 +27,56 @@
         this.setEnergyVariancePercents();
         this.setDailyTotalWater();
         this.setDailyVarianceWater();
+        
+        if(this.options.draw_chart) {
+            this.setScores(this.options.chart_container);
+        }
 
+    }
+    
+    CalculateSummary.prototype.setScores = function(container) {
+        var protein_variance = $("#variance_protein_percents").val();
+        var carbs_variance = $("#variance_fats_percents").val();
+        var fats_variance = $("#variance_carbs_percents").val();
+        
+        var protein= this.calculateScores(protein_variance);
+        var carbs = this.calculateScores(carbs_variance);
+        var fats = this.calculateScores(fats_variance);
+        
+        $("#protein_score").html(protein + '%');
+        $("#carbs_score").html(carbs + '%');
+        $("#fats_score").html(fats + '%');
+        
+        var total_score = this.calculateTotalScore(protein, carbs, fats);
+        $("#final_score").html(total_score + '%');
+
+        var data = [
+            {label: "Protein:" , data: [[1, protein]]},
+            {label: "Carbs:", data: [[1, carbs]]},
+            {label: "Fat:", data: [[1, fats]]}
+        ];
+        
+        
+        var targets_pie = $.drawPie(data, container);
+
+        targets_pie.draw();  
+    }
+    
+    CalculateSummary.prototype.calculateTotalScore = function(protein, carbs, fats) {
+        var sum = protein + carbs + fats;
+       
+        return this.round_2_sign(sum / 3);
+    }
+    
+    CalculateSummary.prototype.calculateScores = function(value) {
+        var value = parseFloat(value);
+        if(value < 0) {
+            var score = 100 + value;
+        } else {
+            var score = 100 - value;
+        }
+        score = Math.abs(score);
+        return this.round_2_sign(score);
     }
 
 

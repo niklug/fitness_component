@@ -95,7 +95,7 @@ JHtml::_('behavior.keepalive');
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <?php echo $this->frontend_model->getGoalName($this->item->goal_category_id); ?>
+                                        <?php echo $this->frontend_form_model->getGoalName($this->item->goal_category_id); ?>
                                     </span>
                                 </td>
                             </tr>
@@ -111,7 +111,7 @@ JHtml::_('behavior.keepalive');
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <?php  echo $this->frontend_model->getTrainingPeriodName($this->item->training_period_id); ?>
+                                        <?php  echo $this->frontend_form_model->getTrainingPeriodName($this->item->training_period_id); ?>
                                     </span>
                                 </td>
                             </tr>
@@ -133,7 +133,7 @@ JHtml::_('behavior.keepalive');
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <?php echo $this->frontend_model->getNutritionFocusName($this->item->nutrition_focus); ?>
+                                        <?php echo $this->frontend_form_model->getNutritionFocusName($this->item->nutrition_focus); ?>
                                     </span>
                                 </td>
                             </tr>
@@ -183,8 +183,52 @@ JHtml::_('behavior.keepalive');
                         <br/>
                         <hr>
                         <br/>
+                        <div  style="float:left; width:500px;">
+                            <table width="100%">
+                                <tr>
+                                    <td  id="pie_td" class="center">
+                                        <div class="pie-container">
+                                            <h5>MACRONUTRIENT SCORES</h5>
+                                            <div id="placeholder_targets" class="placeholder_pie"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h5>Individual Macronutrient Scores</h5>
+                                        <table width="100%">
+                                            <tr>
+                                                <td>Protein</td>
+                                                <td>Carbs</td>
+                                                <td>Fat</td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td id="protein_score"></td>
+                                                <td id="carbs_score"></td>
+                                                <td id="fats_score"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <h5>FINAL SCORE</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="final_score" colspan="2">
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="status_button_place" colspan="2">
+                                                    <br/>
+                                                    <?php echo $this->backend_list_model->status_html($this->item->status) ?>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                         <div style="float:right">
-                            <table >
+                            <table>
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -378,33 +422,14 @@ JHtml::_('behavior.keepalive');
     </div>
     
     <input type="hidden" name="jform[assessed_by]" value="<?php echo JFactory::getUser()->id; ?>" />
-    
-    <div class="width-60 fltlft">
-        <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_FITNESS_LEGEND_NUTRITION_DIARY'); ?></legend>
-            <ul class="adminformlist">
-
-  
-				<li><?php echo $this->form->getLabel('status'); ?>
-				<?php echo $this->form->getInput('status'); ?></li>
-				<li><?php echo $this->form->getLabel('score'); ?>
-				<?php echo $this->form->getInput('score'); ?></li>
-		
-			
-
-
-            </ul>
-        </fieldset>
-    </div>
-    
-
-    
-
+    <input type="hidden" name="jform[score]" value="" />
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 
 </form>
+
+
 
 
 <script type="text/javascript">
@@ -422,6 +447,7 @@ JHtml::_('behavior.keepalive');
         }
         
         var activity_level = '<?php echo $this->item->activity_level; ?>';
+        
         
         if(activity_level == '1') {
             var macronutrient_targets_heavy = $.macronutrientTargets(macronutrient_targets_options, 'heavy', 'HEAVY TRAINING DAY');
@@ -478,7 +504,28 @@ JHtml::_('behavior.keepalive');
         }
         
         var calculate_summary_options = {
-            'activity_level' : "input[name='jform[activity_level]']"
+            'activity_level' : "input[name='jform[activity_level]']",
+            'chart_container' : $("#placeholder_targets"),
+            'draw_chart' : true
+        }
+        
+        var status_options = {
+            'item_id' : '<?php echo $this->item->id; ?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'db_table' : '#__fitness_nutrition_diary',
+            'status_button' : '.status_button',
+            'status_button_dialog' : 'status_button_dialog',
+            'dialog_status_wrapper' : 'dialog_status_wrapper',
+            'dialog_status_template' : '#dialog_status_template',
+            'status_button_template' : '#status_button_template',
+            'status_button_place' : '#status_button_place',
+            'statuses' : {
+                '2' : {'label' : 'PASSED', 'class' : 'status_pass'},
+                '3' : {'label' : 'FAIL', 'class' : 'status_fail'}, 
+                '4' : {'label' : 'DISTINCTION', 'class' : 'status_distinction'}
+            },
+            'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
+            'hide_image_class' : 'hideimage'
         }
         
         // meal blocks object
@@ -495,7 +542,40 @@ JHtml::_('behavior.keepalive');
         
         var plan_comments_html = plan_comments.run();
         $("#plan_comments_wrapper").html(plan_comments_html);
+        
+        // status
+        var score_status = $.status(status_options);
+        score_status.run();
+        
     })($js);
 
     
+</script>
+
+
+<script type="text/template" id="dialog_status_template">
+    <div id="<%= wrapper %>">
+        <img class="<%=  hide_image_class %>" src="<%= close_image %>" alt="close" title="close" >
+        <% _.each(statuses, function(item, key){
+            if(status_id != key) {
+            %>
+                <a class="status_button_dialog <%= item.class %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+            <% 
+            }
+        })  
+        %>
+        <input type="checkbox" class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>
+    </div>
+      
+</script>
+
+<script type="text/template" id="status_button_template">
+    <% _.each(statuses, function(item, key){
+        if(status_id == key) {
+        %>
+            <a class="status_button <%= item.class %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+        <% 
+        }
+    })  
+    %>
 </script>

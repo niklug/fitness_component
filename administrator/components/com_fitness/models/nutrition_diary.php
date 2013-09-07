@@ -141,5 +141,24 @@ class FitnessModelnutrition_diary extends JModelAdmin
             $result = array_combine($all_trainers_id, $all_trainers_name);
             return $result;
         }
+        
+        public function updateDiaryStatus($data_encoded, $table){
+            $ret['IsSuccess'] = 1;
+            $db = JFactory::getDbo();
+       
+            $obj = json_decode($data_encoded);
+                   
+            $obj = $db->updateObject($table, $obj, 'id');
+    
+
+            if (!$obj) {
+                $ret['IsSuccess'] = false;
+                $ret['Msg'] = $db->stderr();
+            }
+            
+            $result = array('status' => $ret, 'data' => $obj->status);
+            
+            return json_encode($result);   
+        }
 
 }

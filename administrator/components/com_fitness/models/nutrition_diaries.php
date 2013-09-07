@@ -297,7 +297,7 @@ class FitnessModelnutrition_diaries extends JModelList {
                 break;
             case '2' :
                 $class = 'status_pass';
-                $text = 'PASS';
+                $text = 'PASSED';
                 break;
             case '3' :
                 $class = 'status_fail';
@@ -317,7 +317,7 @@ class FitnessModelnutrition_diaries extends JModelList {
                 break;
         }
 
-        $html = '<div class="status_button ' . $class . '">' . $text . '</div>';
+        $html = '<a href="javascript:void(0)" data-status_id="' . $status . '" class="status_button ' . $class . '">' . $text . '</a>';
 
         return $html;
     }
