@@ -188,41 +188,17 @@ JHtml::_('behavior.keepalive');
                                 <tr>
                                     <td  id="pie_td" class="center">
                                         <div class="pie-container">
-                                            <h5>MACRONUTRIENT SCORES</h5>
+                                            <h3>MACRONUTRIENT SCORES</h3>
                                             <div id="placeholder_targets" class="placeholder_pie"></div>
                                         </div>
                                     </td>
                                     <td>
-                                        <h5>Individual Macronutrient Scores</h5>
-                                        <table width="100%">
-                                            <tr>
-                                                <td>Protein</td>
-                                                <td>Carbs</td>
-                                                <td>Fat</td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td id="protein_score"></td>
-                                                <td id="carbs_score"></td>
-                                                <td id="fats_score"></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <h5>FINAL SCORE</h5>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td id="final_score" colspan="2">
-                                                    
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td id="status_button_place" colspan="2">
-                                                    <br/>
-                                                    <?php echo $this->backend_list_model->status_html($this->item->status) ?>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        <h3 style="text-align: center;">FINAL SCORE</h3>
+                                        <div id="final_score" colspan="2"></div>
+                                         <br/>
+                                        <div id="status_button_place" colspan="2">
+                                                <?php echo $this->backend_list_model->status_html($this->item->status) ?>
+                                        </div>
                                     </td>
                                 </tr>
                             </table>

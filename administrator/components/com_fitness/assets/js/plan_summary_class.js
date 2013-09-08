@@ -36,8 +36,8 @@
     
     CalculateSummary.prototype.setScores = function(container) {
         var protein_variance = $("#variance_protein_percents").val();
-        var carbs_variance = $("#variance_fats_percents").val();
-        var fats_variance = $("#variance_carbs_percents").val();
+        var carbs_variance = $("#variance_carbs_percents").val();
+        var fats_variance = $("#variance_fats_percents").val();
         
         var protein= this.calculateScores(protein_variance);
         var carbs = this.calculateScores(carbs_variance);
@@ -49,15 +49,21 @@
         
         var total_score = this.calculateTotalScore(protein, carbs, fats);
         $("#final_score").html(total_score + '%');
+        
+        
+        var target_kind = this.getDayKindPrefix();
+        var dayly_target_protein = this.getTargetPercentsValue('protein', target_kind);
+        var dayly_target_carbs = this.getTargetPercentsValue('carbs', target_kind);
+        var dayly_target_fats = this.getTargetPercentsValue('fats', target_kind);
 
         var data = [
-            {label: "Protein:" , data: [[1, protein]]},
-            {label: "Carbs:", data: [[1, carbs]]},
-            {label: "Fat:", data: [[1, fats]]}
+            {label: "Protein: <br/>"  + protein + '%' , data: [[1, dayly_target_protein]]},
+            {label: "Carbs: <br/>" + carbs + '%', data: [[1, dayly_target_carbs]]},
+            {label: "Fat: <br/>" + fats + '%', data: [[1, dayly_target_fats]]}
         ];
         
         
-        var targets_pie = $.drawPie(data, container);
+        var targets_pie = $.drawPie(data, container, {'no_percent_label' : true});
 
         targets_pie.draw();  
     }

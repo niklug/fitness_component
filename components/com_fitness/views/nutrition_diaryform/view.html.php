@@ -136,11 +136,16 @@ class FitnessViewNutrition_diaryform extends JView {
                 $secondary_trainers = $model->get_own_trainers();
                 $active_plan_data = $model->getActivePlanData();
                 
+                // connect list frontend form model
+                require_once JPATH_COMPONENT_SITE . DS .  'models' . DS . 'nutrition_diaries.php';
+                $frontend_list_model  = new FitnessModelNutrition_diaries();
+                
                 
                 
                 $nutrition_plan_id = $this->item->nutrition_plan_id ? $this->item->nutrition_plan_id : $active_plan_data->id;
                 
                 $this->assign('model', $model);
+                $this->assign('frontend_list_model', $frontend_list_model);
                 $this->assign('secondary_trainers', $secondary_trainers);
                 $this->assign('active_plan_data', $active_plan_data);
                 $this->assign('nutrition_plan_id', $nutrition_plan_id);

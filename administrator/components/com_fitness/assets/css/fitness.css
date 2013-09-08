@@ -613,5 +613,22 @@
         font-size: 14px;
         line-height: 1.2em;
     }
+    
+    
 
 /* end pie*/
+
+#final_score{
+    color: #008000;
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 70px;
+    text-align: center;
+}
+
+#status_button_place {
+    margin-top: 50px;
+    padding-left: 39px;
+    text-align: center;
+}
+

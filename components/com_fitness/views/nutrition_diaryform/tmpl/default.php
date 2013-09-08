@@ -332,8 +332,31 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
             ?>
             <tr>
                 <td colspan="2">
-                    <div class="fitness_block_wrapper" style="min-height: 300px;">
+                    <div class="fitness_block_wrapper" style="min-height: 320px;">
                         <div class="internal_wrapper">
+                            <div  style="float:left; width:300px;">
+                                <div class="score_pie_container pie-container">
+                                    <h5 style="text-align: center;">MACRONUTRIENT SCORES</h5>
+                                    <div id="placeholder_scope" class="placeholder_pie"></div>
+                                </div>
+                                <table id="total_score" width="100%">
+                                    <tr>
+                                        <td>
+                                            <h5 style="text-align: center;">FINAL SCORE</h5>
+                                        </td>
+                                        <td>
+                                           <div id="final_score" ></div>
+                                        </td>
+                                        <td>
+                                            <div id="status_button_place" >
+                                                <?php echo $this->frontend_list_model->status_html($this->item->status) ?>
+                                            </div>
+                                        </td>
+                                            
+                                            
+                                    </tr>
+                                </table>
+                            </div>
                             <div style="float:right; font-size: 10px;">
                                 <table >
                                     <thead>
@@ -636,7 +659,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
 
             var container = $("#placeholder_targets");
 
-            var targets_pie = $.drawPie(data, container);
+            var targets_pie = $.drawPie(data, container, {'no_percent_label' : false});
 
             targets_pie.draw(); 
         }
@@ -675,8 +698,9 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
         
         
         var calculate_summary_options = {
-            'activity_level' : "input[name='jform[activity_level]']"
-
+            'activity_level' : "input[name='jform[activity_level]']",
+            'chart_container' : $("#placeholder_scope"),
+            'draw_chart' : true
         }
         
         var macronutrient_targets_options = {
@@ -728,6 +752,12 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                 return false;
             }
         });
+        
+        
+        // score pie
+        
+        
+        
         
     })($js);
 

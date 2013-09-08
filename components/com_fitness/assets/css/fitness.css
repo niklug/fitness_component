@@ -235,7 +235,7 @@ td.center, th.center, .center {
 }
 
 /* pie */
-    #placeholder_targets {
+    #placeholder_targets,  #placeholder_scope{
         width: 100%;
         height: 100%;
     }
@@ -484,4 +484,24 @@ display: inline-block;
     top: 100px;
     width: 98%;
     z-index: 999;
+}
+
+
+#final_score{
+    color: #008000;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#status_button_place {
+    text-align: center;
+}
+
+#total_score{
+    margin-top: 50px;
+}
+
+.score_pie_container{
+    margin-left: 40px;
 }
