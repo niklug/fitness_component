@@ -352,7 +352,7 @@ display: inline-block;
     font-size: 10px;
 }
 
-.fitness_block_wrapper .internal_wrapper textarea {
+.fitness_block_wrapper .internal_wrapper textarea, .comment_wrapper textarea {
     color: #fff;
     height: 50px;
 }

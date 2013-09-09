@@ -139,6 +139,18 @@ switch ($method) {
     break;
     //
 
+    // nutrition diary
+    case "sendDiaryPassEmail":
+        sendNutritionDiaryEmail('email_diary_pass');
+    break;
+    case "sendDiaryFailEmail":
+        sendNutritionDiaryEmail('email_diary_fail');
+    break;
+    case "sendDiarySubmittedEmail":
+        sendNutritionDiaryEmail('email_diary_submitted');
+    break;
+    //
+
     case "update_exercise_field":
         update_exercise_field();
     break;
@@ -1766,7 +1778,7 @@ function getEmailByRecipeId($recipe_id) {
     return $user->email; 
 }
 
-
+//nutrition plan email
 function sendNutritionPlanEmail($type) {
     $nutrition_plan_id = JRequest::getVar('id');
     
@@ -1815,6 +1827,69 @@ function getEmailByNutritionPlanId($nutrition_plan_id) {
     
     return $user->email; 
 }
+
+// nutrition diary email
+function sendNutritionDiaryEmail($type) {
+    $diary_id = JRequest::getVar('id');
+    
+    if(!$diary_id) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'No nutrition diary id';
+        echo json_encode($ret);
+        die();
+    }
+    switch ($type) {
+        case 'email_diary_pass':
+            $subject = 'Nutrition Diary Results';
+            break;
+        case 'email_diary_fail':
+            $subject = 'Nutrition Diary Results';
+            break;
+        case 'email_diary_submitted':
+            $subject = 'Nutrition Diary Results';
+            break;
+        default:
+            return;
+            break;
+    }
+
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&diary_id=' . $diary_id;
+    
+    $contents = getContentCurl($url);
+    
+    $email = getEmailByDiaryId($diary_id);
+    
+    $send = sendEmail($email, $subject, $contents);
+
+    if($send != '1') {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'Email function error';
+        echo json_encode($ret);
+        die();
+    }
+    $ret['IsSuccess'] = true;
+    $ret['Msg'] = $email;
+    echo json_encode($ret);
+    die();
+}
+
+function getEmailByDiaryId($id) {
+    $db = & JFactory::getDBO();
+    $query = "SELECT client_id FROM #__fitness_nutrition_diary WHERE id='$id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = $db->stderr();
+        echo json_encode($ret);
+        die();
+    }
+    $user_id = $db->loadResult();
+    
+    $user = &JFactory::getUser($user_id);
+    
+    return $user->email; 
+}
+
 
 jexit();
 ?>

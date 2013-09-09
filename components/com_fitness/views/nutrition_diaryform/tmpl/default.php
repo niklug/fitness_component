@@ -329,12 +329,15 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
             </tr>
             <?php
             if($this->item->id) {
+                if(!in_array($this->item->status, array('2', '3', '4'))) {
+                    $score_hidden = 'visibility: hidden;';
+                }
             ?>
             <tr>
                 <td colspan="2">
                     <div class="fitness_block_wrapper" style="min-height: 320px;">
                         <div class="internal_wrapper">
-                            <div  style="float:left; width:300px;">
+                            <div  style="float:left; width:300px;<?php echo  $score_hidden;?>">
                                 <div class="score_pie_container pie-container">
                                     <h5 style="text-align: center;">MACRONUTRIENT SCORES</h5>
                                     <div id="placeholder_scope" class="placeholder_pie"></div>
@@ -540,15 +543,21 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">
-                        <div class="clr"></div>
-                        <div id="plan_comments_wrapper"></div>
-                        <div class="clr"></div>
-                        <input id="add_comment_0" class="" type="button" value="Add Comment" >
-                        <div class="clr"></div>
-                </td>
-            </tr>
+            <?php
+            if(in_array($this->item->status, array('2', '3', '4'))) {
+            ?>
+                <tr>
+                    <td colspan="2">
+                            <div class="clr"></div>
+                            <div id="plan_comments_wrapper"></div>
+                            <div class="clr"></div>
+                            <input id="add_comment_0" class="" type="button" value="Add Comment" >
+                            <div class="clr"></div>
+                    </td>
+                </tr>
+                <?php
+                }
+                ?>
             <?php
             }
             ?>
@@ -576,7 +585,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                     <?php
                         if ($this->item->id) {
                     ?>
-                    <input type="submit" class="validate" name="submit" value="Submit" />
+                    <input type="submit" id="submit_button" class="validate" name="submit" value="Submit" />
                     <?php
                         }
                     ?>
@@ -744,6 +753,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
         /* END MEALS BLOCK */
         
         // on save
+    
         $('#form-nutrition_diary').submit(function(event) {
             var activity_level_element =  "input[name='jform[activity_level]']";
             var activity_level = $(activity_level_element +":checked").val();
@@ -752,12 +762,8 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                 return false;
             }
         });
-        
-        
-        // score pie
-        
-        
-        
+     
+       
         
     })($js);
 

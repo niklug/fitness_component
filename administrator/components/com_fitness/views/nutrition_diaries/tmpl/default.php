@@ -311,7 +311,13 @@ $saveOrder	= $listOrder == 'a.ordering';
                                     
 				</td>
 				<td>
-					<?php echo $item->score; ?>
+					<?php
+                                        if($item->score) {
+                                           echo $item->score . '%'; 
+                                        } else {
+                                            echo '-';
+                                        }
+                                         ?>
 				</td>
 
 

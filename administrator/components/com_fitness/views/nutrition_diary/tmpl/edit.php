@@ -398,14 +398,14 @@ JHtml::_('behavior.keepalive');
     </div>
     
     <input type="hidden" name="jform[assessed_by]" value="<?php echo JFactory::getUser()->id; ?>" />
-    <input type="hidden" name="jform[score]" value="" />
+    <input type="hidden" id="score_input" name="jform[score]" value="" />
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 
 </form>
 
-
+<div id="emais_sended"></div>
 
 
 <script type="text/javascript">
@@ -488,6 +488,7 @@ JHtml::_('behavior.keepalive');
         var status_options = {
             'item_id' : '<?php echo $this->item->id; ?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'db_table' : '#__fitness_nutrition_diary',
             'status_button' : '.status_button',
             'status_button_dialog' : 'status_button_dialog',
@@ -540,7 +541,7 @@ JHtml::_('behavior.keepalive');
             }
         })  
         %>
-        <input type="checkbox" class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>
+        <input type="checkbox" id="send_diary_email" name="send_diary_email" value="1"> <span style="font-size:12px;">Send email</span>
     </div>
       
 </script>

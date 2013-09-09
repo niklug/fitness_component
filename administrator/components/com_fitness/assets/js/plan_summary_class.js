@@ -50,6 +50,12 @@
         var total_score = this.calculateTotalScore(protein, carbs, fats);
         $("#final_score").html(total_score + '%');
         
+        var status = $(".status_button").attr('data-status_id');
+        
+        if((status == '3') || (status == '4') || (status == '5')) {
+            $("#score_input").val(total_score);
+        }
+        
         
         var target_kind = this.getDayKindPrefix();
         var dayly_target_protein = this.getTargetPercentsValue('protein', target_kind);

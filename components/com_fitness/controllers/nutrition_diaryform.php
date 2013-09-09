@@ -113,12 +113,22 @@ class FitnessControllerNutrition_diaryForm extends FitnessController
  
                     $data['submit_date'] = $time_created;
                     $data['status'] = '5';
+
                 }
 
 		// Attempt to save the data.
 		$return	= $model->save($data);
                 
                 $id = $return;
+                
+                // send email
+                $url = JURI::root() . 'index.php?option=com_multicalendar&task=load&calid=0&id=' . $id . '&method=sendDiarySubmittedEmail';
+                $ch = curl_init();
+                curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+                curl_setopt($ch, CURLOPT_URL,$url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $contents = curl_exec ($ch);
+                curl_close ($ch);
 
 
 		// Check for errors.

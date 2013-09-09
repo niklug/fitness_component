@@ -89,8 +89,9 @@ defined('_JEXEC') or die;
                             <?php 
                             $date = JFactory::getDate($item->submit_date);
                             $submit_date = $date->toFormat('%a %d %b %y');
+                    
                             if($item->submit_date != '0000-00-00 00:00:00') {
-                                $submit_date;
+                                echo $submit_date;
                             } else {
                                 echo ' - ';
                             }

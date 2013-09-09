@@ -128,6 +128,18 @@ function getNutritionPlanData($id) {
    return $result;
 }
 
+function getNutritionDiaryData($id) {
+   $db	= & JFactory::getDBO();
+   $query = "SELECT * FROM #__fitness_nutrition_diary WHERE id='$id'";
+   $db->setQuery($query);
+    if(!$db->query()) {
+        JError::raiseError($db->getErrorMsg());
+    }
+   $result = $db->loadObject();
+   return $result;
+}
+
+
 /**
  * npkorban
  * @param type $event_id
