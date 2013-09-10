@@ -127,12 +127,11 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                             </tr>
                                                             <tr>
                                                                 <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">ENTRY DATE: <br />
-                                                                    SUBMITTED: <br />
-                                                                    ASSESSED BY: </td>
+                                                                    SUBMITTED:</td>
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <?php echo $entry_date?><br />
                                                                     <?php echo $submit_date. ' ' . $submit_time; ?> <br />
-                                                                    <?php echo $trainer_name;?><br /></td>
+                                                                    
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">

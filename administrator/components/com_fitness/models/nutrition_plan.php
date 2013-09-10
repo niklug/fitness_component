@@ -153,8 +153,26 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 $status['message'] = $db->stderr();
             }
             $data = $db->loadObject();
+            
+            $data->minigoals = $this->getMiniGoals($data->id);
+            
             $result = array('status' => $status, 'data' => $data);
             return json_encode($result); 
+        }
+        
+        public function getMiniGoals($id) {
+            $db = & JFactory::getDBO();
+            $query = "SELECT mg.deadline AS minigoal_deadline, c.name AS minigoal_name FROM #__fitness_mini_goals AS mg
+                LEFT JOIN #__fitness_mini_goal_categories AS c ON mg.mini_goal_category_id=c.id
+                WHERE mg.primary_goal_id='$id'
+                AND mg.state='1'";
+            $db->setQuery($query);
+            $status['success'] = 1;
+            if (!$db->query()) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+            }
+            return $db->loadObjectList();
         }
         
         public function resetAllForceActive() {

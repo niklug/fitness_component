@@ -412,7 +412,7 @@
 .delete_meal, .delete_comment , .delete_plan_meal, .delete_shopping_item{
     background-image: url("../images/cross.png");
     background-size: 15px auto;
-    display: block;
+    display: inline-block;
     height: 15px;
     width: 15px;
 }
@@ -426,6 +426,15 @@
     border: 1px solid #cccccc;
     text-align: center;
     z-index: 999;
+}
+
+.meal_date, .meal_time, .save_plan_meal, .water, .previous_water {
+    float:none;
+    margin: 5px;
+}
+
+.error_wrapper {
+    color:red;
 }
 
 #ingredients_results, .ingredients_results{

@@ -79,8 +79,15 @@
         comment_template += '<td><b>Comment by: </b><span class="comment_by">' + comment_obj.user_name +  '</span></td>';
         comment_template += '<td><b>Date: </b> <span class="comment_date">' + current_time.date +  '</span></td>';
         comment_template += '<td><b>Time: </b> <span class="comment_time">' + current_time.time_short +  '</span></td>';
-        comment_template += '<td><input id="save_comment_' + this.meal_id + '" class="save_comment" type="button"  value="Save"></td>'
-        comment_template += '<td align="center"><a href="javascript:void(0)" class="delete_comment" id="delete_comment_' + this.meal_id + '" title="delete"></a></td>';
+        
+        if(!comment_obj.id) {
+            comment_template += '<td><input id="save_comment_' + this.meal_id + '" class="save_comment" type="button"  value="Save"></td>'
+        }
+        
+        if(!this.options.read_only) {
+            comment_template += '<td align="center"><a href="javascript:void(0)" class="delete_comment" id="delete_comment_' + this.meal_id + '" title="delete"></a></td>';
+        }
+        
         comment_template += '</tr>';
         comment_template += '<tr>';
         comment_template += '<td colspan="5"><textarea  class="comment_textarea" cols="100" rows="3">' + comment_obj.comment +  '</textarea></td>';

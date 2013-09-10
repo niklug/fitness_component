@@ -123,6 +123,7 @@
         this.options.active_finish_field.val('');
         var self = this;
         this.getGoalData(e, function(output) {
+            console.log(output);
             if(output) {
                 self.options.training_period_select.val(output.training_period_name);
                 self.options.active_start_field.val(output.start_date);
@@ -346,11 +347,42 @@
         this.getGoalData(this.options.primary_goal_select, function(output) {
             if(output) {
                 self.options.training_period_select.val(output.training_period_name);
+                self.populateMinigoals(output.minigoals, $("#plan_mini_goals"));
             }
         });
 
         //set detes fields options depends on saved statuses
         this.dateFieldsLogic();
+    }
+    
+    NutritionPlan.prototype.populateMinigoals = function(minigoals, destination) {
+        var html = '';
+        html += '<hr>';
+        
+        $.each(minigoals, function(index,item) {
+            html += '<table>';
+            html += '<tr>';
+            html += '<td width="100">';
+            html += 'Mini Goal';
+            html += '</td>';
+            html += '<td>';
+            html += item.minigoal_name;
+            html += '</td>';
+            html += '</tr>';
+            
+            html += '<tr>';
+            html += '<td>';
+            html += 'Achieve By';
+            html += '</td>';
+            html += '<td>';
+            html += item.minigoal_deadline;
+            html += '</td>';
+            html += '</tr>';
+            html += '</table>';
+            html += '<hr>';
+        });
+        
+        $(destination).html(html);
     }
     
     // Add the  function to the top level of the jQuery object

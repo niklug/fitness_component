@@ -37,7 +37,12 @@
             $(".save_plan_meal").live('click', function() {
                 var closest_table = $(this).closest("table");
                 var data =  self.validateFields(closest_table);
-
+                
+                if(self.options.import_date) {
+                    var date_field_value = $(self.options.import_date_source).val();
+                    closest_table.find('.meal_date').val(date_field_value);
+                }
+                
                 if(!data) return;
 
                 data.id = closest_table.attr('data-id');
@@ -108,61 +113,51 @@
         html += '<table data-id="' + meal_id + '" width="100%">';
         html += '<tr>';
 
-        html += '<td>';
-        html += 'MEAL TIME';
-        html += '</td>';
-
-        html += '<td>';
-        html += '<input  size="5" type="text"  class="meal_date required" value="' + (o.meal_time).substring(0, 10) + '" readonly>';
+        html += '<td style="text-align:right;">';
+        html += 'What time did you eat this meal?';
+        
+        var date_field_type = 'text';
+        var date_field_value = (o.meal_time).substring(0, 10);
+        if(this.options.import_date) {
+            date_field_value = $(this.options.import_date_source).val();
+            date_field_type = 'hidden';
+        }
+        
+        html += '<input  size="5" type="' + date_field_type + '"  class="meal_date required" value="' + date_field_value + '" readonly>';
         html += '<input  size="4" type="text"  class="meal_time required " value="' + (o.meal_time).substring(11, 16) + '">';
-        html += '</td>';
 
-        html += '<td class="meal_center_desc">';
-        html += 'How much water did you drink only with THIS meal?';
-        html += '</td>';
-
-        html += '<td>';
-        html += '<input  size="5" type="text"  class="required water" value="' + o.water + '">';
-        html += '</td>';
-
-        html += '<td>';
-        html += 'millilitres';
-        html += '</td>';
-
-        html += '<td>';
         if(this.options.read_only == false) {
             html += '<input title="Save/Update Meal" class="save_plan_meal " type="button"  value="Save">';
         }
-        html += '</td>';
-
-        html += '<td>';
+       
         if(this.options.read_only == false) {
             html += '<a href="javascript:void(0)" class="delete_plan_meal" title="Delete Meal"></a>';
         }
         html += '</td>';
         html += '</tr>';
+        
+        html += '<tr>';
+        html += '<td style="text-align:right;" class="meal_center_desc">';
+        html += 'How much water did you drink only with THIS meal?';
+
+        html += '<input  size="5" type="text"  class="required water" value="' + o.water + '">';
+
+        html += '<span class="grey_title">millilitres</span>';
+        html += '</td>';
+        html += '</tr>';
 
         html += '<tr>';
-        html += '<td>';
-        html += '</td>';
-
-        html += '<td>';
-        html += '</td>';
-
-        html += '<td>';
+        html += '<td style="text-align:right;">';
         html += 'How much water did you drink between (before) this meal and your last meal? (workout/training inclusive)';
+
+        html += '<input  size="5" type="text"  class="required previous_water" value="' + o.previous_water + '">';
+
+        html += '<span class="grey_title">millilitres</span>';
         html += '</td>';
-
-        html += '<td>';
-        html += '<input  size="5" type="text"  class="required previous_water" value="' + o.previous_water + '"> ';
-        html += '</td>';
-
-
-        html += '<td>';
-        html += 'millilitres';
-        html += '</td>';
-
-        html += '<td class="error_wrapper" style="color:red" colspan="2">';
+        html += '</tr>';
+        
+        html += '<tr>';
+        html += '<td style="text-align:right;"  class="error_wrapper" style="color:red">';
         html += '</td>';
 
         html += '</tr>';
@@ -209,7 +204,9 @@
 
         }
         html += '<div class="clr"></div>';
-        html += '<input id="add_comment_' + meal_id + '" class="" type="button" value="Add Comment" >';
+        if(meal_id){
+            html += '<input id="add_comment_' + meal_id + '" class="" type="button" value="Add Comment" >';
+        }
         html += '<div class="clr"></div>';
         html += '</div>'; 
 

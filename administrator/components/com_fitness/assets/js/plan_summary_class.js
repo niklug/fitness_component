@@ -50,6 +50,8 @@
         var total_score = this.calculateTotalScore(protein, carbs, fats);
         $("#final_score").html(total_score + '%');
         
+        this.setVarianceRangeFinalScore($("#final_score"), total_score);
+        
         var status = $(".status_button").attr('data-status_id');
         
         if((status == '3') || (status == '4') || (status == '5')) {
@@ -106,6 +108,29 @@
 
         if(abs_value > 30) {
             input_class = 'red_style'; 
+        }
+        element.addClass(input_class);
+    }
+    
+    
+    CalculateSummary.prototype.setVarianceRangeFinalScore = function(element, value) {
+        var abs_value = Math.abs(value); 
+        var input_class = '';
+        element.removeClass('yellow_style green_style orange_style red_style');
+        if((abs_value >= 0) && (abs_value <= 70)) {
+            input_class = 'red_style'; 
+        }
+        
+        if((abs_value >= 70) && (abs_value <= 80)) {
+            input_class = 'orange_style'; 
+        }
+
+        if((abs_value > 80) && (abs_value <= 90)) {
+            input_class = 'yellow_style'; 
+        }
+
+        if(abs_value > 90) {
+            input_class = 'green_style'; 
         }
         element.addClass(input_class);
     }

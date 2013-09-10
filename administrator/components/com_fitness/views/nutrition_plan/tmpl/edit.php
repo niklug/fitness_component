@@ -20,7 +20,7 @@ JHtml::_('behavior.keepalive');
         clear: both;
     }
     
-    #jform_allowed_proteins-lbl, #jform_allowed_fats-lbl, #jform_allowed_carbs-lbl, #jform_allowed_liquids-lbl, #jform_other_recommendations-lbl{
+    #jform_allowed_proteins-lbl, #jform_allowed_fats-lbl, #jform_allowed_carbs-lbl, #jform_allowed_liquids-lbl, #jform_other_recommendations-lbl, #jform_trainer_comments-lbl, #jform_information-lbl{
         float: none;
     }
 </style>
@@ -30,7 +30,7 @@ JHtml::_('behavior.keepalive');
         <table width="100%">
             <tr>
                 <td width="30%">
-                    <fieldset style="height:410px;" class="adminform">
+                    <fieldset style="min-height:200px;" class="adminform">
                         <legend>CLIENT & TRAINER(S)</legend>
                         <?php
                         $db = JFactory::getDbo();
@@ -75,7 +75,7 @@ JHtml::_('behavior.keepalive');
                 </td>
                 <td width="70%">
                     <fieldset  class="adminform">
-                        <legend>NUTRITION PLAN (PERIODIZATION)</legend>
+                        <legend>NUTRITION PLAN PERIOD & TRAINING FOCUS</legend>
                         <table>
                             <tr>
                                 <td>
@@ -102,7 +102,10 @@ JHtml::_('behavior.keepalive');
                                     <?php echo $this->form->getLabel('training_period'); ?>
                                     <?php echo $this->form->getInput('training_period'); ?>
                                 </td>
-                                <td></td>
+                                <td>
+                                    <?php echo $this->form->getLabel('force_active'); ?>
+                                    <?php echo $this->form->getInput('force_active'); ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -110,10 +113,10 @@ JHtml::_('behavior.keepalive');
                                     <?php echo $this->form->getInput('active_start'); ?>
                                 </td>
                                 <td>
-                                    <?php echo $this->form->getLabel('force_active'); ?>
+                                    <?php echo $this->form->getLabel('override_dates'); ?>
                                 </td>
                                 <td>
-                                    <?php echo $this->form->getInput('force_active'); ?>
+                                    <?php echo $this->form->getInput('override_dates'); ?>
                                 </td>
                                 <td></td>
                             </tr>
@@ -131,19 +134,24 @@ JHtml::_('behavior.keepalive');
                                 <td></td>
                             </tr>
                             <tr>
-                                <td colspan="3">
-                                    <?php echo $this->form->getLabel('nutrition_focus'); ?>
-                                    <?php echo $this->form->getInput('nutrition_focus'); ?>
-                                </td>
-                                <td></td>
-                            </tr>
-                            
-                            <td colspan="4">
-                                    <?php echo $this->form->getLabel('trainer_comments'); ?>
-                                    <?php echo $this->form->getInput('trainer_comments'); ?>
+                                <td id="plan_mini_goals" colspan="4">
+                                    
                                 </td>
                             </tr>
                         </table>
+                    </fieldset>
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="2">
+                    <fieldset  class="adminform">
+                        <legend>NUTRITION FOCUS</legend>
+                        <?php echo $this->form->getLabel('nutrition_focus'); ?>
+                        <?php echo $this->form->getInput('nutrition_focus'); ?>
+                        <div class="clr"></div>
+                        <?php echo $this->form->getLabel('trainer_comments'); ?>
+                        <?php echo $this->form->getInput('trainer_comments'); ?>
                     </fieldset>
                 </td>
             </tr>
@@ -202,6 +210,16 @@ JHtml::_('behavior.keepalive');
                         <div id="shopping_list_wrapper"></div>
                         <div class="clr"></div>
                         <input type="button" id="add_shopping_item" value="ADD NEW ITEM">
+                    </fieldset>
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="2">
+                    <fieldset  class="adminform">
+                        <legend>INFORMATION</legend>
+                        <?php echo $this->form->getLabel('information'); ?>
+                        <?php echo $this->form->getInput('information'); ?>
                     </fieldset>
                 </td>
             </tr>
@@ -464,9 +482,9 @@ JHtml::_('behavior.keepalive');
             'active_finish_field' : $("#jform_active_finish"),
             'active_start_img' : $("#jform_active_start_img"),
             'active_finish_img' : $("#jform_active_finish_img"),
-            'force_active_yes' : $("#jform_force_active0"),
-            'force_active_no' : $("#jform_force_active1"),
-            'force_active_value' : '<?php echo $this->item->force_active;?>',
+            'force_active_yes' : $("#jform_override_dates0"),
+            'force_active_no' : $("#jform_override_dates1"),
+            'force_active_value' : '<?php echo $this->item->override_dates;?>',
             'active_finish_value' : '<?php echo $this->item->active_finish;?>',
             'no_end_date_label': $("#jform_no_end_date-lbl"),
             'no_end_fieldset' : $("#jform_no_end_date"),
@@ -493,7 +511,6 @@ JHtml::_('behavior.keepalive');
             'db_table' : '#__fitness_nutrition_plan_ingredients',
             'parent_view' : 'nutrition_plan_backend',
             'read_only' : false
-
         }
 
         var nutrition_meal_options = {
@@ -504,7 +521,9 @@ JHtml::_('behavior.keepalive');
             'activity_level' : "input[name='jform[activity_level]']",
             'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
             'db_table' : '#__fitness_nutrition_plan_meals',
-            'read_only' : false
+            'read_only' : false,
+            'import_date' : false,
+            'import_date_source' : ''
         }
 
 
@@ -512,14 +531,16 @@ JHtml::_('behavior.keepalive');
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_plan_meal_comments'
+            'db_table' : '#__fitness_nutrition_plan_meal_comments',
+            'read_only' : false
         }
 
         var nutrition_bottom_comment_options = {
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_plan_comments'
+            'db_table' : '#__fitness_nutrition_plan_comments',
+            'read_only' : false
         }
 
 

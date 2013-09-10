@@ -461,7 +461,9 @@ JHtml::_('behavior.keepalive');
             'activity_level' : "input[name='jform[activity_level]']",
             'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
             'db_table' : '#__fitness_nutrition_diary_meals',
-            'read_only' : true
+            'read_only' : true,
+            'import_date' : false,
+            'import_date_source' : ''
         }
 
 
@@ -469,14 +471,16 @@ JHtml::_('behavior.keepalive');
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_diary_meal_comments'
+            'db_table' : '#__fitness_nutrition_diary_meal_comments',
+            'read_only' : false
         }
         
         var nutrition_bottom_comment_options = {
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_diary_comments'
+            'db_table' : '#__fitness_nutrition_diary_comments',
+            'read_only' : false
         }
         
         var calculate_summary_options = {
@@ -497,7 +501,7 @@ JHtml::_('behavior.keepalive');
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place',
             'statuses' : {
-                '2' : {'label' : 'PASSED', 'class' : 'status_pass'},
+                '2' : {'label' : 'PASS', 'class' : 'status_pass'},
                 '3' : {'label' : 'FAIL', 'class' : 'status_fail'}, 
                 '4' : {'label' : 'DISTINCTION', 'class' : 'status_distinction'}
             },

@@ -135,6 +135,28 @@ a:hover, a:active, a:focus {
 }
 
 
+
+.status_pass_stamp {
+    background-image: url("../images/status_pass.png");
+}
+
+.status_fail_stamp {
+    background-image: url("../images/status_fail.png");
+}
+
+.status_distinction_stamp {
+    background-image: url("../images/status_distinction.png");
+}
+
+.status_button_stamp {
+    background-repeat: no-repeat;
+    background-size: 74px 29px;
+    height: 30px;
+    width: 80px;
+    margin-left: 10px;
+}
+
+
 .fitness_wrapper {
     background: none;
     background-color: #0E0704;
@@ -335,9 +357,10 @@ display: inline-block;
 .delete_meal, .fitness_wrapper .delete_comment , .fitness_wrapper .delete_plan_meal, .fitness_wrapper .delete_shopping_item{
     background-image: url("../images/cross.png");
     background-size: 15px auto;
-    display: block;
+    display: inline-block;
     height: 15px;
     width: 15px;
+    margin-left: 10px;
 }
 
 .fitness_wrapper .meal_date{
@@ -351,6 +374,14 @@ display: inline-block;
     color: #000;
     font-size: 10px;
 }
+.meal_date, .meal_time, .save_plan_meal, .water, .previous_water {
+    float:none;
+    margin: 5px;
+}
+.error_wrapper {
+    color:red;
+}
+
 
 .fitness_block_wrapper .internal_wrapper textarea, .comment_wrapper textarea {
     color: #fff;
@@ -461,6 +492,9 @@ display: inline-block;
 .fitness_wrapper .select_meal_form span {
     color: #000000;
 }
+.fitness_wrapper .yellow_style {
+    background-color:yellow!important;
+}
 
 .fitness_wrapper .green_style {
     background-color:#1BC721 !important;
@@ -492,6 +526,7 @@ display: inline-block;
     font-size: 24px;
     font-weight: bold;
     text-align: center;
+    padding: 4px;
 }
 
 #status_button_place {

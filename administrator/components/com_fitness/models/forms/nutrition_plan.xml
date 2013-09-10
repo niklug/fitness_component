@@ -44,7 +44,12 @@
               filter="safehtml" /> 
 
         
-        <field name="force_active" type="radio" default="0" label="Override/Force Active" description="">
+        <field name="force_active" type="radio" default="0" label="FORCE PLANNER ACTIVE" description="">
+          <option value="1">JYES</option>
+          <option value="0">JNO</option>
+        </field>
+        
+        <field name="override_dates" type="radio" default="0" label="Override Dates" description="">
           <option value="1">JYES</option>
           <option value="0">JNO</option>
         </field>
@@ -71,10 +76,16 @@
         /> 
         
         
-       <field name="trainer_comments" type="editor" buttons="false" width="700px" height="150px"
+       <field name="trainer_comments" type="editor" buttons="true"  height="150px"
         class="inputbox"
         filter="safehtml"
-            label="Trainer Comments"
+            label="Details"
+            description=""  /> 
+       
+              <field name="information" type="editor" buttons="true"  height="450px"
+        class="inputbox"
+        filter="safehtml"
+            label="Details"
             description=""  /> 
                 
            <field name="created" type="timecreated" default="" 

@@ -122,5 +122,30 @@ class FitnessModelNutrition_diaries extends JModelList {
 
         return $html;
     }
+    
+     function status_html_stamp($status) {
+        switch($status) {
+            case '2' :
+                $class = 'status_pass_stamp';
+                $text = 'PASS';
+                break;
+            case '3' :
+                $class = 'status_fail_stamp';
+
+                break;
+            case '4' :
+                $class = 'status_distinction_stamp';
+                break;
+            case '5' :
+                $class = 'status_submitted_stamp';
+                break;
+            default :
+                break;
+        }
+
+        $html = '<div class=" status_button_stamp ' . $class . '"></div>';
+
+        return $html;
+    }
 
 }

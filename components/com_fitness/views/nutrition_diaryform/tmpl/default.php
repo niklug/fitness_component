@@ -29,17 +29,22 @@ $training_period_id = $item->training_period_id ? $item->training_period_id : $t
 
 $nutrition_focus = $item->nutrition_focus ? $item->nutrition_focus : $this->active_plan_data->nutrition_focus;
 
-$submitted = false;
-if ($this->item->submit_date && ($this->item->submit_date != '0000-00-00 00:00:00')) {
-    $submitted = true;
-}
-
-
 $heavy_target = $this->model->getNutritionTarget($nutrition_plan_id, 'heavy');
 
 $light_target = $this->model->getNutritionTarget($nutrition_plan_id, 'light');
 
 $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
+
+$submitted = false;
+if ($this->item->submit_date && ($this->item->submit_date != '0000-00-00 00:00:00')) {
+    $submitted = true;
+}
+$scored = false;
+if(in_array($this->item->status, array('2', '3', '4'))) {
+    $scored = true;
+}
+
+
 
 ?>
 <div class="fitness_wrapper">
@@ -170,41 +175,24 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
             <tr>
                 <td colspan="2">
                     <div class="fitness_block_wrapper" style="min-height:150px;">
-                        <h3>PRIMARY GOAL</h3>
+                        <h3>MY NUTRITION FOCUS</h3>
                         <hr class="orange_line">
                         <div class="internal_wrapper">
                             <table width="100%">
                                 <tr>
                                     <td>
-                                        <table width="50%">
+                                        <table width="100%">
                                             <tr>
                                                 <td>
-                                                    Primary Goal
-                                                </td>
-                                                <td>
-                                                    <span class="grey_title">
-                                                        <?php echo $this->model->getGoalName($goal_category_id); ?>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Training Period
-                                                </td>
-                                                <td>
-                                                    <span class="grey_title">
-                                                        <?php echo $this->model->getTrainingPeriodName($training_period_id); ?>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Nutrition Focus
-                                                </td>
-                                                <td>
+                                                    Nutrition Focus &nbsp;
                                                     <span class="grey_title">
                                                         <?php echo $this->model->getNutritionFocusName($nutrition_focus); ?>
                                                     </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <?php echo $this->active_plan_data->trainer_comments ?>
                                                 </td>
                                             </tr>
                                         </table> 
@@ -299,6 +287,9 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                     </div>
                 </td>
             </tr>
+            <?php
+                if($this->item->id) {
+             ?>
              <tr>
                 <td colspan="2">
                     <div class="fitness_block_wrapper" style="min-height: 300px;">
@@ -306,9 +297,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                         <hr class="orange_line">
                         <div class="internal_wrapper">
                             <div class="clr"></div>
-                            <?php
-                            if($this->item->id) {
-                            ?>
+                         
                                 <div id="meals_wrapper"></div>
                                 <div class="clr"></div>
                                 <hr>
@@ -318,18 +307,18 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                                 <input style="display:none;" type="button" id="add_plan_meal" value="NEW MEAL">
                                 <?php
                                 } 
-                            } else {
-                                echo 'Save entry to proceed add Meals ';
-                            }
-                            ?>
+                                ?>
                             <div class="clr"></div>
                         </div>
                     </div>
                 </td>
             </tr>
             <?php
+            } 
+            ?>
+            <?php
             if($this->item->id) {
-                if(!in_array($this->item->status, array('2', '3', '4'))) {
+                if(!$scored) {
                     $score_hidden = 'visibility: hidden;';
                 }
             ?>
@@ -352,7 +341,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                                         </td>
                                         <td>
                                             <div id="status_button_place" >
-                                                <?php echo $this->frontend_list_model->status_html($this->item->status) ?>
+                                                <?php echo $this->frontend_list_model->status_html_stamp($this->item->status) ?>
                                             </div>
                                         </td>
                                             
@@ -544,7 +533,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                 </td>
             </tr>
             <?php
-            if(in_array($this->item->status, array('2', '3', '4'))) {
+            if($scored) {
             ?>
                 <tr>
                     <td colspan="2">
@@ -585,7 +574,9 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
                     <?php
                         if ($this->item->id) {
                     ?>
-                    <input type="submit" id="submit_button" class="validate" name="submit" value="Submit" />
+                    <div style="float:right;">
+                        <input type="submit" id="submit_button" class="validate" name="submit" value="Submit" />
+                    </div>
                     <?php
                         }
                     ?>
@@ -614,7 +605,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
     
     <?php
 
-    //var_dump($this->active_plan_data->id);
+    //var_dump($submitted);
 
     ?>
 
@@ -694,7 +685,10 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
             'activity_level' : "input[name='jform[activity_level]']",
             'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
             'db_table' : '#__fitness_nutrition_diary_meals',
-            'read_only' : '<?php echo $submitted ?>'
+            'read_only' : '<?php echo $submitted ?>',
+            'import_date' : true,
+            'import_date_source' : '#jform_entry_date'
+            
         }
 
 
@@ -702,7 +696,16 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_diary_meal_comments'
+            'db_table' : '#__fitness_nutrition_diary_meal_comments',
+            'read_only' : '<?php echo $scored ?>'
+        }
+        
+        var nutrition_bottom_comment_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
+            'db_table' : '#__fitness_nutrition_diary_comments',
+            'read_only' : '<?php echo $scored ?>'
         }
         
         
@@ -722,13 +725,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
             'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
         }
         
-        var nutrition_bottom_comment_options = {
-            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_diary_comments'
-        }
-        
+       
         var nutrition_meal = $.nutritionMeal(nutrition_meal_options, item_description_options, nutrition_comment_options);
         var calculateSummary =  $.calculateSummary(calculate_summary_options);
         
@@ -763,7 +760,7 @@ $rest_target = $this->model->getNutritionTarget($nutrition_plan_id, 'rest');
             }
         });
      
-       
+
         
     })($js);
 
