@@ -17,12 +17,7 @@
               required="true"
         /> 
         
-        <field name="training_period_id" type="sql" class="inputbox"
-              query="SELECT id, name FROM #__fitness_training_period`"
-              key_field="id"
-              value_field="name"
-              label="Training Period"
-        /> 
+
        
         <field name="goal_category_id" type="sql" class="inputbox"
               query="SELECT id, name FROM #__fitness_goal_categories`"
@@ -46,7 +41,7 @@
               description="COM_FITNESS_GOALS_FORM_DESC_GOAL_DEADLINE" 
               filter="raw" /> 
        
-        <field name="completed" type="list"
+        <field name="status" type="list"
                 
               label="Status"
               description="" 

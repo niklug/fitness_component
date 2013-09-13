@@ -24,7 +24,19 @@
               label="COM_FITNESS_FORM_LBL_MINIGOAL_MINI_GOAL_CATEGORY_ID"
         /> 
         
+        <field name="training_period_id" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_training_period`"
+              key_field="id"
+              value_field="name"
+              label="Training Period"
+        /> 
         
+                
+        <field name="start_date" type="calendar"
+                
+              label="Start Date"
+              description="" 
+              filter="raw" /> 
 
        <field name="deadline" type="calendar" class="inputbox"
         
@@ -55,7 +67,7 @@
             label="COM_FITNESS_FORM_LBL_MINIGOAL_COMMENTS"
             description="COM_FITNESS_FORM_DESC_MINIGOAL_COMMENTS"  /> 
 
-        <field name="completed" type="list"
+        <field name="status" type="list"
                 
               label="Status"
               description="" 

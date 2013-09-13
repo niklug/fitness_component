@@ -97,15 +97,15 @@ function getTrainingPeriods() {
 
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    (function($) {
         $("#graph_client").change(function(){
             var client_id =  $(this).find(':selected').val();
             if(!client_id) return;
             $("#choices").html('');
             var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
             
-            getGraphData(client_id, url);
+            $.getGraphData(client_id, url);
         });
 
-    });
+    })($js);
 </script>

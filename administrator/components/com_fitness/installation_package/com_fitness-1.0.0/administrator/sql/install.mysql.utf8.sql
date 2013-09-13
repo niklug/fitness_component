@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goals` (
 `deadline` DATE NOT NULL ,
 `details` TEXT NOT NULL ,
 `comments` TEXT NOT NULL ,
-`completed` varchar(20) NOT NULL ,
+`status` varchar(20) NOT NULL ,
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
 `modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',

@@ -81,9 +81,10 @@ $saveOrder	= $listOrder == 'a.ordering';
                 
         
         <?php
-        $status[] = JHTML::_('select.option', '1', 'Incomplete' );
-        $status[] = JHTML::_('select.option', '2', 'Pending' );
-        $status[] = JHTML::_('select.option', '3', 'Complete' );
+        
+        $status[] = JHTML::_('select.option', '1', 'Pending' );
+        $status[] = JHTML::_('select.option', '2', 'Complete' );
+        $status[] = JHTML::_('select.option', '3', 'Incomplete' );
 
         ?>
 
@@ -307,7 +308,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</td>
 				<td>
                                     
-					<?php echo $this->model->status_html($item->status); ?>
+					<?php echo $this->model->status_html($item->id, $item->status); ?>
                                     
 				</td>
 				<td>
@@ -369,8 +370,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
-
+    (function($) {
         $("#reset_filtered").click(function(){
             var form = $("#adminForm");
             form.find("select").val('');
@@ -378,6 +378,6 @@ $saveOrder	= $listOrder == 'a.ordering';
             form.submit();
         });
 
-    });
+    })($js);
 
 </script>

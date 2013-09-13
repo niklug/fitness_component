@@ -30,10 +30,11 @@ class FitnessModelminigoals extends JModelList {
                 'primary_goal_id', 'a.primary_goal_id',
                 'mini_goal_category_id', 'a.mini_goal_category_id',
                 'deadline', 'a.deadline',
+                'start_date', 'a.start_date',
                 'details', 'a.details',
                 'comments', 'a.comments',
                 'completed', 'a.completed',
-                'state', 'a.state',
+                'state', 'a.state', 'gf.name'
 
             );
         }
@@ -56,6 +57,20 @@ class FitnessModelminigoals extends JModelList {
 
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
+        
+        // Filter by training period
+        $training_period = $app->getUserStateFromRequest($this->context . '.filter.training_period', 'filter_training_period', '', 'string');
+        $this->setState('filter.training_period', $training_period);
+        
+        //Filtering start date
+        $this->setState('filter.start_date.from', $app->getUserStateFromRequest($this->context.'.filter.start_date.from', 'filter_from_start_date', '', 'string'));
+        $this->setState('filter.start_date.to', $app->getUserStateFromRequest($this->context.'.filter.start_date.to', 'filter_to_start_date', '', 'string'));
+        
+        
+        //Filtering deadline
+        $this->setState('filter.deadline.from', $app->getUserStateFromRequest($this->context.'.filter.deadline.from', 'filter_from_deadline', '', 'string'));
+        $this->setState('filter.deadline.to', $app->getUserStateFromRequest($this->context.'.filter.deadline.to', 'filter_to_deadline', '', 'string'));
+        
 
         
 
@@ -100,10 +115,12 @@ class FitnessModelminigoals extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*'
+                        'list.select', 'a.*, gf.name as training_period'
                 )
         );
         $query->from('`#__fitness_mini_goals` AS a');
+        
+        $query->leftJoin('#__fitness_training_period AS gf ON gf.id = a.training_period_id');
         
         $session = &JFactory::getSession();
         $primary_goal_id = $session->get('primary_goal_id');
@@ -113,14 +130,19 @@ class FitnessModelminigoals extends JModelList {
         
 
         
-    // Filter by published state
-    $published = $this->getState('filter.state');
-    if (is_numeric($published)) {
-        $query->where('a.state = '.(int) $published);
-    } else if ($published === '') {
-        $query->where('(a.state IN (0, 1))');
-    }
-    
+        // Filter by published state
+        $published = $this->getState('filter.state');
+        if (is_numeric($published)) {
+            $query->where('a.state = '.(int) $published);
+        } else if ($published === '') {
+            $query->where('(a.state IN (0, 1))');
+        }
+
+            // Filter by goal focus
+        $training_period = $this->getState('filter.training_period');
+        if (is_numeric($training_period)) {
+            $query->where('gf.id = '.(int) $training_period);
+        } 
 
         // Filter by search in title
         $search = $this->getState('filter.search');
@@ -131,6 +153,17 @@ class FitnessModelminigoals extends JModelList {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
                 $query->where('( a.primary_goal_id LIKE '.$search.'  OR  a.mini_goal_category_id LIKE '.$search.'  OR  a.deadline LIKE '.$search.'  OR  a.state LIKE '.$search.' )');
             }
+        }
+        
+        
+        //Filtering start date
+        $filter_start_date_from = $this->state->get("filter.start_date.from");
+        if ($filter_start_date_from) {
+                $query->where("a.start_date >= '".$db->escape($filter_start_date_from)."'");
+        }
+        $filter_start_date_to = $this->state->get("filter.start_date.to");
+        if ($filter_deadline_to) {
+                $query->where("a.start_date <= '".$db->escape($filter_start_date_to)."'");
         }
 
         

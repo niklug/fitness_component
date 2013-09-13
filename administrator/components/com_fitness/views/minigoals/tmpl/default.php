@@ -39,8 +39,10 @@ if($primary_goal_id) {
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+			<button type="button" id="reset_filtered"><?php echo JText::_('Reset All'); ?></button>
 		</div>
+            
+            
 		
         
 		<div class='filter-select fltrt'>
@@ -49,6 +51,52 @@ if($primary_goal_id) {
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
 			</select>
 		</div>
+            
+                        
+                <?php
+                $db = JFactory::getDbo();
+                $sql = "SELECT id, name FROM #__fitness_training_period WHERE state='1'";
+                $db->setQuery($sql);
+                if(!$db->query()) {
+                    JError::raiseError($db->getErrorMsg());
+                }
+                $training_period= $db->loadObjectList();
+                ?>
+
+                <div class='filter-select fltrt'>
+			<select name="filter_training_period" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('-Training Period-');?></option>
+				<?php echo JHtml::_('select.options', $training_period, "id", "name", $this->state->get('filter.training_period'), true);?>
+			</select>
+		</div>
+            
+                <?php //Filter for the field start date
+                $selected_from_start_date = JRequest::getVar('filter_from_start_date');
+                $selected_to_start_date = JRequest::getVar('filter_to_start_date');
+                ?>
+                <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Start from:'); ?></label>
+                <?php
+                        echo JHtml::_('calendar', $selected_from_start_date, 'filter_from_start_date', 'filter_from_start_date', '%Y-%m-%d', 'onchange="this.form.submit();"');
+                ?>
+                <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Start to:'); ?></label>
+                <?php
+                        echo JHtml::_('calendar', $selected_to_start_date, 'filter_to_start_date', 'filter_to_start_date', '%Y-%m-%d',  'onchange="this.form.submit();"');
+                ?>              
+
+
+
+                <?php //Filter for the field deadline
+                $selected_from_deadline = JRequest::getVar('filter_from_deadline');
+                $selected_to_deadline = JRequest::getVar('filter_to_deadline');
+                ?>
+                <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Deadline from:'); ?></label>
+                <?php
+                        echo JHtml::_('calendar', $selected_from_deadline, 'filter_from_deadline', 'filter_from_deadline', '%Y-%m-%d', 'onchange="this.form.submit();"');
+                ?>
+                <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('Deadline to:'); ?></label>
+                <?php
+                        echo JHtml::_('calendar', $selected_to_deadline, 'filter_to_deadline', 'filter_to_deadline', '%Y-%m-%d',  'onchange="this.form.submit();"');
+                ?>
 
 
 	</fieldset>
@@ -66,7 +114,12 @@ if($primary_goal_id) {
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_MINIGOALS_PRIMARY_GOAL_ID', 'a.primary_goal_id', $listDirn, $listOrder); ?>
 				</th>
-
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Training Period', 'gf.name', $listDirn, $listOrder); ?>
+				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Start Date', 'a.startdate', $listDirn, $listOrder); ?>
+				</th>	
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_MINIGOALS_DEADLINE', 'a.deadline', $listDirn, $listOrder); ?>
 				</th>
@@ -124,10 +177,17 @@ if($primary_goal_id) {
 					<?php echo $this->escape($this->getMiniGoalName($item->mini_goal_category_id)); ?></a>
 					
 				</td>
+                                
 				<td>
 					<?php echo $this->getPrimaryGoalName($item->primary_goal_id); ?>
 				</td>
-
+                                
+                                <td>
+                                        <?php echo $item->training_period; ?>
+				</td>
+                                <td>
+					<?php echo $item->start_date; ?>
+				</td>
 				<td>
 					<?php echo $item->deadline; ?>
 				</td>
@@ -175,3 +235,18 @@ if($primary_goal_id) {
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
+
+
+<script type="text/javascript">
+
+    (function($) {
+        $("#reset_filtered").click(function(){
+            var form = $("#adminForm");
+            form.find("select").val('');
+            form.find("input").val('');
+            form.submit();
+        });
+
+    })($js);
+
+</script>

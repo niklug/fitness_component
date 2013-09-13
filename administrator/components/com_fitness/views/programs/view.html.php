@@ -31,6 +31,12 @@ class FitnessViewPrograms extends JView {
         $document = &JFactory::getDocument();
         $document->addStyleSheet(JURI::base() . 'components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'fitness.css');
 
+        $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'underscore-min.js');
+        include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'status_class.js');
+
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
             throw new Exception(implode("\n", $errors));
@@ -57,6 +63,11 @@ class FitnessViewPrograms extends JView {
         echo '<!--[if IE]><script type="text/javascript" src="' . JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
         $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'graph.js');
 
+        
+        $model = $this->getModel();
+                
+        $this->assign('model', $model);
+        
         parent::display($tpl);
     }
 
@@ -220,7 +231,7 @@ class FitnessViewPrograms extends JView {
                 break;
             
             case 6:
-                $html .= '<a onclick="openSetBox(' . $id . ', ' . $status . ')" class="event_status_complete event_status__button" href="javascript:void(0)">completed</a>';
+                $html .= '<a onclick="openSetBox(' . $id . ', ' . $status . ')" class="event_status_complete event_status__button" href="javascript:void(0)">status</a>';
                 break;
 
             default:

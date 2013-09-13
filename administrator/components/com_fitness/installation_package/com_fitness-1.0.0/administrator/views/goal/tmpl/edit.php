@@ -81,8 +81,8 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 				<?php echo $this->form->getInput('goal_focus_id'); ?></li>
                         	<li><?php echo $this->form->getLabel('deadline'); ?>
 				<?php echo $this->form->getInput('deadline'); ?></li>
-                                <li><?php echo $this->form->getLabel('completed'); ?>
-				<?php echo $this->form->getInput('completed'); ?></li>
+                                <li><?php echo $this->form->getLabel('status'); ?>
+				<?php echo $this->form->getInput('status'); ?></li>
 				<li><?php echo $this->form->getLabel('details'); ?>
 				<?php echo $this->form->getInput('details'); ?></li>
 				<li><?php echo $this->form->getLabel('comments'); ?>

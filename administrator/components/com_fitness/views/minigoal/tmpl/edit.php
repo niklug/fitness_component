@@ -28,47 +28,31 @@ $primary_goal_id = $session->get('primary_goal_id');
 
 </style>
 <script type="text/javascript">
-    function getScript(url,success) {
-        var script = document.createElement('script');
-        script.src = url;
-        var head = document.getElementsByTagName('head')[0],
-        done = false;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState
-                || this.readyState == 'loaded'
-                || this.readyState == 'complete')) {
-                done = true;
-                success();
-                script.onload = script.onreadystatechange = null;
-                head.removeChild(script);
-            }
-        };
-        head.appendChild(script);
-    }
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        js = jQuery.noConflict();
-        js(document).ready(function(){
-            
 
-            Joomla.submitbutton = function(task)
-            {
-                if (task == 'minigoal.cancel') {
+    (function($) {
+
+
+        Joomla.submitbutton = function(task)
+        {
+            if (task == 'minigoal.cancel') {
+                Joomla.submitform(task, document.getElementById('minigoal-form'));
+            }
+            else{
+
+                if (task != 'minigoal.cancel' && document.formvalidator.isValid(document.id('minigoal-form'))) {
+
                     Joomla.submitform(task, document.getElementById('minigoal-form'));
                 }
-                else{
-                    
-                    if (task != 'minigoal.cancel' && document.formvalidator.isValid(document.id('minigoal-form'))) {
-                        
-                        Joomla.submitform(task, document.getElementById('minigoal-form'));
-                    }
-                    else {
-                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                    }
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
                 }
             }
-        });
-    });
+        }
+     })($js);
+
+    
+</script>
+
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="minigoal-form" class="form-validate">
@@ -80,10 +64,14 @@ $primary_goal_id = $session->get('primary_goal_id');
 
 				<li><?php echo $this->form->getLabel('mini_goal_category_id'); ?>
 				<?php echo $this->form->getInput('mini_goal_category_id'); ?></li>
+                                <li><?php echo $this->form->getLabel('training_period_id'); ?>
+				<?php echo $this->form->getInput('training_period_id'); ?></li> 
+                                <li><?php echo $this->form->getLabel('start_date'); ?>
+				<?php echo $this->form->getInput('start_date'); ?></li>
 				<li><?php echo $this->form->getLabel('deadline'); ?>
 				<?php echo $this->form->getInput('deadline'); ?></li>
-                                <li><?php echo $this->form->getLabel('completed'); ?>
-				<?php echo $this->form->getInput('completed'); ?></li>
+                                <li><?php echo $this->form->getLabel('status'); ?>
+				<?php echo $this->form->getInput('status'); ?></li>
 				<li><?php echo $this->form->getLabel('details'); ?>
 				<?php echo $this->form->getInput('details'); ?></li>
 				<li><?php echo $this->form->getLabel('comments'); ?>

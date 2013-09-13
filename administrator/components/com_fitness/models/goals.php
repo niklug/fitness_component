@@ -34,11 +34,11 @@ class FitnessModelgoals extends JModelList {
                 'start_date', 'a.start_date',
                 'details', 'a.details',
                 'comments', 'a.comments',
-                'completed', 'a.completed',
+                'status', 'a.status',
                 'state', 'a.state',
                 'created', 'a.created',
                 'modified', 'a.modified',
-                'u.name', 'gc.name', 'gf.name'
+                'u.name', 'gc.name'
 
             );
         }
@@ -62,7 +62,7 @@ class FitnessModelgoals extends JModelList {
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
         
-        //Filtering deadline
+        //Filtering start date
         $this->setState('filter.start_date.from', $app->getUserStateFromRequest($this->context.'.filter.start_date.from', 'filter_from_start_date', '', 'string'));
         $this->setState('filter.start_date.to', $app->getUserStateFromRequest($this->context.'.filter.start_date.to', 'filter_to_start_date', '', 'string'));
         
@@ -75,9 +75,6 @@ class FitnessModelgoals extends JModelList {
         $goal_category = $app->getUserStateFromRequest($this->context . '.filter.goal_category', 'filter_goal_category', '', 'string');
         $this->setState('filter.goal_category', $goal_category);
         
-       // Filter by training period
-        $training_period = $app->getUserStateFromRequest($this->context . '.filter.training_period', 'filter_training_period', '', 'string');
-        $this->setState('filter.training_period', $training_period);
                 
         // Filter by group
         $group = $app->getUserStateFromRequest($this->context . '.filter.group', 'filter_group', '', 'string');
@@ -120,7 +117,6 @@ class FitnessModelgoals extends JModelList {
         // Compile the store id.
         $id.= ':' . $this->getState('filter.search');
         $id.= ':' . $this->getState('filter.state');
-        $id.= ':' . $this->getState('filter.training_period');
         $id.= ':' . $this->getState('filter.goal_category');
         $id.= ':' . $this->getState('filter.group');
         $id.= ':' . $this->getState('filter.goal_status');
@@ -144,7 +140,7 @@ class FitnessModelgoals extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*,  ug.title as usergroup, gc.name as goal_category_name, gf.name as training_period'
+                        'list.select', 'a.*,  ug.title as usergroup, gc.name as goal_category_name'
                 )
         );
         $query->from('`#__fitness_goals` AS a');
@@ -157,7 +153,6 @@ class FitnessModelgoals extends JModelList {
         $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
         
         $query->leftJoin('#__fitness_goal_categories AS gc ON gc.id = a.goal_category_id');
-        $query->leftJoin('#__fitness_training_period AS gf ON gf.id = a.training_period_id');
 
         
         // filter only for Super Users
@@ -184,13 +179,6 @@ class FitnessModelgoals extends JModelList {
         if (is_numeric($goal_category)) {
             $query->where('gc.id = '.(int) $goal_category);
         } 
-        
-        // Filter by goal focus
-        $training_period = $this->getState('filter.training_period');
-        if (is_numeric($training_period)) {
-            $query->where('gf.id = '.(int) $training_period);
-        } 
-
 
 
         // Filter by group
@@ -203,9 +191,9 @@ class FitnessModelgoals extends JModelList {
         // Filter by goal status
 
         $goal_status = $this->getState('filter.goal_status');
-
+  
         if ($goal_status) {
-            $query->where('a.completed = ' . (int) $goal_status);
+            $query->where('a.status = ' . (int) $goal_status);
         } 
         
         // Filter by created
@@ -237,8 +225,6 @@ class FitnessModelgoals extends JModelList {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
                 $query->where('( a.user_id LIKE '.$search.'
                     OR  gc.name LIKE '.$search.' 
-                    OR  gf.name LIKE '.$search.' 
-                   
                     OR  u.username LIKE '.$search.' 
                     OR  u.name LIKE '.$search.' 
                              
@@ -285,40 +271,7 @@ class FitnessModelgoals extends JModelList {
         return $items;
     }
     
-    /**
-     * 
-     * @param type $goal_id
-     * @param type $goal_status_id
-     * @param type $user_id
-     * @return type
-     */
-    public function setGoalStatus($goal_id, $goal_status_id, $goal_type) {
-        // $goal_type: 1-> Primary Goal; 2 -> Mini Goal
-        $ret['IsSuccess'] = true;
-        $table = '#__fitness_goals';
-
-        if($goal_type == '2') $table = '#__fitness_mini_goals';
-
-        $db = &JFactory::getDBo();
-        $query = "UPDATE $table SET completed='$goal_status_id' WHERE id='$goal_id'";
-        if (!$db->query()) {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = $db->stderr();
-        }
-        $db->setQuery($query);
-        $db->query();
-        
-        $ret['Msg'] = $goal_status_id;
-        $ret = json_encode($ret);
-
-        return $ret;
-    }
-    
-    public function sendGoalEmail($goal_id, $goal_status_id, $user_id) {
-        $goal = $this->getGoal($goal_id);
-        $trainer = JFactory::getUser($goal->primary_trainer);
-        return $this->sendEmail($trainer->email, 'Goal email', 'Test');
-    }
+   
     
     
     
@@ -515,10 +468,9 @@ class FitnessModelgoals extends JModelList {
      */
     function getPrimaryGoalsGraphData($client_id) {
         $db = &JFactory::getDBo();
-        $query = "SELECT pg.*, u.name AS client_name, pname.name AS primary_goal_name, tp.color AS training_period_color
+        $query = "SELECT pg.*, u.name AS client_name, pname.name AS primary_goal_name
             FROM  #__fitness_goals AS pg
             LEFT JOIN #__fitness_goal_categories AS pname on pname.id=pg.goal_category_id
-            LEFT JOIN #__fitness_training_period AS tp ON tp.id=pg.training_period_id
             LEFT JOIN #__users AS u ON  u.id=pg.user_id
             WHERE pg.user_id='$client_id'";
         $db->setQuery($query);
@@ -569,6 +521,32 @@ class FitnessModelgoals extends JModelList {
         }
         $result = array('status' => $ret, 'data' => $db->loadObjectList());
         return  $result;
+    }
+    
+    
+    function status_html($item_id, $status, $button_class) {
+        switch($status) {
+            case '1' :
+                $class = 'goal_status_pending';
+                $text = 'PENDING';
+                break;
+            case '2' :
+                $class = 'goal_status_complete';
+                $text = 'COMPLETE';
+                break;
+            case '3' :
+                $class = 'goal_status_incomplete';
+                $text = 'INCOMPLETE';
+                break;
+            default :
+                $class = 'goal_status_pending';
+                $text = 'PENDING';
+                break;
+        }
+
+        $html = '<a href="javascript:void(0)" data-item_id="' . $item_id . '" data-status_id="' . $status . '" class="' . $button_class . ' ' . $class . '">' . $text . '</a>';
+
+        return $html;
     }
 
 }

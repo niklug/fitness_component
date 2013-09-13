@@ -53,10 +53,19 @@ class FitnessViewGoals extends JView
         $document = &JFactory::getDocument();
         $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 	$document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'underscore-min.js');
+        include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
         $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.js');
         $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.time.js');
         echo '<!--[if IE]><script type="text/javascript" src="' . JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
         $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'graph.js');
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'status_class.js');
+        
+        
+        $model = $this->getModel();
+                
+        $this->assign('model', $model);
         
 		parent::display($tpl);
 	}
@@ -127,34 +136,7 @@ class FitnessViewGoals extends JView
 
 	}
         
-    /**
-     * 
-     * @param type $goal_id
-     * @param type $goal_status
-     * @return string
-     */   
-    public function goal_state_html($goal_id, $goal_status, $goal_type) {
-        $html = '<div id="goal_status_button_' . $goal_id . '_' . $goal_type . '" >';
-        switch ($goal_status) {
-            case 1:
-                $html .= '<a data-status="' . $goal_status .  '" onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $goal_type .  ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
-                break;
-            case 2:
-                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $goal_type .  ')" class="goal_status_complete goal_status__button" href="javascript:void(0)">complete</a>';
-                break;
-            case 3:
-                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status . ', ' . $goal_type .  ')" class="goal_status_incomplete goal_status__button" href="javascript:void(0)">incomplete</a>';
-                break;
 
-
-            default:
-                $html .= '<a data-status="' . $goal_status .  '"  onclick="openSetGoalBox(' . $goal_id . ', ' . $goal_status .  ', ' . $goal_type .  ')" class="goal_status_pending goal_status__button" href="javascript:void(0)">pending</a>';
-                break;
-        }
-        $html .= '</div>';
-        
-        return $html;
-    }
     
     function getMiniGoalName($mini_goal_category_id) {
             $db = JFactory::getDbo();
@@ -170,7 +152,7 @@ class FitnessViewGoals extends JView
     
     function getMiniGoalsList($primary_goal_id, $type) {
         $db = JFactory::getDbo();
-        $sql = "SELECT DISTINCT id, mini_goal_category_id, deadline, completed FROM #__fitness_mini_goals WHERE primary_goal_id='$primary_goal_id' AND state='1'";
+        $sql = "SELECT DISTINCT id, mini_goal_category_id, deadline, status FROM #__fitness_mini_goals WHERE primary_goal_id='$primary_goal_id' AND state='1'";
         $db->setQuery($sql);
         if(!$db->query()) {
             JError::raiseError($db->getErrorMsg());
@@ -178,9 +160,9 @@ class FitnessViewGoals extends JView
         $ids = $db->loadResultArray(0);
         $mini_goal_category_ids = $db->loadResultArray(1);
         $deadlines = $db->loadResultArray(2);
-        $completed = $db->loadResultArray(3);
+        $status = $db->loadResultArray(3);
         
-        if($type == 'status')  return $completed;
+        if($type == 'status')  return $status;
         
         if($type == 'id')  return $ids;
         
@@ -201,10 +183,12 @@ class FitnessViewGoals extends JView
     function getMinigoalsStatusHtml($primary_goal_id) {
         $statuses = $this->getMiniGoalsList($primary_goal_id, 'status');
         $ids = $this->getMiniGoalsList($primary_goal_id, 'id');
+        $model = $this->getModel();
         $i = 0;
         foreach ($statuses as $status) {
-            
-            $html .= $this->goal_state_html($ids[$i], $status, '2'); // 2 -> Mini Goal
+            $html .= '<div id="status_button_place_mini_' . $ids[$i] .'">';
+            $html .= $model->status_html($ids[$i], $status, 'status_button_mini');
+            $html .= '</div>';
             
             $i++;
         }

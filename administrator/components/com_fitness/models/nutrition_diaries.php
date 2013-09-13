@@ -289,7 +289,7 @@ class FitnessModelnutrition_diaries extends JModelList {
         return $db->loadResult();
     }
     
-    function status_html($status) {
+    function status_html($item_id, $status) {
         switch($status) {
             case '1' :
                 $class = 'status_inprogress';
@@ -317,7 +317,7 @@ class FitnessModelnutrition_diaries extends JModelList {
                 break;
         }
 
-        $html = '<a href="javascript:void(0)" data-status_id="' . $status . '" class="status_button ' . $class . '">' . $text . '</a>';
+        $html = '<a href="javascript:void(0)" data-item_id="' . $item_id . '" data-status_id="' . $status . '" class="status_button ' . $class . '">' . $text . '</a>';
 
         return $html;
     }

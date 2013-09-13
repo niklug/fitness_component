@@ -38,7 +38,7 @@
               description="COM_FITNESS_GOALS_FORM_DESC_GOAL_DEADLINE" 
               filter="raw" /> 
        
-        <field name="completed" type="list"
+        <field name="status" type="list"
                 
               label="COM_FITNESS_GOALS_GOALS_COMPLETED"
               description="" 

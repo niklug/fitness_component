@@ -266,5 +266,42 @@ class FitnessModelprograms extends JModelList {
         $db->setQuery($query);
         return $db->loadResult();
     }
+    
+    function status_html($item_id, $status, $button_class) {
+        switch($status) {
+            case '1' :
+                $class = 'event_status_pending';
+                $text = 'PENDING';
+                break;
+            case '2' :
+                $class = 'event_status_attended';
+                $text = 'ATTENDED';
+                break;
+            case '3' :
+                $class = 'event_status_cancelled';
+                $text = 'CANCELLED';
+                break;
+            case '4' :
+                $class = 'event_status_latecancel';
+                $text = 'LATE CANCEL';
+                break;
+            case '5' :
+                $class = 'event_status_noshow';
+                $text = 'NO SHOW';
+                break;
+            case '6' :
+                $class = 'event_status_complete';
+                $text = 'COMPLETE';
+                break;
+            default :
+                $class = 'event_status_pending';
+                $text = 'PENDING';
+                break;
+        }
+
+        $html = '<a href="javascript:void(0)" data-item_id="' . $item_id . '" data-status_id="' . $status . '" class="' . $button_class . ' ' . $class . '">' . $text . '</a>';
+
+        return $html;
+    }
 
 }

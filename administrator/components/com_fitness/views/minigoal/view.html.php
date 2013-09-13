@@ -34,7 +34,9 @@ class FitnessViewMinigoal extends JView
 		if (count($errors = $this->get('Errors'))) {
             throw new Exception(implode("\n", $errors));
 		}
-
+                $document = JFactory::getDocument();
+                $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
 		$this->addToolbar();
 		parent::display($tpl);
 	}

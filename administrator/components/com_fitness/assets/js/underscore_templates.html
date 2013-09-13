@@ -1,0 +1,28 @@
+<script type="text/template" id="dialog_status_template">
+    <div id="<%= wrapper %>">
+        <img class="<%=  hide_image_class %>" src="<%= close_image %>" alt="close" title="close" >
+        <% _.each(statuses, function(item, key){
+            if(status_id != key) {
+            %>
+                <a class="status_button_dialog <%= item.class %>" data-item_id="<%= item_id %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+            <% 
+            }
+        })  
+        if(show_send_email) {
+        %>
+            <input type="checkbox" id="send_diary_email" name="send_diary_email" value="1"> <span style="font-size:12px;">Send email</span>
+        <% } %>
+    </div>
+      
+</script>
+
+<script type="text/template" id="status_button_template">
+    <% _.each(statuses, function(item, key){
+        if(status_id == key) {
+        %>
+            <a class="status_button <%= item.class %>" data-item_id="<%= item_id %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+        <% 
+        }
+    })  
+    %>
+</script>

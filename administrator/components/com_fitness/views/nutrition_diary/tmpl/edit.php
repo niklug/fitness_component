@@ -14,27 +14,6 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
 ?>
-<script type="text/javascript">
-    $js(document).ready(function(){
-        Joomla.submitbutton = function(task)
-        {
-            if (task == 'nutrition_diary.cancel') {
-                Joomla.submitform(task, document.getElementById('nutrition_diary-form'));
-            }
-            else{
-
-                if (task != 'nutrition_diary.cancel' && document.formvalidator.isValid(document.id('nutrition_diary-form'))) {
-
-                    Joomla.submitform(task, document.getElementById('nutrition_diary-form'));
-                }
-                else {
-                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                }
-            }
-        }
-    });
-
-</script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="nutrition_diary-form" class="form-validate">
     <div class="width-100 fltlft">
@@ -194,10 +173,11 @@ JHtml::_('behavior.keepalive');
                                     </td>
                                     <td>
                                         <h3 style="text-align: center;">FINAL SCORE</h3>
-                                        <div id="final_score" colspan="2"></div>
+                                        <div id="final_score"></div>
                                          <br/>
-                                        <div id="status_button_place" colspan="2">
-                                                <?php echo $this->backend_list_model->status_html($this->item->status) ?>
+                                        <div id="status_button_place_<?php echo $this->item->id;?>">
+                                            
+                                                <?php echo $this->backend_list_model->status_html($this->item->id, $this->item->status) ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -490,7 +470,6 @@ JHtml::_('behavior.keepalive');
         }
         
         var status_options = {
-            'item_id' : '<?php echo $this->item->id; ?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'db_table' : '#__fitness_nutrition_diary',
@@ -499,14 +478,19 @@ JHtml::_('behavior.keepalive');
             'dialog_status_wrapper' : 'dialog_status_wrapper',
             'dialog_status_template' : '#dialog_status_template',
             'status_button_template' : '#status_button_template',
-            'status_button_place' : '#status_button_place',
+            'status_button_place' : '#status_button_place_',
             'statuses' : {
-                '2' : {'label' : 'PASS', 'class' : 'status_pass'},
-                '3' : {'label' : 'FAIL', 'class' : 'status_fail'}, 
-                '4' : {'label' : 'DISTINCTION', 'class' : 'status_distinction'}
+                '2' : {'label' : 'PASS', 'class' : 'status_pass', 'email_alias' : 'DiaryPass'},
+                '3' : {'label' : 'FAIL', 'class' : 'status_fail', 'email_alias' : 'DiaryFail'}, 
+                '4' : {'label' : 'DISTINCTION', 'class' : 'status_distinction', 'email_alias' : ''}
             },
+            'statuses2' : {},
             'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
-            'hide_image_class' : 'hideimage'
+            'hide_image_class' : 'hideimage',
+            'show_send_email' : true,
+             setStatuses : function(item_id) {
+                return this.statuses;
+            }
         }
         
         // meal blocks object
@@ -528,35 +512,26 @@ JHtml::_('behavior.keepalive');
         var score_status = $.status(status_options);
         score_status.run();
         
+        
+        Joomla.submitbutton = function(task)
+        {
+            if (task == 'nutrition_diary.cancel') {
+                Joomla.submitform(task, document.getElementById('nutrition_diary-form'));
+            }
+            else{
+
+                if (task != 'nutrition_diary.cancel' && document.formvalidator.isValid(document.id('nutrition_diary-form'))) {
+
+                    Joomla.submitform(task, document.getElementById('nutrition_diary-form'));
+                }
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+                }
+            }
+        }
+        
     })($js);
 
     
 </script>
 
-
-<script type="text/template" id="dialog_status_template">
-    <div id="<%= wrapper %>">
-        <img class="<%=  hide_image_class %>" src="<%= close_image %>" alt="close" title="close" >
-        <% _.each(statuses, function(item, key){
-            if(status_id != key) {
-            %>
-                <a class="status_button_dialog <%= item.class %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
-            <% 
-            }
-        })  
-        %>
-        <input type="checkbox" id="send_diary_email" name="send_diary_email" value="1"> <span style="font-size:12px;">Send email</span>
-    </div>
-      
-</script>
-
-<script type="text/template" id="status_button_template">
-    <% _.each(statuses, function(item, key){
-        if(status_id == key) {
-        %>
-            <a class="status_button <%= item.class %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
-        <% 
-        }
-    })  
-    %>
-</script>

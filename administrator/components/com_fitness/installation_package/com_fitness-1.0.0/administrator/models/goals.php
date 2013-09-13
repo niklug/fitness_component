@@ -33,7 +33,7 @@ class FitnessModelgoals extends JModelList {
                 'deadline', 'a.deadline',
                 'details', 'a.details',
                 'comments', 'a.comments',
-                'completed', 'a.completed',
+                'status', 'a.status',
                 'state', 'a.state',
                 'created', 'a.created',
                 'modified', 'a.modified',
@@ -192,7 +192,7 @@ class FitnessModelgoals extends JModelList {
         $goal_status = $this->getState('filter.goal_status');
 
         if ($goal_status) {
-            $query->where('a.completed = ' . (int) $goal_status);
+            $query->where('a.status = ' . (int) $goal_status);
         } 
         
         // Filter by created
@@ -275,7 +275,7 @@ class FitnessModelgoals extends JModelList {
      */
     public function setGoalStatus($goal_id, $goal_status_id, $user_id) {
         $db = &JFactory::getDBo();
-        $query = "UPDATE #__fitness_goals SET completed='$goal_status_id' WHERE id='$goal_id'";
+        $query = "UPDATE #__fitness_goals SET status='$goal_status_id' WHERE id='$goal_id'";
         $db->setQuery($query);
         $db->query();
         return $goal_status_id;

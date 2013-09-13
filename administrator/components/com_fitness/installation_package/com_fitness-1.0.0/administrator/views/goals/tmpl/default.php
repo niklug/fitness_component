@@ -170,7 +170,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_DEADLINE', 'a.deadline', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_COMPLETED', 'a.completed', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_status', 'a.status', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_GOALS_GOALS_CREATED', 'a.created', $listDirn, $listOrder); ?>
@@ -252,7 +252,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $item->deadline; ?>
 				</td>
 				<td id="goal_status_button_<?php echo $item->id ?>" class="center">
-					<?php echo $this->goal_state_html($item->id, $item->completed, $item->user_id); ?>
+					<?php echo $this->goal_state_html($item->id, $item->status, $item->user_id); ?>
 				</td>
 				<td>
 					<?php echo $item->created; ?>
@@ -293,7 +293,7 @@ $saveOrder	= $listOrder == 'a.ordering';
                 <?php } ?>
                                 <td class="center">
                                     <?php
-                                    echo '<a onclick="sendGoalEmail(' . $item->id . ', ' . $item->completed . ', ' . $item->user_id . ')" class="send_email_button" href="javascript:void(0)"></a>';
+                                    echo '<a onclick="sendGoalEmail(' . $item->id . ', ' . $item->status . ', ' . $item->user_id . ')" class="send_email_button" href="javascript:void(0)"></a>';
                                     ?>
 					
                                 
