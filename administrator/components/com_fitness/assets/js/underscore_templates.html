@@ -4,7 +4,7 @@
         <% _.each(statuses, function(item, key){
             if(status_id != key) {
             %>
-                <a class="status_button_dialog <%= item.class %>" data-item_id="<%= item_id %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+                <a class="<%= status_button_dialog %> <%= item.class %>" data-item_id="<%= item_id %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
             <% 
             }
         })  
@@ -20,7 +20,7 @@
     <% _.each(statuses, function(item, key){
         if(status_id == key) {
         %>
-            <a class="status_button <%= item.class %>" data-item_id="<%= item_id %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+            <a class="<%= status_button %> <%= item.class %>" data-item_id="<%= item_id %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
         <% 
         }
     })  

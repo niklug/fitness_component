@@ -503,7 +503,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'db_table' : '#__dc_mv_events',
-            'status_button' : '.status_button',
+            'status_button' : 'status_button',
             'status_button_dialog' : 'status_button_dialog',
             'dialog_status_wrapper' : 'dialog_status_wrapper',
             'dialog_status_template' : '#dialog_status_template',

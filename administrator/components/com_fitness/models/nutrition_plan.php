@@ -141,10 +141,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         public function getGoalData($id) {
             $db = & JFactory::getDBO();
-            $query = "SELECT g.*, p.name AS training_period_name
+            $query = "SELECT g.*
                 FROM #__fitness_goals as g
-                LEFT JOIN #__fitness_training_period AS p
-                ON g.training_period_id = p.id
                 WHERE g.id='$id' AND g.state='1'";
             $db->setQuery($query);
             $status['success'] = 1;

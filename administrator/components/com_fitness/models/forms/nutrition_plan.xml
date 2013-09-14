@@ -21,9 +21,6 @@
               required="true"
         /> 
         
-        <field name="training_period" type="text" size="50" default="" label="COM_FITNESS_TITLE_TRAININGPERIOD"
-             readonly="true" class="readonly  inputbox"
-             description="COM_FITNESS_TITLE_TRAININGPERIOD" /> 
 
         <field name="active_start" type="calendar"
               required="true"

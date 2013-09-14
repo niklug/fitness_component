@@ -1639,7 +1639,13 @@ function  sendAppointmentEmail($type) {
 }
 
 function sendGoalEmail($type, $goal_type) {
-    $goal_id = JRequest::getVar('goal_id');
+    $goal_id = JRequest::getVar('id');
+    if(!$goal_id) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'Error: no goal id';
+        echo json_encode($ret);
+        die();
+    }  
     // $goal_type 1-> Primary Goal; 2 -> Mini Goal
     switch ($type) {
         case 'email_goal_complete':
@@ -1656,7 +1662,14 @@ function sendGoalEmail($type, $goal_type) {
     
     $contents = getContentCurl($url);
     
-    $email = getEmailByGoalId($goal_id);
+    $email = getEmailByGoalId($goal_id, $goal_type);
+    
+    if(!$email) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'error: email not found';
+        echo json_encode($ret);
+        die();  
+    }
     
     $send = sendEmail($email, $subject, $contents);
 
@@ -1672,9 +1685,15 @@ function sendGoalEmail($type, $goal_type) {
     die();
 }
 
-function getEmailByGoalId($goal_id) {
+function getEmailByGoalId($goal_id, $goal_type) {
     $db = & JFactory::getDBO();
     $query = "SELECT user_id FROM #__fitness_goals WHERE id='$goal_id' AND state='1'";
+    if($goal_type == '2') {
+        $query = "SELECT pg.user_id FROM #__fitness_mini_goals AS mg
+            LEFT JOIN #__fitness_goals AS pg ON pg.id=mg.primary_goal_id
+            WHERE mg.id='$goal_id' AND pg.state='1'
+        ";
+    }
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['IsSuccess'] = false;
@@ -1691,16 +1710,15 @@ function getEmailByGoalId($goal_id) {
         
 // Appointments status emails
 function sendAppointmentStatusEmail($type) {
-    $ret['IsSuccess'] = true;
-    $event_id = JRequest::getVar('event_id');
-    $appointment_client_id = JRequest::getVar('appointment_client_id');
-    
-    if($appointment_client_id == 'personal') {
-        $client_id = getClientsByEvent($event_id);
-        $client_id = $client_id[0];
-    } else {
-        $client_id = getClientIdByAppointmentId($appointment_client_id);
+    $event_id = JRequest::getVar('id');
+    if(!$event_id) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'error: no id';
+        echo json_encode($ret);
+        die();   
     }
+    
+    $client_ids = getClientsByEvent($event_id);
     
     switch ($type) {
         case 'email_status_attended':
@@ -1719,20 +1737,32 @@ function sendAppointmentStatusEmail($type) {
             return;
             break;
     }
-    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
     
-    $contents = getContentCurl($url);
     
-    $email = JFactory::getUser($client_id)->email;
+    foreach ($client_ids as $client_id) {
+        if(!$client_id) continue;
+        
+        $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
 
-    $send = sendEmail($email, $subject, $contents);
+        $contents = getContentCurl($url);
 
-    if($send != '1') {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'Email function error';
-        echo json_encode($ret);
-        die();
+        $email = JFactory::getUser($client_id)->email;
+        
+        $emails[] = $email;
+
+        $send = sendEmail($email, $subject, $contents);
+
+        if($send != '1') {
+            $ret['IsSuccess'] = false;
+            $ret['Msg'] = 'Email function error';
+            echo json_encode($ret);
+            die();
+        }
     }
+    $emails = implode(', ', $emails);
+    //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
+    $ret['IsSuccess'] = true;
+    $ret['Msg'] = $emails;
     echo json_encode($ret);
     die();
 

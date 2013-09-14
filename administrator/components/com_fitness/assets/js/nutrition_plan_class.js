@@ -118,14 +118,11 @@
     }
 
     NutritionPlan.prototype.primaryGoalChangeEvent = function(e) {
-        this.options.training_period_select.val('');
         this.options.active_start_field.val('');
         this.options.active_finish_field.val('');
         var self = this;
         this.getGoalData(e, function(output) {
-            console.log(output);
             if(output) {
-                self.options.training_period_select.val(output.training_period_name);
                 self.options.active_start_field.val(output.start_date);
                 self.options.active_finish_field.val(output.deadline);
             }
@@ -346,7 +343,6 @@
         // papulate training period
         this.getGoalData(this.options.primary_goal_select, function(output) {
             if(output) {
-                self.options.training_period_select.val(output.training_period_name);
                 self.populateMinigoals(output.minigoals, $("#plan_mini_goals"));
             }
         });

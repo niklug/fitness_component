@@ -33,7 +33,6 @@ class FitnessModelnutrition_diaries extends JModelList {
                 'trainer_id', 'u.name',
                 'assessed_by', 'u.name',
                 'goal_category_id', 'gn.primary_goal_name',
-                'training_period', 'a.training_period',
                 'nutrition_focus', 'a.nutrition_focus',
                 'status', 'a.status',
                 'score', 'a.score',
@@ -83,10 +82,7 @@ class FitnessModelnutrition_diaries extends JModelList {
                 // Filter by goal category
                 $goal_category = $app->getUserStateFromRequest($this->context . '.filter.goal_category', 'filter_goal_category', '', 'string');
                 $this->setState('filter.goal_category', $goal_category);
-                
-                // Filter by training period
-                $training_period = $app->getUserStateFromRequest($this->context . '.filter.training_period', 'filter_training_period', '', 'string');
-                $this->setState('filter.training_period', $training_period);
+
                 
                 // Filter by nutrition focus
                 $nutrition_focus = $app->getUserStateFromRequest($this->context . '.filter.nutrition_focus', 'filter_nutrition_focus', '', 'string');
@@ -141,7 +137,6 @@ class FitnessModelnutrition_diaries extends JModelList {
                 $this->getState(
                         'list.select', 'a.*,
                             (SELECT name FROM #__fitness_goal_categories WHERE id=a.goal_category_id) primary_goal_name,
-                            gf.name as training_period,
                             nf.name AS nutrition_focus_name
                         '
                 )
@@ -156,7 +151,7 @@ class FitnessModelnutrition_diaries extends JModelList {
         
         $query->leftJoin('#__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus');
         
-        $query->leftJoin('#__fitness_training_period AS gf ON gf.id = a.training_period_id');
+
 
         
         
@@ -239,12 +234,7 @@ class FitnessModelnutrition_diaries extends JModelList {
                 if (is_numeric($goal_category)) {
                     $query->where('gn.id = '.(int) $goal_category);
                 }  
-                
-                // Filter by goal focus
-                $training_period = $this->getState('filter.training_period');
-                if (is_numeric($training_period)) {
-                    $query->where('gf.id = '.(int) $training_period);
-                } 
+
                 
                 // Filter by nutrition focus
                 $nutrition_focus = $this->getState('filter.nutrition_focus');

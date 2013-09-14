@@ -60,14 +60,6 @@
         
         filter="safehtml" /> 
 
-       <field name="training_period" type="text" size="40" class="inputbox"
-        
-            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_TRAINING_PERIOD"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_TRAINING_PERIOD" 
-        
-        
-        
-        filter="safehtml" /> 
 
        <field name="nutrition_focus" type="text" size="40" class="inputbox"
         
@@ -86,13 +78,7 @@
         
         
         filter="safehtml" /> 
-       
-              <field name="training_period_id" type="text" size="40" class="inputbox"
-        
-            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_TRAINING_PERIOD"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_TRAINING_PERIOD" 
-  
-        filter="safehtml" /> 
+
 
        <field name="score" type="text" size="40" class="inputbox"
         

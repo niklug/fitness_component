@@ -99,8 +99,7 @@ JHtml::_('behavior.keepalive');
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    <?php echo $this->form->getLabel('training_period'); ?>
-                                    <?php echo $this->form->getInput('training_period'); ?>
+
                                 </td>
                                 <td>
                                     <?php echo $this->form->getLabel('force_active'); ?>
@@ -473,7 +472,6 @@ JHtml::_('behavior.keepalive');
             'client_select' : $("#jform_client_id"),
             'secondary_trainers_wrapper' : $("#secondary_trainers"),
             'primary_goal_select' : $("#jform_primary_goal"),
-            'training_period_select' : $("#jform_training_period"),
             'calendar_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_multicalendar&task=load&calid=0',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'client_selected' : '<?php echo $this->item->client_id;?>',

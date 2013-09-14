@@ -113,23 +113,6 @@ $saveOrder	= $listOrder == 'a.ordering';
         </div>
 
         
-        <?php
-        $db = JFactory::getDbo();
-        $sql = "SELECT id, name FROM #__fitness_training_period WHERE state='1'";
-        $db->setQuery($sql);
-        if(!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $training_period= $db->loadObjectList();
-        ?>
-
-        <div class='filter-select fltrt'>
-                <select name="filter_training_period" class="inputbox" onchange="this.form.submit()">
-                        <option value=""><?php echo JText::_('-Training Period-');?></option>
-                        <?php echo JHtml::_('select.options', $training_period, "id", "name", $this->state->get('filter.training_period'), true);?>
-                </select>
-        </div>
-            
         
         <?php
         $db = JFactory::getDbo();
@@ -218,9 +201,6 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_DIARIES_PRIMARY_GOAL', 'gn.primary_goal_name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_DIARIES_TRAINING_PERIOD', 'gf.training_period', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_DIARIES_NUTRITION_FOCUS', 'nf.nutrition_focus_name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
@@ -299,9 +279,6 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</td>
 				<td>
 					<?php echo $item->primary_goal_name; ?>
-				</td>
-				<td>
-					<?php echo $item->training_period; ?>
 				</td>
 				<td>
 					<?php echo $item->nutrition_focus_name; ?>

@@ -14,26 +14,26 @@
     Status.prototype.setEventListeners = function() {
         var self = this;
 
-        $(this.options.status_button).live('click', function() {
+        $("." + this.options.status_button).die().live('click', function() {
             var item_id = $(this).attr('data-item_id');
             var status_id = $(this).attr('data-status_id');
             var dialog_html = self.generateDialogHtml(item_id, status_id);
 
             $("body").append(dialog_html);
+            
         })
 
-        $("." + this.options.hide_image_class).live('click', function() {
+        $("." + this.options.hide_image_class).die().live('click', function() {
              self.closeDialog();
         })
 
-        $("." + this.options.status_button_dialog).live('click', function() {
+        $("." + this.options.status_button_dialog).die().live('click', function() {
             var item_id = $(this).attr('data-item_id');
             var status = $(this).attr('data-status_id');
             var data = {
                 'status' : status,
                 'id' : item_id
             };
-
 
             self.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateDiaryStatus', self.options.db_table, function(output) {
                 self.emailLogic(item_id, status);
@@ -102,7 +102,8 @@
             'close_image' : this.options.close_image,
             'wrapper' : this.options.dialog_status_wrapper,
             'hide_image_class' : this.options.hide_image_class,
-            'status_button_dialog' : this.options.status_button_dialog
+            'status_button_dialog' : this.options.status_button_dialog,
+            'status_button' : this.options.status_button
         };
         var template = _.template( $(this.options.status_button_template).html(), variables );
         return template
@@ -110,7 +111,7 @@
     
     Status.prototype.emailLogic = function(item_id, status_id) {
         var statuses = this.options.setStatuses(item_id);
- 
+        
         var method = statuses[status_id].email_alias;
         var send_email = $("#send_diary_email").is(':checked');
         if(method && send_email) {

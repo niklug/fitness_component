@@ -37,8 +37,6 @@ if (!$canEdit && JFactory::getUser()->authorise('core.edit.own', 'com_fitness'))
 			<?php echo $this->item->assessed_by; ?></li>
 			<li><?php echo JText::_('COM_FITNESS_FORM_LBL_NUTRITION_DIARY_PRIMARY_GOAL'); ?>:
 			<?php echo $this->item->primary_goal; ?></li>
-			<li><?php echo JText::_('COM_FITNESS_FORM_LBL_NUTRITION_DIARY_TRAINING_PERIOD'); ?>:
-			<?php echo $this->item->training_period; ?></li>
 			<li><?php echo JText::_('COM_FITNESS_FORM_LBL_NUTRITION_DIARY_NUTRITION_FOCUS'); ?>:
 			<?php echo $this->item->nutrition_focus; ?></li>
 			<li><?php echo JText::_('COM_FITNESS_FORM_LBL_NUTRITION_DIARY_STATUS'); ?>:
@@ -68,7 +66,7 @@ if (!$canEdit && JFactory::getUser()->authorise('core.edit.own', 'com_fitness'))
 										<input type="hidden" name="jform[trainer_id]" value="<?php echo $this->item->trainer_id; ?>" />
 										<input type="hidden" name="jform[assessed_by]" value="<?php echo $this->item->assessed_by; ?>" />
 										<input type="hidden" name="jform[primary_goal]" value="<?php echo $this->item->primary_goal; ?>" />
-										<input type="hidden" name="jform[training_period]" value="<?php echo $this->item->training_period; ?>" />
+										
 										<input type="hidden" name="jform[nutrition_focus]" value="<?php echo $this->item->nutrition_focus; ?>" />
 										<input type="hidden" name="jform[status]" value="<?php echo $this->item->status; ?>" />
 										<input type="hidden" name="jform[score]" value="<?php echo $this->item->score; ?>" />

@@ -137,7 +137,7 @@ defined('_JEXEC') or die;
                                     <input type="hidden" name="jform[trainer_id]" value="<?php echo $item->trainer_id; ?>" />
                                     <input type="hidden" name="jform[assessed_by]" value="<?php echo $item->assessed_by; ?>" />
                                     <input type="hidden" name="jform[primary_goal]" value="<?php echo $item->primary_goal; ?>" />
-                                    <input type="hidden" name="jform[training_period]" value="<?php echo $item->training_period; ?>" />
+                                    
                                     <input type="hidden" name="jform[nutrition_focus]" value="<?php echo $item->nutrition_focus; ?>" />
                                     <input type="hidden" name="jform[status]" value="<?php echo $item->status; ?>" />
                                     <input type="hidden" name="jform[score]" value="<?php echo $item->score; ?>" />

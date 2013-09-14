@@ -86,12 +86,12 @@ JHtml::_('behavior.keepalive');
                                     <?php echo $this->item->created; ?>
                                 </td>
                                 <td>
-                                    Training Period
+                                    Nutrition Focus
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <?php  echo $this->frontend_form_model->getTrainingPeriodName($this->item->training_period_id); ?>
-                                    </span>
+                                        <?php echo $this->frontend_form_model->getNutritionFocusName($this->item->nutrition_focus); ?>
+                                    </span>               
                                 </td>
                             </tr>
                             <tr>
@@ -108,12 +108,10 @@ JHtml::_('behavior.keepalive');
                                     ?>
                                 </td>
                                 <td>
-                                    Nutrition Focus
+                                    
                                 </td>
                                 <td>
-                                    <span class="grey_title">
-                                        <?php echo $this->frontend_form_model->getNutritionFocusName($this->item->nutrition_focus); ?>
-                                    </span>
+
                                 </td>
                             </tr>
                             <tr>
@@ -473,7 +471,7 @@ JHtml::_('behavior.keepalive');
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'db_table' : '#__fitness_nutrition_diary',
-            'status_button' : '.status_button',
+            'status_button' : 'status_button',
             'status_button_dialog' : 'status_button_dialog',
             'dialog_status_wrapper' : 'dialog_status_wrapper',
             'dialog_status_template' : '#dialog_status_template',

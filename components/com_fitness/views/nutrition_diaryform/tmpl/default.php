@@ -25,7 +25,6 @@ $trainer_id = $item->trainer_id ? $item->trainer_id : $this->active_plan_data->t
 
 $goal_category_id = $item->goal_category_id ? $item->goal_category_id : $this->active_plan_data->primary_goal_id;
 
-$training_period_id = $item->training_period_id ? $item->training_period_id : $this->active_plan_data->training_period_id;
 
 $nutrition_focus = $item->nutrition_focus ? $item->nutrition_focus : $this->active_plan_data->nutrition_focus;
 
@@ -559,7 +558,6 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
         <input type="hidden" name="jform[client_id]" value="<?php echo $user->id; ?>" />
         <input type="hidden" name="jform[trainer_id]" value="<?php echo $trainer_id ?>" />
         <input type="hidden" name="jform[goal_category_id]" value="<?php echo $goal_category_id; ?>" />
-        <input type="hidden" name="jform[training_period_id]" value="<?php echo $training_period_id; ?>" />
         <input type="hidden" name="jform[nutrition_focus]" value="<?php echo $nutrition_focus; ?>" />
 
 
