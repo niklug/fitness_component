@@ -102,13 +102,23 @@ switch ($method) {
     break;
     // goal emails
     case "sendNotifyGoalEmail":
-        sendGoalEmail('email_notify_goal');
+        sendGoalEmail('email_notify_goal', '1');
     break;
     case "sendGoalCompleteEmail":
-        sendGoalEmail('email_goal_complete');
+        sendGoalEmail('email_goal_complete', '1');
     break;
     case "sendGoalIncompleteEmail":
-        sendGoalEmail('email_goal_incomplete');
+        sendGoalEmail('email_goal_incomplete', '1');
+    break;
+    //mini
+    case "sendNotifyGoalMiniEmail":
+        sendGoalEmail('email_notify_goal', '2');
+    break;
+    case "sendGoalCompleteMiniEmail":
+        sendGoalEmail('email_goal_complete', '2');
+    break;
+    case "sendGoalIncompleteMiniEmail":
+        sendGoalEmail('email_goal_incomplete', '2');
     break;
 
     //
@@ -1612,7 +1622,13 @@ function getUserGroup($user_id) {
  * administration Programs view
  */
 function  sendAppointmentEmail($type) {
-    $event_id = JRequest::getVar('event_id');
+    $event_id = JRequest::getVar('id');
+    if(!$event_id) {
+        $ret['IsSuccess'] = false;
+        $ret['Msg'] = 'Error: no item id';
+        echo json_encode($ret);
+        die();   
+    }
     $emails =  send_appointment_email($event_id, $type);
     $emails = implode(', ', $emails);
     //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
@@ -1622,9 +1638,9 @@ function  sendAppointmentEmail($type) {
     die();
 }
 
-function sendGoalEmail($type) {
+function sendGoalEmail($type, $goal_type) {
     $goal_id = JRequest::getVar('goal_id');
-    $goal_type = JRequest::getVar('goal_type');// 1-> Primary Goal; 2 -> Mini Goal
+    // $goal_type 1-> Primary Goal; 2 -> Mini Goal
     switch ($type) {
         case 'email_goal_complete':
             $subject = 'Complete Goal';

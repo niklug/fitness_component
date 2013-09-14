@@ -490,11 +490,12 @@ class FitnessModelgoals extends JModelList {
      */
      function getMiniGoalsGraphData($client_id) {
         $db = &JFactory::getDBo();
-        $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, pg.start_date AS start_date
+        $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, mg.start_date AS start_date, tp.color AS training_period_color
             FROM  #__fitness_mini_goals AS mg
             LEFT JOIN #__fitness_mini_goal_categories AS mname on mname.id=mg.mini_goal_category_id
             LEFT JOIN #__fitness_goals AS pg ON mg.primary_goal_id=pg.id
             LEFT JOIN #__users AS u ON  u.id=pg.user_id
+            LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
             WHERE pg.user_id='$client_id'";
         $db->setQuery($query);
         $ret['success'] = 1;

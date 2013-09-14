@@ -95,8 +95,8 @@
     }
 
     Status.prototype.statusButtonHtml = function(item_id, status_id) {
-
-        var variables = { 'statuses' : this.options.statuses,
+        var statuses = this.options.setStatuses(item_id);
+        var variables = { 'statuses' : statuses,
             'item_id' : item_id,
             'status_id' : status_id,
             'close_image' : this.options.close_image,
@@ -109,13 +109,14 @@
     }
     
     Status.prototype.emailLogic = function(item_id, status_id) {
-        if(this.options.statuses[status_id].email_alias !== 'undefined') {
-            var method = this.options.statuses[status_id].email_alias;
-            var send_email = $("#send_diary_email").is(':checked');
-            if(method && send_email) {
-                this.sendEmail(item_id, method);
-            }
+        var statuses = this.options.setStatuses(item_id);
+ 
+        var method = statuses[status_id].email_alias;
+        var send_email = $("#send_diary_email").is(':checked');
+        if(method && send_email) {
+            this.sendEmail(item_id, method);
         }
+     
     }
     
     Status.prototype.sendEmail = function(id, method) {

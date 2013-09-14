@@ -69,7 +69,7 @@
         data.start_primary = graphItemDataArray(primary_goals, 'start_date');
         data.finish_primary = graphItemDataArray(primary_goals, 'deadline');
         data.status_primary = graphItemDataArray(primary_goals, 'status');
-        data.training_period_colors = graphItemDataArray(primary_goals, 'training_period_color');
+        
         return data;
     }
 
@@ -81,6 +81,7 @@
         data.start_mini = graphItemDataArray(mini_goals, 'start_date');
         data.finish_mini = graphItemDataArray(mini_goals, 'deadline');
         data.status_mini = graphItemDataArray(mini_goals, 'status');
+        data.training_period_colors = graphItemDataArray(mini_goals, 'training_period_color');
         return data;
     }
 
@@ -162,25 +163,26 @@
         //var d1 = [[1377993600 * 1000, 2]];
         var d1 = client_data.primary_goals;
 
-        var training_period_colors = client_data.training_period_colors;
-
-
-        // Training periods 
-        var markings = []; 
-        for(var i = 0; i < d1.length - 1; i++) {
-            markings[i] =  { xaxis: { from: d1[i][0], to: d1[i + 1][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i+1]};
-        }
-        // first Primary Goal marking
-
-        var first_primary_goal_start_date = new Date(client_data.start_primary[0]).getTime();
-        if(first_primary_goal_start_date) {
-            markings[markings.length] =  { xaxis: { from: first_primary_goal_start_date, to: d1[0][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[0]};
-        }
         //console.log(markings);
         //
         // Mini Goals
         //var d2 = [[1320376000 * 1000, 1], [1330376000 * 1000, 1], [1340376000 * 1000, 1], [1350998400 * 1000, 1], [1374710400 * 1000, 1]];
         var d2 = client_data.mini_goals;
+        
+        var training_period_colors = client_data.training_period_colors;
+
+        // Training periods 
+        var markings = []; 
+        for(var i = 0; i < d2.length - 1; i++) {
+            markings[i] =  { xaxis: { from: d2[i][0], to: d2[i + 1][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i+1]};
+        }
+        // first Primary Goal marking
+
+        var first_mini_goal_start_date = new Date(client_data.start_mini[0]).getTime();
+        if(first_mini_goal_start_date) {
+            markings[markings.length] =  { xaxis: { from: first_mini_goal_start_date, to: d2[0][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[0]};
+        }
+        
 
         var d3 = client_data.personal_training_xaxis;
 
