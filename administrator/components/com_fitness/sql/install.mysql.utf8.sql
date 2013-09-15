@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goals` (
   `start_date` date NOT NULL,
   `deadline` date NOT NULL,
   `details` text NOT NULL,
-  `comments` text NOT NULL,
   `status` int(1) NOT NULL DEFAULT '1',
   `state` tinyint(1) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -32,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goals` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_categories` (
 `id` int(11)  NOT NULL AUTO_INCREMENT,
-
 `name` VARCHAR(255)  NOT NULL ,
 `color` VARCHAR(20)  NOT NULL ,
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
@@ -695,14 +693,13 @@ INSERT INTO `#__fitness_training_period` (`id`, `name`, `color`) VALUES
 
 
 CREATE TABLE IF NOT EXISTS `#__fitness_mini_goals` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `primary_goal_id` int(11) unsigned NOT NULL,
   `mini_goal_category_id` int(11) NOT NULL,
   `training_period_id` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `deadline` date NOT NULL,
   `details` text NOT NULL,
-  `comments` text NOT NULL,
   `status` int(1) NOT NULL DEFAULT '1',
   `state` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
@@ -768,14 +765,15 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_meals` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `recipe_id` int(11) unsigned NOT NULL,
+  `item_id` int(11) unsigned NOT NULL,
+  `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `recipe_id` (`recipe_id`),
-  FOREIGN KEY (recipe_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `item_id` (`item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_focus` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -865,28 +863,28 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_meals` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `nutrition_plan_id` int(11) unsigned NOT NULL,
-  `meal_id` int(11) unsigned NOT NULL,
+  `item_id` int(11) unsigned NOT NULL,
+  `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `nutrition_plan_id` (`nutrition_plan_id`),
-  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
+  KEY `item_id` (`item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_meal_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `nutrition_plan_id` int(11) unsigned NOT NULL,
-  `meal_id` int(11) unsigned NOT NULL,
+  `item_id` int(11) unsigned NOT NULL,
+  `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `nutrition_plan_id` (`nutrition_plan_id`),
-  KEY `meal_id` (`meal_id`),
-  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
-  FOREIGN KEY (meal_id) REFERENCES #__fitness_nutrition_plan_meals(id) ON DELETE CASCADE
+  KEY `item_id` (`item_id`),
+  KEY `sub_item_id` (`sub_item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
+  FOREIGN KEY (sub_item_id) REFERENCES #__fitness_nutrition_plan_meals(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_shopping_list` (
@@ -967,28 +965,53 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_ingredients` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_meal_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `nutrition_plan_id` int(11) unsigned NOT NULL,
-  `meal_id` int(11) unsigned NOT NULL,
+  `item_id` int(11) unsigned NOT NULL,
+  `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `nutrition_plan_id` (`nutrition_plan_id`),
-  KEY `meal_id` (`meal_id`),
-  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_diary(id) ON DELETE CASCADE,
-  FOREIGN KEY (meal_id) REFERENCES #__fitness_nutrition_diary_meals(id) ON DELETE CASCADE
+  KEY `item_id` (`nutrition_plan_id`),
+  KEY `sub_item_id` (`meal_id`),
+  FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_diary(id) ON DELETE CASCADE,
+  FOREIGN KEY (sub_item_id) REFERENCES #__fitness_nutrition_diary_meals(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `nutrition_plan_id` int(11) unsigned NOT NULL,
-  `meal_id` int(11) unsigned NOT NULL,
+  `item_id` int(11) unsigned NOT NULL,
+  `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `nutrition_plan_id` (`nutrition_plan_id`),
-  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_diary(id) ON DELETE CASCADE
+  KEY `item_id` (`item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_diary(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 /* end nutrition diary  */
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_goal_comments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) unsigned NOT NULL,
+  `sub_item_id` int(11) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__fitness_goals(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_mini_goal_comments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) unsigned NOT NULL,
+  `sub_item_id` int(11) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__fitness_mini_goals(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

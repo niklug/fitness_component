@@ -57,15 +57,7 @@
             label="COM_FITNESS_FORM_LBL_MINIGOAL_DETAILS"
             description="COM_FITNESS_FORM_DESC_MINIGOAL_DETAILS"  /> 
 
-       <field name="comments" type="editor" buttons="true"
-        class="inputbox"
-        filter="safehtml"
-        
-        
-        
-        
-            label="COM_FITNESS_FORM_LBL_MINIGOAL_COMMENTS"
-            description="COM_FITNESS_FORM_DESC_MINIGOAL_COMMENTS"  /> 
+
 
         <field name="status" type="list"
                 

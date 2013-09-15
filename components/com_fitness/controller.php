@@ -69,27 +69,6 @@ class FitnessController extends JController {
         
         echo $this->admin_nutrition_recipe_model->populateTable($recipe_id);
     }
-
-    function saveComment() {
-        $id = JRequest::getVar('id');
-        $comment_text = JRequest::getVar('comment_text','','POST','STRING',JREQUEST_ALLOWHTML);
-        $created = JRequest::getVar('created');
-        $recipe_id = JRequest::getVar('recipe_id');
-        
-        echo $this->admin_nutrition_recipe_model->saveComment($id, $comment_text, $recipe_id, $created);
-    }
-
-    function deleteComment() {
-        $id= JRequest::getVar('id');
-        
-        echo $this->admin_nutrition_recipe_model->deleteComment($id);
-    }
-
-    function populateComments() {
-        $recipe_id = JRequest::getVar('recipe_id');
-        
-        echo $this->admin_nutrition_recipe_model->populateComments($recipe_id);
-    }
     // end nutrition_recipe
 
     // nutrition plan
@@ -145,24 +124,21 @@ class FitnessController extends JController {
 
     function savePlanComment() {
         $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded', '', 'POST', 'STRING', JREQUEST_ALLOWHTML);
-        
+        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
         echo $this->admin_nutrition_plan_model->savePlanComment($data_encoded, $table);
     }
 
     function deletePlanComment() {
         $table = JRequest::getVar('table');
         $id = JRequest::getVar('id');
-        
         echo $this->admin_nutrition_plan_model->deletePlanComment($id, $table);
     }
 
     function populatePlanComments() {
         $table = JRequest::getVar('table');
-        $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
-        $meal_id = JRequest::getVar('meal_id');
-        
-        echo $this->admin_nutrition_plan_model->populatePlanComments($nutrition_plan_id, $meal_id, $table);
+        $item_id = JRequest::getVar('item_id');
+        $sub_item_id = JRequest::getVar('sub_item_id');
+        echo $this->admin_nutrition_plan_model->populatePlanComments($item_id, $sub_item_id, $table);
     }
 
     function importRecipe() {

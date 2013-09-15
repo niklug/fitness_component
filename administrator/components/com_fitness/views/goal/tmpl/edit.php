@@ -20,52 +20,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 #jform_details-lbl, #jform_comments-lbl {
     float: none;
 }
+.adminformlist li {
+    clear: both;
+}
 
 </style>
-<script type="text/javascript">
-    function getScript(url,success) {
-        var script = document.createElement('script');
-        script.src = url;
-        var head = document.getElementsByTagName('head')[0],
-        done = false;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState
-                || this.readyState == 'loaded'
-                || this.readyState == 'complete')) {
-                done = true;
-                success();
-                script.onload = script.onreadystatechange = null;
-                head.removeChild(script);
-            }
-        };
-        head.appendChild(script);
-    }
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        js = jQuery.noConflict();
-        js(document).ready(function(){
-            
-
-            Joomla.submitbutton = function(task)
-            {
-                if (task == 'goal.cancel') {
-                    Joomla.submitform(task, document.getElementById('goal-form'));
-                }
-                else{
-                    
-                    if (task != 'goal.cancel' && document.formvalidator.isValid(document.id('goal-form'))) {
-                        
-                        Joomla.submitform(task, document.getElementById('goal-form'));
-                    }
-                    else {
-                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                    }
-                }
-            }
-        });
-    });
-</script>
-
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="goal-form" class="form-validate">
     <div class="width-60 fltlft">
         <fieldset class="adminform">
@@ -139,6 +98,13 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 
             </ul>
+            <br/>
+            <div class="clr"></div>
+            <hr>
+            <div id="comments_wrapper"></div>
+            <div class="clr"></div>
+            <input id="add_comment_0" class="" type="button" value="Add Comment" >
+            <div class="clr"></div>
         </fieldset>
     </div>
 
@@ -148,15 +114,52 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 
-    <style type="text/css">
-        /* Temporary fix for drifting editor fields */
-        .adminformlist li {
-            clear: both;
-        }
-    </style>
 </form>
 
 
 
+<script type="text/javascript">
+    
+    (function($) {
+        
+        var comment_options = {
+            'item_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
+            'db_table' : '#__fitness_goal_comments',
+            'read_only' : false
+        }
+        
+        // comments
+        var comments = $.comments(comment_options, comment_options.item_id, 0);
+          
+        var comments_html = comments.run();
+        $("#comments_wrapper").html(comments_html);
+        
 
 
+
+
+
+        Joomla.submitbutton = function(task)
+        {
+            if (task == 'goal.cancel') {
+                Joomla.submitform(task, document.getElementById('goal-form'));
+            }
+            else{
+
+                if (task != 'goal.cancel' && document.formvalidator.isValid(document.id('goal-form'))) {
+
+                    Joomla.submitform(task, document.getElementById('goal-form'));
+                }
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+                }
+            }
+        }
+    
+    })($js);
+    
+    
+    
+</script>

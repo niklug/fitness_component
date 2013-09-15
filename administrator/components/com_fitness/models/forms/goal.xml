@@ -58,11 +58,6 @@
               description="" 
               filter="raw" /> 
 
-        <field name="comments" type="editor"
-                
-              label="Trainer Comments"
-              description="C" 
-              filter="raw" /> 
 
 
            <field name="created" type="timecreated" default="" 

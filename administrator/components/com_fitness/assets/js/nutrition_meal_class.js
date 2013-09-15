@@ -200,7 +200,7 @@
             html += '<div class="clr"></div>';
             html += '<br/>';
 
-            html += $.nutritionComment(this.nutrition_comment_options, this.options.nutrition_plan_id, meal_id).run();
+            html += $.comments(this.nutrition_comment_options, this.nutrition_comment_options.item_id, meal_id).run();
 
         }
         html += '<div class="clr"></div>';

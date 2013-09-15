@@ -25,35 +25,12 @@ $primary_goal_id = $session->get('primary_goal_id');
 #jform_details-lbl, #jform_comments-lbl {
     float: none;
 }
+.adminformlist li {
+    clear: both;
+}
 
 </style>
-<script type="text/javascript">
 
-    (function($) {
-
-
-        Joomla.submitbutton = function(task)
-        {
-            if (task == 'minigoal.cancel') {
-                Joomla.submitform(task, document.getElementById('minigoal-form'));
-            }
-            else{
-
-                if (task != 'minigoal.cancel' && document.formvalidator.isValid(document.id('minigoal-form'))) {
-
-                    Joomla.submitform(task, document.getElementById('minigoal-form'));
-                }
-                else {
-                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                }
-            }
-        }
-     })($js);
-
-    
-</script>
-
-</script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="minigoal-form" class="form-validate">
     <div class="width-60 fltlft">
@@ -81,6 +58,13 @@ $primary_goal_id = $session->get('primary_goal_id');
 
 
             </ul>
+            <br/>
+            <div class="clr"></div>
+            <hr>
+            <div id="comments_wrapper"></div>
+            <div class="clr"></div>
+            <input id="add_comment_0" class="" type="button" value="Add Comment" >
+            <div class="clr"></div>
         </fieldset>
     </div>
 
@@ -89,11 +73,50 @@ $primary_goal_id = $session->get('primary_goal_id');
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
-
-    <style type="text/css">
-        /* Temporary fix for drifting editor fields */
-        .adminformlist li {
-            clear: both;
-        }
-    </style>
 </form>
+
+<script type="text/javascript">
+    
+    (function($) {
+        
+        var comment_options = {
+            'item_id' : '<?php echo $this->item->id;?>',
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
+            'db_table' : '#__fitness_mini_goal_comments',
+            'read_only' : false
+        }
+        
+        // comments
+        var comments = $.comments(comment_options, comment_options.item_id, 0);
+          
+        var comments_html = comments.run();
+        $("#comments_wrapper").html(comments_html);
+        
+
+
+
+
+
+        Joomla.submitbutton = function(task)
+        {
+            if (task == 'minigoal.cancel') {
+                Joomla.submitform(task, document.getElementById('minigoal-form'));
+            }
+            else{
+
+                if (task != 'minigoal.cancel' && document.formvalidator.isValid(document.id('minigoal-form'))) {
+
+                    Joomla.submitform(task, document.getElementById('minigoal-form'));
+                }
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+                }
+            }
+        }
+    
+    })($js);
+    
+    
+    
+</script>

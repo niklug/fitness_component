@@ -110,10 +110,10 @@ class FitnessViewNutrition_plan extends JView {
     
     function populatePlanComments() {
         $table = JRequest::getVar('table');
-        $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
-        $meal_id = JRequest::getVar('meal_id');
+        $item_id = JRequest::getVar('item_id');
+        $sub_item_id = JRequest::getVar('sub_item_id');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->populatePlanComments($nutrition_plan_id, $meal_id, $table);
+        echo $model->populatePlanComments($item_id, $sub_item_id, $table);
     }
     
     function importRecipe() {

@@ -412,13 +412,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         
-        public function populatePlanComments($nutrition_plan_id, $meal_id, $table) {
+        public function populatePlanComments($item_id, $sub_item_id, $table) {
             $ret['IsSuccess'] = 1;
             $db = JFactory::getDbo();
             $query = "SELECT c.*, u.name AS user_name FROM $table AS c
                 LEFT JOIN #__users AS u ON u.id=c.created_by
-                WHERE nutrition_plan_id='$nutrition_plan_id' 
-                AND meal_id='$meal_id'";
+                WHERE item_id='$item_id' 
+                AND sub_item_id='$sub_item_id'";
             $db->setQuery($query);
             if(!$db->query()) {
                 $ret['IsSuccess'] = 0;

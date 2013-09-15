@@ -2,33 +2,34 @@
  * class provide comments system
  */
 (function($) {
-    function NutritionComment(options, nutrition_plan_id, meal_id) {
+    function Comments(options, item_id, sub_item_id) {
         this.options = options;
-        this.nutrition_plan_id = nutrition_plan_id;
-        this.meal_id = meal_id;
+        this.item_id = item_id;
+        this.sub_item_id = sub_item_id;
+        console.log(sub_item_id);
     }
 
-    NutritionComment.prototype.run = function() {
+    Comments.prototype.run = function() {
         var comments_wrapper = this.generateHtml();
         this.setEventListeners();
         return comments_wrapper;
     }
 
-    NutritionComment.prototype.setEventListeners = function() {
+    Comments.prototype.setEventListeners = function() {
         var self = this;
-        $("#add_comment_" + this.meal_id).die().live('click', function() {
+        $("#add_comment_" + this.sub_item_id).die().live('click', function() {
             var comment_template = self.createCommentTemplate(self.options.comment_obj);
-            $("#comments_wrapper_" + self.meal_id).append(comment_template);
+            $("#comments_wrapper_" + self.sub_item_id).append(comment_template);
         });
 
-        $("#save_comment_" + this.meal_id).die().live('click', function() {
+        $("#save_comment_" + this.sub_item_id).die().live('click', function() {
             var comment_wrapper = $(this).closest("table").parent();
             var id = comment_wrapper.attr("data-id");
             var comment_text = $(this).closest("table").find("textarea.comment_textarea").val();
             var date = $(this).closest("table").find(".comment_date").text();
             var time = $(this).closest("table").find(".comment_time").text();
             var created = date + ' ' + time;
-            var obj = {'id' : id, 'comment' : comment_text, 'nutrition_plan_id' : self.nutrition_plan_id, 'meal_id' : self.meal_id, 'created' : created};
+            var obj = {'id' : id, 'comment' : comment_text, 'item_id' : self.item_id, 'sub_item_id' : self.sub_item_id, 'created' : created};
             self.savePlanComment(obj, function(output){
                 var comment_obj = output;
                 var comment_html = self.createCommentTemplate(comment_obj);
@@ -37,7 +38,7 @@
            });
         });
 
-        $("#delete_comment_" + this.meal_id).die().live('click', function(){
+        $("#delete_comment_" + this.sub_item_id).die().live('click', function(){
             var comment_wrapper = $(this).closest("table").parent();
             var id = comment_wrapper.attr('data-id');
             self.deletePlanComment(id, function(output) {
@@ -54,20 +55,20 @@
             comments.each(function(comment_obj){
                 html += self.createCommentTemplate(comment_obj);
             });
-            $("#comments_wrapper_" + self.meal_id).append(html);
+            $("#comments_wrapper_" + self.sub_item_id).append(html);
 
         });
 
     }
 
-    NutritionComment.prototype.generateHtml = function() {
+    Comments.prototype.generateHtml = function() {
         var html = 'QUESTIONS / COMMENTS / INSTRUCTIONS';
-        html += '<div id="comments_wrapper_' + this.meal_id + '">';
+        html += '<div id="comments_wrapper_' + this.sub_item_id + '">';
         html += '</div>';
         return html;
     }
 
-    NutritionComment.prototype.createCommentTemplate = function(comment_obj) {
+    Comments.prototype.createCommentTemplate = function(comment_obj) {
         var d1 = new Date();
         if(comment_obj.created) {
             d1 = new Date(Date.parse(comment_obj.created));
@@ -81,11 +82,11 @@
         comment_template += '<td><b>Time: </b> <span class="comment_time">' + current_time.time_short +  '</span></td>';
         
         if(!comment_obj.id) {
-            comment_template += '<td><input id="save_comment_' + this.meal_id + '" class="save_comment" type="button"  value="Save"></td>'
+            comment_template += '<td><input id="save_comment_' + this.sub_item_id + '" class="save_comment" type="button"  value="Save"></td>'
         }
         
         if(!this.options.read_only) {
-            comment_template += '<td align="center"><a href="javascript:void(0)" class="delete_comment" id="delete_comment_' + this.meal_id + '" title="delete"></a></td>';
+            comment_template += '<td align="center"><a href="javascript:void(0)" class="delete_comment" id="delete_comment_' + this.sub_item_id + '" title="delete"></a></td>';
         }
         
         comment_template += '</tr>';
@@ -98,18 +99,18 @@
     }
 
 
-    NutritionComment.prototype.getCurrentDate = function(d1) {
+    Comments.prototype.getCurrentDate = function(d1) {
         var date = d1.getFullYear() + "-" + (this.pad(d1.getMonth()+1)) + "-" + this.pad(d1.getDate()); 
         var time = this.pad(d1.getHours()) + ":" + this.pad(d1.getMinutes()) + ":" + this.pad(d1.getSeconds());
         var time_short = this.pad(d1.getHours()) + ":" + this.pad(d1.getMinutes());
         return {'date' : date, 'time' : time, 'time_short' : time_short};
     }
 
-    NutritionComment.prototype.pad = function pad(d) {
+    Comments.prototype.pad = function pad(d) {
         return (d < 10) ? '0' + d.toString() : d.toString();
     }
 
-    NutritionComment.prototype.savePlanComment = function(o, handleData) {
+    Comments.prototype.savePlanComment = function(o, handleData) {
         var table = this.options.db_table;
         if(o.id === 'undefined')  o.id = "";
         var data_encoded = JSON.stringify(o); 
@@ -141,7 +142,7 @@
 
 
 
-    NutritionComment.prototype.deletePlanComment = function(id, handleData) {
+    Comments.prototype.deletePlanComment = function(id, handleData) {
         var table = this.options.db_table;
         var url = this.options.fitness_administration_url;
         $.ajax({
@@ -170,11 +171,11 @@
     }
 
 
-    NutritionComment.prototype.populatePlanComments = function(handleData) {
+    Comments.prototype.populatePlanComments = function(handleData) {
         var table = this.options.db_table;
         var url = this.options.fitness_administration_url;
-        var nutrition_plan_id = this.options.nutrition_plan_id;
-        var meal_id = this.meal_id;
+        var item_id = this.options.item_id;
+        var sub_item_id = this.sub_item_id;
         $.ajax({
             type : "POST",
             url : url,
@@ -182,8 +183,8 @@
                 view : 'nutrition_plan',
                 format : 'text',
                 task : 'populatePlanComments',
-                nutrition_plan_id : nutrition_plan_id,
-                meal_id : meal_id,
+                item_id : item_id,
+                sub_item_id : sub_item_id,
                 table : table
             },
             dataType : 'json',
@@ -201,9 +202,9 @@
         }); 
     }
     // Add the  function to the top level of the jQuery object
-    $.nutritionComment = function(options, nutrition_plan_id, meal_id) {
+    $.comments = function(options, item_id, sub_item_id) {
 
-        var constr = new NutritionComment(options, nutrition_plan_id, meal_id);
+        var constr = new Comments(options, item_id, sub_item_id);
 
         return constr;
     };

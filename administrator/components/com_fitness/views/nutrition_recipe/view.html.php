@@ -35,8 +35,10 @@ class FitnessViewNutrition_recipe extends JView
             throw new Exception(implode("\n", $errors));
 		}
                 
-                $document = &JFactory::getDocument();
+                $document = JFactory::getDocument();
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+                $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'comments_class.js');
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 		$this->addToolbar();
 		parent::display($tpl);

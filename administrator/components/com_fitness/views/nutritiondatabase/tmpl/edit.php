@@ -214,24 +214,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 <script type="text/javascript">
 
-    $(document).ready(function() {
-        Joomla.submitbutton = function(task)
-        {
-
-            if (task == 'nutritiondatabase.cancel') {
-                Joomla.submitform(task, document.getElementById('nutritiondatabase-form'));
-            }
-            else{
-
-                if (task != 'nutritiondatabase.cancel' && document.formvalidator.isValid(document.id('nutritiondatabase-form'))) {
-                    if(validate_form() != true) return;
-                    Joomla.submitform(task, document.getElementById('nutritiondatabase-form'));
-                }
-                else {
-                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                }
-            }
-        }
+    (function($) {
 
         // input focus out events
         $("#jform_calories").on('focusout', function() {
@@ -326,150 +309,168 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             on_specific_gravity_change();
         });        
         
-        
-    });
     
-    function validate_form() {
-        var saturated_fat_error = validate_saturated_fat();
-        var sum_100_error = validate_sum_100();
-        var sugars_error = validate_sugars();
-        if(saturated_fat_error && sum_100_error && sugars_error) {
-            return true;
+        function validate_form() {
+            var saturated_fat_error = validate_saturated_fat();
+            var sum_100_error = validate_sum_100();
+            var sugars_error = validate_sugars();
+            if(saturated_fat_error && sum_100_error && sugars_error) {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
-    
-    function validate_saturated_fat() {
-        var saturated_fat = parse_comma_number($("#jform_saturated_fat").val());
-        var total_fat = parse_comma_number($("#jform_fats").val());
-        
-        if(parseFloat(saturated_fat) > parseFloat(total_fat)) {
-            $("#saturated_error").html('Saturated fat value must be less than or equal to the total fat value.')
-            return false;
-        } else {
-            $("#saturated_error").html('');
-            return true;
-        } 
-    }
-    
-    
-    function validate_sum_100() {
-        var protein = parse_comma_number($("#jform_protein").val());
-        var total_fat = parse_comma_number($("#jform_fats").val());
-        var carbohydrate  = parse_comma_number($("#jform_carbs").val());
-        var sum = parseFloat(protein) + parseFloat(total_fat) + parseFloat(carbohydrate);
-        if(sum > 100) {
-            $("#sum_100_error").html('Sum of proximates cannot exceed 100g.')
-            return false;
-        } else {
-            $("#sum_100_error").html('');
-            return true;
-        } 
-    }
-    
-    function validate_sugars() {
-        var sugars = parse_comma_number($("#jform_total_sugars").val());
-        var carbs = parse_comma_number($("#jform_carbs").val());
-        if(parseFloat(sugars) > parseFloat(carbs)) {
-            $("#sugars_error").html('Sugar value must be less than or equal to the carbohydrate value.')
-            return false;
-        } else {
-            $("#sugars_error").html('');
-            return true;
-        }  
-    }
-    
-    function check_specific_gravity() {
-        var specific_gravity = parse_comma_number('<?php echo $this->item->specific_gravity; ?>');
-        var measurement_unit =  $("#jform_measurement_unit").val();
-        hide_left_column();
-        $("#right_title").html("<b>Enter Nutrition Info</b><br/>(as on product label: “average per 100g”) ");
-        if(specific_gravity || (measurement_unit == '2')) {
-            $("#jform_measurement_unit").val('2');
-            $("#jform_specific_gravity").val(specific_gravity);
-            $("#measurement_unit_wrapper").show();
-            set_measurement_unit('2');
-            specific_gravity_set_grams(specific_gravity);
-            show_left_column();
+
+        function validate_saturated_fat() {
+            var saturated_fat = parse_comma_number($("#jform_saturated_fat").val());
+            var total_fat = parse_comma_number($("#jform_fats").val());
+
+            if(parseFloat(saturated_fat) > parseFloat(total_fat)) {
+                $("#saturated_error").html('Saturated fat value must be less than or equal to the total fat value.')
+                return false;
+            } else {
+                $("#saturated_error").html('');
+                return true;
+            } 
         }
-    }
-    
-    function specific_gravity_set_grams(specific_gravity) {
-        if(specific_gravity == 0) return;
-        $("#specific_gravity_grams").val(round_2_sign(parseFloat(100/specific_gravity)));
-    }
-    
-    function set_measurement_unit(measurement_unit) {
-        if(measurement_unit == '2') {
-            $("#measurement_unit_wrapper").show();
-            show_left_column();
-            $("#right_title").html("<b>Values as 100g Edible Portion (EP)</b><br/>(stored in nutrition database) ");
-        } else {
-            $("#jform_specific_gravity").val('');
-            $("#specific_gravity_grams").val('');
-            $("#measurement_unit_wrapper").hide();
+
+
+        function validate_sum_100() {
+            var protein = parse_comma_number($("#jform_protein").val());
+            var total_fat = parse_comma_number($("#jform_fats").val());
+            var carbohydrate  = parse_comma_number($("#jform_carbs").val());
+            var sum = parseFloat(protein) + parseFloat(total_fat) + parseFloat(carbohydrate);
+            if(sum > 100) {
+                $("#sum_100_error").html('Sum of proximates cannot exceed 100g.')
+                return false;
+            } else {
+                $("#sum_100_error").html('');
+                return true;
+            } 
+        }
+
+        function validate_sugars() {
+            var sugars = parse_comma_number($("#jform_total_sugars").val());
+            var carbs = parse_comma_number($("#jform_carbs").val());
+            if(parseFloat(sugars) > parseFloat(carbs)) {
+                $("#sugars_error").html('Sugar value must be less than or equal to the carbohydrate value.')
+                return false;
+            } else {
+                $("#sugars_error").html('');
+                return true;
+            }  
+        }
+
+        function check_specific_gravity() {
+            var specific_gravity = parse_comma_number('<?php echo $this->item->specific_gravity; ?>');
+            var measurement_unit =  $("#jform_measurement_unit").val();
             hide_left_column();
             $("#right_title").html("<b>Enter Nutrition Info</b><br/>(as on product label: “average per 100g”) ");
+            if(specific_gravity || (measurement_unit == '2')) {
+                $("#jform_measurement_unit").val('2');
+                $("#jform_specific_gravity").val(specific_gravity);
+                $("#measurement_unit_wrapper").show();
+                set_measurement_unit('2');
+                specific_gravity_set_grams(specific_gravity);
+                show_left_column();
+            }
         }
-    }
-    
-    function parse_comma_number(str) {
-        return str.replace(',' ,'.');
-    }
-    
-    function calculate_energy() {
-        var calories = parse_comma_number($("#jform_calories").val());
-        var energy = calories * 4.184;
-        energy = round_2_sign(energy);
-        $("#jform_energy").val(energy);
-    }
-    
-    function calculate_calories(type) {
-        var energy = parse_comma_number($("#jform_energy").val());;
-        var calories = energy / 4.184;
-        calories = round_2_sign(calories);
-        $("#jform_calories").val(calories);
-    }
-    
-    function round_2_sign(value) {
-        return Math.round(value * 100)/100;
-    }
-    //////////////////////////////
-    
-    function set_converted_value(value, field_id) {
-        var specific_gravity_grams = $("#specific_gravity_grams").val();
-        if(!specific_gravity_grams) {
-            alert('Set up Specific Gravity field first!');
-            return;
+
+        function specific_gravity_set_grams(specific_gravity) {
+            if(specific_gravity == 0) return;
+            $("#specific_gravity_grams").val(round_2_sign(parseFloat(100/specific_gravity)));
         }
-        var convertedValue = (value / 100) * specific_gravity_grams;
-        convertedValue = round_2_sign(convertedValue);
-        $("#" + field_id).val(convertedValue);
-    }
-    
-    function hide_left_column() {
-        $(".millilitres_column").hide();
-    }
-    
-    function show_left_column() {
-        $(".millilitres_column").show();
-    }
-    
-    function on_specific_gravity_change() {
-        set_converted_value($("#enter_energy").val(), 'jform_energy');
-        
-        set_converted_value($("#enter_protein").val(), 'jform_protein');
 
-        set_converted_value($("#enter_fats").val(), 'jform_fats');
+        function set_measurement_unit(measurement_unit) {
+            if(measurement_unit == '2') {
+                $("#measurement_unit_wrapper").show();
+                show_left_column();
+                $("#right_title").html("<b>Values as 100g Edible Portion (EP)</b><br/>(stored in nutrition database) ");
+            } else {
+                $("#jform_specific_gravity").val('');
+                $("#specific_gravity_grams").val('');
+                $("#measurement_unit_wrapper").hide();
+                hide_left_column();
+                $("#right_title").html("<b>Enter Nutrition Info</b><br/>(as on product label: “average per 100g”) ");
+            }
+        }
 
-        set_converted_value($("#enter_saturated_fat").val(), 'jform_saturated_fat');
-       
-        set_converted_value($("#enter_carbs").val(), 'jform_carbs');
+        function parse_comma_number(str) {
+            return str.replace(',' ,'.');
+        }
 
-        set_converted_value($("#enter_total_sugars").val(), 'jform_total_sugars');
+        function calculate_energy() {
+            var calories = parse_comma_number($("#jform_calories").val());
+            var energy = calories * 4.184;
+            energy = round_2_sign(energy);
+            $("#jform_energy").val(energy);
+        }
+
+        function calculate_calories(type) {
+            var energy = parse_comma_number($("#jform_energy").val());;
+            var calories = energy / 4.184;
+            calories = round_2_sign(calories);
+            $("#jform_calories").val(calories);
+        }
+
+        function round_2_sign(value) {
+            return Math.round(value * 100)/100;
+        }
+        //////////////////////////////
+
+        function set_converted_value(value, field_id) {
+            var specific_gravity_grams = $("#specific_gravity_grams").val();
+            if(!specific_gravity_grams) {
+                alert('Set up Specific Gravity field first!');
+                return;
+            }
+            var convertedValue = (value / 100) * specific_gravity_grams;
+            convertedValue = round_2_sign(convertedValue);
+            $("#" + field_id).val(convertedValue);
+        }
+
+        function hide_left_column() {
+            $(".millilitres_column").hide();
+        }
+
+        function show_left_column() {
+            $(".millilitres_column").show();
+        }
+
+        function on_specific_gravity_change() {
+            set_converted_value($("#enter_energy").val(), 'jform_energy');
+
+            set_converted_value($("#enter_protein").val(), 'jform_protein');
+
+            set_converted_value($("#enter_fats").val(), 'jform_fats');
+
+            set_converted_value($("#enter_saturated_fat").val(), 'jform_saturated_fat');
+
+            set_converted_value($("#enter_carbs").val(), 'jform_carbs');
+
+            set_converted_value($("#enter_total_sugars").val(), 'jform_total_sugars');
+
+            set_converted_value($("#enter_sodium").val(), 'jform_sodium');
+
+            calculate_calories();
+        }
         
-        set_converted_value($("#enter_sodium").val(), 'jform_sodium');
-        
-        calculate_calories();
-    }
+        Joomla.submitbutton = function(task)
+        {
+
+            if (task == 'nutritiondatabase.cancel') {
+                Joomla.submitform(task, document.getElementById('nutritiondatabase-form'));
+            }
+            else{
+
+                if (task != 'nutritiondatabase.cancel' && document.formvalidator.isValid(document.id('nutritiondatabase-form'))) {
+                    if(validate_form() != true) return;
+                    Joomla.submitform(task, document.getElementById('nutritiondatabase-form'));
+                }
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+                }
+            }
+        }
+    
+    })($js);
 </script>

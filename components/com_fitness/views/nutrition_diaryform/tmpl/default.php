@@ -691,7 +691,7 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
 
 
         var nutrition_comment_options = {
-            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'item_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_nutrition_diary_meal_comments',
@@ -699,7 +699,7 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
         }
         
         var nutrition_bottom_comment_options = {
-            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'item_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_nutrition_diary_comments',
@@ -734,7 +734,7 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
 
         var macronutrient_targets_rest = $.macronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
         //bottom comments
-        var plan_comments = $.nutritionComment(nutrition_bottom_comment_options, nutrition_comment_options.nutrition_plan_id, 0);
+        var plan_comments = $.comments(nutrition_bottom_comment_options, nutrition_comment_options.item_id, 0);
         
         nutrition_meal.run();
         calculateSummary.run();
