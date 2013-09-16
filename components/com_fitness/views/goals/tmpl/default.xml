@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="Nutrition Diary" option="View">
+    <layout title="Goals" option="View">
         <message>
-                        
+
         </message>
-	</layout>
+    </layout>
+
 </metadata>

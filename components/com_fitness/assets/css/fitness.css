@@ -378,7 +378,7 @@ display: inline-block;
     float:none;
     margin: 5px;
 }
-.error_wrapper {
+.error_wrapper, .error {
     color:red;
 }
 

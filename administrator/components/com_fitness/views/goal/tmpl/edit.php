@@ -98,13 +98,15 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 
             </ul>
-            <br/>
-            <div class="clr"></div>
-            <hr>
-            <div id="comments_wrapper"></div>
-            <div class="clr"></div>
-            <input id="add_comment_0" class="" type="button" value="Add Comment" >
-            <div class="clr"></div>
+            <?php if($this->item->id) { ?>
+                <br/>
+                <div class="clr"></div>
+                <hr>
+                <div id="comments_wrapper"></div>
+                <div class="clr"></div>
+                <input id="add_comment_0" class="" type="button" value="Add Comment" >
+                <div class="clr"></div>
+            <?php } ?>
         </fieldset>
     </div>
 

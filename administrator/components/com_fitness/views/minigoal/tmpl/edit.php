@@ -59,12 +59,15 @@ $primary_goal_id = $session->get('primary_goal_id');
 
             </ul>
             <br/>
-            <div class="clr"></div>
-            <hr>
-            <div id="comments_wrapper"></div>
-            <div class="clr"></div>
-            <input id="add_comment_0" class="" type="button" value="Add Comment" >
-            <div class="clr"></div>
+            <?php if($this->item->id) { ?>
+                <br/>
+                <div class="clr"></div>
+                <hr>
+                <div id="comments_wrapper"></div>
+                <div class="clr"></div>
+                <input id="add_comment_0" class="" type="button" value="Add Comment" >
+                <div class="clr"></div>
+            <?php } ?>
         </fieldset>
     </div>
 
