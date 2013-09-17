@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goals` (
   `start_date` date NOT NULL,
   `deadline` date NOT NULL,
   `details` text NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '1',
+  `status` int(1) NOT NULL DEFAULT '0',
   `state` tinyint(1) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -700,7 +700,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_mini_goals` (
   `start_date` date NOT NULL,
   `deadline` date NOT NULL,
   `details` text NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '1',
+  `status` int(1) NOT NULL DEFAULT '0',
   `state` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   FOREIGN KEY (primary_goal_id) REFERENCES #__fitness_goals(id) ON DELETE CASCADE

@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Fitness_goals records.
  */
-class FitnessModelgoals extends JModelList {
+class FitnessModelgoals_periods extends JModelList {
 
     /**
      * Constructor.
@@ -95,15 +95,6 @@ class FitnessModelgoals extends JModelList {
      * @since	1.6
      */
     protected function getStoreId($id = '') {
-        // Compile the store id.
-        $id.= ':' . $this->getState('filter.search');
-        $id.= ':' . $this->getState('filter.state');
-        $id.= ':' . $this->getState('filter.goal_category');
-        $id.= ':' . $this->getState('filter.group');
-        $id.= ':' . $this->getState('filter.goal_status');
-        $id.= ':' . $this->getState('filter.created');
-        $id.= ':' . $this->getState('filter.modified');
-
         return parent::getStoreId($id);
     }
 
@@ -142,13 +133,16 @@ class FitnessModelgoals extends JModelList {
         return $items;
     }
     
-    public function addPrimaryGoal($table, $data_encoded) {
-        $ret['IsSuccess'] = 1;
+    public function addGoal($table, $data_encoded) {
+        $ret['success'] = 1;
         $db = JFactory::getDbo();
 
         $user = &JFactory::getUser();
         $obj = json_decode($data_encoded);
-        $obj->user_id = $user->id;
+        
+        if(!$obj->primary_goal_id){
+            $obj->user_id = $user->id;
+        }
 
         if($obj->id) {
             $insert = $db->updateObject($table, $obj, 'id');
@@ -157,8 +151,8 @@ class FitnessModelgoals extends JModelList {
         }
 
         if (!$insert) {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = $db->stderr();
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
         }
         
         $inserted_id = $db->insertid();
@@ -171,6 +165,25 @@ class FitnessModelgoals extends JModelList {
 
         return json_encode($result); 
     }
+    
+    
+    
+    public function populateGoals() {
+
+        require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'goals.php';
+
+        $model_backend = new FitnessModelgoals();
+
+        $user = &JFactory::getUser();
+
+        $data = $model_backend->getGraphData($user->id);
+
+        return $data; 
+    }
+    
+    
+    
+    
 
 
 }

@@ -366,6 +366,8 @@ echo $this->loadTemplate('graph');?>
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place_',
             'statuses' : {
+                '4' : {'label' : 'EVALUATING', 'class' : 'goal_status_evaluating', 'email_alias' : ''}, 
+                '5' : {'label' : 'IN PROGRESS', 'class' : 'goal_status_inprogress', 'email_alias' : ''},
                 '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : ''},
                 '2' : {'label' : 'COMPLETE', 'class' : 'goal_status_complete', 'email_alias' : 'GoalComplete'}, 
                 '3' : {'label' : 'INCOMPLETE', 'class' : 'goal_status_incomplete', 'email_alias' : 'GoalIncomplete'}
@@ -390,9 +392,12 @@ echo $this->loadTemplate('graph');?>
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place_mini_',
             'statuses' : {
+                '4' : {'label' : 'EVALUATING', 'class' : 'goal_status_evaluating', 'email_alias' : ''}, 
+                '5' : {'label' : 'IN PROGRESS', 'class' : 'goal_status_inprogress', 'email_alias' : ''},
                 '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : ''},
                 '2' : {'label' : 'COMPLETE', 'class' : 'goal_status_complete', 'email_alias' : 'GoalCompleteMini'}, 
                 '3' : {'label' : 'INCOMPLETE', 'class' : 'goal_status_incomplete', 'email_alias' : 'GoalIncompleteMini'}
+      
             },
             'statuses2' : {},
             'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',

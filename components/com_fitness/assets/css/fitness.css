@@ -82,6 +82,9 @@ a:hover, a:active, a:focus {
     background: none !important;
 }
 
+
+
+
 .add_item {
     background-image: url("../images/add_exercise.png");
     background-repeat: no-repeat;
@@ -121,7 +124,7 @@ a:hover, a:active, a:focus {
     border: 2px solid #4C4C4C;
 }
 
-.status_button {
+.status_button, .status_button_dialog, .status_button_mini, .status_button_dialog_mini {
     display: block;
     font-size: 10px !important;
     height: 11px;
@@ -130,9 +133,61 @@ a:hover, a:active, a:focus {
     text-align: center;
     text-transform: uppercase;
     width: 80px;
-    color:#000000;
+    color:#000000 !important;
+    font-weight: bold;
     line-height: 19px;
+    text-decoration: none !important;
 }
+
+
+
+.goal_status_wrapper, .event_status_wrapper {
+    background-color: #FFFFFF;
+    border-radius: 5px 5px 5px 5px;
+    left: 50%;
+    margin-left: -50px;
+    padding: 2px 0;
+    position: fixed;
+    top: 33%;
+    width: 100px;
+    text-align: center;
+    display:none;
+    border: 1px #cccccc solid;
+    padding-top:17px;
+
+}
+
+.goal_status_wrapper a{
+    margin: 5px;
+}
+
+.goal_status_pending {
+    background-color: #E3E4E4;
+    border: 2px solid #A4A4A4;
+}
+
+
+.goal_status_complete {
+    background-color: #B0FFB0;
+    border: 2px solid #04BF04;
+}
+
+.goal_status_incomplete {
+    background-color: #FF9292;
+    border: 2px solid #C60000;
+
+}
+
+.goal_status_evaluating {
+    background-color: #FFA992;
+    border: 2px solid #AA4424;
+}
+
+.goal_status_inprogress {
+    background-color: #FFFDAE;
+    border: 2px solid #A5A908;
+}
+
 
 
 

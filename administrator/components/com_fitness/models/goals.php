@@ -490,7 +490,7 @@ class FitnessModelgoals extends JModelList {
      */
      function getMiniGoalsGraphData($client_id) {
         $db = &JFactory::getDBo();
-        $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, mg.start_date AS start_date, tp.color AS training_period_color
+        $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, mg.start_date AS start_date, tp.color AS training_period_color, tp.name AS training_period_name
             FROM  #__fitness_mini_goals AS mg
             LEFT JOIN #__fitness_mini_goal_categories AS mname on mname.id=mg.mini_goal_category_id
             LEFT JOIN #__fitness_goals AS pg ON mg.primary_goal_id=pg.id
@@ -539,9 +539,17 @@ class FitnessModelgoals extends JModelList {
                 $class = 'goal_status_incomplete';
                 $text = 'INCOMPLETE';
                 break;
+            case '4' :
+                $class = 'goal_status_evaluating';
+                $text = 'EVALUATING';
+                break;
+            case '5' :
+                $class = 'goal_status_inprogress';
+                $text = 'IN PROGRESS';
+                break;
             default :
-                $class = 'goal_status_pending';
-                $text = 'PENDING';
+                $class = 'goal_status_evaluating';
+                $text = 'EVALUATING';
                 break;
         }
 

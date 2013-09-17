@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Fitness.
  */
-class FitnessViewGoals extends JView
+class FitnessViewGoals_periods extends JView
 {
 	protected $items;
 	protected $pagination;
@@ -41,6 +41,7 @@ class FitnessViewGoals extends JView
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'underscore-min.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'backbone-min.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'moment.min.js');
                 
                 
                 $document->addStyleSheet(JUri::root() . 'components/com_fitness/assets/css/fitness.css');

@@ -15,14 +15,17 @@ if(!JSession::checkToken('get')) {
 //=======================================================
 // AJAX View
 //======================================================
-class FitnessViewGoals extends JView {
+class FitnessViewGoals_periods extends JView {
     
-    function addPrimaryGoal() {
+    function addGoal() {
         $table = JRequest::getVar('table');
         $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
-        $model = $this -> getModel("goals");
-        echo $model->addPrimaryGoal($table, $data_encoded);
+        $model = $this -> getModel("goals_periods");
+        echo $model->addGoal($table, $data_encoded);
     }
     
-    
+    function populateGoals() {
+        $model = $this -> getModel("goals_periods");
+        echo $model->populateGoals();
+    }
 }

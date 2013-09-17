@@ -169,9 +169,15 @@ class FitnessController extends JController {
     
     
     // goals
-    function addPrimaryGoal() {
-            $view = $this -> getView('goals', 'json');
-            $view->setModel($this->getModel('goals'));
-            $view -> addPrimaryGoal();
+    function addGoal() {
+        $view = $this -> getView('goals_periods', 'json');
+        $view->setModel($this->getModel('goals_periods'));
+        $view -> addGoal();
+    }
+    
+    function populateGoals() {
+        $view = $this -> getView('goals_periods', 'json');
+        $view->setModel($this->getModel('goals_periods'));
+        $view -> populateGoals(); 
     }
 }
