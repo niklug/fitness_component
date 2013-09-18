@@ -29,6 +29,17 @@ defined('_JEXEC') or die;
                 <a style="cursor: pointer;" id="new_goal" onclick="javascript:void(0)">[New Goal]</a>
             </div>
         </div>
+        <br/>
+        <div style="width:100%;text-align: center;">
+            Display # 
+            <select name="items_number" id="items_number">
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option selected="selected" value="10">10</option>
+                <option value="20">20</option>
+                <option value="all">All</option>
+            </select> 
+        </div>
     </div>
 </script>
 
@@ -85,17 +96,30 @@ defined('_JEXEC') or die;
 
 
 <script type="text/template" id="primary_goal_template">
-    <% _.each(goals.primary_goals, function(item, key){ %>
+    <%
+    var pages_number = model.getPagesNumber();
+    var counter = 0;
+    _.each(model.attributes.goals.primary_goals, function(item, key){
+    
+    counter++;
+    
+    if((counter > pages_number) && (pages_number != 'all')) return;
+    %>
         <table width="100%">
             <tr>
                 <td width="50%">
-                    <table>
+                    <table width="100%">
                         <tr>
                             <td style="width:120px;">
                                 Primary Goal 
                             </td>
                             <td class="grey_title">
                                 <%= model.setDefaultText(item.status, item.primary_goal_name) %>
+                                <% if(model.statusReviewed(item.status)) { %>
+                                    <div style="width:50px;float: right;">
+                                        <a data-id="<%= item.id %>" style="cursor: pointer;" class="open_goal" onclick="javascript:void(0)">[OPEN]</a>
+                                    </div>
+                                <% } %>
                             </td>
                         </tr>
                         <tr>
@@ -146,15 +170,20 @@ defined('_JEXEC') or die;
                     <div class="minigoals_wrapper" style="width:100%;">
                     <% 
                     var primary_goal_id = item.id;
-                    _.each(goals.mini_goals, function(item, key){ %>
+                    _.each(model.attributes.goals.mini_goals, function(item, key){ %>
                          <% if(primary_goal_id == item.primary_goal_id) { %>
-                                <table>
+                                <table width="100%">
                                     <tr>
                                         <td style="width:120px;">
                                             Mini Goal 
                                         </td>
                                         <td class="grey_title">
-                                            <%= model.setDefaultText(item.status, item.primary_goal_name) %>
+                                            <%= model.setDefaultText(item.status, item.mini_goal_name) %>
+                                                <% if(model.statusReviewed(item.status)) { %>
+                                                <div style="width:50px;float: right;">
+                                                    <a data-id="<%= item.id %>" style="cursor: pointer;" class="open_mini_goal" onclick="javascript:void(0)">[OPEN]</a>
+                                                </div>
+                                            <% } %>
                                         </td>
                                     </tr>
                                     <tr>
@@ -228,6 +257,127 @@ defined('_JEXEC') or die;
     <% }) %>
 </script>
 
+
+<script type="text/template" id="goal_template">
+    <h2>GOALS & TRAINING PERIODS</h2>
+    <div class="fitness_block_wrapper" style="min-height:200px;">
+        
+        <h3><%= title %></h3>
+        <div class="clr"></div>
+        <hr class="orange_line">
+        <div class="internal_wrapper">
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+                    <%
+                        
+                        var goal_type = model.attributes.goal_type;
+                        var id = model.attributes.id;
+                        
+                        
+                        var goals = model.attributes.goals.primary_goals
+                        if(goal_type == 'mini_goal') {
+                            goals = model.attributes.goals.mini_goals
+                        }
+                        
+                        _.each(goals, function(item, key){
+                            if(item.id == id) {
+                                %>
+                                <table width="100%">
+                                    <% if(goal_type == 'primary_goal') { %>
+                                    <tr>
+                                        <td style="width:120px;">
+                                            Primary Goal 
+                                        </td>
+                                        <td class="grey_title">
+                                            <%= item.primary_goal_name %>
+                                        </td>
+                                    </tr>
+                                    <% } else { %>
+                                    <tr>
+                                        <td style="width:120px;">
+                                            Mini Goal 
+                                        </td>
+                                        <td class="grey_title">
+                                            <%= item.mini_goal_name %>
+                                        </td>
+                                    </tr>                                    
+                                    <% } %>
+                                    
+                                    <% if(goal_type == 'mini_goal') { %>
+                                    <tr>
+                                        <td>
+                                            Training Period 
+                                        </td>
+                                        <td class="grey_title">
+                                            <%= item.training_period_name %>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                    <tr>
+                                        <td>
+                                            Start Date 
+                                        </td>
+                                        <td class="grey_title">
+                                            <%
+                                            var d1 = new Date(Date.parse(item.start_date));            
+                                            var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+                                            %>
+                                            <%= 
+                                                start_date 
+                                             %>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Achieve By 
+                                        </td>
+                                        <td class="grey_title">
+                                            <%
+                                                var d2 = new Date(Date.parse(item.deadline));            
+                                                var deadline = moment(d2).format("dddd, D MMMM  YYYY");      
+                                            %>
+                                            <%= deadline %>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Status 
+                                        </td>
+                                        <td>
+                                            <%= model.setStatus(item.status) %>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Goal Details 
+                                        </td>
+                                        <td class="grey_title">
+                                            <%= item.details %>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <%
+                            }
+                        });
+                    
+                    %>
+                        
+                        <button id="cancel_goal">Cancel</button>
+                    </td>
+                    <td>
+                        <div id="comments_wrapper" style="width:100%"></div>
+                        <div class="clr"></div>
+                        <br/>
+                        <input id="add_comment_0" class="" type="button" value="Add Comment" >
+                        <div class="clr"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</script>
+
 <script type="text/javascript">
     
     (function($) {
@@ -235,15 +385,24 @@ defined('_JEXEC') or die;
         var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
-            'pending_review_text' : 'Pending Review'
+            'pending_review_text' : 'Pending Review',
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+            'goals_db_table' : '#__fitness_goals',
+            'minigoals_db_table' : '#__fitness_mini_goals',
+            'goals_comments_db_table' : '#__fitness_goal_comments',
+            'minigoals_comments_db_table' : '#__fitness_mini_goal_comments'
         }
-
+        
 
         //// Goal Model
         Goal_model = Backbone.Model.extend({
-            defaults: {},
+            defaults: {
+                'pages_number' : 10
+            },
             
-            initialize: function(){ },
+            initialize: function(){
+
+            },
             
             addGoal : function(data) {
                 
@@ -252,10 +411,10 @@ defined('_JEXEC') or die;
                 var view = 'goals_periods';
                 
                 var task = 'addGoal';
-                var table = '#__fitness_goals'; 
+                var table = this.get('goals_db_table');
                 
                 if(goal_type == 'mini_goal') {
-                    var table = '#__fitness_mini_goals';
+                    var table = this.get('minigoals_db_table');
                     data.primary_goal_id = this.get('primary_goal_id')
                 }
                 
@@ -338,8 +497,37 @@ defined('_JEXEC') or die;
             },
             
             setDefaultText : function(status, string) {
-                if((status == '4') || (status == '0') || (status == '')) return this.attributes.pending_review_text;
+                if(!this.statusReviewed(status)) return this.attributes.pending_review_text;
                 return string;
+            },
+            
+            statusReviewed : function(status) {
+                if((status == '4') || (status == '0') || (status == '')) return false;
+                return true;
+            },
+            
+            checkLocalStorage : function() {
+                if(typeof(Storage)==="undefined") {
+                   return false;
+                }
+                return true;
+            },
+            
+            setPagesNumber : function(pages_number) {
+                if(!this.checkLocalStorage) return;
+                localStorage.setItem('pages_number', pages_number);
+            },
+            getPagesNumber : function() {
+                var pages_number = this.get('pages_number');
+                if(!this.checkLocalStorage) {
+                    return pages_number;
+                }
+                
+                var store_pages_number =  localStorage.getItem('pages_number');
+                
+                if(!store_pages_number) return pages_number;
+                
+                return localStorage.getItem('pages_number');
             }
         });
 
@@ -350,7 +538,7 @@ defined('_JEXEC') or die;
         ///// Add view   
         Add_goal_view = Backbone.View.extend({
             initialize: function(){
-                this.model = new Goal_model(options);
+                this.model = this.options.model;
                 this.model.set({'goal_type' : this.options.goal_type, 'primary_goal_id' : this.options.primary_goal_id});
                 this.listenToOnce(this.model, "change:saved_item", this.onItemAdded);
                 
@@ -401,6 +589,37 @@ defined('_JEXEC') or die;
             },
 
         });
+        
+        
+        /// Goal view
+        Goal_view = Backbone.View.extend({
+            initialize: function(){
+                this.model = this.options.model;
+                this.model.set({'goal_type' : this.options.goal_type, 'id' : this.options.id, 'comments' : this.options.comments});
+                this.render();
+            },
+            render: function(){
+                this.loadTemplate();
+                var comments_html = this.model.attributes.comments.run();
+                $("#comments_wrapper").html(comments_html);
+            },
+            loadTemplate : function() {
+                var model = this.model;
+                var variables = {
+                    'title' : this.options.title,
+                    'model' : model,
+                }
+                var template = _.template( $("#goal_template").html(), variables);
+                this.$el.html( template );
+            },
+            events: {
+                "click #cancel_goal" : "cancelGoal",
+            },
+            cancelGoal : function() {
+                this.undelegateEvents();
+                var default_list_view = new Default_list_view({ el: $("#goal_container") });
+            },
+        });
 
 
 
@@ -409,28 +628,34 @@ defined('_JEXEC') or die;
         Default_list_view = Backbone.View.extend({
             initialize: function(){
                 this.model = new Goal_model(options);
-                this.model.populateGoals();
-                this.listenToOnce(this.model, "change:goals", this.onPopulateGoals);
                 this.render();
             },
             render: function(){
+                this.model.populateGoals();
                 this.loadTemplate();
+                this.listenToOnce(this.model, "change:goals", this.onPopulateGoals);
             },
             loadTemplate : function() {
-                var template = _.template( $("#default_goal_list_template").html(), {} );
+                var variables = {
+                    
+                }
+                var template = _.template( $("#default_goal_list_template").html(), variables );
                 this.$el.html( template );
+                var pages_number = this.model.getPagesNumber();
+                $("#items_number").val(pages_number);
             },
             events: {
-                "click #new_goal": "addGoal",
-                "click .new_mini_goal": "addMiniGoal"
+                "click #new_goal" : "addGoal",
+                "click .new_mini_goal" : "addMiniGoal",
+                "click .open_goal" : "openGoal",
+                "click .open_mini_goal" : "openMiniGoal",
+                "change #items_number" : "setPagination" 
             },
             onPopulateGoals : function() {
                 if (this.model.has("goals")){
-                    var goals = this.model.attributes.goals;
-                    //console.log(goals);
+                     //console.log(goals);
                     var model = this.model;
                     var variables = {
-                        'goals' : goals, 
                         'model' : model,
                     }
                     var template = _.template( $("#primary_goal_template").html(), variables);
@@ -439,14 +664,56 @@ defined('_JEXEC') or die;
                 };  
             },
             addGoal : function(event) {
-                var add_goal_view = new Add_goal_view({ el: $("#goal_container"), 'goal_type' : 'primary_goal', 'title' : 'CREATE PRIMARY GOAL' });
+                var add_goal_view = new Add_goal_view({ el: $("#goal_container"), 'model' : this.model, 'goal_type' : 'primary_goal', 'title' : 'CREATE PRIMARY GOAL' });
                 this.undelegateEvents();
             },
             addMiniGoal : function(event) {
                 var primary_goal_id = $(event.target).data('id');
-                
-                var add_goal_view = new Add_goal_view({ el: $("#goal_container"), 'goal_type' : 'mini_goal', 'primary_goal_id' : primary_goal_id, 'title' : 'CREATE MINI GOAL'});
+                var add_goal_view = new Add_goal_view({ el: $("#goal_container"), 'model' : this.model, 'goal_type' : 'mini_goal', 'primary_goal_id' : primary_goal_id, 'title' : 'CREATE MINI GOAL'});
                 this.undelegateEvents();
+            },
+            openGoal : function(event) {
+            
+                var id = $(event.target).data('id');
+                
+                var comment_options = {
+                    'item_id' : id,
+                    'fitness_administration_url' : this.model.attributes.fitness_frontend_url,
+                    'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
+                    'db_table' : this.model.attributes.goals_comments_db_table,
+                    'read_only' : true
+                }
+                var comments = $.comments(comment_options, comment_options.item_id, 0);
+                
+                var add_goal_view = new Goal_view({ el: $("#goal_container"), 'model' : this.model, 'comments' : comments, 'goal_type' : 'primary_goal', 'id' : id, 'title' : 'MY PRIMARY GOAL' });
+                this.undelegateEvents();
+            },
+            openMiniGoal : function(event) {
+                var id = $(event.target).data('id');
+                
+                var comment_options = {
+                    'item_id' : id,
+                    'fitness_administration_url' : this.model.attributes.fitness_frontend_url,
+                    'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
+                    'db_table' : this.model.attributes.minigoals_comments_db_table,
+                    'read_only' : true
+                }
+                var comments = $.comments(comment_options, comment_options.item_id, 0);
+                
+                var add_goal_view = new Goal_view({ el: $("#goal_container"), 'model' : this.model, 'comments' : comments, 'goal_type' : 'mini_goal', 'id' : id, 'title' : 'MY MINI GOAL'});
+                this.undelegateEvents();
+            },
+            setPagination : function(event) {
+                var pages_number = $(event.target).val();
+                        
+                this.initialize();
+
+                $("#items_number").val(pages_number);
+                
+                       
+                this.model.setPagesNumber(pages_number);
+
+ 
             }
         });
 

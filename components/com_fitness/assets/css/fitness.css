@@ -405,7 +405,8 @@ display: inline-block;
 }
 
 .fitness_wrapper .comment_wrapper, .fitness_wrapper .comment_textarea {
-    width: 600px !important;
+    width: 100% !important;
+    padding: 2px !important;
 }
 
 
@@ -513,9 +514,6 @@ display: inline-block;
     background: none;
 }
 
-.fitness_wrapper .comment_wrapper, .fitness_wrapper .comment_textarea {
-    width: 600px !important;
-}
 
 .fitness_wrapper .nutrition_targets_table input {
     width: 70px;

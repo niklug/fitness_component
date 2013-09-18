@@ -6,7 +6,6 @@
         this.options = options;
         this.item_id = item_id;
         this.sub_item_id = sub_item_id;
-        console.log(sub_item_id);
     }
 
     Comments.prototype.run = function() {
