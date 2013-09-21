@@ -239,7 +239,7 @@ Licensed under the MIT license.
 						bottom: 0,
 						right: 0,
 						'font-size': "smaller",
-						color: "#545454"
+						color: "#B0B0B0"
 					})
 					.insertAfter(this.element);
 			}

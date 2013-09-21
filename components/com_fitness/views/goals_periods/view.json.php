@@ -25,7 +25,8 @@ class FitnessViewGoals_periods extends JView {
     }
     
     function populateGoals() {
+        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
         $model = $this -> getModel("goals_periods");
-        echo $model->populateGoals();
+        echo $model->populateGoals($data_encoded);
     }
 }

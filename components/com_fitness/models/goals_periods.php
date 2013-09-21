@@ -168,7 +168,7 @@ class FitnessModelgoals_periods extends JModelList {
     
     
     
-    public function populateGoals() {
+    public function populateGoals($data_encoded) {
 
         require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'goals.php';
 
@@ -176,7 +176,7 @@ class FitnessModelgoals_periods extends JModelList {
 
         $user = &JFactory::getUser();
 
-        $data = $model_backend->getGraphData($user->id);
+        $data = $model_backend->getGraphData($user->id, $data_encoded);
 
         return $data; 
     }

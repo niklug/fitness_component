@@ -68,6 +68,8 @@
             <option value="1">Pending</option>
             <option value="2">Complete</option>
             <option value="3">Incomplete</option>
+            <option value="4">In Progress</option>
+            <option value="5">Evaluating</option>
         </field> 
 
          <field

@@ -8,375 +8,45 @@
  */
 // no direct access
 defined('_JEXEC') or die;
+function getTrainingPeriods() {
+    // Training Period List
+    $db = JFactory::getDbo();
+    $sql = "SELECT * FROM #__fitness_training_period WHERE state='1'";
+    $db->setQuery($sql);
+    $training_periods = $db->loadObjectList();
 
+    foreach ($training_periods as $item) {
+        $color = '<div style="float:left;margin-right:5px;width:15px; height:15px;background-color:' . $item->color . '" ></div>';
+        $name = '<div class="grey_title"> ' . $item->name . '</div>';
+        $html .= $color . $name ;
+    }
+    return $html;
+}
 ?>
+<div style="opacity: 1;" class="fitness_wrapper">
+    <h2>GOALS & TRAINING PERIODS</h2>
+    <div class="fitness_content_wrapper">
+        <div  style="width:100%; text-align: right;">
+            <a  id="by_year" href="javascript:void(0)">[Current Year]</a>
+            <a  id="by_month" href="javascript:void(0)">[Current Month]</a>
+        </div>
+        <fieldset style="width:140px !important; margin-left: 0px; float: left;margin-top: 36px;">
+            <legend class="grey_title">Training Period Keys</legend>
+            <?php echo getTrainingPeriods();?>
+        </fieldset>
+        <div class="graph-container" style="width:800px;">
+
+            <div id="placeholder" class="graph-placeholder"></div>
+
+        </div>
+    </div>
+</div>
+
 <div id="goal_container" class="fitness_wrapper">
 
 </div>
 
-<script type="text/template" id="default_goal_list_template">
-    <h2>GOALS & TRAINING PERIODS</h2>
-    <div class="fitness_block_wrapper" style="min-height:200px;">
-        <h3  style="float:left;">MY PRIMARY GOALS</h3>
-        <h3 style="float:right;">MY MINI GOALS</h3>
-        <div class="clr"></div>
-        <hr class="orange_line">
-        <div style="width:100%;" id="goals_wrapper">
-        
-        </div>
-        <div class="internal_wrapper">
-            <div style="width:100%;text-align: center;">
-                <a style="cursor: pointer;" id="new_goal" onclick="javascript:void(0)">[New Goal]</a>
-            </div>
-        </div>
-        <br/>
-        <div style="width:100%;text-align: center;">
-            Display # 
-            <select name="items_number" id="items_number">
-                <option value="1">1</option>
-                <option value="5">5</option>
-                <option selected="selected" value="10">10</option>
-                <option value="20">20</option>
-                <option value="all">All</option>
-            </select> 
-        </div>
-    </div>
-</script>
 
-<script type="text/template" id="add_goal_template">
-    <h2>GOALS & TRAINING PERIODS</h2>
-    <div class="fitness_block_wrapper" style="min-height:200px;">
-        <h3><%= title %></h3>
-        <div class="clr"></div>
-        <hr class="orange_line">
-        <div class="internal_wrapper">
-            <form action="" id="add_goal_form">
-                <table>
-                    <tr>
-                        <td>
-                            Start Date
-                        </td>
-                        <td>
-                            <input type="text" name="start_date" id="start_date" size="6" class="required">
-                        </td>
-                        <td>
-                            (when will you begin training for this goal?)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Achieve By 
-                        </td>
-                        <td>
-                            <input type="text" name="deadline" id="deadline" size="6" class="required">
-                        </td>
-                        <td>
-                            (when do you wish to achieve your results?)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            Goal Details (describe in as much detail as possible the results you envision and what it is you wish to achieve...)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td colspan="2">
-                           <textarea name="details" id="details" rows="20" cols="90" class="required"></textarea> 
-                        </td>
-                    </tr>
-                </table>
-                <br/>
-                <button type="submit" id="add_goal">Submit</button>
-                <button type="submit" id="cancel_add_goal">Cancel</button>
-            </form>
-        </div>
-    </div>
-</script>
-
-
-<script type="text/template" id="primary_goal_template">
-    <%
-    var pages_number = model.getPagesNumber();
-    var counter = 0;
-    _.each(model.attributes.goals.primary_goals, function(item, key){
-    
-    counter++;
-    
-    if((counter > pages_number) && (pages_number != 'all')) return;
-    %>
-        <table width="100%">
-            <tr>
-                <td width="50%">
-                    <table width="100%">
-                        <tr>
-                            <td style="width:120px;">
-                                Primary Goal 
-                            </td>
-                            <td class="grey_title">
-                                <%= model.setDefaultText(item.status, item.primary_goal_name) %>
-                                <% if(model.statusReviewed(item.status)) { %>
-                                    <div style="width:50px;float: right;">
-                                        <a data-id="<%= item.id %>" style="cursor: pointer;" class="open_goal" onclick="javascript:void(0)">[OPEN]</a>
-                                    </div>
-                                <% } %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Start Date 
-                            </td>
-                            <td class="grey_title">
-                                <%
-                                var d1 = new Date(Date.parse(item.start_date));            
-                                var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
-                                %>
-                                <%= 
-                                    model.setDefaultText(item.status, start_date) 
-                                 %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Achieve By 
-                            </td>
-                            <td class="grey_title">
-                                <%
-                                    var d2 = new Date(Date.parse(item.deadline));            
-                                    var deadline = moment(d2).format("dddd, D MMMM  YYYY");      
-                                %>
-                                <%= model.setDefaultText(item.status, deadline) %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Status 
-                            </td>
-                            <td>
-                                <%= model.setStatus(item.status) %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Goal Details 
-                            </td>
-                            <td class="grey_title">
-                                <%= item.details %>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td>
-                    <div class="minigoals_wrapper" style="width:100%;">
-                    <% 
-                    var primary_goal_id = item.id;
-                    _.each(model.attributes.goals.mini_goals, function(item, key){ %>
-                         <% if(primary_goal_id == item.primary_goal_id) { %>
-                                <table width="100%">
-                                    <tr>
-                                        <td style="width:120px;">
-                                            Mini Goal 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%= model.setDefaultText(item.status, item.mini_goal_name) %>
-                                                <% if(model.statusReviewed(item.status)) { %>
-                                                <div style="width:50px;float: right;">
-                                                    <a data-id="<%= item.id %>" style="cursor: pointer;" class="open_mini_goal" onclick="javascript:void(0)">[OPEN]</a>
-                                                </div>
-                                            <% } %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Training Period 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%= model.setDefaultText(item.status, item.training_period_name) %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Start Date 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%
-                                            var d1 = new Date(Date.parse(item.start_date));            
-                                            var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
-                                            %>
-                                            <%= 
-                                                model.setDefaultText(item.status, start_date) 
-                                             %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Achieve By 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%
-                                                var d2 = new Date(Date.parse(item.deadline));            
-                                                var deadline = moment(d2).format("dddd, D MMMM  YYYY");      
-                                            %>
-                                            <%= model.setDefaultText(item.status, deadline) %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Status 
-                                        </td>
-                                        <td>
-                                            <%= model.setStatus(item.status) %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Goal Details 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%= item.details %>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <br/>
-                                <hr>
-                                <br/>
-                            <%
-                            }
-                         %>
-                    <% }) %>
-                    </div>
-                    <div style="width:100%;text-align: right;">
-                        <a data-id="<%= primary_goal_id %>" style="cursor: pointer;" class="new_mini_goal" onclick="javascript:void(0)">[New Mini Goal]</a>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <br/>
-        <hr>
-        <br/>
-    <% }) %>
-</script>
-
-
-<script type="text/template" id="goal_template">
-    <h2>GOALS & TRAINING PERIODS</h2>
-    <div class="fitness_block_wrapper" style="min-height:200px;">
-        
-        <h3><%= title %></h3>
-        <div class="clr"></div>
-        <hr class="orange_line">
-        <div class="internal_wrapper">
-            <table width="100%">
-                <tr>
-                    <td width="50%">
-                    <%
-                        
-                        var goal_type = model.attributes.goal_type;
-                        var id = model.attributes.id;
-                        
-                        
-                        var goals = model.attributes.goals.primary_goals
-                        if(goal_type == 'mini_goal') {
-                            goals = model.attributes.goals.mini_goals
-                        }
-                        
-                        _.each(goals, function(item, key){
-                            if(item.id == id) {
-                                %>
-                                <table width="100%">
-                                    <% if(goal_type == 'primary_goal') { %>
-                                    <tr>
-                                        <td style="width:120px;">
-                                            Primary Goal 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%= item.primary_goal_name %>
-                                        </td>
-                                    </tr>
-                                    <% } else { %>
-                                    <tr>
-                                        <td style="width:120px;">
-                                            Mini Goal 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%= item.mini_goal_name %>
-                                        </td>
-                                    </tr>                                    
-                                    <% } %>
-                                    
-                                    <% if(goal_type == 'mini_goal') { %>
-                                    <tr>
-                                        <td>
-                                            Training Period 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%= item.training_period_name %>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-                                    <tr>
-                                        <td>
-                                            Start Date 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%
-                                            var d1 = new Date(Date.parse(item.start_date));            
-                                            var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
-                                            %>
-                                            <%= 
-                                                start_date 
-                                             %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Achieve By 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%
-                                                var d2 = new Date(Date.parse(item.deadline));            
-                                                var deadline = moment(d2).format("dddd, D MMMM  YYYY");      
-                                            %>
-                                            <%= deadline %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Status 
-                                        </td>
-                                        <td>
-                                            <%= model.setStatus(item.status) %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Goal Details 
-                                        </td>
-                                        <td class="grey_title">
-                                            <%= item.details %>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <%
-                            }
-                        });
-                    
-                    %>
-                        
-                        <button id="cancel_goal">Cancel</button>
-                    </td>
-                    <td>
-                        <div id="comments_wrapper" style="width:100%"></div>
-                        <div class="clr"></div>
-                        <br/>
-                        <input id="add_comment_0" class="" type="button" value="Add Comment" >
-                        <div class="clr"></div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</script>
 
 <script type="text/javascript">
     
@@ -397,7 +67,8 @@ defined('_JEXEC') or die;
         //// Goal Model
         Goal_model = Backbone.Model.extend({
             defaults: {
-                'pages_number' : 10
+                'pages_number' : 10,
+                'list_type' : '0'
             },
             
             initialize: function(){
@@ -430,6 +101,8 @@ defined('_JEXEC') or die;
                 var view = 'goals_periods';
                 var task = 'populateGoals';
                 var table = '';
+                var list_type= this.getLocalStorageItem('list_type');
+                data.list_type = list_type;
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     //console.log(output);
@@ -513,26 +186,250 @@ defined('_JEXEC') or die;
                 return true;
             },
             
-            setPagesNumber : function(pages_number) {
+            
+            setLocalStorageItem : function(name, value) {
                 if(!this.checkLocalStorage) return;
-                localStorage.setItem('pages_number', pages_number);
+                localStorage.setItem(name, value);
             },
-            getPagesNumber : function() {
-                var pages_number = this.get('pages_number');
+            getLocalStorageItem : function(name) {
+                var value = this.get(name);
                 if(!this.checkLocalStorage) {
-                    return pages_number;
+                    return value;
                 }
                 
-                var store_pages_number =  localStorage.getItem('pages_number');
+                var store_value =  localStorage.getItem(name);
                 
-                if(!store_pages_number) return pages_number;
+                if(!store_value) return value;
                 
-                return localStorage.getItem('pages_number');
+                return localStorage.getItem(name);
             }
         });
+        
+        
+        //// 
+        Goals_graph_model = Backbone.Model.extend({
+            defaults: {
+            },
+            initialize: function(goals){
+                this.setGraphData(goals);
+            },
+            setGraphData : function(goals) {
+                var data = {};
+                var primary_goals_data = this.setPrimaryGoalsGraphData(goals.primary_goals);
+                $.extend(true,data, primary_goals_data);
+                var mini_goals_data = this.setMiniGoalsGraphData(goals.mini_goals);
+                $.extend(true,data, mini_goals_data);
+                this.drawGraph(data);
+            },
+            setPrimaryGoalsGraphData : function(primary_goals) {
+                var data = {};
+                data.primary_goals = this.x_axisDateArray(primary_goals, 2, 'deadline');
+                data.client_primary = this.graphItemDataArray(primary_goals, 'client_name');
+                data.goal_primary = this.graphItemDataArray(primary_goals, 'primary_goal_name');
+                data.start_primary = this.graphItemDataArray(primary_goals, 'start_date');
+                data.finish_primary = this.graphItemDataArray(primary_goals, 'deadline');
+                data.status_primary = this.graphItemDataArray(primary_goals, 'status');
+                return data;
+            },
+            setMiniGoalsGraphData : function(mini_goals) {
+                var data = {};
+                data.mini_goals = this.x_axisDateArray(mini_goals, 1, 'deadline');
+                data.client_mini = this.graphItemDataArray(mini_goals, 'client_name');
+                data.goal_mini = this.graphItemDataArray(mini_goals, 'mini_goal_name');
+                data.start_mini = this.graphItemDataArray(mini_goals, 'start_date');
+                data.finish_mini = this.graphItemDataArray(mini_goals, 'deadline');
+                data.status_mini = this.graphItemDataArray(mini_goals, 'status');
+                data.training_period_colors = this.graphItemDataArray(mini_goals, 'training_period_color');
+                return data;
+            },
+            x_axisDateArray : function(data, y_value, field) {
+                var x_axis_array = []; 
+                for(var i = 0; i < data.length; i++) {
+                    var unix_time = new Date(Date.parse(data[i][field])).getTime();
+                    x_axis_array[i] = [unix_time, y_value];
+                }
+                return x_axis_array;
+            },
+            graphItemDataArray : function(data, type) {
+                var items = []; 
+                for(var i = 0; i < data.length; i++) {
+                    items[i] = data[i][type];
+                }
+                return items;
+            },
+            drawGraph : function(client_data) {
+                var self = this;
+                //TIME SETTINGS
+                var current_time = new Date().getTime();
+                var start_year = new Date(new Date().getFullYear(), 0, 1).getTime();
+                var end_year = new Date(new Date().getFullYear(), 12, 0).getTime();
+                
+                var date = new Date();
+                var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() - 60*59*24 * 1000;
+                var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime() + 60*59*24 * 1000;
+                // END TIME SETTINGS
+ 
+                // DATA
+                // Primary Goals
+                var d1 = client_data.primary_goals;
+                // Mini Goals
+                var d2 = client_data.mini_goals;
+                // Current Time
+                var d8 = [[current_time, 3]];
+                // Training Periods colors
+                var training_period_colors = client_data.training_period_colors;
+                // Training periods 
+                var markings = []; 
+                for(var i = 0; i < d2.length - 1; i++) {
+                    markings[i] =  { xaxis: { from: d2[i][0], to: d2[i + 1][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i+1]};
+                }
+                // first Primary Goal marking
+                var first_mini_goal_start_date = new Date(client_data.start_mini[0]).getTime();
+                if(first_mini_goal_start_date) {
+                    markings[markings.length] =  { xaxis: { from: first_mini_goal_start_date, to: d2[0][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[0]};
+                }
+                var data = [
+                    {label: "Primary Goal", data: d1},
+                    {label: "Mini Goal", data: d2},
+                    {label: "Current Time", data: d8}
+                ];
+                // END DATA
+                
+                // START OPTIONS
+                // base common options
+                var options = {
+                    xaxis: {mode: "time", timezone: "browser"},
+                    yaxis: {show: false},
+                    series: {
+                        lines: {show: false },
+                        points: {show: true, radius: 5, symbol: "circle", fill: true, fillColor: "#FFFFFF" },
+                        bars: {show: true, lineWidth: 3},
+                    },
+                    grid: {
+                        hoverable: true,
+                        clickable: true,
+                        backgroundColor: {
+                             colors: ["#000", "#F0F0F0"]
+                        },
+                        markings: markings,
+                        color: "#C0C0C0"
+                    },
+                    legend: {show: true, margin: [0, 0], backgroundColor: "none", labelBoxBorderColor:"none"},
 
+                    colors: [
+                        "#A3270F",// Primary Goal
+                        "#287725", // Mimi Goal
+                        "#FFB01F"// Current Time
+                    ]
+                };
+                // year options
+                var options_year = { xaxis: {tickSize: [1, "month"], min: start_year, max: end_year}};
+                $.extend(true,options_year, options);
+                // month options
+                var options_month = { xaxis: {tickSize: [1, "day"], min:  firstDay, max: lastDay, timeformat: "%d"}};
+                $.extend(true,options_month, options);
+                
+                var current_options = {
+                    get : function() {return this.options;},
+                    set : function(options) {this.options = options}
+                };
+                current_options = options_year;
+                
+                // by year
+                $("#by_year").click(function() {
+                    current_options = options_year;
+                    self.plotAccordingToChoices(data, current_options);
+                });
+                // by month
+                $("#by_month").click(function() {
+                    current_options = options_month;
+                    self.plotAccordingToChoices(data, current_options);
+                });
+                
+                this.plotAccordingToChoices(data, current_options);
+                
+                $("<div id='tooltip'></div>").css({
+                    position: "absolute",
+                    display: "none",
+                    border: "2px solid #cccccc",
+                    "border-radius": "10px",
+                    padding: "5px",
+                    "background-color": "#fee",
+                    opacity: 0.9,
+                    color: "#fff",
+                    "text-align" : "left",
+                }).appendTo("body");
+                
+                $("#placeholder").bind("plothover", function (event, pos, item) {
+                    if (item) {
+                        var data_type = item.datapoint[1];
+                        var html = "<p style=\"text-align:center;\"><b>" +  item.series.label + "</b></p>";
 
+                        switch(data_type) {
+                            case 1 : // Mini Goals
+                                html +=  "Client: " +  client_data.client_mini[item.dataIndex] + "</br>";
+                                html +=  "Goal: " +  (client_data.goal_mini[item.dataIndex] || '') + "</br>";
+                                html +=  "Start: " +  client_data.start_mini[item.dataIndex] + "</br>";
+                                html +=  "Finish: " +  client_data.finish_mini[item.dataIndex] + "</br>";
+                                html +=  "Status: " +  (self.getStatusById(client_data.status_mini[item.dataIndex]) || '') + "</br>"; 
+                                $("#tooltip").css("background-color", "#287725");
+                                break;
+                            case 2 : // Primary Goals
+                                html +=  "Client: " +  client_data.client_primary[item.dataIndex] + "</br>";
+                                html +=  "Goal: " +  (client_data.goal_primary[item.dataIndex] || '') + "</br>";
+                                html +=  "Start: " +  client_data.start_primary[item.dataIndex] + "</br>";
+                                html +=  "Finish: " +  client_data.finish_primary[item.dataIndex] + "</br>";
+                                html +=  "Status: " +  (self.getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>"; 
+                                $("#tooltip").css("background-color", "#A3270F");
+                                break;
+                            case 8 : // Current Time
+                                html =  "Current Time" ;
+                                $("#tooltip").css("background-color", "#FFB01F");
+                                break;
+                            default :
+                                break;
+                        }
 
+                        $("#tooltip").html(html)
+                            .css({top: item.pageY+5, left: item.pageX+5})
+                            .fadeIn(200);
+                    } else {
+                            $("#tooltip").hide();
+                    }
+
+                });
+                
+                
+             },
+             plotAccordingToChoices : function(data, options) {
+                if (data.length > 0) {
+                        $.plot("#placeholder", data, options);
+                }
+            },
+            getStatusById : function(id) {
+                var status_name;
+                switch(id) {
+                    case '1' : 
+                       status_name = 'Pending';
+                       break;
+                    case '2' :
+                       status_name = 'Complete';
+                       break;
+                    case '3' :
+                       status_name = 'Incomplete';
+                    case '4' :
+                       status_name = 'Evaluating';
+                       break;
+                    case '5' :
+                       status_name = 'In Progress';
+                    default :
+                       status_name = 'Evaluating';
+                       break;
+                }
+                return status_name;
+            }
+
+        });
 
 
         ///// Add view   
@@ -641,20 +538,26 @@ defined('_JEXEC') or die;
                 }
                 var template = _.template( $("#default_goal_list_template").html(), variables );
                 this.$el.html( template );
-                var pages_number = this.model.getPagesNumber();
+                var pages_number = this.model.getLocalStorageItem('pages_number');
+                var list_type= this.model.getLocalStorageItem('list_type');
                 $("#items_number").val(pages_number);
+                $("#list_type").val(list_type);
+                
             },
             events: {
                 "click #new_goal" : "addGoal",
                 "click .new_mini_goal" : "addMiniGoal",
                 "click .open_goal" : "openGoal",
                 "click .open_mini_goal" : "openMiniGoal",
-                "change #items_number" : "setPagination" 
+                "change #items_number" : "setPagination",
+                "change #list_type" : "runList"
             },
             onPopulateGoals : function() {
                 if (this.model.has("goals")){
-                     //console.log(goals);
                     var model = this.model;
+                    // init Graph
+                    this.graph_data = new Goals_graph_model(this.model.attributes.goals);
+                    console.log(this.graph_data );
                     var variables = {
                         'model' : model,
                     }
@@ -711,9 +614,17 @@ defined('_JEXEC') or die;
                 $("#items_number").val(pages_number);
                 
                        
-                this.model.setPagesNumber(pages_number);
+                this.model.setLocalStorageItem('pages_number', pages_number);
 
  
+            },
+            runList : function(event) {
+                var list_type = $(event.target).val();
+                this.model.setLocalStorageItem('list_type', list_type);
+                this.initialize();
+                $("#list_type").val(list_type);
+                
+                //console.log(this.model.getLocalStorageItem('list_type'));
             }
         });
 

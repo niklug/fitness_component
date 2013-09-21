@@ -383,10 +383,10 @@ class FitnessModelgoals extends JModelList {
      * @param type $client_id
      * @return type
      */
-    function getGraphData($client_id) {
-
+    function getGraphData($client_id, $data_encoded) {
+        $data = json_decode($data_encoded);
         // primary goals
-        $primary_goals = $this->getPrimaryGoalsGraphData($client_id);
+        $primary_goals = $this->getPrimaryGoalsGraphData($client_id, $data);
         if($primary_goals['status']['success'] == false) {
             $ret['success'] = 0;
             $ret['message'] = $primary_goals['status']['message'];
@@ -394,7 +394,7 @@ class FitnessModelgoals extends JModelList {
         }
         
         //mini goals
-        $mini_goals = $this->getMiniGoalsGraphData($client_id);
+        $mini_goals = $this->getMiniGoalsGraphData($client_id, $data);
         if($mini_goals['status']['success'] == false) {
             $ret['success'] = 0;
             $ret['message'] = $mini_goals['status']['message'];
@@ -466,13 +466,28 @@ class FitnessModelgoals extends JModelList {
      * @param type $client_id
      * @return type
      */
-    function getPrimaryGoalsGraphData($client_id) {
+    function getPrimaryGoalsGraphData($client_id, $data) {
+        $list_type = $data->list_type;
+        $config = JFactory::getConfig();
+        $date = new DateTime($time_created);
+        $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+        $current_date = $date->format('Y-m-d');
+        
         $db = &JFactory::getDBo();
         $query = "SELECT pg.*, u.name AS client_name, pname.name AS primary_goal_name
             FROM  #__fitness_goals AS pg
             LEFT JOIN #__fitness_goal_categories AS pname on pname.id=pg.goal_category_id
             LEFT JOIN #__users AS u ON  u.id=pg.user_id
-            WHERE pg.user_id='$client_id'";
+            WHERE pg.user_id='$client_id' ";
+        
+        if($list_type == 'previous') {
+            $query .= " AND pg.deadline < " . $db->quote($current_date);
+        }
+        
+        if($list_type == 'current') {
+            $query .= " AND pg.deadline > " . $db->quote($current_date);
+        }
+                
         $db->setQuery($query);
         $ret['success'] = 1;
         if (!$db->query()) {
@@ -488,7 +503,12 @@ class FitnessModelgoals extends JModelList {
      * @param type $client_id
      * @return type
      */
-     function getMiniGoalsGraphData($client_id) {
+     function getMiniGoalsGraphData($client_id, $data) {
+        $list_type = $data->list_type;
+        $config = JFactory::getConfig();
+        $date = new DateTime($time_created);
+        $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+        $current_date = $date->format('Y-m-d');
         $db = &JFactory::getDBo();
         $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, mg.start_date AS start_date, tp.color AS training_period_color, tp.name AS training_period_name
             FROM  #__fitness_mini_goals AS mg
@@ -497,6 +517,15 @@ class FitnessModelgoals extends JModelList {
             LEFT JOIN #__users AS u ON  u.id=pg.user_id
             LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
             WHERE pg.user_id='$client_id'";
+        
+        if($list_type == 'previous') {
+            $query .= " AND mg.deadline < " . $db->quote($current_date);
+        }
+        
+        if($list_type == 'current') {
+            $query .= " AND mg.deadline > " . $db->quote($current_date);
+        }
+        
         $db->setQuery($query);
         $ret['success'] = 1;
         if (!$db->query()) {

@@ -309,7 +309,7 @@
         plotAccordingToChoices(data, current_options);
         //END TOOGLE
         //
-        // END START RUN BY PERIOD
+        // END  RUN BY PERIOD
 
         $("<div id='tooltip'></div>").css({
                 position: "absolute",
@@ -329,18 +329,18 @@
                 switch(data_type) {
                     case 1 : // Mini Goals
                         html +=  "Client: " +  client_data.client_mini[item.dataIndex] + "</br>";
-                        html +=  "Goal: " +  client_data.goal_mini[item.dataIndex] + "</br>";
+                        html +=  "Goal: " +  (client_data.goal_mini[item.dataIndex] || '') + "</br>";
                         html +=  "Start: " +  client_data.start_mini[item.dataIndex] + "</br>";
                         html +=  "Finish: " +  client_data.finish_mini[item.dataIndex] + "</br>";
-                        html +=  "Status: " +  getStatusById(client_data.status_mini[item.dataIndex]) + "</br>"; 
+                        html +=  "Status: " +  (getStatusById(client_data.status_mini[item.dataIndex]) || '') + "</br>"; 
                         $("#tooltip").css("background-color", "#287725");
                         break;
                     case 2 : // Primary Goals
                         html +=  "Client: " +  client_data.client_primary[item.dataIndex] + "</br>";
-                        html +=  "Goal: " +  client_data.goal_primary[item.dataIndex] + "</br>";
+                        html +=  "Goal: " +  (client_data.goal_primary[item.dataIndex] || '') + "</br>";
                         html +=  "Start: " +  client_data.start_primary[item.dataIndex] + "</br>";
                         html +=  "Finish: " +  client_data.finish_primary[item.dataIndex] + "</br>";
-                        html +=  "Status: " +  getStatusById(client_data.status_primary[item.dataIndex]) + "</br>"; 
+                        html +=  "Status: " +  (getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>"; 
                         $("#tooltip").css("background-color", "#A3270F");
                         break;
                     case 3 : // Personal Training
@@ -429,8 +429,13 @@
                break;
             case '3' :
                status_name = 'Incomplete';
+            case '4' :
+               status_name = 'Evaluating';
+               break;
+            case '5' :
+               status_name = 'In Progress';
             default :
-
+               status_name = 'Evaluating';
                break;
         }
         return status_name;
