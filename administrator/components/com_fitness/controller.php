@@ -244,6 +244,13 @@ class FitnessController extends JController
             $view->setModel($this->getModel('nutrition_diary'));
             $view -> updateDiaryStatus();
 	}
+        
+        // Goal view
+        function checkOverlapDate() {
+            $view = $this -> getView('goals', 'json');
+            $view->setModel($this->getModel('goals'));
+            $view -> checkOverlapDate();
+	}
 
   
         

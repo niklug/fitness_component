@@ -111,30 +111,7 @@ function getTrainingPeriods() {
             },
 
             ajaxCall : function(data, url, view, task, table, handleData) {
-                var data_encoded = JSON.stringify(data);
-                $.ajax({
-                    type : "POST",
-                    url : url,
-                    data : {
-                        view : view,
-                        task : task,
-                        format : 'text',
-                        data_encoded : data_encoded,
-                        table : table
-                    },
-                    dataType : 'json',
-                    success : function(response) {
-                        if(!response.status.success) {
-                            alert(response.status.message);
-                            return;
-                        }
-                        handleData(response.data);
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown)
-                    {
-                        alert( task + " error");
-                    }
-                }); 
+                return $.AjaxCall(data, url, view, task, table, handleData);
             },
             setStatus : function(status) {
                 var style_class;

@@ -124,6 +124,8 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     
     (function($) {
         
+
+        
         var comment_options = {
             'item_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
@@ -139,10 +141,6 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         $("#comments_wrapper").html(comments_html);
         
 
-
-
-
-
         Joomla.submitbutton = function(task)
         {
             if (task == 'goal.cancel') {
@@ -151,8 +149,33 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             else{
 
                 if (task != 'goal.cancel' && document.formvalidator.isValid(document.id('goal-form'))) {
-
-                    Joomla.submitform(task, document.getElementById('goal-form'));
+                    
+                    // check Goals overlaping 
+                    var data = {};
+                    var url = '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+                    var view = 'goals';
+                    var ajax_task = 'checkOverlapDate';
+                    var table = '#__fitness_goals';
+                    
+                    data.item_id = '<?php echo $this->item->id; ?>';
+                    data.where_column = 'user_id';
+                    data.where_value = $("#jform_user_id").val();
+                    data.start_date = $("#jform_start_date").val();
+                    
+                    data.end_date = $("#jform_deadline").val();
+                    data.start_date_column = 'start_date';
+                    data.end_date_column = 'deadline';
+                    //console.log(data);
+                    $.AjaxCall(data, url, view, ajax_task, table, function(output){
+                        if(output) {
+                            console.log(output);
+                            alert('Goal Date is Overlaping!');
+                            return false;
+                        }
+        
+                        Joomla.submitform(task, document.getElementById('goal-form'));
+                    });
+                    
                 }
                 else {
                     alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');

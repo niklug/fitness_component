@@ -478,7 +478,7 @@ class FitnessModelgoals extends JModelList {
             FROM  #__fitness_goals AS pg
             LEFT JOIN #__fitness_goal_categories AS pname on pname.id=pg.goal_category_id
             LEFT JOIN #__users AS u ON  u.id=pg.user_id
-            WHERE pg.user_id='$client_id' ";
+            WHERE pg.user_id='$client_id' AND pg.state='1'";
         
         if($list_type == 'previous') {
             $query .= " AND pg.deadline < " . $db->quote($current_date);
@@ -516,7 +516,7 @@ class FitnessModelgoals extends JModelList {
             LEFT JOIN #__fitness_goals AS pg ON mg.primary_goal_id=pg.id
             LEFT JOIN #__users AS u ON  u.id=pg.user_id
             LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
-            WHERE pg.user_id='$client_id'";
+            WHERE pg.user_id='$client_id' AND mg.state='1'";
         
         if($list_type == 'previous') {
             $query .= " AND mg.deadline < " . $db->quote($current_date);
@@ -585,6 +585,56 @@ class FitnessModelgoals extends JModelList {
         $html = '<a href="javascript:void(0)" data-item_id="' . $item_id . '" data-status_id="' . $status . '" class="' . $button_class . ' ' . $class . '">' . $text . '</a>';
 
         return $html;
+    }
+    
+    /**
+     * 
+     * @param type $data_encoded {start_date, end_date, start_date_column, end_date_column}
+     * @param type $table
+     * @return bool
+     */
+    function checkOverlapDate($data_encoded, $table) {
+        $data = json_decode($data_encoded);
+        
+        $item_id = $data->item_id;
+        
+        $where_column = $data->where_column;
+        $where_value = $data->where_value;
+        
+        $start_date = $data->start_date;
+        $end_date = $data->end_date;
+        
+        $start_date_column = $data->start_date_column;
+        $end_date_column = $data->end_date_column;
+        
+        $db = &JFactory::getDBo();
+        
+        $query = "SELECT * FROM $table WHERE " 
+            . " ( ( " . $start_date_column . "  <  "  . $db->quote($start_date) . " AND "
+            . $end_date_column . "  >=  "  . $db->quote($start_date) . " ) OR "
+                
+            . " ( " . $start_date_column . "  <  "  . $db->quote($end_date) . " AND "
+            . $end_date_column . "  >=  "  . $db->quote($end_date) . " ) OR "  
+            
+            . " ( " . $start_date_column . "  >  "  . $db->quote($start_date) . " AND " 
+            . $end_date_column . "  <=  "  . $db->quote($end_date) . " ) ) " .
+                
+            "  AND state='1' ";
+        
+        if($where_value && $where_column) {
+            $query .= " AND $where_column =" . $db->quote($where_value);
+        }
+        
+        $query .= " AND id NOT IN ('$item_id')";
+       
+        $db->setQuery($query);
+        $ret['success'] = 1;
+        if (!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->stderr();
+        }
+        $result = array('status' => $ret, 'data' => $db->loadResult());
+        return  json_encode($result);
     }
 
 }
