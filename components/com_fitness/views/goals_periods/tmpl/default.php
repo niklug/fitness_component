@@ -272,12 +272,16 @@ function getTrainingPeriods() {
                 // DATA
                 // Primary Goals
                 var d1 = client_data.primary_goals;
+                
+            
+                
                 // Mini Goals
                 var d2 = client_data.mini_goals;
                 // Current Time
                 var d8 = [[current_time, 3]];
                 // Training Periods colors
                 var training_period_colors = client_data.training_period_colors;
+                console.log(training_period_colors);
                 // Training periods 
                 var markings = []; 
                 for(var i = 0; i < d2.length - 1; i++) {
@@ -288,6 +292,7 @@ function getTrainingPeriods() {
                 if(first_mini_goal_start_date) {
                     markings[markings.length] =  { xaxis: { from: first_mini_goal_start_date, to: d2[0][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[0]};
                 }
+        
                 var data = [
                     {label: "Primary Goal", data: d1},
                     {label: "Mini Goal", data: d2},
@@ -309,7 +314,7 @@ function getTrainingPeriods() {
                         hoverable: true,
                         clickable: true,
                         backgroundColor: {
-                             colors: ["#000", "#F0F0F0"]
+                             colors: ["#0E0704", "#0E0704"]
                         },
                         markings: markings,
                         color: "#C0C0C0"
@@ -382,7 +387,7 @@ function getTrainingPeriods() {
                                 html +=  "Status: " +  (self.getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>"; 
                                 $("#tooltip").css("background-color", "#A3270F");
                                 break;
-                            case 8 : // Current Time
+                            case 3 : // Current Time
                                 html =  "Current Time" ;
                                 $("#tooltip").css("background-color", "#FFB01F");
                                 break;
@@ -459,7 +464,15 @@ function getTrainingPeriods() {
                 };
             },
             loadPlugins: function(){
-                $( "#start_date, #deadline" ).datepicker({ dateFormat: "yy-mm-dd" });
+                
+                var model_attr = this.model.attributes;
+                var primary_goal_obj = _.find(model_attr.goals.primary_goals, function(obj) { return obj.id == model_attr.primary_goal_id });
+                var start_date = primary_goal_obj.start_date;
+                var deadline = primary_goal_obj.deadline;
+                var min_date = new Date(Date.parse(start_date));
+                var max_date = new Date(Date.parse(deadline));
+    
+                $( "#start_date, #deadline" ).datepicker({ dateFormat: "yy-mm-dd", minDate: min_date, maxDate: max_date });
                 $("#add_goal_form").validate();
             },
             events: {
@@ -557,7 +570,6 @@ function getTrainingPeriods() {
                     var model = this.model;
                     // init Graph
                     this.graph_data = new Goals_graph_model(this.model.attributes.goals);
-                    console.log(this.graph_data );
                     var variables = {
                         'model' : model,
                     }

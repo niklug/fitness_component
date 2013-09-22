@@ -585,7 +585,7 @@ Licensed under the MIT license.
                     borderWidth: 2, // in pixels
                     minBorderMargin: null, // in pixels, null means taken from points radius
                     markings: null, // array of ranges or fn: axes -> array of ranges
-                    markingsColor: "#f4f4f4",
+                    markingsColor: "#0E0704",
                     markingsLineWidth: 2,
                     // interactive stuff
                     clickable: false,
