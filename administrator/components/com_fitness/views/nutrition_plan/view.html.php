@@ -51,7 +51,7 @@ class FitnessViewNutrition_plan extends JView
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 $document->addStyleSheet( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
                 
-                echo '<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />';
+                $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
 		$this->addToolbar();
 		parent::display($tpl);
 	}

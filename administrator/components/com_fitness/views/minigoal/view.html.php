@@ -36,11 +36,25 @@ class FitnessViewMinigoal extends JView
 		}
                 $document = JFactory::getDocument();
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery-ui.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'comments_class.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'ajax_call_function.js');
+                
+                $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
+                
 		$this->addToolbar();
+                
+                // connect backend list model
+                require_once JPATH_COMPONENT_ADMINISTRATOR . DS .  'models' . DS . 'goals.php';
+                $backend_list_model  = new FitnessModelgoals();
+                
+                $this->assign('backend_list_model', $backend_list_model);
+                
 		parent::display($tpl);
 	}
+        
+        
 
 	/**
 	 * Add the page title and toolbar.
@@ -80,6 +94,9 @@ class FitnessViewMinigoal extends JView
 		else {
 			JToolBarHelper::cancel('minigoal.cancel', 'JTOOLBAR_CLOSE');
 		}
-
+                
+        
 	}
+        
+
 }

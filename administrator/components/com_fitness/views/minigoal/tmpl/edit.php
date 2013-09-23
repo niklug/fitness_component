@@ -20,6 +20,9 @@ $session = &JFactory::getSession();
 
 $primary_goal_id = $session->get('primary_goal_id');
 
+$primary_goal = $this->backend_list_model->getGoal($primary_goal_id);
+
+
 ?>
 <style type="text/css">
 #jform_details-lbl, #jform_comments-lbl {
@@ -81,6 +84,10 @@ $primary_goal_id = $session->get('primary_goal_id');
 <script type="text/javascript">
     
     (function($) {
+        // set datapicker
+        var min_date = new Date(Date.parse('<?php echo $primary_goal->start_date; ?>'));
+        var max_date = new Date(Date.parse('<?php echo $primary_goal->deadline; ?>'));
+        $( "#jform_start_date, #jform_deadline" ).datepicker({ dateFormat: "yy-mm-dd" , minDate: min_date, maxDate: max_date });
         
         var comment_options = {
             'item_id' : '<?php echo $this->item->id;?>',
@@ -109,8 +116,32 @@ $primary_goal_id = $session->get('primary_goal_id');
             else{
 
                 if (task != 'minigoal.cancel' && document.formvalidator.isValid(document.id('minigoal-form'))) {
-
-                    Joomla.submitform(task, document.getElementById('minigoal-form'));
+                    // check Goals overlaping 
+                    var data = {};
+                    var url = '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+                    var view = 'goals';
+                    var ajax_task = 'checkOverlapDate';
+                    var table = '#__fitness_mini_goals';
+                    
+                    data.item_id = '<?php echo $this->item->id; ?>';
+                    data.where_column = 'primary_goal_id';
+                    data.where_value = '<?php echo $primary_goal_id; ?>';
+                    data.start_date = $("#jform_start_date").val();
+                    
+                    data.end_date = $("#jform_deadline").val();
+                    data.start_date_column = 'start_date';
+                    data.end_date_column = 'deadline';
+                    //console.log(data);
+                    $.AjaxCall(data, url, view, ajax_task, table, function(output){
+                        if(output) {
+                            //console.log(output);
+                            alert('Goal Date is Overlaping!');
+                            return false;
+                        }
+        
+                        Joomla.submitform(task, document.getElementById('minigoal-form'));
+                    });
+                    
                 }
                 else {
                     alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');

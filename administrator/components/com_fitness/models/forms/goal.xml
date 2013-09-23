@@ -52,6 +52,7 @@
             <option value="3">Incomplete</option>
             <option value="4">In Progress</option>
             <option value="5">Evaluating</option>
+            <option value="6">Assessing</option>
         </field> 
 
         <field name="details" type="editor"

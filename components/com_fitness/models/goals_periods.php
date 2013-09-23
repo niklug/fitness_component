@@ -181,7 +181,16 @@ class FitnessModelgoals_periods extends JModelList {
         return $data; 
     }
     
-    
+    public function checkOverlapDate($data_encoded, $table) {
+
+        require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'goals.php';
+
+        $model_backend = new FitnessModelgoals();
+
+        $data = $model_backend->checkOverlapDate($data_encoded, $table);
+
+        return $data; 
+    }
     
     
 

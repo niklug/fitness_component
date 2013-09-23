@@ -130,7 +130,7 @@ class FitnessViewNutrition_diaryform extends JView {
 
                 $document->addStyleSheet( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
                 
-                echo '<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />';
+                $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
                 
 
                 $model = $this->getModel();
@@ -139,6 +139,7 @@ class FitnessViewNutrition_diaryform extends JView {
                 
                 // connect list frontend form model
                 require_once JPATH_COMPONENT_SITE . DS .  'models' . DS . 'nutrition_diaries.php';
+                
                 $frontend_list_model  = new FitnessModelNutrition_diaries();
                 
                 

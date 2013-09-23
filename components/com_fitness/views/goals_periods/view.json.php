@@ -29,4 +29,11 @@ class FitnessViewGoals_periods extends JView {
         $model = $this -> getModel("goals_periods");
         echo $model->populateGoals($data_encoded);
     }
+    
+    function checkOverlapDate() {
+        $table = JRequest::getVar('table');
+        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
+        $model = $this -> getModel("goals_periods");
+        echo $model->checkOverlapDate($data_encoded, $table);
+    }
 }

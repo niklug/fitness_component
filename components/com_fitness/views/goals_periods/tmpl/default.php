@@ -25,20 +25,34 @@ function getTrainingPeriods() {
 ?>
 <div style="opacity: 1;" class="fitness_wrapper">
     <h2>GOALS & TRAINING PERIODS</h2>
-    <div class="fitness_content_wrapper">
-        <div  style="width:100%; text-align: right;">
+    <div class="fitness_block_wrapper">
+        <div  style="width:200px; float: left;">
+            <h3>MY TRAINING PLAN</h3>
+        </div>
+        <div  style="width:500px; float:right; text-align: right;margin-top: 4px;margin-right: 20px;">
             <a  id="by_year" href="javascript:void(0)">[Current Year]</a>
             <a  id="by_month" href="javascript:void(0)">[Current Month]</a>
         </div>
-        <fieldset style="width:140px !important; margin-left: 0px; float: left;margin-top: 36px;">
-            <legend class="grey_title">Training Period Keys</legend>
-            <?php echo getTrainingPeriods();?>
-        </fieldset>
-        <div class="graph-container" style="width:800px;">
-
-            <div id="placeholder" class="graph-placeholder"></div>
-
+        <div class="clr"></div>
+        <hr class="orange_line">
+        <div class="internal_wrapper">
+            <table>
+                <tr>
+                    <td>
+                        <div class="graph-container" style="width:780px;">
+                            <div id="placeholder" class="graph-placeholder"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <fieldset style="width:140px !important;">
+                            <legend class="grey_title">Training Period Keys</legend>
+                            <?php echo getTrainingPeriods();?>
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
         </div>
+
     </div>
 </div>
 
@@ -57,6 +71,7 @@ function getTrainingPeriods() {
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'pending_review_text' : 'Pending Review',
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
+            'user_id' : '<?php echo JFactory::getUser()->id;?>',
             'goals_db_table' : '#__fitness_goals',
             'minigoals_db_table' : '#__fitness_mini_goals',
             'goals_comments_db_table' : '#__fitness_goal_comments',
@@ -137,12 +152,16 @@ function getTrainingPeriods() {
                         style_class = 'goal_status_inprogress';
                         text = 'IN PROGRESS';
                         break;
+                    case '6' :
+                        style_class = 'goal_status_assessing';
+                        text = 'ASSESSING';
+                        break;
                     default :
                         style_class = 'goal_status_evaluating';
                         text = 'EVALUATING';
                         break;
                 }
-                var html = '<a href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
                 return html;
             },
             
@@ -250,7 +269,7 @@ function getTrainingPeriods() {
                 // Primary Goals
                 var d1 = client_data.primary_goals;
                 
-            
+                //console.log(d1);
                 
                 // Mini Goals
                 var d2 = client_data.mini_goals;
@@ -258,8 +277,7 @@ function getTrainingPeriods() {
                 var d8 = [[current_time, 3]];
                 // Training Periods colors
                 var training_period_colors = client_data.training_period_colors;
-                console.log(training_period_colors);
-                // Training periods 
+                 // Training periods 
                 var markings = []; 
                 for(var i = 0; i < d2.length - 1; i++) {
                     markings[i] =  { xaxis: { from: d2[i][0], to: d2[i + 1][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i+1]};
@@ -284,7 +302,7 @@ function getTrainingPeriods() {
                     yaxis: {show: false},
                     series: {
                         lines: {show: false },
-                        points: {show: true, radius: 5, symbol: "circle", fill: true, fillColor: "#FFFFFF" },
+                        points: {show: true, radius: 5, symbol: "circle", fill: true, fillColor: "#0E0704" },
                         bars: {show: true, lineWidth: 3},
                     },
                     grid: {
@@ -404,6 +422,8 @@ function getTrainingPeriods() {
                        break;
                     case '5' :
                        status_name = 'In Progress';
+                    case '6' :
+                       status_name = 'Assessing';
                     default :
                        status_name = 'Evaluating';
                        break;
@@ -430,26 +450,35 @@ function getTrainingPeriods() {
             },
             loadTemplate : function() {
                 var variables = {
-                    'title' : this.options.title
+                    'title' : this.options.title,
+                    'model' : this.model
                 }
                 var template = _.template( $("#add_goal_template").html(), variables );
                 this.$el.html( template );
             },
             onItemAdded : function() {
                 if (this.model.has("saved_item")){
-                    //console.log(this.model);
+                    var default_list_view = new Default_list_view({ el: $("#goal_container") });
+                    
+                    default_list_view.initialize();
+
+                    this.undelegateEvents();
                 };
             },
             loadPlugins: function(){
+                var goal_type = this.model.get('goal_type');
                 
-                var model_attr = this.model.attributes;
-                var primary_goal_obj = _.find(model_attr.goals.primary_goals, function(obj) { return obj.id == model_attr.primary_goal_id });
-                var start_date = primary_goal_obj.start_date;
-                var deadline = primary_goal_obj.deadline;
-                var min_date = new Date(Date.parse(start_date));
-                var max_date = new Date(Date.parse(deadline));
-    
-                $( "#start_date, #deadline" ).datepicker({ dateFormat: "yy-mm-dd", minDate: min_date, maxDate: max_date });
+                if(goal_type == 'mini_goal') {
+                    var model_attr = this.model.attributes;
+                    var primary_goal_obj = _.find(model_attr.goals.primary_goals, function(obj) { return obj.id == model_attr.primary_goal_id });
+                    var start_date = primary_goal_obj.start_date;
+                    var deadline = primary_goal_obj.deadline;
+                    var min_date = new Date(Date.parse(start_date));
+                    var max_date = new Date(Date.parse(deadline));
+                    $( "#start_date, #deadline" ).datepicker({ dateFormat: "yy-mm-dd", minDate: min_date, maxDate: max_date });
+                } else {
+                    $( "#start_date, #deadline" ).datepicker({ dateFormat: "yy-mm-dd" });
+                }
                 $("#add_goal_form").validate();
             },
             events: {
@@ -457,23 +486,62 @@ function getTrainingPeriods() {
                 "submit #add_goal_form" : "addGoal"
             },
             addGoal : function() {
-                
-                var data = {
-                    'start_date' : $("#start_date").val(),
-                    'deadline' : $("#deadline").val(),
-                    'details' : $("#details").val()
-                };
 
-                this.model.addGoal(data);
+                this.checkOverlapDate();
+
+                this.listenToOnce(this.model, "change:goal_overlap", this.onCheckOverlapDate);
                 
-                var default_list_view = new Default_list_view({ el: $("#goal_container") });
-                
-                this.undelegateEvents();
+                return false;
             },
             cancelAddGoal : function() {
                 this.undelegateEvents();
                 var default_list_view = new Default_list_view({ el: $("#goal_container") });
+                return false;
             },
+            checkOverlapDate : function() {
+                var data = {};
+                var url = this.model.attributes.fitness_frontend_url;
+                var view = 'goals_periods';
+                var ajax_task = 'checkOverlapDate';
+                
+                var table = '#__fitness_goals';
+                data.where_column = 'user_id';
+                data.where_value = this.model.attributes.user_id;
+
+                var goal_type = this.model.get('goal_type');
+                if(goal_type == 'mini_goal') {
+                    var table = '#__fitness_mini_goals';
+                    data.where_column = 'primary_goal_id';
+                    data.where_value = this.model.attributes.primary_goal_id;
+                }
+                
+                data.item_id = '';
+                data.start_date = $("#start_date").val();
+                data.end_date = $("#deadline").val();
+                data.start_date_column = 'start_date';
+                data.end_date_column = 'deadline';
+                
+                var model = this.model;
+                
+                this.model.ajaxCall(data, url, view, ajax_task, table, function(output){
+                    if(output) {
+                         alert('Goal Date is Overlaping!');
+                    }
+                    model.set("goal_overlap", output);
+                    return false;
+                });
+            },
+            onCheckOverlapDate : function() {
+                if (!this.model.get("goal_overlap")){
+                    var data = {
+                        'start_date' : $("#start_date").val(),
+                        'deadline' : $("#deadline").val(),
+                        'details' : $("#details").val()
+                    };
+                    this.model.addGoal(data);
+                }
+                return false;
+            }
 
         });
         

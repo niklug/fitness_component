@@ -576,6 +576,10 @@ class FitnessModelgoals extends JModelList {
                 $class = 'goal_status_inprogress';
                 $text = 'IN PROGRESS';
                 break;
+            case '6' :
+                $class = 'goal_status_assessing';
+                $text = 'ASSESSING';
+                break;
             default :
                 $class = 'goal_status_evaluating';
                 $text = 'EVALUATING';

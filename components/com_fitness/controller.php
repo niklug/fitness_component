@@ -180,4 +180,10 @@ class FitnessController extends JController {
         $view->setModel($this->getModel('goals_periods'));
         $view -> populateGoals(); 
     }
+    
+    function checkOverlapDate() {
+        $view = $this -> getView('goals_periods', 'json');
+        $view->setModel($this->getModel('goals_periods'));
+        $view -> checkOverlapDate(); 
+    }
 }

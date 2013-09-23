@@ -168,8 +168,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     //console.log(data);
                     $.AjaxCall(data, url, view, ajax_task, table, function(output){
                         if(output) {
-                            console.log(output);
-                            alert('Goal Date is Overlaping!');
+                             alert('Goal Date is Overlaping!');
                             return false;
                         }
         

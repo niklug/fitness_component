@@ -32,15 +32,16 @@
         /> 
         
                 
-        <field name="start_date" type="calendar"
-                
+        <field name="start_date" type="text" size="8"
+              class="inputbox" 
               label="Start Date"
               description="" 
-              filter="raw" /> 
+              readonly="true"
+              filter="safehtml" /> 
 
-       <field name="deadline" type="calendar" class="inputbox"
-        
-        
+       <field name="deadline" type="text" class="inputbox"
+         size="8"
+         readonly="true"
          default="" 
         
             label="COM_FITNESS_FORM_LBL_MINIGOAL_DEADLINE"
@@ -70,6 +71,7 @@
             <option value="3">Incomplete</option>
             <option value="4">In Progress</option>
             <option value="5">Evaluating</option>
+            <option value="6">Assessing</option>
         </field> 
 
          <field

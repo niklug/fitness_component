@@ -66,6 +66,9 @@
 </script>
 
 <script type="text/template" id="add_goal_template">
+    <%
+        var goal_type = model.get('goal_type');
+    %>
     <div class="fitness_block_wrapper" style="min-height:200px;">
         <h3><%= title %></h3>
         <div class="clr"></div>
@@ -92,12 +95,21 @@
                             <input style="width:60px;" readonly type="text" name="deadline" id="deadline" size="6" class="required">
                         </td>
                         <td>
-                            (when do you wish to achieve your results?)
+                            <% if(goal_type == 'primary_goal') { %>
+                                (when do you wish to achieve your results?)
+                            <% } else { %>
+                                (when do you wish to achieve this mini goal?) 
+                            <% } %>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3">
-                            Goal Details (describe in as much detail as possible the results you envision and what it is you wish to achieve...)
+                            <% if(goal_type == 'primary_goal') { %>
+                                Goal Details (describe in as much detail as possible the results you envision and what it is you wish to achieve...)
+                            <% } else { %>
+                                Goal Details (describe your mini goal in detail and how it will help achieve your primary goal) 
+                            <% } %>
+                            
                         </td>
                     </tr>
                     <tr>
@@ -266,9 +278,11 @@
                          %>
                     <% }) %>
                     </div>
-                    <div style="width:100%;text-align: right;">
-                        <a data-id="<%= primary_goal_id %>" style="cursor: pointer;" class="new_mini_goal" onclick="javascript:void(0)">[New Mini Goal]</a>
-                    </div>
+                    <% if(!model.statusReviewed(item.status))  { %>
+                        <div style="width:100%;text-align: right;">
+                            <a data-id="<%= primary_goal_id %>" style="cursor: pointer;" class="new_mini_goal" onclick="javascript:void(0)">[New Mini Goal]</a>
+                        </div>
+                    <% } %>
                 </td>
             </tr>
         </table>
@@ -383,7 +397,7 @@
                     
                     %>
                         
-                        <button id="cancel_goal">Cancel</button>
+                        <button id="cancel_goal">CLOSE</button>
                     </td>
                     <td>
                         <div id="comments_wrapper" style="width:100%"></div>

@@ -50,8 +50,9 @@ class FitnessViewGoals_periods extends JView
                 echo '<!--[if IE]><script type="text/javascript" src="' . JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
         
                 $document->addStyleSheet(JUri::root() . 'components/com_fitness/assets/css/fitness.css');
-                echo '<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />';
                 
+                $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
+       
                 
 
 		parent::display($tpl);

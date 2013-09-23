@@ -516,27 +516,27 @@
 }
 
 .status_inprogress {
-    background-color: #F9DEA4;
+    background-color: #F9DEA4 !important;
     border: 2px solid #C79700;
 }
 
 .status_pass {
-    background-color: #DBFFDB;
+    background-color: #DBFFDB !important;
     border: 2px solid #429625;
 }
 
 .status_fail {
-    background-color: #E4B4B4;
+    background-color: #E4B4B4 !important;
     border: 2px solid #A71313;
 }
 
 .status_distinction {
-    background-color: #DBFFDB;
+    background-color: #DBFFDB !important;
     border: 2px solid #429625;
 }
 
 .status_submitted {
-    background-color: #D2D2D2;
+    background-color: #D2D2D2 !important;
     border: 2px solid #4C4C4C;
 }
 
@@ -578,30 +578,35 @@
 }
 
 .goal_status_pending {
-    background-color: #E3E4E4;
+    background-color: #E3E4E4 !important;
     border: 2px solid #A4A4A4;
 }
 
 
 .goal_status_complete {
-    background-color: #B0FFB0;
+    background-color: #B0FFB0 !important;
     border: 2px solid #04BF04;
 }
 
 .goal_status_incomplete {
-    background-color: #FF9292;
+    background-color: #FF9292 !important;
     border: 2px solid #C60000;
 
 }
 
 .goal_status_evaluating {
-    background-color: #FFA992;
+    background-color: #FFA992 !important;
     border: 2px solid #AA4424;
 }
 
 .goal_status_inprogress {
-    background-color: #FFFDAE;
+    background-color: #FFFDAE !important;
     border: 2px solid #A5A908;
+}
+
+.goal_status_assessing {
+    background-color: #ECB8FF !important;
+    border: 2px solid #4B0082;
 }
 
 /* pie */
