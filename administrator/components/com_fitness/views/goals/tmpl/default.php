@@ -148,7 +148,7 @@ echo $this->loadTemplate('graph');?>
 
                 <div class='filter-select fltrt'>
 			<select name="filter_goal_status" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-Primary Goal Status-');?></option>
+				<option value=""><?php echo JText::_('-Status-');?></option>
 				<?php echo JHtml::_('select.options', $goal_status, "value", "text", $this->state->get('filter.goal_status'), true);?>
 			</select>
 		</div>
@@ -180,22 +180,26 @@ echo $this->loadTemplate('graph');?>
 				<?php echo JHtml::_('grid.sort',  'Accomplish By', 'a.deadline', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Primary Goal Status', 'a.status', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Status', 'a.status', $listDirn, $listOrder); ?>
 				</th>
-                                <th width="1%" class="nowrap">
-                                        Notify
-                                </th>
+
                                 <th  class="nowrap">
-                                        Mini Goals
+                                        Mini Goal
                                 </th>
+                                <th class='nowrap'>
+                                    Training Period
+				</th>
+                                <th class='nowrap'>
+                                    Start Date
+				</th>
                                 <th class="nowrap">
-                                        Mini Goals Deadline
+                                        Accomplish By
                                 </th>
                                 <th  class="nowrap">
-                                        Mini Goals Status
+                                        Status
                                 </th>
                                 <th  class="nowrap">
-                                        Add/Edit Mini Goals
+                                        Add/Edit
                                 </th>
 
                 <?php if (isset($this->items[0]->state)) { ?>
@@ -273,11 +277,14 @@ echo $this->loadTemplate('graph');?>
                                 <td id="status_button_place_<?php echo $item->id;?>">
                                         <?php echo $this->model->status_html($item->id, $item->status, 'status_button') ?>
                                 </td>
-                                <td class="center">
-                                    <a data-id="<?php echo $item->id ?>"  class="send_email_button"></a>
-                                </td>
 				<td>
 					<?php echo $this->getMiniGoalsList($item->id, 'minigoals'); ?>
+				</td>
+                                <td>
+					<?php echo $this->getMiniGoalsList($item->id, 'training_period'); ?>
+				</td>
+                                <td>
+					<?php echo $this->getMiniGoalsList($item->id, 'start_date'); ?>
 				</td>
 				<td>
 					<?php echo $this->getMiniGoalsList($item->id, 'deadline'); ?>

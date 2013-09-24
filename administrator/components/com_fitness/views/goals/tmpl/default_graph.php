@@ -74,8 +74,11 @@ function getTrainingPeriods() {
         <tr>
             <td></td>
             <td>
-                Zoom Scale to: <button id="whole">Whole period</button>
+                <button id="all_goals">All Goals</button>
+                <button id="current_primary_goal">Current Primary Goal</button>
+                <button id="by_year_previous">Previous Year</button>
                 <button id="by_year">Current Year</button>
+                <button id="by_year_next">Next Year</button>
                 <button id="by_month">Current Month</button>
                 <button id="by_week">Current Week</button>
                 <button id="by_day">Current Day</button>
@@ -98,14 +101,68 @@ function getTrainingPeriods() {
 
 <script type="text/javascript">
     (function($) {
+        // localStorage functions
+        function checkLocalStorage() {
+            if(typeof(Storage)==="undefined") {
+               return false;
+            }
+            return true;
+        }
+
+        function setLocalStorageItem(name, value) {
+            if(!checkLocalStorage) return;
+            localStorage.setItem(name, value);
+        }
+
+        function getLocalStorageItem(name) {
+            if(!checkLocalStorage) {
+                return false;
+            }
+            var store_value =  localStorage.getItem(name);
+            if(!store_value) return false;
+            return store_value;
+        }
+        //
+        
+        // on reload
+        var client_id = getLocalStorageItem('client_id');
+        
+        if(client_id) {
+              runGraph({'list_type' : ''}, client_id);
+            $("#graph_client").val(client_id);
+        }
+        
         $("#graph_client").change(function(){
             var client_id =  $(this).find(':selected').val();
+            setLocalStorageItem('client_id', client_id);
+            runGraph({'list_type' : ''}, client_id);
+            
+        });
+        
+        // by current primary goal
+        $("#current_primary_goal").click(function() {
+            $(this).addClass('choosen_link');
+            $("#whole, #all_goals, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options_year');
+            runGraph({'list_type' : 'current_primary_goal'}, client_id);
+        });
+        
+        // by all goals
+        $("#all_goals").click(function() {
+            $(this).addClass('choosen_link');
+            $("#whole, #current_primary_goal, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options');
+            runGraph({'list_type' : ''}, client_id);
+        });
+        
+        function runGraph(data, client_id) {
             if(!client_id) return;
+           
             $("#choices").html('');
             var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
             
-            $.getGraphData(client_id, url);
-        });
+            $.getGraphData(data, client_id, url);
+        }
 
     })($js);
 </script>

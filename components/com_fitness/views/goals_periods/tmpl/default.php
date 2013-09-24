@@ -26,11 +26,14 @@ function getTrainingPeriods() {
 <div style="opacity: 1;" class="fitness_wrapper">
     <h2>GOALS & TRAINING PERIODS</h2>
     <div class="fitness_block_wrapper">
-        <div  style="width:200px; float: left;">
+        <div  style="width:250px; float: left;">
             <h3>MY TRAINING PLAN</h3>
         </div>
         <div  style="width:500px; float:right; text-align: right;margin-top: 4px;margin-right: 20px;">
+            <a id="whole" href="javascript:void(0)">[All Goals]</a>
+            <a  id="by_year_previous" href="javascript:void(0)">[Previous Year]</a>
             <a  id="by_year" href="javascript:void(0)">[Current Year]</a>
+            <a  id="by_year_next" href="javascript:void(0)">[Next Year]</a>
             <a  id="by_month" href="javascript:void(0)">[Current Month]</a>
         </div>
         <div class="clr"></div>
@@ -181,8 +184,6 @@ function getTrainingPeriods() {
                 }
                 return true;
             },
-            
-            
             setLocalStorageItem : function(name, value) {
                 if(!this.checkLocalStorage) return;
                 localStorage.setItem(name, value);
@@ -192,12 +193,9 @@ function getTrainingPeriods() {
                 if(!this.checkLocalStorage) {
                     return value;
                 }
-                
                 var store_value =  localStorage.getItem(name);
-                
                 if(!store_value) return value;
-                
-                return localStorage.getItem(name);
+                return store_value;
             }
         });
         
@@ -207,6 +205,7 @@ function getTrainingPeriods() {
             defaults: {
             },
             initialize: function(goals){
+                this.goal_model = new Goal_model(options);
                 this.setGraphData(goals);
             },
             setGraphData : function(goals) {
@@ -257,8 +256,13 @@ function getTrainingPeriods() {
                 var self = this;
                 //TIME SETTINGS
                 var current_time = new Date().getTime();
+                var start_year_previous = new Date(new Date().getFullYear() - 1, 0, 1).getTime();
                 var start_year = new Date(new Date().getFullYear(), 0, 1).getTime();
+                var start_year_next = new Date(new Date().getFullYear() + 1, 0, 1).getTime();
+                
+                var end_year_previous = new Date(new Date().getFullYear() - 1, 12, 0).getTime();
                 var end_year = new Date(new Date().getFullYear(), 12, 0).getTime();
+                var end_year_next = new Date(new Date().getFullYear() + 1, 12, 0).getTime();
                 
                 var date = new Date();
                 var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() - 60*59*24 * 1000;
@@ -312,6 +316,7 @@ function getTrainingPeriods() {
                              colors: ["#0E0704", "#0E0704"]
                         },
                         markings: markings,
+                        markingsColor: "#0E0704",
                         color: "#C0C0C0"
                     },
                     legend: {show: true, margin: [0, 0], backgroundColor: "none", labelBoxBorderColor:"none"},
@@ -323,8 +328,12 @@ function getTrainingPeriods() {
                     ]
                 };
                 // year options
+                var options_year_previous = { xaxis: {tickSize: [1, "month"], min: start_year_previous, max: end_year_previous}};
+                $.extend(true,options_year_previous, options);
                 var options_year = { xaxis: {tickSize: [1, "month"], min: start_year, max: end_year}};
                 $.extend(true,options_year, options);
+                var options_year_next = { xaxis: {tickSize: [1, "month"], min: start_year_next, max: end_year_next}};
+                $.extend(true,options_year_next, options);
                 // month options
                 var options_month = { xaxis: {tickSize: [1, "day"], min:  firstDay, max: lastDay, timeformat: "%d"}};
                 $.extend(true,options_month, options);
@@ -333,15 +342,79 @@ function getTrainingPeriods() {
                     get : function() {return this.options;},
                     set : function(options) {this.options = options}
                 };
-                current_options = options_year;
+                // on load
+                var graph_period = this.goal_model.getLocalStorageItem('graph_period');
+                    
+                switch(graph_period) {
+                    case 'options' :
+                        current_options = options;
+                        $("#whole").addClass('choosen_link');
+                        $("#by_year_previous, #by_year, #by_year_next, #by_month").removeClass('choosen_link');
+                       break;
+                    case 'options_year_previous' :
+                        current_options = options_year_previous;
+                        $("#by_year_previous").addClass('choosen_link');
+                        $("#whole, #by_year, #by_year_next, #by_month").removeClass('choosen_link');
+                       break;
+                    case 'options_year' :
+                        current_options = options_year;
+                        $("#by_year").addClass('choosen_link');
+                        $("#whole, #by_year_previous, #by_year_next, #by_month").removeClass('choosen_link');
+                       break;
+                    case 'options_year_next' :
+                        current_options = options_year_next;
+                        $("#by_year_next").addClass('choosen_link');
+                        $("#whole, #by_year_previous, #by_year, #by_month").removeClass('choosen_link');
+                       break;
+                    case 'options_month' :
+                        current_options = options_month;
+                        $("#by_month").addClass('choosen_link');
+                        $("#whole, #by_year_previous, #by_year, #by_year_next").removeClass('choosen_link');
+                       break;
+                    default :
+                        current_options = options_year;
+                        $("#by_year").addClass('choosen_link');
+                        $("#whole, #by_year_previous, #by_year_next, #by_month").removeClass('choosen_link');
+                        break;
+                }
                 
+                
+                var self = this;
+                // whole 
+                $("#whole").click(function() {
+                    $(this).addClass('choosen_link');
+                    $("#by_year_previous, #by_year, #by_year_next, #by_month").removeClass('choosen_link');
+                    self.goal_model.setLocalStorageItem('graph_period', 'options');
+                    current_options = options;
+                    self.plotAccordingToChoices(data, current_options);
+                });
                 // by year
+                $("#by_year_previous").click(function() {
+                    $(this).addClass('choosen_link');
+                    $("#whole, #by_year, #by_year_next, #by_month").removeClass('choosen_link');
+                    self.goal_model.setLocalStorageItem('graph_period', 'options_year_previous');
+                    current_options = options_year_previous;
+                    self.plotAccordingToChoices(data, current_options);
+                });
                 $("#by_year").click(function() {
+                    $(this).addClass('choosen_link');
+                    $("#whole, #by_year_previous, #by_year_next, #by_month").removeClass('choosen_link');
+                    self.goal_model.setLocalStorageItem('graph_period', 'options_year');
                     current_options = options_year;
+                    self.plotAccordingToChoices(data, current_options);
+                });
+                $("#by_year_next").click(function() {
+                    $(this).addClass('choosen_link');
+                    $("#whole, #by_year_previous, #by_year, #by_month").removeClass('choosen_link');
+                    self.goal_model.setLocalStorageItem('graph_period', 'options_year_next');
+                    current_options = options_year_next;
                     self.plotAccordingToChoices(data, current_options);
                 });
                 // by month
                 $("#by_month").click(function() {
+                    $(this).addClass('choosen_link');
+                    $("#whole, #by_year_previous, #by_year, #by_year_next").removeClass('choosen_link');
+                    self.goal_model.setLocalStorageItem('graph_period', 'options_month');
                     current_options = options_month;
                     self.plotAccordingToChoices(data, current_options);
                 });

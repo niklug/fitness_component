@@ -1,5 +1,6 @@
 (function($) {
-    function getGraphData(client_id, url) {
+    function getGraphData(data, client_id, url) {
+        var data_encoded = JSON.stringify(data);
         $.ajax({
             type : "POST",
             url : url,
@@ -7,7 +8,8 @@
                 view : 'goals',
                 format : 'text',
                 task : 'getGraphData',
-                client_id : client_id
+                client_id : client_id,
+                data_encoded : data_encoded
               },
             dataType : 'json',
             success : function(response) {
@@ -138,8 +140,13 @@
 
          //TIME SETTINGS
         var current_time = new Date().getTime();
+        var start_year_previous = new Date(new Date().getFullYear() - 1, 0, 1).getTime();
         var start_year = new Date(new Date().getFullYear(), 0, 1).getTime();
+        var start_year_next = new Date(new Date().getFullYear() + 1, 0, 1).getTime();
+
+        var end_year_previous = new Date(new Date().getFullYear() - 1, 12, 0).getTime();
         var end_year = new Date(new Date().getFullYear(), 12, 0).getTime();
+        var end_year_next = new Date(new Date().getFullYear() + 1, 12, 0).getTime();
 
         var date = new Date();
         var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() - 60*59*24 * 1000;
@@ -225,7 +232,8 @@
                         backgroundColor: {
                              colors: ["#FFFFFF", "#F0F0F0"]
                         },
-                        markings: markings
+                        markings: markings,
+                        markingsColor: "#F2F2F2"
             },
             legend: {show: true, margin: [-170, 0]},
 
@@ -244,8 +252,12 @@
         };
 
         // year options
+        var options_year_previous = { xaxis: {tickSize: [1, "month"], min: start_year_previous, max: end_year_previous}};
+        $.extend(true,options_year_previous, options);
         var options_year = { xaxis: {tickSize: [1, "month"], min: start_year, max: end_year}};
         $.extend(true,options_year, options);
+        var options_year_next = { xaxis: {tickSize: [1, "month"], min: start_year_next, max: end_year_next}};
+        $.extend(true,options_year_next, options);
         // month options
         var options_month = { xaxis: {tickSize: [1, "day"], min:  firstDay, max: lastDay, timeformat: "%d"}};
         $.extend(true,options_month, options);
@@ -260,41 +272,104 @@
             get : function() {return this.options;},
             set : function(options) {this.options = options}
         };
-        current_options = options_year;
+        
+        var graph_period = getLocalStorageItem('graph_period');
         // END OPTIONS
 
         // START RUN BY PERIOD
+        
+        switch(graph_period) {
+            case 'options' :
+                current_options = options;
+                $("#whole").addClass('choosen_link');
+                $("#by_year_previous, #by_year, #by_year_next, #by_month").removeClass('choosen_link');
+               break;
+            case 'options_year_previous' :
+                current_options = options_year_previous;
+                $("#by_year_previous").addClass('choosen_link');
+                $("#whole, #by_year, #by_year_next, #by_month").removeClass('choosen_link');
+               break;
+            case 'options_year' :
+                current_options = options_year;
+                $("#by_year").addClass('choosen_link');
+                $("#whole, #by_year_previous, #by_year_next, #by_month").removeClass('choosen_link');
+               break;
+            case 'options_year_next' :
+                current_options = options_year_next;
+                $("#by_year_next").addClass('choosen_link');
+                $("#whole, #by_year_previous, #by_year, #by_month").removeClass('choosen_link');
+               break;
+            case 'options_month' :
+                current_options = options_month;
+                $("#by_month").addClass('choosen_link');
+                $("#whole, #by_year_previous, #by_year, #by_year_next").removeClass('choosen_link');
+               break;
+            default :
+                current_options = options_year;
+                $("#by_year").addClass('choosen_link');
+                $("#whole, #by_year_previous, #by_year_next, #by_month").removeClass('choosen_link');
+                break;
+        }
+
+
+        var self = this;
         // whole 
         $("#whole").click(function() {
+            $(this).addClass('choosen_link');
+            $("#all_goals, #current_primary_goal, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options');
             current_options = options;
             plotAccordingToChoices(data, current_options);
         });
-
-         // by year
+        // by year
+        $("#by_year_previous").click(function() {
+            $(this).addClass('choosen_link');
+            $("#all_goals, #current_primary_goal,  #whole, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options_year_previous');
+            current_options = options_year_previous;
+            plotAccordingToChoices(data, current_options);
+        });
         $("#by_year").click(function() {
+            $(this).addClass('choosen_link');
+            $("#all_goals,  #current_primary_goal, #whole, #by_year_previous, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options_year');
             current_options = options_year;
             plotAccordingToChoices(data, current_options);
         });
-
-
-       // by month
+        $("#by_year_next").click(function() {
+            $(this).addClass('choosen_link');
+            $("#all_goals, #current_primary_goal,  #whole, #by_year_previous, #by_year, #by_month, #by_week, #by_day").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options_year_next');
+            current_options = options_year_next;
+            plotAccordingToChoices(data, current_options);
+        });
+        // by month
         $("#by_month").click(function() {
+            $(this).addClass('choosen_link');
+            $("#all_goals, #current_primary_goal,  #whole, #by_year_previous, #by_year, #by_year_next, #by_week, #by_day").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options_month');
             current_options = options_month;
             plotAccordingToChoices(data, current_options);
         });
-
+        
         // by week
         $("#by_week").click(function() {
+            $(this).addClass('choosen_link');
+            $("#all_goals,  #current_primary_goal, #whole, #by_year_previous, #by_year, #by_year_next, #by_month, #by_day").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options_week');
             current_options = options_week;
             plotAccordingToChoices(data, current_options);
         });
 
         // by day
         $("#by_day").click(function() {
+            $(this).addClass('choosen_link');
+            $("#all_goals, #current_primary_goal,  #whole, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week").removeClass('choosen_link');
+            setLocalStorageItem('graph_period', 'options_day');
             current_options = options_day
             plotAccordingToChoices(data, current_options);
         });
-
+        
          // TOOGLE
         // insert checkboxes 
         $.each(data, function(key, val) {
@@ -462,10 +537,33 @@
       return [monday, sunday];
     }
     
-    // Add the  function to the top level of the jQuery object
-    $.getGraphData = function(client_id, url) {
+        // localStorage functions
+    function checkLocalStorage() {
+        if(typeof(Storage)==="undefined") {
+           return false;
+        }
+        return true;
+    }
 
-        var constr = getGraphData(client_id, url);
+    function setLocalStorageItem(name, value) {
+        if(!checkLocalStorage) return;
+        localStorage.setItem(name, value);
+    }
+
+    function getLocalStorageItem(name) {
+        if(!checkLocalStorage) {
+            return false;
+        }
+        var store_value =  localStorage.getItem(name);
+        if(!store_value) return false;
+        return store_value;
+    }
+    //
+    
+    // Add the  function to the top level of the jQuery object
+    $.getGraphData = function(data, client_id, url) {
+
+        var constr = getGraphData(data, client_id, url);
 
         return constr;
     };

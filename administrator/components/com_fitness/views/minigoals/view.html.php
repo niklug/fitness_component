@@ -114,16 +114,17 @@ class FitnessViewMinigoals extends JView
 
 	}
         
-        function getPrimaryGoalName($goal_category_id) {
+        function getPrimaryGoalName($id) {
             $db = JFactory::getDbo();
-            $sql = "SELECT goal_category_id FROM #__fitness_goals WHERE id='$goal_category_id' AND state='1'";
+            $sql = "SELECT goal_category_id FROM #__fitness_goals WHERE id='$id'";
             $db->setQuery($sql);
             if(!$db->query()) {
                 JError::raiseError($db->getErrorMsg());
             }
             $id = $db->loadResult();
+         
             
-            $sql = "SELECT name FROM #__fitness_goal_categories WHERE id='$id' AND state='1'";
+            $sql = "SELECT name FROM #__fitness_goal_categories WHERE id='$id'";
             $db->setQuery($sql);
             if(!$db->query()) {
                 JError::raiseError($db->getErrorMsg());

@@ -487,6 +487,13 @@ class FitnessModelgoals extends JModelList {
         if($list_type == 'current') {
             $query .= " AND pg.deadline > " . $db->quote($current_date);
         }
+        
+        if($list_type == 'current_primary_goal') {
+            $query .= " AND pg.start_date <= " . $db->quote($current_date);
+            $query .= " AND pg.deadline > " . $db->quote($current_date);
+        }
+       
+
                 
         $db->setQuery($query);
         $ret['success'] = 1;
@@ -495,6 +502,7 @@ class FitnessModelgoals extends JModelList {
             $ret['message'] = $db->stderr();
         }
         $primary_goals = array('status' => $ret, 'data' => $db->loadObjectList());
+        
         return  $primary_goals;
     }
     
@@ -518,6 +526,7 @@ class FitnessModelgoals extends JModelList {
             LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
             WHERE pg.user_id='$client_id' AND mg.state='1'";
         
+        
         if($list_type == 'previous') {
             $query .= " AND mg.deadline < " . $db->quote($current_date);
         }
@@ -525,6 +534,8 @@ class FitnessModelgoals extends JModelList {
         if($list_type == 'current') {
             $query .= " AND mg.deadline > " . $db->quote($current_date);
         }
+        
+
         
         $db->setQuery($query);
         $ret['success'] = 1;

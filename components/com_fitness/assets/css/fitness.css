@@ -615,3 +615,7 @@ display: inline-block;
 	font-size: 14px;
 	line-height: 1.2em;
 }
+
+.choosen_link {
+    color: #fff !important;
+}
