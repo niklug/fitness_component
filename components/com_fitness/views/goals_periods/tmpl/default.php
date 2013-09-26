@@ -90,11 +90,10 @@ function getTrainingPeriods() {
             },
             
             initialize: function(){
-
+                this.listenToOnce(this, "change:saved_item", this.onAddGoal);
             },
             
             addGoal : function(data) {
-                
                 var goal_type = this.get('goal_type');
                 var url = this.get('fitness_frontend_url');
                 var view = 'goals_periods';
@@ -112,7 +111,17 @@ function getTrainingPeriods() {
                     self.set("saved_item", output);
                 });
             },
-
+            onAddGoal : function() {
+                if (this.has("saved_item")){
+                    this.sendGoalEmail();
+                };
+            },
+            sendGoalEmail : function() {
+                var goal_status = $.status({'calendar_frontend_url' : this.attributes.calendar_frontend_url});
+                var id = this.get('saved_item').id;
+                //console.log(id);
+                goal_status.sendEmail(id, 'GoalEvaluating');
+            },
             populateGoals : function() {
                 var data = {};
                 var url = this.get('fitness_frontend_url');

@@ -23,7 +23,7 @@
             dataType : 'json',
             success : function(response) {
                 //console.log(response);
-                if(response.IsSuccess != true) {
+                if(response.success != true) {
                     alert(response.Msg);
                     return;
                 } 

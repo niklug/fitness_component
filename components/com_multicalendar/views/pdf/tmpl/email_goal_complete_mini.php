@@ -13,25 +13,25 @@
                 text-decoration:none;
             }
             .lightContainer a, .lightContainer a:visited{
-                color:#482104;
+                color:#FFF;
             }
             .lightContainer a:hover {
-                color:#0e0601 !important;
+                color:#005A00 !important;
             }
             .darkContainer a, .darkContainer a:visited {
-                color:#790010;
+                color:#FFF;
             }
             .darkContainer a:hover {
-                color:#790010 !important;
+                color:#005A00 !important;
             }
             .readMore a:hover {
-                background-color:#410009 !important;
-                color: #790010 !important;
+                background-color:#002500 !important;
+                color: #005A00 !important;
             }
             body {
                 margin:0;
                 background-color:#dddddd;
-                color:#790010;
+                color:#005A00;
                 font-family:Arial, Helvetica, sans-serif;
                 font-size:12px;
                 -webkit-text-size-adjust: none;
@@ -48,7 +48,7 @@
         </style>
     </head>
     <body>
- <?php
+                        <?php
 require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/functions.php' );
 
 $id = &JRequest::getVar('id');
@@ -72,7 +72,8 @@ $deadline =  $date->toFormat('%A, %d %b %Y') ;
 $description = $goal_data->description;
 
 $path = JUri::base() . 'components/com_multicalendar/views/pdf/tmpl/images/';
-$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id;
+$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id . '&goal_type=' . $goal_type;
+
 ?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
@@ -88,7 +89,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout='
                                 <!--Start Of Company Name And Slogan [row number #1]-->
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#78000D" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
+                                        <td bgcolor="#005A00" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
                                             <img alt="Elite Fitness Training" height="78" src="<?php echo $path ?>/logo.png" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
@@ -108,40 +109,41 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout='
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">YOU ALMOST MADE IT!</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">CONGRATULATIONS!</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $client_name;?>,</p>
-                                                                    <p>You ALMOST achieved your goal... but you still have a little more work to do!</p>
-                                                                    <p>You should now discuss with your trainer what actions need to be taken towards getting closer to what you want out of your health and fitness.</p>
-                                                                    <p>Start by recognizing the positive changes you have made so far and book a consultation with your trainer to discuss your mindset and lifestyle choices. Doing so will have a dramatic impact on achieving further results!</p>
-                                                                    <p>Review this goal and start taking notes on what else you think you could have done to better achieve your goal and present your ideas to your trainer at your consultation.</p></td>
+                                                                    <p>Well done on achieving your Mini Goal! </p>
+                                                                    <p>You should now discuss with your trainer the future direction of your training, set new goals if you have not done so already and continue to challenge yourself and test your limits.</p>
+                                                                    <p>Make sure you review your trainers comments as this may present you with ideas on possible future training directions!</p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">PRIMARY GOAL: <br />
-                                                                    START DATE: <br />
-                                                                    ACCOMPLISH BY: </td>
-                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    <?php echo $goal_data->category_name;?><br />
+                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>PRIMARY GOAL: </p>
+                                                                    <p>MINI GOAL:<br />
+                                                                        START DATE: <br />
+                                                                        ACCOMPLISH BY: </p></td>
+                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>
+                                                                     <?php echo $goal_data->primary_goal_name;?></p>
+                                                                  <p><?php echo $goal_data->category_name;?><br />
                                                                     <?php echo $date_created;?><br />
-                                                                    <?php echo $deadline;?> </td>
+                                                                    <?php echo $deadline;?> </p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">GOAL DETAILS: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">MINI GOAL DETAILS: </td>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $goal_data->details;?> </td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">ASSESSED BY: </td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $trainer_name;?></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $trainer_name;?> </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFF; text-align:center;">
-                                                                    <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:78000D;">CLICK HERE TO OPEN</a>
+                                                                <td class="readMore" width="160" height="22" bgcolor="#0A1C00" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#005A00; text-align:center;">
+                                                                    <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#005A00;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -160,8 +162,8 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout='
                                 <!--Start Of Content [row number #3]-->
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#78000D" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">What should you do now?</h2>
+                                        <td bgcolor="#005A00" style="padding:20px;">
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">You've achieved this goal... now what?</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
@@ -176,9 +178,6 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout='
                                     </tr>
                                 </table>
                                 <!--End Of Content [row number #3]-->
-                                <!--Start Of two Content Container [row number #4]-->
-
-                                <!--End Of Two Column Container [row number #4]-->
                                 <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>

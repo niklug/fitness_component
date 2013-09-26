@@ -198,8 +198,8 @@ function checkIfOverlapping($calid, $st, $et, $sub, $loc,$id)
 function getMessageOverlapping()
 {
     $ret = array();
-    $ret['IsSuccess'] = false;
-    $ret['Msg'] = "OVERLAPPING";
+    $ret['success'] = false;
+    $ret['message'] = "OVERLAPPING";
     return $ret;
 }
 function addCalendar(
@@ -242,11 +242,11 @@ function addCalendar(
 
     $db->setQuery( $sql );
     if (!$db->query()){
-      $ret['IsSuccess'] = false;
-      $ret['Msg'] = $db->stderr();
+      $ret['success'] = false;
+      $ret['message'] = $db->stderr();
     }else{
-      $ret['IsSuccess'] = true;
-      $ret['Msg'] = 'add success';
+      $ret['success'] = true;
+      $ret['message'] = 'add success';
       $ret['Data'] = $db->insertid();
     }
     }
@@ -254,8 +254,8 @@ function addCalendar(
      $ret = getMessageOverlapping();
 
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
 
   return $ret;
@@ -316,19 +316,19 @@ function addDetailedCalendar(
 
     $db->setQuery( $sql );
     if (!$db->query()){
-      $ret['IsSuccess'] = false;
-      $ret['Msg'] = $db->stderr();
+      $ret['success'] = false;
+      $ret['message'] = $db->stderr();
     }else{
-      $ret['IsSuccess'] = true;
-      $ret['Msg'] = 'add success';
+      $ret['success'] = true;
+      $ret['message'] = 'add success';
       $ret['Data'] = $db->insertid();
     }
     }
     else
      $ret = getMessageOverlapping();
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
   return $ret;
 }
@@ -360,8 +360,8 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id){
 
     $db->setQuery( $sql );
     if (!$db->query()){
-          $ret['IsSuccess'] = false;
-          $ret['Msg'] = $db->stderr();
+          $ret['success'] = false;
+          $ret['message'] = $db->stderr();
     }
     $rows = $db->loadObjectList();
 
@@ -434,18 +434,18 @@ function updateCalendar($id, $st, $et){
           . "where `id`=" . $id;
         $db->setQuery( $sql );
         if (!$db->query()){
-          $ret['IsSuccess'] = false;
-          $ret['Msg'] = $db->stderr();
+          $ret['success'] = false;
+          $ret['message'] = $db->stderr();
         }else{
-          $ret['IsSuccess'] = true;
-          $ret['Msg'] = 'Succefully';
+          $ret['success'] = true;
+          $ret['message'] = 'Succefully';
         }
     }
     else
          $ret = getMessageOverlapping();
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
   return $ret;
 }
@@ -523,11 +523,11 @@ function updateDetailedCalendar(
               . "where `id`=" . $id;
             $db->setQuery( $sql );
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
             }
         }        
         else if (substr($rruleType,0,5)=="UNTIL")
@@ -590,24 +590,24 @@ function updateDetailedCalendar(
               . "where `id`=" . $id;
             $db->setQuery( $sql );
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
             }
         }
     }
     else
          $ret = getMessageOverlapping();
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
   
   if(JRequest::getVar('assessment_form')) {
       $retAss = updateAssessmentData();
-      if(!$retAss['IsSuccess']) $ret = $retAss;
+      if(!$retAss['success']) $ret = $retAss;
   }
 
   return $ret;
@@ -631,11 +631,11 @@ function removeCalendar($id,$rruleType){
               
             $db->setQuery( $sql );            
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
             }
         }  
         else if (substr($rruleType,0,9)=="del_UNTIL")
@@ -661,11 +661,11 @@ function removeCalendar($id,$rruleType){
               . "where `id`=" . $id;
             $db->setQuery( $sql );            
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
             }
             
         }
@@ -674,16 +674,16 @@ function removeCalendar($id,$rruleType){
             $sql = "delete from `".DC_MV_CAL."` where `id`=" . $id;
 	        $db->setQuery( $sql );
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
             }
         }
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
   return $ret;
 }
@@ -1085,7 +1085,7 @@ function set_group_client_status() {
  * @return type
  */
 function updateAssessmentData() {
-    $ret['IsSuccess'] = true;
+    $ret['success'] = true;
     $post = JRequest::get('post','','POST','STRING',JREQUEST_ALLOWHTML);
     $info = print_r($post, true);
     $db = & JFactory::getDBO();
@@ -1120,8 +1120,8 @@ function updateAssessmentData() {
     $query = "SELECT assessment_id FROM #__fitness_assessments WHERE event_id='$event_id'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
         return $ret;
     }
     $id = $db->loadResult();
@@ -1134,8 +1134,8 @@ function updateAssessmentData() {
     }
     
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
     }
     return $ret;
 }

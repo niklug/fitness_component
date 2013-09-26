@@ -504,7 +504,7 @@
     left: 50%;
     margin-left: -60px;
     padding: 15px 0 2px;
-    position: fixed;
+    position: absolute;
     text-align: center;
     top: 60%;
     width: 102px;

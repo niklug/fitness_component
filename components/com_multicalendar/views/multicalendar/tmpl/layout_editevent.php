@@ -261,7 +261,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
                     $.post(DATA_FEED_URL + "&method=remove",
                         param,
                         function(data){
-                              if (data.IsSuccess) {
+                              if (data.success) {
                                     closeEdit();
                                 }
                                 else
@@ -323,7 +323,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
                 dataType: "json",
                 success: function(data) {
                     //console.log(data.Data);
-                    if (data.IsSuccess) {
+                    if (data.success) {
                         var event_id = data.Data;
                         var current_url = window.location.href.replace('&id=0').replace('#') + '&id=' + event_id +'#';
                         //console.log(current_url);

@@ -15,12 +15,18 @@
         var self = this;
 
         $("." + this.options.status_button).die().live('click', function() {
+            $("#" + self.options.dialog_status_wrapper).remove();
             var item_id = $(this).attr('data-item_id');
             var status_id = $(this).attr('data-status_id');
             var dialog_html = self.generateDialogHtml(item_id, status_id);
 
             $("body").append(dialog_html);
-            
+            var position = $(this).position();
+            var top = position.top;
+            var left = position.left;
+            $("#" + self.options.dialog_status_wrapper).css('top', top + 'px');
+            $("#" + self.options.dialog_status_wrapper).css('left', left + 'px');
+        
         })
 
         $("." + this.options.hide_image_class).die().live('click', function() {
@@ -80,7 +86,7 @@
                 },
                 dataType : 'json',
                 success : function(response) {
-                    if(!response.status.IsSuccess) {
+                    if(!response.status.success) {
                         alert(response.status.Msg);
                         return;
                     }
@@ -131,8 +137,8 @@
                 },
                 dataType : 'json',
                 success : function(response) {
-                    if(response.IsSuccess) {
-                        var emails = response.Msg.split(',');
+                    if(response.success) {
+                        var emails = response.message.split(',');
 
                         var message = 'Emails were sent to: ' +  "</br>";
                         $.each(emails, function(index, email) { 
@@ -141,12 +147,12 @@
                         $("#emais_sended").append(message);
 
                     } else {
-                        alert(response.Msg);
+                        alert(response.message);
                     }
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown)
                 {
-                    alert("error sendEmail");
+                    alert(method + " sendEmail");
                 }
         });
     }

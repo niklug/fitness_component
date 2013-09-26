@@ -244,11 +244,11 @@ if($parent_view == 'nutrition_plan_backend') $table = '#__fitness_nutrition_plan
             },
             dataType : 'json',
             success : function(response) {
-                if(!response.status.IsSuccess) {
+                if(!response.status.success) {
                     alert(response.status.Msg);
                     return;
                 }
-                handleData(response.status.IsSuccess);
+                handleData(response.status.success);
               },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
@@ -436,7 +436,7 @@ if($parent_view == 'nutrition_plan_backend') $table = '#__fitness_nutrition_plan
               },
             dataType : 'json',
             success : function(response) {
-                if(!response.status.IsSuccess) {
+                if(!response.status.success) {
                     alert(response.status.Msg);
                     return;
                 }
@@ -506,7 +506,7 @@ if($parent_view == 'nutrition_plan_backend') $table = '#__fitness_nutrition_plan
               },
             dataType : 'json',
             success : function(response) {
-                if(!response.status.IsSuccess) {
+                if(!response.status.success) {
                     alert(response.status.Msg);
                     return;
                 }

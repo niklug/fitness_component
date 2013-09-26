@@ -24,6 +24,8 @@ defined('_JEXEC') or die('Restricted access');
 require_once( JPATH_COMPONENT.'/DC_MultiViewCal/php/functions.php' );
 require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/list.inc.php' );
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
 $db 	=& JFactory::getDBO();
 header('Content-type:text/javascript;charset=UTF-8');
 $method = JRequest::getVar( 'method' );
@@ -36,8 +38,6 @@ switch ($method) {
                 JRequest::getVar("CalendarEndTime"),
                 JRequest::getVar("CalendarTitle"),
                 JRequest::getVar("IsAllDayEvent"),
-                
-       
                 JRequest::getVar("Location")
     
                 );
@@ -66,127 +66,152 @@ switch ($method) {
         $ret = removeCalendar( JRequest::getVar("calendarId"),JRequest::getVar("rruleType"));
         break;
     case "get_session_type":
-            get_session_type();
+            $ret = get_session_type();
         break;
     case "get_session_focus":
-            get_session_focus();
+            $ret = get_session_focus();
         break;
     case "get_trainers":
-            get_trainers();
+            $ret = get_trainers();
         break;
     case "get_clients":
-        get_clients();
+        $ret = get_clients();
     break;
     case "set_event_status":
-            set_event_status();
+            $ret = set_event_status();
         break;
     case "add_exercise":
-            add_exercise();
+            $ret = add_exercise();
         break;
     case "delete_exercise":
-            delete_exercise();
+            $ret = delete_exercise();
         break;
     case "set_event_exircise_order":
-        set_event_exircise_order();
+        $ret = set_event_exircise_order();
     case "send_appointment_email":
-        send_appointment_email(JRequest::getVar('event_id'), 'workout');
+        $ret = send_appointment_email(JRequest::getVar('event_id'), 'workout');
     break;
     case "sendAppointmentEmail":
-        sendAppointmentEmail('confirmation');
+        $ret = sendAppointmentEmail('confirmation');
     break;
     case "sendNotifyEmail":
-        sendAppointmentEmail('notify');
+        $ret = sendAppointmentEmail('notify');
     break;
     case "sendNotifyAssessmentEmail":
-        sendAppointmentEmail('notifyAssessment');
+        $ret = sendAppointmentEmail('notifyAssessment');
     break;
     // goal emails
-    case "sendNotifyGoalEmail":
-        sendGoalEmail('email_notify_goal', '1');
+    case "sendGoalPengingEmail":
+        $ret = sendGoalEmail($method);
     break;
     case "sendGoalCompleteEmail":
-        sendGoalEmail('email_goal_complete', '1');
+        $ret = sendGoalEmail($method);
     break;
     case "sendGoalIncompleteEmail":
-        sendGoalEmail('email_goal_incomplete', '1');
+        $ret = sendGoalEmail($method);
     break;
-    //mini
-    case "sendNotifyGoalMiniEmail":
-        sendGoalEmail('email_notify_goal', '2');
+    case "sendGoalEvaluatingEmail":
+        $ret = sendGoalEmail($method);
     break;
-    case "sendGoalCompleteMiniEmail":
-        sendGoalEmail('email_goal_complete', '2');
+    case "sendGoalInprogressEmail":
+        $ret = sendGoalEmail($method);
     break;
-    case "sendGoalIncompleteMiniEmail":
-        sendGoalEmail('email_goal_incomplete', '2');
+    case "sendGoalAssessingEmail":
+        $ret = sendGoalEmail($method);
+    break;
+    case "sendGoalCommentEmail":
+        $ret = sendGoalEmail($method);
     break;
 
+    //mini
+    case "sendGoalPengingMiniEmail":
+        $ret = sendGoalEmail($method);
+    break;
+    case "sendGoalCompleteMiniEmail":
+        $ret = sendGoalEmail($method);
+    break;
+    case "sendGoalIncompleteMiniEmail":
+        $ret = sendGoalEmail($method);
+    break;
+    case "sendGoalEvaluatingMiniEmail":
+        $ret = sendGoalEmail($method);
+    break;
+    case "sendGoalInprogressMiniEmail":
+        $ret = sendGoalEmail($method);
+    break;
+    case "sendGoalAssessingMiniEmail":
+        $ret = sendGoalEmail($method);
+    break;
+    case "sendGoalCommentMiniEmail":
+        $ret = sendGoalEmail($method);
+    break;
     //
+
 
     // appointment status emails
     case "sendAppointmentAttendedEmail":
-        sendAppointmentStatusEmail('email_status_attended');
+        $ret = sendAppointmentStatusEmail('email_status_attended');
     break;
     case "sendAppointmentCancelledEmail":
-        sendAppointmentStatusEmail('email_status_cancelled');
+        $ret = sendAppointmentStatusEmail('email_status_cancelled');
     break;
     case "sendAppointmentLatecancelEmail":
-        sendAppointmentStatusEmail('email_status_late_cancel');
+        $ret = sendAppointmentStatusEmail('email_status_late_cancel');
     break;
     case "sendAppointmentNoshowEmail":
-        sendAppointmentStatusEmail('email_status_no_show');
+        $ret = sendAppointmentStatusEmail('email_status_no_show');
     break;
 
     // Recipe approved email
     case "sendRecipeEmail":
-        sendRecipeEmail();
+        $ret = sendRecipeEmail();
     break;
     //
 
     // nutrition plan
     case "sendNutritionPlanNotifyEmail":
-        sendNutritionPlanEmail('email_notify_nutrition_plan');
+        $ret = sendNutritionPlanEmail('email_notify_nutrition_plan');
     break;
     //
 
     // nutrition diary
     case "sendDiaryPassEmail":
-        sendNutritionDiaryEmail('email_diary_pass');
+        $ret = sendNutritionDiaryEmail('email_diary_pass');
     break;
     case "sendDiaryFailEmail":
-        sendNutritionDiaryEmail('email_diary_fail');
+        $ret = sendNutritionDiaryEmail('email_diary_fail');
     break;
     case "sendDiarySubmittedEmail":
-        sendNutritionDiaryEmail('email_diary_submitted');
+        $ret = sendNutritionDiaryEmail('email_diary_submitted');
     break;
     //
 
     case "update_exercise_field":
-        update_exercise_field();
+        $ret = update_exercise_field();
     break;
     case "get_semi_clients":
-        get_semi_clients();
+        $ret = get_semi_clients();
     break;
     case "add_update_group_client":
-        add_update_group_client();
+        $ret = add_update_group_client();
     break;
     case "delete_group_client":
-        delete_group_client();
+        $ret = delete_group_client();
     break;
     case "set_group_client_status":
-        set_group_client_status();
+        $ret = set_group_client_status();
     break;
     case "generateFormHtml":
-        generateFormHtml();
+        $ret = generateFormHtml();
           break;
     case "saveDragedData":
-        saveDragedData();
+        $ret = saveDragedData();
         break;
     case "sendRemindersManually":
-        sendRemindersManually();
+        $ret = sendRemindersManually();
          break;
     case "deleteEvent":
-        deleteEvent(); 
+        $ret = deleteEvent(); 
         break;
 
     case "adddetails":
@@ -240,9 +265,12 @@ switch ($method) {
 
 }
 echo json_encode($ret);
+
+
+
 function checkIfOverlappingThisEvent($id, $st, $et)
 {
-    $db 	=& JFactory::getDBO();
+    $db =& JFactory::getDBO();
     $sql = "select * from `".DC_MV_CAL."` where id=".$id;
 
     $db->setQuery( $sql );
@@ -283,8 +311,8 @@ function checkIfOverlapping($calid, $st, $et, $sub, $loc,$id)
 function getMessageOverlapping()
 {
     $ret = array();
-    $ret['IsSuccess'] = false;
-    $ret['Msg'] = "OVERLAPPING";
+    $ret['success'] = false;
+    $ret['message'] = "OVERLAPPING";
     return $ret;
 }
 function addCalendar(
@@ -327,11 +355,11 @@ function addCalendar(
 
     $db->setQuery( $sql );
     if (!$db->query()){
-      $ret['IsSuccess'] = false;
-      $ret['Msg'] = $db->stderr();
+      $ret['success'] = false;
+      $ret['message'] = $db->stderr();
     }else{
-      $ret['IsSuccess'] = true;
-      $ret['Msg'] = 'add success';
+      $ret['success'] = true;
+      $ret['message'] = 'add success';
       $ret['Data'] = $db->insertid();
     }
     }
@@ -339,8 +367,8 @@ function addCalendar(
      $ret = getMessageOverlapping();
 
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
 
   return $ret;
@@ -401,19 +429,19 @@ function addDetailedCalendar(
 
     $db->setQuery( $sql );
     if (!$db->query()){
-      $ret['IsSuccess'] = false;
-      $ret['Msg'] = $db->stderr();
+      $ret['success'] = false;
+      $ret['message'] = $db->stderr();
     }else{
-      $ret['IsSuccess'] = true;
-      $ret['Msg'] = 'add success';
+      $ret['success'] = true;
+      $ret['message'] = 'add success';
       $ret['Data'] = $db->insertid();
     }
     }
     else
      $ret = getMessageOverlapping();
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
   return $ret;
 }
@@ -484,8 +512,8 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     
     $db->setQuery( $sql );
     if (!$db->query()){
-          $ret['IsSuccess'] = false;
-          $ret['Msg'] = $db->stderr();
+          $ret['success'] = false;
+          $ret['message'] = $db->stderr();
     }
     $rows = $db->loadObjectList();
 
@@ -506,8 +534,8 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
             $query = "SELECT  client_id FROM #__fitness_appointment_clients WHERE event_id='$id'";
             $db->setQuery($query);
             if (!$db->query()) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
             }
             if ($row->client_id) {
                 $clients = $db->loadResultArray(0);
@@ -584,18 +612,18 @@ function updateCalendar($id, $st, $et){
           . "where `id`=" . $id;
         $db->setQuery( $sql );
         if (!$db->query()){
-          $ret['IsSuccess'] = false;
-          $ret['Msg'] = $db->stderr();
+          $ret['success'] = false;
+          $ret['message'] = $db->stderr();
         }else{
-          $ret['IsSuccess'] = true;
-          $ret['Msg'] = 'Succefully';
+          $ret['success'] = true;
+          $ret['message'] = 'Succefully';
         }
     }
     else
          $ret = getMessageOverlapping();
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
   return $ret;
 }
@@ -677,11 +705,11 @@ function updateDetailedCalendar(
               . "where `id`=" . $id;
             $db->setQuery( $sql );
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
               $ret['Data'] = $id;
             }
         }        
@@ -747,11 +775,11 @@ function updateDetailedCalendar(
               . "where `id`=" . $id;
             $db->setQuery( $sql );
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
               $ret['Data'] = $id;
             }
         }
@@ -759,13 +787,13 @@ function updateDetailedCalendar(
     else
          $ret = getMessageOverlapping();
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
   
   if(JRequest::getVar('assessment_form')) {
       $retAss = updateAssessmentData();
-      if(!$retAss['IsSuccess']) $ret = $retAss;
+      if(!$retAss['success']) $ret = $retAss;
   }
 
   return $ret;
@@ -789,11 +817,11 @@ function removeCalendar($id,$rruleType){
               
             $db->setQuery( $sql );            
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
             }
         }  
         else if (substr($rruleType,0,9)=="del_UNTIL")
@@ -819,11 +847,11 @@ function removeCalendar($id,$rruleType){
               . "where `id`=" . $id;
             $db->setQuery( $sql );            
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
             }
             
         }
@@ -832,16 +860,16 @@ function removeCalendar($id,$rruleType){
             $sql = "delete from `".DC_MV_CAL."` where `id`=" . $id;
 	        $db->setQuery( $sql );
             if (!$db->query()){
-              $ret['IsSuccess'] = false;
-              $ret['Msg'] = $db->stderr();
+              $ret['success'] = false;
+              $ret['message'] = $db->stderr();
             }else{
-              $ret['IsSuccess'] = true;
-              $ret['Msg'] = 'Succefully';
+              $ret['success'] = true;
+              $ret['message'] = 'Succefully';
             }
         }
 	}catch(Exception $e){
-     $ret['IsSuccess'] = false;
-     $ret['Msg'] = $e->getMessage();
+     $ret['success'] = false;
+     $ret['message'] = $e->getMessage();
   }
   return $ret;
 }
@@ -858,8 +886,7 @@ function  get_session_type() {
     $id = $db->loadResultArray(0);
     $name = $db->loadResultArray(1);
     $result = array_combine($id, $name);
-    echo  json_encode($result);
-    die();
+    return $result;
 }
 
 
@@ -876,8 +903,7 @@ function  get_session_focus() {
     $id = $db->loadResultArray(0);
     $name = $db->loadResultArray(1);
     $result = array_combine($id, $name);
-    echo  json_encode($result);
-    die();
+    return $result;
 }
 
 /** get appointment type by category
@@ -920,8 +946,7 @@ function  get_trainers() {
     }
     
     $result = array( 'status' => $status, 'data' => array_combine($all_trainers_id, $all_trainers_name));
-    echo  json_encode($result);
-    die();
+    return $result;
 }
 
 /** get appointment type by category
@@ -953,8 +978,7 @@ function  get_clients() {
     }
     
     $result = array( 'status' => $status, 'data' => array_combine($clients, $clients_name));
-    echo  json_encode($result);
-    die();
+    return $result;
 }
 
 
@@ -999,8 +1023,7 @@ function add_exercise() {
     }
 
     $post['id'] = $db->insertid();
-    echo json_encode($post);
-    die();
+    return $post;
 }
 
 
@@ -1018,8 +1041,7 @@ function delete_exercise() {
         $post['success'] = 0;
         $post['message'] = $db->stderr();
     }
-    echo json_encode($post);
-    die();
+    return $post;
 }
 
 /**
@@ -1036,8 +1058,7 @@ function set_event_exircise_order() {
         $status['message'] = $db->stderr();
     }
     $status['success'] = 1;
-    echo json_encode($status);
-    die();
+    return $status;
 }
 
 /**
@@ -1073,19 +1094,25 @@ function send_appointment_email($event_id, $type) {
         
         $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf' . $layout . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
         
-        $contents = getContentCurl($url);
+        $helper = new FitnessHelper();
+        $contents = $helper->getContentCurl($url);
+    
+        if(!$contents['success']) {
+            return $contents;
+        }
+
+        $contents = $contents['data'];
         
         $email = JFactory::getUser($client_id)->email;
         
         $emails[] = $email;
         
-        $send = sendEmail($email, $subject, $contents);
+        $send = $helper->sendEmail($email, $subject, $contents);
 
         if($send != '1') {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = 'Email function error';
-            echo json_encode($ret);
-            die();
+            $ret['success'] = false;
+            $ret['message'] = 'Email function error';
+            return $ret;
         }
         if($type == 'confirmation') {
             setSentEmailStatus($event_id, $client_id);
@@ -1101,63 +1128,12 @@ function setSentEmailStatus($event_id, $client_id) {
     $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] =  $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] =  $db->stderr();
+        return $ret;
     } 
 }
         
-        
-function getContentCurl($url) {
-        if(!function_exists('curl_version')) {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = 'cURL not anabled';
-            echo json_encode($ret);
-            die();
-        }
-
-        $ch = curl_init();
-        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $contents = curl_exec ($ch);
-        curl_close ($ch);
-        return $contents;
-}
-
-/**
- * standard send email function
- * @param type $recipient
- * @param type $Subject
- * @param type $body
- */
-function sendEmail($recipient, $Subject, $body) {
-
-    $mailer = & JFactory::getMailer();
-
-    $config = new JConfig();
-
-    $sender = array($config->mailfrom, $config->fromname);
-
-    $mailer->setSender($sender);
-
-    //$recipient = 'npkorban@mail.ru';
-
-    $mailer->addRecipient($recipient);
-
-    $mailer->setSubject($Subject);
-
-    $mailer->isHTML(true);
-
-    $mailer->setBody($body);
-
-    $send = &$mailer->Send();
-
-    return $send;
-
-}
-
 
 /** get client email be event id
  * 
@@ -1173,10 +1149,9 @@ function getClientsByEvent($event_id) {
 
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] =  $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] =  $db->stderr();
+        return $ret;
     }
     $client_ids = $db->loadResultArray(0);
     $client_ids = array_unique($client_ids);
@@ -1227,8 +1202,7 @@ function update_exercise_field() {
         $status['message'] = $db->stderr();
     }
     $status['success'] = 1;
-    echo json_encode($status);
-    die();
+    return $status;
 }
 
 
@@ -1247,8 +1221,7 @@ function get_semi_clients() {
     }
     
     $result = array('ids' => $ids, 'clients'=>$clients, 'clients_name'=>$clients_name, 'status'=>$status);
-    echo  json_encode($result);
-    die();
+    return $result;
 }
 
 /**
@@ -1275,8 +1248,7 @@ function add_update_group_client() {
         $user = &JFactory::getUser($client_id);
         $status['success'] = 0;
         $status['message'] = $user->username . ' already added for this appointment';
-        echo json_encode($status);
-        die();
+        return $status;
     }
     
     if($id) {
@@ -1298,8 +1270,7 @@ function add_update_group_client() {
         }
         $status['id'] = $db->insertid();
     }
-    echo json_encode($status);
-    die();
+    return $status;
 }
 
 function delete_group_client() {
@@ -1313,8 +1284,7 @@ function delete_group_client() {
         $status['message'] = $db->stderr();
     }
     $status['success'] = 1;
-    echo json_encode($status);
-    die();
+    return $status;
 }
 
 
@@ -1333,8 +1303,7 @@ function set_group_client_status() {
     }
     $status['ids'] = $id;
     $status['success'] = 1;
-    echo json_encode($status);
-    die();
+    return $status;
 }
 
 
@@ -1343,7 +1312,7 @@ function set_group_client_status() {
  * @return type
  */
 function updateAssessmentData() {
-    $ret['IsSuccess'] = true;
+    $ret['success'] = true;
     $post = JRequest::get('post','','POST','STRING',JREQUEST_ALLOWHTML);
     $db = & JFactory::getDBO();
     $fields = array('event_id', 'as_height', 'as_weight', 'as_age', 
@@ -1372,8 +1341,8 @@ function updateAssessmentData() {
     $query = "SELECT assessment_id FROM #__fitness_assessments WHERE event_id='$event_id'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
         return $ret;
     }
     $id = $db->loadResult();
@@ -1382,12 +1351,12 @@ function updateAssessmentData() {
     
     if(!$id) {
         $insert = $db->insertObject('#__fitness_assessments', $obj, 'assessment_id');
-        if(!$insert) $ret['IsSuccess'] = false;
+        if(!$insert) $ret['success'] = false;
 
     } else {
         $obj->assessment_id = $id;
         $update= $db->updateObject('#__fitness_assessments', $obj, 'assessment_id');
-        if(!$update) $ret['IsSuccess'] = false;
+        if(!$update) $ret['success'] = false;
     }
 
     return $ret;
@@ -1395,13 +1364,13 @@ function updateAssessmentData() {
 
 
 function getCategoryNameColorById($id) {
-    $result['IsSuccess'] = true;
+    $result['success'] = true;
     $db = & JFactory::getDBO();
     $query = "SELECT name, color FROM #__fitness_categories WHERE id='$id' AND state='1'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $result['IsSuccess'] = false;
-        $result['Msg'] = $db->stderr();
+        $result['success'] = false;
+        $result['message'] = $db->stderr();
     }
     $result['name'] = $db->loadResultArray(0);
     $result['color'] = $db->loadResultArray(1);
@@ -1411,7 +1380,7 @@ function getCategoryNameColorById($id) {
 }
 
 function saveDragedData() {
-    $ret['IsSuccess'] = true;
+    $ret['success'] = true;
     $post = JRequest::get('post');
     $starttime = $post['starttime'];
     $field = $post['field'];
@@ -1421,8 +1390,8 @@ function saveDragedData() {
     $query = "SELECT id, title,  starttime FROM #__dc_mv_events WHERE id='$event_id'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
     }
 
     $event_name = $db->loadResultArray(1);
@@ -1434,9 +1403,9 @@ function saveDragedData() {
         $category_name = getCategoryNameColorById($value);
 
     
-        if (!$category_name['IsSuccess']) {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = $category_name['Msg'];
+        if (!$category_name['success']) {
+            $ret['success'] = false;
+            $ret['message'] = $category_name['message'];
         }
         $value = $category_name['name'][0];
         $color = $category_name['color'][0];
@@ -1450,8 +1419,8 @@ function saveDragedData() {
         }
         $db->setQuery($query);
         if (!$db->query()) {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = $db->stderr();
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
         }
 
         if (($field == 'client_id') AND !(in_array($event_name[0], array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
@@ -1474,45 +1443,41 @@ function saveDragedData() {
             }
             
         } else {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = 'Place appointment first';
+                $ret['success'] = false;
+                $ret['message'] = 'Place appointment first';
         }
     }
     
-    echo json_encode($ret);
-    die();
+    return $ret;
 }
 
 
 
 function insertGroupClient($event_id, $client_id) {
-    $ret['IsSuccess'] = true;
+    $ret['success'] = true;
     $db = & JFactory::getDBO();
     $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        return json_encode($ret);
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
+        return $ret;;
     }
     $client = $db->loadResult();
 
     if ($client == $client_id) {
         $user = &JFactory::getUser($client_id);
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $user->username . ' already added for this appointment';
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $user->username . ' already added for this appointment';
+        return $ret;
      }
     $query = "INSERT  INTO #__fitness_appointment_clients (event_id, client_id)
         VALUES ('$event_id', '$client_id')";
 
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
     }
 
     return $ret;
@@ -1520,7 +1485,7 @@ function insertGroupClient($event_id, $client_id) {
 
 
 function insertEvent($post) {
-    $ret['IsSuccess'] = true;
+    $ret['success'] = true;
     $db = & JFactory::getDBO();
     $obj = new stdClass();
     $obj->starttime = $post['starttime'];
@@ -1537,10 +1502,9 @@ function insertEvent($post) {
     $insert = $db->insertObject('#__dc_mv_events', $obj, 'id');
     $db->setQuery($query);
     if (!$insert) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
+        return $ret;
     }
     return $ret;
 }
@@ -1569,10 +1533,9 @@ function sendRemindersManually() {
     ";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
+        return $ret;
     }
     $event_ids = $db->loadResultArray(0);
     
@@ -1583,25 +1546,23 @@ function sendRemindersManually() {
     
     $emails = implode(', ', $emails);
     //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
-    $ret['IsSuccess'] = true;
-    $ret['Msg'] = $emails;
-    echo json_encode($ret);
-    die();
+    $ret['success'] = true;
+    $ret['message'] = $emails;
+    return $ret;
 }
 
 
 function deleteEvent() {
-    $ret['IsSuccess'] = true;
+    $ret['success'] = true;
     $event_id = JRequest::getVar('event_id');
     $db = & JFactory::getDBO();
     $query = "DELETE FROM #__dc_mv_events WHERE id='$event_id'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
     }
-    echo json_encode($ret);
-    die();
+    return $ret;
 }
 
 
@@ -1624,98 +1585,204 @@ function getUserGroup($user_id) {
 function  sendAppointmentEmail($type) {
     $event_id = JRequest::getVar('id');
     if(!$event_id) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'Error: no item id';
-        echo json_encode($ret);
-        die();   
+        $ret['success'] = false;
+        $ret['message'] = 'Error: no item id';
+        return $ret;
     }
     $emails =  send_appointment_email($event_id, $type);
     $emails = implode(', ', $emails);
     //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
-    $ret['IsSuccess'] = true;
-    $ret['Msg'] = $emails;
-    echo json_encode($ret);
-    die();
+    $ret['success'] = true;
+    $ret['message'] = $emails;
+    return $ret;
 }
 
-function sendGoalEmail($type, $goal_type) {
-    $goal_id = JRequest::getVar('id');
-    if(!$goal_id) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'Error: no goal id';
-        echo json_encode($ret);
-        die();
-    }  
-    // $goal_type 1-> Primary Goal; 2 -> Mini Goal
-    switch ($type) {
-        case 'email_goal_complete':
-            $subject = 'Complete Goal';
+
+// goals emails
+function sendGoalEmail($method) {
+    $id = JRequest::getVar('id');
+    if(!$id) {
+        $ret['success'] = false;
+        $ret['message'] = 'Error: no goal id';
+        return $ret;
+    } 
+    //default
+    $send_to_client = true;
+    $send_to_trainer = false;
+
+    switch ($method) {
+        //primary
+        case 'sendGoalPengingEmail':
+            $subject = 'New Primary Goal';
+            $layout = 'email_goal_pending';
+            $goal_type = '1';
             break;
-        case 'email_goal_incomplete':
-            $subject = 'Incomplete Goal';
+        case 'sendGoalCompleteEmail':
+            $subject = 'Primary Goal Complete';
+            $layout = 'email_goal_complete';
+            $goal_type = '1';
+            break;
+        case 'sendGoalIncompleteEmail':
+            $subject = 'Primary Goal Incomplete';
+            $layout = 'email_goal_incomplete';
+            $goal_type = '1';
+            break;
+        case 'sendGoalEvaluatingEmail':
+            $subject = 'Evaluate Primary Goal';
+            $layout = 'email_goal_evaluating';
+            $goal_type = '1';
+            $send_to_client = false;
+            $send_to_trainer = true;
+            break;
+        case 'sendGoalInprogressEmail':
+            $subject = 'Primary Goal Scheduled';
+            $layout = 'email_goal_inprogress';
+            $goal_type = '1';
+            break;
+        case 'sendGoalAssessingEmail':
+            $subject = 'Assess Primary Goal';
+            $layout = 'email_goal_assessing';
+            $goal_type = '1';
+            break;
+        case 'sendGoalCommentEmail':
+            $subject = 'New/Unread Message by [comment author name]';
+            $layout = 'email_goal_assessing';
+            $goal_type = '1';
+            break;
+        
+        //mini
+        case 'sendGoalPengingMiniEmail':
+            $subject = 'New Mini Goal';
+            $layout = 'email_goal_pending_mini';
+            $goal_type = '2';
+            break;
+        case 'sendGoalCompleteMiniEmail':
+            $subject = 'Mini Goal Complete';
+            $layout = 'email_goal_complete_mini';
+            $goal_type = '2';
+            break;
+        case 'sendGoalIncompleteMiniEmail':
+            $subject = 'Mini Goal Incomplete';
+            $layout = 'email_goal_incomplete_mini';
+            $goal_type = '2';
+            break;
+        case 'sendGoalEvaluatingMiniEmail':
+            $subject = 'Evaluate Mini Goal';
+            $layout = 'email_goal_evaluating_mini';
+            $goal_type = '2';
+            break;
+        case 'sendGoalInprogressMiniEmail':
+            $subject = 'Mini Goal Scheduled';
+            $layout = 'email_goal_inprogress_mini';
+            $goal_type = '2';
+            break;
+        case 'sendGoalAssessingMiniEmail':
+            $subject = 'Assess Mini Goal';
+            $layout = 'email_goal_assessing_mini';
+            $goal_type = '2';
+            break;
+        case 'sendGoalCommentMiniEmail':
+            $subject = 'New/Unread Message by [comment author name]';
+            $layout = 'email_goal_assessing_mini';
+            $goal_type = '2';
             break;
         default:
-            $subject = 'Review Your Feedback';
             break;
     }
-    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&goal_id=' . $goal_id . '&goal_type=' . $goal_type ;
+    $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id . '&goal_type=' . $goal_type;
     
-    $contents = getContentCurl($url);
-    
-    $email = getEmailByGoalId($goal_id, $goal_type);
-    
-    if(!$email) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'error: email not found';
-        echo json_encode($ret);
-        die();  
-    }
-    
-    $send = sendEmail($email, $subject, $contents);
+    $helper = new FitnessHelper();
 
-    if($send != '1') {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'Email function error';
-        echo json_encode($ret);
-        die();
+    $contents = $helper->getContentCurl($url);
+    
+    if(!$contents['success']) {
+        return $contents;
     }
-    $ret['IsSuccess'] = true;
-    $ret['Msg'] = $email;
-    echo json_encode($ret);
-    die();
+
+    $contents = $contents['data'];
+    
+
+    
+    //send to client
+    if($send_to_client) {
+        
+        $client = $helper->getClientIdByGoalId($id, $goal_type);
+        
+        if(!$client['success']) {
+            return $client;
+        }
+        
+        $client_id = $client['data']['client_id'];
+        
+        if(!$client_id) {
+            $ret['success'] = 0;
+            $ret['message'] = 'error: no client id';
+            return $ret;
+        }
+
+        $client_email = &JFactory::getUser($client_id)->email;
+
+        $send = $helper->sendEmail($client_email, $subject, $contents);
+
+        if($send != '1') {
+            $ret['success'] = false;
+            $ret['message'] = 'Email function error';
+            return $ret;
+        }
+    }
+    
+    //sent to trainer
+    if($send_to_trainer) {
+        
+        $trainers = $helper->getClientTrainers($client_id, 'all');
+        
+        $send = $helper->sendEmail($trainer_email, $subject, $contents);
+
+        if($send != '1') {
+            $ret['success'] = false;
+            $ret['message'] = 'Email function error';
+            return $ret;
+        }
+    }
+    
+    $ret['success'] = true;
+    $ret['message'] = $email;
+    return $ret;
 }
 
 function getEmailByGoalId($goal_id, $goal_type) {
     $db = & JFactory::getDBO();
-    $query = "SELECT user_id FROM #__fitness_goals WHERE id='$goal_id' AND state='1'";
+    $query = "SELECT user_id, (SELECT primary_trainer FROM #__fitness_clients WHERE user_id=#__fitness_goals.user_id ) trainer_id FROM #__fitness_goals WHERE id='$goal_id' AND state='1'";
     if($goal_type == '2') {
-        $query = "SELECT pg.user_id FROM #__fitness_mini_goals AS mg
+        $query = "SELECT pg.user_id, c.primary_trainer AS trainer_id FROM #__fitness_mini_goals AS mg
             LEFT JOIN #__fitness_goals AS pg ON pg.id=mg.primary_goal_id
+            LEFT JOIN #__fitness_clients AS c ON c.user_id=pg.user_id
             WHERE mg.id='$goal_id' AND pg.state='1'
         ";
     }
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
+        return $ret;
     }
-    $user_id = $db->loadResult();
+    $user_id = $db->loadResultArray(0);
+    $trainer_id = $db->loadResultArray(1);
+
+    $client = &JFactory::getUser($user_id[0]);
+    $trainer = &JFactory::getUser($trainer_id[0]);
     
-    $user = &JFactory::getUser($user_id);
-    
-    return $user->email;
+    return array('client_email' => $client->email, 'trainer_email' => $trainer->email );
 }
+
         
 // Appointments status emails
 function sendAppointmentStatusEmail($type) {
     $event_id = JRequest::getVar('id');
     if(!$event_id) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'error: no id';
-        echo json_encode($ret);
-        die();   
+        $ret['success'] = false;
+        $ret['message'] = 'error: no id';
+        return $ret;   
     }
     
     $client_ids = getClientsByEvent($event_id);
@@ -1743,28 +1810,32 @@ function sendAppointmentStatusEmail($type) {
         if(!$client_id) continue;
         
         $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
+        $helper = new FitnessHelper();
+        $contents = $helper->getContentCurl($url);
+    
+        if(!$contents['success']) {
+            return $contents;
+        }
 
-        $contents = getContentCurl($url);
+        $contents = $contents['data'];
 
         $email = JFactory::getUser($client_id)->email;
         
         $emails[] = $email;
 
-        $send = sendEmail($email, $subject, $contents);
+        $send = $helper->sendEmail($email, $subject, $contents);
 
         if($send != '1') {
-            $ret['IsSuccess'] = false;
-            $ret['Msg'] = 'Email function error';
-            echo json_encode($ret);
-            die();
+            $ret['success'] = false;
+            $ret['message'] = 'Email function error';
+            return $ret;
         }
     }
     $emails = implode(', ', $emails);
     //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
-    $ret['IsSuccess'] = true;
-    $ret['Msg'] = $emails;
-    echo json_encode($ret);
-    die();
+    $ret['success'] = true;
+    $ret['message'] = $emails;
+    return $ret;
 
 }
 
@@ -1773,10 +1844,9 @@ function getClientIdByAppointmentId($appointment_client_id) {
     $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE id='$appointment_client_id'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
+        return $ret;
     } 
     $client_id = $db->loadResult();
     return $client_id;
@@ -1789,22 +1859,27 @@ function sendRecipeEmail() {
     
     $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=email_recipe_approved&tpml=component&recipe_id=' . $recipe_id ;
     
-    $contents = getContentCurl($url);
+    $helper = new FitnessHelper();
+    $contents = $helper->getContentCurl($url);
+
+    if(!$contents['success']) {
+        return $contents;
+    }
+
+    $contents = $contents['data'];
     
     $email = getEmailByRecipeId($recipe_id);
     
-    $send = sendEmail($email, $subject, $contents);
+    $send = $helper->sendEmail($email, $subject, $contents);
 
     if($send != '1') {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'Email function error';
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = 'Email function error';
+        return $ret;
     }
-    $ret['IsSuccess'] = true;
-    $ret['Msg'] = $email;
-    echo json_encode($ret);
-    die();
+    $ret['success'] = true;
+    $ret['message'] = $email;
+    return $ret;
 }
 
 function getEmailByRecipeId($recipe_id) {
@@ -1812,10 +1887,9 @@ function getEmailByRecipeId($recipe_id) {
     $query = "SELECT created_by FROM #__fitness_nutrition_recipes WHERE id='$recipe_id' AND state='1'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
+        return $ret;
     }
     $user_id = $db->loadResult();
     
@@ -1829,31 +1903,31 @@ function sendNutritionPlanEmail($type) {
     $nutrition_plan_id = JRequest::getVar('id');
     
     if(!$nutrition_plan_id) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'No nutrition plan id';
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = 'No nutrition plan id';
+        return $ret;
     }
     $subject = 'Nutrition Plan Available';
     
     $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&nutrition_plan_id=' . $nutrition_plan_id;
     
-    $contents = getContentCurl($url);
+    $helper = new FitnessHelper();
+    $contents = $helper->getContentCurl($url);
+    
+    $contents = $contents['data'];
     
     $email = getEmailByNutritionPlanId($nutrition_plan_id);
     
-    $send = sendEmail($email, $subject, $contents);
+    $send = $helper->sendEmail($email, $subject, $contents);
 
     if($send != '1') {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'Email function error';
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = 'Email function error';
+        return $ret;
     }
-    $ret['IsSuccess'] = true;
-    $ret['Msg'] = $email;
-    echo json_encode($ret);
-    die();
+    $ret['success'] = true;
+    $ret['message'] = $email;
+    return $ret;
 }
 
 
@@ -1862,10 +1936,9 @@ function getEmailByNutritionPlanId($nutrition_plan_id) {
     $query = "SELECT client_id FROM #__fitness_nutrition_plan WHERE id='$nutrition_plan_id' AND state='1'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
+        return $ret;
     }
     $user_id = $db->loadResult();
     
@@ -1879,10 +1952,9 @@ function sendNutritionDiaryEmail($type) {
     $diary_id = JRequest::getVar('id');
     
     if(!$diary_id) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'No nutrition diary id';
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = 'No nutrition diary id';
+        return $ret;
     }
     switch ($type) {
         case 'email_diary_pass':
@@ -1901,22 +1973,27 @@ function sendNutritionDiaryEmail($type) {
 
     $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&diary_id=' . $diary_id;
     
-    $contents = getContentCurl($url);
+    $helper = new FitnessHelper();
+    $contents = $helper->getContentCurl($url);
+    
+    if(!$contents['success']) {
+        return $contents;
+    }
+    
+    $contents = $contents['data'];
     
     $email = getEmailByDiaryId($diary_id);
     
-    $send = sendEmail($email, $subject, $contents);
+    $send = $helper->sendEmail($email, $subject, $contents);
 
     if($send != '1') {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = 'Email function error';
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = 'Email function error';
+        return $ret;
     }
-    $ret['IsSuccess'] = true;
-    $ret['Msg'] = $email;
-    echo json_encode($ret);
-    die();
+    $ret['success'] = true;
+    $ret['message'] = $email;
+    return $ret;
 }
 
 function getEmailByDiaryId($id) {
@@ -1924,10 +2001,9 @@ function getEmailByDiaryId($id) {
     $query = "SELECT client_id FROM #__fitness_nutrition_diary WHERE id='$id'";
     $db->setQuery($query);
     if (!$db->query()) {
-        $ret['IsSuccess'] = false;
-        $ret['Msg'] = $db->stderr();
-        echo json_encode($ret);
-        die();
+        $ret['success'] = false;
+        $ret['message'] = $db->stderr();
+        return $ret;
     }
     $user_id = $db->loadResult();
     

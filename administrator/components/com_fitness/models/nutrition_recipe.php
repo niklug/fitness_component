@@ -123,7 +123,7 @@ class FitnessModelnutrition_recipe extends JModelAdmin
         
         
         public function getSearchIngredients($search_text) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             
             $search_text_array = preg_split("/[\s,]+/", $search_text);
             
@@ -139,8 +139,8 @@ class FitnessModelnutrition_recipe extends JModelAdmin
             
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $ingredients = $db->loadObjectList();
 
@@ -157,13 +157,13 @@ class FitnessModelnutrition_recipe extends JModelAdmin
         
         
         public function getIngredientData($id) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "SELECT * FROM #__fitness_nutrition_database WHERE id='$id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $ingredient = $db->loadObject();
 
@@ -173,7 +173,7 @@ class FitnessModelnutrition_recipe extends JModelAdmin
         }
         
         public function saveMeal($ingredient_encoded) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             
             $ingredient = json_decode($ingredient_encoded);
@@ -185,8 +185,8 @@ class FitnessModelnutrition_recipe extends JModelAdmin
             }
 
             if (!$insert) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
             }
             
             $inserted_id = $db->insertid();
@@ -194,9 +194,9 @@ class FitnessModelnutrition_recipe extends JModelAdmin
             if(!$inserted_id) {
                 $inserted_id = $ingredient->id;
             }
-            //$ret['IsSuccess'] = 0;
+            //$ret['success'] = 0;
             
-            //$ret['Msg'] = print_r($ingredient, true);
+            //$ret['message'] = print_r($ingredient, true);
             
             $result = array('status' => $ret, 'inserted_id' => $inserted_id);
             
@@ -205,13 +205,13 @@ class FitnessModelnutrition_recipe extends JModelAdmin
         
         
         public function deleteMeal($id) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "DELETE FROM #__fitness_nutrition_recipes_meals WHERE id='$id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $result = array('status' => $ret);
             
@@ -219,13 +219,13 @@ class FitnessModelnutrition_recipe extends JModelAdmin
         }
         
         public function populateTable($recipe_id) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "SELECT * FROM #__fitness_nutrition_recipes_meals WHERE recipe_id='$recipe_id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $recipe_meals = $db->loadObjectList();
 

@@ -13,6 +13,7 @@
               },
             dataType : 'json',
             success : function(response) {
+                console.log(response);
                 if(response.status.success != true) {
                     alert(response.status.message);
                     return;
@@ -282,32 +283,52 @@
             case 'options' :
                 current_options = options;
                 $("#whole").addClass('choosen_link');
-                $("#by_year_previous, #by_year, #by_year_next, #by_month").removeClass('choosen_link');
+                $("#all_goals, #current_primary_goal, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
                break;
             case 'options_year_previous' :
                 current_options = options_year_previous;
                 $("#by_year_previous").addClass('choosen_link');
-                $("#whole, #by_year, #by_year_next, #by_month").removeClass('choosen_link');
+                $("#all_goals, #current_primary_goal, #whole, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
                break;
             case 'options_year' :
                 current_options = options_year;
                 $("#by_year").addClass('choosen_link');
-                $("#whole, #by_year_previous, #by_year_next, #by_month").removeClass('choosen_link');
+                $("#all_goals, #current_primary_goal, #whole, #by_year_previous, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
                break;
             case 'options_year_next' :
                 current_options = options_year_next;
                 $("#by_year_next").addClass('choosen_link');
-                $("#whole, #by_year_previous, #by_year, #by_month").removeClass('choosen_link');
+                $("#all_goals, #current_primary_goal, #whole, #by_year_previous, #by_year, #by_month, #by_week, #by_day").removeClass('choosen_link');
                break;
             case 'options_month' :
                 current_options = options_month;
                 $("#by_month").addClass('choosen_link');
-                $("#whole, #by_year_previous, #by_year, #by_year_next").removeClass('choosen_link');
+                $("#all_goals, #current_primary_goal, #whole, #by_year_previous, #by_year, #by_year_next, #by_week, #by_day").removeClass('choosen_link');
                break;
+            case 'options_week' :
+                current_options = options_week;
+                $("#by_week").addClass('choosen_link');
+                $("#all_goals, #current_primary_goal, #whole, #by_year_previous, #by_year, #by_month, #by_day").removeClass('choosen_link');
+               break;
+            case 'options_day' :
+                current_options = options_day;
+                $("#by_day").addClass('choosen_link');
+                $("#all_goals, #current_primary_goal, #whole, #by_year_previous, #by_year, #by_year_next, #by_week").removeClass('choosen_link');
+               break;
+            case 'current_primary_goal' :
+                current_options = options_year;
+                $("#current_primary_goal").addClass('choosen_link');
+                $("#all_goals, #whole, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
+                break;
+            case 'all_goals' :
+                current_options = options;
+                $("#all_goals").addClass('choosen_link');
+                $("#current_primary_goal, #whole, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
+            break;
             default :
                 current_options = options_year;
                 $("#by_year").addClass('choosen_link');
-                $("#whole, #by_year_previous, #by_year_next, #by_month").removeClass('choosen_link');
+                $("#whole, #by_year_previous, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
                 break;
         }
 

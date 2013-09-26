@@ -62,10 +62,11 @@ function getGoalData($goal_id, $goal_type) {
     
     if($goal_type == '2') {
         
-        $query = "SELECT g.*, c.name AS category_name,  u.primary_trainer, g.start_date AS created FROM #__fitness_mini_goals AS g
-            LEFT JOIN #__fitness_mini_goal_categories AS c ON g.mini_goal_category_id=c.id
-            LEFT JOIN #__fitness_goals AS p ON g.primary_goal_id=p.id
-            LEFT JOIN #__fitness_clients AS u ON p.user_id=u.user_id
+        $query = "SELECT g.*, mc.name AS category_name,  u.primary_trainer, g.start_date AS created, pc.name AS primary_goal_name, u.user_id AS user_id FROM #__fitness_mini_goals AS g
+            LEFT JOIN #__fitness_mini_goal_categories AS mc ON g.mini_goal_category_id=mc.id
+            LEFT JOIN #__fitness_goals AS pg ON g.primary_goal_id=pg.id
+            LEFT JOIN #__fitness_goal_categories AS pc ON pc.id=pg.goal_category_id
+            LEFT JOIN #__fitness_clients AS u ON pg.user_id=u.user_id
             WHERE g.id='$goal_id'"; 
     }
     

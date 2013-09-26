@@ -143,7 +143,7 @@ class FitnessModelnutrition_diary extends JModelAdmin
         }
         
         public function updateDiaryStatus($data_encoded, $table){
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
        
             $obj = json_decode($data_encoded);
@@ -152,8 +152,8 @@ class FitnessModelnutrition_diary extends JModelAdmin
     
 
             if (!$obj) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
             }
             
             $result = array('status' => $ret, 'data' => $obj->status);

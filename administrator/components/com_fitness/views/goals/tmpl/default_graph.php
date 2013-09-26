@@ -143,7 +143,7 @@ function getTrainingPeriods() {
         $("#current_primary_goal").click(function() {
             $(this).addClass('choosen_link');
             $("#whole, #all_goals, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
-            setLocalStorageItem('graph_period', 'options_year');
+            setLocalStorageItem('graph_period', 'current_primary_goal');
             runGraph({'list_type' : 'current_primary_goal'}, client_id);
         });
         
@@ -151,7 +151,7 @@ function getTrainingPeriods() {
         $("#all_goals").click(function() {
             $(this).addClass('choosen_link');
             $("#whole, #current_primary_goal, #by_year_previous, #by_year, #by_year_next, #by_month, #by_week, #by_day").removeClass('choosen_link');
-            setLocalStorageItem('graph_period', 'options');
+            setLocalStorageItem('graph_period', 'all_goals');
             runGraph({'list_type' : ''}, client_id);
         });
         

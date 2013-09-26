@@ -48,14 +48,14 @@
         </style>
     </head>
     <body>
-<?php
+          <?php
 require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/functions.php' );
 
-$goal_id = &JRequest::getVar('goal_id');
+$id = &JRequest::getVar('id');
 $goal_type = JRequest::getVar('goal_type');// 1-> Primary Goal; 2 -> Mini Goal
 
 
-$goal_data = getGoalData($goal_id, $goal_type);
+$goal_data = getGoalData($id, $goal_type);
 
 $user = &JFactory::getUser($goal_data->user_id);
 $client_name = $user->name;
@@ -72,7 +72,7 @@ $deadline =  $date->toFormat('%A, %d %b %Y') ;
 $description = $goal_data->description;
 
 $path = JUri::base() . 'components/com_multicalendar/views/pdf/tmpl/images/';
-$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_goal_complete&tpml=component&goal_id=' . $goal_id;
+$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_goal_complete&tpml=component&id=' . $id;
 ?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
@@ -80,7 +80,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                     <table width="630" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; text-align:left; margin:0 auto;">
                         <tr>
                             <td style="font-family:Arial, Helvetica, sans-serif; font-size:11px; line-height:15pt; color:#df833e;">
-                                <a href="<?php echo $sitelink ?>" style="color:#999999;">Having trouble viewing this email? Click here to open in your web browser.</a>
+                                <a href=<?php echo $sitelink ?> style="color:#999999;">Having trouble viewing this email? Click here to open in your web browser.</a>
                             </td>
                         </tr>
                         <tr>
@@ -89,7 +89,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td bgcolor="#005A00" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
-                                            <img alt="Elite Fitness Training" height="78" src="<?php echo $path ?>logo.png" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
+                                            <img alt="Elite Fitness Training" height="78" src="<?php echo $path ?>/logo.png" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
                                 </table>
@@ -97,7 +97,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <!--Start Of Main Content [row number #2]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px;">
@@ -115,31 +115,26 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $client_name;?>,</p>
-                                                                    <p>You have achieved your goal... WELL DONE! </p>
-                                                                    <p>You should now discuss with your trainer on what you should do on setting sights towards achieving your next goal. You may also want to review any goals you have previously set.</p>
-                                                                    <p>Please take into account your trainers comments and action any requests or instructions.</p></td>
+                                                                    <p>Well done on achieving your Primary Goal! </p>
+                                                                    <p>You should now discuss with your trainer the future direction of your training, set new goals if you have not done so already and continue to challenge yourself and test your limits.</p>
+                                                                    <p>Make sure you review your trainers comments as this may present you with ideas on possible future training directions!</p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    GOAL TYPE: <br />
-                                                                    DATE CREATED: <br />
+                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">PRIMARY GOAL: <br />
+                                                                    START DATE: <br />
                                                                     ACCOMPLISH BY: </td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <?php echo $goal_data->category_name;?><br />
                                                                     <?php echo $date_created;?><br />
                                                                     <?php echo $deadline;?> </td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">DETAILS: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">GOAL DETAILS: </td>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $goal_data->details;?> </td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">TRAINER NAME: </td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $trainer_name;?> </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>COMMENTS: </p></td>
-                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p><?php echo $goal_data->comments;?></p></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">ASSESSED BY: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $trainer_name;?>  </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -157,7 +152,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>/borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
                                 <!--End Of Main Content [row number #2]-->
@@ -169,7 +164,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
-                                                        <img alt="image" height="100" src="<?php echo $path ?>goals.png" width="100" border="0" vspace="0" hspace="0" /></td>
+                                                        <img alt="image" height="100" src="<?php echo $path ?>/goals.png" width="100" border="0" vspace="0" hspace="0" /></td>
                                                     <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                         <p>Stay focused! Talk to your trainer about ways to improve your mindset and subsequently change your lifestyle.</p>
                                                         <p>Discuss with your trainer the next phase of your training and set yourself new goals so you keep on achieving great results!</p></td>
@@ -183,7 +178,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
@@ -191,25 +186,25 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                             <table align="center" width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse; text-align:right;">
                                                 <tr>
                                                     <td width="20" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e; margin:0; padding:0; text-align:left;" valign="top">
-                                                        <img alt="image" height="16" src="<?php echo $path ?>bulb.png" width="13" /></td>
+                                                        <img alt="image" height="16" src="<?php echo $path ?>/bulb.png" width="13" /></td>
                                                     <td width="450" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF; margin:0; padding:0 10px 0 0; text-align:left;" valign="top">
                                                         Want to tell your friends about us?...</td>
                                                     <td width="26" valign="middle">
-                                                        <a href="http://www.facebook.com/EliteTraining"><img alt="Facebook" height="16" src="<?php echo $path ?>facebook.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                        <a href="http://www.facebook.com/EliteTraining"><img alt="Facebook" height="16" src="<?php echo $path ?>/facebook.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
-                                                        <a href="http://www.twitter.com/EliteMelbourne"><img alt="Twitter" height="16" src="<?php echo $path ?>twitter.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                        <a href="http://www.twitter.com/EliteMelbourne"><img alt="Twitter" height="16" src="<?php echo $path ?>/twitter.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
                                                         <a href="http://www.youtube.com/EliteFitnessPT">
-                                                            <img alt="YouTube" height="16" src="<?php echo $path ?>youtube.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                            <img alt="YouTube" height="16" src="<?php echo $path ?>/youtube.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
                                                         <a href="http://www.instagram.com/EliteMelbourne">
-                                                            <img alt="Instagram" height="16" src="<?php echo $path ?>instagram.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                            <img alt="Instagram" height="16" src="<?php echo $path ?>/instagram.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
                                                         <a href="https://plus.google.com/117163734672496632130/about">
-                                                            <img alt="Google" height="16" src="<?php echo $path ?>google.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                            <img alt="Google" height="16" src="<?php echo $path ?>/google.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                     <td width="26" valign="middle">
                                                         <a href="http://www.linkedin.com/pub/paul-meier/21/785/b1">
-                                                            <img alt="Linkedin" height="16" src="<?php echo $path ?>in.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
+                                                            <img alt="Linkedin" height="16" src="<?php echo $path ?>/in.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
                                                 </tr>
                                             </table>
 
@@ -217,13 +212,13 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                     </tr>
                                     <tr>
                                         <td height="2" bgcolor="#140901" style="padding:0 0 15px 0; line-height:0;">
-                                            <img alt="" height="2" src="<?php echo $path ?>hr.png" width="620" /></td>
+                                            <img alt="" height="2" src="<?php echo $path ?>/hr.png" width="620" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:0px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF;">
                                             Copyright © ELITE FITNESS TRAINING<br />
                                             <a href="www.elitefit.com.au" style="color:#FFF;">www.elitefit.com.au</a> | <a href="mailto:info@elitefit.com.au" style="color:#FFF;">info@elitefit.com.au</a> | +64 2205 0590<br />
-                                            Having trouble viewing this email? <a href="<?php echo $sitelink ?>" style="color:#FFF;">Click Here</a> to open in your web browser.
+                                            Having trouble viewing this email? <a href=<?php echo $sitelink ?> style="color:#FFF;">Click Here</a> to open in your web browser.
                                         </td>
                                     </tr>
                                 </table>

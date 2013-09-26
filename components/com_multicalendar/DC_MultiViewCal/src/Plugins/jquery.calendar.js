@@ -1964,7 +1964,7 @@
                     url : url,
                     dataType : 'json',
                     success : function(response) { 
-                        if(response.IsSuccess) {
+                        if(response.success) {
                             var emails = response.Msg.split(',');
                             
                             var message = 'Emails were sent to: ' +  "</br>";
@@ -2411,7 +2411,7 @@
             option.onBeforeRequestData && option.onBeforeRequestData(3);
             $.post(option.quickDeleteUrl, param, function(data) {
                 if (data) {
-                    if (data.IsSuccess) {
+                    if (data.success) {
                         de = null;
                         option.onAfterRequestData && option.onAfterRequestData(3);
                     }
@@ -2678,7 +2678,7 @@
                     option.onBeforeRequestData && option.onBeforeRequestData(4);
                     $.post(option.quickUpdateUrl, param, function(data) {
                         if (data) {
-                            if (data.IsSuccess == true) {
+                            if (data.success == true) {
                                 option.isloading = false;
                                 option.onAfterRequestData && option.onAfterRequestData(4);
                             }
@@ -2811,7 +2811,7 @@
                         option.onBeforeRequestData && option.onBeforeRequestData(2);
                         $.post(option.quickAddUrl, param, function(data) {
                             if (data) {
-                                if (data.IsSuccess == true) {
+                                if (data.success == true) {
                                     option.isloading = false;
                                     newdata.push(-1, what);
                                     var sd = str_MdyyyyHHmm_todate(datestart);
@@ -3079,7 +3079,7 @@
                     },
                     dataType : 'json',
                     success : function(response) { 
-                        if(response.IsSuccess) {
+                        if(response.success) {
                            var remember_drag = $("#remember_drag").is(':checked');
                            if(remember_drag) {
                                 goDrag(drag_name, drag_value);
@@ -3142,7 +3142,7 @@
                     },
                     dataType : 'json',
                     success : function(response) { 
-                        if(response.IsSuccess) {
+                        if(response.success) {
                             //console.log(event_id + ' deleted');
                         } else {
                             alert(response.Msg);

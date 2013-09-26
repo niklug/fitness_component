@@ -5,8 +5,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
 if(!JSession::checkToken('get')) {
-    $status['IsSuccess'] = 0;
-    $status['Msg'] = JText::_('JINVALID_TOKEN');
+    $status['success'] = 0;
+    $status['message'] = JText::_('JINVALID_TOKEN');
     $result = array( 'status' => $status);
     echo  json_encode($result);
     die();

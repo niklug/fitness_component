@@ -373,10 +373,10 @@ echo $this->loadTemplate('graph');?>
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place_',
             'statuses' : {
-                '4' : {'label' : 'EVALUATING', 'class' : 'goal_status_evaluating', 'email_alias' : ''}, 
-                '5' : {'label' : 'IN PROGRESS', 'class' : 'goal_status_inprogress', 'email_alias' : ''},
-                '6' : {'label' : 'ASSESSING', 'class' : 'goal_status_assessing', 'email_alias' : ''},
-                '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : ''},
+                '4' : {'label' : 'EVALUATING', 'class' : 'goal_status_evaluating', 'email_alias' : 'GoalEvaluating'}, 
+                '5' : {'label' : 'IN PROGRESS', 'class' : 'goal_status_inprogress', 'email_alias' : 'GoalInprogress'},
+                '6' : {'label' : 'ASSESSING', 'class' : 'goal_status_assessing', 'email_alias' : 'GoalAssessing'},
+                '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : 'GoalPenging'},
                 '2' : {'label' : 'COMPLETE', 'class' : 'goal_status_complete', 'email_alias' : 'GoalComplete'}, 
                 '3' : {'label' : 'INCOMPLETE', 'class' : 'goal_status_incomplete', 'email_alias' : 'GoalIncomplete'}
             },
@@ -400,10 +400,10 @@ echo $this->loadTemplate('graph');?>
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place_mini_',
             'statuses' : {
-                '4' : {'label' : 'EVALUATING', 'class' : 'goal_status_evaluating', 'email_alias' : ''}, 
-                '5' : {'label' : 'IN PROGRESS', 'class' : 'goal_status_inprogress', 'email_alias' : ''},
-                '6' : {'label' : 'ASSESSING', 'class' : 'goal_status_assessing', 'email_alias' : ''},
-                '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : ''},
+                '4' : {'label' : 'EVALUATING', 'class' : 'goal_status_evaluating', 'email_alias' : 'GoalEvaluatingMini'}, 
+                '5' : {'label' : 'IN PROGRESS', 'class' : 'goal_status_inprogress', 'email_alias' : 'GoalInprogressMini'},
+                '6' : {'label' : 'ASSESSING', 'class' : 'goal_status_assessing', 'email_alias' : 'GoalAssessingMini'},
+                '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : 'GoalPengingMini'},
                 '2' : {'label' : 'COMPLETE', 'class' : 'goal_status_complete', 'email_alias' : 'GoalCompleteMini'}, 
                 '3' : {'label' : 'INCOMPLETE', 'class' : 'goal_status_incomplete', 'email_alias' : 'GoalIncompleteMini'}
       
@@ -423,12 +423,6 @@ echo $this->loadTemplate('graph');?>
         var goal_status_mini = $.status(mini_goal_status_options);
         goal_status_mini.run();
         
-        
-        // Notify email
-        $(".send_email_button").on('click', function() {
-            var item_id = $(this).attr('data-id');
-            goal_status.sendEmail(item_id, 'NotifyGoal');
-        })
         
     })($js);
     

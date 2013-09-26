@@ -237,7 +237,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         }
         
         public function saveIngredient($ingredient_encoded, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             
             $ingredient = json_decode($ingredient_encoded);
@@ -249,8 +249,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
             }
 
             if (!$insert) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
             }
             
             
@@ -258,9 +258,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
             if(!$inserted_id) {
                 $inserted_id = $ingredient->id;
             }
-            //$ret['IsSuccess'] = 0;
+            //$ret['success'] = 0;
             
-            //$ret['Msg'] = print_r($ingredient, true);
+            //$ret['message'] = print_r($ingredient, true);
             
             $result = array('status' => $ret, 'inserted_id' => $inserted_id);
             
@@ -269,13 +269,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function deleteIngredient($id, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "DELETE FROM $table WHERE id='$id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $result = array('status' => $ret, 'id' => $id);
             
@@ -284,13 +284,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function populateItemDescription($nutrition_plan_id, $meal_id, $type, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "SELECT * FROM $table WHERE nutrition_plan_id='$nutrition_plan_id' AND  meal_id='$meal_id' AND type='$type' ";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $data = $db->loadObjectList();
 
@@ -301,7 +301,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function savePlanMeal($meal_encoded, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             
             $meal = json_decode($meal_encoded);
@@ -313,8 +313,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
             }
 
             if (!$insert) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
             }
             
             
@@ -322,9 +322,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
             if(!$inserted_id) {
                 $inserted_id = $meal->id;
             }
-            //$ret['IsSuccess'] = 0;
+            //$ret['success'] = 0;
             
-            //$ret['Msg'] = print_r($ingredient, true);
+            //$ret['message'] = print_r($ingredient, true);
             
             $result = array('status' => $ret, 'inserted_id' => $inserted_id);
             
@@ -332,13 +332,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
         }
         
         public function deletePlanMeal($id, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "DELETE FROM $table WHERE id='$id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $result = array('status' => $ret, 'id' => $id);
             
@@ -347,13 +347,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function populatePlanMeal($nutrition_plan_id, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "SELECT * FROM $table WHERE nutrition_plan_id='$nutrition_plan_id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $data = $db->loadObjectList();
 
@@ -364,7 +364,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function savePlanComment($data_encoded, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             
             $user = &JFactory::getUser();
@@ -379,13 +379,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
             }
 
             if (!$insert) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
             }
             /*
-            $ret['IsSuccess'] = 0;
+            $ret['success'] = 0;
             
-            $ret['Msg'] = print_r($obj, true);
+            $ret['message'] = print_r($obj, true);
             */
             $obj->user_name = $user->name;
   
@@ -397,13 +397,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function deletePlanComment($id, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "DELETE FROM $table WHERE id='$id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $result = array('status' => $ret, 'id' => $id);
             
@@ -413,7 +413,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function populatePlanComments($item_id, $sub_item_id, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "SELECT c.*, u.name AS user_name FROM $table AS c
                 LEFT JOIN #__users AS u ON u.id=c.created_by
@@ -421,8 +421,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 AND sub_item_id='$sub_item_id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $comments = $db->loadObjectList();
 
@@ -434,7 +434,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
                 
         public function importRecipe($data_encoded, $table) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             
             $user = &JFactory::getUser();
@@ -443,8 +443,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $query = "SELECT * FROM #__fitness_nutrition_recipes_meals WHERE recipe_id='$obj->recipe_id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $ingredients = $db->loadObjectList();
             
@@ -469,14 +469,14 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 
                 $insert = $db->insertObject($table, $data, 'id');
                 if (!$insert) {
-                    $ret['IsSuccess'] = false;
-                    $ret['Msg'] = $db->stderr();
+                    $ret['success'] = false;
+                    $ret['message'] = $db->stderr();
                 }
             }
             /*
-            $ret['IsSuccess'] = 0;
+            $ret['success'] = 0;
             
-            $ret['Msg'] = print_r($data, true);
+            $ret['message'] = print_r($data, true);
 
             */
             $result = array('status' => $ret);
@@ -487,7 +487,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
                 
         public function saveShoppingItem($data_encoded) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             
             $user = &JFactory::getUser();
@@ -502,14 +502,14 @@ class FitnessModelnutrition_plan extends JModelAdmin
             }
 
             if (!$insert) {
-                $ret['IsSuccess'] = false;
-                $ret['Msg'] = $db->stderr();
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
             }
             
             /*
-            $ret['IsSuccess'] = 0;
+            $ret['success'] = 0;
             
-            $ret['Msg'] = print_r($obj, true);
+            $ret['message'] = print_r($obj, true);
             */
 
   
@@ -522,13 +522,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function deleteShoppingItem($id) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "DELETE FROM #__fitness_nutrition_plan_shopping_list WHERE id='$id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $result = array('status' => $ret, 'id' => $id);
             
@@ -537,13 +537,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function getShoppingItemData($nutrition_plan_id) {
-            $ret['IsSuccess'] = 1;
+            $ret['success'] = 1;
             $db = JFactory::getDbo();
             $query = "SELECT * FROM #__fitness_nutrition_plan_shopping_list WHERE nutrition_plan_id='$nutrition_plan_id'";
             $db->setQuery($query);
             if(!$db->query()) {
-                $ret['IsSuccess'] = 0;
-                $ret['Msg'] =  $db->getErrorMsg();
+                $ret['success'] = 0;
+                $ret['message'] =  $db->getErrorMsg();
             }
             $comments = $db->loadObjectList();
 

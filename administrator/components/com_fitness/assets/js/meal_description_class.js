@@ -187,7 +187,7 @@
               },
             dataType : 'json',
             success : function(response) {
-                if(!response.status.IsSuccess) {
+                if(!response.status.success) {
                     alert(response.status.Msg);
                     return;
                 }
@@ -238,7 +238,7 @@
               },
             dataType : 'json',
             success : function(response) {
-                if(!response.status.IsSuccess) {
+                if(!response.status.success) {
                     alert(response.status.Msg);
                     return;
                 }
@@ -391,7 +391,7 @@
             },
             dataType : 'json',
             success : function(response) {
-                if(!response.status.IsSuccess) {
+                if(!response.status.success) {
                     alert(response.status.Msg);
                     return;
                 }
@@ -420,7 +420,7 @@
               },
             dataType : 'json',
             success : function(response) {
-                if(!response.status.IsSuccess) {
+                if(!response.status.success) {
                     alert(response.status.Msg);
                     return;
                 }
@@ -455,7 +455,7 @@
               },
             dataType : 'json',
             success : function(response) {
-                if(!response.status.IsSuccess) {
+                if(!response.status.success) {
                     alert(response.status.Msg);
                     return;
                 }

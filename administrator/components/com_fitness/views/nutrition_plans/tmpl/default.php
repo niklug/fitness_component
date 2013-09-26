@@ -392,7 +392,7 @@ echo $date->format('Y-m-d H:i:s');
                 },
                 dataType : 'json',
                 success : function(response) {
-                    if(response.IsSuccess) {
+                    if(response.success) {
                         var emails = response.Msg.split(',');
 
                         var message = 'Emails were sent to: ' +  "</br>";
