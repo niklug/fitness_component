@@ -13,7 +13,6 @@
               },
             dataType : 'json',
             success : function(response) {
-                console.log(response);
                 if(response.status.success != true) {
                     alert(response.status.message);
                     return;

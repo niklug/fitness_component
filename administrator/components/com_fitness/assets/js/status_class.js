@@ -152,7 +152,7 @@
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown)
                 {
-                    alert(method + " sendEmail");
+                    alert(method + " error");
                 }
         });
     }

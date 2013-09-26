@@ -464,11 +464,18 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
         $sql .= " or id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))) ";
     }
     
-    $user = &JFactory::getUser();
+    //logged user
+    $cid = JRequest::getVar( 'cid' );
+    
+    $user = &JFactory::getUser($cid);
+    /*
     if($user->guest) {
-    $ret['error'] = 'Login please in Front End to proceed here.';
-    return $ret;
+        $ret['success'] = false;
+        $ret['error'] = 'Login please in Front End to proceed here.';
+        return $ret;
     }
+     */
+
     if (getUserGroup($user->id) != 'Super Users') {
         $sql .= " and trainer_id='$user->id' ";
     } else {
@@ -918,10 +925,11 @@ function  get_trainers() {
     if ((getUserGroup($user->id) == 'Super Users') OR $secondary_only) {
         $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
         $db->setQuery($query);
-            $status['success'] = 1;
+        $status['success'] = 1;
         if (!$db->query()) {
             $status['success'] = 0;
             $status['message'] = $db->stderr();
+            return  array( 'status' => $status);
         }
         $primary_trainer= $db->loadResultArray(0);
         $other_trainers = $db->loadResultArray(1);
@@ -938,6 +946,7 @@ function  get_trainers() {
     if(!$all_trainers_id) {
         $status['success'] = 0;
         $status['message'] = 'No trainers assigned to this client.';
+        return  array( 'status' => $status);
     }
     
     foreach ($all_trainers_id as $user_id) {
@@ -962,6 +971,7 @@ function  get_clients() {
     if (!$db->query()) {
         $status['success'] = 0;
         $status['message'] = $db->stderr();
+        return  array( 'status' => $status);
     }
     
     $clients= $db->loadResultArray(0);
@@ -969,6 +979,7 @@ function  get_clients() {
     if(!$clients) {
         $status['success'] = 0;
         $status['message'] = 'No clients assigned to this trainer.';
+        return  array( 'status' => $status);
     }
 
     
@@ -1048,16 +1059,16 @@ function delete_exercise() {
  * change event exercises order on drag and drop
  */
 function set_event_exircise_order() {
+    $status['success'] = 1;
     $row_id = JRequest::getVar('row_id');
     $order = JRequest::getVar('order');
     $db = & JFactory::getDBO();
     $query = "UPDATE `#__fitness_events_exercises` SET `order` = '$order' WHERE `id` ='$row_id'";
     $db->setQuery($query);
-        if (!$db->query()) {
+    if (!$db->query()) {
         $status['success'] = 0;
         $status['message'] = $db->stderr();
     }
-    $status['success'] = 1;
     return $status;
 }
 
@@ -1163,6 +1174,7 @@ function getClientsByEvent($event_id) {
  * @return type
  */
 function update_exercise_field() {
+    $status['success'] = 1;
     $exercise_id = &JRequest::getVar('exercise_id');
     $exercise_column = &JRequest::getVar('exercise_column');
     $new_value = &JRequest::getVar('new_value');
@@ -1201,7 +1213,7 @@ function update_exercise_field() {
         $status['success'] = 0;
         $status['message'] = $db->stderr();
     }
-    $status['success'] = 1;
+    
     return $status;
 }
 
@@ -1232,9 +1244,7 @@ function add_update_group_client() {
     $event_id = JRequest::getVar("event_id");
     $client_id = JRequest::getVar("client_id");
     $id = JRequest::getVar("id");
-    
 
-        
     $db = & JFactory::getDBO();
     $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
     $db->setQuery($query);
@@ -1701,25 +1711,23 @@ function sendGoalEmail($method) {
 
     $contents = $contents['data'];
     
+    $client = $helper->getClientIdByGoalId($id, $goal_type);
+        
+    if(!$client['success']) {
+        return $client;
+    }
 
-    
+    $client_id = $client['data']['client_id'];
+
+    if(!$client_id) {
+        $ret['success'] = 0;
+        $ret['message'] = 'error: no client id';
+        return $ret;
+    }
+
     //send to client
     if($send_to_client) {
         
-        $client = $helper->getClientIdByGoalId($id, $goal_type);
-        
-        if(!$client['success']) {
-            return $client;
-        }
-        
-        $client_id = $client['data']['client_id'];
-        
-        if(!$client_id) {
-            $ret['success'] = 0;
-            $ret['message'] = 'error: no client id';
-            return $ret;
-        }
-
         $client_email = &JFactory::getUser($client_id)->email;
 
         $send = $helper->sendEmail($client_email, $subject, $contents);
@@ -1731,17 +1739,26 @@ function sendGoalEmail($method) {
         }
     }
     
+        
     //sent to trainer
     if($send_to_trainer) {
         
-        $trainers = $helper->getClientTrainers($client_id, 'all');
+        $trainers_data = $helper->getClientTrainers($client_id, 'all');
         
-        $send = $helper->sendEmail($trainer_email, $subject, $contents);
+        $trainers = $trainers_data['data'];
 
-        if($send != '1') {
-            $ret['success'] = false;
-            $ret['message'] = 'Email function error';
-            return $ret;
+        foreach ($trainers as $trainer_id) {
+            if(!$trainer_id) continue;
+            
+            $trainer_email = &JFactory::getUser($trainer_id)->email;
+                
+            $send = $helper->sendEmail($trainer_email, $subject, $contents);
+            
+            if($send != '1') {
+                $ret['success'] = false;
+                $ret['message'] =  'Email function error';
+                return $ret;
+            }
         }
     }
     
@@ -1750,30 +1767,6 @@ function sendGoalEmail($method) {
     return $ret;
 }
 
-function getEmailByGoalId($goal_id, $goal_type) {
-    $db = & JFactory::getDBO();
-    $query = "SELECT user_id, (SELECT primary_trainer FROM #__fitness_clients WHERE user_id=#__fitness_goals.user_id ) trainer_id FROM #__fitness_goals WHERE id='$goal_id' AND state='1'";
-    if($goal_type == '2') {
-        $query = "SELECT pg.user_id, c.primary_trainer AS trainer_id FROM #__fitness_mini_goals AS mg
-            LEFT JOIN #__fitness_goals AS pg ON pg.id=mg.primary_goal_id
-            LEFT JOIN #__fitness_clients AS c ON c.user_id=pg.user_id
-            WHERE mg.id='$goal_id' AND pg.state='1'
-        ";
-    }
-    $db->setQuery($query);
-    if (!$db->query()) {
-        $ret['success'] = false;
-        $ret['message'] = $db->stderr();
-        return $ret;
-    }
-    $user_id = $db->loadResultArray(0);
-    $trainer_id = $db->loadResultArray(1);
-
-    $client = &JFactory::getUser($user_id[0]);
-    $trainer = &JFactory::getUser($trainer_id[0]);
-    
-    return array('client_email' => $client->email, 'trainer_email' => $trainer->email );
-}
 
         
 // Appointments status emails

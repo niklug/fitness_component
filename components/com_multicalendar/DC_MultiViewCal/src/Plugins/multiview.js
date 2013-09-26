@@ -132,8 +132,8 @@ function initMultiViewCal(container,calendarId,config)
               '</div>';
             var $container = $jc("#"+container);
             $container.html(string);
-                    var DATA_FEED_URL = config.path+"?option=com_multicalendar&task=load";
-                    var DATA_EDIT_URL = config.path+"?option=com_multicalendar&month_index="+i18n.dcmvcal.dateformat.month_index+"&task=editevent&delete="+((config.userDel)?"1":"0")+"&palette="+config.palette+"&paletteDefault="+config.paletteDefault+"&calid="+calendarId;
+                    var DATA_FEED_URL = config.path+"option=com_multicalendar&task=load";
+                    var DATA_EDIT_URL = config.path+"option=com_multicalendar&month_index="+i18n.dcmvcal.dateformat.month_index+"&task=editevent&delete="+((config.userDel)?"1":"0")+"&palette="+config.palette+"&paletteDefault="+config.paletteDefault+"&calid="+calendarId;
                     var op = {
                         numberOfMonths:config.numberOfMonths,
                         view: config.view,

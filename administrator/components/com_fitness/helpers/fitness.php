@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 /**
  * Fitness helper.
  */
-class FitnessHelper extends AjaxHelper
+class FitnessHelper
 {
     /**
      * Configure the Linkbar.
@@ -123,6 +123,7 @@ class FitnessHelper extends AjaxHelper
         if (!$db->query()) {
             $status['success'] = 0;
             $status['message'] = $db->stderr();
+            return $status;
         }
         $primary_trainer= $db->loadResultArray(0);
         $other_trainers = $db->loadResultArray(1);
@@ -173,7 +174,7 @@ class FitnessHelper extends AjaxHelper
         $client_id = $db->loadResultArray(0);
         $trainer_id = $db->loadResultArray(1);
 
-        $result['data'] = array('client_id' => $client_id, 'trainer_id' => $trainer_id);
+        $result['data'] = array('client_id' => $client_id[0], 'trainer_id' => $trainer_id[0]);
         
         return $result;
     }
@@ -181,6 +182,3 @@ class FitnessHelper extends AjaxHelper
          
 }
 
-class AjaxHelper {
-    
-}
