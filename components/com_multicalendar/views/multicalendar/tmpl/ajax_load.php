@@ -1648,11 +1648,14 @@ function sendGoalEmail($method) {
             $subject = 'Primary Goal Scheduled';
             $layout = 'email_goal_inprogress';
             $goal_type = '1';
+            $send_to_trainer = true;
             break;
         case 'sendGoalAssessingEmail':
             $subject = 'Assess Primary Goal';
             $layout = 'email_goal_assessing';
             $goal_type = '1';
+            $send_to_client = false;
+            $send_to_trainer = true;
             break;
         case 'sendGoalCommentEmail':
             $subject = 'New/Unread Message by [comment author name]';
@@ -1685,11 +1688,14 @@ function sendGoalEmail($method) {
             $subject = 'Mini Goal Scheduled';
             $layout = 'email_goal_inprogress_mini';
             $goal_type = '2';
+            $send_to_trainer = true;
             break;
         case 'sendGoalAssessingMiniEmail':
             $subject = 'Assess Mini Goal';
             $layout = 'email_goal_assessing_mini';
             $goal_type = '2';
+            $send_to_client = false;
+            $send_to_trainer = true;
             break;
         case 'sendGoalCommentMiniEmail':
             $subject = 'New/Unread Message by [comment author name]';

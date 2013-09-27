@@ -44,7 +44,7 @@
             self.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateDiaryStatus', self.options.db_table, function(output) {
                 self.emailLogic(item_id, status);
                 var status_button_html = self.statusButtonHtml(item_id, status);
-                $(self.options.status_button_place + '' + item_id).html(status_button_html)
+                $(self.options.status_button_place + '' + item_id).html(status_button_html);
                 self.closeDialog();
             });
         })

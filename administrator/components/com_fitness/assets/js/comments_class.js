@@ -33,6 +33,7 @@
                 var comment_obj = output;
                 var comment_html = self.createCommentTemplate(comment_obj);
                 comment_wrapper.replaceWith(comment_html);
+                alert('fuck');
                 //console.log(comment_obj);
            });
         });
