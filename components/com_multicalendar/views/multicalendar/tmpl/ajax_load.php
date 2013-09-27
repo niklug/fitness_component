@@ -1659,7 +1659,7 @@ function sendGoalEmail($method) {
             break;
         case 'sendGoalCommentEmail':
             $subject = 'New/Unread Message by [comment author name]';
-            $layout = 'email_goal_assessing';
+            $layout = 'email_goal_comment';
             $goal_type = '1';
             break;
         
@@ -1699,7 +1699,7 @@ function sendGoalEmail($method) {
             break;
         case 'sendGoalCommentMiniEmail':
             $subject = 'New/Unread Message by [comment author name]';
-            $layout = 'email_goal_assessing_mini';
+            $layout = 'email_goal_comment_mini';
             $goal_type = '2';
             break;
         default:
@@ -1733,14 +1733,10 @@ function sendGoalEmail($method) {
 
     //send to client
     if($send_to_client) {
-        
-        $client_email = &JFactory::getUser($client_id)->email;
-
-        $send = $helper->sendEmail($client_email, $subject, $contents);
-
-        if($send != '1') {
-            $ret['success'] = false;
-            $ret['message'] = 'Email function error';
+        $client_sent = $helper->sendEmailToClient($client_id, $subject, $contents);
+        if(!$client_sent['success']) {
+            $ret['success'] = 0;
+            $ret['message'] = $client_sent['message'];
             return $ret;
         }
     }
@@ -1748,24 +1744,12 @@ function sendGoalEmail($method) {
         
     //sent to trainer
     if($send_to_trainer) {
-        
-        $trainers_data = $helper->getClientTrainers($client_id, 'all');
-        
-        $trainers = $trainers_data['data'];
-
-        foreach ($trainers as $trainer_id) {
-            if(!$trainer_id) continue;
-            
-            $trainer_email = &JFactory::getUser($trainer_id)->email;
-                
-            $send = $helper->sendEmail($trainer_email, $subject, $contents);
-            
-            if($send != '1') {
-                $ret['success'] = false;
-                $ret['message'] =  'Email function error';
-                return $ret;
-            }
-        }
+        $trainers_sent = $helper->sendEmailToTrainers($client_id, 'all', $subject, $contents);
+        if(!$trainers_sent['success']) {
+            $ret['success'] = 0;
+            $ret['message'] = $trainers_sent['message'];
+            return $ret;
+        } 
     }
     
     $ret['success'] = true;

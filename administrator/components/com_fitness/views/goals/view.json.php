@@ -66,5 +66,13 @@ class FitnessViewGoals extends JView {
             $model = $this -> getModel("goals");
 	    echo $model->checkOverlapDate($data_encoded, $table);
 	}
+        
+        function commentEmail() {
+            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
+            $table= JRequest::getVar('table');
+            $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
+            $model = $this -> getModel("goals");
+	    echo json_encode($model->commentEmail($data_encoded, $table));
+	}
       
 }

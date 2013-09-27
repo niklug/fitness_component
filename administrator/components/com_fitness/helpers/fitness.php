@@ -15,6 +15,17 @@ defined('_JEXEC') or die;
  */
 class FitnessHelper
 {
+    const PENDING_GOAL_STATUS = '1';
+    const COMPLETE_GOAL_STATUS = '2';
+    const INCOMPLETE_GOAL_STATUS = '3';
+    const EVELUATING_GOAL_STATUS = '4';
+    const INPROGRESS_GOAL_STATUS = '5';
+    const ASSESSING_GOAL_STATUS = '6';
+    
+    const TRAINERS_USERGROUP = 'Trainers';
+    const CLIENTS_USERGROUP = 'Registered';
+    const ADMINISTRATOR_USERGROUP = 'Super Users';
+
     /**
      * Configure the Linkbar.
      */
@@ -177,6 +188,108 @@ class FitnessHelper
         $result['data'] = array('client_id' => $client_id[0], 'trainer_id' => $trainer_id[0]);
         
         return $result;
+    }
+    
+    public function getGoal($id) {
+        $ret['success'] = true;
+        $db = &JFactory::getDBo();
+        $query = "SELECT * FROM #__fitness_goals WHERE id='$id'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
+            return $ret;
+        }
+        $ret['data'] = $db->loadObject();
+        return $ret;
+    }
+    
+    public function getUserGroup($user_id) {
+        $ret['success'] = true;
+        if(!$user_id) {
+            $user_id = &JFactory::getUser()->id;
+        }
+        $db = JFactory::getDBO();
+        $query = "SELECT title FROM #__usergroups WHERE id IN 
+            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
+            return $ret;
+        }
+        $ret['data'] = $db->loadResult();
+        return $ret;
+    }
+    
+    
+    public function sendEmailToTrainers($client_id, $type, $subject, $contents) {
+        $ret['success'] = 1;
+        $trainers_data = $this->getClientTrainers($client_id, $type);
+        if(!$trainers_data['status']['success']) {
+            $ret['success'] = 0;
+            $ret['message'] = $trainers_data['status']['message'];
+            return $ret;
+        }
+        $trainers = $trainers_data['data'];
+        
+        foreach ($trainers as $trainer_id) {
+            if(!$trainer_id) continue;
+            
+            $trainer_email = &JFactory::getUser($trainer_id)->email;
+                
+            $send = $this->sendEmail($trainer_email, $subject, $contents);
+            
+            if($send != '1') {
+                $ret['success'] = false;
+                $ret['message'] =  'Email function error';
+                return $ret;
+            }
+        }
+        return $ret;
+    }
+    
+    public function sendEmailToOtherTrainers($client_id, $user_id, $subject, $contents) {
+        $ret['success'] = 1;
+        $all_trainers = $this->getClientTrainers($client_id, 'all');
+        if(!$all_trainers['status']['success']) {
+            $ret['success'] = 0;
+            $ret['message'] = $all_trainers['status']['message'];
+            return $ret;
+        }
+        $all_trainers = $all_trainers['data'];
+
+        $other_trainers = array_diff($all_trainers, array($user_id));
+
+        foreach ($other_trainers as $trainer_id) {
+            if(!$trainer_id) continue;
+
+            $trainer_email = &JFactory::getUser($trainer_id)->email;
+
+            $send = $this->sendEmail($trainer_email, $subject, $contents);
+
+            if($send != '1') {
+                $ret['success'] = 0;
+                $ret['message'] =  'Email function error';
+                return $ret;
+            }
+        }
+        return $ret;
+    }
+    
+    
+    public function sendEmailToClient($client_id, $subject, $contents) {
+        $ret['success'] = 1;
+        $client_email = &JFactory::getUser($client_id)->email;
+
+        $send = $this->sendEmail($client_email, $subject, $contents);
+
+        if($send != '1') {
+            $ret['success'] = false;
+            $ret['message'] = 'Email function error';
+            return $ret;
+        }
+        return $ret;
     }
          
          

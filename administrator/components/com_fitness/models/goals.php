@@ -42,6 +42,10 @@ class FitnessModelgoals extends JModelList {
 
             );
         }
+        
+        require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+                
+        $this->helper = new FitnessHelper();
 
         parent::__construct($config);
     }
@@ -650,6 +654,103 @@ class FitnessModelgoals extends JModelList {
         }
         $result = array('status' => $ret, 'data' => $db->loadResult());
         return  json_encode($result);
+    }
+    
+    function commentEmail($data_encoded, $table) {
+        $ret['success'] = 1;
+        $data = json_decode($data_encoded);
+        
+        $goal_id = $data->item_id;
+        
+        $comment_id= $data->id;
+        
+        $user_id = $data->created_by;
+        
+        $goal_type = 'primary';
+        $layout = 'email_goal_comment';
+        $subject = 'New/Unread Message by ' . JFactory::getUser($user_id)->name;
+        if($table == '#__fitness_mini_goal_comments'){
+            $goal_type = 'mini';
+            $layout = 'email_goal_comment_mini';
+        }
+        
+        $helper = $this->helper;
+        
+        $goal = $helper->getGoal($goal_id);
+        
+        if(!$goal['success']) {
+            $ret['status']['success'] = 0;
+            $ret['status']['message'] = $goal['message'];
+            return $ret;
+        }
+    
+        $status = $goal['data']->status;
+        
+        if((($status == $helper::EVELUATING_GOAL_STATUS)) OR (($status == $helper::ASSESSING_GOAL_STATUS))) {
+            $ret['status']['success'] = 1;
+            return $ret;
+        }
+        
+        $user_type = $helper->getUserGroup($user_id);
+        if(!$user_type['success']) {
+            $ret['status']['success'] = 0;
+            $ret['status']['message'] = $user_type['message'];
+            return $ret;
+        }
+        
+        
+        $send_to = 'all_trainers';
+        if(($user_type['data'] == $helper::TRAINERS_USERGROUP) OR ($user_type['data'] == $helper::ADMINISTRATOR_USERGROUP)) {
+            $send_to = 'client_and_other_trainers'; 
+        }
+        
+        
+        $url = JURI::root() .'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $goal_id . '&goal_type=' . $goal_type . '&comment_id=' . $comment_id;
+        
+        $contents = $helper->getContentCurl($url);
+    
+        if(!$contents['success']) {
+            $ret['status']['success'] = 0;
+            $ret['status']['message'] = $contents['message'];
+            return $ret;
+        }
+        
+        $contents = $contents['data'];
+        
+        //sent to all trainers
+        if($send_to == 'all_trainers') {
+            $trainers_sent = $helper->sendEmailToTrainers($user_id, 'all', $subject, $contents);
+            if(!$trainers_sent['success']) {
+                $ret['status']['success'] = 0;
+                $ret['status']['message'] = $trainers_sent['message'];
+                return $ret;
+            }
+        }
+        
+        if($send_to == 'client_and_other_trainers') {
+            //send to client
+            $client_id = $goal['data']->user_id;
+ 
+            $client_sent = $helper->sendEmailToClient($client_id, $subject, $contents);
+            if(!$client_sent['success']) {
+                $ret['status']['success'] = 0;
+                $ret['status']['message'] = $client_sent['message'];
+                return $ret;
+            }
+
+            //  send to other trainers
+            $other_trainers_sent = $helper->sendEmailToOtherTrainers($client_id, $user_id, $subject, $contents);
+               
+            if(!$other_trainers_sent['success']) {
+                $ret['status']['success'] = 0;
+                $ret['status']['message'] = $other_trainers_sent['message'];
+                return $ret;
+            }
+        }
+        
+        $result = array('status' => $ret, 'data' => $data);
+        return  $result;
+   
     }
 
 }

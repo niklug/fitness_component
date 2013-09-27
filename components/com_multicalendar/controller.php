@@ -49,11 +49,12 @@ class MultiCalendarController extends JController
                 
                 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
                 
-                $this->helper = new FitnessHelper();
+                $helper = new FitnessHelper();
+                $this->helper = $helper;
                 
-                $this->evaluating_status = '4';
-                $this->inprogress_status = '5';
-                $this->assessing_status = '6';
+                $this->evaluating_status = $helper::EVELUATING_GOAL_STATUS;
+                $this->inprogress_status = $helper::INPROGRESS_GOAL_STATUS;
+                $this->assessing_status = $helper::ASSESSING_GOAL_STATUS;
                 
                 
 		if(JRequest::getCmd('view') === 'insert') {

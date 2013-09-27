@@ -33,8 +33,9 @@
                 var comment_obj = output;
                 var comment_html = self.createCommentTemplate(comment_obj);
                 comment_wrapper.replaceWith(comment_html);
-                alert('fuck');
-                //console.log(comment_obj);
+                // send comment email
+                self.commentEmail(comment_obj);
+                
            });
         });
 
@@ -60,7 +61,8 @@
         });
 
     }
-
+    
+    
     Comments.prototype.generateHtml = function() {
         var html = 'QUESTIONS / COMMENTS / INSTRUCTIONS';
         html += '<div id="comments_wrapper_' + this.sub_item_id + '">';
@@ -135,7 +137,7 @@
               },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                alert("error savePlanComment");
+                alert("error saveComment");
             }
         }); 
     }
@@ -165,7 +167,7 @@
                 },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                alert("error deletePlanComment");
+                alert("error deleteComment");
             }
         }); 
     }
@@ -197,10 +199,25 @@
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                alert("error populatePlanComments");
+                alert("error populateComments");
             }
         }); 
     }
+    
+    
+    Comments.prototype.commentEmail = function(comment_obj) {
+
+        var data = comment_obj;
+        var url = this.options.fitness_administration_url
+        var view = 'goals';
+        var task = 'commentEmail';
+        var table = this.options.db_table;;
+        
+        $.AjaxCall(data, url, view, task, table, function(output) {
+            console.log(output);
+        });
+    }
+    
     // Add the  function to the top level of the jQuery object
     $.comments = function(options, item_id, sub_item_id) {
 
