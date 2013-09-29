@@ -659,18 +659,18 @@ class FitnessModelgoals extends JModelList {
     function commentEmail($data_encoded, $table) {
         $ret['success'] = 1;
         $data = json_decode($data_encoded);
-        
+
         $goal_id = $data->item_id;
         
         $comment_id= $data->id;
         
         $user_id = $data->created_by;
-        
-        $goal_type = 'primary';
+        // 1-> Primary Goal; 2 -> Mini Goal
+        $goal_type = '1';
         $layout = 'email_goal_comment';
         $subject = 'New/Unread Message by ' . JFactory::getUser($user_id)->name;
         if($table == '#__fitness_mini_goal_comments'){
-            $goal_type = 'mini';
+            $goal_type = '2';
             $layout = 'email_goal_comment_mini';
         }
         

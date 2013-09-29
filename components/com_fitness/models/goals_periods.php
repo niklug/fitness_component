@@ -11,6 +11,8 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
 
+// connect backend model
+require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'goals.php';
 /**
  * Methods supporting a list of Fitness_goals records.
  */
@@ -169,9 +171,6 @@ class FitnessModelgoals_periods extends JModelList {
     
     
     public function populateGoals($data_encoded) {
-
-        require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'goals.php';
-
         $model_backend = new FitnessModelgoals();
 
         $user = &JFactory::getUser();
@@ -183,11 +182,19 @@ class FitnessModelgoals_periods extends JModelList {
     
     public function checkOverlapDate($data_encoded, $table) {
 
-        require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'goals.php';
-
         $model_backend = new FitnessModelgoals();
 
         $data = $model_backend->checkOverlapDate($data_encoded, $table);
+
+        return $data; 
+    }
+    
+    
+    public function commentEmail($data_encoded, $table) {
+
+        $model_backend = new FitnessModelgoals();
+
+        $data = $model_backend->commentEmail($data_encoded, $table);
 
         return $data; 
     }

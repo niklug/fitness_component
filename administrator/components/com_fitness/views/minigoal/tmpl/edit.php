@@ -94,7 +94,8 @@ $primary_goal = $this->backend_list_model->getGoal($primary_goal_id);
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_mini_goal_comments',
-            'read_only' : false
+            'read_only' : false,
+            'anable_comment_email' : true
         }
         
         // comments

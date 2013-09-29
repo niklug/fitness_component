@@ -33,8 +33,11 @@
                 var comment_obj = output;
                 var comment_html = self.createCommentTemplate(comment_obj);
                 comment_wrapper.replaceWith(comment_html);
+                
                 // send comment email
-                self.commentEmail(comment_obj);
+                if(self.options.anable_comment_email !== 'undefined' && self.options.anable_comment_email == true) {
+                    self.commentEmail(comment_obj);
+                }
                 
            });
         });

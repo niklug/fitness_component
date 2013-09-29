@@ -723,7 +723,8 @@ function getTrainingPeriods() {
                     'fitness_administration_url' : this.model.attributes.fitness_frontend_url,
                     'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : this.model.attributes.goals_comments_db_table,
-                    'read_only' : true
+                    'read_only' : true,
+                    'anable_comment_email' : true
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
                 
@@ -738,7 +739,8 @@ function getTrainingPeriods() {
                     'fitness_administration_url' : this.model.attributes.fitness_frontend_url,
                     'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : this.model.attributes.minigoals_comments_db_table,
-                    'read_only' : true
+                    'read_only' : true,
+                    'anable_comment_email' : true
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
                 
