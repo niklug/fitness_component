@@ -47,6 +47,11 @@ class FitnessViewClients extends JView {
         FitnessHelper::addSubmenu('Assessments', 'assessments');
         FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
         FitnessHelper::addSubmenu('Settings', 'settings');
+        
+        $document = &JFactory::getDocument();
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+
 
         parent::display($tpl);
     }

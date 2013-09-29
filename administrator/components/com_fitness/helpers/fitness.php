@@ -233,10 +233,14 @@ class FitnessHelper
         }
         $trainers = $trainers_data['data'];
         
+        $emails = array();
+        
         foreach ($trainers as $trainer_id) {
             if(!$trainer_id) continue;
             
             $trainer_email = &JFactory::getUser($trainer_id)->email;
+            
+            $emails[] = $trainer_email;
                 
             $send = $this->sendEmail($trainer_email, $subject, $contents);
             
@@ -246,6 +250,9 @@ class FitnessHelper
                 return $ret;
             }
         }
+        
+        $ret['message'] =  $emails;
+        
         return $ret;
     }
     
@@ -289,9 +296,11 @@ class FitnessHelper
             $ret['message'] = 'Email function error';
             return $ret;
         }
+        
+        $ret['message'] = array($client_email);
+                
         return $ret;
     }
-         
-         
+ 
 }
 

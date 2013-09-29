@@ -1657,11 +1657,6 @@ function sendGoalEmail($method) {
             $send_to_client = false;
             $send_to_trainer = true;
             break;
-        case 'sendGoalCommentEmail':
-            $subject = 'New/Unread Message by [comment author name]';
-            $layout = 'email_goal_comment';
-            $goal_type = '1';
-            break;
         
         //mini
         case 'sendGoalPengingMiniEmail':
@@ -1697,11 +1692,6 @@ function sendGoalEmail($method) {
             $send_to_client = false;
             $send_to_trainer = true;
             break;
-        case 'sendGoalCommentMiniEmail':
-            $subject = 'New/Unread Message by [comment author name]';
-            $layout = 'email_goal_comment_mini';
-            $goal_type = '2';
-            break;
         default:
             break;
     }
@@ -1731,6 +1721,7 @@ function sendGoalEmail($method) {
         return $ret;
     }
 
+    $emails = array();
     //send to client
     if($send_to_client) {
         $client_sent = $helper->sendEmailToClient($client_id, $subject, $contents);
@@ -1739,6 +1730,7 @@ function sendGoalEmail($method) {
             $ret['message'] = $client_sent['message'];
             return $ret;
         }
+        $emails = array_merge($emails, $client_sent['message']);
     }
     
         
@@ -1750,10 +1742,12 @@ function sendGoalEmail($method) {
             $ret['message'] = $trainers_sent['message'];
             return $ret;
         } 
+        $emails = array_merge($emails, $trainers_sent['message']);
     }
     
+    $emails = implode(', ', $emails);
     $ret['success'] = true;
-    $ret['message'] = $email;
+    $ret['message'] = $emails;
     return $ret;
 }
 

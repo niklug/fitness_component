@@ -137,7 +137,9 @@
             },
             dataType : 'json',
             success : function(response) {
+                //console.log(response);
                 if(response.success) {
+                    
                     var emails = response.message.split(',');
 
                     var message = 'Emails were sent to: ' +  "</br>";

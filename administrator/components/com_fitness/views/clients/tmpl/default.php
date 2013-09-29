@@ -234,33 +234,14 @@ $saveOrder	= $listOrder == 'a.ordering';
 </form>
 
 <script type="text/javascript">
-    function getScript(url,success) {
-        var script = document.createElement('script');
-        script.src = url;
-        var head = document.getElementsByTagName('head')[0],
-        done = false;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState
-                || this.readyState == 'loaded'
-                || this.readyState == 'complete')) {
-                done = true;
-                success();
-                script.onload = script.onreadystatechange = null;
-                head.removeChild(script);
-            }
-        };
-        head.appendChild(script);
-    }
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        $(document).ready(function(){
-            $("#reset_filtered").click(function(){
-                var form = $("#adminForm");
-                form.find("select").val('');
-                form.find("input").val('');
-                form.submit();
-            });
- 
+
+    (function($) {
+        $("#reset_filtered").click(function(){
+            var form = $("#adminForm");
+            form.find("select").val('');
+            form.find("input").val('');
+            form.submit();
         });
-    });
+ 
+    })($js);
 </script>

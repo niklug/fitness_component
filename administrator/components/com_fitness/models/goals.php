@@ -629,13 +629,13 @@ class FitnessModelgoals extends JModelList {
         $db = &JFactory::getDBo();
         
         $query = "SELECT * FROM $table WHERE " 
-            . " ( ( " . $start_date_column . "  <  "  . $db->quote($start_date) . " AND "
+            . " ( ( " . $start_date_column . "  <=  "  . $db->quote($start_date) . " AND "
             . $end_date_column . "  >=  "  . $db->quote($start_date) . " ) OR "
                 
-            . " ( " . $start_date_column . "  <  "  . $db->quote($end_date) . " AND "
+            . " ( " . $start_date_column . "  <=  "  . $db->quote($end_date) . " AND "
             . $end_date_column . "  >=  "  . $db->quote($end_date) . " ) OR "  
             
-            . " ( " . $start_date_column . "  >  "  . $db->quote($start_date) . " AND " 
+            . " ( " . $start_date_column . "  >=  "  . $db->quote($start_date) . " AND " 
             . $end_date_column . "  <=  "  . $db->quote($end_date) . " ) ) " .
                 
             "  AND state='1' ";

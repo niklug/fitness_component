@@ -16,101 +16,7 @@ JHtml::_('behavior.keepalive');
 $document = JFactory::getDocument();
 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 ?>
-<script type="text/javascript">
-    function getScript(url,success) {
-        var script = document.createElement('script');
-        script.src = url;
-        var head = document.getElementsByTagName('head')[0],
-        done = false;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState
-                || this.readyState == 'loaded'
-                || this.readyState == 'complete')) {
-                done = true;
-                success();
-                script.onload = script.onreadystatechange = null;
-                head.removeChild(script);
-            }
-        };
-        head.appendChild(script);
-    }
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        //jQuery = jQuery.noConflict();
-        $(document).ready(function(){
 
-            Joomla.submitbutton = function(task)
-            {
-                if (task == 'client.cancel') {
-                    Joomla.submitform(task, document.getElementById('client-form'));
-                }
-                else{
-                    
-                    if (task != 'client.cancel' && document.formvalidator.isValid(document.id('client-form'))) {
-                        
-                        Joomla.submitform(task, document.getElementById('client-form'));
-                    }
-                    else {
-                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                    }
-                }
-            }
-            
-            //////////////////////////////////////////
-            $('#user_group').change(function(){
-               var user_group = $(this).find(':selected').val();
-               getClientsByGroup(user_group);
-            });
-            
-            
-            function getClientsByGroup(user_group) {
-                var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
-                $.ajax({
-                    type : "POST",
-                    url : url,
-                    data : {
-                       view : 'goals',
-                       format : 'text',
-                       task : 'getClientsByGroup',
-                       user_group : user_group
-                    },
-                    dataType : 'json',
-                    success : function(response) {
-                        if(!response.status.success) {
-                            alert(response.status.message);
-                            $("#jform_user_id").html('');
-                            return;
-                        }
-                        var client_id = '<?php echo $this->item->user_id; ?>';
-                        
-                        var html = '<option  value="">-Select-</option>';
-                        $.each(response.data, function(index, value) {
-                             if(index) {
-                                var selected = '';
-                                if(client_id == index) {
-                                    selected = 'selected';
-                                }
-                                html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
-                            }
-                        });
-                        $("#jform_user_id").html(html);
-                     
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown)
-                    {
-                        alert("error");
-                    }
-                });
-            }
-
-            var user_group = $("#user_group").find(':selected').val();
-            if(user_group) {
-                getClientsByGroup(user_group);
-            }
-            
-        });
-    });
-</script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="client-form" class="form-validate">
     <div class="width-60 fltlft">
@@ -150,16 +56,13 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     <select id="jform_user_id" class="inputbox" name="jform[user_id]"></select>
                 </li>
 
-				<li><?php echo $this->form->getLabel('state'); ?>
-				<?php echo $this->form->getInput('state'); ?></li>
-                               
-                       
-                                    <li><?php echo $this->form->getLabel('primary_trainer'); ?>
-                                    <?php echo $this->form->getInput('primary_trainer'); ?></li>
-                                    <li><?php echo $this->form->getLabel('other_trainers'); ?>
-                                    <?php echo $this->getInput($this->item->id); ?></li>
-                     
+                <li><?php echo $this->form->getLabel('state'); ?>
+                <?php echo $this->form->getInput('state'); ?></li>
 
+                <li><?php echo $this->form->getLabel('primary_trainer'); ?>
+                <?php echo $this->form->getInput('primary_trainer'); ?></li>
+                <li><?php echo $this->form->getLabel('other_trainers'); ?>
+                <?php echo $this->getInput($this->item->id); ?></li>
 
             </ul>
         </fieldset>
@@ -171,13 +74,86 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 
-    <style type="text/css">
-        /* Temporary fix for drifting editor fields */
-        .adminformlist li {
-            clear: both;
-        }
-    </style>
 </form>
+
+<script type="text/javascript">
+    (function($) {
+            //////////////////////////////////////////
+            $('#user_group').change(function(){
+               var user_group = $(this).find(':selected').val();
+               getClientsByGroup(user_group);
+            });
+
+
+            function getClientsByGroup(user_group) {
+                var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
+                $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                       view : 'goals',
+                       format : 'text',
+                       task : 'getClientsByGroup',
+                       user_group : user_group
+                    },
+                    dataType : 'json',
+                    success : function(response) {
+                        if(!response.status.success) {
+                            alert(response.status.message);
+                            $("#jform_user_id").html('');
+                            return;
+                        }
+                        var client_id = '<?php echo $this->item->user_id; ?>';
+
+                        var html = '<option  value="">-Select-</option>';
+                        $.each(response.data, function(index, value) {
+                             if(index) {
+                                var selected = '';
+                                if(client_id == index) {
+                                    selected = 'selected';
+                                }
+                                html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
+                            }
+                        });
+                        $("#jform_user_id").html(html);
+
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
+                    }
+                });
+            }
+
+            var user_group = $("#user_group").find(':selected').val();
+            if(user_group) {
+                getClientsByGroup(user_group);
+            }
+
+
+
+
+            Joomla.submitbutton = function(task)
+            {
+                if (task == 'client.cancel') {
+                    Joomla.submitform(task, document.getElementById('client-form'));
+                }
+                else{
+
+                    if (task != 'client.cancel' && document.formvalidator.isValid(document.id('client-form'))) {
+
+                        Joomla.submitform(task, document.getElementById('client-form'));
+                    }
+                    else {
+                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+                    }
+                }
+            }
+        
+        })($js);
+
+
+</script>
 
 
 
