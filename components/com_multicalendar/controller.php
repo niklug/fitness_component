@@ -77,10 +77,10 @@ class MultiCalendarController extends JController
                 }
                 
                 if ($task == 'status_cron') {
-                    $this->inprogressStatusController('');
-                    $this->inprogressStatusController('mini');
-                    $this->assessingStatusController('');
-                    $this->assessingStatusController('mini');
+                    $this->inprogressStatusController('1');
+                    $this->inprogressStatusController('2');
+                    $this->assessingStatusController('1');
+                    $this->assessingStatusController('2');
                 }
                 
                 if ($task == 'confirm_email') {
@@ -136,7 +136,7 @@ class MultiCalendarController extends JController
             } catch (Exception $e) {
                 $message = $e->getMessage();
                 
-                $this->sendEmail($this->administrator_email, 'email reminder error', $message);
+                $this->helper->sendEmail($this->administrator_email, 'email reminder error', $message);
 
                 echo $message;
 
@@ -165,7 +165,13 @@ class MultiCalendarController extends JController
 
                 $url = JURI::base() .'index.php?option=com_multicalendar&view=pdf&layout=email_reminder&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
 
-                $contents = $this->getContentCurl($url);
+                $contents = $this->helper->getContentCurl($url);
+                $contents = $contents['data'];
+                if(!$contents['success']) {
+                    echo $contents['message'];
+                    $this->helper->sendEmail($this->administrator_email, 'email reminder error', $contents['message']);
+                    return;
+                }
 
                 $email = JFactory::getUser($client_id)->email;
 
@@ -174,26 +180,11 @@ class MultiCalendarController extends JController
                 if($send == '1') {
                     $this->setSentEmailStatus($event_id, $email, $client_id);
                 } else {
-                    $this->sendEmail($this->administrator_email, 'email reminder error', $send);
+                    $this->helper->sendEmail($this->administrator_email, 'email reminder error', $send);
                     echo $send . "<br/>";
                 }
             }
 
-        }
-        
-        
-        public function getContentCurl($url) {
-                if(!function_exists('curl_version')) {
-                    $this->sendEmail($this->administrator_email, 'email reminder error', 'cURL not anabled');
-                    die('cURL not anabled');
-                }
-                $ch = curl_init();
-                curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-                curl_setopt($ch, CURLOPT_URL,$url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                $contents = curl_exec ($ch);
-                curl_close ($ch);
-                return $contents;
         }
 
         
@@ -215,7 +206,7 @@ class MultiCalendarController extends JController
             } catch (Exception $e) {
                 $message = $e->getMessage();
                 
-                $this->sendEmail($this->administrator_email, 'email reminder error', $message);
+                $this->helper->sendEmail($this->administrator_email, 'email reminder error', $message);
 
                 echo $message;
 
@@ -226,37 +217,6 @@ class MultiCalendarController extends JController
             return $client_ids;
         }
 
-        /**
-         * standard send email function
-         * @param type $recipient
-         * @param type $Subject
-         * @param type $body
-         */
-        public function sendEmail($recipient, $Subject, $body) {
-
-            $mailer = & JFactory::getMailer();
-
-            $config = new JConfig();
-
-            $sender = array($config->mailfrom, $config->fromname);
-
-            $mailer->setSender($sender);
-
-            //$recipient = 'npkorban@mail.ru';
-
-            $mailer->addRecipient($recipient);
-
-            $mailer->setSubject($Subject);
-
-            $mailer->isHTML(true);
-
-            $mailer->setBody($body);
-
-            $send = & $mailer->Send();
-
-            return $send;
-         }
-        
         
         /**
          * 
@@ -272,7 +232,7 @@ class MultiCalendarController extends JController
             } catch (Exception $e) {
                 $message = $e->getMessage();
                 
-                $this->sendEmail($this->administrator_email, 'email reminder error', $message);
+                $this->helper->sendEmail($this->administrator_email, 'email reminder error', $message);
 
                 echo $message;
 
@@ -300,7 +260,7 @@ class MultiCalendarController extends JController
 
                 $message .= "<br/> <br/> <strong style='color:red'>" .$e->getMessage() . "</strong><br/>";
 
-                $this->sendEmail($this->administrator_email, 'email reminder error', $message);
+                $this->helper->sendEmail($this->administrator_email, 'email reminder error', $message);
 
                 echo $message;
 
@@ -326,7 +286,7 @@ class MultiCalendarController extends JController
 
                 $message .= "<br/> <br/> <strong style='color:red'>" .$e->getMessage() . "</strong><br/>";
 
-                $this->sendEmail($this->administrator_email, 'email reminder error', $message);
+                $this->helper->sendEmail($this->administrator_email, 'email reminder error', $message);
 
                 echo $message;
 
@@ -346,48 +306,75 @@ class MultiCalendarController extends JController
         } 
         
         // status
-        private function inprogressStatusController($goals_type) {
-            
+        private function inprogressStatusController($goal_type) {
+            $db = & JFactory::getDBO();
             $table = '#__fitness_goals';
-            $layout = 'sendGoalInprogressEmail';
+            $layout = 'email_goal_inprogress';
+            $subject = 'Primary Goal Scheduled';
             $data = new stdClass();
             $data->status = $this->inprogress_status;
             
-            if($goals_type == 'mini') {
-                $table = '#__fitness_mini_goals';
-                $layout = 'sendGoalInprogressMiniEmail';
-            }
-                    
-            $db = & JFactory::getDBO();
-            $query = "SELECT id  FROM  $table
+            $query = "SELECT id, user_id  FROM  $table
                 WHERE (status=". $db->quote($this->evaluating_status) ." OR status='' OR status=NULL)
                 AND start_date <= " . $db->quote($this->current_date) . "
                 AND state='1'
             ";
-                
+            
+            if($goal_type == '2') {
+                $table = '#__fitness_mini_goals';
+                $layout = 'email_goal_inprogress_mini';
+                $subject = 'Mini Goal Scheduled';
+                $query = "SELECT mg.id, pg.user_id  FROM  $table AS mg
+                    LEFT JOIN #__fitness_goals AS pg ON mg.primary_goal_id=pg.id
+                    WHERE (mg.status=". $db->quote($this->evaluating_status) ." OR mg.status='' OR mg.status=NULL)
+                    AND mg.start_date <= " . $db->quote($this->current_date) . "
+                    AND mg.state='1'
+                ";
+            }
+                    
             $db->setQuery($query);
             try {
                 $db->query();
                 $goals = $db->loadObjectList();
-                var_dump($goals);
+                
                 foreach ($goals as $goal) {
                     if(!$goal) continue;
                     $data->id = $goal->id;
-                    var_dump($data);
                     $updated = $db->updateObject($table, $data, 'id');
                     if (!$updated) {
                          die($db->stderr());
                     }
-                    $url = JURI::root() .'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component';
-                    $contents .= $this->getContentCurl($url);
+                    $url = JURI::root() .'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $goal->id . '&goal_type=' . $goal_type;
+                    $contents = $this->helper->getContentCurl($url);
+                    $contents = $contents['data'];
+                    if(!$contents['success']) {
+                        echo $contents['message'];
+                        $this->helper->sendEmail($this->administrator_email, 'email status error', $contents['message']);
+                        return;
+                    }
+                    // send to client
+                    $client_sent = $this->helper->sendEmailToClient($goal->user_id, $subject, $contents);
+                    if(!$client_sent['success']) {
+                        echo  $client_sent['message'];
+                        $this->helper->sendEmail($this->administrator_email, 'email to client status error', $client_sent['message']);
+                        return;
+                    }
+                    echo "<br/>" .  'Sent to client: ' .  implode(',', $client_sent['message']) . "<br/>"; 
+
+                    //sent to all trainers
+                    $trainers_sent = $this->helper->sendEmailToTrainers($goal->user_id, 'all', $subject, $contents);
+                    if(!$trainers_sent['success']) {
+                        echo $trainers_sent['message'];
+                        $this->helper->sendEmail($this->administrator_email, 'email to trainer status error', $trainers_sent['message']);
+                    }
+                    echo 'Sent to trainers: ' .  implode(',', $trainers_sent['message']) . "<br/>"; 
                 }
-                echo $contents;
                 
             } catch (Exception $e) {
 
                 $message .= "<br/> <br/> <strong style='color:red'>" . $e->getMessage() . "</strong><br/>";
 
-                $this->sendEmail($this->administrator_email, 'email reminder error', $message);
+                $this->helper->sendEmail($this->administrator_email, 'Status Controller error', $message);
 
                 echo $message;
 
@@ -397,25 +384,32 @@ class MultiCalendarController extends JController
     }
     
     
-    private function assessingStatusController($goals_type) {
-            
+    private function assessingStatusController($goal_type) {
+            $db = & JFactory::getDBO();
             $table = '#__fitness_goals';
-            $layout = 'sendGoalAssessingEmail';
+            $layout = 'email_goal_assessing';
+            $subject = 'Assess Primary Goal';
             $data = new stdClass();
             $data->status = $this->assessing_status;
             
-            if($goals_type == 'mini') {
-                $table = '#__fitness_mini_goals';
-                $layout = 'sendGoalAssessingMiniEmail';
-            }
-                    
-            $db = & JFactory::getDBO();
-            $query = "SELECT id  FROM  $table
+            $query = "SELECT id, user_id  FROM  $table
                 WHERE (status=". $db->quote($this->inprogress_status) .")
                 AND deadline <= " . $db->quote($this->current_date) . "
                 AND state='1'
             ";
-                
+            
+            if($goal_type == '2') {
+                $table = '#__fitness_mini_goals';
+                $layout = 'email_goal_assessing_mini';
+                $subject = 'Assess Mini Goal';
+                $query = "SELECT mg.id, pg.user_id  FROM  $table AS mg
+                    LEFT JOIN #__fitness_goals AS pg ON mg.primary_goal_id=pg.id
+                    WHERE (mg.status=". $db->quote($this->inprogress_status) .")
+                    AND mg.deadline <= " . $db->quote($this->current_date) . "
+                    AND mg.state='1'
+                ";
+            }
+                    
             $db->setQuery($query);
             try {
                 $db->query();
@@ -424,21 +418,41 @@ class MultiCalendarController extends JController
                 foreach ($goals as $goal) {
                     if(!$goal) continue;
                     $data->id = $goal->id;
-                    var_dump($data);
                     $updated = $db->updateObject($table, $data, 'id');
                     if (!$updated) {
                          die($db->stderr());
                     }
-                    $url = JURI::root() .'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component';
-                    $contents .= $this->getContentCurl($url);
+                    $url = JURI::root() .'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $goal->id . '&goal_type=' . $goal_type;
+                    $contents = $this->helper->getContentCurl($url);
+                    $contents = $contents['data'];
+                    if(!$contents['success']) {
+                        echo $contents['message'];
+                        $this->helper->sendEmail($this->administrator_email, 'email status error', $contents['message']);
+                        return;
+                    }
+                    // send to client
+                    $client_sent = $this->helper->sendEmailToClient($goal->user_id, $subject, $contents);
+                    if(!$client_sent['success']) {
+                        echo  $client_sent['message'];
+                        $this->helper->sendEmail($this->administrator_email, 'email to client status error', $client_sent['message']);
+                        return;
+                    }
+                    echo "<br/>" .  'Sent to client: ' .  implode(',', $client_sent['message']) . "<br/>"; 
+
+                    //sent to all trainers
+                    $trainers_sent = $this->helper->sendEmailToTrainers($goal->user_id, 'all', $subject, $contents);
+                    if(!$trainers_sent['success']) {
+                        echo $trainers_sent['message'];
+                        $this->helper->sendEmail($this->administrator_email, 'email to trainer status error', $trainers_sent['message']);
+                    }
+                    echo 'Sent to trainers: ' .  implode(',', $trainers_sent['message']) . "<br/>"; 
                 }
-                echo $contents;
                 
             } catch (Exception $e) {
 
                 $message .= "<br/> <br/> <strong style='color:red'>" . $e->getMessage() . "</strong><br/>";
 
-                $this->sendEmail($this->administrator_email, 'email reminder error', $message);
+                $this->helper->sendEmail($this->administrator_email, 'Status Controller error', $message);
 
                 echo $message;
 
