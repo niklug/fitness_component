@@ -173,7 +173,7 @@ class FitnessHelper
             $query = "SELECT pg.user_id, c.primary_trainer AS trainer_id FROM #__fitness_mini_goals AS mg
                 LEFT JOIN #__fitness_goals AS pg ON pg.id=mg.primary_goal_id
                 LEFT JOIN #__fitness_clients AS c ON c.user_id=pg.user_id
-                WHERE mg.id='$id' AND pg.state='1'
+                WHERE mg.id='$id' AND mg.state='1'
             ";
         }
         $db->setQuery($query);
@@ -190,10 +190,10 @@ class FitnessHelper
         return $result;
     }
     
-    public function getGoal($id) {
+    public function getGoal($id, $table) {
         $ret['success'] = true;
         $db = &JFactory::getDBo();
-        $query = "SELECT * FROM #__fitness_goals WHERE id='$id'";
+        $query = "SELECT * FROM $table WHERE id='$id'";
         $db->setQuery($query);
         if (!$db->query()) {
             $ret['success'] = false;

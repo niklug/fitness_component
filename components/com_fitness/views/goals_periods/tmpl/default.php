@@ -100,10 +100,12 @@ function getTrainingPeriods() {
                 
                 var task = 'addGoal';
                 var table = this.get('goals_db_table');
+                data.status = '4';
                 
                 if(goal_type == 'mini_goal') {
                     var table = this.get('minigoals_db_table');
-                    data.primary_goal_id = this.get('primary_goal_id')
+                    data.primary_goal_id = this.get('primary_goal_id');
+                    
                 }
                 
                 var self = this;
@@ -119,8 +121,12 @@ function getTrainingPeriods() {
             sendGoalEmail : function() {
                 var goal_status = $.status({'calendar_frontend_url' : this.attributes.calendar_frontend_url});
                 var id = this.get('saved_item').id;
-                //console.log(id);
-                goal_status.sendEmail(id, 'GoalEvaluating');
+                var email = 'GoalEvaluating';
+                var goal_type = this.get('goal_type');
+                if(goal_type == 'mini_goal') {
+                    email = 'GoalEvaluatingMini';
+                }
+                goal_status.sendEmail(id, email);
             },
             populateGoals : function() {
                 var data = {};
@@ -186,6 +192,10 @@ function getTrainingPeriods() {
                 if((status == '4') || (status == '0') || (status == '')) return false;
                 return true;
             },
+            statusAssessing : function(status) {
+                if((status == '6')) return true;
+                return false;
+            },
             
             checkLocalStorage : function() {
                 if(typeof(Storage)==="undefined") {
@@ -237,6 +247,7 @@ function getTrainingPeriods() {
             },
             setMiniGoalsGraphData : function(mini_goals) {
                 var data = {};
+                data.mini_goals_start_date = this.x_axisDateArray(mini_goals, 1, 'start_date');
                 data.mini_goals = this.x_axisDateArray(mini_goals, 1, 'deadline');
                 data.client_mini = this.graphItemDataArray(mini_goals, 'client_name');
                 data.goal_mini = this.graphItemDataArray(mini_goals, 'mini_goal_name');
@@ -244,6 +255,7 @@ function getTrainingPeriods() {
                 data.finish_mini = this.graphItemDataArray(mini_goals, 'deadline');
                 data.status_mini = this.graphItemDataArray(mini_goals, 'status');
                 data.training_period_colors = this.graphItemDataArray(mini_goals, 'training_period_color');
+                
                 return data;
             },
             x_axisDateArray : function(data, y_value, field) {
@@ -290,16 +302,13 @@ function getTrainingPeriods() {
                 var d8 = [[current_time, 3]];
                 // Training Periods colors
                 var training_period_colors = client_data.training_period_colors;
+       
                  // Training periods 
                 var markings = []; 
-                for(var i = 0; i < d2.length - 1; i++) {
-                    markings[i] =  { xaxis: { from: d2[i][0], to: d2[i + 1][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i+1]};
+                for(var i = 0; i < d2.length; i++) {
+                    markings[i] =  { xaxis: { from: client_data.mini_goals_start_date[i][0], to: d2[i][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i]};
                 }
-                // first Primary Goal marking
-                var first_mini_goal_start_date = new Date(client_data.start_mini[0]).getTime();
-                if(first_mini_goal_start_date) {
-                    markings[markings.length] =  { xaxis: { from: first_mini_goal_start_date, to: d2[0][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[0]};
-                }
+
         
                 var data = [
                     {label: "Primary Goal", data: d1},
@@ -499,13 +508,16 @@ function getTrainingPeriods() {
                        break;
                     case '3' :
                        status_name = 'Incomplete';
+                       break;
                     case '4' :
                        status_name = 'Evaluating';
                        break;
                     case '5' :
                        status_name = 'In Progress';
+                       break;
                     case '6' :
                        status_name = 'Assessing';
+                       break;
                     default :
                        status_name = 'Evaluating';
                        break;

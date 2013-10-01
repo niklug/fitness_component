@@ -32,7 +32,7 @@
 <script type="text/template" id="default_goal_list_template">
     <div style="width:100%;text-align: right;">
         <select name="list_type" id="list_type">
-            <option value="current">Current Goals</option>
+            <option value="current">Current/Future Goals</option>
             <option value="previous">Previous Goals</option>
             <option value="current_primary_goal">Currrent Primary Goal</option>
             <option value="0">All Goals</option>
@@ -63,7 +63,6 @@
                 <option value="all">All</option>
             </select> 
         </div>
-        <div style="padding:3px;" id="emais_sended"></div>
     </div>
 </script>
 
@@ -150,7 +149,7 @@
                             </td>
                             <td class="grey_title">
                                 <%= model.setDefaultText(item.status, item.primary_goal_name) %>
-                                <% if(model.statusReviewed(item.status)) { %>
+                                <% if(model.statusReviewed(item.status) && !model.statusAssessing(item.status)) { %>
                                     <div style="width:50px;float: right;">
                                         <a data-id="<%= item.id %>" style="cursor: pointer;" class="open_goal" onclick="javascript:void(0)">[OPEN]</a>
                                     </div>
@@ -214,7 +213,7 @@
                                         </td>
                                         <td class="grey_title">
                                             <%= model.setDefaultText(item.status, item.mini_goal_name) %>
-                                                <% if(model.statusReviewed(item.status)) { %>
+                                                <% if(model.statusReviewed(item.status) && !model.statusAssessing(item.status)) { %>
                                                 <div style="width:50px;float: right;">
                                                     <a data-id="<%= item.id %>" style="cursor: pointer;" class="open_mini_goal" onclick="javascript:void(0)">[OPEN]</a>
                                                 </div>

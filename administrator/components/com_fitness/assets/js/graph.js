@@ -77,6 +77,7 @@
 
     function setMiniGoalsGraphData(mini_goals) {
         var data = {};
+        data.mini_goals_start_date = x_axisDateArray(mini_goals, 1, 'start_date');
         data.mini_goals = x_axisDateArray(mini_goals, 1, 'deadline');
         data.client_mini = graphItemDataArray(mini_goals, 'client_name');
         data.goal_mini = graphItemDataArray(mini_goals, 'mini_goal_name');
@@ -178,18 +179,12 @@
         
         var training_period_colors = client_data.training_period_colors;
 
-        // Training periods 
+       // Training periods 
         var markings = []; 
-        for(var i = 0; i < d2.length - 1; i++) {
-            markings[i] =  { xaxis: { from: d2[i][0], to: d2[i + 1][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i+1]};
+        for(var i = 0; i < d2.length; i++) {
+            markings[i] =  { xaxis: { from: client_data.mini_goals_start_date[i][0], to: d2[i][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i]};
         }
-        // first Primary Goal marking
 
-        var first_mini_goal_start_date = new Date(client_data.start_mini[0]).getTime();
-        if(first_mini_goal_start_date) {
-            markings[markings.length] =  { xaxis: { from: first_mini_goal_start_date, to: d2[0][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[0]};
-        }
-        
 
         var d3 = client_data.personal_training_xaxis;
 
@@ -524,11 +519,16 @@
                break;
             case '3' :
                status_name = 'Incomplete';
+               break;
             case '4' :
                status_name = 'Evaluating';
                break;
             case '5' :
                status_name = 'In Progress';
+               break;
+            case '6' :
+               status_name = 'Assessing';
+               break;
             default :
                status_name = 'Evaluating';
                break;

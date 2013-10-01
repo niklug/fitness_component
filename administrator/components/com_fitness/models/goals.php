@@ -485,7 +485,9 @@ class FitnessModelgoals extends JModelList {
             WHERE pg.user_id='$client_id' AND pg.state='1'";
         
         if($list_type == 'previous') {
-            $query .= " AND pg.deadline < " . $db->quote($current_date);
+            $query .= " AND ( pg.deadline < " . $db->quote($current_date);
+            $query .= " OR (pg.start_date <= " . $db->quote($current_date);
+            $query .= " AND pg.deadline > " . $db->quote($current_date) . " )) ";
         }
         
         if($list_type == 'current') {
@@ -532,7 +534,9 @@ class FitnessModelgoals extends JModelList {
         
         
         if($list_type == 'previous') {
-            $query .= " AND mg.deadline < " . $db->quote($current_date);
+            $query .= " AND ( mg.deadline < " . $db->quote($current_date);
+            $query .= " OR (mg.start_date <= " . $db->quote($current_date);
+            $query .= " AND mg.deadline > " . $db->quote($current_date) . " )) ";
         }
         
         if($list_type == 'current') {
@@ -669,15 +673,17 @@ class FitnessModelgoals extends JModelList {
         $goal_type = '1';
         $layout = 'email_goal_comment';
         $subject = 'New/Unread Message by ' . JFactory::getUser($user_id)->name;
+        $goal_table = '#__fitness_goals';
         if($table == '#__fitness_mini_goal_comments'){
             $goal_type = '2';
             $layout = 'email_goal_comment_mini';
+            $goal_table = '#__fitness_mini_goals';
         }
         
         $helper = $this->helper;
         
-        $goal = $helper->getGoal($goal_id);
-        
+        $goal = $helper->getGoal($goal_id, $goal_table);
+            
         if(!$goal['success']) {
             $ret['status']['success'] = 0;
             $ret['status']['message'] = $goal['message'];
@@ -685,6 +691,7 @@ class FitnessModelgoals extends JModelList {
         }
     
         $status = $goal['data']->status;
+
         
         if((($status == $helper::EVELUATING_GOAL_STATUS)) OR (($status == $helper::ASSESSING_GOAL_STATUS))) {
             $ret['status']['success'] = 1;

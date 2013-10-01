@@ -64,7 +64,7 @@
                 
               label="Status"
               description="" 
-              default="1"   
+              default="4"   
               filter="raw">
             <option value="1">Pending</option>
             <option value="2">Complete</option>

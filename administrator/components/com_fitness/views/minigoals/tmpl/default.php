@@ -123,6 +123,9 @@ if($primary_goal_id) {
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_MINIGOALS_DEADLINE', 'a.deadline', $listDirn, $listOrder); ?>
 				</th>
+                                <th  class="left">
+                                        Edit/View
+                                </th>
 
 
                 <?php if (isset($this->items[0]->state)) { ?>
@@ -190,6 +193,9 @@ if($primary_goal_id) {
 				</td>
 				<td>
 					<?php echo $item->deadline; ?>
+				</td>
+                                <td>
+                                    <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=minigoal.edit&id='.(int) $item->id); ?>">Edit/View </a>
 				</td>
 
 
