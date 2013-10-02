@@ -66,24 +66,7 @@ echo $this->loadTemplate('graph');?>
                         <?php
 				echo JHtml::_('calendar', $selected_to_deadline, 'filter_to_deadline', 'filter_to_deadline', '%Y-%m-%d',  'onchange="this.form.submit();"');
 			?>
-
-
-                        <?php //Filter for the created
-                        $filter_created = JRequest::getVar('filter_created');
-                              ?>
-                        <label class="filter-search-lbl" for="filter_created"><?php echo JText::_('Created: '); ?></label>
-                        <?php
-                                echo JHtml::_('calendar', $filter_created, 'filter_created', 'filter_created', '%Y-%m-%d', 'onchange="this.form.submit();"');
-                        ?>
-
-                        <?php //Filter for the created
-                        $filter_modified = JRequest::getVar('filter_modified');
-                              ?>
-                        <label class="filter-search-lbl" for="filter_modified"><?php echo JText::_('Modified: '); ?></label>
-                        <?php
-                                echo JHtml::_('calendar', $filter_modified, 'filter_modified', 'filter_modified', '%Y-%m-%d', 'onchange="this.form.submit();"');
-                        ?>
-            
+      
 		</div>
             </fieldset>
             <fieldset style="border:none;">
@@ -136,13 +119,15 @@ echo $this->loadTemplate('graph');?>
 				<?php echo JHtml::_('select.options', $group, "value", "text", $this->state->get('filter.group'), true);?>
 			</select>
 		</div>
-            
-            
+
             
                 <?php
                 $goal_status[] = JHTML::_('select.option', '1', 'Pending' );
                 $goal_status[] = JHTML::_('select.option', '2', 'Complete' );
                 $goal_status[] = JHTML::_('select.option', '3', 'Incomplete' );
+                $goal_status[] = JHTML::_('select.option', '4', 'Evaluating' );
+                $goal_status[] = JHTML::_('select.option', '5', 'In Progress' );
+                $goal_status[] = JHTML::_('select.option', '6', 'Assessing' );
  
                 ?>
 
@@ -278,19 +263,19 @@ echo $this->loadTemplate('graph');?>
                                         <?php echo $this->model->status_html($item->id, $item->status, 'status_button') ?>
                                 </td>
 				<td>
-					<?php echo $this->getMiniGoalsList($item->id, 'minigoals'); ?>
+					<?php echo $this->model->getMiniGoalsList($item->id, 'minigoals'); ?>
 				</td>
                                 <td>
-					<?php echo $this->getMiniGoalsList($item->id, 'training_period'); ?>
+					<?php echo $this->model->getMiniGoalsList($item->id, 'training_period'); ?>
 				</td>
                                 <td>
-					<?php echo $this->getMiniGoalsList($item->id, 'start_date'); ?>
+					<?php echo $this->model->getMiniGoalsList($item->id, 'start_date'); ?>
 				</td>
 				<td>
-					<?php echo $this->getMiniGoalsList($item->id, 'deadline'); ?>
+					<?php echo $this->model->getMiniGoalsList($item->id, 'deadline'); ?>
 				</td>
 				<td>
-                                    <?php echo $this->getMinigoalsStatusHtml($item->id); ?>
+                                    <?php echo $this->model->getMinigoalsStatusHtml($item->id); ?>
 					
 				</td>
                                 <td>

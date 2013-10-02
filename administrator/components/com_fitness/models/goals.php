@@ -610,6 +610,91 @@ class FitnessModelgoals extends JModelList {
         return $html;
     }
     
+    
+    
+    function getMiniGoalName($mini_goal_category_id) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT name FROM #__fitness_mini_goal_categories WHERE id='$mini_goal_category_id'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+    }
+    
+    function getTrainingPeriodName($id) {
+            $db = JFactory::getDbo();
+            $sql = "SELECT name FROM #__fitness_training_period WHERE id='$id'";
+            $db->setQuery($sql);
+            if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
+            $result = $db->loadResult();
+            return $result;
+    }
+        
+    
+    function getMiniGoalsList($primary_goal_id, $type) {
+        $db = JFactory::getDbo();
+        $sql = "SELECT DISTINCT id, mini_goal_category_id, training_period_id, start_date, deadline, status FROM #__fitness_mini_goals WHERE primary_goal_id='$primary_goal_id' AND state='1'";
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $ids = $db->loadResultArray(0);
+        $mini_goal_category_ids = $db->loadResultArray(1);
+        $training_period_id = $db->loadResultArray(2);
+        $start_date = $db->loadResultArray(3);
+        $deadlines = $db->loadResultArray(4);
+        $status = $db->loadResultArray(5);
+        
+        if($type == 'status')  return $status;
+        
+        if($type == 'id')  return $ids;
+        
+       if($type == 'training_period') {
+            foreach ($training_period_id as $value) {
+                $html .= $this->getTrainingPeriodName($value) . "<br>";
+            }
+            return $html;
+        }
+        
+        if($type == 'start_date') {
+            foreach ($start_date as $value) {
+                $html .= $value . "<br>";
+            }
+            return $html;
+        }
+        
+        if($type == 'deadline') {
+            foreach ($deadlines as $value) {
+                $html .= $value . "<br>";
+            }
+            return $html;
+        }
+
+        foreach ($mini_goal_category_ids as $value) {
+            $html .= $this->getMiniGoalName($value) . "<br>";
+        }
+        
+        return $html;
+    }
+    
+    function getMinigoalsStatusHtml($primary_goal_id) {
+        $statuses = $this->getMiniGoalsList($primary_goal_id, 'status');
+        $ids = $this->getMiniGoalsList($primary_goal_id, 'id');
+        $i = 0;
+        foreach ($statuses as $status) {
+            $html .= '<div id="status_button_place_mini_' . $ids[$i] .'">';
+            $html .= $this->status_html($ids[$i], $status, 'status_button_mini');
+            $html .= '</div>';
+            
+            $i++;
+        }
+        return $html;
+    }
+    
     /**
      * 
      * @param type $data_encoded {start_date, end_date, start_date_column, end_date_column}

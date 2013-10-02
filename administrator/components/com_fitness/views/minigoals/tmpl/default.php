@@ -124,6 +124,9 @@ if($primary_goal_id) {
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_MINIGOALS_DEADLINE', 'a.deadline', $listDirn, $listOrder); ?>
 				</th>
                                 <th  class="left">
+                                        Status
+                                </th>
+                                <th  class="left">
                                         Edit/View
                                 </th>
 
@@ -194,6 +197,9 @@ if($primary_goal_id) {
 				<td>
 					<?php echo $item->deadline; ?>
 				</td>
+                                <td  id="status_button_place_<?php echo $item->id;?>">
+                                        <?php echo $this->goals_model->status_html($item->id, $item->status, 'status_button') ?>
+                                </td>
                                 <td>
                                     <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=minigoal.edit&id='.(int) $item->id); ?>">Edit/View </a>
 				</td>
@@ -252,6 +258,41 @@ if($primary_goal_id) {
             form.find("input").val('');
             form.submit();
         });
+        
+        
+        
+        var mini_goal_status_options = {
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
+            'db_table' : '#__fitness_mini_goals',
+            'status_button' : 'status_button',
+            'status_button_dialog' : 'status_button_dialog',
+            'dialog_status_wrapper' : 'dialog_status_wrapper',
+            'dialog_status_template' : '#dialog_status_template',
+            'status_button_template' : '#status_button_template',
+            'status_button_place' : '#status_button_place_',
+            'statuses' : {
+                '4' : {'label' : 'EVALUATING', 'class' : 'goal_status_evaluating', 'email_alias' : 'GoalEvaluatingMini'}, 
+                '5' : {'label' : 'IN PROGRESS', 'class' : 'goal_status_inprogress', 'email_alias' : 'GoalInprogressMini'},
+                '6' : {'label' : 'ASSESSING', 'class' : 'goal_status_assessing', 'email_alias' : 'GoalAssessingMini'},
+                '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : 'GoalPengingMini'},
+                '2' : {'label' : 'COMPLETE', 'class' : 'goal_status_complete', 'email_alias' : 'GoalCompleteMini'}, 
+                '3' : {'label' : 'INCOMPLETE', 'class' : 'goal_status_incomplete', 'email_alias' : 'GoalIncompleteMini'}
+      
+            },
+            'statuses2' : {},
+            'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
+            'hide_image_class' : 'hideimage',
+            'show_send_email' : true,
+            setStatuses : function(item_id) {
+                return this.statuses;
+            }
+        }
+        
+        
+        
+        var goal_status_mini = $.status(mini_goal_status_options);
+        goal_status_mini.run();
 
     })($js);
 
