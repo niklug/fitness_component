@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Fitness records.
  */
-class FitnessModelclients extends JModelList {
+class FitnessModeluser_groups extends JModelList {
 
     /**
      * Constructor.
@@ -26,13 +26,11 @@ class FitnessModelclients extends JModelList {
     public function __construct($config = array()) {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'id', 'a.id',
-                'user_id', 'a.user_id',
-                'state', 'a.state',
+                                'id', 'a.id',
+                'gid', 'a.gid',
                 'primary_trainer', 'a.primary_trainer',
                 'other_trainers', 'a.other_trainers',
-                'g.group_id', 'u.name', 'u.username',
-                'u.email'
+                'state', 'a.state',
 
             );
         }
@@ -55,22 +53,18 @@ class FitnessModelclients extends JModelList {
 
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
+
         
-        // Filter by primary trainer
-        $primary_trainer = $app->getUserStateFromRequest($this->context . '.filter.primary_trainer', 'filter_primary_trainer', '', 'string');
-        $this->setState('filter.primary_trainer', $primary_trainer);
-        
-                
-        // Filter by group
-        $group = $app->getUserStateFromRequest($this->context . '.filter.group', 'filter_group', '', 'string');
-        $this->setState('filter.group', $group);
+		//Filtering gid
+		$this->setState('filter.gid', $app->getUserStateFromRequest($this->context.'.filter.gid', 'filter_gid', '', 'string'));
+
 
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
         $this->setState('params', $params);
 
         // List state information.
-        parent::populateState('a.user_id', 'asc');
+        parent::populateState('a.id', 'asc');
     }
 
     /**
@@ -88,8 +82,6 @@ class FitnessModelclients extends JModelList {
         // Compile the store id.
         $id.= ':' . $this->getState('filter.search');
         $id.= ':' . $this->getState('filter.state');
-        $id.= ':' . $this->getState('filter.primary_trainer');
-        $id.= ':' . $this->getState('filter.group');
 
         return parent::getStoreId($id);
     }
@@ -106,48 +98,28 @@ class FitnessModelclients extends JModelList {
         $query = $db->getQuery(true);
 
         // Select the required fields from the table.
-        $query->select(     'a.id, u.name, u.username, g.group_id,  ug.title as usergroup, u.email, a.primary_trainer, a.other_trainers, a.state' );
-        
-
-        $query->from('`#__fitness_clients` AS a');
-        
-        $query->leftJoin('#__users AS u ON u.id = a.user_id');
-        
-        $query->leftJoin('#__user_usergroup_map AS g ON u.id = g.user_id');
-        
-        $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
-        
-        // filter only for Super Users
-        $user = &JFactory::getUser();
-        if ($this->getUserGroup($user->id) != 'Super Users') {
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query->where('(a.primary_trainer = ' . (int) $user->id . ' OR a.other_trainers LIKE ' . $other_trainers . ' )');
-        }
+        $query->select(
+                $this->getState(
+                        'list.select', 'a.*, ug.title AS usergroup_name'
+                )
+        );
+        $query->from('`#__fitness_user_groups` AS a');
 
         
-        // Filter by published state
-        $published = $this->getState('filter.state');
-        if (is_numeric($published)) {
-            $query->where('a.state = '.(int) $published);
-        } else if ($published === '') {
-            $query->where('(a.state IN (0, 1))');
-        }
+		// Join over the user field 'primary_trainer'
+		$query->select('primary_trainer.name AS primary_trainer');
+		$query->join('LEFT', '#__users AS primary_trainer ON primary_trainer.id = a.primary_trainer');
+                $query->leftJoin('#__usergroups AS ug ON ug.id = a.gid');
 
-
-        // Filter by primary trainer
-        $primary_trainer = $this->getState('filter.primary_trainer');
-        if (is_numeric($primary_trainer)) {
-            $query->where('a.primary_trainer = '.(int) $primary_trainer);
-        } 
         
-        
-
-
-            // Filter by group
-        $group = $this->getState('filter.group');
-        if (is_numeric($group)) {
-            $query->where('g.group_id = '.(int) $group);
-        } 
+    // Filter by published state
+    $published = $this->getState('filter.state');
+    if (is_numeric($published)) {
+        $query->where('a.state = '.(int) $published);
+    } else if ($published === '') {
+        $query->where('(a.state IN (0, 1))');
+    }
+    
 
         // Filter by search in title
         $search = $this->getState('filter.search');
@@ -156,18 +128,17 @@ class FitnessModelclients extends JModelList {
                 $query->where('a.id = ' . (int) substr($search, 3));
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('(
-                    u.username LIKE '.$search.' 
-                    OR  u.name LIKE '.$search.' 
-                 )');
+                
             }
-            
-            
-
-            
         }
 
         
+
+		//Filtering gid
+		$filter_gid = $this->state->get("filter.gid");
+		if ($filter_gid) {
+			$query->where("a.gid = '".$db->escape($filter_gid)."'");
+		}
 
 
         // Add the list ordering clause.
@@ -180,21 +151,10 @@ class FitnessModelclients extends JModelList {
         return $query;
     }
 
-    // Get the items, and change the TAG ID FOR TAG NAMES OVER EACH TAG
     public function getItems() {
         $items = parent::getItems();
-
         
-
         return $items;
-    }
-    
-    function getUserGroup($user_id) {
-        $db = JFactory::getDBO();
-        $query = "SELECT title FROM #__usergroups WHERE id IN 
-            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
-        $db->setQuery($query);
-        return $db->loadResult();
     }
 
 }

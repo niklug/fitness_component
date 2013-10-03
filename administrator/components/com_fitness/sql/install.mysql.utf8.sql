@@ -1015,3 +1015,17 @@ CREATE TABLE IF NOT EXISTS `#__fitness_mini_goal_comments` (
   KEY `item_id` (`item_id`),
   FOREIGN KEY (item_id) REFERENCES #__fitness_mini_goals(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_user_groups` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`gid` INT(11) unsigned NOT NULL ,
+`primary_trainer` INT(11)  NOT NULL ,
+`other_trainers` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`),
+KEY `gid` (`gid`),
+FOREIGN KEY (gid) REFERENCES #__usergroups(id) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET=utf8 AUTO_INCREMENT=1;
+

@@ -116,6 +116,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_CLIENTS_PRIMARY_TRAINER', 'a.primary_trainer', $listDirn, $listOrder); ?>
 				</th>
+                                <th class='left'>
+                                    Secondary Trainers
+				</th>
 	
 
 
@@ -188,6 +191,17 @@ $saveOrder	= $listOrder == 'a.ordering';
                                         echo $user->username; 
                                         ?>
 				</td>
+                                <td>
+                                <?php 
+                                    $other_trainers = split(',', $item->other_trainers);
+                                    foreach ($other_trainers as $other_trainer) {
+                                        if($other_trainer) {
+                                            echo JFactory::getUser($other_trainer)->name . "<br/>";
+                                        }
+                                    }
+
+                                ?>
+                                </td>
 	
 
                 <?php if (isset($this->items[0]->state)) { ?>

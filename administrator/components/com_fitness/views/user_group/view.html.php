@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View to edit
  */
-class FitnessViewClient extends JView
+class FitnessViewUser_group extends JView
 {
 	protected $state;
 	protected $item;
@@ -32,15 +32,20 @@ class FitnessViewClient extends JView
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
-                    throw new Exception(implode("\n", $errors));
+            throw new Exception(implode("\n", $errors));
 		}
                 $document = &JFactory::getDocument();
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
                 
-                $model = $this->getModel();
+                $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 
-                $this->assign('model', $model);
+                // connect frontend form model
+                require_once JPATH_COMPONENT_ADMINISTRATOR . DS .  'models' . DS . 'client.php';
+                $client_model  = new FitnessModelclient();
+                
+                $this->assign('client_model', $client_model);
+
 		$this->addToolbar();
 		parent::display($tpl);
 	}
@@ -61,30 +66,28 @@ class FitnessViewClient extends JView
         }
 		$canDo		= FitnessHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_CLIENT'), 'client.png');
+		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_USER_GROUP'), 'user_group.png');
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit')||($canDo->get('core.create'))))
 		{
 
-			JToolBarHelper::apply('client.apply', 'JTOOLBAR_APPLY');
-			JToolBarHelper::save('client.save', 'JTOOLBAR_SAVE');
+			JToolBarHelper::apply('user_group.apply', 'JTOOLBAR_APPLY');
+			JToolBarHelper::save('user_group.save', 'JTOOLBAR_SAVE');
 		}
 		if (!$checkedOut && ($canDo->get('core.create'))){
-			JToolBarHelper::custom('client.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+			JToolBarHelper::custom('user_group.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 		}
 		// If an existing item, can save to a copy.
 		if (!$isNew && $canDo->get('core.create')) {
-			JToolBarHelper::custom('client.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+			JToolBarHelper::custom('user_group.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
 		}
 		if (empty($this->item->id)) {
-			JToolBarHelper::cancel('client.cancel', 'JTOOLBAR_CANCEL');
+			JToolBarHelper::cancel('user_group.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else {
-			JToolBarHelper::cancel('client.cancel', 'JTOOLBAR_CLOSE');
+			JToolBarHelper::cancel('user_group.cancel', 'JTOOLBAR_CLOSE');
 		}
 
 	}
-        
-       
 }

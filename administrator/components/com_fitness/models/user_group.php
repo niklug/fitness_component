@@ -15,7 +15,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * Fitness model.
  */
-class FitnessModelclient extends JModelAdmin
+class FitnessModeluser_group extends JModelAdmin
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -33,7 +33,7 @@ class FitnessModelclient extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'Client', $prefix = 'FitnessTable', $config = array())
+	public function getTable($type = 'User_group', $prefix = 'FitnessTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -52,7 +52,9 @@ class FitnessModelclient extends JModelAdmin
 		$app	= JFactory::getApplication();
 
 		// Get the form.
-		$form = $this->loadForm('com_fitness.client', 'client', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_fitness.user_group', 'user_group', array('control' => 'jform', 'load_data' => $loadData));
+        
+        
 		if (empty($form)) {
 			return false;
 		}
@@ -69,13 +71,12 @@ class FitnessModelclient extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_fitness.edit.client.data', array());
+		$data = JFactory::getApplication()->getUserState('com_fitness.edit.user_group.data', array());
 
 		if (empty($data)) {
 			$data = $this->getItem();
             
 		}
-
                 $data->other_trainers = explode(',',$data->other_trainers);
 		return $data;
 	}
@@ -113,7 +114,7 @@ class FitnessModelclient extends JModelAdmin
 			// Set ordering to the last item if not set
 			if (@$table->ordering === '') {
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__fitness_clients');
+				$db->setQuery('SELECT MAX(ordering) FROM #__fitness_user_groups');
 				$max = $db->loadResult();
 				$table->ordering = $max+1;
 			}
@@ -122,8 +123,7 @@ class FitnessModelclient extends JModelAdmin
 	}
         
         
-        
-        /** multilevel select
+             /** multilevel select
          * 
          * @param type $item_id
          * @return string
@@ -157,17 +157,6 @@ class FitnessModelclient extends JModelAdmin
                     }
                     $drawField .= '</select>';
                     return $drawField;
-        }
-        
-        function getUserGroup($user_id) {
-            $db = JFactory::getDBO();
-            $query = "SELECT title FROM #__usergroups WHERE id IN 
-            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
-            $db->setQuery($query);
-            if(!$db->query()) {
-                JError::raiseError($db->getErrorMsg());
-            }
-            return $db->loadResult();
         }
 
 }

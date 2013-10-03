@@ -29,7 +29,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 $db->setQuery($sql);
                 $grouplist = $db->loadObjectList();
 
-                $userGroup = $this->getUserGroup($this->item->user_id); 
+                $userGroup = $this->model->getUserGroup($this->item->user_id); 
                 ?>
 
                 <li>
@@ -62,7 +62,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <li><?php echo $this->form->getLabel('primary_trainer'); ?>
                 <?php echo $this->form->getInput('primary_trainer'); ?></li>
                 <li><?php echo $this->form->getLabel('other_trainers'); ?>
-                <?php echo $this->getInput($this->item->id); ?></li>
+                <?php echo $this->model->getInput($this->item->id, '#__fitness_clients'); ?></li>
 
             </ul>
         </fieldset>
@@ -83,6 +83,19 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                var user_group = $(this).find(':selected').val();
                getClientsByGroup(user_group);
             });
+            
+            $("#jform_primary_trainer").on('change', function() {
+                var value = $(this).val();
+                hideSelectOption(value, '#other_trainers');
+            });
+            
+            var value = $("#jform_primary_trainer").val();
+            hideSelectOption(value, '#other_trainers');
+            
+            function hideSelectOption(value, element) {
+                $(element + " option").show();
+                $(element + " option[value=" + value + "]").hide();
+            }
 
 
             function getClientsByGroup(user_group) {
