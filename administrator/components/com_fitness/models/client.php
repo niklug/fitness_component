@@ -141,7 +141,7 @@ class FitnessModelclient extends JModelAdmin
                     $other_trainers = explode(',', $db->loadResult());
 
                     $drawField = '';
-                    $drawField .= '<select id="other_trainers" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
+                    $drawField .= '<select size="10" id="other_trainers" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
                     $drawField .= '<option value="">none</option>';
                     if(isset($result)) {
                         foreach ($result as $item) {

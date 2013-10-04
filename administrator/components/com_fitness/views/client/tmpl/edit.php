@@ -30,11 +30,14 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 $grouplist = $db->loadObjectList();
 
                 $userGroup = $this->model->getUserGroup($this->item->user_id); 
+                
+                $id = $this->item->id;
                 ?>
 
                 <li>
                     <label id="jform_user_id-lbl" class="" for="jform_user_id">User Group</label>
-                    <select id="user_group" name="user_group" class="inputbox" >
+                   <?php if(!$id) { ?>
+                    <select readonly id="user_group" name="user_group" class="inputbox" >
                         <option value=""><?php echo JText::_('-Select-'); ?></option>
                         <?php 
                         foreach ($grouplist as $option) {
@@ -47,17 +50,24 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                         }
                         ?>
                     </select>
+                    <?php } else {
+                        echo $userGroup;
+                    }
+                    ?>
                 </li>
                 <?php
                     $id = $this->item->id;
                 ?>
                 <li>
                     <label id="jform_user_id-lbl" class="" for="jform_user_id">Username</label>
-                    <select id="jform_user_id" class="inputbox" name="jform[user_id]"></select>
+                    <?php if(!$id) { ?>
+                        <select id="jform_user_id" class="inputbox" name="jform[user_id]"></select>
+                    <?php } else {
+                        echo JFactory::getUser($this->item->user_id)->username;
+                    }
+                    ?>
                 </li>
 
-                <li><?php echo $this->form->getLabel('state'); ?>
-                <?php echo $this->form->getInput('state'); ?></li>
 
                 <li><?php echo $this->form->getLabel('primary_trainer'); ?>
                 <?php echo $this->form->getInput('primary_trainer'); ?></li>
@@ -84,17 +94,23 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                getClientsByGroup(user_group);
             });
             
+            var all_options = $('#other_trainers').html();
+
             $("#jform_primary_trainer").on('change', function() {
                 var value = $(this).val();
-                hideSelectOption(value, '#other_trainers');
+                hideSelectOption(value, '#other_trainers', all_options);
             });
-            
+
             var value = $("#jform_primary_trainer").val();
-            hideSelectOption(value, '#other_trainers');
-            
-            function hideSelectOption(value, element) {
-                $(element + " option").show();
-                $(element + " option[value=" + value + "]").hide();
+            hideSelectOption(value, '#other_trainers', all_options);
+
+
+
+            function hideSelectOption(value, element, all_options) {
+
+                $(element).html(all_options);
+
+                $(element + " option[value=" + value + "]").remove();
             }
 
 

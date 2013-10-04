@@ -71,17 +71,23 @@ JHtml::_('behavior.keepalive');
 <script type="text/javascript">
     (function($) {
         
+        var all_options = $('#other_trainers').html();
+        
         $("#jform_primary_trainer").on('change', function() {
             var value = $(this).val();
-            hideSelectOption(value, '#other_trainers');
+            hideSelectOption(value, '#other_trainers', all_options);
         });
 
         var value = $("#jform_primary_trainer").val();
-        hideSelectOption(value, '#other_trainers');
+        hideSelectOption(value, '#other_trainers', all_options);
+        
+        
 
-        function hideSelectOption(value, element) {
-            $(element + " option").show();
-            $(element + " option[value=" + value + "]").hide();
+        function hideSelectOption(value, element, all_options) {
+            
+            $(element).html(all_options);
+        
+            $(element + " option[value=" + value + "]").remove();
         }
 
          Joomla.submitbutton = function(task)
