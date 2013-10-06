@@ -90,47 +90,34 @@ JHtml::_('behavior.keepalive');
                                         ?>
                                     </select>
                                 </td>
-                                <td></td>
-                                <td></td>
                                 <td>
                                     <?php echo $this->form->getLabel('state'); ?>
                                     <?php echo $this->form->getInput('state'); ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3">
-
-                                </td>
                                 <td>
+                                    <label for="primary_goal_start_date">
+                                    Start Date
+                                    </label>
+                                    <input id="primary_goal_start_date" ctype="text" value="" name="primary_goal_start_date" readonly="readonly" >
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="primary_goal_deadline">
+                                    Achieve By
+                                    </label>
+                                    <input id="primary_goal_deadline" value="" name="primary_goal_deadline" readonly="readonly" >
+                                </td>
+                                 <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
                                     <?php echo $this->form->getLabel('force_active'); ?>
                                     <?php echo $this->form->getInput('force_active'); ?>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <?php echo $this->form->getLabel('active_start'); ?>
-                                    <?php echo $this->form->getInput('active_start'); ?>
-                                </td>
-                                <td>
-                                    <?php echo $this->form->getLabel('override_dates'); ?>
-                                </td>
-                                <td>
-                                    <?php echo $this->form->getInput('override_dates'); ?>
-                                </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <?php echo $this->form->getLabel('active_finish'); ?>
-                                    <?php echo $this->form->getInput('active_finish'); ?>
-                                </td>
-                                <td>
-                                    <?php echo $this->form->getLabel('no_end_date'); ?>
-                                </td>
-                                <td>
-                                    <?php echo $this->form->getInput('no_end_date'); ?>
-                                </td>
-                                <td></td>
                             </tr>
                             <tr>
                                 <td id="plan_mini_goals" colspan="4">
@@ -139,6 +126,7 @@ JHtml::_('behavior.keepalive');
                             </tr>
                         </table>
                     </fieldset>
+                    <input  id="jform_mini_goal" class="required" type="hidden"  value="<?php echo $this->item->mini_goal ?>" name="jform[mini_goal]"  required="required">
                 </td>
             </tr>
             
@@ -456,6 +444,8 @@ JHtml::_('behavior.keepalive');
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
+    
+
 </form>
 
 
@@ -476,19 +466,15 @@ JHtml::_('behavior.keepalive');
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'client_selected' : '<?php echo $this->item->client_id;?>',
             'primary_goal_selected' : '<?php echo $this->item->primary_goal;?>',
-            'active_start_field' : $("#jform_active_start"),
-            'active_finish_field' : $("#jform_active_finish"),
-            'active_start_img' : $("#jform_active_start_img"),
-            'active_finish_img' : $("#jform_active_finish_img"),
-            'force_active_yes' : $("#jform_override_dates0"),
-            'force_active_no' : $("#jform_override_dates1"),
-            'force_active_value' : '<?php echo $this->item->override_dates;?>',
+            'mini_goal_selected' : '<?php echo $this->item->mini_goal;?>',
             'active_finish_value' : '<?php echo $this->item->active_finish;?>',
-            'no_end_date_label': $("#jform_no_end_date-lbl"),
-            'no_end_fieldset' : $("#jform_no_end_date"),
-            'no_end_date_yes' : $("#jform_no_end_date0"),
-            'no_end_date_no' : $("#jform_no_end_date1"),
-            'max_possible_date' : '9999-12-31'
+            'max_possible_date' : '9999-12-31',
+            'primary_goal_start_date' : $("#primary_goal_start_date"),
+            'primary_goal_deadline' : $("#primary_goal_deadline"),
+            'override_dates' : '<?php echo $this->item->override_dates;?>',
+            'active_start' : '<?php echo $this->item->active_start;?>',
+            'active_finish' : '<?php echo $this->item->active_finish;?>',
+           
         }
 
         var macronutrient_targets_options = {
@@ -635,7 +621,7 @@ JHtml::_('behavior.keepalive');
                             macronutrient_targets_light.saveTargetsData(function(output) {
                                 macronutrient_targets_rest.saveTargetsData(function(output) {
                                     //reset force active fields in database by ajax
-                                    var force_active = nutrition_plan.options.force_active_yes.is(":checked");
+                                    var force_active = $("#jform_override_dates0").is(":checked");
                                     if(force_active) {
                                         nutrition_plan.resetAllForceActive(function() {
                                             Joomla.submitform(task, document.getElementById('nutrition_plan-form'));
@@ -649,7 +635,7 @@ JHtml::_('behavior.keepalive');
                           });
                     } else {
                         //reset force active fields in database by ajax
-                        var force_active = nutrition_plan.options.force_active_yes.is(":checked");
+                        var force_active = $("#jform_override_dates0").is(":checked");
                         if(force_active) {
                             nutrition_plan.resetAllForceActive(function() {
                                 Joomla.submitform(task, document.getElementById('nutrition_plan-form'));

@@ -792,6 +792,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan` (
   `force_active` tinyint(1) NOT NULL,
   `override_dates` tinyint(1) NOT NULL DEFAULT '0',
   `primary_goal` int(11) NOT NULL,
+  `mini_goal` int(11) NOT NULL,
   `nutrition_focus` int(11) NOT NULL,
   `trainer_comments` text NOT NULL,
   `information` text NOT NULL,

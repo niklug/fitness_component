@@ -160,8 +160,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         public function getMiniGoals($id) {
             $db = & JFactory::getDBO();
-            $query = "SELECT mg.deadline AS minigoal_deadline, c.name AS minigoal_name FROM #__fitness_mini_goals AS mg
+            $query = "SELECT mg.*, c.name AS minigoal_name, tp.name AS training_period_name FROM #__fitness_mini_goals AS mg
                 LEFT JOIN #__fitness_mini_goal_categories AS c ON mg.mini_goal_category_id=c.id
+                LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
                 WHERE mg.primary_goal_id='$id'
                 AND mg.state='1'";
             $db->setQuery($query);

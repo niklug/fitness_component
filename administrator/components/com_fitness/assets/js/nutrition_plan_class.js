@@ -27,56 +27,70 @@
         });
 
         // on Active start 'yes' click
-        this.options.force_active_yes.on('click', function(){
+        $("#jform_override_dates0").live('click', function(){
             self.forceActiveYes();
         });
 
         // on Active start 'no' click
-        this.options.force_active_no.on('click', function(){
+        $("#jform_override_dates1").live('click', function(){
             self.forceActiveNo();
         });
 
         // on No End Date 'yes' click
-        this.options.no_end_date_yes.on('click', function(){
+        $("#jform_no_end_date0").live('click', function(){
             self.forceNoEndDateYes();
         });
 
         // on No End Date start 'no' click
-        this.options.no_end_date_no.on('click', function(){
+        $("#jform_no_end_date1").live('click', function(){
             self.forceNoEndDateNo();
+        });
+        
+        // on Minigoal select click
+        $("#minigoals_select").live('change', function() {
+            var id = $(this).val();
+            $("#jform_mini_goal").val(id);
+            self.setMinigoal(id);
         });
 
     }
+    
+    NutritionPlan.prototype.setMinigoal = function(id) {
+        var mini_goal_obj = _.find(this.minigoals, function(obj) { return obj.id == id});
+        this.populateMinigoalFields(mini_goal_obj);
+    }
 
     NutritionPlan.prototype.forceActiveYes = function() {
-        this.options.active_start_img.css('display', 'block');
-        this.options.active_start_field.attr('readonly', false);
-        this.options.active_finish_img.css('display', 'block');
-        this.options.active_finish_field.attr('readonly', false);
-        this.options.no_end_date_label.show();
-        this.options.no_end_fieldset.show();
+        $( "#jform_active_start, #jform_active_finish" ).datepicker({ dateFormat: "yy-mm-dd"});
+        $("#jform_no_end_date-lbl, #jform_no_end_date").show();
+        $("#jform_active_finish").attr('readonly', false);
+        $("#jform_override_dates0").val('1');
+        $("#jform_override_dates1").val('0');
+        
+        $("#jform_active_start").show();
+        $("#jform_active_finish").show();
     }
 
     NutritionPlan.prototype.forceActiveNo = function() {
-        this.options.active_start_img.css('display', 'none');
-        this.options.active_start_field.attr('readonly', true);
-        this.options.active_finish_img.css('display', 'none');
-        this.options.active_finish_field.attr('readonly', true);
-        this.options.no_end_date_label.hide();
-        this.options.no_end_fieldset.hide(); 
-        //this.options.no_end_date_active_input.val('0');
+        $( "#jform_active_start, #jform_active_finish" ).datepicker( "destroy" );
+        $("#jform_no_end_date-lbl, #jform_no_end_date").hide();
+        $("#jform_active_finish").attr('readonly', true);
+        $("#jform_override_dates0").val('0');
+        $("#jform_override_dates1").val('1');
+        $("#jform_active_start").hide();
+        $("#jform_active_finish").hide();
     }
 
-    NutritionPlan.prototype.forceNoEndDateNo = function() {
-        this.options.active_finish_img.css('display', 'block');
-        this.options.active_finish_field.attr('readonly', false);
-    }
 
     NutritionPlan.prototype.forceNoEndDateYes = function() {
-        this.options.active_finish_img.css('display', 'none');
-        this.options.active_finish_field.attr('readonly', true); 
-        this.options.active_finish_field.val(this.options.max_possible_date); 
-        //this.options.active_finish_field.css('display', 'none'); 
+        $("#jform_active_finish").val(this.options.max_possible_date);
+        $("#jform_no_end_date0").val('1');
+        $("#jform_no_end_date1").val('0');
+    }
+    
+    NutritionPlan.prototype.forceNoEndDateNo = function() {
+        $("#jform_no_end_date0").val('1');
+        $("#jform_no_end_date1").val('0');
     }
 
 
@@ -85,8 +99,8 @@
         this.populateSecondaryTrainers({}, this.options.secondary_trainers_wrapper);
         this.populateSelect({}, this.options.client_select);
         this.populateSelect({}, this.options.primary_goal_select);
-        this.options.active_start_field.val('');
-        this.options.active_finish_field.val('');
+        this.options.primary_goal_start_date.val('');
+        this.options.primary_goal_deadline.val('');
         //
         var self = this;
         this.getTrainerClients(e, function(output) {
@@ -101,8 +115,8 @@
         // reset fields
         this.populateSecondaryTrainers({}, this.options.secondary_trainers_wrapper);
         this.populateSelect({}, this.options.primary_goal_select);
-        this.options.active_start_field.val('');
-        this.options.active_finish_field.val('');
+        this.options.primary_goal_start_date.val('');
+        this.options.primary_goal_deadline.val('');
         //
         var self = this;
         this.getClientSecondaryTrainers(e, function(output) {
@@ -118,13 +132,14 @@
     }
 
     NutritionPlan.prototype.primaryGoalChangeEvent = function(e) {
-        this.options.active_start_field.val('');
-        this.options.active_finish_field.val('');
+        this.options.primary_goal_start_date.val('');
+        this.options.primary_goal_deadline.val('');
         var self = this;
         this.getGoalData(e, function(output) {
             if(output) {
-                self.options.active_start_field.val(output.start_date);
-                self.options.active_finish_field.val(output.deadline);
+                self.options.primary_goal_start_date.val(output.start_date);
+                self.options.primary_goal_deadline.val(output.deadline);
+                self.populateMinigoals(output.minigoals, $("#plan_mini_goals"));
             }
         });
     }
@@ -297,7 +312,8 @@
 
     NutritionPlan.prototype.dateFieldsLogic = function() {
         // set  Active Start/Finish field inactive/active and No End Date
-        if(parseInt(this.options.force_active_value)) {
+        
+        if(parseInt(this.options.override_dates)) {
             this.forceActiveYes();
 
         } else {
@@ -307,14 +323,14 @@
 
         if(this.options.active_finish_value == this.options.max_possible_date) {
             this.forceNoEndDateYes();
-            this.options.no_end_date_yes.attr('checked', true);
+            $("#jform_no_end_date0").attr('checked', true);
 
         } else {
 
-            if(parseInt(this.options.force_active_value)) {
+            if(parseInt(this.options.override_dates)) {
                 this.forceNoEndDateNo();
             }
-            this.options.no_end_date_yes.attr('checked', false);
+            $("#jform_no_end_date0").attr('checked', false);
 
         }
     }
@@ -344,6 +360,12 @@
         this.getGoalData(this.options.primary_goal_select, function(output) {
             if(output) {
                 self.populateMinigoals(output.minigoals, $("#plan_mini_goals"));
+                self.options.primary_goal_start_date.val(output.start_date);
+                self.options.primary_goal_deadline.val(output.deadline);
+                var mini_goal = self.options.mini_goal_selected;
+                $("#minigoals_select").val(mini_goal);
+                self.setMinigoal(mini_goal);
+                self.dateFieldsLogic();
             }
         });
 
@@ -353,33 +375,134 @@
     
     NutritionPlan.prototype.populateMinigoals = function(minigoals, destination) {
         var html = '';
-        html += '<hr>';
-        
+        this.minigoals = minigoals;
+        html += '<table width="100%">';
+        html += '<tr>';
+        html += '<td style="width:150px;">';
+        html += 'Mini Goal';
+        html += '</td>';
+        html += '<td>';
+        html += '<select id="minigoals_select">';
+        html += '<option value="">-Select-</option>';
         $.each(minigoals, function(index,item) {
-            html += '<table>';
-            html += '<tr>';
-            html += '<td width="100">';
-            html += 'Mini Goal';
-            html += '</td>';
-            html += '<td>';
-            html += item.minigoal_name;
-            html += '</td>';
-            html += '</tr>';
-            
-            html += '<tr>';
-            html += '<td>';
-            html += 'Achieve By';
-            html += '</td>';
-            html += '<td>';
-            html += item.minigoal_deadline;
-            html += '</td>';
-            html += '</tr>';
-            html += '</table>';
-            html += '<hr>';
+            html += '<option value="' + item.id + '">' + item.minigoal_name + '</option>';
         });
+        html += '</select>';
+        html += '</td>';
+        html += '</tr>';
+        
+        html += '<tr>';
+        html += '<td id="minigoal_fields" colspan="2">';
+        
+        html += '</td>';
+        html += '</tr>';
+        
+        html += '</table>';
         
         $(destination).html(html);
     }
+    
+    NutritionPlan.prototype.populateMinigoalFields = function(minigoal) {
+        var html = '';
+        html += '<table width="100%">';
+        html += '<tr>';
+        html += '<td>';
+        html += 'Training Period';
+        html += '</td>';
+        html += '<td>';
+        html += minigoal.training_period_name;
+        html += '</td>';
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td>';
+        html += 'Start Date / Active From';
+        html += '</td>';
+        html += '<td>';
+        html += minigoal.start_date;
+        html += '</td>';
+        html += '<td>';
+        
+        var active_start = minigoal.start_date;
+        
+        if(this.options.active_start) {
+            active_start = this.options.active_start;
+        }
+        
+        html += '<input style="display:none" readonly id="jform_active_start" class="required" type="text" value="' + active_start + '" name="jform[active_start]" title="" aria-required="true" required="required">';
+        html += '</td>';
+        html += '<td>';
+        html += 'Override Dates';
+        html += '</td>';
+
+        var override_dates = this.options.override_dates;
+
+        var override_dates_0_checked = '';
+        var override_dates_1_checked = 'checked';
+   
+        if(override_dates == '1') {
+            override_dates = '1';
+            override_dates_0_checked = 'checked';
+            override_dates_1_checked = '';
+        }
+      
+        
+        html += '<td>';
+        html += '<fieldset id="jform_override_dates" class="radio">';
+        html += '<input id="jform_override_dates0" ' + override_dates_0_checked + ' class="" type="radio" value="' + override_dates + '" name="jform[override_dates]" >';
+        html += '<label class="" for="jform_override_dates0" aria-invalid="false">Yes</label>';
+        html += '<input id="jform_override_dates1" ' + override_dates_1_checked + '  type="radio"  value="' + override_dates + '" name="jform[override_dates]">';
+        html += '<label for="jform_override_dates1">No</label>';
+        html += '</fieldset>';
+        html += '</td>';
+        
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td>';
+        html += 'Achieve By / Active To';
+        html += '</td>';
+        html += '<td>';
+        html += minigoal.deadline;
+        html += '</td>';
+        html += '<td>';
+        
+        var active_finish = minigoal.deadline;
+        
+        if(this.options.active_finish) {
+            active_finish = this.options.active_finish;
+        }
+        
+        html += '<input style="display:none" readonly id="jform_active_finish" class="required" type="text" value="' + active_finish + '" name="jform[active_finish]" title="" readonly="readonly" aria-required="true" required="required">';
+        html += '</td>';
+        html += '<td>';
+        html += '<label id="jform_no_end_date-lbl" class="" for="jform_no_end_date" style="display: none;">No End Date</label>';
+        html += '</td>';
+
+        var no_end_date = '0';
+        var no_end_date_0_checked = '';
+          var no_end_date_1_checked = 'checked';
+
+        if(this.options.active_finish_value == this.options.max_possible_date) {
+            no_end_date = '1';
+            no_end_date_0_checked = 'checked';
+            no_end_date_1_checked = '';
+        }
+        
+        
+        html += '<td>';
+        html += '<fieldset id="jform_no_end_date" class="radio" style="display: none;">';
+        html += '<input id="jform_no_end_date0" type="radio" ' + no_end_date_0_checked + ' value="' + no_end_date + '" name="jform[no_end_date]">';
+        html += '<label for="jform_no_end_date0">Yes</label>';
+        html += '<input id="jform_no_end_date1" type="radio" ' + no_end_date_1_checked + '  value="' + no_end_date + '" name="jform[no_end_date]">';
+        html += '<label for="jform_no_end_date1">No</label>';
+        html += '</fieldset>';
+        html += '</td>';
+        
+        html += '</tr>';
+        html += '</table>';
+        
+        $("#minigoal_fields").html(html);
+    }
+    
     
     // Add the  function to the top level of the jQuery object
     $.nutritionPlan = function(options) {
