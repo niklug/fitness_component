@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Fitness.
  */
-class FitnessViewGoals_periods extends JView
+class FitnessViewNutrition_planning extends JView
 {
 	protected $items;
 	protected $pagination;
@@ -55,12 +55,30 @@ class FitnessViewGoals_periods extends JView
                 $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
                 
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'goals_frontend.js');
+                
+                // connect list nutrition_diaryform model
+                require_once JPATH_COMPONENT_SITE . DS .  'models' . DS . 'nutrition_diaryform.php';
+                
+                $nutrition_diaryform_model  = new FitnessModelNutrition_diaryForm();
+                
+                // connect list nutrition_diaryform model
+                require_once JPATH_COMPONENT_SITE . DS .  'models' . DS . 'goals_periods.php';
+                
+                $goals_periods_model  = new FitnessModelgoals_periods();
+                
+                
+                $active_plan_data = $nutrition_diaryform_model->getActivePlanData();
+                
+                $secondary_trainers = $nutrition_diaryform_model->get_own_trainers();
        
-                $model = $this->getModel();
-                
-                $this->assign('model', $model);
-                
+                $this->assign('nutrition_diaryform_model', $nutrition_diaryform_model);
 
+                $this->assign('active_plan_data', $active_plan_data);
+                
+                $this->assign('secondary_trainers', $secondary_trainers);
+                
+                $this->assign('goals_periods_model', $goals_periods_model);
+                
 		parent::display($tpl);
 	}
 

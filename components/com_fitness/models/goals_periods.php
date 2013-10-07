@@ -200,6 +200,22 @@ class FitnessModelgoals_periods extends JModelList {
     }
     
     
+    function getTrainingPeriods() {
+        // Training Period List
+        $db = JFactory::getDbo();
+        $sql = "SELECT * FROM #__fitness_training_period WHERE state='1'";
+        $db->setQuery($sql);
+        $training_periods = $db->loadObjectList();
+
+        foreach ($training_periods as $item) {
+            $color = '<div style="float:left;margin-right:5px;width:15px; height:15px;background-color:' . $item->color . '" ></div>';
+            $name = '<div class="grey_title"> ' . $item->name . '</div>';
+            $html .= $color . $name ;
+        }
+        return $html;
+    }
+    
+    
 
 
 }

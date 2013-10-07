@@ -62,6 +62,19 @@
               description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_PRIMARY_GOAL" 
               required="true" 
               filter="safehtml" /> 
+        
+        <field name="mini_goal" type="text" size="40" class="inputbox"
+        
+              label="Mini Goal
+
+
+
+
+
+"
+              description="" 
+              required="true" 
+              filter="safehtml" /> 
 
         
         <field name="nutrition_focus" type="sql" class="inputbox"

@@ -338,10 +338,15 @@ class FitnessModelNutrition_diaryForm extends JModelForm
     
     function getPlanData($id) {
         $db = & JFactory::getDBO();
-        $query = "SELECT a.*, gc.id AS primary_goal_id
+        $query = "SELECT a.*, gc.id AS primary_goal_id, gc.name AS primary_goal_name,
+            g.start_date AS primary_goal_start_date, g.deadline AS primary_goal_deadline,
+            mgc.name AS mini_goal_name, tp.name AS trainer_comments
             FROM #__fitness_nutrition_plan AS a
             LEFT JOIN #__fitness_goals AS g ON g.id = a.primary_goal
             LEFT JOIN #__fitness_goal_categories AS gc  ON g.goal_category_id=gc.id
+            LEFT JOIN #__fitness_mini_goals AS mg ON mg.id = a.mini_goal
+            LEFT JOIN #__fitness_mini_goal_categories AS mgc  ON mg.mini_goal_category_id=mgc.id
+            LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
               
             WHERE a.id='$id' AND a.state='1'";
         $db->setQuery($query);
