@@ -205,6 +205,9 @@ class FitnessModelgoals_periods extends JModelList {
         $db = JFactory::getDbo();
         $sql = "SELECT * FROM #__fitness_training_period WHERE state='1'";
         $db->setQuery($sql);
+        if(!$db->query()) {
+                JError::raiseError($db->getErrorMsg());
+            }
         $training_periods = $db->loadObjectList();
 
         foreach ($training_periods as $item) {
@@ -213,6 +216,54 @@ class FitnessModelgoals_periods extends JModelList {
             $html .= $color . $name ;
         }
         return $html;
+    }
+    
+    public function getPlanShoppingList($id) {
+        $db = JFactory::getDbo();
+        $sql = "SELECT * FROM #__fitness_nutrition_plan_shopping_list WHERE nutrition_plan_id='$id'";
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $result = $db->loadObjectList();
+        return $result;
+    }
+    
+    public function getUserPans($client_id, $nutrition_plan_id) {
+        $db = JFactory::getDbo();
+        $sql = "SELECT a.*, 
+             (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
+             mgn.name AS mini_goal_name,
+             nf.name AS nutrition_focus_name,
+             t.calories AS calories,
+             t.protein AS protein,
+             t.fats AS fats,
+             t.carbs AS carbs
+                         
+            FROM #__fitness_nutrition_plan AS a
+            LEFT JOIN #__fitness_goals AS gc ON gc.id = a.primary_goal
+            LEFT JOIN #__fitness_goal_categories AS gn ON gn.id = gc.goal_category_id
+            
+            LEFT JOIN #__fitness_mini_goals AS mgc ON mgc.id = a.mini_goal
+            LEFT JOIN #__fitness_mini_goal_categories AS mgn ON mgn.id = mgc.mini_goal_category_id
+            
+
+            LEFT JOIN #__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus
+            LEFT JOIN #__fitness_nutrition_plan_targets AS t ON t.nutrition_plan_id = a.id
+            
+
+            WHERE a.client_id='$client_id' AND  a.state='1'";
+        
+        if($nutrition_plan_id) {
+            $sql .= " AND a.id <> '$nutrition_plan_id'";
+        }
+        
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $result = $db->loadObjectList();
+        return $result;
     }
     
     

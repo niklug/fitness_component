@@ -48,6 +48,10 @@ class FitnessViewNutrition_planning extends JView
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'status_class.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.time.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+                echo '<!--[if IE]><script type="text/javascript" src="' . JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.flot.pie.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'flot_pie_class.js');
                 echo '<!--[if IE]><script type="text/javascript" src="' . JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
         
                 $document->addStyleSheet(JUri::root() . 'components/com_fitness/assets/css/fitness.css');
@@ -65,8 +69,7 @@ class FitnessViewNutrition_planning extends JView
                 require_once JPATH_COMPONENT_SITE . DS .  'models' . DS . 'goals_periods.php';
                 
                 $goals_periods_model  = new FitnessModelgoals_periods();
-                
-                
+             
                 $active_plan_data = $nutrition_diaryform_model->getActivePlanData();
                 
                 $secondary_trainers = $nutrition_diaryform_model->get_own_trainers();
