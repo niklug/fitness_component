@@ -192,4 +192,11 @@ class FitnessController extends JController {
         $view->setModel($this->getModel('goals_periods'));
         $view -> commentEmail();
     }
+    
+    // nutrition plan
+    function populatePlan() {
+        $view = $this -> getView('nutrition_planning', 'json');
+        $view->setModel($this->getModel('goals_periods'));
+        $view -> populatePlan(); 
+    }
 }

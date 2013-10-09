@@ -135,13 +135,13 @@ class FitnessModelnutrition_plans extends JModelList {
                         'list.select', 'a.*, 
                          (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
                          nf.name AS nutrition_focus_name,
-                         t.calories AS calories,
-                         t.protein AS protein,
-                         t.fats AS fats,
-                         t.carbs AS carbs'
+                         (SELECT calories FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') calories,
+                         (SELECT protein FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') protein,
+                         (SELECT fats FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') fats,
+                         (SELECT carbs FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') carbs'
                 )
         );
-        $query->from('`#__fitness_nutrition_plan` AS a');
+        $query->from('#__fitness_nutrition_plan AS a');
         
         $query->leftJoin('#__users AS u ON u.id = a.client_id');
         
@@ -151,9 +151,9 @@ class FitnessModelnutrition_plans extends JModelList {
         
         $query->leftJoin('#__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus');
         
-        $query->leftJoin('#__fitness_nutrition_plan_targets AS t ON t.nutrition_plan_id = a.id');
+        //$query->leftJoin('#__fitness_nutrition_plan_targets AS t ON t.nutrition_plan_id = a.id');
         
-        $query->where("t.type='heavy'");
+        //$query->where("t.type='heavy'");
         
         // filter only for Super Users
         $user = &JFactory::getUser();

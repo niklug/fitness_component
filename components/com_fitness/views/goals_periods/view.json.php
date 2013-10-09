@@ -43,4 +43,6 @@ class FitnessViewGoals_periods extends JView {
         $model = $this -> getModel("goals_periods");
         echo json_encode($model->commentEmail($data_encoded, $table));
     }
+    
+    
 }

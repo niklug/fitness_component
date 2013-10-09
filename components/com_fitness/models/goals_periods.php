@@ -235,10 +235,10 @@ class FitnessModelgoals_periods extends JModelList {
              (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
              mgn.name AS mini_goal_name,
              nf.name AS nutrition_focus_name,
-             t.calories AS calories,
-             t.protein AS protein,
-             t.fats AS fats,
-             t.carbs AS carbs
+             (SELECT calories FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") calories,
+             (SELECT protein FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") protein,
+             (SELECT fats FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") fats,
+             (SELECT carbs FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") carbs
                          
             FROM #__fitness_nutrition_plan AS a
             LEFT JOIN #__fitness_goals AS gc ON gc.id = a.primary_goal
@@ -249,8 +249,7 @@ class FitnessModelgoals_periods extends JModelList {
             
 
             LEFT JOIN #__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus
-            LEFT JOIN #__fitness_nutrition_plan_targets AS t ON t.nutrition_plan_id = a.id
-            
+           
 
             WHERE a.client_id='$client_id' AND  a.state='1'";
         
@@ -263,6 +262,43 @@ class FitnessModelgoals_periods extends JModelList {
             JError::raiseError($db->getErrorMsg());
         }
         $result = $db->loadObjectList();
+        return $result;
+    }
+    
+    public function populatePlan($data_encoded) {
+        $status['success'] = 1;
+        $data = json_decode($data_encoded);
+        $id = $data->id;
+
+        require_once JPATH_COMPONENT_SITE .  '/models/nutrition_diaryform.php';
+        $nutrition_diaryform_model  = new FitnessModelNutrition_diaryForm();
+       
+        $plan_data = $nutrition_diaryform_model->getPlanData($id);
+       
+        if(!$plan_data['status']) {
+            $status['success'] = 0;
+            $status['message'] = $plan_data['message'];
+            $result = array('status' => $status);
+            return $result;
+        }
+        
+        $plan_data = $plan_data['data'];
+        
+        $client_id = $plan_data->client_id;
+        
+        $client_trainers = $nutrition_diaryform_model->get_client_trainers($client_id);
+        
+        if(!$client_trainers['status']) {
+            $status['success'] = 0;
+            $status['message'] = $client_trainers['message'];
+            $result = array('status' => $status);
+            return $result;
+        }
+        $client_trainers = $client_trainers['data'];
+        
+        $plan_data->secondary_trainers = $client_trainers;
+
+        $result = array('status' => $status, 'data' => $plan_data);
         return $result;
     }
     

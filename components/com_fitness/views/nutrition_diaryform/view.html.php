@@ -134,7 +134,13 @@ class FitnessViewNutrition_diaryform extends JView {
                 
 
                 $model = $this->getModel();
-                $secondary_trainers = $model->get_own_trainers();
+                
+                $user = &JFactory::getUser();
+                $secondary_trainers = $model->get_client_trainers($user->id);
+                if(!$secondary_trainers['status']) {
+                    JError::raiseError($secondary_trainers['message']);
+                }
+                
                 $active_plan_data = $model->getActivePlanData();
                 
                 // connect list frontend form model
@@ -148,7 +154,7 @@ class FitnessViewNutrition_diaryform extends JView {
                 
                 $this->assign('model', $model);
                 $this->assign('frontend_list_model', $frontend_list_model);
-                $this->assign('secondary_trainers', $secondary_trainers);
+                $this->assign('secondary_trainers', $secondary_trainers['data']);
                 $this->assign('active_plan_data', $active_plan_data);
                 $this->assign('nutrition_plan_id', $nutrition_plan_id);
                 

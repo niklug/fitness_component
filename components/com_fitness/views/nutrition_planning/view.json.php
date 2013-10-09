@@ -18,4 +18,9 @@ if(!JSession::checkToken('get')) {
 class FitnessViewNutrition_planning extends JView {
     
 
+    function populatePlan() {
+        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
+        $model = $this -> getModel("goals_periods");
+        echo json_encode($model->populatePlan($data_encoded));
+    }
 }
