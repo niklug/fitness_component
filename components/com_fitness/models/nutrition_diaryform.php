@@ -310,7 +310,9 @@ class FitnessModelNutrition_diaryForm extends JModelForm
         }
         $other_trainers = $db->loadResultArray(0);
         $all_trainers_id = explode(',', $other_trainers[0]);
-        if(!$all_trainers_id[0]) return;
+        if(!$all_trainers_id[0]) {
+            return $ret;
+        }
         foreach ($all_trainers_id as $user_id) {
             $user = &JFactory::getUser($user_id);
             $all_trainers_name[] = $user->name;

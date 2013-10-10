@@ -490,7 +490,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                                 echo "<tr> <td>" . $item->name . "</td>";
                                 echo "<td>" . $item->usage . "</td>";
                                 echo "<td>" . $item->comments . "</td>";
-                                echo '<td><a target="_blank" href="' . $item->url . '">[VIEW PRODUCT]</a></td></tr>';
+                                echo '<td width="80"><a style="font-size:12px;" target="_blank" href="' . $item->url . '">[view product]</a></td></tr>';
                             }
                         ?>
                     </tbody>

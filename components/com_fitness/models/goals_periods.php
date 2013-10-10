@@ -274,7 +274,8 @@ class FitnessModelgoals_periods extends JModelList {
         $nutrition_diaryform_model  = new FitnessModelNutrition_diaryForm();
        
         $plan_data = $nutrition_diaryform_model->getPlanData($id);
-       
+        
+               
         if(!$plan_data['status']) {
             $status['success'] = 0;
             $status['message'] = $plan_data['message'];
@@ -282,6 +283,7 @@ class FitnessModelgoals_periods extends JModelList {
             return $result;
         }
         
+             
         $plan_data = $plan_data['data'];
         
         $client_id = $plan_data->client_id;

@@ -75,7 +75,7 @@ class FitnessViewNutrition_planning extends JView
                 $user = &JFactory::getUser();
                 $secondary_trainers = $nutrition_diaryform_model->get_client_trainers($user->id);
                 if(!$secondary_trainers['status']) {
-                    JError::raiseError($secondary_trainers['message']);
+                    echo $secondary_trainers['message'];
                 }
        
                 $this->assign('nutrition_diaryform_model', $nutrition_diaryform_model);
