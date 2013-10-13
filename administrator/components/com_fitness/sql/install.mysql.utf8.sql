@@ -916,7 +916,6 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary` (
 `nutrition_focus` INT(11)  NOT NULL ,
 `status` INT(1)  NOT NULL ,
 `score` FLOAT NOT NULL ,
-`trainer_comments` TEXT NOT NULL ,
 `activity_level` int(1) NOT NULL DEFAULT '0',
 `created` DATETIME NOT NULL ,
 `state` TINYINT(1)  NOT NULL ,
@@ -1029,4 +1028,28 @@ PRIMARY KEY (`id`),
 KEY `gid` (`gid`),
 FOREIGN KEY (gid) REFERENCES #__usergroups(id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8 AUTO_INCREMENT=1;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_business_profiles` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`group_id` INT(11)  NOT NULL ,
+`primary_administrator` INT(11)  NOT NULL ,
+`secondary_administrator` INT(11)  NOT NULL ,
+`terms_conditions` TEXT NOT NULL ,
+`header_image` VARCHAR(255)  NOT NULL ,
+`facebook_url` VARCHAR(255)  NOT NULL ,
+`twitter_url` VARCHAR(255)  NOT NULL ,
+`youtube_url` VARCHAR(255)  NOT NULL ,
+`instagram_url` VARCHAR(255)  NOT NULL ,
+`google_plus_url` VARCHAR(255)  NOT NULL ,
+`linkedin_url` VARCHAR(255)  NOT NULL ,
+`website_url` VARCHAR(255)  NOT NULL ,
+`email` VARCHAR(255)  NOT NULL ,
+`contact_number` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
 

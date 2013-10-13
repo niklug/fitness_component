@@ -83,13 +83,6 @@
         
         filter="safehtml" /> 
 
-       <field name="trainer_comments" type="editor" width="100%" height="150px"
-                
-            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_TRAINER_COMMENTS"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_TRAINER_COMMENTS" 
-                
-                
-                 /> 
 
          <field
         name="state"

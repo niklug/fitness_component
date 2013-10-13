@@ -301,6 +301,19 @@ class FitnessHelper
                 
         return $ret;
     }
+    
+     public function checkUniqueTableItem($table, $column, $value) {
+        $ret['success'] = 1;
+        $db = JFactory::getDBO();
+        $query = "SELECT * FROM $table WHERE $column='$value'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->stderr();
+        }
+        $ret['data'] = $db->loadResult();
+        return $ret;
+    }
  
 }
 

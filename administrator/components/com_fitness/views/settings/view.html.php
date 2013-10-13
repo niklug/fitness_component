@@ -49,6 +49,7 @@ class FitnessViewSettings extends JView {
         FitnessHelper::addSubmenu('Recipe Types', 'recipe_types');
         FitnessHelper::addSubmenu('Nutrition Focuses', 'nutrition_focuses');
         FitnessHelper::addSubmenu('User Groups', 'user_groups');
+        FitnessHelper::addSubmenu('Business Profiles', 'business_profiles');
 
 
         parent::display($tpl);

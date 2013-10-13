@@ -54,8 +54,7 @@ defined('_JEXEC') or die;
                         <th>STATUS</th>
                         <th>SCORE</th>
                         <th>ASSESSED BY</th>
-                        <th>SUBMITTED</th>
-                        <th>TIME</th>
+                        <th>SUBMIT DATE</th>
                         <th>VIEW</th>
                         <th>COMMENTS</th>
                         <th></th>
@@ -89,19 +88,9 @@ defined('_JEXEC') or die;
                             <?php 
                             $date = JFactory::getDate($item->submit_date);
                             $submit_date = $date->toFormat('%a %d %b %y');
-                    
-                            if($item->submit_date != '0000-00-00 00:00:00') {
-                                echo $submit_date;
-                            } else {
-                                echo ' - ';
-                            }
-                            ?>
-                        </td>
-                        <td>
-                            <?php 
                             $submit_time =  $date->format('H:i'); 
                             if($item->submit_date != '0000-00-00 00:00:00') {
-                                echo $submit_time;
+                                echo $submit_date . ' at ' . $submit_time;
                             } else {
                                 echo ' - ';
                             }
@@ -111,9 +100,6 @@ defined('_JEXEC') or die;
                             <?php if ($item->status != '5') { ?>
                             <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.edit&id=' . (int)$item->id); ?>"><span class="preview"></span></a>
                             <?php } ?>
-                        </td>
-                        <td>
-                            <?php echo $item->trainer_comments ? $item->trainer_comments : '-' ?>
                         </td>
                         <td>
                             <a class="jgrid" title="Trash" href="javascript:document.getElementById('form-nutrition_diary-state-<?php echo $item->id; ?>').submit()">

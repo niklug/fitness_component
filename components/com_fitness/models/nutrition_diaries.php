@@ -82,6 +82,8 @@ class FitnessModelNutrition_diaries extends JModelList {
         $user = &JFactory::getUser();
 
         $query->where('a.client_id = '.(int) $user->id);
+        
+        $query->order('a.entry_date DESC');
 
         return $query;
     }

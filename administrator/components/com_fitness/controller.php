@@ -258,6 +258,13 @@ class FitnessController extends JController
             $view -> commentEmail();
 	}
         
+        // business profile view
+        function checkUniqueGroup() {
+            $view = $this -> getView('business_profile', 'json');
+            $view->setModel($this->getModel('business_profile'));
+            $view -> checkUniqueGroup();
+	}
+        
         
 
   

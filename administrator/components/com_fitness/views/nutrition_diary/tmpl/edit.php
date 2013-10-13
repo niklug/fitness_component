@@ -20,7 +20,7 @@ JHtml::_('behavior.keepalive');
         <table width="100%">
             <tr>
                 <td width="30%">
-                    <fieldset style="height: 366px;" class="adminform">
+                    <fieldset style="min-height: 130px;" class="adminform">
                         <legend>CLIENT & TRAINER(S) </legend>
                         <table>
                             <tr>
@@ -120,14 +120,6 @@ JHtml::_('behavior.keepalive');
                                 </td>
                                 <td>
                                     <?php echo JFactory::getUser($this->item->assessed_by)->name; ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <?php echo $this->form->getLabel('trainer_comments'); ?>
-                                </td>
-                                <td colspan="3">
-                                    <?php echo $this->form->getInput('trainer_comments'); ?>
                                 </td>
                             </tr>
                         </table>
