@@ -91,7 +91,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             //////////////////////////////////////////
             $('#user_group').change(function(){
                var user_group = $(this).find(':selected').val();
-               getClientsByGroup(user_group);
+               getUsersByGroup(user_group);
             });
             
             var all_options = $('#other_trainers').html();
@@ -114,7 +114,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             }
 
 
-            function getClientsByGroup(user_group) {
+            function getUsersByGroup(user_group) {
                 var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
                 $.ajax({
                     type : "POST",
@@ -122,7 +122,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     data : {
                        view : 'goals',
                        format : 'text',
-                       task : 'getClientsByGroup',
+                       task : 'getUsersByGroup',
                        user_group : user_group
                     },
                     dataType : 'json',
@@ -156,7 +156,7 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
             var user_group = $("#user_group").find(':selected').val();
             if(user_group) {
-                getClientsByGroup(user_group);
+                getUsersByGroup(user_group);
             }
 
 

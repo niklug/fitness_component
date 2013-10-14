@@ -29,6 +29,7 @@ class FitnessModelbusiness_profiles extends JModelList {
                                 'id', 'a.id',
                 'name', 'a.name',
                 'group_id', 'a.group_id',
+                'usergroup_name', 'usergroup_name',
                 'primary_administrator', 'a.primary_administrator',
                 'secondary_administrator', 'a.secondary_administrator',
                 'terms_conditions', 'a.terms_conditions',

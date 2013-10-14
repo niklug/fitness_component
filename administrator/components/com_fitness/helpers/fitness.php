@@ -314,6 +314,38 @@ class FitnessHelper
         $ret['data'] = $db->loadResult();
         return $ret;
     }
+    
+    
+    public function getUsersByGroup($group_id) {
+        $db = &JFactory::getDBo();
+        $query = "SELECT u.id FROM #__users AS u 
+            INNER JOIN #__user_usergroup_map AS g ON g.user_id=u.id WHERE g.group_id='$group_id' AND u.block='0'";
+        $db->setQuery($query);
+        $ret['success'] = 1;
+        if (!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->stderr();
+            return $ret;
+        }
+
+        $clients= $db->loadResultArray(0);
+
+        if(!$clients) {
+            $ret['success'] = 0;
+            $ret['message'] = 'No users assigned to this usergroup.';
+            return $ret;
+        }
+
+
+        foreach ($clients as $user_id) {
+            $user = &JFactory::getUser($user_id);
+            $clients_name[] = $user->name;
+        }
+        
+        $ret['data'] = array_combine($clients, $clients_name);
+        
+        return $ret;
+    }
  
 }
 

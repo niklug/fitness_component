@@ -52,11 +52,11 @@ class FitnessController extends JController
         
         //clients view
         //------------------------------------------------------
-	function getClientsByGroup() {
+	function getUsersByGroup() {
             
  		$view = $this -> getView('goals', 'json');
                 $view->setModel($this->getModel('goals'));
-   		$view -> getClientsByGroup();
+   		$view -> getUsersByGroup();
 	}
         
         // programs view
@@ -264,6 +264,8 @@ class FitnessController extends JController
             $view->setModel($this->getModel('business_profile'));
             $view -> checkUniqueGroup();
 	}
+        
+
         
         
 

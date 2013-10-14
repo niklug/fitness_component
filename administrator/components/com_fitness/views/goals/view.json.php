@@ -31,11 +31,11 @@ class FitnessViewGoals extends JView {
 	}
         
         // clients view
-        function getClientsByGroup() {
+        function getUsersByGroup() {
             JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 	    $user_group = JRequest::getVar('user_group');
             $model = $this -> getModel("goals");
-	    echo $model->getClientsByGroup($user_group);
+	    echo $model->getUsersByGroup($user_group);
 	}
         
         

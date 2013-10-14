@@ -142,5 +142,6 @@ class FitnessModelbusiness_profile extends JModelAdmin
             $result = array( 'status' => $status, 'data' => $item_exists['data']);
             return  $result;
         }
+        
 
 }

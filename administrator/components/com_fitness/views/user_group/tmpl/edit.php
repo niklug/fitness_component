@@ -21,18 +21,46 @@ JHtml::_('behavior.keepalive');
             <ul class="adminformlist">
                                 <?php
                                 $db = JFactory::getDbo();
+                                $sql = 'SELECT id AS value, name AS text'. ' FROM #__fitness_business_profiles' . ' ORDER BY id';
+                                $db->setQuery($sql);
+                                if(!$db->query()) {
+                                    JError::raiseError($db->getErrorMsg());
+                                }
+                                $business_profiles = $db->loadObjectList();
+                                ?>
+
+                                <li>
+                                    <label id="jform_user_id-lbl" class="" for="jform_group_id">Business Name</label>
+                                    <select  id="business_profile_id"  name="jform[business_profile_id]" aria-required="true" required="required" class="required" >
+                                        <option value=""><?php echo JText::_('-Select-'); ?></option>
+                                        <?php 
+                                        foreach ($business_profiles as $option) {
+                                            if($this->item->business_profile_id == $option->value){ 
+                                                $selected = 'selected';
+                                            } else {
+                                                $selected = '';
+                                            }
+                                            echo '<option ' . $selected . ' value="' . $option->value . '">' . $option->text . ' </option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </li>
+                                
+                                
+                                <?php
+                                $db = JFactory::getDbo();
                                 $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
                                 $db->setQuery($sql);
                                 $grouplist = $db->loadObjectList();
                                 ?>
 
                                 <li>
-                                    <label id="jform_user_id-lbl" class="" for="jform_gid">User Group</label>
-                                    <select  id="gid"  name="jform[gid]" aria-required="true" required="required" class="required" >
+                                    <label id="jform_user_id-lbl" class="" for="jform_group_id">User Group</label>
+                                    <select  id="group_id"  name="jform[group_id]" aria-required="true" required="required" class="required" >
                                         <option value=""><?php echo JText::_('-Select-'); ?></option>
                                         <?php 
                                         foreach ($grouplist as $option) {
-                                            if($this->item->gid == $option->value){ 
+                                            if($this->item->group_id == $option->value){ 
                                                 $selected = 'selected';
                                             } else {
                                                 $selected = '';

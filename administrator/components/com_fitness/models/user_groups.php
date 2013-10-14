@@ -26,8 +26,10 @@ class FitnessModeluser_groups extends JModelList {
     public function __construct($config = array()) {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                                'id', 'a.id',
-                'gid', 'a.gid',
+                'id', 'a.id',
+                'business_profile_id', 'bp.name',
+                'trainers_group_name', 'trainers_group_name',
+                'group_id', 'ug.title',
                 'primary_trainer', 'a.primary_trainer',
                 'other_trainers', 'a.other_trainers',
                 'state', 'a.state',
@@ -55,8 +57,11 @@ class FitnessModeluser_groups extends JModelList {
         $this->setState('filter.state', $published);
 
         
-		//Filtering gid
-		$this->setState('filter.gid', $app->getUserStateFromRequest($this->context.'.filter.gid', 'filter_gid', '', 'string'));
+		//Filtering group_id
+		$this->setState('filter.group_id', $app->getUserStateFromRequest($this->context.'.filter.group_id', 'filter_group_id', '', 'string'));
+
+                //Filtering business_profile_id
+		$this->setState('filter.business_profile_id', $app->getUserStateFromRequest($this->context.'.filter.business_profile_id', 'filter_business_profile_id', '', 'string'));
 
 
         // Load the parameters.
@@ -100,7 +105,8 @@ class FitnessModeluser_groups extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*, ug.title AS usergroup_name'
+                        'list.select', 'a.*, ug.title AS usergroup_name, bp.name AS business_profile_name,'
+                        . ' ( SELECT title FROM #__usergroups WHERE id=bp.group_id) trainers_group_name'
                 )
         );
         $query->from('`#__fitness_user_groups` AS a');
@@ -109,7 +115,9 @@ class FitnessModeluser_groups extends JModelList {
 		// Join over the user field 'primary_trainer'
 		$query->select('primary_trainer.name AS primary_trainer');
 		$query->join('LEFT', '#__users AS primary_trainer ON primary_trainer.id = a.primary_trainer');
-                $query->leftJoin('#__usergroups AS ug ON ug.id = a.gid');
+                $query->leftJoin('#__usergroups AS ug ON ug.id = a.group_id');
+                
+                $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = a.business_profile_id');
 
         
     // Filter by published state
@@ -124,21 +132,23 @@ class FitnessModeluser_groups extends JModelList {
         // Filter by search in title
         $search = $this->getState('filter.search');
         if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
-            } else {
-                $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                
-            }
+            $search = $db->Quote('%' . $db->escape($search, true) . '%');
+            $query->where('ug.title LIKE ' . $search);
         }
 
         
 
-		//Filtering gid
-		$filter_gid = $this->state->get("filter.gid");
-		if ($filter_gid) {
-			$query->where("a.gid = '".$db->escape($filter_gid)."'");
-		}
+        //Filtering group_id
+        $filter_group_id = $this->state->get("filter.group_id");
+        if ($filter_group_id) {
+                $query->where("a.group_id = '".$db->escape($filter_group_id)."'");
+        }
+        
+        //Filtering business profile
+        $filter_business_profile_id = $this->state->get("filter.business_profile_id");
+        if ($filter_business_profile_id) {
+                $query->where("a.business_profile_id = '".$db->escape($filter_business_profile_id)."'");
+        }
 
 
         // Add the list ordering clause.

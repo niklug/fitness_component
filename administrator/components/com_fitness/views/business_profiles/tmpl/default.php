@@ -75,7 +75,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_BUSINESS_PROFILES_NAME', 'a.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_BUSINESS_PROFILES_GROUP_ID', 'ug.usergroup_name', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_BUSINESS_PROFILES_GROUP_ID', 'usergroup_name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_BUSINESS_PROFILES_PRIMARY_ADMINISTRATOR', 'a.primary_administrator', $listDirn, $listOrder); ?>

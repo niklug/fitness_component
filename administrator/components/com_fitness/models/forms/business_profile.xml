@@ -24,21 +24,17 @@
                  required="true" 
             filter="raw" /> 
 
-       <field name="primary_administrator" type="user"
+       <field name="primary_administrator" type="text"
                 
             label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_PRIMARY_ADMINISTRATOR"
             description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_PRIMARY_ADMINISTRATOR" 
             required="true"   
-                
-                 /> 
+       /> 
 
-       <field name="secondary_administrator" type="user"
-                
+       <field name="secondary_administrator" type="text"
             label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_SECONDARY_ADMINISTRATOR"
             description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_SECONDARY_ADMINISTRATOR" 
-                
-                
-                 /> 
+       /> 
 
        <field name="terms_conditions" type="editor"
                 

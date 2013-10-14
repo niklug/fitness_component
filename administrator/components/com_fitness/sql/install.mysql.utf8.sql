@@ -1019,14 +1019,16 @@ CREATE TABLE IF NOT EXISTS `#__fitness_mini_goal_comments` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_user_groups` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-
-`gid` INT(11) unsigned NOT NULL ,
+`business_profile_id`  INT(11) unsigned NOT NULL ,
+`group_id` INT(11) unsigned NOT NULL ,
 `primary_trainer` INT(11)  NOT NULL ,
 `other_trainers` VARCHAR(255)  NOT NULL ,
 `state` TINYINT(1)  NOT NULL ,
 PRIMARY KEY (`id`),
-KEY `gid` (`gid`),
-FOREIGN KEY (gid) REFERENCES #__usergroups(id) ON DELETE CASCADE
+KEY `group_id` (`group_id`),
+KEY `business_profile_id` (`business_profile_id`),
+FOREIGN KEY (group_id) REFERENCES #__usergroups(id) ON DELETE CASCADE,
+FOREIGN KEY (business_profile_id) REFERENCES #__fitness_business_profiles(id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8 AUTO_INCREMENT=1;
 
 
@@ -1034,7 +1036,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_business_profiles` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 
 `name` VARCHAR(255)  NOT NULL ,
-`group_id` INT(11)  NOT NULL ,
+`group_id` INT(11) UNSIGNED NOT NULL ,
 `primary_administrator` INT(11)  NOT NULL ,
 `secondary_administrator` INT(11)  NOT NULL ,
 `terms_conditions` TEXT NOT NULL ,
@@ -1049,7 +1051,9 @@ CREATE TABLE IF NOT EXISTS `#__fitness_business_profiles` (
 `email` VARCHAR(255)  NOT NULL ,
 `contact_number` VARCHAR(255)  NOT NULL ,
 `state` TINYINT(1)  NOT NULL ,
-PRIMARY KEY (`id`)
+PRIMARY KEY (`id`),
+KEY `group_id` (`group_id`),
+FOREIGN KEY (group_id) REFERENCES #__usergroups(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
 

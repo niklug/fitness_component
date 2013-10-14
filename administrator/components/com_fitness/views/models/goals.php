@@ -364,7 +364,7 @@ class FitnessModelgoals extends JModelList {
     
     
     // clients view
-    public function getClientsByGroup($user_group) {
+    public function getUsersByGroup($user_group) {
         $db = &JFactory::getDBo();
         $query = "SELECT u.id FROM #__users AS u 
             INNER JOIN #__user_usergroup_map AS g ON g.user_id=u.id WHERE g.group_id='$user_group'";

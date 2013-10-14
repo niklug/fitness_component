@@ -13,9 +13,6 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.tooltip');
 JHTML::_('script','system/multiselect.js',false,true);
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 $user	= JFactory::getUser();
 $userId	= $user->get('id');
@@ -27,6 +24,14 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=user_groups'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
+            
+                <div class="filter-search fltlft">
+			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('User Group Name: '); ?></label>
+			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
+			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+			<button type="button" id="reset_filtered"><?php echo JText::_('Reset All'); ?></button>
+		</div>
+            
                 <div class='filter-select fltrt'>
 			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
@@ -43,18 +48,29 @@ $saveOrder	= $listOrder == 'a.ordering';
                             JError::raiseError($db->getErrorMsg());
                         }
                         $grouplist = $db->loadObjectList();
-                        foreach ($grouplist as $option) {
-                            $group[] = JHTML::_('select.option', $option->value, $option->text );
-                        }
-
                         ?>
 
                         <div class='filter-select fltrt'>
-                                <select name="filter_gid" class="inputbox" onchange="this.form.submit()">
+                                <select name="filter_group_id" class="inputbox" onchange="this.form.submit()">
                                         <option value=""><?php echo JText::_('-User Group-');?></option>
-                                        <?php echo JHtml::_('select.options', $group, "value", "text", $this->state->get('filter.gid'), true);?>
+                                        <?php echo JHtml::_('select.options', $grouplist, "value", "text", $this->state->get('filter.group_id'), true);?>
                                 </select>
                         </div>
+                    
+                    <?php
+                        $db = JFactory::getDbo();
+                        $sql = 'SELECT id AS value, name AS text'. ' FROM #__fitness_business_profiles' . ' ORDER BY id';
+                        $db->setQuery($sql);
+                        if(!$db->query()) {
+                            JError::raiseError($db->getErrorMsg());
+                        }
+                        $business_profiles = $db->loadObjectList();
+                        ?>
+                        <select name="filter_business_profile_id" class="inputbox" onchange="this.form.submit()">
+                                <option value=""><?php echo JText::_('-Business Profile-');?></option>
+                                <?php echo JHtml::_('select.options', $business_profiles, "value", "text", $this->state->get('filter.business_profile_id'), true);?>
+                        </select>
+
                     
 		</div>
 
@@ -72,7 +88,13 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</th>
 
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_USER_GROUPS_GID', 'a.gid', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_USER_GROUPS_GID', 'ug.title', $listDirn, $listOrder); ?>
+				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Business Profile', 'bp.name', $listDirn, $listOrder); ?>
+				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Trainers Group', 'trainers_group_name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_USER_GROUPS_PRIMARY_TRAINER', 'a.primary_trainer', $listDirn, $listOrder); ?>
@@ -137,6 +159,13 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $item->usergroup_name; ?>
                                     </a>
 				</td>
+                                <td>
+                                    <?php echo $item->business_profile_name; ?>
+                                </td>
+                                
+                                <td>
+                                    <?php echo $item->trainers_group_name; ?>
+                                </td>
 				<td>
 					<?php echo $item->primary_trainer; ?>
 				</td>
@@ -196,3 +225,19 @@ $saveOrder	= $listOrder == 'a.ordering';
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
+
+
+<script type="text/javascript">
+
+    (function($) {
+
+        $("#reset_filtered").click(function(){
+            var form = $("#adminForm");
+            form.find("select").val('');
+            form.find("input").val('');
+            form.submit();
+        });
+    })($js);
+    
+    
+</script>

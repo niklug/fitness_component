@@ -6,19 +6,21 @@
             readonly="true" class="readonly"
             description="JGLOBAL_FIELD_ID_DESC" /> 
 
-       <field name="gid" type="accesslevel"
-                
-            label="COM_FITNESS_FORM_LBL_USER_GROUP_GID"
-            description="COM_FITNESS_FORM_DESC_USER_GROUP_GID" 
-                
-                
-                 required="true" 
-            filter="raw" /> 
-
  
-		<field name="filter_gid" type="accesslevel" onchange="this.form.submit();" /> 
+		<field name="filter_group_id" type="accesslevel" onchange="this.form.submit();" /> 
 
-       <field name="gid" type="accesslevel"
+                
+            <field name="business_profile_id" type="text"
+
+        label="Business Name"
+        description="" 
+
+
+             required="true" 
+        filter="raw" /> 
+                
+                
+       <field name="group_id" type="accesslevel"
                 
             label="COM_FITNESS_FORM_LBL_USER_GROUP_GID"
             description="COM_FITNESS_FORM_DESC_USER_GROUP_GID" 

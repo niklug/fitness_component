@@ -57,9 +57,10 @@ JHtml::_('behavior.keepalive');
                             </select>
                         </li>
                         <li><?php echo $this->form->getLabel('primary_administrator'); ?>
-                            <?php echo $this->form->getInput('primary_administrator'); ?></li>
+                            <select id="jform_primary_administrator" class="inputbox" name="jform[primary_administrator]"></select>
+                        </li>
                         <li><?php echo $this->form->getLabel('secondary_administrator'); ?>
-                            <?php echo $this->form->getInput('secondary_administrator'); ?></li>
+                            <select id="jform_secondary_administrator" class="inputbox" name="jform[secondary_administrator]"></select></li>
                         <li><?php echo $this->form->getLabel('terms_conditions'); ?>
                             <?php echo $this->form->getInput('terms_conditions'); ?></li>
                     </ul>
@@ -118,6 +119,29 @@ JHtml::_('behavior.keepalive');
 
     (function($) {
 
+        all_secondary_administrator_options = '';
+        
+        
+        $("#jform_primary_administrator").live('change', function() {
+            if(!all_secondary_administrator_options) {
+                all_secondary_administrator_options = $('#jform_secondary_administrator').html();
+            }
+            var value = $(this).val();
+            hideSelectOption(value, '#jform_secondary_administrator', all_secondary_administrator_options);
+
+        });
+
+
+        
+        function hideSelectOption(value, element, all_options) {
+
+            $(element).html(all_options);
+
+            $(element + " option[value=" + value + "]").remove();
+        }
+        
+        
+        
         $("#group_id").on('change', function() {
             var group_id = $(this).val();
             
@@ -136,9 +160,75 @@ JHtml::_('behavior.keepalive');
                     alert('Business Profile already created for this User Group!');
                     $("#group_id").val('');
                 }
-            })
+            });
             
-        })
+            getUsersByGroup(group_id);
+            
+        });
+        
+        
+        
+        function getUsersByGroup(group_id) {
+            var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                   view : 'goals',
+                   format : 'text',
+                   task : 'getUsersByGroup',
+                   user_group : group_id
+                },
+                dataType : 'json',
+                success : function(response) {
+                    if(!response.status.success) {
+                        alert(response.status.message);
+                        $("#jform_primary_administrator, #jform_secondary_administrator").html('');
+                        return;
+                    }
+                    var primary_administrator = '<?php echo $this->item->primary_administrator; ?>';
+
+                    var html = '<option  value="">-Select-</option>';
+                    $.each(response.data, function(index, value) {
+                         if(index) {
+                            var selected = '';
+                            if(primary_administrator == index) {
+                                selected = 'selected';
+                            }
+                            html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
+                        }
+                    });
+                    $("#jform_primary_administrator").html(html);
+                    
+                    
+                    
+                    
+                    var secondary_administrator = '<?php echo $this->item->secondary_administrator; ?>';
+
+                    var html = '<option  value="">-Select-</option>';
+                    $.each(response.data, function(index, value) {
+                         if(index) {
+                            var selected = '';
+                            if(secondary_administrator == index) {
+                                selected = 'selected';
+                            }
+                            html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
+                        }
+                    });
+                    $("#jform_secondary_administrator").html(html);
+
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert("error");
+                }
+            });
+        }
+        
+        var group_id = $("#group_id").find(':selected').val();
+        if(group_id) {
+            getUsersByGroup(group_id);
+        }
 
 
 

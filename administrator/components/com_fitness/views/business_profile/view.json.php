@@ -22,5 +22,4 @@ class FitnessViewBusiness_profile extends JView {
             $model = $this -> getModel("business_profile");
 	    echo json_encode($model->checkUniqueGroup($data_encoded, $table));
 	}
-      
 }
