@@ -13,9 +13,6 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.tooltip');
 JHTML::_('script','system/multiselect.js',false,true);
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 $user	= JFactory::getUser();
 $userId	= $user->get('id');
@@ -23,6 +20,11 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_diaries'); ?>" method="post" name="adminForm" id="adminForm">
@@ -150,25 +152,9 @@ $saveOrder	= $listOrder == 'a.ordering';
                         <?php echo JHtml::_('select.options', $assessed_by, "value", "text", $this->state->get('filter.assessed_by'), true);?>
                 </select>
         </div>
-        
-        
-        
-        <?php
-        $db = JFactory::getDbo();
 
-        $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
-        $db->setQuery($sql);
-        if(!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $primary_trainerlist = $db->loadObjectList();
-        ?>
-        
         <div class='filter-select fltrt'>
-                <select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
-                        <option value=""><?php echo JText::_('-Primary Trainer-');?></option>
-                        <?php echo JHtml::_('select.options', $primary_trainerlist, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
-                </select>
+                <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'filter_primary_trainer', 'primary_trainer', $this->state->get('filter.primary_trainer'), 'Primary Trainer', false, 'inputbox'); ?>
         </div>
                      
     </fieldset>  
@@ -354,6 +340,11 @@ $saveOrder	= $listOrder == 'a.ordering';
             form.find("input").val('');
             form.submit();
         });
+        
+        $("#primary_trainer").on('change', function() {
+                 var form = $("#adminForm");
+                 form.submit();
+        })
 
     })($js);
 

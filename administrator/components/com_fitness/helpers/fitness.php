@@ -21,10 +21,50 @@ class FitnessHelper
     const EVELUATING_GOAL_STATUS = '4';
     const INPROGRESS_GOAL_STATUS = '5';
     const ASSESSING_GOAL_STATUS = '6';
-    
-    const TRAINERS_USERGROUP = 'Trainers';
+
     const CLIENTS_USERGROUP = 'Registered';
     const ADMINISTRATOR_USERGROUP = 'Super Users';
+    
+    public static $trainers_group_id = null;
+    
+    public static function getTrainersGroupId() {
+        
+        if (!self::$trainers_group_id) {
+            self::$trainers_group_id = self::createTrainersGroupId();
+        }
+
+        return self::$trainers_group_id;
+    }
+    
+    
+    
+    public static function createTrainersGroupId() {
+        $db = & JFactory::getDBO();
+        $user = &JFactory::getUser();
+        $groups = $user->get('groups');
+        $user_group_id = $groups[8];
+
+        $query = "SELECT bp.group_id AS trainers_group_id from #__fitness_user_groups AS ug "
+                . " INNER JOIN #__fitness_business_profiles AS bp ON bp.id=ug.business_profile_id "
+                . " WHERE ug.group_id = '$user_group_id'"
+                . " AND ug.state='1'"
+                . " AND bp.state='1'";
+        $db->setQuery($query);
+        
+        if (!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        
+        $trainers_group_id = $db->loadResult();
+        
+        if (!$trainers_group_id) {
+            JError::raiseWarning( 100, 'No Trainers Group assigned!' );
+        }
+
+        return $trainers_group_id;
+    }
+    
+
 
     /**
      * Configure the Linkbar.
@@ -346,6 +386,105 @@ class FitnessHelper
         
         return $ret;
     }
+    
+    
+    public function getTrainersByUsergroup() {
+        
+        $trainers_group_id = self::getTrainersGroupId();
+
+        $db = &JFactory::getDBo();
+        $query = "SELECT id AS value, username AS text FROM #__users "
+                . "INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id"
+                . " WHERE #__user_usergroup_map.group_id='$trainers_group_id'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $trainers = $db->loadObjectList();
+        
+        return $trainers;
+    }
+    
+    
+    /**
+     * 
+     * @param type $items - options array
+     * @param type $name - select tag name
+     * @param type $id - select tag id
+     * @param type $selected - option selected value
+     * @param type $select - empty option name
+     * @param type $required - 'true' if is field requered
+     * @param type $class - select tag class
+     * @return string
+     */
+    public function generateSelect($items, $name, $id, $selected, $select, $required, $class) {
+        $html = '<select id="' . $id . '" name="' . $name . '" class="' . $class;
+        
+        if($required) {
+            $html .= 'required="required"';
+        }
+        
+        $html .=  '">';
+        
+        $html .= '<option value="">-Select ' . $select . '-</option>';
+        $html .= JHtml::_('select.options', $items , 'value', 'text', $selected, true);
+        $html .= '</select>';
+        return $html;
+    }
+    
+    function getOtherTrainersSelect($item_id, $table) {
+        $trainers_group_id = self::getTrainersGroupId();
+        $db = &JFactory::getDbo();
+        $query = "SELECT id, username FROM #__users"
+                . " INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id "
+                . "WHERE #__user_usergroup_map.group_id='$trainers_group_id'";
+        $db->setQuery($query);
+        $result = $db->loadObjectList();
+        $query = "SELECT other_trainers FROM $table WHERE id='$item_id'";
+        $db->setQuery($query);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $other_trainers = explode(',', $db->loadResult());
+        $drawField = '<select size="10" id="other_trainers" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
+        $drawField .= '<option value="">none</option>';
+        if(isset($result)) {
+            foreach ($result as $item) {
+                if(in_array($item->id, $other_trainers)){
+                    $selected = 'selected="selected"';
+                } else {
+                    $selected = '';
+                }
+                $drawField .= '<option ' . $selected . ' value="' . $item->id . '">' . $item->username . ' </option>';
+            }
+        }
+        $drawField .= '</select>';
+        return $drawField;
+    }
+    
+    public function getGroupList() {
+        $db = JFactory::getDbo();
+        $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $grouplist = $db->loadObjectList();
+        return $grouplist;
+    }
+    
+    public function getBusinessProfileList() {
+        $db = JFactory::getDbo();
+        $sql = 'SELECT id AS value, name AS text FROM #__fitness_business_profiles' . ' ORDER BY id';
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $grouplist = $db->loadObjectList();
+        return $grouplist;
+    }
+    
+    
  
 }
 

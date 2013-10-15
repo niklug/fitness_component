@@ -122,41 +122,5 @@ class FitnessModeluser_group extends JModelAdmin
 		}
 	}
         
-        
-             /** multilevel select
-         * 
-         * @param type $item_id
-         * @return string
-         */
-        function getInput($item_id, $table) {
-                    $db = &JFactory::getDbo();
-                    $query = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
-                    $db->setQuery($query);
-                    $result = $db->loadObjectList();
-                    $query = "SELECT other_trainers FROM $table WHERE id='$item_id'";
-                    $db->setQuery($query);
-                    if(!$db->query()) {
-                        JError::raiseError($db->getErrorMsg());
-                    }
-                    $other_trainers = explode(',', $db->loadResult());
-
-                    $drawField = '';
-                    $drawField .= '<select id="other_trainers" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
-                    $drawField .= '<option value="">none</option>';
-                    if(isset($result)) {
-                        foreach ($result as $item) {
-                            if(in_array($item->id, $other_trainers)){
-                                $selected = 'selected="selected"';
-                            } else {
-                                $selected = '';
-                            }
-
-                            $drawField .= '<option ' . $selected . ' value="' . $item->id . '">' . $item->username . ' </option>';
-
-                        }
-                    }
-                    $drawField .= '</select>';
-                    return $drawField;
-        }
 
 }

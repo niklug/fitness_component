@@ -1,5 +1,5 @@
 <?php
-
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 
 /** get locations from fitness component
  * npkorban
@@ -58,8 +58,12 @@ function getClients() {
  * @return type
  */
 function getTrainers() { 
+    $trainers_group_id = FitnessHelper::getTrainersGroupId();
+    
     $db	= & JFactory::getDBO();
-    $query = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+    $query = "SELECT id, username FROM #__users "
+            . "INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id "
+            . "WHERE #__user_usergroup_map.group_id='$trainers_group_id'";
     $user = &JFactory::getUser();
     if (getUserGroupById($user->id) != 'Super Users') {
         $query .= " AND #__users.id = '$user->id'";

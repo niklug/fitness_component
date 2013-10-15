@@ -39,12 +39,6 @@ class FitnessViewUser_group extends JView
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
                 
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
-                
-                // connect frontend form model
-                require_once JPATH_COMPONENT_ADMINISTRATOR . DS .  'models' . DS . 'client.php';
-                $client_model  = new FitnessModelclient();
-                
-                $this->assign('client_model', $client_model);
 
 		$this->addToolbar();
 		parent::display($tpl);

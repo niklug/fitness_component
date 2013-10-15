@@ -12,6 +12,10 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 <style type="text/css">
     #jform_terms_conditions-lbl {
@@ -31,30 +35,12 @@ JHtml::_('behavior.keepalive');
                     <legend><?php echo JText::_('COM_FITNESS_LEGEND_BUSINESS_PROFILE'); ?></legend>
                     <ul class="adminformlist">
                         <li><?php echo $this->form->getLabel('name'); ?>
-                            <?php echo $this->form->getInput('name'); ?></li>
-                        <li>
-                            <?php
-                            $db = JFactory::getDbo();
-                            $sql = 'SELECT id AS value, title AS text' . ' FROM #__usergroups' . ' ORDER BY id';
-                            $db->setQuery($sql);
-                            $grouplist = $db->loadObjectList();
-                            ?>
-
+                            <?php echo $this->form->getInput('name'); ?>
+                        </li>
+ 
                         <li>
                             <?php echo $this->form->getLabel('group_id'); ?>
-                            <select  id="group_id"  name="jform[group_id]" aria-required="true" required="required" class="required" >
-                                <option value=""><?php echo JText::_('-Select-'); ?></option>
-                                <?php
-                                foreach ($grouplist as $option) {
-                                    if ($this->item->group_id == $option->value) {
-                                        $selected = 'selected';
-                                    } else {
-                                        $selected = '';
-                                    }
-                                    echo '<option ' . $selected . ' value="' . $option->value . '">' . $option->text . ' </option>';
-                                }
-                                ?>
-                            </select>
+                            <?php echo $helper->generateSelect($helper->getGroupList(), 'jform[group_id]', 'group_id', $this->item->group_id, '', "required", true); ?>
                         </li>
                         <li><?php echo $this->form->getLabel('primary_administrator'); ?>
                             <select id="jform_primary_administrator" class="inputbox" name="jform[primary_administrator]"></select>

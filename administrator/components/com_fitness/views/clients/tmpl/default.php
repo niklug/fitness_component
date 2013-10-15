@@ -23,6 +23,10 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=clients'); ?>" method="post" name="adminForm" id="adminForm">
@@ -40,52 +44,12 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
 			</select>
 		</div>
-            
-                <?php
-                $db = JFactory::getDbo();
-                
-                $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
-                $db->setQuery($sql);
-                if(!$db->query()) {
-                    JError::raiseError($db->getErrorMsg());
-                }
-                $primary_trainerlist = $db->loadObjectList();
-                if(isset($primary_trainerlist)) {
-                    foreach ($primary_trainerlist as $option) {
-                        $primary_trainer[] = JHTML::_('select.option', $option->value, $option->text );
-                    }
-                }
-                
-                ?>
-
                 <div class='filter-select fltrt'>
-			<select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-Primary Trainer-');?></option>
-				<?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
-			</select>
+                    <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'filter_primary_trainer', 'primary_trainer', $this->state->get('filter.primary_trainer'), 'Primary Trainer'); ?>
 		</div>
-            
-            
-                        
-                <?php
-                $db = JFactory::getDbo();
-                $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
-                $db->setQuery($sql);
-                if(!$db->query()) {
-                    JError::raiseError($db->getErrorMsg());
-                }
-                $grouplist = $db->loadObjectList();
-                foreach ($grouplist as $option) {
-                    $group[] = JHTML::_('select.option', $option->value, $option->text );
-                }
- 
-                ?>
 
                 <div class='filter-select fltrt'>
-			<select name="filter_group" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-User Group-');?></option>
-				<?php echo JHtml::_('select.options', $group, "value", "text", $this->state->get('filter.group'), true);?>
-			</select>
+                    <?php echo $helper->generateSelect($helper->getGroupList(), 'filter_group', 'group_id', $this->state->get('filter.group'), 'User Group', false, 'inputbox'); ?>
 		</div>
 
 	</fieldset>
@@ -256,6 +220,12 @@ $saveOrder	= $listOrder == 'a.ordering';
             form.find("input").val('');
             form.submit();
         });
+        
+        $("#group_id, #primary_trainer").on('change', function() {
+             var form = $("#adminForm");
+             form.submit();
+             
+        })
  
     })($js);
 </script>

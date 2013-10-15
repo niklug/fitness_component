@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_clients` (
 `primary_trainer` INT(11)  NOT NULL ,
 `other_trainers` VARCHAR(255)  NOT NULL ,
 PRIMARY KEY (`id`),
+UNIQUE (`user_id`),
 FOREIGN KEY (user_id) REFERENCES #__users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT COLLATE=utf8_general_ci;
 
@@ -1053,6 +1054,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_business_profiles` (
 `state` TINYINT(1)  NOT NULL ,
 PRIMARY KEY (`id`),
 KEY `group_id` (`group_id`),
+UNIQUE(group_id),
 FOREIGN KEY (group_id) REFERENCES #__usergroups(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 

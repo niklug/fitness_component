@@ -27,6 +27,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 // GRAPH
 require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . 'tmpl' . DS .  'default_graph.php';
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 
 ?>
 
@@ -167,31 +170,8 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
                         </select>
                 </div>
 
-
-
-                <?php
-                // primary trainer filter
-                $db = JFactory::getDbo();
-
-                $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
-                $db->setQuery($sql);
-                if(!$db->query()) {
-                    JError::raiseError($db->getErrorMsg());
-                }
-                $primary_trainerlist = $db->loadObjectList();
-                if(isset($primary_trainerlist)) {
-                    foreach ($primary_trainerlist as $option) {
-                        $primary_trainer[] = JHTML::_('select.option', $option->value, $option->text );
-                    }
-                }
-
-                ?>
-
                 <div class='filter-select fltrt'>
-                        <select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
-                                <option value=""><?php echo JText::_('-Primary Trainer-');?></option>
-                                <?php echo JHtml::_('select.options', $primary_trainer, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
-                        </select>
+                        <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'filter_primary_trainer', 'primary_trainer', $this->state->get('filter.primary_trainer'), 'Primary Trainer', false, 'inputbox'); ?>
                 </div>
             
                 <a id="add_appointment" title="Add New Item" href="javascript:void(0)"></a>
@@ -426,6 +406,10 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS. 'goals' . DS . '
             setFrontendPublished(event_id, status);
         });
 
+        $("#primary_trainer").on('change', function() {
+                 var form = $("#adminForm");
+                 form.submit();
+        })
 
         function setFrontendPublished(event_id, status) {
             var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'

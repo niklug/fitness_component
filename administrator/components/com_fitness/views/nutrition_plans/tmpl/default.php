@@ -25,12 +25,10 @@ $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
 
 
-/*
-$config = JFactory::getConfig();
-$date = new DateTime();
-$date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
-echo $date->format('Y-m-d H:i:s');
-*/
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_plans'); ?>" method="post" name="adminForm" id="adminForm">
@@ -139,24 +137,9 @@ echo $date->format('Y-m-d H:i:s');
                             <?php echo JHtml::_('select.options', $active, "value", "text", $this->state->get('filter.active'), true);?>
                     </select>
             </div>
-            
 
-
-            <?php
-            $db = JFactory::getDbo();
-
-            $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
-            $db->setQuery($sql);
-            if(!$db->query()) {
-                JError::raiseError($db->getErrorMsg());
-            }
-            $primary_trainerlist = $db->loadObjectList();
-            ?>
             <div class='filter-select fltrt'>
-                    <select name="filter_primary_trainer" class="inputbox" onchange="this.form.submit()">
-                            <option value=""><?php echo JText::_('-Primary Trainer-');?></option>
-                            <?php echo JHtml::_('select.options', $primary_trainerlist, "value", "text", $this->state->get('filter.primary_trainer'), true);?>
-                    </select>
+                <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'filter_primary_trainer', 'primary_trainer', $this->state->get('filter.primary_trainer'), 'Primary Trainer', false, 'inputbox'); ?>
             </div>
                            
 
@@ -371,7 +354,7 @@ echo $date->format('Y-m-d H:i:s');
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+    (function($) {
 
         $("#reset_filtered").click(function(){
             var form = $("#adminForm");
@@ -380,35 +363,42 @@ echo $date->format('Y-m-d H:i:s');
             form.submit();
         });
 
-    });
-    
-    function sendEmail(id, method) {
-        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
-        $.ajax({
-                type : "POST",
-                url : url,
-                data : {
-                    id : id
-                },
-                dataType : 'json',
-                success : function(response) {
-                    if(response.success) {
-                        var emails = response.Msg.split(',');
 
-                        var message = 'Emails were sent to: ' +  "</br>";
-                        $.each(emails, function(index, email) { 
-                            message += email +  "</br>";
-                        });
-                        $("#emais_sended").append(message);
+        function sendEmail(id, method) {
+            var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
+            $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                        id : id
+                    },
+                    dataType : 'json',
+                    success : function(response) {
+                        if(response.success) {
+                            var emails = response.Msg.split(',');
 
-                    } else {
-                        alert(response.Msg);
+                            var message = 'Emails were sent to: ' +  "</br>";
+                            $.each(emails, function(index, email) { 
+                                message += email +  "</br>";
+                            });
+                            $("#emais_sended").append(message);
+
+                        } else {
+                            alert(response.Msg);
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("error");
                     }
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown)
-                {
-                    alert("error");
-                }
-        });
-    }
+            });
+        }
+
+
+        $("#primary_trainer").on('change', function() {
+                 var form = $("#adminForm");
+                 form.submit();
+        })
+        
+    })($js);
 </script>

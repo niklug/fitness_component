@@ -20,6 +20,10 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
+
+        
+        
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=business_profiles'); ?>" method="post" name="adminForm" id="adminForm">

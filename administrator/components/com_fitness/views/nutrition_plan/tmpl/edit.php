@@ -13,6 +13,10 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
+
 ?>
 <style type="text/css">
     /* Temporary fix for drifting editor fields */
@@ -32,23 +36,10 @@ JHtml::_('behavior.keepalive');
                 <td width="30%">
                     <fieldset style="min-height:200px;" class="adminform">
                         <legend>CLIENT & TRAINER(S)</legend>
-                        <?php
-                        $db = JFactory::getDbo();
-
-                        $sql = "SELECT id AS value, username AS text FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
-                        $db->setQuery($sql);
-                        if(!$db->query()) {
-                            JError::raiseError($db->getErrorMsg());
-                        }
-                        $primary_trainerlist = $db->loadObjectList();
-                        ?>
                         <ul>
                             <li><?php echo $this->form->getLabel('trainer_id'); ?>
                                 <div class='filter-select fltrt'>
-                                    <select id="jform_trainer_id" class="inputbox" name="jform[trainer_id]">
-                                        <option value=""><?php echo JText::_('-Select-');?></option>
-                                        <?php echo JHtml::_('select.options', $primary_trainerlist, "value", "text", $this->item->trainer_id, true);?>
-                                    </select>
+                                    <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'jform[trainer_id]', 'jform_trainer_id', $this->item->trainer_id, '' ,true, "required"); ?>
                                 </div>
                             </li>
                             <li><?php echo $this->form->getLabel('client_id'); ?>

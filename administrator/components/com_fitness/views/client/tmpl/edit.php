@@ -12,9 +12,10 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 
@@ -24,12 +25,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_CLIENT'); ?></legend>
             <ul class="adminformlist">
                 <?php
-                $db = JFactory::getDbo();
-                $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
-                $db->setQuery($sql);
-                $grouplist = $db->loadObjectList();
-
-                $userGroup = $this->model->getUserGroup($this->item->user_id); 
+                $userGroup = $helper->getUserGroup($this->item->user_id); 
+                
+                if(!$userGroup['success']) {
+                    JError::raiseError($userGroup['message']);
+                }
                 
                 $id = $this->item->id;
                 ?>
@@ -37,21 +37,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 <li>
                     <label id="jform_user_id-lbl" class="" for="jform_user_id">User Group</label>
                    <?php if(!$id) { ?>
-                    <select readonly id="user_group" name="user_group" class="inputbox" >
-                        <option value=""><?php echo JText::_('-Select-'); ?></option>
-                        <?php 
-                        foreach ($grouplist as $option) {
-                            if($userGroup == $option->text){ 
-                                $selected = 'selected';
-                            } else {
-                                $selected = '';
-                            }
-                            echo '<option ' . $selected . ' value="' . $option->value . '">' . $option->text . ' </option>';
-                        }
-                        ?>
-                    </select>
+                    
+                    <?php echo $helper->generateSelect($helper->getGroupList(), 'user_group', 'user_group', $this->item->user_group, '', true, "required"); ?>
+                    
                     <?php } else {
-                        echo $userGroup;
+                        echo $userGroup['data'];
                     }
                     ?>
                 </li>
@@ -70,9 +60,11 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 
                 <li><?php echo $this->form->getLabel('primary_trainer'); ?>
-                <?php echo $this->form->getInput('primary_trainer'); ?></li>
+                <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'jform[primary_trainer]', 'jform_primary_trainer', $this->item->primary_trainer); ?>
+                </li>
                 <li><?php echo $this->form->getLabel('other_trainers'); ?>
-                <?php echo $this->model->getInput($this->item->id, '#__fitness_clients'); ?></li>
+                    <?php echo $helper->getOtherTrainersSelect($this->item->id, '#__fitness_clients'); ?>
+                </li>
 
             </ul>
         </fieldset>

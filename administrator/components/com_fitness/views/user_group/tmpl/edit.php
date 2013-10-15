@@ -12,75 +12,43 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
+
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
+
+
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="user_group-form" class="form-validate">
     <div class="width-60 fltlft">
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_USER_GROUP'); ?></legend>
             <ul class="adminformlist">
-                                <?php
-                                $db = JFactory::getDbo();
-                                $sql = 'SELECT id AS value, name AS text'. ' FROM #__fitness_business_profiles' . ' ORDER BY id';
-                                $db->setQuery($sql);
-                                if(!$db->query()) {
-                                    JError::raiseError($db->getErrorMsg());
-                                }
-                                $business_profiles = $db->loadObjectList();
-                                ?>
+                <li>
+                    <label id="" class="" for="jform_group_id">Business Name</label>
+                    <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $this->item->business_profile_id , '', true, "required"); ?>
+                </li>
 
-                                <li>
-                                    <label id="jform_user_id-lbl" class="" for="jform_group_id">Business Name</label>
-                                    <select  id="business_profile_id"  name="jform[business_profile_id]" aria-required="true" required="required" class="required" >
-                                        <option value=""><?php echo JText::_('-Select-'); ?></option>
-                                        <?php 
-                                        foreach ($business_profiles as $option) {
-                                            if($this->item->business_profile_id == $option->value){ 
-                                                $selected = 'selected';
-                                            } else {
-                                                $selected = '';
-                                            }
-                                            echo '<option ' . $selected . ' value="' . $option->value . '">' . $option->text . ' </option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </li>
-                                
-                                
-                                <?php
-                                $db = JFactory::getDbo();
-                                $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
-                                $db->setQuery($sql);
-                                $grouplist = $db->loadObjectList();
-                                ?>
+                <li>
+                    <label id="jform_user_id-lbl" class="" for="jform_group_id">User Group</label>
+                    
+                    <?php echo $helper->generateSelect($helper->getGroupList(), 'jform[group_id]', 'group_id', $this->item->group_id, '', true, "required"); ?>
+                </li>
 
-                                <li>
-                                    <label id="jform_user_id-lbl" class="" for="jform_group_id">User Group</label>
-                                    <select  id="group_id"  name="jform[group_id]" aria-required="true" required="required" class="required" >
-                                        <option value=""><?php echo JText::_('-Select-'); ?></option>
-                                        <?php 
-                                        foreach ($grouplist as $option) {
-                                            if($this->item->group_id == $option->value){ 
-                                                $selected = 'selected';
-                                            } else {
-                                                $selected = '';
-                                            }
-                                            echo '<option ' . $selected . ' value="' . $option->value . '">' . $option->text . ' </option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </li>
-                
-				<li><?php echo $this->form->getLabel('primary_trainer'); ?>
-				<?php echo $this->form->getInput('primary_trainer'); ?></li>
-                                
-                                
-				
-                                <li><?php echo $this->form->getLabel('other_trainers'); ?>
-                                <?php echo $this->client_model->getInput($this->item->id, '#__fitness_user_groups'); ?></li>
-                                
-                                
-				<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
+                <li><?php echo $this->form->getLabel('primary_trainer'); ?>
+                <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'jform[primary_trainer]', 'jform_primary_trainer', $this->item->primary_trainer, ''); ?>
+                </li>
+
+
+
+                <li><?php echo $this->form->getLabel('other_trainers'); ?>
+                <?php echo $helper->getOtherTrainersSelect($this->item->id, '#__fitness_user_groups'); ?>
+                </li>
+
+
+                <input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 
 
             </ul>

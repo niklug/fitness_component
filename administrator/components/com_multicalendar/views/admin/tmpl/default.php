@@ -22,6 +22,10 @@
 
 defined('_JEXEC') or die('Restricted access'); 
 require_once( JPATH_COMPONENT_SITE.'/DC_MultiViewCal/php/list.inc.php' );
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+
 global $arrayJS_list;
 global $JC_JQUERY_SPECIAL ;
 $mainframe  =& JFactory::getApplication();
@@ -152,10 +156,12 @@ function getUserGroup($user_id) {
     </div>
 
     <?php
+    $trainers_group_id = FitnessHelper::getTrainersGroupId();
+    
     $db = JFactory::getDbo();
     $sql = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map
         ON #__user_usergroup_map.user_id=#__users.id
-        WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')";
+        WHERE #__user_usergroup_map.group_id='$trainers_group_id'";
     if(getUserGroup() != 'Super Users') {
         $user_id = &JFactory::getUser()->id;
         $sql .= " AND #__users.id='$user_id'";

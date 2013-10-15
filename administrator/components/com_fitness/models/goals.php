@@ -780,7 +780,7 @@ class FitnessModelgoals extends JModelList {
         
         
         $send_to = 'all_trainers';
-        if(($user_type['data'] == $helper::TRAINERS_USERGROUP) OR ($user_type['data'] == $helper::ADMINISTRATOR_USERGROUP)) {
+        if(($user_type['data'] == FitnessHelper::getTrainersGroupId()) OR ($user_type['data'] == $helper::ADMINISTRATOR_USERGROUP)) {
             $send_to = 'client_and_other_trainers'; 
         }
         

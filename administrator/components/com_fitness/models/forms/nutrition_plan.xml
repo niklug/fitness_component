@@ -13,11 +13,7 @@
               required="true" 
               filter="safehtml" /> 
 
-        <field name="trainer_id" type="sql" class="inputbox"
-              query="SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id WHERE #__user_usergroup_map.group_id=(SELECT id FROM #__usergroups WHERE title='Trainers')"
-              key_field="id"
-              value_field="username"
-              label="COM_FITNESS_FORM_LBL_CLIENT_PRIMARY_TRAINER"
+        <field name="trainer_id" type="text" class="inputbox"
               required="true"
         /> 
         

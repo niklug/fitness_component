@@ -20,6 +20,10 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=user_groups'); ?>" method="post" name="adminForm" id="adminForm">
@@ -39,44 +43,12 @@ $saveOrder	= $listOrder == 'a.ordering';
 			</select>
 		</div>
 		<div class='filter-select fltrt'>
-                                   
-                         <?php
-                        $db = JFactory::getDbo();
-                        $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
-                        $db->setQuery($sql);
-                        if(!$db->query()) {
-                            JError::raiseError($db->getErrorMsg());
-                        }
-                        $grouplist = $db->loadObjectList();
-                        ?>
 
-                        <div class='filter-select fltrt'>
-                                <select name="filter_group_id" class="inputbox" onchange="this.form.submit()">
-                                        <option value=""><?php echo JText::_('-User Group-');?></option>
-                                        <?php echo JHtml::_('select.options', $grouplist, "value", "text", $this->state->get('filter.group_id'), true);?>
-                                </select>
-                        </div>
-                    
-                    <?php
-                        $db = JFactory::getDbo();
-                        $sql = 'SELECT id AS value, name AS text'. ' FROM #__fitness_business_profiles' . ' ORDER BY id';
-                        $db->setQuery($sql);
-                        if(!$db->query()) {
-                            JError::raiseError($db->getErrorMsg());
-                        }
-                        $business_profiles = $db->loadObjectList();
-                        ?>
-                        <select name="filter_business_profile_id" class="inputbox" onchange="this.form.submit()">
-                                <option value=""><?php echo JText::_('-Business Profile-');?></option>
-                                <?php echo JHtml::_('select.options', $business_profiles, "value", "text", $this->state->get('filter.business_profile_id'), true);?>
-                        </select>
-
-                    
+                    <div class='filter-select fltrt'>
+                        <?php echo $helper->generateSelect($helper->getGroupList(), 'filter_group_id', 'group_id', $this->state->get('filter.group_id'), 'User Group', false, 'inputbox'); ?>
+                    </div>
+                        <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id'), 'Business Profile', false, 'inputbox'); ?>
 		</div>
-
-		
-
-
 	</fieldset>
 	<div class="clr"> </div>
 
@@ -237,6 +209,12 @@ $saveOrder	= $listOrder == 'a.ordering';
             form.find("input").val('');
             form.submit();
         });
+        
+        $("#group_id, #business_profile_id").on('change', function() {
+             var form = $("#adminForm");
+             form.submit();
+        })
+
     })($js);
     
     
