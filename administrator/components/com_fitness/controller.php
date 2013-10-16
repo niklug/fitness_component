@@ -265,6 +265,13 @@ class FitnessController extends JController
             $view -> checkUniqueGroup();
 	}
         
+        // user group view
+        function onBusinessNameChange() {
+            $view = $this -> getView('user_group', 'json');
+            $view->setModel($this->getModel('user_group'));
+            $view -> onBusinessNameChange();
+	}
+        
 
         
         

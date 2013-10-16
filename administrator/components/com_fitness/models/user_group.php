@@ -11,7 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
-
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 /**
  * Fitness model.
  */
@@ -121,6 +121,40 @@ class FitnessModeluser_group extends JModelAdmin
 
 		}
 	}
+        
+        public function onBusinessNameChange($data_encoded, $table) {
+            $result['status']['success'] = 1;
+            
+            $helper = new FitnessHelper();
+            
+            $data = json_decode($data_encoded);
+            
+            $business_profile_id = $data->business_profile_id;
+            
+            $business_profile = $helper->getBusinessProfile($business_profile_id);
+            
+            if(!$business_profile['success']) {
+                $result['status']['success'] = 0;
+                $result['status']['message'] = $business_profile['message'];
+                return $result;
+            }
+            
+            $business_profile = $business_profile['data'];
+            
+            $trainers_group_id =  $business_profile->group_id;
+            
+            $trainers = $helper->getUsersByGroup($trainers_group_id);
+            
+            if(!$trainers['success']) {
+                $result['status']['success'] = 0;
+                $result['status']['message'] = $trainers['message'];
+                return $result;
+            }
+            
+            $result['data'] = $trainers['data'];
+            
+            return  $result;
+        }
         
 
 }

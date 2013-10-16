@@ -44,9 +44,11 @@ class plgUserFitness extends JPlugin
     function addUserToFitnessComponent($user, $isnew, $success, $msg){
         $db = JFactory::getDbo();
         
-        $gid = $user['groups'][0];
+        $group_id = $user['groups'][0];
         
-        $query = "SELECT * FROM #__fitness_user_groups WHERE gid='$gid' AND state='1'";
+        $user_id = $user['id'];
+        
+        $query = "SELECT * FROM #__fitness_user_groups WHERE group_id='$group_id' AND state='1'";
         $db->setQuery($query);
         if(!$db->query()) {
             JError::raiseError($db->getErrorMsg());
@@ -59,7 +61,21 @@ class plgUserFitness extends JPlugin
         $data->other_trainers = $group_trainers->other_trainers;
         $data->state = '1';
         
-        $insert = $db->insertObject('#__fitness_clients', $data, 'id');
+        //check if user exists in fitness clients table
+        $query = "SELECT id FROM #__fitness_clients WHERE user_id='$user_id'";
+        $db->setQuery($query);
+        if(!$db->query()) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        $data->id = $db->loadResult();
+        
+        if($data->id) {
+            $insert = $db->updateObject('#__fitness_clients', $data, 'id');
+        } else {
+            $insert = $db->insertObject('#__fitness_clients', $data, 'id');
+        }
+        
+        
         if (!$insert) {
             JError::raiseError($db->getErrorMsg());
         }

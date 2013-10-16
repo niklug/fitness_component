@@ -86,20 +86,20 @@ $helper = new FitnessHelper();
                getUsersByGroup(user_group);
             });
             
-            var all_options = $('#other_trainers').html();
-
-            $("#jform_primary_trainer").on('change', function() {
+            all_options = $('#jform_other_trainers').html();
+            $("#jform_primary_trainer").live('change', function() {
+                if(!all_options) {
+                    all_options = $('#jform_other_trainers').html();
+                }
                 var value = $(this).val();
-                hideSelectOption(value, '#other_trainers', all_options);
+                hideSelectOption(value, '#jform_other_trainers', all_options);
             });
 
             var value = $("#jform_primary_trainer").val();
-            hideSelectOption(value, '#other_trainers', all_options);
-
-
-
+            hideSelectOption(value, '#jform_other_trainers', all_options);
+            
             function hideSelectOption(value, element, all_options) {
-
+            
                 $(element).html(all_options);
 
                 $(element + " option[value=" + value + "]").remove();

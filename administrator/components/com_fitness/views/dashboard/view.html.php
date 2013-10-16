@@ -65,9 +65,14 @@ class FitnessViewDashboard extends JView
 	 */
 	protected function addToolbar()
 	{
-      
+            
+            require_once JPATH_COMPONENT . '/helpers/fitness.php';
+
 
             JToolBarHelper::title(JText::_('Dashboard'), 'notificationss.png');
+            
+            JToolBarHelper::preferences('com_fitness');
+
 
             
         }

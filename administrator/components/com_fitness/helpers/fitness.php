@@ -42,7 +42,8 @@ class FitnessHelper
         $db = & JFactory::getDBO();
         $user = &JFactory::getUser();
         $groups = $user->get('groups');
-        $user_group_id = $groups[8];
+        $user_group_id = array_shift(array_values($groups));
+
 
         $query = "SELECT bp.group_id AS trainers_group_id from #__fitness_user_groups AS ug "
                 . " INNER JOIN #__fitness_business_profiles AS bp ON bp.id=ug.business_profile_id "
@@ -56,6 +57,11 @@ class FitnessHelper
         }
         
         $trainers_group_id = $db->loadResult();
+        
+        
+        if (!$trainers_group_id) {
+            $trainers_group_id = $user_group_id;
+        }
         
         if (!$trainers_group_id) {
             JError::raiseWarning( 100, 'No Trainers Group assigned!' );
@@ -388,10 +394,11 @@ class FitnessHelper
     }
     
     
-    public function getTrainersByUsergroup() {
+    public function getTrainersByUsergroup($trainers_group_id) {
         
-        $trainers_group_id = self::getTrainersGroupId();
-
+        if(!$trainers_group_id) {
+            $trainers_group_id = self::getTrainersGroupId();
+        }
         $db = &JFactory::getDBo();
         $query = "SELECT id AS value, username AS text FROM #__users "
                 . "INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id"
@@ -432,8 +439,10 @@ class FitnessHelper
         return $html;
     }
     
-    function getOtherTrainersSelect($item_id, $table) {
-        $trainers_group_id = self::getTrainersGroupId();
+    function getOtherTrainersSelect($item_id, $table, $trainers_group_id) {
+        if(!$trainers_group_id) {
+            $trainers_group_id = self::getTrainersGroupId();
+        }
         $db = &JFactory::getDbo();
         $query = "SELECT id, username FROM #__users"
                 . " INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id "
@@ -446,7 +455,7 @@ class FitnessHelper
             JError::raiseError($db->getErrorMsg());
         }
         $other_trainers = explode(',', $db->loadResult());
-        $drawField = '<select size="10" id="other_trainers" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
+        $drawField = '<select size="10" id="jform_other_trainers" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
         $drawField .= '<option value="">none</option>';
         if(isset($result)) {
             foreach ($result as $item) {
@@ -459,7 +468,8 @@ class FitnessHelper
             }
         }
         $drawField .= '</select>';
-        return $drawField;
+        
+         return $drawField;
     }
     
     public function getGroupList() {
@@ -475,13 +485,27 @@ class FitnessHelper
     
     public function getBusinessProfileList() {
         $db = JFactory::getDbo();
-        $sql = 'SELECT id AS value, name AS text FROM #__fitness_business_profiles' . ' ORDER BY id';
+        $sql = "SELECT id AS value, name AS text FROM #__fitness_business_profiles WHERE state='1' ORDER BY id";
         $db->setQuery($sql);
         if(!$db->query()) {
             JError::raiseError($db->getErrorMsg());
         }
-        $grouplist = $db->loadObjectList();
-        return $grouplist;
+        $result = $db->loadObjectList();
+        return $result;
+    }
+    
+    public function getBusinessProfile($id) {
+        $ret['success'] = 1;
+        $db = JFactory::getDbo();
+        $sql = "SELECT * FROM #__fitness_business_profiles WHERE id='$id' AND state='1'";
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->getErrorMsg();
+        }
+        $ret['data'] = $db->loadObject();
+        
+        return $ret;
     }
     
     

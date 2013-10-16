@@ -34,20 +34,41 @@ $helper = new FitnessHelper();
                 <li>
                     <label id="jform_user_id-lbl" class="" for="jform_group_id">User Group</label>
                     
-                    <?php echo $helper->generateSelect($helper->getGroupList(), 'jform[group_id]', 'group_id', $this->item->group_id, '', true, "required"); ?>
+                    <?php
+                    echo $helper->generateSelect($helper->getGroupList(), 'jform[group_id]', 'group_id', $this->item->group_id, '', true, "required");
+                    ?>
                 </li>
 
                 <li><?php echo $this->form->getLabel('primary_trainer'); ?>
-                <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'jform[primary_trainer]', 'jform_primary_trainer', $this->item->primary_trainer, ''); ?>
+                <?php
+                      $business_profile_id = $this->item->business_profile_id;
+                      
+                      $business_profile = $helper->getBusinessProfile($business_profile_id);
+                      if(!$business_profile['success']) {
+                          JError::raiseError($business_profile['message']);
+                      }
+                      $business_profile = $business_profile['data'];
+                      $group_id = $business_profile->group_id;
+                      $primary_trainers = array();
+                      if($group_id) {
+                          $primary_trainers = $helper->getTrainersByUsergroup($group_id);
+                      } 
+                      echo $helper->generateSelect($primary_trainers, 'jform[primary_trainer]', 'jform_primary_trainer', $this->item->primary_trainer, ''); ?>
                 </li>
 
 
 
                 <li><?php echo $this->form->getLabel('other_trainers'); ?>
-                <?php echo $helper->getOtherTrainersSelect($this->item->id, '#__fitness_user_groups'); ?>
+                    <?php
+                    $item_id = $this->item->id;
+                    if($item_id) {
+                        echo $helper->getOtherTrainersSelect($this->item->id, '#__fitness_user_groups', $group_id);
+                    } else {
+                        echo $helper->generateSelect(array(), 'jform[other_trainers]', 'jform_other_trainers', $this->item->other_trainers, ''); 
+                    }
+                    ?>
                 </li>
-
-
+                
                 <input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 
 
@@ -67,15 +88,65 @@ $helper = new FitnessHelper();
 <script type="text/javascript">
     (function($) {
         
-        var all_options = $('#other_trainers').html();
+        $("#business_profile_id").on('change', function() {
+            all_options = '';
+            $("#jform_primary_trainer, #jform_other_trainers").html('<option  value="">-Select-</option>');
+            
+            var business_profile_id = $(this).val();
+            var data = {};
+            var url = '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            var view = 'user_group';
+            var task = 'onBusinessNameChange';
+            var table = '#__fitness_business_profiles';
+            data.business_profile_id = business_profile_id;
+            
+            $.AjaxCall(data, url, view, task, table, function(output) {
+                
+                var primary_trainer = '<?php echo $this->item->primary_trainer; ?>';
+                var html = '<option  value="">-Select-</option>';
+                $.each(output, function(index, value) {
+                     if(index) {
+                        var selected = '';
+                        if(primary_trainer == index) {
+                            selected = 'selected';
+                        }
+                        html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
+                    }
+                });
+                $("#jform_primary_trainer").html(html);
+
+                var html2 ='<select size="10" id="jform_other_trainers" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
+                html2 += '<option  value="">none</option>';
+                $.each(output, function(index, value) {
+                     if(index) {
+                        html2 += '<option  value="' + index + '">' +  value + '</option>';
+                    }
+                });
+                
+                html2 += '</select>';
+                
+                $("#jform_other_trainers").replaceWith(html2);
+                
+            });
+            
+        });
         
-        $("#jform_primary_trainer").on('change', function() {
+        
+        
+        
+        
+        
+        all_options = $('#jform_other_trainers').html();
+        $("#jform_primary_trainer").live('change', function() {
+            if(!all_options) {
+                all_options = $('#jform_other_trainers').html();
+            }
             var value = $(this).val();
-            hideSelectOption(value, '#other_trainers', all_options);
+            hideSelectOption(value, '#jform_other_trainers', all_options);
         });
 
         var value = $("#jform_primary_trainer").val();
-        hideSelectOption(value, '#other_trainers', all_options);
+        hideSelectOption(value, '#jform_other_trainers', all_options);
         
         
 
