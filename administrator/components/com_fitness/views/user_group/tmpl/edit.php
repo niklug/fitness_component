@@ -27,7 +27,7 @@ $helper = new FitnessHelper();
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_USER_GROUP'); ?></legend>
             <ul class="adminformlist">
                 <li>
-                    <label id="" class="" for="jform_group_id">Business Name</label>
+                    <label id="" class="" for="jform_business_profile_id">Business Name</label>
                     <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $this->item->business_profile_id , '', true, "required"); ?>
                 </li>
 

@@ -1,13 +1,14 @@
 CREATE TABLE IF NOT EXISTS `#__fitness_clients` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-
+`business_profile_id` INT(11)  NOT NULL ,
 `user_id` INT(11)  NOT NULL ,
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 `primary_trainer` INT(11)  NOT NULL ,
 `other_trainers` VARCHAR(255)  NOT NULL ,
 PRIMARY KEY (`id`),
 UNIQUE (`user_id`),
-FOREIGN KEY (user_id) REFERENCES #__users(id) ON DELETE CASCADE
+FOREIGN KEY (user_id) REFERENCES #__users(id) ON DELETE CASCADE,
+FOREIGN KEY (business_profile_id) REFERENCES #__fitness_business_profiles(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT COLLATE=utf8_general_ci;
 
 

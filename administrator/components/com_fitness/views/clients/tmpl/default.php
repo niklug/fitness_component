@@ -45,11 +45,11 @@ $helper = new FitnessHelper();
 			</select>
 		</div>
                 <div class='filter-select fltrt'>
-                    <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'filter_primary_trainer', 'primary_trainer', $this->state->get('filter.primary_trainer'), 'Primary Trainer'); ?>
+                    <?php echo $helper->generateSelect($helper->getTrainersClientsTable(), 'filter_primary_trainer', 'primary_trainer', $this->state->get('filter.primary_trainer'), 'Primary Trainer'); ?>
 		</div>
 
                 <div class='filter-select fltrt'>
-                    <?php echo $helper->generateSelect($helper->getGroupList(), 'filter_group', 'group_id', $this->state->get('filter.group'), 'User Group', false, 'inputbox'); ?>
+                    <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id') , 'Business Name', false, "inputbox"); ?>
 		</div>
 
 	</fieldset>
@@ -71,7 +71,7 @@ $helper = new FitnessHelper();
 				</th>
                                 
                                 <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'User Group', 'a.user_group', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Business Name', 'business_name', $listDirn, $listOrder); ?>
 				</th>
 
 				<th class='left'>
@@ -143,7 +143,7 @@ $helper = new FitnessHelper();
 					<?php echo $item->username;?>
 				</td>
                                 <td>
-					<?php echo $item->usergroup; ?>
+					<?php echo $item->business_name; ?>
 				</td>
 				<td>
 					<?php echo $item->email; ?>
@@ -221,7 +221,7 @@ $helper = new FitnessHelper();
             form.submit();
         });
         
-        $("#group_id, #primary_trainer").on('change', function() {
+        $("#business_profile_id, #primary_trainer").on('change', function() {
              var form = $("#adminForm");
              form.submit();
              

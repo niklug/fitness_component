@@ -26,6 +26,11 @@ class FitnessViewBusiness_profile extends JView
 	 */
 	public function display($tpl = null)
 	{
+                require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+                if(!FitnessHelper::is_superuser()){
+                    JError::raiseError('You don\'t have access to this view!');
+                    return false;
+                }
 		$this->state	= $this->get('State');
 		$this->item		= $this->get('Item');
 		$this->form		= $this->get('Form');

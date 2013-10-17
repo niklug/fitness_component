@@ -324,7 +324,7 @@ class FitnessModelgoals extends JModelList {
     public function getUsersByGroup($group_id) {
         $status['success'] = 1;
         
-        $helper = $helper = $this->helper;
+        $helper = $this->helper;
         
         $users = $helper->getUsersByGroup($group_id);
         
@@ -335,6 +335,28 @@ class FitnessModelgoals extends JModelList {
 
         $result = array( 'status' => $status, 'data' => $users['data']);
         return  json_encode($result);
+
+    }
+    
+    public function getUsersByBusiness($business_id) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $user_group_data = $helper->getUserGroupByBusiness($business_id);
+        
+        if(!$user_group_data['success']) {
+            $status['success'] = 0;
+            $status['message'] = $user_group_data['message'];
+            $result = array( 'status' => $status);
+            return  json_encode($result);
+        }
+        
+        $user_group_data = $user_group_data['data'];
+        
+        $group_id = $user_group_data->group_id;
+        
+        return $this->getUsersByGroup($group_id);
 
     }
     

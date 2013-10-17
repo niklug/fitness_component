@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS `#__dc_mv_events` (
   `rrule` varchar(255) DEFAULT NULL,
   `uid` int(10) DEFAULT NULL,
   `exdate` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `#__dc_mv_configuration` (

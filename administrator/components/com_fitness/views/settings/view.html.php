@@ -12,6 +12,9 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+
 /**
  * View class for a list of Fitness.
  */
@@ -48,8 +51,11 @@ class FitnessViewSettings extends JView {
         FitnessHelper::addSubmenu('Locations', 'locations');
         FitnessHelper::addSubmenu('Recipe Types', 'recipe_types');
         FitnessHelper::addSubmenu('Nutrition Focuses', 'nutrition_focuses');
-        FitnessHelper::addSubmenu('User Groups', 'user_groups');
-        FitnessHelper::addSubmenu('Business Profiles', 'business_profiles');
+        
+        if(FitnessHelper::is_superuser()){
+            FitnessHelper::addSubmenu('User Groups', 'user_groups');
+            FitnessHelper::addSubmenu('Business Profiles', 'business_profiles');
+        }
 
 
         parent::display($tpl);
