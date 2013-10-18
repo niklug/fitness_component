@@ -12,9 +12,11 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
+
 ?>
 <style type="text/css">
 #jform_details-lbl, #jform_comments-lbl {
@@ -30,41 +32,17 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_GOALS_LEGEND_GOAL'); ?></legend>
             <ul class="adminformlist">
-
-                		<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
-                                <?php
-                                $user = &JFactory::getUser();
-                                $userGroup = $this->getUserGroup($user->id); 
-                                $db = JFactory::getDbo();
-
-                                $sql = "SELECT #__users.id AS value, #__users.username as text FROM #__users INNER JOIN #__fitness_clients ON #__fitness_clients.user_id=#__users.id WHERE #__fitness_clients.state='1'";
-                    
-                                if ($userGroup != 'Super Users') {
-                                    $sql .= "AND  #__fitness_clients.primary_trainer='$user->id'";
-                                }
                                 
-                                $db->setQuery($sql);
-                                $clients = $db->loadObjectList();
-                                ?>
+                		<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
+                                <li><?php echo $this->form->getLabel('business_profile_id'); 
+                                $business_profile_id = $helper->getBubinessIdByClientId($this->item->user_id);
+                                
+                                echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $business_profile_id , '', true, "required required"); ?>
+                                </li>
 
                                 <li>
-                                    <label id="jform_user_id-lbl" class=" required" for="jform_user_id">
-                                        Client
-                                        <span class="star"> *</span>
-                                    </label>
-                                    <select id="jform_user_id" class="inputbox required" name="jform[user_id]" aria-required="true" required="required">
-                                        <option value=""><?php echo JText::_('-Select-'); ?></option>
-                                        <?php 
-                                        foreach ($clients as $option) {
-                                            if($this->item->user_id == $option->value){ 
-                                                $selected = 'selected';
-                                            } else {
-                                                $selected = '';
-                                            }
-                                            echo '<option ' . $selected . ' value="' . $option->value . '">' . $option->text . ' </option>';
-                                        }
-                                        ?>
-                                    </select>
+                                   <?php echo $this->form->getLabel('user_id'); ?>
+                                    <select id="jform_user_id" class="inputbox required" name="jform[user_id]" required="required"></select>
                                 </li>
                                                              
 				<li><?php echo $this->form->getLabel('goal_category_id'); ?>
@@ -124,8 +102,6 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
     
     (function($) {
         
-
-        
         var comment_options = {
             'item_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
@@ -140,6 +116,59 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
           
         var comments_html = comments.run();
         $("#comments_wrapper").html(comments_html);
+        
+        
+        $("#business_profile_id").on('change', function() {
+            var business_profile_id = $(this).val();
+            getUsersByBusiness(business_profile_id);
+
+        });
+        
+        function getUsersByBusiness(business_id) {
+            var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                   view : 'goals',
+                   format : 'text',
+                   task : 'getUsersByBusiness',
+                   business_id : business_id
+                },
+                dataType : 'json',
+                success : function(response) {
+                    if(!response.status.success) {
+                        alert(response.status.message);
+                        $("#jform_user_id").html('');
+                        return;
+                    }
+                    var client_id = '<?php echo $this->item->user_id; ?>';
+
+                    var html = '<option  value="">-Select-</option>';
+                    $.each(response.data, function(index, value) {
+                         if(index) {
+                            var selected = '';
+                            if(client_id == index) {
+                                selected = 'selected';
+                            }
+                            html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
+                        }
+                    });
+                    $("#jform_user_id").html(html);
+
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert("error");
+                }
+            });
+        }
+
+        var business_id = $("#business_profile_id").find(':selected').val();
+        if(business_id) {
+            getUsersByBusiness(business_id);
+        }
+        
         
 
         Joomla.submitbutton = function(task)

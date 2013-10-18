@@ -21,7 +21,9 @@ $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 
+$helper = new FitnessHelper();
 
 // GRAPH
 echo $this->loadTemplate('graph');?>
@@ -99,25 +101,8 @@ echo $this->loadTemplate('graph');?>
                 
             
             
-                <?php
-                $db = JFactory::getDbo();
-                $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
-                $db->setQuery($sql);
-                if(!$db->query()) {
-                    JError::raiseError($db->getErrorMsg());
-                }
-                $grouplist = $db->loadObjectList();
-                foreach ($grouplist as $option) {
-                    $group[] = JHTML::_('select.option', $option->value, $option->text );
-                }
- 
-                ?>
-
                 <div class='filter-select fltrt'>
-			<select name="filter_group" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('-User Group-');?></option>
-				<?php echo JHtml::_('select.options', $group, "value", "text", $this->state->get('filter.group'), true);?>
-			</select>
+                    <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id') , 'Business Name', false, "inputbox"); ?>
 		</div>
 
             
@@ -156,7 +141,7 @@ echo $this->loadTemplate('graph');?>
 				<?php echo JHtml::_('grid.sort',  'Primary Goal', 'gc.name', $listDirn, $listOrder); ?>
 				</th>
                                 <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'User Group', 'a.user_group', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'Business Name', 'business_name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'Start Date', 'a.startdate', $listDirn, $listOrder); ?>
@@ -251,7 +236,7 @@ echo $this->loadTemplate('graph');?>
 				</td>
 
                                 <td>
-					<?php echo $item->usergroup; ?>
+					<?php echo $item->business_name; ?>
 				</td>
                                 <td>
 					<?php echo $item->start_date; ?>
@@ -342,6 +327,12 @@ echo $this->loadTemplate('graph');?>
             form.find("input").val('');
             form.submit();
         });
+        
+        $("#business_profile_id").on('change', function() {
+             var form = $("#adminForm");
+             form.submit();
+             
+        })
 
     
        

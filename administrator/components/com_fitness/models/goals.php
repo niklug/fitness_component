@@ -8,7 +8,7 @@
  * @author      Nikolay Korban <niklug@ukr.net> - http://
  */
 defined('_JEXEC') or die;
-
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 jimport('joomla.application.component.modellist');
 
 /**
@@ -38,6 +38,7 @@ class FitnessModelgoals extends JModelList {
                 'state', 'a.state',
                 'created', 'a.created',
                 'modified', 'a.modified',
+                'business_name', 'business_name',
                 'u.name', 'gc.name'
 
             );
@@ -83,6 +84,10 @@ class FitnessModelgoals extends JModelList {
         // Filter by group
         $group = $app->getUserStateFromRequest($this->context . '.filter.group', 'filter_group', '', 'string');
         $this->setState('filter.group', $group);
+        
+        // Filter by business profile
+        $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
+        $this->setState('filter.business_profile_id', $business_profile_id);
         
         // Filter by goal status
         $goal_status = $app->getUserStateFromRequest($this->context . '.filter.goal_status', 'filter_goal_status', '', 'string');
@@ -144,7 +149,7 @@ class FitnessModelgoals extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*,  ug.title as usergroup, gc.name as goal_category_name'
+                        'list.select', 'a.*,  ug.title as usergroup, gc.name as goal_category_name, bp.name AS business_name'
                 )
         );
         $query->from('`#__fitness_goals` AS a');
@@ -157,14 +162,24 @@ class FitnessModelgoals extends JModelList {
         $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
         
         $query->leftJoin('#__fitness_goal_categories AS gc ON gc.id = a.goal_category_id');
+        
+        $query->leftJoin('#__fitness_clients AS c ON c.user_id = a.user_id');
+        
+        $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = c.business_profile_id');
 
         
-        // filter only for Super Users
+          
+        if(FitnessHelper::is_primary_administrator() || FitnessHelper::is_secondary_administrator()) {
+            $trainers_group_id = FitnessHelper::getTrainersGroupId();
+            $query->where('bp.group_id = '.(int) $trainers_group_id);
+        }
+        
+        // 
         $user = &JFactory::getUser();
-        if ($this->getUserGroup($user->id) != 'Super Users') {
-
+        
+        if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
             $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query->where('a.user_id IN (SELECT DISTINCT user_id FROM #__fitness_clients WHERE primary_trainer=' .  (int) $user->id .  ' OR other_trainers LIKE ' . $other_trainers .  ' )');
+            $query->where('(c.primary_trainer = ' . (int) $user->id . ' OR c.other_trainers LIKE ' . $other_trainers . ' )');
         }
 
         
@@ -189,6 +204,12 @@ class FitnessModelgoals extends JModelList {
         $group = $this->getState('filter.group');
         if (is_numeric($group)) {
             $query->where('g.group_id = '.(int) $group);
+        } 
+        
+        // Filter by business profile
+        $business_profile_id = $this->getState('filter.business_profile_id');
+        if (is_numeric($business_profile_id)) {
+            $query->where('c.business_profile_id = '.(int) $business_profile_id);
         } 
         
         

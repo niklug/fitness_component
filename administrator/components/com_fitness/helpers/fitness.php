@@ -724,6 +724,30 @@ class FitnessHelper extends FitnessFactory
         return $ret;
     }
     
+    public function getClient($client_id) {
+        $ret['success'] = 1;
+        $db = JFactory::getDbo();
+        $sql = "SELECT * FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->getErrorMsg();
+        }
+        $ret['data'] = $db->loadObject();
+        
+        return $ret;
+    }
+    
+    public function getBubinessIdByClientId($client_id) {
+        $client_data = $this->getClient($client_id);
+        if(!$client_data['success']) {
+            JError::raiseError($client_data['message']);
+        }
+        $client_data = $client_data["data"];
+        $business_profile_id = $client_data->business_profile_id;
+        return $business_profile_id;
+    }
+    
     
     
     
