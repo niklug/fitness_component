@@ -94,7 +94,7 @@ class FitnessTablenutrition_recipe extends JTable {
         if (property_exists($this, 'ordering') && $this->id == 0) {
             $this->ordering = self::getNextOrder();
         }
-
+        $this->recipe_type = implode(',',$this->recipe_type);
         return parent::check();
     }
 

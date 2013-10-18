@@ -36,6 +36,11 @@ class FitnessViewNutrition_recipes extends JView
 		}
                 $document = &JFactory::getDocument();
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'ajax_call_function.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'status_class.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'underscore-min.js');
+                include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 		$this->addToolbar();
         
@@ -49,6 +54,10 @@ class FitnessViewNutrition_recipes extends JView
                 FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
                 FitnessHelper::addSubmenu('Assessments', 'assessments');
                 FitnessHelper::addSubmenu('Settings', 'settings');
+                
+                $model = $this->getModel();
+                
+                $this->assign('model', $model);
         
 		parent::display($tpl);
 	}
@@ -119,7 +128,7 @@ class FitnessViewNutrition_recipes extends JView
 
 	}
         
-        function getRecipeTypeByName($id) {
+        function getRecipeName($id) {
             $db = JFactory::getDbo();
             $sql = "SELECT name FROM #__fitness_recipe_types WHERE id='$id' AND state='1'";
             $db->setQuery($sql);

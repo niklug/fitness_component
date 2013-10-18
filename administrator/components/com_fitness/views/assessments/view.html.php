@@ -55,8 +55,8 @@ class FitnessViewAssessments extends JView {
         FitnessHelper::addSubmenu('Calendar', 'calendar');
         FitnessHelper::addSubmenu('Programs', 'programs');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
+        FitnessHelper::addSubmenu('Recipes', 'nutrition_recipes');
         FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
-        FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
         FitnessHelper::addSubmenu('Settings', 'settings');
         
         // connect frontend list model

@@ -45,8 +45,8 @@ class FitnessViewNutrition_diaries extends JView
             FitnessHelper::addSubmenu('Calendar', 'calendar');
             FitnessHelper::addSubmenu('Programs', 'programs');
             FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
+            FitnessHelper::addSubmenu('Recipes', 'nutrition_recipes');
             FitnessHelper::addSubmenu('Assessments', 'assessments');
-            FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
             FitnessHelper::addSubmenu('Settings', 'settings');
             
             $document = &JFactory::getDocument();

@@ -15,10 +15,16 @@
          required="true" 
         filter="safehtml" /> 
        
-       <field name="recipe_type" type="sql" class="inputbox"
-              query="SELECT id, name FROM #__fitness_recipe_types`"
-              key_field="id"
-              value_field="name"
+       <field name="image" type="media"
+                
+            label="Recipe Image"
+            description="" 
+                
+                
+                
+            directory="images" /> 
+       
+       <field name="recipe_type" type="text" class="inputbox"
               label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_RECIPE_TYPE"
         /> 
        
@@ -41,12 +47,23 @@
        <field name="created" type="timecreated" default="" 
             label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_CREATED"
             description="COM_FITNESS_FORM_DESC_NUTRITION_RECIPE_CREATED"  /> 
+       
+       <field name="status" type="list"
+                
+              label="Status"
+              description="" 
+              default="1"   
+              filter="raw">
+            <option value="1">Pending</option>
+            <option value="2">Approved</option>
+            <option value="3">Not Approved</option>
+              </field> 
 
          <field
         name="state"
         type="list"
-        label="JSTATUS"
-        description="JFIELD_PUBLISHED_DESC"
+        label="Published"
+        description=""
         class="inputbox"
         size="1"
         default="1">

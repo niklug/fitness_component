@@ -12,6 +12,10 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 <style type="text/css">
     /* Temporary fix for drifting editor fields */
@@ -40,17 +44,36 @@ JHtml::_('behavior.keepalive');
                             <?php echo $this->form->getLabel('recipe_name'); ?>
                         </td>
                         <td>
-                            <?php echo $this->form->getLabel('recipe_type'); ?>
+                            <?php echo $this->form->getInput('recipe_name'); ?>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>
-                            <?php echo $this->form->getInput('recipe_name'); ?>
+                            <?php echo $this->form->getLabel('image'); ?>
                         </td>
                         <td>
-                            <?php echo $this->form->getInput('recipe_type'); ?> 
+                            <?php echo $this->form->getInput('image'); ?>
+                            <div class="clr"></div>
+                            (image dimensions should match width 200px be height 180px)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $this->form->getLabel('recipe_type'); ?>
+                        </td>
+                        <td>
+                            <?php
+                            $recipes = $helper->getRecipeTypes();
+                            if(!$recipes['success']) {
+                                JError::raiseError($recipes['message']);
+                            }
+                            $recipes = $recipes['data'];
+                                           
+                            echo $helper->generateMultipleSelect($recipes, 'jform[recipe_type]', 'jform_recipe_type', $this->item->recipe_type, '', true, 'inputbox');
+                            
+                            ?> 
                         </td>
                     </tr>
                 </tbody>
@@ -105,6 +128,10 @@ JHtml::_('behavior.keepalive');
             <input id="add_comment_0" class="" type="button" value="Add Comment" >
             <div class="clr"></div>
             <hr>
+            <?php echo $this->form->getLabel('status'); ?>
+            <?php echo $this->form->getInput('status'); ?>
+            <div class="clr"></div>
+            <br/>
             <?php echo $this->form->getLabel('state'); ?>
             <?php echo $this->form->getInput('state'); ?>
         </fieldset>

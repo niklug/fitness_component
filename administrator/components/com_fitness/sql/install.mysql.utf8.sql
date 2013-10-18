@@ -734,9 +734,11 @@ PRIMARY KEY (`id`)
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `recipe_name` varchar(255) NOT NULL,
-  `recipe_type` int(11) NOT NULL,
+  `recipe_type` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
   `number_serves` int(3) NOT NULL,
   `instructions` text NOT NULL,
+  `status` int(1) NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `state` tinyint(1) NOT NULL DEFAULT '1',

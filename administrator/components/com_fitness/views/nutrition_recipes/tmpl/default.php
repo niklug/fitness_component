@@ -143,7 +143,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_SODIUM', 'a.sodium', $listDirn, $listOrder); ?>
 				</th>
                                 <th style="width:1%;" class='left'>
-                                    Notify
+                                    <?php echo JHtml::_('grid.sort',  'Status', 'a.status', $listDirn, $listOrder); ?>
 				</th>
 
 
@@ -207,7 +207,15 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php endif; ?>
 				</td>
 				<td>
-					<?php echo $this->getRecipeTypeByName($item->recipe_type); ?>
+                                    <?php 
+                                        $recipe_types = split(',', $item->recipe_type);
+                                        foreach ($recipe_types as $recipe_type) {
+                                            if($recipe_type) {
+                                                echo $this->getRecipeName($recipe_type) . "<br/>";
+                                            }
+                                        }
+
+                                    ?>
 				</td>
 				<td>
 					<?php echo $item->created_by; ?>
@@ -239,8 +247,8 @@ $saveOrder	= $listOrder == 'a.ordering';
                                 <td>
                                         <?php echo $item->sodium; ?>
                                 </td>
-                                <td>
-                                      <a onclick="sendEmail('<?php echo $item->id ?>', 'Recipe')" class="send_email_button"></a>  
+                                <td id="status_button_place_<?php echo $item->id;?>">
+                                        <?php echo $this->model->status_html($item->id, $item->status, 'status_button') ?>
                                 </td>
 
                 <?php if (isset($this->items[0]->state)) { ?>
@@ -289,44 +297,44 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+    (function($) {
         $("#reset_filtered").click(function(){
             var form = $("#adminForm");
             form.find("select").val('');
             form.find("input").val('');
             form.submit();
         });
+        
+        
+         //status class
+        var recipe_status_options = {
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
+            'db_table' : '#__fitness_nutrition_recipes',
+            'status_button' : 'status_button',
+            'status_button_dialog' : 'status_button_dialog',
+            'dialog_status_wrapper' : 'dialog_status_wrapper',
+            'dialog_status_template' : '#dialog_status_template',
+            'status_button_template' : '#status_button_template',
+            'status_button_place' : '#status_button_place_',
+            'statuses' : {
+                '1' : {'label' : 'PENDING', 'class' : 'recipe_status_pending', 'email_alias' : ''},
+                '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : ''}, 
+                '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : ''}
+            },
+            'statuses2' : {},
+            'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
+            'hide_image_class' : 'hideimage',
+            'show_send_email' : true,
+            setStatuses : function(item_id) {
+                return this.statuses;
+            }
+        }
+        
+        
+        
+        var recipe_status = $.status(recipe_status_options);
+        recipe_status.run();
 
-    });
-  
-    
-    function sendEmail(recipe_id, method) {
-        var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
-        $.ajax({
-                type : "POST",
-                url : url,
-                data : {
-                    recipe_id : recipe_id
-                },
-                dataType : 'json',
-                success : function(response) {
-                    if(response.success) {
-                        var emails = response.Msg.split(',');
-
-                        var message = 'Emails were sent to: ' +  "</br>";
-                        $.each(emails, function(index, email) { 
-                            message += email +  "</br>";
-                        });
-                        $("#emais_sended").append(message);
-
-                    } else {
-                        alert(response.Msg);
-                    }
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown)
-                {
-                    alert("error");
-                }
-        });
-    }
+    })($js);
 </script>

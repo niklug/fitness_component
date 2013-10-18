@@ -49,8 +49,8 @@ class FitnessViewDashboard extends JView
         FitnessHelper::addSubmenu('Programs', 'programs');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
         FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
+        FitnessHelper::addSubmenu('Recipes', 'nutrition_recipes');
         FitnessHelper::addSubmenu('Assessments', 'assessments');
-        FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
         FitnessHelper::addSubmenu('Settings', 'settings');
         
         $this->addToolbar();

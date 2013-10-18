@@ -549,7 +549,7 @@
     padding: 2px 0 7px;
     text-align: center;
     text-transform: uppercase;
-    width: 80px;
+    width: 90px;
     color:#000000 !important;
     font-weight: bold;
     line-height: 19px;
@@ -578,18 +578,18 @@
     margin: 5px;
 }
 
-.goal_status_pending {
+.goal_status_pending, .recipe_status_pending  {
     background-color: #E3E4E4 !important;
     border: 2px solid #A4A4A4;
 }
 
 
-.goal_status_complete {
+.goal_status_complete, .recipe_status_approved {
     background-color: #B0FFB0 !important;
     border: 2px solid #04BF04;
 }
 
-.goal_status_incomplete {
+.goal_status_incomplete, .recipe_status_notapproved {
     background-color: #FF9292 !important;
     border: 2px solid #C60000;
 

@@ -583,6 +583,26 @@ class FitnessHelper extends FitnessFactory
         return $html;
     }
     
+    function generateMultipleSelect($items, $name, $id, $selected, $select, $required, $class) {
+
+        $selected = explode(',', $selected);
+        $html = '<select size="10" id="' . $id . '" class="' . $class . '" multiple="multiple" name="' . $name . '[]">';
+        $html .= '<option value="">none</option>';
+        if(isset($items)) {
+            foreach ($items as $item) {
+                if(in_array($item->id, $selected)){
+                    $selected_option = 'selected="selected"';
+                } else {
+                    $selected_option = '';
+                }
+                $html .= '<option ' . $selected_option . ' value="' . $item->id . '">' . $item->name . ' </option>';
+            }
+        }
+        $html .= '</select>';
+        
+        return $html;
+    }
+    
     function getOtherTrainersSelect($item_id, $table, $trainers_group_id) {
         if(!$trainers_group_id) {
             $trainers_group_id = self::getTrainersGroupId();
@@ -616,6 +636,7 @@ class FitnessHelper extends FitnessFactory
          return $drawField;
     }
     
+        
     public function getGroupList() {
         $db = JFactory::getDbo();
         $sql = 'SELECT id AS value, title AS text'. ' FROM #__usergroups' . ' ORDER BY id';
@@ -685,6 +706,20 @@ class FitnessHelper extends FitnessFactory
             $ret['message'] = $db->getErrorMsg();
         }
         $ret['data'] = $db->loadObject();
+        
+        return $ret;
+    }
+    
+    public function getRecipeTypes() {
+        $ret['success'] = 1;
+        $db = JFactory::getDbo();
+        $sql = "SELECT id, name FROM #__fitness_recipe_types WHERE state='1'";
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->getErrorMsg();
+        }
+        $ret['data'] = $db->loadObjectList();
         
         return $ret;
     }
