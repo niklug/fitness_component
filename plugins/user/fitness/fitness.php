@@ -11,7 +11,7 @@ jimport('joomla.utilities.date'); //Date Functionality
 jimport( 'joomla.user.helper' ); //User helper
 jimport( 'joomla.plugin.helper' ); //Plugin Helper
 
-
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 /**
  * Custom Fitness User Plugin.
  *
@@ -48,6 +48,25 @@ class plgUserFitness extends JPlugin
         
         $user_id = $user['id'];
         
+        
+        
+        if(FitnessHelper::is_trainer($user_id)) {
+            return true;
+        }
+        
+        if(FitnessHelper::is_superuser($user_id)) {
+            return true;
+        }
+        
+        $helper  = new FitnessHelper();
+        
+        $user_group_data = $helper->getBusinessByUserGroup($group_id);
+        
+        if(!$user_group_data['success']) {
+            JError::raiseError($user_group_data['message']);
+        }
+        $user_group_data = $user_group_data['data'];
+        
         $query = "SELECT * FROM #__fitness_user_groups WHERE group_id='$group_id' AND state='1'";
         $db->setQuery($query);
         if(!$db->query()) {
@@ -57,6 +76,7 @@ class plgUserFitness extends JPlugin
         
         $data = new stdClass();
         $data->user_id = $user['id'];
+        $data->business_profile_id = $user_group_data->business_profile_id;
         $data->primary_trainer = $group_trainers->primary_trainer;
         $data->other_trainers = $group_trainers->other_trainers;
         $data->state = '1';

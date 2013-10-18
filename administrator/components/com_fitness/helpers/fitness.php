@@ -34,25 +34,25 @@ class FitnessFactory {
         return self::$trainers_group_id;
     }
     
-     public static function getCurrentGroupId() {
+     public static function getCurrentGroupId($user_id) {
         
         if (!self::$group_id) {
-            self::$group_id = self::createCurrentGroupId();
+            self::$group_id = self::createCurrentGroupId($user_id);
         }
 
         return self::$group_id;
     }
     
-    public static function is_superuser() {
-        if(self::getCurrentGroupId() == self::SUPERUSER_GROUP_ID) {
+    public static function is_superuser($user_id) {
+        if(self::getCurrentGroupId($user_id) == self::SUPERUSER_GROUP_ID) {
             return true;
         }
         return false;
     }
     
-    public static function is_trainer() {
+    public static function is_trainer($user_id) {
         if(self::$is_trainer == null) {
-            $group_id = self::getCurrentGroupId();
+            $group_id = self::getCurrentGroupId($user_id);
             $parent_group_id =  self::MANAGER_GROUP_ID;
             self::$is_trainer = self::isChildGroup($group_id, $parent_group_id);
             return self::$is_trainer;
@@ -60,9 +60,11 @@ class FitnessFactory {
         return self::$is_trainer;
     }
     
-    public static function is_primary_administrator() {
+    public static function is_primary_administrator($user_id) {
         if(self::$is_primary_administrator == null) {
-            $user_id = &JFactory::getUser()->id;
+            if(!$user_id) {
+                $user_id = &JFactory::getUser()->id;
+            }
             $primary_administrator_id = self::getAdministratorId('primary_administrator');
 
             if($user_id == $primary_administrator_id) {
@@ -76,9 +78,11 @@ class FitnessFactory {
     }
     
     
-    public static function is_secondary_administrator() {
+    public static function is_secondary_administrator($user_id) {
         if(self::$is_secondary_administrator == null) {
-            $user_id = &JFactory::getUser()->id;
+            if(!$user_id) {
+                $user_id = &JFactory::getUser()->id;
+            }
             $primary_administrator_id = self::getAdministratorId('secondary_administrator');
 
             if($user_id == $primary_administrator_id) {
@@ -91,8 +95,8 @@ class FitnessFactory {
         return self::$is_secondary_administrator;
     }
     
-    public function getAdministratorId($administrator_type) {
-        $group_id = self::getCurrentGroupId();
+    public function getAdministratorId($administrator_type, $user_id) {
+        $group_id = self::getCurrentGroupId($user_id);
         $db = JFactory::getDBO();
         $query = "SELECT $administrator_type FROM #__fitness_business_profiles WHERE group_id='$group_id'  AND state='1'";
         $db->setQuery($query);
@@ -533,7 +537,7 @@ class FitnessHelper extends FitnessFactory
             $trainers_group_id = self::getTrainersGroupId();
         }
         $db = &JFactory::getDBo();
-        $query = "SELECT c.primary_trainer AS value, u.username AS text FROM #__fitness_clients AS c"
+        $query = "SELECT DISTINCT c.primary_trainer AS value, u.username AS text FROM #__fitness_clients AS c"
                 . " LEFT JOIN #__users AS u on u.id=c.primary_trainer"
                 . " INNER JOIN #__user_usergroup_map AS m ON m.user_id=u.id"
                 . " WHERE c.state='1'";
@@ -669,6 +673,23 @@ class FitnessHelper extends FitnessFactory
         
         return $ret;
     }
+    
+    
+    public function getBusinessByUserGroup($group_id) {
+        $ret['success'] = 1;
+        $db = JFactory::getDbo();
+        $sql = "SELECT * FROM #__fitness_user_groups WHERE group_id='$group_id' AND state='1'";
+        $db->setQuery($sql);
+        if(!$db->query()) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->getErrorMsg();
+        }
+        $ret['data'] = $db->loadObject();
+        
+        return $ret;
+    }
+    
+    
     
     
  
