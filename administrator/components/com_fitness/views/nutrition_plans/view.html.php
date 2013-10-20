@@ -41,13 +41,15 @@ class FitnessViewNutrition_plans extends JView
             FitnessHelper::addSubmenu('Dashboard', 'dashboard');
             FitnessHelper::addSubmenu('Clients', 'clients');
             FitnessHelper::addSubmenu('Client Planning', 'goals');
+            FitnessHelper::addSubmenu('Assessments', 'assessments');
             FitnessHelper::addSubmenu('Calendar', 'calendar');
             FitnessHelper::addSubmenu('Programs', 'programs');
+            FitnessHelper::addSubmenu('Exercise Library', '#');
+
             FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
-            FitnessHelper::addSubmenu('Recipes', 'nutrition_recipes');
-            FitnessHelper::addSubmenu('Assessments', 'assessments');
+            FitnessHelper::addSubmenu('Recipe Database', 'nutrition_recipes');
             FitnessHelper::addSubmenu('Settings', 'settings');
-            
+
             $model = $this->getModel();
             $this->assign('model', $model);
 

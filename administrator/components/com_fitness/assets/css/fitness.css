@@ -74,6 +74,12 @@
     display: block;
 } 
 
+.exercise_href, .icon-48-programs {
+    background-image: url("../images/header/exercise_library.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
 .nutrition_plans_href, .icon-48-nutrition_plans {
     background-image: url("../images/header/nutrition_plans.png");
     background-size: 45px auto;
@@ -136,6 +142,14 @@
     width: 136px;
     background-image: url(../images/programs.png);
     display: block;
+}
+
+#exercise_href {
+    background-repeat: no-repeat;
+    height: 158px;
+    width: 136px;
+    background-image: url(../images/exercise_library.png);
+    display: block;
 } 
 
 #nutrition_plans_href {
@@ -166,7 +180,7 @@
     background-repeat: no-repeat;
     height: 158px;
     width: 136px;
-    background-image: url(../images/nutrition_database.png);
+    background-image: url(../images/recipe_database.png);
     display: block;
 } 
 

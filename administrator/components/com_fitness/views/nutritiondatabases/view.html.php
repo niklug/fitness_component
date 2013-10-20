@@ -42,11 +42,13 @@ class FitnessViewNutritiondatabases extends JView
         FitnessHelper::addSubmenu('Dashboard', 'dashboard');
         FitnessHelper::addSubmenu('Clients', 'clients');
         FitnessHelper::addSubmenu('Client Planning', 'goals');
+        FitnessHelper::addSubmenu('Assessments', 'assessments');
         FitnessHelper::addSubmenu('Calendar', 'calendar');
         FitnessHelper::addSubmenu('Programs', 'programs');
+        FitnessHelper::addSubmenu('Exercise Library', '#');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
         FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
-        FitnessHelper::addSubmenu('Assessments', 'assessments');
+
         FitnessHelper::addSubmenu('Settings', 'settings');
         
 		parent::display($tpl);

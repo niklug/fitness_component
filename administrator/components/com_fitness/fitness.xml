@@ -36,19 +36,18 @@
 			<language tag="en-GB">language/en-GB.com_fitness.ini</language>
     </languages>
     <administration>
-        <menu img="components/com_fitness/assets/images/s_com_fitness.png" >COM_FITNESS</menu>
+        <menu img="components/com_fitness/assets/images/s_com_fitness.png" >Fitness Management</menu>
         <submenu>
-            
-            <menu link="option=com_fitness&amp;view=dashboard" view="notifications" img="components/com_fitness/assets/images/s_notificationss.png" alt="Fitness/Notificationss">COM_FITNESS_TITLE_NOTIFICATIONSS</menu>
-            <menu link="option=com_fitness&amp;view=clients" view="clients" img="components/com_fitness/assets/images/s_clients.png" alt="Fitness/Clients">COM_FITNESS_TITLE_CLIENTS</menu>
-            <menu link="option=com_fitness&amp;view=goals" view="goals" img="components/com_fitness/assets/images/s_goals.png" alt="Fitness/Goals">COM_FITNESS_TITLE_GOALS</menu>
-            <menu link="option=com_multicalendar&amp;view=admin&amp;task=admin" view="calendar" img="components/com_fitness/assets/images/s_calendar.png" alt="Fitness/Calendar">COM_FITNESS_TITLE_CALENDAR</menu>
-            <menu link="option=com_fitness&amp;view=programs" view="programs" img="components/com_fitness/assets/images/s_programs.png" alt="Fitness/Programs">COM_FITNESS_TITLE_PROGRAMS</menu>
-            <menu link="option=com_fitness&amp;view=nutrition_plans" view="nutrition_plans" img="components/com_fitness/assets/images/s_nutrition_plans.png" alt="Fitness/Nutrition Plans">COM_FITNESS_TITLE_NUTRITION_PLANS</menu>
-            <menu link="option=com_fitness&amp;view=nutrition_diaries" view="nutrition_diaries" img="components/com_fitness/assets/images/s_nutrition_diary.png" alt="Fitness/Nutrition Diary">COM_FITNESS_TITLE_NUTRITION_DIARY</menu>
-            <menu link="option=com_fitness&amp;view=assessments" view="assessments" img="components/com_fitness/assets/images/s_assessments.png" alt="Fitness/Assessments">COM_FITNESS_TITLE_ASSESSMENTS</menu>
-            <menu link="option=com_fitness&amp;view=settings" view="settings" img="components/com_fitness/assets/images/s_settings.png" alt="Fitness/Settings">COM_FITNESS_TITLE_SETTINGS</menu>
-
+            <menu link="option=com_fitness&amp;view=dashboard" view="dashboard" img="components/com_fitness/assets/images/s_notificationss.png" alt="Dashboard">COM_FITNESS_TITLE_DASHBOARD</menu>
+            <menu link="option=com_fitness&amp;view=clients" view="clients" img="components/com_fitness/assets/images/s_clients.png" alt="Clients">COM_FITNESS_TITLE_CLIENTS</menu>
+            <menu link="option=com_fitness&amp;view=goals" view="goals" img="components/com_fitness/assets/images/s_goals.png" alt="Client Planning">COM_FITNESS_TITLE_CLIENTS</menu>
+            <menu link="option=com_fitness&amp;view=assessments" view="assessments" img="components/com_fitness/assets/images/s_assessments.png" alt="Assessments">COM_FITNESS_TITLE_ASSESSMENTS</menu>
+            <menu link="option=com_multicalendar&amp;view=admin&amp;task=admin" view="calendar" img="components/com_fitness/assets/images/s_calendar.png" alt="Calendar">COM_FITNESS_TITLE_CALENDAR</menu>
+            <menu link="option=com_fitness&amp;view=programs" view="programs" img="components/com_fitness/assets/images/s_programs.png" alt="Programs">COM_FITNESS_TITLE_PROGRAMS</menu>
+            <menu link="#" view="" img="components/com_fitness/assets/images/s_exersice_library.png" alt="Exercise Library">COM_FITNESS_TITLE_EXERCISE_LIBRARY</menu>
+            <menu link="option=com_fitness&amp;view=nutrition_plans" view="nutrition_plans" img="components/com_fitness/assets/images/s_nutrition_plans.png" alt="Nutrition Plans">COM_FITNESS_TITLE_NUTRITION_PLANS</menu>
+            <menu link="option=com_fitness&amp;view=nutrition_diaries" view="nutrition_diaries" img="components/com_fitness/assets/images/s_nutrition_diary.png" alt="Nutrition Diary">COM_FITNESS_TITLE_NUTRITION_DIARY</menu>
+            <menu link="option=com_fitness&amp;view=nutrition_recipes" view="nutrition_recipes" img="components/com_fitness/assets/images/s_nutrition_recipes.png" alt="Recipe Database">COM_FITNESS_TITLE_RECIPE_DATABASE</menu>
         </submenu>
         <files folder="administrator">
             <filename>access.xml</filename>

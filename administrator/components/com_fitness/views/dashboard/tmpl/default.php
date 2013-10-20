@@ -23,32 +23,32 @@ defined('_JEXEC') or die;
                                 <a id="clients_href" href="index.php?option=com_fitness&view=clients" title="Clients"></a>
                             </td>
                             <td>
-                                <a id="goals_href"  href="index.php?option=com_fitness&view=goals" title="Goals"></a>
+                                <a id="goals_href"  href="index.php?option=com_fitness&view=goals" title="Client Planning"></a>
                             </td>
                             <td>
-                                <a id="calendar_href"  href="index.php?option=com_multicalendar&view=admin&task=admin" title="Calendar"></a>
+                                <a id="assessments_href"  href="index.php?option=com_fitness&view=assessments" title="Assessments"></a>
                             </td>
                         </tr>
                         <tr>
                             <td>
+                                <a id="calendar_href"  href="index.php?option=com_multicalendar&view=admin&task=admin" title="Calendar"></a>
+                            </td>
+                            <td>
                                 <a id="programs_href"  href="index.php?option=com_fitness&view=programs" title="Programs"></a>
                             </td>
+                            <td>
+                                <a id="exercise_href"  href="#" title="Exercise Library"></a>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>
                                 <a id="nutrition_plans_href"  href="index.php?option=com_fitness&view=nutrition_plans" title="Nutrition Plans"></a>
                             </td>
                             <td>
                                 <a id="nutrition_diary_href"  href="index.php?option=com_fitness&view=nutrition_diary" title="Nutrition Diary"></a>
                             </td>
-                        </tr>
-                        <tr>
                             <td>
-                                <a id="assessments_href"  href="index.php?option=com_fitness&view=assessments" title="Assessments"></a>
-                            </td>
-                            <td>
-                                <a id="nutrition_database_href"  href="index.php?option=com_fitness&view=nutritiondatabases" title="Nutrition Database"></a>
-                            </td>
-                            <td>
-                                <a id="settings_href"  href="index.php?option=com_fitness&view=settings" title="Settings"></a>
+                                <a id="nutrition_database_href"  href="index.php?option=com_fitness&view=nutritiondatabases" title="Recipe Database"></a>
                             </td>
                         </tr>
                     </tbody>
