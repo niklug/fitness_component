@@ -171,7 +171,7 @@ class FitnessModelnutrition_recipes extends JModelList {
                 //Filtering recipe type
 		$filter_recipe_type = $this->state->get("filter.recipe_type");
 		if ($filter_recipe_type) {
-			$query->where("a.recipe_type = '".$db->escape($filter_recipe_type)."'");
+			$query->where("a.recipe_type LIKE '%".$db->escape($filter_recipe_type)."%'");
 		}
 
 

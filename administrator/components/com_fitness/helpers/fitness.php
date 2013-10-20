@@ -569,13 +569,22 @@ class FitnessHelper extends FitnessFactory
      * @return string
      */
     public function generateSelect($items, $name, $id, $selected, $select, $required, $class) {
-        $html = '<select id="' . $id . '" name="' . $name . '" class="' . $class;
+ 
+        $html = '<select ';
+        
+        $html .= ' name="' . $name . '" ';
+        
+        $html .= ' id="' . $id . '" ';
+        
+        $html .= ' class="' . $class . '" ';
+        
+        $html .= ' required="required" ';
         
         if($required) {
             $html .= 'required="required"';
         }
         
-        $html .=  '">';
+        $html .=  '>';
         
         $html .= '<option value="">-Select ' . $select . '-</option>';
         $html .= JHtml::_('select.options', $items , 'value', 'text', $selected, true);
@@ -713,7 +722,7 @@ class FitnessHelper extends FitnessFactory
     public function getRecipeTypes() {
         $ret['success'] = 1;
         $db = JFactory::getDbo();
-        $sql = "SELECT id, name FROM #__fitness_recipe_types WHERE state='1'";
+        $sql = "SELECT id, name, id AS value, name AS text FROM #__fitness_recipe_types WHERE state='1'";
         $db->setQuery($sql);
         if(!$db->query()) {
             $ret['success'] = 0;
@@ -748,8 +757,14 @@ class FitnessHelper extends FitnessFactory
         return $business_profile_id;
     }
     
+    public function JErrorFromAjaxDecorator($respond){
+        if(!$respond['success']) {
+            JError::raiseError($respond['message']);
+        }
+        return $respond['data'];
+    }
     
-    
+   
     
  
 }

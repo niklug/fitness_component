@@ -13,9 +13,6 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.tooltip');
 JHTML::_('script','system/multiselect.js',false,true);
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 $user	= JFactory::getUser();
 $userId	= $user->get('id');
@@ -143,7 +140,9 @@ $helper = new FitnessHelper();
             </div>
                            
 
-            
+            <div class='filter-select fltrt'>
+                <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id') , 'Business Name', false, "inputbox"); ?>
+            </div>
             
 
         </fieldset>    
@@ -230,7 +229,7 @@ $helper = new FitnessHelper();
                     $colspan = count(get_object_vars($this->items[0]));
                 }
                 else{
-                    $colspan = 10;
+                    $colspan = 15;
                 }
             ?>
 			<tr>
@@ -362,6 +361,12 @@ $helper = new FitnessHelper();
             form.find("input").val('');
             form.submit();
         });
+        
+        $("#business_profile_id").on('change', function() {
+             var form = $("#adminForm");
+             form.submit();
+             
+        })
 
 
         function sendEmail(id, method) {

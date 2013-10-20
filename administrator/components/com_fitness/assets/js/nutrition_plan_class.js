@@ -11,6 +11,11 @@
 
     NutritionPlan.prototype.setEventListeners = function() {
         var self = this;
+        // on business profile select
+        this.options.business_profile_select.on('change', function(){
+            self.businessProfileChangeEvent($(this));
+        });
+        
         // on trainer select
         this.options.trainer_select.on('change', function(){
             self.trainerChangeEvent($(this));
@@ -49,6 +54,7 @@
         // on Minigoal select click
         $("#minigoals_select").live('change', function() {
             var id = $(this).val();
+            $("#minigoal_fields").html('');
             $("#jform_mini_goal").val(id);
             self.setMinigoal(id);
         });
@@ -109,6 +115,9 @@
                 self.populateSelect(output, self.options.client_select, selected_option);
             }
         });
+        
+        this.populateSelect({}, $("#minigoals_select"));
+        $("#minigoal_fields").html('');
     }
 
     NutritionPlan.prototype.clientChangeEvent = function(e) {
@@ -129,11 +138,29 @@
                 self.populateSelect(output, self.options.primary_goal_select, selected_option);
             }
         });
+        
+        this.populateSelect({}, $("#minigoals_select"));
+        $("#minigoal_fields").html('');
+    }
+    
+    NutritionPlan.prototype.businessProfileChangeEvent = function(e) {
+        // reset fields
+        this.populateSecondaryTrainers({}, this.options.secondary_trainers_wrapper);
+        this.populateSelect({}, this.options.client_select);
+        this.populateSelect({}, this.options.primary_goal_select);
+        this.options.primary_goal_start_date.val('');
+        this.options.primary_goal_deadline.val('');
+        
+        this.populateSelect({}, $("#minigoals_select"));
+        $("#minigoal_fields").html('');
+
     }
 
     NutritionPlan.prototype.primaryGoalChangeEvent = function(e) {
         this.options.primary_goal_start_date.val('');
         this.options.primary_goal_deadline.val('');
+        this.populateSelect({}, $("#minigoals_select"));
+        $("#minigoal_fields").html('');
         var self = this;
         this.getGoalData(e, function(output) {
             if(output) {
@@ -382,7 +409,7 @@
         html += 'Mini Goal';
         html += '</td>';
         html += '<td>';
-        html += '<select id="minigoals_select">';
+        html += '<select id="minigoals_select" class="inputbox required " >';
         html += '<option value="">-Select-</option>';
         $.each(minigoals, function(index,item) {
             html += '<option value="' + item.id + '">' + item.minigoal_name + '</option>';

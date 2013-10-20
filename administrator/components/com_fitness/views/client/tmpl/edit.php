@@ -25,12 +25,7 @@ $helper = new FitnessHelper();
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_CLIENT'); ?></legend>
             <ul class="adminformlist">
                 <?php
-                $business_profile = $helper->getBusinessProfile($this->item->business_profile_id);
-                
-                if(!$business_profile['success']) {
-                    JError::raiseError($userGroup['message']);
-                }
-                $business_profile = $business_profile["data"];
+                $business_profile = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfile($this->item->business_profile_id));
                 
                 $id = $this->item->id;
                 ?>
@@ -51,7 +46,7 @@ $helper = new FitnessHelper();
                 <li>
                     <label id="jform_user_id-lbl" class="" for="jform_user_id">Username</label>
                     <?php if(!$id) { ?>
-                        <select id="jform_user_id" class="inputbox" name="jform[user_id]"><option value="">-Select-</option></select>
+                        <select id="jform_user_id" class="inputbox required" name="jform[user_id]"><option value="">-Select-</option></select>
                     <?php } else {
                         echo JFactory::getUser($this->item->user_id)->username;
                     }
@@ -63,17 +58,13 @@ $helper = new FitnessHelper();
                 <?php
                       $business_profile_id = $this->item->business_profile_id;
                       
-                      $business_profile = $helper->getBusinessProfile($business_profile_id);
-                      if(!$business_profile['success']) {
-                          JError::raiseError($business_profile['message']);
-                      }
-                      $business_profile = $business_profile['data'];
+                      $business_profile = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfile($business_profile_id));
                       $group_id = $business_profile->group_id;
                       $primary_trainers = array();
                       if($group_id) {
                           $primary_trainers = $helper->getTrainersByUsergroup($group_id);
                       } 
-                      echo $helper->generateSelect($primary_trainers, 'jform[primary_trainer]', 'jform_primary_trainer', $this->item->primary_trainer, ''); ?>
+                      echo $helper->generateSelect($primary_trainers, 'jform[primary_trainer]', 'jform_primary_trainer', $this->item->primary_trainer, '', true, 'required'); ?>
                 </li>
 
 

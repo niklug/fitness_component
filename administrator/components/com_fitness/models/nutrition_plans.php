@@ -8,7 +8,7 @@
  * @author      Nikolay Korban <niklug@ukr.net> - http://
  */
 defined('_JEXEC') or die;
-
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 jimport('joomla.application.component.modellist');
 
 /**
@@ -34,6 +34,7 @@ class FitnessModelnutrition_plans extends JModelList {
                 'force_active', 'a.force_active',
                 'primary_goal', 'a.primary_goal',
                 'nutrition_focus', 'a.nutrition_focus',
+                'business_name', 'business_name',
                 'created', 'a.created',
                 'state', 'a.state',
 
@@ -90,6 +91,10 @@ class FitnessModelnutrition_plans extends JModelList {
                 // Filter by nutrition focus
                 $nutrition_focus = $app->getUserStateFromRequest($this->context . '.filter.nutrition_focus', 'filter_nutrition_focus', '', 'string');
                 $this->setState('filter.nutrition_focus', $nutrition_focus);
+                
+                 // Filter by business profile
+                $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
+                $this->setState('filter.business_profile_id', $business_profile_id);
 
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
@@ -138,7 +143,8 @@ class FitnessModelnutrition_plans extends JModelList {
                          (SELECT calories FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') calories,
                          (SELECT protein FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') protein,
                          (SELECT fats FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') fats,
-                         (SELECT carbs FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') carbs'
+                         (SELECT carbs FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') carbs,'
+                        . 'bp.name AS business_name'
                 )
         );
         $query->from('#__fitness_nutrition_plan AS a');
@@ -151,25 +157,24 @@ class FitnessModelnutrition_plans extends JModelList {
         
         $query->leftJoin('#__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus');
         
-        //$query->leftJoin('#__fitness_nutrition_plan_targets AS t ON t.nutrition_plan_id = a.id');
+        $query->leftJoin('#__fitness_clients AS c ON c.user_id = a.client_id');
         
-        //$query->where("t.type='heavy'");
+        $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = c.business_profile_id');
         
-        // filter only for Super Users
-        $user = &JFactory::getUser();
-        if ($this->getUserGroup($user->id) != 'Super Users') {
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query->where('(a.trainer_id = ' . (int) $user->id .' )');
-        }
-        
-        // filter only for Super Users
-        $user = &JFactory::getUser();
-        if ($this->getUserGroup($user->id) != 'Super Users') {
 
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query->where('a.client_id IN (SELECT DISTINCT user_id FROM #__fitness_clients WHERE primary_trainer=' .  (int) $user->id .  ' OR other_trainers LIKE ' . $other_trainers .  ' )');
+        
+        if(FitnessHelper::is_primary_administrator() || FitnessHelper::is_secondary_administrator()) {
+            $trainers_group_id = FitnessHelper::getTrainersGroupId();
+            $query->where('bp.group_id = '.(int) $trainers_group_id);
         }
         
+        // 
+        $user = &JFactory::getUser();
+        
+        if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
+            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
+            $query->where('(c.primary_trainer = ' . (int) $user->id . ' OR c.other_trainers LIKE ' . $other_trainers . ' )');
+        }
 
         
     // Filter by published state
@@ -269,6 +274,13 @@ class FitnessModelnutrition_plans extends JModelList {
                 $query->where('a.id NOT IN ('. $ids . ')');
             }
         }  
+        
+        
+        // Filter by business profile
+        $business_profile_id = $this->getState('filter.business_profile_id');
+        if (is_numeric($business_profile_id)) {
+            $query->where('c.business_profile_id = '.(int) $business_profile_id);
+        } 
 
 
         // Add the list ordering clause.

@@ -20,6 +20,11 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_recipes'); ?>" method="post" name="adminForm" id="adminForm">
@@ -65,23 +70,16 @@ $saveOrder	= $listOrder == 'a.ordering';
                         </select>
                 </div>
             
-                <?php //Filter for the field created_by
-                $db = JFactory::getDbo();
-                $sql = "SELECT DISTINCT r.recipe_type AS value, t.name AS text FROM #__fitness_nutrition_recipes AS r 
-                    LEFT JOIN #__fitness_recipe_types AS t ON t.id=r.recipe_type
-                    WHERE r.state='1'";
-                $db->setQuery($sql);
-                if(!$db->query()) {
-                    JError::raiseError($db->getErrorMsg());
-                }
-                $recipe_type = $db->loadAssocList();
-                ?>
                 <div class='filter-select fltrt'>
-                        <select name="filter_recipe_type" class="inputbox" onchange="this.form.submit()">
-                                <option value=""><?php echo JText::_('-Recipe Type-');?></option>
-                                <?php echo JHtml::_('select.options', $recipe_type, "value", "text", $this->state->get('filter.recipe_type'), true);?>
-                        </select>
-                </div>
+                    <?php
+                    $recipeTypes = $helper->JErrorFromAjaxDecorator($helper->getRecipeTypes());
+                                        
+                    $helper->generateSelect($recipeTypes, 'filter_recipe_type', 'filter_recipe_type', $this->state->get('filter.recipe_type') , 'Recipe Type', false, "inputbox"); 
+     
+                    ?>
+
+		</div>
+            
 		
 		<div class='filter-select fltrt'>
 			<?php //Filter for the field created
@@ -304,6 +302,12 @@ $saveOrder	= $listOrder == 'a.ordering';
             form.find("input").val('');
             form.submit();
         });
+        
+         $("#filter_recipe_type").on('change', function() {
+             var form = $("#adminForm");
+             form.submit();
+             
+        })
         
         
          //status class

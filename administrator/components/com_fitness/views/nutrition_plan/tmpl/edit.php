@@ -44,10 +44,10 @@ $helper = new FitnessHelper();
                             </li>
                                 
                             <li><?php echo $this->form->getLabel('trainer_id'); ?>
-                                <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'jform[trainer_id]', 'jform_trainer_id', $this->item->trainer_id, '' ,true, "required"); ?>
+                                <?php echo $helper->generateSelect(array(), 'jform[trainer_id]', 'jform_trainer_id', $this->item->trainer_id, '' ,true, 'required'); ?>
                             </li>
                             <li><?php echo $this->form->getLabel('client_id'); ?>
-                                <select id="jform_client_id" class="inputbox" name="jform[client_id]">
+                                <select id="jform_client_id" class="inputbox required" name="jform[client_id]">
                                     <?php
                                     if($this->item->client_id) {
                                         echo '<option value="' . $this->item->client_id . '">'. JFactory::getUser($this->item->client_id)->name .'</option>';
@@ -58,8 +58,9 @@ $helper = new FitnessHelper();
                                 </select>
                             </li>
                             <li>
-                                <label id="jform_trainers_id-lbl" class="" for="jform_trainers_id">Secondary Trainers</label>
-                                <div id="secondary_trainers"></div>
+                                <label id="jform_secondary_trainers-lbl"  for="jform_secondary_trainers" >Secondary Trainers</label>
+                                <div class="clr"></div>
+                                <div style="margin-left:138px;" id="secondary_trainers"></div>
                             </li>
                         </ul>
                     </fieldset>
@@ -71,7 +72,7 @@ $helper = new FitnessHelper();
                             <tr>
                                 <td>
                                     <?php echo $this->form->getLabel('primary_goal'); ?>
-                                    <select id="jform_primary_goal" class="inputbox" name="jform[primary_goal]">
+                                    <select id="jform_primary_goal" class="inputbox required" name="jform[primary_goal]">
                                         <?php
                                         if($this->item->primary_goal) {
                                             echo '<option value="' . $this->item->primary_goal. '">'. $this->getPrimaryGoalName($this->item->primary_goal) .'</option>';
@@ -446,15 +447,27 @@ $helper = new FitnessHelper();
     
     (function($) {
         
+        // connect helper class
+        var helper_options = {
+            'ajax_call_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        }
+        var fitness_helper = $.fitness_helper(helper_options);
+        
         $("#business_profile_id").on('change', function() {
             var business_profile_id = $(this).val();
-            alert(business_profile_id);
+            fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#jform_trainer_id', '<?php echo $this->item->trainer_id; ?>');
 
         });
+        
+        var business_profile_id = $("#business_profile_id").val();
+        if(business_profile_id) {
+            fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#jform_trainer_id', '<?php echo $this->item->trainer_id; ?>');
+        }
 
 
         /*  OPTIONS  */
         var nutrition_plan_options = {
+            'business_profile_select' : $("#business_profile_id"),
             'trainer_select' : $("#jform_trainer_id"),
             'client_select' : $("#jform_client_id"),
             'secondary_trainers_wrapper' : $("#secondary_trainers"),

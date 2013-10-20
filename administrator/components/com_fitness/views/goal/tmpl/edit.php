@@ -102,6 +102,24 @@ $helper = new FitnessHelper();
     
     (function($) {
         
+        // connect helper class
+        var helper_options = {
+            'ajax_call_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        }
+        var fitness_helper = $.fitness_helper(helper_options);
+        
+        $("#business_profile_id").on('change', function() {
+            var business_profile_id = $(this).val();
+            // populate clients select
+            fitness_helper.populateClientsSelectOnBusiness('goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
+        });
+        
+        var business_profile_id = $("#business_profile_id").val();
+        if(business_profile_id) {
+            fitness_helper.populateClientsSelectOnBusiness('goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
+        }
+        
+        
         var comment_options = {
             'item_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
@@ -117,57 +135,7 @@ $helper = new FitnessHelper();
         var comments_html = comments.run();
         $("#comments_wrapper").html(comments_html);
         
-        
-        $("#business_profile_id").on('change', function() {
-            var business_profile_id = $(this).val();
-            getClientsByBusiness(business_profile_id);
 
-        });
-        
-        function getClientsByBusiness(business_profile_id) {
-            var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
-            $.ajax({
-                type : "POST",
-                url : url,
-                data : {
-                   view : 'goals',
-                   format : 'text',
-                   task : 'getClientsByBusiness',
-                   business_profile_id : business_profile_id
-                },
-                dataType : 'json',
-                success : function(response) {
-                    if(!response.status.success) {
-                        alert(response.status.message);
-                        $("#jform_user_id").html('');
-                        return;
-                    }
-                    var client_id = '<?php echo $this->item->user_id; ?>';
-
-                    var html = '<option  value="">-Select-</option>';
-                    $.each(response.data, function(index, value) {
-                         if(index) {
-                            var selected = '';
-                            if(client_id == index) {
-                                selected = 'selected';
-                            }
-                            html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
-                        }
-                    });
-                    $("#jform_user_id").html(html);
-
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown)
-                {
-                    alert("error");
-                }
-            });
-        }
-
-        var business_profile_id = $("#business_profile_id").find(':selected').val();
-        if(business_profile_id) {
-            getClientsByBusiness(business_profile_id);
-        }
         
         
 
