@@ -359,12 +359,16 @@ class FitnessModelgoals extends JModelList {
 
     }
     
-    public function getUsersByBusiness($business_id) {
+    public function getClientsByBusiness($data_encoded) {
         $status['success'] = 1;
         
         $helper = $this->helper;
         
-        $user_group_data = $helper->getUserGroupByBusiness($business_id);
+        $data = json_decode($data_encoded);
+        
+        $business_profile_id = $data->business_profile_id;
+        
+        $user_group_data = $helper->getUserGroupByBusiness($business_profile_id);
         
         if(!$user_group_data['success']) {
             $status['success'] = 0;

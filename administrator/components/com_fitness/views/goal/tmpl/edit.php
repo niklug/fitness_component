@@ -120,11 +120,11 @@ $helper = new FitnessHelper();
         
         $("#business_profile_id").on('change', function() {
             var business_profile_id = $(this).val();
-            getUsersByBusiness(business_profile_id);
+            getClientsByBusiness(business_profile_id);
 
         });
         
-        function getUsersByBusiness(business_id) {
+        function getClientsByBusiness(business_profile_id) {
             var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
             $.ajax({
                 type : "POST",
@@ -132,8 +132,8 @@ $helper = new FitnessHelper();
                 data : {
                    view : 'goals',
                    format : 'text',
-                   task : 'getUsersByBusiness',
-                   business_id : business_id
+                   task : 'getClientsByBusiness',
+                   business_profile_id : business_profile_id
                 },
                 dataType : 'json',
                 success : function(response) {
@@ -164,9 +164,9 @@ $helper = new FitnessHelper();
             });
         }
 
-        var business_id = $("#business_profile_id").find(':selected').val();
-        if(business_id) {
-            getUsersByBusiness(business_id);
+        var business_profile_id = $("#business_profile_id").find(':selected').val();
+        if(business_profile_id) {
+            getClientsByBusiness(business_profile_id);
         }
         
         

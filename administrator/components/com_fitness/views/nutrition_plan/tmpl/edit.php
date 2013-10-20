@@ -37,29 +37,29 @@ $helper = new FitnessHelper();
                     <fieldset style="min-height:200px;" class="adminform">
                         <legend>CLIENT & TRAINER(S)</legend>
                         <ul>
+                            <li><?php echo $this->form->getLabel('business_profile_id'); 
+                                $business_profile_id = $helper->getBubinessIdByClientId($this->item->client_id);
+                                
+                                echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $business_profile_id , '', true, "required required"); ?>
+                            </li>
+                                
                             <li><?php echo $this->form->getLabel('trainer_id'); ?>
-                                <div class='filter-select fltrt'>
-                                    <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'jform[trainer_id]', 'jform_trainer_id', $this->item->trainer_id, '' ,true, "required"); ?>
-                                </div>
+                                <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'jform[trainer_id]', 'jform_trainer_id', $this->item->trainer_id, '' ,true, "required"); ?>
                             </li>
                             <li><?php echo $this->form->getLabel('client_id'); ?>
-                                <div class='filter-select fltrt'>
-                                    <select id="jform_client_id" class="inputbox" name="jform[client_id]">
-                                        <?php
-                                        if($this->item->client_id) {
-                                            echo '<option value="' . $this->item->client_id . '">'. JFactory::getUser($this->item->client_id)->name .'</option>';
-                                        } else {
-                                            echo '<option value="">' . JText::_('-Select-')  . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
+                                <select id="jform_client_id" class="inputbox" name="jform[client_id]">
+                                    <?php
+                                    if($this->item->client_id) {
+                                        echo '<option value="' . $this->item->client_id . '">'. JFactory::getUser($this->item->client_id)->name .'</option>';
+                                    } else {
+                                        echo '<option value="">' . JText::_('-Select-')  . '</option>';
+                                    }
+                                    ?>
+                                </select>
                             </li>
                             <li>
                                 <label id="jform_trainers_id-lbl" class="" for="jform_trainers_id">Secondary Trainers</label>
-                                <div class='filter-select fltrt'>
-                                    <div id="secondary_trainers"></div>
-                                </div>
+                                <div id="secondary_trainers"></div>
                             </li>
                         </ul>
                     </fieldset>
@@ -445,6 +445,12 @@ $helper = new FitnessHelper();
 
     
     (function($) {
+        
+        $("#business_profile_id").on('change', function() {
+            var business_profile_id = $(this).val();
+            alert(business_profile_id);
+
+        });
 
 
         /*  OPTIONS  */

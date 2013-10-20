@@ -587,7 +587,7 @@ class FitnessHelper extends FitnessFactory
 
         $selected = explode(',', $selected);
         $html = '<select size="10" id="' . $id . '" class="' . $class . '" multiple="multiple" name="' . $name . '[]">';
-        $html .= '<option value="">none</option>';
+        $html .= '<option>-Select-</option>';
         if(isset($items)) {
             foreach ($items as $item) {
                 if(in_array($item->id, $selected)){

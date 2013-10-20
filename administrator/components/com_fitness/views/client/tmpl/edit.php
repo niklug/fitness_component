@@ -51,7 +51,7 @@ $helper = new FitnessHelper();
                 <li>
                     <label id="jform_user_id-lbl" class="" for="jform_user_id">Username</label>
                     <?php if(!$id) { ?>
-                        <select id="jform_user_id" class="inputbox" name="jform[user_id]"></select>
+                        <select id="jform_user_id" class="inputbox" name="jform[user_id]"><option value="">-Select-</option></select>
                     <?php } else {
                         echo JFactory::getUser($this->item->user_id)->username;
                     }
@@ -84,7 +84,7 @@ $helper = new FitnessHelper();
                     if($item_id) {
                         echo $helper->getOtherTrainersSelect($this->item->id, '#__fitness_clients', $group_id);
                     } else {
-                        echo $helper->generateSelect(array(), 'jform[other_trainers]', 'jform_other_trainers', $this->item->other_trainers, ''); 
+                        echo $helper->generateMultipleSelect(array(), 'jform[other_trainers]', 'jform_other_trainers', '', '', false, 'inputbox');
                     }
                     ?>
                 </li>
@@ -103,125 +103,38 @@ $helper = new FitnessHelper();
 
 <script type="text/javascript">
     (function($) {
-            //////////////////////////////////////////
-           
+        
+        // connect helper class
+        var helper_options = {
+            'ajax_call_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        }
+        var fitness_helper = $.fitness_helper(helper_options);
+        
+                   
         $("#business_profile_id").on('change', function() {
-            all_options = '';
+
             $("#jform_primary_trainer, #jform_other_trainers").html('<option  value="">-Select-</option>');
-
-            var business_profile_id = $(this).val();
-            var data = {};
-            var url = '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
-            var view = 'user_group';
-            var task = 'onBusinessNameChange';
-            var table = '#__fitness_business_profiles';
-            data.business_profile_id = business_profile_id;
-
-            $.AjaxCall(data, url, view, task, table, function(output) {
-
-                var primary_trainer = '<?php echo $this->item->primary_trainer; ?>';
-                var html = '<option  value="">-Select-</option>';
-                $.each(output, function(index, value) {
-                     if(index) {
-                        var selected = '';
-                        if(primary_trainer == index) {
-                            selected = 'selected';
-                        }
-                        html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
-                    }
-                });
-                $("#jform_primary_trainer").html(html);
-
-                var html2 ='<select size="10" id="jform_other_trainers" class="inputbox" multiple="multiple" name="jform[other_trainers][]">';
-                html2 += '<option  value="">none</option>';
-                $.each(output, function(index, value) {
-                     if(index) {
-                        html2 += '<option  value="' + index + '">' +  value + '</option>';
-                    }
-                });
-
-                html2 += '</select>';
-
-                $("#jform_other_trainers").replaceWith(html2);
-
-                getUsersByBusiness(business_profile_id);
-
-            });
-
-        });
-        
-        
-        
-        
-        
-        
-        all_options = $('#jform_other_trainers').html();
-        $("#jform_primary_trainer").live('change', function() {
-            if(!all_options) {
-                all_options = $('#jform_other_trainers').html();
-            }
-            var value = $(this).val();
-            hideSelectOption(value, '#jform_other_trainers', all_options);
-        });
-
-        var value = $("#jform_primary_trainer").val();
-        hideSelectOption(value, '#jform_other_trainers', all_options);
-        
-        
-        
-        function hideSelectOption(value, element, all_options) {
             
-            $(element).html(all_options);
-        
-            $(element + " option[value=" + value + "]").remove();
-        }
-
-        function getUsersByBusiness(business_id) {
-            var url = '<?php echo JUri::base() ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
-            $.ajax({
-                type : "POST",
-                url : url,
-                data : {
-                   view : 'goals',
-                   format : 'text',
-                   task : 'getUsersByBusiness',
-                   business_id : business_id
-                },
-                dataType : 'json',
-                success : function(response) {
-                    if(!response.status.success) {
-                        alert(response.status.message);
-                        $("#jform_user_id").html('');
-                        return;
-                    }
-                    var client_id = '<?php echo $this->item->user_id; ?>';
-
-                    var html = '<option  value="">-Select-</option>';
-                    $.each(response.data, function(index, value) {
-                         if(index) {
-                            var selected = '';
-                            if(client_id == index) {
-                                selected = 'selected';
-                            }
-                            html += '<option ' + selected + ' value="' + index + '">' +  value + '</option>';
-                        }
-                    });
-                    $("#jform_user_id").html(html);
-
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown)
-                {
-                    alert("error");
-                }
+            // primary trainers
+            var business_profile_id = $(this).val();
+                
+            fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#jform_primary_trainer', '<?php echo $this->item->primary_trainer; ?>');
+            
+            // populate other trainers select
+            fitness_helper.on('change:trainers', function(model, items) {
+                fitness_helper.populateSelect(items, '#jform_other_trainers', '');
             });
-        }
+            
+            
+            // populate clients select
+            fitness_helper.populateClientsSelectOnBusiness('goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
+            
+            
 
-        var business_id = $("#business_profile_id").find(':selected').val();
-        if(business_id) {
-            getUsersByBusiness(business_id);
-        }
+        });
 
-
+        // exclude options logic
+        fitness_helper.excludeSelectOption('#jform_primary_trainer', '#jform_other_trainers');
 
 
         Joomla.submitbutton = function(task)
