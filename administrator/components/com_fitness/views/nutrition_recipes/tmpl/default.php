@@ -91,6 +91,10 @@ $helper = new FitnessHelper();
 			echo JHtml::_('calendar', $selected_to_created, 'filter_to_created', 'filter_to_created', '%Y-%m-%d',  'onchange="this.form.submit();"');
 			?>
 		</div>
+            
+                <div class='filter-select fltrt'>
+                    <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id') , 'Business Name', false, "inputbox"); ?>
+		</div>
                
 	</fieldset>
     
@@ -303,11 +307,11 @@ $helper = new FitnessHelper();
             form.submit();
         });
         
-         $("#filter_recipe_type").on('change', function() {
+         $("#filter_recipe_type, #business_profile_id").on('change', function() {
              var form = $("#adminForm");
              form.submit();
-             
         })
+        
         
         
          //status class

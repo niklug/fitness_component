@@ -11,6 +11,8 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
 /**
  * Methods supporting a list of Fitness records.
  */
@@ -26,12 +28,13 @@ class FitnessModelnutrition_recipes extends JModelList {
     public function __construct($config = array()) {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                                'id', 'a.id',
+                'id', 'a.id',
                 'recipe_name', 'a.recipe_name',
                 'recipe_type', 'a.recipe_type',
                 'created_by', 'a.created_by',
                 'created', 'a.created',
                 'status', 'a.status',
+                'business_name', 'business_name',
                 'state', 'a.state',
 
             );
@@ -57,15 +60,18 @@ class FitnessModelnutrition_recipes extends JModelList {
         $this->setState('filter.state', $published);
 
         
-		//Filtering created
-		$this->setState('filter.created.from', $app->getUserStateFromRequest($this->context.'.filter.created.from', 'filter_from_created', '', 'string'));
-		$this->setState('filter.created.to', $app->getUserStateFromRequest($this->context.'.filter.created.to', 'filter_to_created', '', 'string'));
-                //Filtering created_by
-		$this->setState('filter.created_by', $app->getUserStateFromRequest($this->context.'.filter.created_by', 'filter_created_by', '', 'string'));
-                
-                //Filtering recipe type
-		$this->setState('filter.recipe_type', $app->getUserStateFromRequest($this->context.'.filter.recipe_type', 'filter_recipe_type', '', 'string'));
+        //Filtering created
+        $this->setState('filter.created.from', $app->getUserStateFromRequest($this->context.'.filter.created.from', 'filter_from_created', '', 'string'));
+        $this->setState('filter.created.to', $app->getUserStateFromRequest($this->context.'.filter.created.to', 'filter_to_created', '', 'string'));
+        //Filtering created_by
+        $this->setState('filter.created_by', $app->getUserStateFromRequest($this->context.'.filter.created_by', 'filter_created_by', '', 'string'));
 
+        //Filtering recipe type
+        $this->setState('filter.recipe_type', $app->getUserStateFromRequest($this->context.'.filter.recipe_type', 'filter_recipe_type', '', 'string'));
+
+                // Filter by business profile
+        $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
+        $this->setState('filter.business_profile_id', $business_profile_id);
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
         $this->setState('params', $params);
@@ -117,26 +123,56 @@ class FitnessModelnutrition_recipes extends JModelList {
                            (SELECT ROUND(SUM(energy),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS energy,
                            (SELECT ROUND(SUM(saturated_fat),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS saturated_fat,
                            (SELECT ROUND(SUM(total_sugars),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS total_sugars,
-                           (SELECT ROUND(SUM(sodium),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS sodium
+                           (SELECT ROUND(SUM(sodium),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS sodium,
+                           bp.name AS business_name
                        '
                 )
         );
         $query->from('`#__fitness_nutrition_recipes` AS a');
 
         
-		// Join over the user field 'created_by'
-		$query->select('created_by.name AS created_by');
-		$query->join('LEFT', '#__users AS created_by ON created_by.id = a.created_by');
-
+        // Join over the user field 'created_by'
+        $query->select('u.name AS created_by');
+        $query->join('LEFT', '#__users AS u ON u.id = a.created_by');
         
-    // Filter by published state
-    $published = $this->getState('filter.state');
-    if (is_numeric($published)) {
-        $query->where('a.state = '.(int) $published);
-    } else if ($published === '') {
-        $query->where('(a.state IN (0, 1))');
-    }
-    
+        
+        $query->leftJoin('#__fitness_clients AS c ON c.user_id = a.created_by');
+        $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = c.business_profile_id');
+        $query->leftJoin('#__user_usergroup_map AS um ON um.user_id = a.created_by');
+        
+        
+        $user = &JFactory::getUser();
+        $user_id = $user->id;
+        $current_group_id = FitnessHelper::getCurrentGroupId($user->id);
+        $trainers_group_id = FitnessHelper::getTrainersGroupId();
+        // if Primary or Secondary administrator of the Business Profile        
+        if(FitnessHelper::is_primary_administrator() || FitnessHelper::is_secondary_administrator()) {
+            $query->where('bp.group_id = '.(int) $trainers_group_id 
+                    . ' OR um.group_id='.(int) $trainers_group_id
+                    . ' OR um.group_id='.(int) FitnessHelper::SUPERUSER_GROUP_ID);
+        }
+        
+        // 
+        
+        
+        // if usual Trainer of the Business Profile    
+        if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
+            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
+            $query->where('(c.primary_trainer = ' . (int) $user->id 
+                    . ' OR c.other_trainers LIKE ' . $other_trainers . ' )'
+                    . ' OR um.group_id='.(int) $trainers_group_id
+                    . ' OR um.group_id='.(int) FitnessHelper::SUPERUSER_GROUP_ID
+                    );
+        }
+        
+        // Filter by published state
+        $published = $this->getState('filter.state');
+        if (is_numeric($published)) {
+            $query->where('a.state = '.(int) $published);
+        } else if ($published === '') {
+            $query->where('(a.state IN (0, 1))');
+        }
+
 
         // Filter by search in title
         $search = $this->getState('filter.search');

@@ -331,7 +331,6 @@ echo $this->loadTemplate('graph');?>
         $("#business_profile_id").on('change', function() {
              var form = $("#adminForm");
              form.submit();
-             
         })
 
     
