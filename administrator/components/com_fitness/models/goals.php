@@ -358,7 +358,7 @@ class FitnessModelgoals extends JModelList {
 
     }
     
-    public function getClientsByBusiness($data_encoded) {
+    public function getUsersByBusiness($data_encoded) {
         $status['success'] = 1;
         
         $helper = $this->helper;
@@ -381,6 +381,30 @@ class FitnessModelgoals extends JModelList {
         $group_id = $user_group_data->group_id;
         
         return $this->getUsersByGroup($group_id);
+
+    }
+    
+    public function getClientsByBusiness($data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $business_profile_id = $data->business_profile_id;
+     
+        $clients =  $helper->getClientsByBusiness($business_profile_id);
+        
+        if(!$clients['success']) {
+            $status['success'] = 0;
+            $status['message'] = $clients['message'];
+            $result = array( 'status' => $status);
+            return  json_encode($result);
+        }
+        
+        $result = array( 'status' => $status, 'data' => $clients['data']);
+        
+        return  json_encode($result);
 
     }
     

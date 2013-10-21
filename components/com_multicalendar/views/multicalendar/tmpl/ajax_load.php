@@ -53,10 +53,12 @@ switch ($method) {
         $appointment = JRequest::getVar("appointment");
         $session_type = JRequest::getVar("session_type");
         $session_focus = JRequest::getVar("session_focus");
+        
+        $business_profile_id = JRequest::getVar("filter_business_profile_id");
 
         $d1 = mktime(0, 0, 0,  date("m", $d1), date("d", $d1), date("Y", $d1));
         $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2))+24*60*60-1;
-        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus);
+        $ret = listCalendarByRange($calid, ($d1),($d2), $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus, $business_profile_id);
 
         break;
     case "update":
@@ -446,9 +448,8 @@ function addDetailedCalendar(
   return $ret;
 }
 
-function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus){
-  
-  
+function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus, $business_profile_id){
+    
   $ret = array();
   $ret['events'] = array();
   $ret["issort"] =true;
@@ -457,70 +458,91 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
   $ret['error'] = null;
   $db 	=& JFactory::getDBO();
   try{
-    $sql = "select * from `".DC_MV_CAL."` where ".DC_MV_CAL_IDCAL."=".$calid;
+    $sql = "select a.* from `".DC_MV_CAL."` AS a ";
+    
+    $sql .= " LEFT JOIN #__fitness_clients AS c ON c.user_id = a.client_id ";
+
+    $sql .= " LEFT JOIN #__fitness_business_profiles AS bp ON bp.id = c.business_profile_id ";
+        
+    $sql .= " where a.".DC_MV_CAL_IDCAL."=".$calid;
+    
+    
+    //logged user
+    $cid = JRequest::getVar( 'cid' );
+    
+       
+    $user = &JFactory::getUser($cid);
+    
+    
+    
+    if(FitnessHelper::is_primary_administrator($user->id) || FitnessHelper::is_secondary_administrator($user->id)) {
+        
+            $trainers_group_id = FitnessHelper::getTrainersGroupIdByUser($user);
+
+            //$ret['error'] = print_r($trainers_group_id, true);
+            //return $ret;
+
+            $sql .=' AND  bp.group_id = '.(int) $trainers_group_id;
+        }
+        
+
+    if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
+        $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
+        $sql .=' AND (c.primary_trainer = ' . (int) $user->id . ' OR c.other_trainers LIKE ' . $other_trainers . ' ) ';
+    }
+    
+    
+    if($business_profile_id) {
+         $sql .=' AND  c.business_profile_id = '.(int) $business_profile_id;
+    }
+    
     $client_ids = implode($client_id, ',');
     if($client_id[0]) {
-        $sql .= " and (client_id IN ($client_ids) ";
-        $sql .= " or id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))) ";
+        $sql .= " and (a.client_id IN ($client_ids) ";
+        $sql .= " or a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))) ";
     }
     
     //logged user
     $cid = JRequest::getVar( 'cid' );
     
     $user = &JFactory::getUser($cid);
-    /*
-    if($user->guest) {
-        $ret['success'] = false;
-        $ret['error'] = 'Login please in Front End to proceed here.';
-        return $ret;
-    }
-     */
-
-    if (getUserGroup($user->id) != 'Super Users') {
-        $sql .= " and trainer_id='$user->id' ";
-    } else {
-        $trainer_ids = implode($trainer_id, ',');
-        if($trainer_id[0]) {
-            $sql .= " and trainer_id IN ($trainer_ids) ";
-        }
-    }
-    
 
     $locations = "'" . implode("','", $location) . "'";
     if($location[0]) {
-        $sql .= " and location IN ($locations) ";
+        $sql .= " and a.location IN ($locations) ";
     }
 
     
     $appointments = "'" . implode("','", $appointment) . "'";
     if($appointment[0]) {
-        $sql .= " and title IN ($appointments) ";
+        $sql .= " and a.title IN ($appointments) ";
     }
     
 
     $session_types = "'" . implode("','", $session_type) . "'";
     if($session_type[0]) {
-        $sql .= " and session_type IN ($session_types) ";
+        $sql .= " and a.session_type IN ($session_types) ";
     }
     
     
     $session_focuses = "'" . implode("','", $session_focus) . "'";
     if($session_focus[0]) {
-        $sql .= " and session_focus IN ($session_focuses) ";
+        $sql .= " and a.session_focus IN ($session_focuses) ";
     }
     //$sql .= " AND published='1'";
             
-    $sql .=  " and ( (`".DC_MV_CAL_FROM."` between '"
+    $sql .=  " and ( (a.".DC_MV_CAL_FROM." between '"
         
-      .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_TO."` between '"
-      .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (`".DC_MV_CAL_FROM."` <= '"
-      .php2MySqlTime($sd)."' and `".DC_MV_CAL_TO."` >= '". php2MySqlTime($ed)."') or rrule<>'') order by uid desc,  ".DC_MV_CAL_FROM."  ";
-    
+      .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (a.".DC_MV_CAL_TO." between '"
+      .php2MySqlTime($sd)."' and '". php2MySqlTime($ed)."') or (a.".DC_MV_CAL_FROM." <= '"
+      .php2MySqlTime($sd)."' and a.".DC_MV_CAL_TO." >= '". php2MySqlTime($ed)."') or a.rrule<>'') order by a.uid desc,  a.".DC_MV_CAL_FROM."  ";
+
     
     $db->setQuery( $sql );
     if (!$db->query()){
           $ret['success'] = false;
-          $ret['message'] = $db->stderr();
+          $ret['error'] = $db->stderr();
+          return $ret;
     }
     $rows = $db->loadObjectList();
 
@@ -604,7 +626,7 @@ function listCalendar($day, $type){
       break;
   }
   //echo $st . "--" . $et;
-  return listCalendarByRange($st, $et, '', '', '', '', '', '');
+  return listCalendarByRange($st, $et, '', '', '', '', '', '', '');
 }
 
 function updateCalendar($id, $st, $et){

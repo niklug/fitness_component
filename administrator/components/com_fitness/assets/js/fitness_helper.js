@@ -15,11 +15,11 @@
                 return $.AjaxCall(data, url, view, task, table, handleData);
             },
             
-            getClientsByBusiness : function(view, business_profile_id) {
+            getClientsByBusiness : function(view, business_profile_id, task) {
                 var data = {};
                 var url = this.get('ajax_call_url');
                 var view = view;
-                var task = 'getClientsByBusiness';
+                var task = task;
                 var table = '';
                 data.business_profile_id = business_profile_id;
                 
@@ -58,11 +58,16 @@
                 return html;
             },
             
-            populateClientsSelectOnBusiness : function(model, business_profile_id, target, selected) {
-                this.getClientsByBusiness(model, business_profile_id);
+            populateUsersSelectOnBusiness : function(task, model, business_profile_id, target, selected) {
+                
+                this.getClientsByBusiness(model, business_profile_id, task);
                 this.on('change:clients', function(model, items) {
                     model.populateSelect(items, target, selected);
                 });
+            },
+            
+            populateClientsSelectOnBusiness : function(task, model, business_profile_id, target, selected) {
+                this.populateUsersSelectOnBusiness(task, model, business_profile_id, target, selected);
             },
             
             populateTrainersSelectOnBusiness : function(model, business_profile_id, target, selected) {

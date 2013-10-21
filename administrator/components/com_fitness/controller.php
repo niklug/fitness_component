@@ -59,6 +59,14 @@ class FitnessController extends JController
    		$view -> getUsersByGroup();
 	}
         
+        
+        function getUsersByBusiness() {
+            
+ 		$view = $this -> getView('goals', 'json');
+                $view->setModel($this->getModel('goals'));
+   		$view -> getUsersByBusiness();
+	}
+        
         function getClientsByBusiness() {
             
  		$view = $this -> getView('goals', 'json');

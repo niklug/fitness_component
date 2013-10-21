@@ -118,10 +118,7 @@ $helper = new FitnessHelper();
             
             
             // populate clients select
-            fitness_helper.populateClientsSelectOnBusiness('goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
-            
-            
-
+            fitness_helper.populateClientsSelectOnBusiness('getUsersByBusiness', 'goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
         });
 
         // exclude options logic

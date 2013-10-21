@@ -111,12 +111,12 @@ $helper = new FitnessHelper();
         $("#business_profile_id").on('change', function() {
             var business_profile_id = $(this).val();
             // populate clients select
-            fitness_helper.populateClientsSelectOnBusiness('goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
+            fitness_helper.populateClientsSelectOnBusiness('getClientsByBusiness', 'goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
         });
         
         var business_profile_id = $("#business_profile_id").val();
         if(business_profile_id) {
-            fitness_helper.populateClientsSelectOnBusiness('goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
+            fitness_helper.populateClientsSelectOnBusiness('getClientsByBusiness', 'goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
         }
         
         

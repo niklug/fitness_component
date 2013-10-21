@@ -38,6 +38,13 @@ class FitnessViewGoals extends JView {
 	    echo $model->getUsersByGroup($user_group);
 	}
         
+        function getUsersByBusiness() {
+            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
+	    $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
+            $model = $this -> getModel("goals");
+	    echo $model->getUsersByBusiness($data_encoded);
+	}
+        
         function getClientsByBusiness() {
             JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 	    $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);

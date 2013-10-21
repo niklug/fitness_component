@@ -1921,7 +1921,17 @@
                 option.url = default_option_url;
             });
             
-            $(".drag_data").mousedown(function(){
+            $("#business_profile_id").live('change', function(){
+
+                var filter_options = $("#calendar_filter_form").serialize();
+                option.url = option.url + '&' + filter_options;
+                populate();
+                option.url = default_option_url;
+
+    
+            });
+            
+            $(".drag_data").live('mousedown', function(){
                 drag_name = $(this).data('name');
                 drag_value = $(this).data('value');
                 goDrag(drag_name, drag_value); 
@@ -1965,7 +1975,7 @@
                     dataType : 'json',
                     success : function(response) { 
                         if(response.success) {
-                            var emails = response.Msg.split(',');
+                            var emails = response.message.split(',');
                             
                             var message = 'Emails were sent to: ' +  "</br>";
                             $.each(emails, function(index, email) { 
@@ -1974,7 +1984,7 @@
                             $("#emais_sended").append(message);
               
                         } else {
-                            alert(response.Msg);
+                            alert(response.message);
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
@@ -3051,8 +3061,8 @@
          }
          
          function saveDragedData(event_id, starttime,  endtime, field, value) {
-             //console.log(event_id);
-             //console.log(start + ', ' + end + ', ' + name + ', ' + value);
+
+             //console.log(event_id + ' '  + starttime + ', ' + endtime + ', ' + field + ', ' + value);
              var url = option.url.replace('list', 'saveDragedData');
              //console.log(url);
              var client_id =  $('#filter_client').find(':selected').val();
@@ -3060,7 +3070,7 @@
              //console.log(client_id);
              var trainer_id =  $('#filter_trainer').find(':selected').val();
              if(!trainer_id) trainer_id =  $('#trainer_input').val();
-             console.log(trainer_id);
+             //console.log(trainer_id);
              if(!trainer_id) trainer_id = '';
              var location =  $('#filter_location').find(':selected').val();
              if(!location) location = '';
@@ -3093,7 +3103,7 @@
                            //console.log(drag_value);
 
                         } else {
-                            alert(response.Msg);
+                            alert(response.message);
                         }
                         //console.log(response);
                     },
@@ -3109,7 +3119,7 @@
          
          function onDragEvent(e, obj, event_id) {
              //console.log(drag_value);
-            //console.log(event_id);
+            console.log(event_id);
             var _dragdata = { type: 1, target: obj, sx: e.pageX, sy: e.pageY };
             var d = _dragdata;
             var wrapid = new Date().getTime();
@@ -3145,7 +3155,7 @@
                         if(response.success) {
                             //console.log(event_id + ' deleted');
                         } else {
-                            alert(response.Msg);
+                            alert(response.message);
                         }
                         //console.log(response);
                     },

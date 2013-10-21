@@ -25,6 +25,25 @@ require_once( JPATH_COMPONENT_SITE.'/DC_MultiViewCal/php/list.inc.php' );
 
 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 
+$helper = new FitnessHelper();
+
+$group_id = $helper->getTrainersGroupId();
+
+$business_profile = $helper->JErrorFromAjaxDecorator($helper->getBusinessByTrainerGroup($group_id));
+
+$business_profile_id = $business_profile->id;
+
+
+
+$document = &JFactory::getDocument();
+$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'underscore-min.js');
+include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
+$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'backbone-min.js');
+$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'ajax_call_function.js');
+$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'fitness_helper.js');
+
 
 global $arrayJS_list;
 global $JC_JQUERY_SPECIAL ;
@@ -113,82 +132,27 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 <?php
 
 
-function getUserGroup($user_id) {
-    if(!$user_id) {
-        $user_id = &JFactory::getUser()->id;
-    }
-    $db = JFactory::getDBO();
-    $query = "SELECT title FROM #__usergroups WHERE id IN 
-        (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
-    $db->setQuery($query);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    return $db->loadResult();
-}
-
 
 ?>
 <div id="calendar_filters"  style="clear: both;height: 80px; width: 100%;">
+    
+        
     <form id="calendar_filter_form">
-    <?php
-    $db = JFactory::getDbo();
-    $sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
-    if(getUserGroup() != 'Super Users') {
-        $user_id = &JFactory::getUser()->id;
-        $sql .= " AND (primary_trainer='$user_id' OR other_trainers LIKE '%$user_id%')";
-    }
-    $db->setQuery($sql);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $clients = $db->loadObjectList();
-    ?>
+    <div class='filter-select fltrt'>
+        <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id','' , 'Business Name', false, "inputbox"); ?>
+    </div>
+
     <div   style="float:left;" >
         <select multiple size="6" id="filter_client" name="client_id[]" class="inputbox">
                 <option value=""><?php echo JText::_('-Select Clients-');?></option>
-                <?php 
-                    foreach ($clients as $client) {
-                        echo '<option value="' . $client->user_id . '">' . JFactory::getUser($client->user_id)->name. '</option>';
-                    }
-                ?>
         </select>
     </div>
 
-    <?php
-    $trainers_group_id = FitnessHelper::getTrainersGroupId();
-    
-    $db = JFactory::getDbo();
-    $sql = "SELECT id, username FROM #__users INNER JOIN #__user_usergroup_map
-        ON #__user_usergroup_map.user_id=#__users.id
-        WHERE #__user_usergroup_map.group_id='$trainers_group_id'";
-    if(getUserGroup() != 'Super Users') {
-        $user_id = &JFactory::getUser()->id;
-        $sql .= " AND #__users.id='$user_id'";
-    }
-    $db->setQuery($sql);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $trainers = $db->loadObjectList();
-    ?>
+
     <div  style="float:left;margin-left: 10px;">
-        <?php
-        if(getUserGroup() == 'Super Users') {
-        ?>
-            <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
-              <option value=""><?php echo JText::_('-Select Trainers-');?></option>
-                <?php 
-                    foreach ($trainers as $trainer) {
-                        echo '<option value="' . $trainer->id . '">' . $trainer->username . '</option>';
-                    }
-                ?>
-            </select>
-            <?php
-            } else {
-                echo '<input type="hidden" id="trainer_input" name="trainer_id" value="' . JFactory::getUser()->id . '" />';
-            }
-        ?>
+        <select multiple size="6" id="filter_trainer" name="trainer_id[]" class="inputbox" >
+          <option value=""><?php echo JText::_('-Select Trainers-');?></option>
+        </select>
     </div>
     <?php
  
@@ -325,14 +289,8 @@ function getUserGroup($user_id) {
                                 
                                 <div class="drag_area">
                                     <h4 >2. Add Client to Appointment</h4>
-                                    <ul>
-                                    <?php 
-                                        foreach ($clients as $client) {
-                                            echo '<li data-name="client_id" data-value="' . $client->user_id . '" class="drag_data" title="' . JFactory::getUser($client->user_id)->username. '" >'
-                                                 . JFactory::getUser($client->user_id)->name . '</li>';
-                                        }
+                                    <ul id="clients_ul">
                                     
-                                    ?>
                                     </ul>
 
                                 </div>
@@ -340,14 +298,7 @@ function getUserGroup($user_id) {
                             <td>
                                   <div class="drag_area">
                                     <h4 >3. Add Trainer to Appointment</h4>
-                                    <ul>
-                                    <?php 
-                                        foreach ($trainers as $trainer) {
-                                            echo '<li data-name="trainer_id" data-value="' . $trainer->id. '" class="drag_data" title="' . JFactory::getUser($trainer->id)->username  . '"        ">' 
-                                                 . JFactory::getUser($trainer->id)->name . '</li>';
-                                        }
-                                    
-                                    ?>
+                                    <ul id="trainers_ul">
                                     </ul>
 
                                 </div>
@@ -449,6 +400,70 @@ userAdd:true,
             userEditOwner:true,
             userDelOwner:true,
             userOwner:-1 <?php echo $newp;?>});
+
+
+
+//npkorban
+    (function($) {
+        
+        // connect helper class
+        var helper_options = {
+            'ajax_call_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        }
+        var fitness_helper = $.fitness_helper(helper_options);
+        
+                   
+        $("#business_profile_id").on('change', function() {
+            
+            var business_profile_id = $(this).val();
+            businessLogic(business_profile_id);
+            
+        });
+        
+        function businessLogic(business_profile_id) {
+            if(!business_profile_id) {
+                populateDragUL({}, $("#clients_ul"), 'client_id');
+                populateDragUL({}, $("#trainers_ul"), 'trainer_id');
+                fitness_helper.populateSelect({}, '#filter_client', '');
+                fitness_helper.populateSelect({}, '#filter_trainer', '');
+                return;
+            }
+            // populate clients select
+            fitness_helper.populateClientsSelectOnBusiness('getClientsByBusiness', 'goals', business_profile_id, '#filter_client', '');
+            
+            fitness_helper.on('change:clients', function(model, items) {
+                populateDragUL(items, $("#clients_ul"), 'client_id');
+            });
+            
+            
+            // populate trainers select
+            fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#filter_trainer', '');
+            
+            fitness_helper.on('change:trainers', function(model, items) {
+                populateDragUL(items, $("#trainers_ul"), 'trainer_id');
+            });
+        }
+        
+        
+        function populateDragUL(data, target, data_name) {
+            var html = '';
+            $.each(data, function(index, value) {
+                if(index) {
+                    html += '<li data-name="'  +data_name + '" data-value="' + index + '" class="drag_data" title="' + value + '" >' + value + '</li>'
+                }
+            });
+            $(target).html(html);
+            return html;
+        }
+        
+        var business_profile_id = '<?php echo $business_profile_id;?>';
+        
+        if(business_profile_id) {
+            $("#business_profile_id").val(business_profile_id);
+            businessLogic(business_profile_id);
+        }
+            
+    })($js);
 
 </script>
 
