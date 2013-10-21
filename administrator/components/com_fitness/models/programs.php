@@ -11,6 +11,8 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
 /**
  * Methods supporting a list of Fitness records.
  */
@@ -46,6 +48,7 @@ class FitnessModelprograms extends JModelList {
                 'rrule', 'a.rrule',
                 'uid', 'a.uid',
                 'exdate', 'a.exdate',
+                'business_name', 'business_name',
 
             );
         }
@@ -102,6 +105,10 @@ class FitnessModelprograms extends JModelList {
         $event_status = $app->getUserStateFromRequest($this->context . '.filter.event_status', 'filter_event_status', '', 'string');
         $this->setState('filter.event_status', $event_status);
         
+        // Filter by business profile
+        $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
+        $this->setState('filter.business_profile_id', $business_profile_id);
+        
                  
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
@@ -144,18 +151,38 @@ class FitnessModelprograms extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*'
+                        'list.select', 'a.*, bp.name AS business_name'
                 )
         );
         $query->from('`#__dc_mv_events` AS a');
         
         $query->leftJoin('#__users AS u ON u.id = a.client_id');
-
-        // filter only for Super Users
-        $user = &JFactory::getUser();
-        if ($this->getUserGroup($user->id) != 'Super Users') {
-            $query->where('a.trainer_id = ' . (int) $user->id);
+        
+        $query->leftJoin('#__fitness_clients AS c ON c.user_id = a.client_id');
+        
+        $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = c.business_profile_id');
+        
+        
+        if(FitnessHelper::is_primary_administrator() || FitnessHelper::is_secondary_administrator()) {
+            $trainers_group_id = FitnessHelper::getTrainersGroupId();
+            $query->where('bp.group_id = '.(int) $trainers_group_id);
         }
+        
+        // 
+        $user = &JFactory::getUser();
+        
+        if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
+            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
+            $query->where('(c.primary_trainer = ' . (int) $user->id . ' OR c.other_trainers LIKE ' . $other_trainers . ' )');
+        }
+        
+        // Filter by business profile
+        $business_profile_id = $this->getState('filter.business_profile_id');
+        if (is_numeric($business_profile_id)) {
+            $query->where('c.business_profile_id = '.(int) $business_profile_id);
+        } 
+
+     
 
         // Filter by search in title
         $search = $this->getState('filter.search');
@@ -177,6 +204,9 @@ class FitnessModelprograms extends JModelList {
                 ');
             }
         }
+        
+        
+        
 
         $query->where("a.title NOT IN ('Assessment')");
          
@@ -258,15 +288,7 @@ class FitnessModelprograms extends JModelList {
         return $items;
     }
     
-    
-    function getUserGroup($user_id) {
-        $db = JFactory::getDBO();
-        $query = "SELECT title FROM #__usergroups WHERE id IN 
-            (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
-        $db->setQuery($query);
-        return $db->loadResult();
-    }
-    
+
     function status_html($item_id, $status, $button_class) {
         switch($status) {
             case '1' :

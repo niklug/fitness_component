@@ -44,7 +44,6 @@ class FitnessModelgoals extends JModelList {
             );
         }
         
-        require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
                 
         $this->helper = new FitnessHelper();
 

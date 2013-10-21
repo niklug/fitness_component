@@ -153,6 +153,10 @@ $helper = new FitnessHelper();
                     <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'filter_primary_trainer', 'primary_trainer', $this->state->get('filter.primary_trainer'), 'Primary Trainer', false, 'inputbox'); ?>
                 </div>
             
+                <div class='filter-select fltrt'>
+                    <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id') , 'Business Name', false, "inputbox"); ?>
+		</div>
+            
                 <a id="add_appointment" title="Add New Item" href="javascript:void(0)"></a>
 
 
@@ -241,7 +245,7 @@ $helper = new FitnessHelper();
                     $colspan = count(get_object_vars($this->items[0]));
                 }
                 else{
-                    $colspan = 10;
+                    $colspan = 17;
                 }
             ?>
 			<tr>
@@ -377,6 +381,11 @@ $helper = new FitnessHelper();
 </div>
 <script type="text/javascript">
     (function($) {
+        
+        $("#business_profile_id").on('change', function() {
+             var form = $("#adminForm");
+             form.submit();
+        })
 
         $(".edit_event").live('click', function(e) {
             var event_id = $(this).data('id');
