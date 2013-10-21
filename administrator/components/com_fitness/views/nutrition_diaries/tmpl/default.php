@@ -156,6 +156,10 @@ $helper = new FitnessHelper();
         <div class='filter-select fltrt'>
                 <?php echo $helper->generateSelect($helper->getTrainersByUsergroup(), 'filter_primary_trainer', 'primary_trainer', $this->state->get('filter.primary_trainer'), 'Primary Trainer', false, 'inputbox'); ?>
         </div>
+        
+        <div class='filter-select fltrt'>
+            <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id') , 'Business Name', false, "inputbox"); ?>
+        </div>
                      
     </fieldset>  
             
@@ -340,8 +344,9 @@ $helper = new FitnessHelper();
             form.find("input").val('');
             form.submit();
         });
+
         
-        $("#primary_trainer").on('change', function() {
+        $("#primary_trainer, #business_profile_id").on('change', function() {
                  var form = $("#adminForm");
                  form.submit();
         })

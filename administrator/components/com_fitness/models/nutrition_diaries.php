@@ -11,6 +11,8 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
 /**
  * Methods supporting a list of Fitness records.
  */
@@ -37,6 +39,7 @@ class FitnessModelnutrition_diaries extends JModelList {
                 'status', 'a.status',
                 'score', 'a.score',
                 'trainer_comments', 'a.trainer_comments',
+                'business_name', 'business_name',
                 'state', 'a.state',
 
             );
@@ -92,6 +95,10 @@ class FitnessModelnutrition_diaries extends JModelList {
                 $diary_status = $app->getUserStateFromRequest($this->context . '.filter.diary_status', 'filter_diary_status', '', 'string');
                 $this->setState('filter.diary_status', $goal_status);
                 
+                // Filter by business profile
+                $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
+                $this->setState('filter.business_profile_id', $business_profile_id);
+
                 
                 
         // Load the parameters.
@@ -137,7 +144,8 @@ class FitnessModelnutrition_diaries extends JModelList {
                 $this->getState(
                         'list.select', 'a.*,
                             (SELECT name FROM #__fitness_goal_categories WHERE id=a.goal_category_id) primary_goal_name,
-                            nf.name AS nutrition_focus_name
+                            nf.name AS nutrition_focus_name,
+                            bp.name AS business_name
                         '
                 )
         );
@@ -151,46 +159,52 @@ class FitnessModelnutrition_diaries extends JModelList {
         
         $query->leftJoin('#__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus');
         
-
-
+        $query->leftJoin('#__fitness_clients AS c ON c.user_id = a.client_id');
         
+        $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = c.business_profile_id');
         
-                // filter only for Super Users
-        $user = &JFactory::getUser();
-        if ($this->getUserGroup($user->id) != 'Super Users') {
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query->where('(a.trainer_id = ' . (int) $user->id .' )');
+
+        if(FitnessHelper::is_primary_administrator() || FitnessHelper::is_secondary_administrator()) {
+            $trainers_group_id = FitnessHelper::getTrainersGroupId();
+            $query->where('bp.group_id = '.(int) $trainers_group_id);
         }
         
-        // filter only for Super Users
+        // 
         $user = &JFactory::getUser();
-        if ($this->getUserGroup($user->id) != 'Super Users') {
-
+        
+        if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
             $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query->where('a.client_id IN (SELECT DISTINCT user_id FROM #__fitness_clients WHERE primary_trainer=' .  (int) $user->id .  ' OR other_trainers LIKE ' . $other_trainers .  ' )');
+            $query->where('(c.primary_trainer = ' . (int) $user->id . ' OR c.other_trainers LIKE ' . $other_trainers . ' )');
         }
-        
-        
-        
-    // Filter by published state
-    $published = $this->getState('filter.state');
-    if (is_numeric($published)) {
-        $query->where('a.state = '.(int) $published);
-    } else if ($published === '') {
-        $query->where('(a.state IN (0, 1))');
-    }
-    
 
-        // Filter by search in title
-        $search = $this->getState('filter.search');
-        if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
-            } else {
-                $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('( u.name LIKE '.$search.'  OR  u.username LIKE '.$search.' )');
+        
+        
+        // Filter by business profile
+        $business_profile_id = $this->getState('filter.business_profile_id');
+        if (is_numeric($business_profile_id)) {
+            $query->where('c.business_profile_id = '.(int) $business_profile_id);
+        } 
+        
+        
+        // Filter by published state
+        $published = $this->getState('filter.state');
+        if (is_numeric($published)) {
+            $query->where('a.state = '.(int) $published);
+        } else if ($published === '') {
+            $query->where('(a.state IN (0, 1))');
+        }
+
+
+            // Filter by search in title
+            $search = $this->getState('filter.search');
+            if (!empty($search)) {
+                if (stripos($search, 'id:') === 0) {
+                    $query->where('a.id = ' . (int) substr($search, 3));
+                } else {
+                    $search = $db->Quote('%' . $db->escape($search, true) . '%');
+                    $query->where('( u.name LIKE '.$search.'  OR  u.username LIKE '.$search.' )');
+                }
             }
-        }
 
         
 
