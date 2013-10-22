@@ -30,8 +30,8 @@
            /** client onchange select
              *  
              */
-            $('#client').change(function(){
-               var client_id = $(this).find(':selected')[0].id;
+            $('#client').live('change', function(){
+               var client_id = $(this).val();
                setTrainerSelect(client_id);
             });
 
@@ -254,16 +254,19 @@
          *  npkorban
          */
         function setTrainerSelect(client_id) {
-           var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
+            var cid = '<?php echo JRequest::getVar( 'cid' );?>';
+            var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
             var url = DATA_FEED_URL+ "&method=get_trainers";
             $.ajax({
                 type : "POST",
                 url : url,
                 data : {
-                   client_id : client_id
+                   client_id : client_id,
+                   cid : cid
                 },
                 dataType : 'json',
                 success : function(message) {
+                    console.log(message);
                     if(!message.status.success) {
                         alert(message.status.message);
                         return;

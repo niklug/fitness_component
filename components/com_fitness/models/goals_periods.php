@@ -305,6 +305,16 @@ class FitnessModelgoals_periods extends JModelList {
     }
     
     
+    
+    public function getClientsByBusiness($data_encoded) {
+        $model_backend = new FitnessModelgoals();
+
+        $data = $model_backend->getClientsByBusiness($data_encoded);
+
+        return $data; 
+    }
+    
+    
 
 
 }

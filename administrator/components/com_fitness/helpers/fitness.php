@@ -35,9 +35,9 @@ class FitnessFactory {
         return self::$trainers_group_id;
     }
     
-    public static function getTrainersGroupIdByUser($user) {
+    public static function getTrainersGroupIdByUser($user_id) {
 
-        return self::createTrainersGroupId($user);
+        return self::createTrainersGroupId($user_id);
     }
     
     
@@ -127,14 +127,12 @@ class FitnessFactory {
     }
     
     
-    public static function createTrainersGroupId($user) {
+    public static function createTrainersGroupId($user_id) {
 
         
         $db = & JFactory::getDBO();
         
-        if(!$user->id) {
-            $user = &JFactory::getUser();
-        }
+        $user = &JFactory::getUser($user_id);
 
         
         $groups = $user->get('groups');
@@ -541,13 +539,14 @@ class FitnessHelper extends FitnessFactory
         return $ret;
     }
     
-    public function getClientsByBusiness($business_profile_id, $user) {
+    public function getClientsByBusiness($business_profile_id, $user_id) {
+            
         $db = &JFactory::getDBo();
         $query = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE business_profile_id='$business_profile_id'";
         
-        if(!$user->id) {
-            $user = JFactory::getUser();
-        }   
+
+        $user = JFactory::getUser($user_id);
+   
         
         // if simple trainer
         if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
@@ -730,13 +729,13 @@ class FitnessHelper extends FitnessFactory
         return $grouplist;
     }
     
-    public function getBusinessProfileList() {
+    public function getBusinessProfileList($user_id) {
         $db = JFactory::getDbo();
         $sql = "SELECT id AS value, name AS text FROM #__fitness_business_profiles WHERE state='1' ";
         
-        if(self::is_trainer()) {
-            $trainers_group_id = self::getTrainersGroupId();
-             $sql .= "  AND group_id='$trainers_group_id'";
+        if(self::is_trainer($user_id)) {
+            $trainers_group_id = self::getTrainersGroupIdByUser($user_id);
+            $sql .= "  AND group_id='$trainers_group_id'";
         }
         
         $sql .= "  ORDER BY id";

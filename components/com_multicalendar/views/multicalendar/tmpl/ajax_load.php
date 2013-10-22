@@ -477,18 +477,18 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     
     if(FitnessHelper::is_primary_administrator($user->id) || FitnessHelper::is_secondary_administrator($user->id)) {
         
-            $trainers_group_id = FitnessHelper::getTrainersGroupIdByUser($user);
+            $trainers_group_id = FitnessHelper::getTrainersGroupIdByUser($user->id);
 
             //$ret['error'] = print_r($trainers_group_id, true);
             //return $ret;
 
-            $sql .=' AND  bp.group_id = '.(int) $trainers_group_id;
+            $sql .= " AND  (bp.group_id = " .(int) $trainers_group_id . " OR (a.client_id='') ) ";
         }
         
 
     if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
         $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-        $sql .=' AND (c.primary_trainer = ' . (int) $user->id . ' OR c.other_trainers LIKE ' . $other_trainers . ' ) ';
+        $sql .= " AND (c.primary_trainer = " . (int) $user->id . " OR c.other_trainers LIKE " . $other_trainers .  " OR (a.client_id='')) ";
     }
     
     
@@ -948,11 +948,18 @@ function  get_session_focus() {
  * @param type $catid
 */
 function  get_trainers() {
+    $status['success'] = 1;
     $client_id = JRequest::getVar("client_id");
+
     $secondary_only = JRequest::getVar("secondary_only");
     $db = & JFactory::getDBO();
-    $user = &JFactory::getUser();
-    if ((getUserGroup($user->id) == 'Super Users') OR $secondary_only) {
+    
+    //logged user
+    $cid = JRequest::getVar( 'cid' );
+    $user = &JFactory::getUser($cid);
+    
+   
+    if(FitnessHelper::is_primary_administrator($user->id) || FitnessHelper::is_secondary_administrator($user->id) ||  FitnessHelper::is_superuser($user->id)) {
         $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
         $db->setQuery($query);
         $status['success'] = 1;
@@ -965,9 +972,12 @@ function  get_trainers() {
         $other_trainers = $db->loadResultArray(1);
         $other_trainers = explode(',', $other_trainers[0]);
         $all_trainers_id = array_unique(array_merge($primary_trainer, $other_trainers));
-    } else {
+    }
+        
+    if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && !FitnessHelper::is_superuser($user->id) && FitnessHelper::is_trainer($user->id)) {
         $all_trainers_id = array($user->id);
     }
+
     
     if($secondary_only) {
         $all_trainers_id = $other_trainers;

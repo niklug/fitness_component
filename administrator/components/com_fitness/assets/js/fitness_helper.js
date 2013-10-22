@@ -15,13 +15,14 @@
                 return $.AjaxCall(data, url, view, task, table, handleData);
             },
             
-            getClientsByBusiness : function(view, business_profile_id, task) {
+            getClientsByBusiness : function(view, business_profile_id, task, user_id) {
                 var data = {};
                 var url = this.get('ajax_call_url');
                 var view = view;
                 var task = task;
                 var table = '';
                 data.business_profile_id = business_profile_id;
+                data.user_id = user_id;//current logged user
                 
                 var self = this;
                 this.set("clients", {});
@@ -60,16 +61,16 @@
                 return html;
             },
             
-            populateUsersSelectOnBusiness : function(task, model, business_profile_id, target, selected) {
+            populateUsersSelectOnBusiness : function(task, model, business_profile_id, target, selected, user_id) {
                 
-                this.getClientsByBusiness(model, business_profile_id, task);
+                this.getClientsByBusiness(model, business_profile_id, task, user_id);
                 this.on('change:clients', function(model, items) {
                     model.populateSelect(items, target, selected);
                 });
             },
             
-            populateClientsSelectOnBusiness : function(task, model, business_profile_id, target, selected) {
-                this.populateUsersSelectOnBusiness(task, model, business_profile_id, target, selected);
+            populateClientsSelectOnBusiness : function(task, model, business_profile_id, target, selected, user_id) {
+                this.populateUsersSelectOnBusiness(task, model, business_profile_id, target, selected, user_id);
             },
             
             populateTrainersSelectOnBusiness : function(model, business_profile_id, target, selected) {

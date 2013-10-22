@@ -74,6 +74,7 @@ $datafeed = JURI::root()."index.php?option=com_multicalendar&task=load";
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>Calendar Details</title>
+ 
 <?php
 if (file_exists("./components/com_multicalendar/DC_MultiViewCal/css/".$_GET["css"]."/calendar.css"))
 {
@@ -86,6 +87,13 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/css/".$_GET["css
 		<script type="text/javascript" src="<?php echo $path; ?>js/jquery-ui-1.8.20.custom.min.js"></script>
                 <script type="text/javascript" src="<?php echo $path; ?>js/jquery.tablednd.js"></script>
 		<script src="<?php echo $path; ?>src/Plugins/Common.js" type="text/javascript"></script>
+                
+                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'underscore-min.js'?>"></script>
+                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'backbone-min.js'?>"></script>
+                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'ajax_call_function.js'?>"></script>
+                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'fitness_helper.js'?>"></script>
+
+
 
         <script src="<?php echo $path; ?>src/Plugins/jquery.form.js" type="text/javascript"></script>
 <?php
@@ -460,12 +468,12 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             }, i18n.dcmvcal._simbol_not_allowed);
             $("#fmEdit").validate({
                 submitHandler: function(form) {
-// 
-<?php if (isset($event) && ($event->rrule!="")) { ?>
-$("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addClass("mv_dlg").addClass("mv_dlg_editevent").addClass("infocontainer") ;    
-<?php } else { ?> 
-                $("#fmEdit").ajaxSubmit(options);
-<?php } ?> 
+                // 
+                <?php if (isset($event) && ($event->rrule!="")) { ?>
+                $("#repeatsave").dialog({width:500,modal: true,resizable: false}).parent().addClass("mv_dlg").addClass("mv_dlg_editevent").addClass("infocontainer") ;    
+                <?php } else { ?> 
+                                $("#fmEdit").ajaxSubmit(options);
+                <?php } ?> 
                  
                 }, 
                 errorElement: "div",
