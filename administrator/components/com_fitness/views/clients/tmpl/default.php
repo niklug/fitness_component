@@ -136,8 +136,17 @@ $helper = new FitnessHelper();
 					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 				</td>
                                 <td>
-		                        <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=client.edit&id='.(int) $item->id); ?>">
-					<?php echo $this->escape($item->name); ?></a>
+                                    <?php
+                                    if(FitnessHelper::is_primary_administrator($user->id) || FitnessHelper::is_secondary_administrator($user->id) || FitnessHelper::is_superuser($user->id)) {
+                                    ?>
+                                    <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=client.edit&id='.(int) $item->id); ?>">
+                                    <?php echo $this->escape($item->name); ?></a>
+                                    <?php
+                                    } else {
+                                        echo $this->escape($item->name);
+                                    }
+                                    ?>
+		                        
 				</td>
                                 <td>
 					<?php echo $item->username;?>

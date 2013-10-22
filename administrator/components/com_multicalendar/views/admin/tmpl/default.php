@@ -421,6 +421,7 @@ userAdd:true,
         });
         
         function businessLogic(business_profile_id) {
+            
             if(!business_profile_id) {
                 populateDragUL({}, $("#clients_ul"), 'client_id');
                 populateDragUL({}, $("#trainers_ul"), 'trainer_id');
@@ -428,10 +429,12 @@ userAdd:true,
                 fitness_helper.populateSelect({}, '#filter_trainer', '');
                 return;
             }
+            
             // populate clients select
             fitness_helper.populateClientsSelectOnBusiness('getClientsByBusiness', 'goals', business_profile_id, '#filter_client', '');
             
             fitness_helper.on('change:clients', function(model, items) {
+                
                 populateDragUL(items, $("#clients_ul"), 'client_id');
             });
             

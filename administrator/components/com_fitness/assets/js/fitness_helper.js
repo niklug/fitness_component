@@ -24,6 +24,7 @@
                 data.business_profile_id = business_profile_id;
                 
                 var self = this;
+                this.set("clients", {});
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("clients", output);
                 });
@@ -38,6 +39,7 @@
                 data.business_profile_id = business_profile_id;
                 
                 var self = this;
+                this.set("trainers", {});
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("trainers", output);
                 });

@@ -52,6 +52,7 @@ function getClients() {
 }
 
 
+
 /** get clients from fitness component
  * npkorban
  * 

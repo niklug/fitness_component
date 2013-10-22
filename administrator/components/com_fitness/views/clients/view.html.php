@@ -79,10 +79,16 @@ class FitnessViewClients extends JView {
             if ($canDo->get('core.create')) {
                 JToolBarHelper::addNew('client.add', 'JTOOLBAR_NEW');
             }
-
-            if ($canDo->get('core.edit') && isset($this->items[0])) {
-                JToolBarHelper::editList('client.edit', 'JTOOLBAR_EDIT');
+            
+            $user = JFactory::getUser();
+            
+            if(FitnessHelper::is_primary_administrator($user->id) || FitnessHelper::is_secondary_administrator($user->id) || FitnessHelper::is_superuser($user->id)) {
+                 if ($canDo->get('core.edit') && isset($this->items[0])) {
+                    JToolBarHelper::editList('client.edit', 'JTOOLBAR_EDIT');
+                }
             }
+
+           
         }
 
         if ($canDo->get('core.edit.state')) {

@@ -43,17 +43,11 @@
                         <tr id="client_select_tr">
                             <td>Client:</td>
                             <td>
-                                <?php
-                                if (isset($clients[0]->name)) {
-                                    echo '<select style="float:left;" id="client" name="client_id" class="required safe inputtext" ">';
-                                    echo '<option>-Select-</option>';
-                                    
-                                    for ($i = 0; $i < count( $clients); $i++) {
-                                        echo '<option " id="' .  $clients[$i]->user_id . '" value="' . ( $clients[$i]->user_id) . '" ' . ((isset($event) && (trim($event->client_id) == trim( $clients[$i]->user_id))) ? "selected" : "") . '>' .  $clients[$i]->name . '</option>';
-                                    }
-                                    echo '</select>';
-                                }
-
+                                <select style="float:left;" id="client" name="client_id" class="required safe inputtext">
+                                    <option>-Select-</option>
+                                </select>
+<?php
+//echo '<option " id="' .  $clients[$i]->user_id . '" value="' . ( $clients[$i]->user_id) . '" ' . ((isset($event) && (trim($event->client_id) == trim( $clients[$i]->user_id))) ? "selected" : "") . '>' .  $clients[$i]->name . '</option>';
                                 ?>  
                             </td>
                         </tr>
@@ -101,3 +95,5 @@
 <input id="colorvalue" name="colorvalue" type="hidden" value="<?php echo isset($event)?$event->color:"" ?>" />
 <input type="hidden" id="rrule" name="rrule" value="<?php echo $event->rrule?>" size=55 />
 <input type="hidden" id="rruleType" name="rruleType" value="" size=55 />
+
+

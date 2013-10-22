@@ -541,9 +541,19 @@ class FitnessHelper extends FitnessFactory
         return $ret;
     }
     
-    public function getClientsByBusiness($business_profile_id) {
+    public function getClientsByBusiness($business_profile_id, $user) {
         $db = &JFactory::getDBo();
         $query = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE business_profile_id='$business_profile_id'";
+        
+        if(!$user->id) {
+            $user = JFactory::getUser();
+        }   
+        
+        // if simple trainer
+        if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
+            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
+            $query .= ' AND ( primary_trainer = ' . (int) $user->id . ' OR other_trainers LIKE ' . $other_trainers . ' ) ';
+        }
         $db->setQuery($query);
         $ret['success'] = 1;
         if (!$db->query()) {
@@ -591,6 +601,8 @@ class FitnessHelper extends FitnessFactory
         
         return $trainers;
     }
+    
+    
     
     public function getTrainersClientsTable($trainers_group_id) {
         
