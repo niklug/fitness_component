@@ -1891,6 +1891,7 @@
         function populate_by_filter() {
             var default_option_url = option.url;
             var filter_options = $("#calendar_filter_form").serialize();
+            //console.log(filter_options);
             if(filter_options) {
                 option.url = option.url + '&' + filter_options;
             }

@@ -493,13 +493,21 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     
     
     if($business_profile_id) {
-         $sql .=' AND  c.business_profile_id = '.(int) $business_profile_id;
+         $sql .= " AND  (c.business_profile_id = ".(int) $business_profile_id . " OR (a.client_id=''))";
     }
-    
+  
     $client_ids = implode($client_id, ',');
+    
+
     if($client_id[0]) {
         $sql .= " and (a.client_id IN ($client_ids) ";
         $sql .= " or a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))) ";
+    }
+    
+    $trainer_ids = implode($trainer_id, ',');
+
+    if($trainer_id[0]) {
+        $sql .= " and trainer_id IN ($trainer_ids) ";
     }
     
     //logged user
