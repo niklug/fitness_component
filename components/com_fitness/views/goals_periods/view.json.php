@@ -50,5 +50,12 @@ class FitnessViewGoals_periods extends JView {
         echo $model->getClientsByBusiness($data_encoded);
     }
     
+    function onBusinessNameChange() {
+        $table= JRequest::getVar('table');
+        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
+        $model = $this -> getModel("goals_periods");
+        echo json_encode($model->onBusinessNameChange($data_encoded, $table));
+    }
+
     
 }

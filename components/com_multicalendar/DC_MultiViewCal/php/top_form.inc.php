@@ -49,7 +49,7 @@
              *  
              */
             $('#add_client_button').click(function(){
-               var trainer_id = $('#trainers').find(':selected')[0].id;
+               var trainer_id = $('#trainers').val();
                setClientsSelect(trainer_id);
             });
 
@@ -266,7 +266,6 @@
                 },
                 dataType : 'json',
                 success : function(message) {
-                    console.log(message);
                     if(!message.status.success) {
                         alert(message.status.message);
                         return;
@@ -294,7 +293,7 @@
 
         function buildClientsSelect() {
             var event_id = '<?php echo $event->id; ?>';
-            var trainer_id = $('#trainers').find(':selected')[0].id;
+            var trainer_id = $('#trainers').val();
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
             var url = DATA_FEED_URL+ "&method=get_semi_clients";
             $.ajax({

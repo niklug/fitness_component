@@ -137,7 +137,9 @@ $helper = new FitnessHelper();
 				</td>
                                 <td>
                                     <?php
-                                    if(FitnessHelper::is_primary_administrator($user->id) || FitnessHelper::is_secondary_administrator($user->id) || FitnessHelper::is_superuser($user->id)) {
+                      
+                                    
+                                    if(FitnessHelper::is_primary_administrator($userId) || FitnessHelper::is_secondary_administrator($userId) || FitnessHelper::is_superuser($userId)) {
                                     ?>
                                     <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=client.edit&id='.(int) $item->id); ?>">
                                     <?php echo $this->escape($item->name); ?></a>

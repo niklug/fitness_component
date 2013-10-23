@@ -477,13 +477,13 @@ function listCalendarByRange($calid,$sd, $ed, $client_id, $trainer_id, $location
     
     if(FitnessHelper::is_primary_administrator($user->id) || FitnessHelper::is_secondary_administrator($user->id)) {
         
-            $trainers_group_id = FitnessHelper::getTrainersGroupIdByUser($user->id);
+        $trainers_group_id = FitnessHelper::getTrainersGroupIdByUser($user->id);
 
-            //$ret['error'] = print_r($trainers_group_id, true);
-            //return $ret;
+        //$ret['error'] = print_r($trainers_group_id, true);
+        //return $ret;
 
-            $sql .= " AND  (bp.group_id = " .(int) $trainers_group_id . " OR (a.client_id='') ) ";
-        }
+        $sql .= " AND  (bp.group_id = " .(int) $trainers_group_id . " OR (a.client_id='') ) ";
+    }
         
 
     if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {

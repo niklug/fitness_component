@@ -57,6 +57,10 @@ class FitnessFactory {
         return false;
     }
     
+    
+    /* trainer or primary administrator or secondary administrator of Business
+     * 
+     */
     public static function is_trainer($user_id) {
         if(self::$is_trainer == null) {
             $group_id = self::getCurrentGroupId($user_id);
@@ -66,6 +70,30 @@ class FitnessFactory {
         }
         return self::$is_trainer;
     }
+    
+    
+    /* only trainer, not administrator of Business
+     * 
+     */
+    public static function is_simple_trainer($user_id) {
+        
+        if(!self::is_primary_administrator($user_id) && !self::is_secondary_administrator($user_id) && self::is_trainer($user_id)) {
+            return true;
+        }
+        return false;
+    }
+    
+    
+    /* is trainer-administrator of Business
+     * 
+     */
+    public static function is_trainer_administrator($user_id) {
+        if(self::is_primary_administrator($user_id) || self::is_secondary_administrator($user_id)) {
+            return true;
+        }
+        return false;
+    }
+    
     
     public static function is_client($user_id) {
         if(self::$is_client == null) {
@@ -837,13 +865,28 @@ class FitnessHelper extends FitnessFactory
     }
     
     public function getBusinessProfileId($user_id) {
-        
-        if(self::is_trainer($user_id)) {
-            
-            
+        $ret['success'] = 1;
+        // if admimistrator trainer or superuser
+        if(self::is_trainer_administrator($user_id)) {
+            $group_id = $this->getTrainersGroupIdByUser($user_id);
+        }
+
+        // if simple trainer
+        if(self::is_simple_trainer($user_id)) {
+            $user = &JFactory::getUser($user_id);
+            $groups = $user->get('groups');
+            $group_id = array_shift(array_values($groups));
         }
         
-        return $business_profile_id;
+        $business_profile = $this->getBusinessByTrainerGroup($group_id);
+        if(!$business_profile['success']) {
+            $ret['success'] = 0;
+            $ret['message'] = $business_profile['message'];
+        }
+        $business_profile = $business_profile['data'];
+        $ret['data'] = $business_profile->id;
+
+        return $ret;
     }
     
     public function getBusinessByTrainerGroup($group_id) {

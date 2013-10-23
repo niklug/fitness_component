@@ -199,6 +199,12 @@ class FitnessController extends JController {
         $view -> getClientsByBusiness();
     }
     
+    function onBusinessNameChange() {
+            $view = $this -> getView('goals_periods', 'json');
+            $view->setModel($this->getModel('goals_periods'));
+            $view -> onBusinessNameChange();
+	}
+    
     // nutrition plan
     function populatePlan() {
         $view = $this -> getView('nutrition_planning', 'json');

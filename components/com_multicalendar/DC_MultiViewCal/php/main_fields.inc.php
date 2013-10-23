@@ -7,13 +7,12 @@ $cid = JRequest::getVar( 'cid' );
     
 $user = &JFactory::getUser($cid);
 
-$group_id = $helper->getTrainersGroupIdByUser($user_id);
+$business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user->id));
 
-$business_profile = $helper->JErrorFromAjaxDecorator($helper->getBusinessByTrainerGroup($group_id));
-
-$business_profile_id = $business_profile->id;
+$is_simple_trainer = FitnessFactory::is_simple_trainer($user->id);
 
 
+var_dump($is_simple_trainer);
 
 ?>
 <table border="0">
@@ -71,9 +70,6 @@ $business_profile_id = $business_profile->id;
                                 <select style="float:left;" id="client" name="client_id" class="required safe inputtext">
                                     <option>-Select-</option>
                                 </select>
-<?php
-//echo '<option " id="' .  $clients[$i]->user_id . '" value="' . ( $clients[$i]->user_id) . '" ' . ((isset($event) && (trim($event->client_id) == trim( $clients[$i]->user_id))) ? "selected" : "") . '>' .  $clients[$i]->name . '</option>';
-                                ?>  
                             </td>
                         </tr>
                         <tr id="trainer_select_tr">
@@ -86,12 +82,6 @@ $business_profile_id = $business_profile->id;
                             <td>Trainer:</td>
                             <td>
                                 <select  id="trainers" name="trainer_id" class="required safe inputtext" >
-                                    <?php
-                                    echo '<option>-Select-</option>';
-                                    for ($i = 0; $i < count( $trainers); $i++) {
-                                        echo '<option " id="' .  $trainers[$i]->id . '" value="' . ( $trainers[$i]->id) . '" ' . ((isset($event) && (trim($event->trainer_id) == trim( $trainers[$i]->id))) ? "selected" : "") . '>' .  $trainers[$i]->username . '</option>';
-                                    }
-                                    ?>
                                 </select>
                             </td>
                         </tr>
@@ -144,9 +134,12 @@ $business_profile_id = $business_profile->id;
             
             // populate clients select
             fitness_helper.populateClientsSelectOnBusiness('getClientsByBusiness', 'goals_periods', business_profile_id, '#client', '<?php echo trim($event->client_id);?>', '<?php echo $user->id;?>');
+            
+            fitness_helper.populateTrainersSelectOnBusiness('goals_periods', business_profile_id, '#trainers', '<?php echo trim($event->trainer_id) ?>', '<?php echo $user->id;?>');
         }
         
         var business_profile_id = '<?php echo $business_profile_id;?>';
+
         
         if(business_profile_id) {
             $("#business_profile_id").val(business_profile_id);

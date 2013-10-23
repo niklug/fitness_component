@@ -314,6 +314,23 @@ class FitnessModelgoals_periods extends JModelList {
         return $data; 
     }
     
+    /** get trainers on Business 
+     * 
+     * @param type $data_encoded
+     * @param type $table
+     * @return type
+     */
+    
+    public function onBusinessNameChange($data_encoded, $table) {
+        require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'user_group.php';
+        $user_group_model = new FitnessModeluser_group();
+        
+        $data = $user_group_model->onBusinessNameChange($data_encoded, $table);
+        
+        return $data; 
+        
+    }
+    
     
 
 

@@ -131,6 +131,9 @@ class FitnessModeluser_group extends JModelAdmin
             
             $business_profile_id = $data->business_profile_id;
             
+            //logged user
+            $user_id = $data->user_id;
+            
             $business_profile = $helper->getBusinessProfile($business_profile_id);
             
             if(!$business_profile['success']) {
@@ -143,7 +146,7 @@ class FitnessModeluser_group extends JModelAdmin
             
             $trainers_group_id =  $business_profile->group_id;
             
-            $user = &JFactory::getUser();
+            $user = &JFactory::getUser($user_id);
             
             // is simple trainer
             if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {

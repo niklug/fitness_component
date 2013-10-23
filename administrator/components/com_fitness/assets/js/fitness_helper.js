@@ -31,13 +31,14 @@
                 });
             },
             
-            getTrainersByBusiness : function(view, business_profile_id) {
+            getTrainersByBusiness : function(view, business_profile_id, user_id) {
                 var data = {};
                 var url = this.get('ajax_call_url');
                 var view = view;
                 var task = 'onBusinessNameChange';
                 var table = '#__fitness_business_profiles';
                 data.business_profile_id = business_profile_id;
+                data.user_id = user_id;//current logged user
                 
                 var self = this;
                 this.set("trainers", {});
@@ -73,8 +74,8 @@
                 this.populateUsersSelectOnBusiness(task, model, business_profile_id, target, selected, user_id);
             },
             
-            populateTrainersSelectOnBusiness : function(model, business_profile_id, target, selected) {
-                this.getTrainersByBusiness(model, business_profile_id);
+            populateTrainersSelectOnBusiness : function(model, business_profile_id, target, selected, user_id) {
+                this.getTrainersByBusiness(model, business_profile_id, user_id);
                 this.on('change:trainers', function(model, items) {
                     model.populateSelect(items, target, selected);
                 });
