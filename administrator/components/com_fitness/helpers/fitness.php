@@ -35,6 +35,7 @@ class FitnessFactory {
         return self::$trainers_group_id;
     }
     
+    
     public static function getTrainersGroupIdByUser($user_id) {
 
         return self::createTrainersGroupId($user_id);
@@ -49,6 +50,7 @@ class FitnessFactory {
 
         return self::$group_id;
     }
+    
     
     public static function is_superuser($user_id) {
         if(self::getCurrentGroupId($user_id) == self::SUPERUSER_GROUP_ID) {
@@ -107,6 +109,7 @@ class FitnessFactory {
         return self::$is_client;
     }
     
+    
     public static function is_primary_administrator($user_id) {
         
         if(self::$is_primary_administrator == null) {
@@ -145,6 +148,7 @@ class FitnessFactory {
         return self::$is_secondary_administrator;
     }
     
+    
     public function getAdministratorId($administrator_type, $user_id) {
         
         $group_id = self::getCurrentGroupId($user_id);
@@ -168,8 +172,6 @@ class FitnessFactory {
 
         $trainers_group_id = self::customQuery($query, 0);
         
-        
-        
         if (!$trainers_group_id) {
             $trainers_group_id = $user_group_id;
         }
@@ -180,6 +182,7 @@ class FitnessFactory {
 
         return $trainers_group_id;
     }
+    
     
     public static function createCurrentGroupId($user_id) {
         
@@ -249,9 +252,7 @@ class FitnessFactory {
         }
         return $result;
      }
-    
-    
-    
+
 }
 
 /**
@@ -273,17 +274,17 @@ class FitnessHelper extends FitnessFactory
     public static function addSubmenu($vName = '', $view)
     {
         if($view == 'calendar') {
-                            JSubMenuHelper::addEntry(
-                    $vName,
-                    'index.php?option=com_multicalendar&view=admin&task=admin',
-                    $vName == $vName
+            JSubMenuHelper::addEntry(
+                $vName,
+                'index.php?option=com_multicalendar&view=admin&task=admin',
+                $vName == $vName
             );
             return;
         }
         JSubMenuHelper::addEntry(
-                $vName,
-                'index.php?option=com_fitness&view='. $view,
-                $vName == $vName
+            $vName,
+            'index.php?option=com_fitness&view='. $view,
+            $vName == $vName
         );
 
     }

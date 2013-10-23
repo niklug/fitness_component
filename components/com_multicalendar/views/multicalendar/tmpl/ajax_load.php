@@ -828,16 +828,17 @@ function get_trainers($user_id) {
     $status['success'] = 1;
 
     if (!$user_id) {
-        $status['success'] = 0;
-        $status['message'] = 'no user_id';
         return array('status' => $status);
     }
+    
 
     $secondary_only = JRequest::getVar("secondary_only");
+    
+     $all_trainers = JRequest::getVar("all_trainers");
 
     $db = & JFactory::getDBO();
 
-    if ((FitnessHelper::is_trainer_administrator($user_id) || FitnessHelper::is_superuser($user_id)) || $secondary_only) {
+    if ((FitnessHelper::is_trainer_administrator($user_id) || FitnessHelper::is_superuser($user_id)) || $secondary_only || $all_trainers) {
         $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$user_id' AND state='1'";
         $db->setQuery($query);
         $status['success'] = 1;
