@@ -9,10 +9,6 @@ $user = &JFactory::getUser($cid);
 
 $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user->id));
 
-$is_simple_trainer = FitnessFactory::is_simple_trainer($user->id);
-
-
-var_dump($is_simple_trainer);
 
 ?>
 <table border="0">

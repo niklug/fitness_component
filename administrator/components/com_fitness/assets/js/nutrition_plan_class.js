@@ -207,7 +207,7 @@
             url : url,
             data : {
                method : 'get_trainers',
-               client_id : client_id,
+               user_id : client_id,
                secondary_only : true
             },
             dataType : 'json',

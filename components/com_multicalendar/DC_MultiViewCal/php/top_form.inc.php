@@ -254,15 +254,14 @@
          *  npkorban
          */
         function setTrainerSelect(client_id) {
-            var cid = '<?php echo JRequest::getVar( 'cid' );?>';
+            var user_id = '<?php echo JRequest::getVar( 'cid' );?>';
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
             var url = DATA_FEED_URL+ "&method=get_trainers";
             $.ajax({
                 type : "POST",
                 url : url,
                 data : {
-                   client_id : client_id,
-                   cid : cid
+                   user_id : user_id,
                 },
                 dataType : 'json',
                 success : function(message) {

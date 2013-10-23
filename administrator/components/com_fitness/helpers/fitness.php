@@ -26,10 +26,10 @@ class FitnessFactory {
     
     
    
-    public static function getTrainersGroupId() {
+    public static function getTrainersGroupId($user_id) {
         
         if (!self::$trainers_group_id) {
-            self::$trainers_group_id = self::createTrainersGroupId();
+            self::$trainers_group_id = self::createTrainersGroupId($user_id);
         }
 
         return self::$trainers_group_id;
@@ -62,6 +62,7 @@ class FitnessFactory {
      * 
      */
     public static function is_trainer($user_id) {
+        
         if(self::$is_trainer == null) {
             $group_id = self::getCurrentGroupId($user_id);
             $parent_group_id =  self::MANAGER_GROUP_ID;
@@ -88,6 +89,7 @@ class FitnessFactory {
      * 
      */
     public static function is_trainer_administrator($user_id) {
+        
         if(self::is_primary_administrator($user_id) || self::is_secondary_administrator($user_id)) {
             return true;
         }
@@ -106,6 +108,7 @@ class FitnessFactory {
     }
     
     public static function is_primary_administrator($user_id) {
+        
         if(self::$is_primary_administrator == null) {
             if(!$user_id) {
                 $user_id = &JFactory::getUser()->id;
@@ -145,40 +148,26 @@ class FitnessFactory {
     public function getAdministratorId($administrator_type, $user_id) {
         
         $group_id = self::getCurrentGroupId($user_id);
-        $db = JFactory::getDBO();
         $query = "SELECT $administrator_type FROM #__fitness_business_profiles WHERE group_id='$group_id'  AND state='1'";
-        $db->setQuery($query);
-        if (!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        return $db->loadResult();
+        return self::customQuery($query, 0);
     }
     
     
     public static function createTrainersGroupId($user_id) {
-
-        
-        $db = & JFactory::getDBO();
         
         $user = &JFactory::getUser($user_id);
-
         
         $groups = $user->get('groups');
         $user_group_id = array_shift(array_values($groups));
-
 
         $query = "SELECT bp.group_id AS trainers_group_id from #__fitness_user_groups AS ug "
                 . " INNER JOIN #__fitness_business_profiles AS bp ON bp.id=ug.business_profile_id "
                 . " WHERE ug.group_id = '$user_group_id'"
                 . " AND ug.state='1'"
                 . " AND bp.state='1'";
-        $db->setQuery($query);
+
+        $trainers_group_id = self::customQuery($query, 0);
         
-        if (!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        
-        $trainers_group_id = $db->loadResult();
         
         
         if (!$trainers_group_id) {
@@ -193,16 +182,14 @@ class FitnessFactory {
     }
     
     public static function createCurrentGroupId($user_id) {
+        
         if(!$user_id) {
             $user_id = &JFactory::getUser()->id;
         }
-        $db = JFactory::getDBO();
+
         $query = "SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id'";
-        $db->setQuery($query);
-        if (!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $group_id = $db->loadResult();
+
+        $group_id = self::customQuery($query, 0);
         
         if (!$group_id) {
             JError::raiseWarning( 100, 'User Group not found!' );
@@ -216,16 +203,53 @@ class FitnessFactory {
         if(!$user_id) {
             $user_id = &JFactory::getUser()->id;
         }
-        $db = JFactory::getDBO();
+
         $query = "SELECT id FROM #__usergroups WHERE id='$group_id'  AND parent_id='$parent_group_id'";
-        $db->setQuery($query);
-        if (!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $group_id = $db->loadResult();
+
+        $group_id = self::customQuery($query, 0);
         
         return $group_id;
     }
+    
+    
+    public static function customQuery($query, $type) {
+	$db = & JFactory::getDBO();
+        $db->setQuery($query);
+
+        if (!$db->query()) {
+            throw new Exception($db->getErrorMsg());
+            JError::raiseError($db->getErrorMsg());
+        }
+
+        switch ($type) {
+            case 0:
+                $result = $db->loadResult();
+                break;
+            case 1:
+                $result = $db->loadObjectList();
+                break;
+            case 2:
+                $result = $db->loadObject();
+                break;
+            case 3:
+                $result = $db->loadResultArray();
+                break;
+            case 4:
+                $result = $db->loadRow();
+                break;
+            case 5:
+                $result = $db->query();
+                break;
+            case 6:
+                $result = $db->loadAssocList();
+                break;
+            default:
+                return false;
+                break;
+        }
+        return $result;
+     }
+    
     
     
 }
@@ -242,7 +266,6 @@ class FitnessHelper extends FitnessFactory
     const INPROGRESS_GOAL_STATUS = '5';
     const ASSESSING_GOAL_STATUS = '6';
 
-    const CLIENTS_USERGROUP = 'Registered';
     const ADMINISTRATOR_USERGROUP = 'Super Users';
     /**
      * Configure the Linkbar.
@@ -572,10 +595,8 @@ class FitnessHelper extends FitnessFactory
         $db = &JFactory::getDBo();
         $query = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE business_profile_id='$business_profile_id'";
         
-
         $user = JFactory::getUser($user_id);
    
-        
         // if simple trainer
         if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
             $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
@@ -596,7 +617,6 @@ class FitnessHelper extends FitnessFactory
             $ret['message'] = 'No clients assigned to this Business Profile.';
             return $ret;
         }
-
 
         foreach ($clients as $user_id) {
             if($user_id) {
