@@ -418,7 +418,6 @@
 <script type="text/template" id="nutrition_plan_template">
     <%
         var plan_data = model.attributes.plan_data;
-        console.log(plan_data);
     %>
     <table width="100%">
             <tr>
@@ -597,9 +596,36 @@
                         </td>
                     </tr>
                 </table> 
-
-
             </div>
         </div>
 
+</script>
+
+
+<!-- Recipe Database -->
+
+<script type="text/template" id="recipe_database_mainmenu_template">
+    <ul>
+        <li><a id="my_recipes_link" class="plan_menu_link"  href="#!/my_recipes">MY RECIPES</a></li>
+        <li><a id="recipe_database_link" class="plan_menu_link"  href="#!/recipe_database">RECIPE DATABASE</a></li>
+        <li><a id="nutrition_database_link" class="plan_menu_link"  href="#!/nutrition_database">NUTRITION DATABASE</a></li>
+    </ul>
+</script>
+
+<script type="text/template" id="recipe_database_submenu_template">
+    <div class="fitness_block_wrapper" style="height:30px;margin-top: 20px;">
+        <div class="internal_wrapper">
+            <div>sub menu area</div>
+        </div>
+        <hr class="orange_line">
+    </div>
+</script>
+
+
+<script type="text/template" id="recipe_database_main_container_template">
+    <div class="fitness_block_wrapper" style="min-height:400px;margin-top: 20px;">
+        <div class="internal_wrapper">
+            <div>main container area</div>
+        </div>
+    </div>
 </script>

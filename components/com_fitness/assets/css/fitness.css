@@ -1,49 +1,49 @@
 
 /* form css */
-    .front-end-edit ul {
-        padding: 0 !important;
-    }
-    .front-end-edit li {
-        list-style: none;
-        margin-bottom: 6px !important;
-    }
-    .front-end-edit label {
-        margin-right: 10px;
-        display: block;
-        float: left;
-        width: 200px !important;
-    }
-    .front-end-edit .radio label {
-        float: none;
-    }
-    .front-end-edit .readonly {
-        border: none !important;
-        color: #666;
-    }    
-    .front-end-edit #editor-xtd-buttons {
-        height: 50px;
-        width: 600px;
-        float: left;
-    }
-    .front-end-edit .toggle-editor {
-        height: 50px;
-        width: 120px;
-        float: right;
-    }
+.front-end-edit ul {
+    padding: 0 !important;
+}
+.front-end-edit li {
+    list-style: none;
+    margin-bottom: 6px !important;
+}
+.front-end-edit label {
+    margin-right: 10px;
+    display: block;
+    float: left;
+    width: 200px !important;
+}
+.front-end-edit .radio label {
+    float: none;
+}
+.front-end-edit .readonly {
+    border: none !important;
+    color: #666;
+}    
+.front-end-edit #editor-xtd-buttons {
+    height: 50px;
+    width: 600px;
+    float: left;
+}
+.front-end-edit .toggle-editor {
+    height: 50px;
+    width: 120px;
+    float: right;
+}
 
-    #jform_rules-lbl{
-        display:none;
-    }
+#jform_rules-lbl{
+    display:none;
+}
 
-    #access-rules a:hover{
-        background:#f5f5f5 url('../images/slider_minus.png') right  top no-repeat;
-        color: #444;
-    }
+#access-rules a:hover{
+    background:#f5f5f5 url('../images/slider_minus.png') right  top no-repeat;
+    color: #444;
+}
 
-    fieldset.radio label{
-        width: 50px !important;
-    }
-    /* end form css */
+fieldset.radio label{
+    width: 50px !important;
+}
+/* end form css */
 .jgrid span.unpublish {
     background-image: url("../images/publish_x.png");
 }
@@ -315,25 +315,25 @@ td.center, th.center, .center {
 }
 
 /* pie */
-    #placeholder_targets,  #placeholder_scope{
-        width: 100%;
-        height: 100%;
-    }
+#placeholder_targets,  #placeholder_scope{
+    width: 100%;
+    height: 100%;
+}
 
-    .pie-container {
-        margin: 0;
-        padding: 0;
-        width: 220px;
-        height: 220px;
-        position: relative;
-    }
+.pie-container {
+    margin: 0;
+    padding: 0;
+    width: 220px;
+    height: 220px;
+    position: relative;
+}
 
-    .placeholder_pie {
-        width: 100%;
-        height: 100%;
-        font-size: 14px;
-        line-height: 1.2em;
-    }
+.placeholder_pie {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    line-height: 1.2em;
+}
 
 /* end pie*/
 
@@ -343,16 +343,16 @@ td.center, th.center, .center {
     width: 172px;
 }
 #jform_activity_level0{
-display: inline-block;
+    display: inline-block;
 }
 
 #jform_activity_level1{
-display: inline-block;
+    display: inline-block;
 }
 
 
 #jform_activity_level2{
-display: inline-block;
+    display: inline-block;
 }
 
 .fitness_wrapper fieldset.radio label {
@@ -602,7 +602,7 @@ display: inline-block;
 
 
 .graph-container {
-  background: none repeat scroll 0 0 transparent;
+    background: none repeat scroll 0 0 transparent;
     height: 250px;
     margin: 0;
     padding: 0;
@@ -610,12 +610,52 @@ display: inline-block;
 }
 
 .graph-placeholder {
-	width: 100%;
-	height: 100%;
-	font-size: 14px;
-	line-height: 1.2em;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    line-height: 1.2em;
 }
 
 .choosen_link {
     color: #fff !important;
 }
+
+
+
+
+#plan_menu, #recipe_mainmenu {
+    width: 100%;
+}
+
+#plan_menu ul, #recipe_mainmenu ul {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+#plan_menu ul li, #recipe_mainmenu ul li {
+    border: 1px solid #CCCCCC;
+    float: left;
+    line-height: 1.7em;
+    list-style: none outside none;
+    padding: 0 10px;
+    position: relative;
+    text-align: center;
+    width: auto;
+}
+
+#plan_menu ul li a , #recipe_mainmenu ul li a{
+    text-decoration: none !important;
+    color: #BC4A26;
+    font-size: 16px;
+}
+
+#plan_menu ul li a:hover, #plan_menu ul li a:active, .active_link,
+#recipe_mainmenu ul li a:hover, #recipe_mainmenu ul li a:active, .active_link {
+    color:#fff !important;
+    border-bottom: 2px solid #BC4A26;
+    font-weight:bold;
+}
+
+

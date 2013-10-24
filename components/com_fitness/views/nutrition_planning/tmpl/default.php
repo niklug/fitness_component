@@ -12,45 +12,6 @@ $light_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_
 $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_plan_id, 'rest');
 
 ?>
-<style>
-    
-    #plan_menu {
-        width: 100%;
-        margin: 2px 2px 2px;
-    }
-    
-    #plan_menu ul {
-        width: 100%;
-        display: inline-block;
-        margin: 0;
-        padding: 0;
-    }
-    
-    #plan_menu ul li {
-        border: 1px solid #CCCCCC;
-        float: left;
-        line-height: 1.7em;
-        list-style: none outside none;
-        padding: 0 10px;
-        position: relative;
-        text-align: center;
-        width: auto;
-    }
-    
-    #plan_menu ul li a {
-        text-decoration: none !important;
-        color: #BC4A26;
-        font-size: 16px;
-    }
-    
-    #plan_menu ul li a:hover, #plan_menu ul li a:active, .active_link {
-        color:#fff !important;
-        border-bottom: 2px solid #BC4A26;
-        font-weight:bold;
-    }
-    
-</style>
-
 
 <div style="opacity: 1;" class="fitness_wrapper">
     <h2>NUTRITION PLAN</h2>
@@ -655,9 +616,8 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             nutrition_focus: function () {
-                 $(".block").hide();
+                 this.reset_link();
                  $("#nutrition_focus_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
                  $("#nutrition_focus_link").addClass("active_link");
                  $("#close_tab").hide();
                  // connect Graph from Goals frontend logic
@@ -665,9 +625,8 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             daily_targets: function () {
-                 $(".block").hide();
+                 this.reset_link();
                  $("#daily_targets_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
                  $("#daily_targets_link").addClass("active_link");
                  $("#close_tab").hide();
                  
@@ -679,33 +638,29 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             shopping_list: function () {
-                 $(".block").hide();
+                 this.reset_link();
                  $("#shopping_list_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
                  $("#shopping_list_link").addClass("active_link");
                  $("#close_tab").hide();
             },
                     
             diary_guide: function () {
-                 $(".block").hide();
+                 this.reset_link();
                  $("#diary_guide_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
                  $("#diary_guide_link").addClass("active_link");
                  $("#close_tab").hide();
             },
                     
             information: function () {
-                 $(".block").hide();
+                 this.reset_link();
                  $("#information_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
                  $("#information_link").addClass("active_link");
                  $("#close_tab").hide();
             },
                     
             archive: function () {
-                 $(".block").hide();
+                 this.reset_link();
                  $("#archive_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
                  $("#archive_focus_link").addClass("active_link");
                  $("#close_tab").hide();
             },
@@ -715,6 +670,11 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                  //alert('closing');
                  $("#close_tab").hide();
                  this.archive();
+            }
+            
+            reset_link : function() {
+                $(".block").hide();
+                $(".plan_menu_link").removeClass("active_link");
             }
                     
             
