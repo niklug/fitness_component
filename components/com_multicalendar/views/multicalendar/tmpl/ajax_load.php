@@ -883,7 +883,7 @@ function get_trainers($user_id) {
 function get_clients() {
     $trainer_id = JRequest::getVar("trainer_id");
     $db = & JFactory::getDBO();
-    $query = "SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$trainer_id' AND state='1'";
+    $query = "SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$trainer_id' OR other_trainers LIKE '%$trainer_id%' AND state='1'";
     $db->setQuery($query);
     $status['success'] = 1;
     if (!$db->query()) {
