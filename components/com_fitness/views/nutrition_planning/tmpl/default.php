@@ -616,8 +616,9 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             nutrition_focus: function () {
-                 this.reset_link();
+                 $(".block").hide();
                  $("#nutrition_focus_wrapper").show();
+                 $(".plan_menu_link").removeClass("active_link");
                  $("#nutrition_focus_link").addClass("active_link");
                  $("#close_tab").hide();
                  // connect Graph from Goals frontend logic
@@ -625,8 +626,9 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             daily_targets: function () {
-                 this.reset_link();
+                 $(".block").hide();
                  $("#daily_targets_wrapper").show();
+                 $(".plan_menu_link").removeClass("active_link");
                  $("#daily_targets_link").addClass("active_link");
                  $("#close_tab").hide();
                  
@@ -638,29 +640,33 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             shopping_list: function () {
-                 this.reset_link();
+                 $(".block").hide();
                  $("#shopping_list_wrapper").show();
+                 $(".plan_menu_link").removeClass("active_link");
                  $("#shopping_list_link").addClass("active_link");
                  $("#close_tab").hide();
             },
                     
             diary_guide: function () {
-                 this.reset_link();
+                 $(".block").hide();
                  $("#diary_guide_wrapper").show();
+                 $(".plan_menu_link").removeClass("active_link");
                  $("#diary_guide_link").addClass("active_link");
                  $("#close_tab").hide();
             },
                     
             information: function () {
-                 this.reset_link();
+                 $(".block").hide();
                  $("#information_wrapper").show();
+                 $(".plan_menu_link").removeClass("active_link");
                  $("#information_link").addClass("active_link");
                  $("#close_tab").hide();
             },
                     
             archive: function () {
-                 this.reset_link();
+                 $(".block").hide();
                  $("#archive_wrapper").show();
+                 $(".plan_menu_link").removeClass("active_link");
                  $("#archive_focus_link").addClass("active_link");
                  $("#close_tab").hide();
             },
@@ -670,11 +676,6 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                  //alert('closing');
                  $("#close_tab").hide();
                  this.archive();
-            }
-            
-            reset_link : function() {
-                $(".block").hide();
-                $(".plan_menu_link").removeClass("active_link");
             }
                     
             

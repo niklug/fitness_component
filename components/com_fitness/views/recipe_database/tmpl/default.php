@@ -28,7 +28,65 @@ defined('_JEXEC') or die;
 <script type="text/javascript">
     
     (function($) {
- 
+        
+        // MODELS 
+        Recipe_database_model = Backbone.Model.extend({
+            defaults: {
+                'pages_number' : 10,
+                'list_type' : '0'
+            },
+
+            initialize: function(){
+
+            },
+
+            ajaxCall : function(data, url, view, task, table, handleData) {
+                return $.AjaxCall(data, url, view, task, table, handleData);
+            },
+          
+            setLocalStorageItem : function(name, value) {
+                if(!this.checkLocalStorage) return;
+                localStorage.setItem(name, value);
+            },
+            
+            getLocalStorageItem : function(name) {
+                var value = this.get(name);
+                if(!this.checkLocalStorage) {
+                    return value;
+                }
+                var store_value =  localStorage.getItem(name);
+                if(!store_value) return value;
+                return store_value;
+            },
+          
+            setStatus : function(status) {
+                var style_class;
+                var text;
+                switch(status) {
+                    case '1' :
+                        style_class = 'recipe_status_pending';
+                        text = 'PENDING';
+                        break;
+                    case '2' :
+                        style_class = 'recipe_status_approved';
+                        text = 'APPROVED';
+                        break;
+                    case '3' :
+                        style_class = 'recipe_status_notapproved';
+                        text = 'NOT APPROVED';
+                        break;
+                   
+                    default :
+                        style_class = 'recipe_status_pending';
+                        text = 'PENDING';
+                        break;
+                }
+                var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                return html;
+            },
+        });
+        
+       
         
         // VIEWS
         var Views = { }; 
@@ -53,20 +111,54 @@ defined('_JEXEC') or die;
             }
         });
         
-        var MainContainer_view = Backbone.View.extend({
-
-            el: $("#recipe_main_container"), 
-
+        
+        var Recipe_item_view = Backbone.View.extend({
             render : function(){
-                var template = _.template($("#recipe_database_main_container_template").html());
+                var variables = {
+                    'id' : '1',
+                    'name' : 'Paleo Chicken Soup',
+                    'type' : 'Chicken & Poultry, Soups',
+                    'serves' : '4',
+                    'author' : 'Jodi Boam',
+                    'status' : '1',
+                    'trainer' : 'Paul Meier',
+                    'image' : 'images/images.jpeg',
+                    'model' : new Recipe_database_model()
+                };
+                
+                var template = _.template($("#recipe_database_item_template").html(), variables);
                 this.$el.html(template);
             }
         });
+        
+        
+        var MainContainer_view = Backbone.View.extend({
+            
+            el: $("#recipe_main_container"), 
+
+            render : function(){
+                
+                var variables = {
+
+                };
+                
+                var template = _.template($("#recipe_database_main_container_template").html(), variables);
+                this.$el.html(template);
+                
+                // load recipe item
+                var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper")});
+                recipe_item.render();
+            }
+        });
+        
+        
+        
 
         Views = { 
             mainmenu: new Mainmenu_view(),
             submenu: new Submenu_view(),
-            main_container : new MainContainer_view()
+            main_container : new MainContainer_view(),
+   
         };
         
          // CONTROLLER
@@ -84,7 +176,8 @@ defined('_JEXEC') or die;
                 this.common_actions();
                 $("#my_recipes_link").addClass("active_link");
                 this.load_submenu();
-
+                
+       
             },
 
             recipe_database : function () {
@@ -132,36 +225,7 @@ defined('_JEXEC') or die;
         Backbone.history.start();  
         
         
-        // MODEL 
-        Recipe_database_model = Backbone.Model.extend({
-            defaults: {
-                'pages_number' : 10,
-                'list_type' : '0'
-            },
-
-            initialize: function(){
-
-            },
-
-            ajaxCall : function(data, url, view, task, table, handleData) {
-                return $.AjaxCall(data, url, view, task, table, handleData);
-            },
-          
-            setLocalStorageItem : function(name, value) {
-                if(!this.checkLocalStorage) return;
-                localStorage.setItem(name, value);
-            },
-            
-            getLocalStorageItem : function(name) {
-                var value = this.get(name);
-                if(!this.checkLocalStorage) {
-                    return value;
-                }
-                var store_value =  localStorage.getItem(name);
-                if(!store_value) return value;
-                return store_value;
-            }
-        });
+        
         
 
     })($js);

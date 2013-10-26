@@ -161,18 +161,18 @@ a:hover, a:active, a:focus {
     margin: 5px;
 }
 
-.goal_status_pending {
+.goal_status_pending, .recipe_status_pending  {
     background-color: #E3E4E4 !important;
     border: 2px solid #A4A4A4;
 }
 
 
-.goal_status_complete {
+.goal_status_complete, .recipe_status_approved {
     background-color: #B0FFB0 !important;
     border: 2px solid #04BF04;
 }
 
-.goal_status_incomplete {
+.goal_status_incomplete, .recipe_status_notapproved {
     background-color: #FF9292 !important;
     border: 2px solid #C60000;
 
@@ -656,6 +656,16 @@ td.center, th.center, .center {
     color:#fff !important;
     border-bottom: 2px solid #BC4A26;
     font-weight:bold;
+}
+
+
+.recipe_database_image {
+    width: 200px;
+    height: 180px;
+    border: 3px solid #fff;
+    background-repeat:no-repeat;
+    background-size: 200px 180px;
+
 }
 
 

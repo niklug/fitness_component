@@ -623,9 +623,83 @@
 
 
 <script type="text/template" id="recipe_database_main_container_template">
-    <div class="fitness_block_wrapper" style="min-height:400px;margin-top: 20px;">
+    <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
-            <div>main container area</div>
+            <div id="recipe_database_items_wrapper">main container area</div>
         </div>
     </div>
 </script>
+
+
+
+<script type="text/template" id="recipe_database_item_template">
+    <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
+        <table width="100%">
+            <tr>
+                <td width="30%" style="text-align:center; vertical-align:middle;">
+                    <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+                </td>
+                <td width="50%">
+                    <table  width="100%">
+                        <tr>
+                            <td>RECIPE NAME</td>
+                            <td>
+                                <span class="grey_title">
+                                     <%= name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>RECIPE TYPE</td>
+                            <td>
+                                <span class="grey_title">
+                                     <%= type %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>SERVES</td>
+                            <td>
+                                <span class="grey_title">
+                                     <%= serves %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>AUTHOR</td>
+                            <td>
+                                <span class="grey_title">
+                                     <%= author %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>STATUS</td>
+                            <td>
+                                <span class="grey_title">
+                                <% console.log(status);  %>
+                                     <%= model.setStatus(status) %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>TRAINER</td>
+                            <td>
+                                <span class="grey_title">
+                                     <%= trainer %>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="text-align:center; vertical-align:bottom;">
+                    <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[VIEW RECIPE]</a>
+                    <br/><br/>
+                    <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[TRASH RECIPE]</a>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</script>
+
