@@ -17,5 +17,11 @@ if(!JSession::checkToken('get')) {
 //======================================================
 class FitnessViewRecipe_database extends JView {
     
+    function getRecipes() {
+        $table = JRequest::getVar('table');
+        $data_encoded = JRequest::getVar('data_encoded','','POST');
+        $model = $this -> getModel("recipe_database");
+        echo json_encode($model->getRecipes($table, $data_encoded));
+    }
     
 }

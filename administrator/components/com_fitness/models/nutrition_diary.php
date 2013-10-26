@@ -142,7 +142,7 @@ class FitnessModelnutrition_diary extends JModelAdmin
             return $result;
         }
         
-        public function updateDiaryStatus($data_encoded, $table){
+        public function updateStatus($data_encoded, $table){
             $ret['success'] = 1;
             $db = JFactory::getDbo();
        

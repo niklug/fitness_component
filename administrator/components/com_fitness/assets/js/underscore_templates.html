@@ -625,7 +625,7 @@
 <script type="text/template" id="recipe_database_main_container_template">
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
-            <div id="recipe_database_items_wrapper">main container area</div>
+            <div id="recipe_database_items_wrapper"></div>
         </div>
     </div>
 </script>
@@ -645,7 +645,7 @@
                             <td>RECIPE NAME</td>
                             <td>
                                 <span class="grey_title">
-                                     <%= name %>
+                                     <%= recipe_name %>
                                 </span>
                             </td>
                         </tr>
@@ -653,7 +653,11 @@
                             <td>RECIPE TYPE</td>
                             <td>
                                 <span class="grey_title">
-                                     <%= type %>
+                                    <% _.each(recipe_types_names, function(item){ %>
+                                        <%= item + "<br/>" %>
+                                    <% 
+                                    })  
+                                    %>
                                 </span>
                             </td>
                         </tr>
@@ -661,7 +665,7 @@
                             <td>SERVES</td>
                             <td>
                                 <span class="grey_title">
-                                     <%= serves %>
+                                     <%= number_serves %>
                                 </span>
                             </td>
                         </tr>
@@ -677,7 +681,6 @@
                             <td>STATUS</td>
                             <td>
                                 <span class="grey_title">
-                                <% console.log(status);  %>
                                      <%= model.setStatus(status) %>
                                 </span>
                             </td>
@@ -701,5 +704,8 @@
 
         </table>
     </div>
+    <br/>
+    <hr>
+    <br/>
 </script>
 

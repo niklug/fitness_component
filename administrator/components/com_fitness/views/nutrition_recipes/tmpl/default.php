@@ -336,7 +336,10 @@ $helper = new FitnessHelper();
             'show_send_email' : true,
             setStatuses : function(item_id) {
                 return this.statuses;
-            }
+            },
+            'set_updater' : true,
+            'user_id' : '<?php echo JFactory::getUser()->id;?>'
+             
         }
         
         

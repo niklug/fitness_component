@@ -41,14 +41,32 @@
                 'id' : item_id
             };
 
-            self.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateDiaryStatus', self.options.db_table, function(output) {
+            self.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateStatus', self.options.db_table, function(output) {
                 self.emailLogic(item_id, status);
                 var status_button_html = self.statusButtonHtml(item_id, status);
                 $(self.options.status_button_place + '' + item_id).html(status_button_html);
                 self.closeDialog();
+                if((self.options.set_updater !== 'undefined') && (self.options.set_updater == true)) {
+                    self.setUpdaterId(item_id);
+                }
             });
         })
 
+    }
+    
+    
+    Status.prototype.setUpdaterId = function(item_id) {
+        var user_id = this.options.user_id;
+        var data = {
+                'reviewed_by' : user_id,
+                'id' : item_id
+        };
+        
+        var self = this;
+
+        this.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateStatus', self.options.db_table, function(output) {
+
+        });
     }
 
 

@@ -19,11 +19,11 @@ class FitnessViewNutrition_diary extends JView {
     
 
     
-    function updateDiaryStatus() {
+    function updateStatus() {
         $data_encoded = JRequest::getVar('data_encoded');
         $table = JRequest::getVar('table');
         $model = $this -> getModel("nutrition_diary");
-        echo $model -> updateDiaryStatus($data_encoded, $table);
+        echo $model -> updateStatus($data_encoded, $table);
     }
     
 

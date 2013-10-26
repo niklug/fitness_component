@@ -29,6 +29,14 @@ defined('_JEXEC') or die;
     
     (function($) {
         
+        var options = {
+            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+            'user_id' : '<?php echo JFactory::getUser()->id;?>',
+            'recipes_db_table' : '#__fitness_nutrition_recipes',
+        };
+        
         // MODELS 
         Recipe_database_model = Backbone.Model.extend({
             defaults: {
@@ -37,7 +45,7 @@ defined('_JEXEC') or die;
             },
 
             initialize: function(){
-
+                
             },
 
             ajaxCall : function(data, url, view, task, table, handleData) {
@@ -84,6 +92,21 @@ defined('_JEXEC') or die;
                 var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
                 return html;
             },
+            
+            getRecipes : function() {
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = 'recipe_database';
+                var task = 'getRecipes';
+                var table = this.get('recipes_db_table');
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+                    self.set("recipes", output);
+                });
+            },
+            
+            
         });
         
        
@@ -114,25 +137,34 @@ defined('_JEXEC') or die;
         
         var Recipe_item_view = Backbone.View.extend({
             render : function(){
+                var data = this.options.data;
+                console.log(data);
                 var variables = {
                     'id' : '1',
-                    'name' : 'Paleo Chicken Soup',
+                    'recipe_name' : 'Paleo Chicken Soup',
                     'type' : 'Chicken & Poultry, Soups',
-                    'serves' : '4',
+                    'number_serves' : '4',
                     'author' : 'Jodi Boam',
                     'status' : '1',
                     'trainer' : 'Paul Meier',
                     'image' : 'images/images.jpeg',
-                    'model' : new Recipe_database_model()
+                    'model' : new Recipe_database_model(options)
                 };
                 
-                var template = _.template($("#recipe_database_item_template").html(), variables);
-                this.$el.html(template);
+                data.model = new Recipe_database_model(options);
+                
+                var template = _.template($("#recipe_database_item_template").html(), data);
+                this.$el.append(template);
             }
         });
         
         
         var MainContainer_view = Backbone.View.extend({
+            
+            initialize: function(){
+                this.model = new Recipe_database_model(options);
+        
+            },
             
             el: $("#recipe_main_container"), 
 
@@ -144,10 +176,23 @@ defined('_JEXEC') or die;
                 
                 var template = _.template($("#recipe_database_main_container_template").html(), variables);
                 this.$el.html(template);
-                
-                // load recipe item
-                var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper")});
-                recipe_item.render();
+            },
+            
+            loadRecipes : function() {
+                this.model.getRecipes();
+                this.listenToOnce(this.model, "change:recipes", this.onGetRecipes);
+            },
+            
+            onGetRecipes : function() {
+                if (this.model.has("recipes")){
+                    this.populateRecipes(this.model.get("recipes"));
+                }
+            },
+            populateRecipes : function(recipes) {
+                _.each(recipes, function(item){
+                    var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper"), 'data' : item});
+                    recipe_item.render();
+                })
             }
         });
         
@@ -176,7 +221,9 @@ defined('_JEXEC') or die;
                 this.common_actions();
                 $("#my_recipes_link").addClass("active_link");
                 this.load_submenu();
-                
+                if (Views.main_container != null) {
+                    Views.main_container.loadRecipes();
+                }
        
             },
 
