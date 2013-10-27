@@ -12,6 +12,31 @@
 defined('_JEXEC') or die;
 ?>
 
+<style>
+
+            nav {
+                padding: 0;
+                width: 600px;
+                margin: auto;
+                position:relative; 
+                text-align: center;
+            }
+
+            nav a {
+                display: inline-block;
+           }
+
+            nav ul {
+                display: inline;
+            }	
+
+            nav li {
+                display: inline;
+                list-style-type: none;
+            }
+
+        </style>
+
 <div style="opacity: 1;" class="fitness_wrapper">
     <h2>RECIPE DATABASE</h2>
     
@@ -28,6 +53,118 @@ defined('_JEXEC') or die;
 <script type="text/javascript">
     
     (function($) {
+    
+    
+        <!-- START Pagination -->
+        var Pagination_item = Backbone.Model.extend({});
+
+        var Pagination_items = Backbone.Collection.extend({
+            model: Pagination_item,
+        });
+
+        var Pagination_app_model = Backbone.Model.extend({
+            defaults: {
+                currentPage : "",
+                items_number : 10
+            },
+            checkLocalStorage : function() {
+                if(typeof(Storage)==="undefined") {
+                   return false;
+                }
+                return true;
+            },
+            setLocalStorageItem : function(name, value) {
+                if(!this.checkLocalStorage) return;
+                localStorage.setItem(name, value);
+            },
+            getLocalStorageItem : function(name) {
+                var value = this.get(name);
+                if(!this.checkLocalStorage) {
+                    return value;
+                }
+                var store_value =  localStorage.getItem(name);
+                if(!store_value) return value;
+                return store_value;
+            }
+        });
+
+        var Pagination_page_view = Backbone.View.extend({
+            tagName: "li",
+            template: _.template($("#template-page").html()),
+            events: {
+                "click #a-page-item": "onPageClick",
+                
+            },
+            onPageClick: function() {
+                var currentPage = this.options.pageIndex;
+                this.model.setLocalStorageItem('currentPage',  currentPage);
+                this.model.set({currentPage: currentPage});
+
+            },
+       
+            render: function() {
+                $(this.el).html(this.template({pageNumber: this.options.pageIndex}));
+                return this;
+            },
+        });
+
+
+         var Pagination_view = Backbone.View.extend({
+
+            initialize: function(){
+
+                this.render();
+                this.itemsCollection = new Pagination_items();
+                this.itemsCollection.bind("add", this.renderPages, this);
+                this.addItems();
+            },
+
+            render : function(){
+                var template = _.template($("#backbone_pagination_template").html());
+                this.$el.html(template);
+                var items_number = this.model.getLocalStorageItem('items_number');
+                $("#items_number").val(items_number);
+
+            },
+
+            events: {
+                "change #items_number": "onLimitChange"
+            },
+            
+            onLimitChange: function(event) {
+                var items_number = $(event.target).val();
+                this.model.setLocalStorageItem('currentPage',  1);
+                this.model.setLocalStorageItem('items_number', items_number);
+                this.model.set({'items_number' : items_number});
+                
+             
+            },
+
+            addItems: function() {
+                var items_total = this.model.get('items_total');
+                var self = this;
+                for (var i = 0; i < items_total; i++) {
+                    self.itemsCollection.add(new Pagination_item());
+                }
+            },
+
+            renderPages: function() {
+                var length = this.itemsCollection.length;
+                var items_number = this.model.getLocalStorageItem('items_number');
+                var pages = length / items_number | 0;
+                if (pages > 0) {
+                    $("#ul-pagination li").remove();
+                    for (i = 1; i <= pages; i++) {
+                        var pageItem = new Pagination_page_view({pageIndex: i, model : this.model});
+                        $("#ul-pagination").append(pageItem.render().el);
+                    }
+                }
+            }
+        });
+        
+        <!-- END Pagination -->
+        
+        
         
         var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
@@ -40,12 +177,15 @@ defined('_JEXEC') or die;
         // MODELS 
         Recipe_database_model = Backbone.Model.extend({
             defaults: {
-                'pages_number' : 10,
-                'list_type' : '0'
+                'page' : 1,
+                'limit' : 10
             },
 
             initialize: function(){
-                
+                this.pagination_app_model = new Pagination_app_model();
+
+                this.pagination_app_model.bind("change:currentPage", this.loadRecipes, this);
+                this.pagination_app_model.bind("change:items_number", this.loadRecipes, this);
             },
 
             ajaxCall : function(data, url, view, task, table, handleData) {
@@ -93,12 +233,15 @@ defined('_JEXEC') or die;
                 return html;
             },
             
-            getRecipes : function() {
+            getRecipes : function(page, limit) {
                 var data = {};
                 var url = this.get('fitness_frontend_url');
                 var view = 'recipe_database';
                 var task = 'getRecipes';
                 var table = this.get('recipes_db_table');
+
+                data.page = page || 1;
+                data.limit = limit;
 
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
@@ -106,11 +249,44 @@ defined('_JEXEC') or die;
                 });
             },
             
+            loadRecipes : function() {
+
+                var page = this.pagination_app_model.getLocalStorageItem('currentPage');
+                var limit = this.pagination_app_model.getLocalStorageItem('items_number');
+                
+                console.log('page ' + page);
+                console.log('limit ' + limit);
+            
+                this.getRecipes(page, limit);
+                this.listenToOnce(this, "change:recipes", this.onGetRecipes);
+            },
+            
+            onGetRecipes : function() {
+                if (this.has("recipes")){
+                    var recipes = this.get("recipes");
+                    var item = recipes[0];
+                    var items_total = item.items_total; 
+                    this.pagination_app_model.set({'items_total' : items_total});
+                    var pagination_view = new Pagination_view({el: $("#pagination_container"), model : this.pagination_app_model});
+                    
+                    this.populateRecipes(recipes);
+                }
+            },
+            populateRecipes : function(recipes) {
+                $("#recipe_database_items_wrapper").html('');
+                _.each(recipes, function(item){
+                    var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper"), 'data' : item});
+                    recipe_item.render();
+                });
+            }
+            
             
         });
         
-       
         
+        
+
+                
         // VIEWS
         var Views = { }; 
         
@@ -138,19 +314,7 @@ defined('_JEXEC') or die;
         var Recipe_item_view = Backbone.View.extend({
             render : function(){
                 var data = this.options.data;
-                console.log(data);
-                var variables = {
-                    'id' : '1',
-                    'recipe_name' : 'Paleo Chicken Soup',
-                    'type' : 'Chicken & Poultry, Soups',
-                    'number_serves' : '4',
-                    'author' : 'Jodi Boam',
-                    'status' : '1',
-                    'trainer' : 'Paul Meier',
-                    'image' : 'images/images.jpeg',
-                    'model' : new Recipe_database_model(options)
-                };
-                
+
                 data.model = new Recipe_database_model(options);
                 
                 var template = _.template($("#recipe_database_item_template").html(), data);
@@ -158,12 +322,13 @@ defined('_JEXEC') or die;
             }
         });
         
+       
+        
         
         var MainContainer_view = Backbone.View.extend({
             
             initialize: function(){
-                this.model = new Recipe_database_model(options);
-        
+                this.render();
             },
             
             el: $("#recipe_main_container"), 
@@ -178,22 +343,7 @@ defined('_JEXEC') or die;
                 this.$el.html(template);
             },
             
-            loadRecipes : function() {
-                this.model.getRecipes();
-                this.listenToOnce(this.model, "change:recipes", this.onGetRecipes);
-            },
-            
-            onGetRecipes : function() {
-                if (this.model.has("recipes")){
-                    this.populateRecipes(this.model.get("recipes"));
-                }
-            },
-            populateRecipes : function(recipes) {
-                _.each(recipes, function(item){
-                    var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper"), 'data' : item});
-                    recipe_item.render();
-                })
-            }
+           
         });
         
         
@@ -203,7 +353,6 @@ defined('_JEXEC') or die;
             mainmenu: new Mainmenu_view(),
             submenu: new Submenu_view(),
             main_container : new MainContainer_view(),
-   
         };
         
          // CONTROLLER
@@ -221,10 +370,11 @@ defined('_JEXEC') or die;
                 this.common_actions();
                 $("#my_recipes_link").addClass("active_link");
                 this.load_submenu();
+                
                 if (Views.main_container != null) {
-                    Views.main_container.loadRecipes();
+                   var model = new Recipe_database_model(options);
+                   model.loadRecipes();
                 }
-       
             },
 
             recipe_database : function () {
@@ -263,7 +413,7 @@ defined('_JEXEC') or die;
             
             hide_submenu : function() {
                 $(Views.submenu.$el).html('');
-            },
+            }
             
         });
 
@@ -273,6 +423,11 @@ defined('_JEXEC') or die;
         
         
         
+        
+        
+        
+        
+
         
 
     })($js);

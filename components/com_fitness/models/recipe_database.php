@@ -53,11 +53,19 @@ class FitnessModelrecipe_database extends JModelList {
         
         $data = json_decode($data_encoded);
         
+        $page = $data->page;
+        $limit = $data->limit;
+        
+        $start = ($page - 1) * $limit;
+        
         $query = "SELECT a.*,"
+                . " (SELECT COUNT(*) FROM #__fitness_nutrition_recipes  WHERE state='1') items_total, "
                 . " (SELECT name FROM #__users WHERE id=a.created_by) author,"
                 . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer"
                 . " FROM  #__fitness_nutrition_recipes AS a"
-                . " WHERE a.state='1'";
+                . " WHERE a.state='1'"
+                . " ORDER BY a.recipe_name"
+                . " LIMIT $start, $limit";
 
                 
         try {

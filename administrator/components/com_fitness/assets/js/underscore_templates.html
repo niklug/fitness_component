@@ -626,6 +626,8 @@
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
             <div id="recipe_database_items_wrapper"></div>
+            <div style="text-align:center;" id="pagination_container">
+            </div>
         </div>
     </div>
 </script>
@@ -642,8 +644,8 @@
                 <td width="50%">
                     <table  width="100%">
                         <tr>
-                            <td>RECIPE NAME</td>
-                            <td>
+                            <td width="40%">RECIPE NAME</td>
+                            <td width="60%">
                                 <span class="grey_title">
                                      <%= recipe_name %>
                                 </span>
@@ -689,7 +691,7 @@
                             <td>TRAINER</td>
                             <td>
                                 <span class="grey_title">
-                                     <%= trainer %>
+                                     <%= trainer || '-' %>
                                 </span>
                             </td>
                         </tr>
@@ -708,4 +710,30 @@
     <hr>
     <br/>
 </script>
+
+
+<!-- PAGINATION -->
+<script type="text/template" id="backbone_pagination_template">
+    <nav id="div-nav">
+        <a id="first" title="First Page" href="javascript:void(0)">START</a>&#32; &#108;
+        <a id="prev" title="Previous Page" href="javascript:void(0)">PREV</a>
+        <ul id="ul-pagination"></ul>
+        <a id="next" title="Next Page" href="javascript:void(0)">NEXT</a>&#32;&#108;
+        <a id="last" title="Last Page" href="javascript:void(0)">END</a>
+    </nav>
+    <div style="width:100%;text-align: center;">
+        Display # 
+        <select name="items_number" id="items_number">
+            <option value="2">2</option>
+            <option value="5">5</option>
+            <option selected="selected" value="10">10</option>
+            <option value="20">20</option>
+        </select> 
+    </div>
+</script>
+
+<script id="template-page" type="text/template">
+    <a id="a-page-item" href="javascript:void(0)"><%= pageNumber %></a>
+</script>
+<!-- END PAGINATION -->
 
