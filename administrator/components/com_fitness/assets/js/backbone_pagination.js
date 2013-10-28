@@ -81,7 +81,6 @@
             initialize: function(){
                 this.itemsCollection = new Pagination_items();
                 this.itemsCollection.bind("add", this.renderPages, this);
-                
             },
 
             render : function(){

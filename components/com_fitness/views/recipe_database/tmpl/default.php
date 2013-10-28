@@ -62,25 +62,16 @@ defined('_JEXEC') or die;
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
             'user_id' : '<?php echo JFactory::getUser()->id;?>',
             'recipes_db_table' : '#__fitness_nutrition_recipes',
+            'recipe_types_db_table' : '#__fitness_recipe_types',
         };
         
         // MODELS 
         Recipe_database_model = Backbone.Model.extend({
-            defaults: {
-                'page' : 1,
-                'limit' : 10
-            },
 
             initialize: function(){
-                this.connectPagination();
+                
             },
             
-            connectPagination : function() {
-                this.pagination_app_model = $.backbone_pagination({});
-                this.pagination_app_model.bind("change:currentPage", this.loadRecipes, this);
-                this.pagination_app_model.bind("change:items_number", this.loadRecipes, this);
-            },
-
             ajaxCall : function(data, url, view, task, table, handleData) {
                 return $.AjaxCall(data, url, view, task, table, handleData);
             },
@@ -125,7 +116,23 @@ defined('_JEXEC') or die;
                 var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
                 return html;
             },
+             
+        });
+        
+        
+        var Recipe_items_model = Recipe_database_model.extend({
             
+            initialize: function(){
+                this.bind("change:filter_options", this.loadRecipes, this);
+                this.connectPagination();
+            },
+            
+            connectPagination : function() {
+                this.pagination_app_model = $.backbone_pagination({});
+                this.pagination_app_model.bind("change:currentPage", this.loadRecipes, this);
+                this.pagination_app_model.bind("change:items_number", this.loadRecipes, this);
+            },
+
             getRecipes : function(page, limit) {
                 var data = {};
                 var url = this.get('fitness_frontend_url');
@@ -135,6 +142,12 @@ defined('_JEXEC') or die;
 
                 data.page = page || 1;
                 data.limit = limit;
+                
+                var filter_options = this.get('filter_options') || '';
+                
+                console.log(filter_options);
+                
+                data.filter_options = filter_options;
 
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
@@ -158,7 +171,10 @@ defined('_JEXEC') or die;
                     
                     //pagination
                     var item = recipes[0];
-                    var items_total = item.items_total; 
+                    var items_total = 0;
+                    if (typeof item !== "undefined") {
+                        items_total = item.items_total;
+                    }
                     this.pagination_app_model.set({'items_total' : items_total});
                     //
                     
@@ -167,16 +183,38 @@ defined('_JEXEC') or die;
             },
             populateRecipes : function(recipes) {
                 $("#recipe_database_items_wrapper").html('');
+                
+                if(recipes.length == 0) {
+                    $("#recipe_database_items_wrapper").html('<div style="text-align:center;">No Recipes Found.</div>');
+                }
+                
                 _.each(recipes, function(item){
                     var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper"), 'data' : item});
                     recipe_item.render();
                 });
             }
             
-            
         });
         
         
+        var Filter_categories_model = Recipe_database_model.extend({
+
+            getRecipeTypes : function(page, limit) {
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = 'recipe_database';
+                var task = 'getRecipeTypes';
+                var table = this.get('recipe_types_db_table');
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+                    self.set("recipe_types", output);
+                    //console.log(output);
+                });
+            },
+
+            
+        });
         
 
                 
@@ -208,16 +246,44 @@ defined('_JEXEC') or die;
             render : function(){
                 var data = this.options.data;
 
-                data.model = new Recipe_database_model(options);
+                data.model = new Recipe_items_model(options);
                 
                 var template = _.template($("#recipe_database_item_template").html(), data);
                 this.$el.append(template);
             }
         });
         
-       
         
-        
+        var Filter_view = Backbone.View.extend({
+            initialize: function(){
+                this.recipe_items_model = this.options.recipe_items_model;
+
+            },
+            
+            render : function(){
+                this.model.getRecipeTypes();
+                this.listenToOnce(this.model, "change:recipe_types", this.loadTemplate);
+            
+            },
+            
+            events: {
+                "change #categories_filter" : "onFilterSelect",
+            },
+            
+            loadTemplate : function() {
+                var data = {'items' : this.model.get('recipe_types')};
+                var template = _.template($("#recipe_database_filter_template").html(), data);
+                this.$el.html(template);
+            },
+            
+            onFilterSelect : function(event){
+                var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
+                this.recipe_items_model.set({'filter_options' : ids});
+                //console.log(this.recipe_items_model.get('filter_options'));
+            }
+        });
+
+
         var MainContainer_view = Backbone.View.extend({
             
             initialize: function(){
@@ -265,9 +331,10 @@ defined('_JEXEC') or die;
                 this.load_submenu();
                 
                 if (Views.main_container != null) {
-                   var model = new Recipe_database_model(options);
-                   model.loadRecipes();
+                   var recipe_items_model = new Recipe_items_model(options);
+                   recipe_items_model.loadRecipes();
                 }
+                this.load_categories_filter(recipe_items_model);
             },
 
             recipe_database : function () {
@@ -306,6 +373,15 @@ defined('_JEXEC') or die;
             
             hide_submenu : function() {
                 $(Views.submenu.$el).html('');
+            },
+            
+            load_categories_filter : function(recipe_items_model) {
+                var categories_filter = new Filter_view({
+                    el: $("#recipe_database_filter_wrapper"),
+                    model : new Filter_categories_model(options),
+                    'recipe_items_model' : recipe_items_model
+                });
+                categories_filter.render();
             }
             
         });

@@ -58,13 +58,35 @@ class FitnessModelrecipe_database extends JModelList {
         
         $start = ($page - 1) * $limit;
         
-        $query = "SELECT a.*,"
-                . " (SELECT COUNT(*) FROM #__fitness_nutrition_recipes  WHERE state='1') items_total, "
-                . " (SELECT name FROM #__users WHERE id=a.created_by) author,"
+        $filter_options = $data->filter_options;
+        
+        //get rid of empty element
+        $filter_options = implode(",",array_filter(explode(",",$filter_options)));
+        
+        $query = "SELECT a.*,";
+        
+        //get total
+        $query .= " (SELECT COUNT(*) FROM #__fitness_nutrition_recipes AS a ";
+        $query .= " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type";
+        $query .= " WHERE a.state='1' ";
+        if($filter_options) {
+            $query .= " AND t.id IN ($filter_options)";
+        }
+          
+        $query .= " ) items_total, ";
+        //
+        
+        $query .= " (SELECT name FROM #__users WHERE id=a.created_by) author,"
                 . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer"
                 . " FROM  #__fitness_nutrition_recipes AS a"
-                . " WHERE a.state='1'"
-                . " ORDER BY a.recipe_name"
+                . " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type"
+                . " WHERE a.state='1'";
+        
+        if($filter_options) {
+            $query .= " AND t.id IN ($filter_options)";
+        }
+                
+        $query .= " AND a.state='1' ORDER BY a.recipe_name"
                 . " LIMIT $start, $limit";
 
                 
@@ -73,6 +95,7 @@ class FitnessModelrecipe_database extends JModelList {
         } catch (Exception $e) {
             $status['success'] = 0;
             $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
         }
         
 
@@ -83,6 +106,7 @@ class FitnessModelrecipe_database extends JModelList {
             } catch (Exception $e) {
                 $status['success'] = 0;
                 $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
             }
             $data[$i]->recipe_types_names = $recipe_types_names;
             $i++;
@@ -100,6 +124,24 @@ class FitnessModelrecipe_database extends JModelList {
         return FitnessHelper::customQuery($query, 3);
     }
     
-    
+    public function getRecipeTypes() {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $recipeTypes = $helper->getRecipeTypes();
+        
+        if(!$recipeTypes['success']) {
+            $status['success'] = 0;
+            $status['message'] = $recipeTypes['message'];
+            return array( 'status' => $status);
+        }
+        
+        $data = $recipeTypes['data'];
+
+        $result = array( 'status' => $status, 'data' => $data);
+        
+        return $result;
+    }
     
 }

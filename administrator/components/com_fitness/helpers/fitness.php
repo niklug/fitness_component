@@ -843,7 +843,7 @@ class FitnessHelper extends FitnessFactory
     public function getRecipeTypes() {
         $ret['success'] = 1;
         $db = JFactory::getDbo();
-        $sql = "SELECT id, name, id AS value, name AS text FROM #__fitness_recipe_types WHERE state='1'";
+        $sql = "SELECT id, name, id AS value, name AS text FROM #__fitness_recipe_types WHERE state='1' ORDER BY name ASC";
         $db->setQuery($sql);
         if(!$db->query()) {
             $ret['success'] = 0;

@@ -601,6 +601,35 @@
 
 </script>
 
+<!-- PAGINATION -->
+<script type="text/template" id="backbone_pagination_template">
+    <nav id="div-nav">
+        <% if(currentPage > 1) { %>
+            <a id="first_pag" title="First Page" href="javascript:void(0)">START</a>&#32; &#108;
+            <a id="prev_pag" title="Previous Page" href="javascript:void(0)">PREV</a>
+        <% } %>
+        <ul id="ul-pagination"></ul>
+        <% if(currentPage <  pages) { %>
+            <a id="next_pag" title="Next Page" href="javascript:void(0)">NEXT</a>&#32;&#108;
+            <a id="last_pag" title="Last Page" href="javascript:void(0)">END</a>
+        <% } %>
+    </nav>
+    <div style="width:100%;text-align: center;">
+        Display # 
+        <select name="items_number" id="items_number">
+            <option value="2">2</option>
+            <option value="5">5</option>
+            <option selected="selected" value="10">10</option>
+            <option value="20">20</option>
+        </select> 
+    </div>
+</script>
+
+<script id="template-page" type="text/template">
+    <a id="a-page-item" class="<%= pageClass %>" href="javascript:void(0)"><%= pageNumber %></a>
+</script>
+<!-- END PAGINATION -->
+
 
 <!-- Recipe Database -->
 
@@ -625,7 +654,17 @@
 <script type="text/template" id="recipe_database_main_container_template">
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
-            <div id="recipe_database_items_wrapper"></div>
+            
+            <table width="100%">
+                <tr>
+                    <td>
+                        <div id="recipe_database_items_wrapper"></div>
+                    </td>
+                    <td width="200" style="vertical-align:top;">
+                        <div id="recipe_database_filter_wrapper"></div>
+                    </td>
+                </tr>
+            <table>
             <div style="text-align:center;" id="pagination_container">
             </div>
         </div>
@@ -712,32 +751,21 @@
 </script>
 
 
-<!-- PAGINATION -->
-<script type="text/template" id="backbone_pagination_template">
-    <nav id="div-nav">
-        <% if(currentPage > 1) { %>
-            <a id="first_pag" title="First Page" href="javascript:void(0)">START</a>&#32; &#108;
-            <a id="prev_pag" title="Previous Page" href="javascript:void(0)">PREV</a>
-        <% } %>
-        <ul id="ul-pagination"></ul>
-        <% if(currentPage <  pages) { %>
-            <a id="next_pag" title="Next Page" href="javascript:void(0)">NEXT</a>&#32;&#108;
-            <a id="last_pag" title="Last Page" href="javascript:void(0)">END</a>
-        <% } %>
-    </nav>
-    <div style="width:100%;text-align: center;">
-        Display # 
-        <select name="items_number" id="items_number">
-            <option value="2">2</option>
-            <option value="5">5</option>
-            <option selected="selected" value="10">10</option>
-            <option value="20">20</option>
-        </select> 
+
+<script type="text/template" id="recipe_database_filter_template">
+    <div class="fitness_block_wrapper" style="">
+        <h5>FILTER CATEGORIES</h5>
+        <div class="clr"></div>
+        <hr class="orange_line">
+        <div class="internal_wrapper">
+            <select multiple size="<%= items.length + 1 %>" id="categories_filter" name="categories_filter[]" class="" style="width:100%;">
+                <option value="">ALL CATEGORIES</option>
+                <% if (typeof items !== "undefined") { %>
+                    <% _.each(items, function(item, key){ %>
+                          <option value="<%= item.id %>"><%= item.name %></option>
+                    <% }) %>
+                <% } %>
+            </select>
+        </div>
     </div>
 </script>
-
-<script id="template-page" type="text/template">
-    <a id="a-page-item" class="<%= pageClass %>" href="javascript:void(0)"><%= pageNumber %></a>
-</script>
-<!-- END PAGINATION -->
-
