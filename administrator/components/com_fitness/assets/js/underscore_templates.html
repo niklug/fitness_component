@@ -715,11 +715,15 @@
 <!-- PAGINATION -->
 <script type="text/template" id="backbone_pagination_template">
     <nav id="div-nav">
-        <a id="first" title="First Page" href="javascript:void(0)">START</a>&#32; &#108;
-        <a id="prev" title="Previous Page" href="javascript:void(0)">PREV</a>
+        <% if(currentPage > 1) { %>
+            <a id="first_pag" title="First Page" href="javascript:void(0)">START</a>&#32; &#108;
+            <a id="prev_pag" title="Previous Page" href="javascript:void(0)">PREV</a>
+        <% } %>
         <ul id="ul-pagination"></ul>
-        <a id="next" title="Next Page" href="javascript:void(0)">NEXT</a>&#32;&#108;
-        <a id="last" title="Last Page" href="javascript:void(0)">END</a>
+        <% if(currentPage <  pages) { %>
+            <a id="next_pag" title="Next Page" href="javascript:void(0)">NEXT</a>&#32;&#108;
+            <a id="last_pag" title="Last Page" href="javascript:void(0)">END</a>
+        <% } %>
     </nav>
     <div style="width:100%;text-align: center;">
         Display # 
@@ -733,7 +737,7 @@
 </script>
 
 <script id="template-page" type="text/template">
-    <a id="a-page-item" href="javascript:void(0)"><%= pageNumber %></a>
+    <a id="a-page-item" class="<%= pageClass %>" href="javascript:void(0)"><%= pageNumber %></a>
 </script>
 <!-- END PAGINATION -->
 
