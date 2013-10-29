@@ -668,4 +668,29 @@ td.center, th.center, .center {
 
 }
 
+/* backbone pagination  */
+ #bac_nav {
+        padding: 0;
+        width: 600px;
+        margin: auto;
+        position:relative; 
+        text-align: center;
+    }
+
+    #bac_nav a {
+        display: inline-block;
+   }
+
+    #bac_nav ul {
+        display: inline;
+    }	
+
+    #bac_nav li {
+        display: inline;
+        list-style-type: none;
+        padding: 0 2px !important;
+    }
+/* */
+
+
 

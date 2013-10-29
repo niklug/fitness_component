@@ -12,32 +12,6 @@
 defined('_JEXEC') or die;
 ?>
 
-<style>
-
-            nav {
-                padding: 0;
-                width: 600px;
-                margin: auto;
-                position:relative; 
-                text-align: center;
-            }
-
-            nav a {
-                display: inline-block;
-           }
-
-            nav ul {
-                display: inline;
-            }	
-
-            nav li {
-                display: inline;
-                list-style-type: none;
-                padding: 0 2px !important;
-            }
-
-        </style>
-
 <div style="opacity: 1;" class="fitness_wrapper">
     <h2>RECIPE DATABASE</h2>
     
@@ -68,10 +42,7 @@ defined('_JEXEC') or die;
         // MODELS 
         Recipe_database_model = Backbone.Model.extend({
 
-            initialize: function(){
-                
-            },
-            
+
             ajaxCall : function(data, url, view, task, table, handleData) {
                 return $.AjaxCall(data, url, view, task, table, handleData);
             },
@@ -121,9 +92,9 @@ defined('_JEXEC') or die;
         
         
         var Recipe_items_model = Recipe_database_model.extend({
-            
+ 
             initialize: function(){
-                this.bind("change:filter_options", this.loadRecipes, this);
+                this.bind("change:filter_options", this.resetCurrentPage, this);
                 this.connectPagination();
             },
             
@@ -132,6 +103,15 @@ defined('_JEXEC') or die;
                 this.pagination_app_model.bind("change:currentPage", this.loadRecipes, this);
                 this.pagination_app_model.bind("change:items_number", this.loadRecipes, this);
             },
+            // on change filter options, reset pagination to 1 page
+            resetCurrentPage : function() {
+                this.pagination_app_model.setLocalStorageItem('currentPage', 1);
+                this.pagination_app_model.off("change:currentPage", this.loadRecipes);
+                this.pagination_app_model.set({'currentPage' : ""});
+                this.pagination_app_model.bind("change:currentPage", this.loadRecipes, this);
+                this.pagination_app_model.set({'currentPage' : 1});
+            },
+            
 
             getRecipes : function(page, limit) {
                 var data = {};
@@ -145,9 +125,9 @@ defined('_JEXEC') or die;
                 
                 var filter_options = this.get('filter_options') || '';
                 
-                console.log(filter_options);
-                
                 data.filter_options = filter_options;
+                
+                data.my_recipes = this.get('my_recipes');
 
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
@@ -187,9 +167,9 @@ defined('_JEXEC') or die;
                 if(recipes.length == 0) {
                     $("#recipe_database_items_wrapper").html('<div style="text-align:center;">No Recipes Found.</div>');
                 }
-                
+                var model = this;
                 _.each(recipes, function(item){
-                    var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper"), 'data' : item});
+                    var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper"), 'data' : item, model : model});
                     recipe_item.render();
                 });
             }
@@ -245,8 +225,8 @@ defined('_JEXEC') or die;
         var Recipe_item_view = Backbone.View.extend({
             render : function(){
                 var data = this.options.data;
-
-                data.model = new Recipe_items_model(options);
+                
+                data.model = this.model;
                 
                 var template = _.template($("#recipe_database_item_template").html(), data);
                 this.$el.append(template);
@@ -330,17 +310,23 @@ defined('_JEXEC') or die;
                 $("#my_recipes_link").addClass("active_link");
                 this.load_submenu();
                 
-                if (Views.main_container != null) {
-                   var recipe_items_model = new Recipe_items_model(options);
-                   recipe_items_model.loadRecipes();
-                }
+                options.my_recipes = true;
+                var recipe_items_model = new Recipe_items_model(options);
+                recipe_items_model.loadRecipes();
+
                 this.load_categories_filter(recipe_items_model);
             },
 
             recipe_database : function () {
                 this.common_actions();
                 $("#recipe_database_link").addClass("active_link");
-                this.hide_submenu()
+                
+                options.my_recipes = false;
+                var recipe_items_model = new Recipe_items_model(options);
+                recipe_items_model.loadRecipes();
+   
+                this.load_categories_filter(recipe_items_model);
+
             },
 
             nutrition_database : function () {
@@ -382,7 +368,8 @@ defined('_JEXEC') or die;
                     'recipe_items_model' : recipe_items_model
                 });
                 categories_filter.render();
-            }
+            },
+ 
             
         });
 

@@ -63,14 +63,31 @@ class FitnessModelrecipe_database extends JModelList {
         //get rid of empty element
         $filter_options = implode(",",array_filter(explode(",",$filter_options)));
         
+        $my_recipes = $data->my_recipes;
+        
+        $user = &JFactory::getUser();
+        $user_id = $user->id;
+        
+        
+    
+         
         $query = "SELECT a.*,";
         
-        //get total
+        //get total number
         $query .= " (SELECT COUNT(*) FROM #__fitness_nutrition_recipes AS a ";
-        $query .= " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type";
+        $query .= " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type"
+                . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by"
+                . " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         $query .= " WHERE a.state='1' ";
+        
         if($filter_options) {
             $query .= " AND t.id IN ($filter_options)";
+        }
+        
+        if((bool)$my_recipes) {
+            $query .= " AND a.created_by = '$user_id'";
+        } else {
+            $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
         }
           
         $query .= " ) items_total, ";
@@ -80,10 +97,20 @@ class FitnessModelrecipe_database extends JModelList {
                 . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer"
                 . " FROM  #__fitness_nutrition_recipes AS a"
                 . " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type"
+                . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by"
+                . " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id"
                 . " WHERE a.state='1'";
         
         if($filter_options) {
             $query .= " AND t.id IN ($filter_options)";
+        }
+        
+        
+        
+        if((bool)$my_recipes) {
+            $query .= " AND a.created_by = '$user_id'";
+        } else {
+            $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
         }
                 
         $query .= " AND a.state='1' ORDER BY a.recipe_name"

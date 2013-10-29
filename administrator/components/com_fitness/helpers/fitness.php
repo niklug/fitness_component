@@ -45,7 +45,7 @@ class FitnessFactory {
      public static function getCurrentGroupId($user_id) {
         
         if (!self::$group_id) {
-            self::$group_id = self::createCurrentGroupId($user_id);
+        return self::createCurrentGroupId($user_id);
         }
 
         return self::$group_id;
@@ -100,13 +100,10 @@ class FitnessFactory {
     
     
     public static function is_client($user_id) {
-        if(self::$is_client == null) {
-            $group_id = self::getCurrentGroupId($user_id);
-            $parent_group_id =  self::REGISTERED_GROUP_ID;
-            self::$is_client = self::isChildGroup($group_id, $parent_group_id);
-            return self::$is_client;
-        }
-        return self::$is_client;
+        $group_id = self::createCurrentGroupId($user_id);
+        $parent_group_id =  self::REGISTERED_GROUP_ID;
+        $is_client = self::isChildGroup($group_id, $parent_group_id);
+        return $is_client;
     }
     
     
@@ -206,8 +203,11 @@ class FitnessFactory {
         if(!$user_id) {
             $user_id = &JFactory::getUser()->id;
         }
+        
+        if($group_id == $parent_group_id) return $group_id;
 
-        $query = "SELECT id FROM #__usergroups WHERE id='$group_id'  AND parent_id='$parent_group_id'";
+        $query = "SELECT id FROM #__usergroups WHERE (id='$group_id'  AND parent_id='$parent_group_id') "
+                . " OR (id='$parent_group_id')";
 
         $group_id = self::customQuery($query, 0);
         
