@@ -171,4 +171,37 @@ class FitnessModelrecipe_database extends JModelList {
         return $result;
     }
     
+    
+    public function getRecipe($table, $data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $id = $data->id;
+        
+        try {
+            $data = $helper->getRecipe($id);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        
+        try {
+            $recipe_types_names = $this->getRecipeNames($data->recipe_type);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        $data->recipe_types_names = $recipe_types_names;
+        
+        $result = array( 'status' => $status, 'data' => $data);
+        
+        return $result;
+    }
+    
+    
 }

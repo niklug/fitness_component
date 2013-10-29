@@ -854,6 +854,21 @@ class FitnessHelper extends FitnessFactory
         return $ret;
     }
     
+    public function getRecipe($id) {
+
+        $query = "SELECT a.*,"
+                . " (SELECT name FROM #__users WHERE id=a.created_by) author,"
+                . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer"
+                . " FROM #__fitness_nutrition_recipes AS a"
+                . " "
+                . "WHERE a.id='$id' "
+                . "AND a.state='1'";
+
+        $item = self::customQuery($query, 2);
+        
+        return $item;
+    }
+    
     public function getClient($client_id) {
         $ret['success'] = 1;
         $db = JFactory::getDbo();

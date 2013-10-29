@@ -644,10 +644,27 @@
 <script type="text/template" id="recipe_database_submenu_template">
     <div class="fitness_block_wrapper" style="height:30px;margin-top: 20px;">
         <div class="internal_wrapper">
-            <div>sub menu area</div>
+            <div id="submenu_container"></div>
         </div>
         <hr class="orange_line">
     </div>
+</script>
+
+<script type="text/template" id="recipe_database_submenu_content_template">
+    <div style="width:100%;">
+        <a data-id="" style="cursor: pointer; float:left;" class="" onclick="javascript:void(0)">[CREATE RECIPE]</a>
+        <a data-id="" style="cursor: pointer;float:right;" class="" onclick="javascript:void(0)">[ARCHIVE/TRASH]</a>
+    </div>
+    <div class="clr"></div>
+</script>
+
+<script type="text/template" id="recipe_database_submenu_recipe_content_template">
+    <div style="width:100%;">
+        <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="" onclick="javascript:void(0)">[TRASH]</a>
+        <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
+        <a data-id="" style="cursor: pointer; float:right;margin-right:10px;" class="" onclick="javascript:void(0)">[EDIT]</a>
+    </div>
+    <div class="clr"></div>
 </script>
 
 
@@ -673,7 +690,85 @@
 
 
 
+<script type="text/template" id="recipe_database_view_recipe_template">
+    <div class="fitness_block_wrapper" style="margin-top: 20px;">
+        <div class="internal_wrapper">
+            <% var my_recipes = model.get('my_recipes'); %>
+            <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
+                <table width="100%">
+                    <tr>
+                        <td width="40%">
+                            <table  width="100%">
+                                <tr>
+                                    <td width="40%">RECIPE NAME</td>
+                                    <td width="60%">
+                                        <span class="grey_title">
+                                             <%= recipe_name %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>RECIPE TYPE</td>
+                                    <td>
+                                        <span class="grey_title">
+                                            <% _.each(recipe_types_names, function(item){ %>
+                                                <%= item + "<br/>" %>
+                                            <% 
+                                            })  
+                                            %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SERVES</td>
+                                    <td>
+                                        <span class="grey_title">
+                                             <%= number_serves %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>AUTHOR</td>
+                                    <td>
+                                        <span class="grey_title">
+                                             <%= author %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>STATUS</td>
+                                    <td>
+                                        <span class="grey_title">
+                                             <%= model.setStatus(status) %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>TRAINER</td>
+                                    <td>
+                                        <span class="grey_title">
+                                             <%= trainer || '-' %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="30%" ></td>
+                        <td width="30%" style="text-align:center; vertical-align:middle;">
+                            <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+
 <script type="text/template" id="recipe_database_item_template">
+    <% var my_recipes = model.get('my_recipes'); %>
     <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
         <table width="100%">
             <tr>
@@ -737,9 +832,13 @@
                     </table>
                 </td>
                 <td style="text-align:center; vertical-align:bottom;">
-                    <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[VIEW RECIPE]</a>
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[VIEW RECIPE]</a>
                     <br/><br/>
-                    <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[TRASH RECIPE]</a>
+                    <% if(my_recipes) { %>
+                        <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[TRASH RECIPE]</a>
+                    <% } else { %>
+                        <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[QUICK COPY]</a>
+                    <% } %>
                 </td>
             </tr>
 
