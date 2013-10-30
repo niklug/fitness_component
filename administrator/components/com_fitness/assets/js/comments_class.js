@@ -67,7 +67,7 @@
     
     
     Comments.prototype.generateHtml = function() {
-        var html = 'QUESTIONS / COMMENTS / INSTRUCTIONS';
+        var html = '<h5>QUESTIONS / COMMENTS / INSTRUCTIONS</h5>';
         html += '<div id="comments_wrapper_' + this.sub_item_id + '">';
         html += '</div>';
         return html;
@@ -82,8 +82,8 @@
         var comment_template = '<div data-id="' + comment_obj.id + '" class="comment_wrapper">';
         comment_template += '<table width="100%">';
         comment_template += '<tr>';
-        comment_template += '<td><b>Comment by: </b><span class="comment_by">' + comment_obj.user_name +  '</span></td>';
-        comment_template += '<td><b>Date: </b> <span class="comment_date">' + current_time.date +  '</span></td>';
+        comment_template += '<td width="33%"><b>Comment by: </b><span class="comment_by">' + comment_obj.user_name +  '</span></td>';
+        comment_template += '<td width="33%"><b>Date: </b> <span class="comment_date">' + current_time.date +  '</span></td>';
         comment_template += '<td><b>Time: </b> <span class="comment_time">' + current_time.time_short +  '</span></td>';
         
         if(!comment_obj.id) {
@@ -94,9 +94,14 @@
             comment_template += '<td align="center"><a href="javascript:void(0)" class="delete_comment" id="delete_comment_' + this.sub_item_id + '" title="delete"></a></td>';
         }
         
+        var anable_readonly = '';
+        if(comment_obj.id) {
+            anable_readonly = 'readonly';
+        }
+        
         comment_template += '</tr>';
         comment_template += '<tr>';
-        comment_template += '<td colspan="5"><textarea  class="comment_textarea" cols="100" rows="3">' + comment_obj.comment +  '</textarea></td>';
+        comment_template += '<td colspan="5"><textarea ' + anable_readonly + '  class="comment_textarea" cols="100" rows="3">' + comment_obj.comment +  '</textarea></td>';
         comment_template += '</tr>';
         comment_template += '</table>';
         comment_template += '</div>';

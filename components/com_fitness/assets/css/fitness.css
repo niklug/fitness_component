@@ -692,5 +692,12 @@ td.center, th.center, .center {
     }
 /* */
 
+.table_border_top {
+    border-top:1px solid #fff !important;
+}
+
+.table_border_bottom {
+    border-bottom:1px solid #fff !important;
+}
 
 

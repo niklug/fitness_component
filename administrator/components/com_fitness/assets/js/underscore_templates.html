@@ -633,6 +633,7 @@
 
 <!-- Recipe Database -->
 
+<!--  main menu template -->
 <script type="text/template" id="recipe_database_mainmenu_template">
     <ul>
         <li><a id="my_recipes_link" class="plan_menu_link"  href="#!/my_recipes">MY RECIPES</a></li>
@@ -650,6 +651,7 @@
     </div>
 </script>
 
+<!--  submenu  My Recipes template -->
 <script type="text/template" id="recipe_database_submenu_content_template">
     <div style="width:100%;">
         <a data-id="" style="cursor: pointer; float:left;" class="" onclick="javascript:void(0)">[CREATE RECIPE]</a>
@@ -658,6 +660,7 @@
     <div class="clr"></div>
 </script>
 
+<!--  submenu for view/open recipe view template -->
 <script type="text/template" id="recipe_database_submenu_recipe_content_template">
     <div style="width:100%;">
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="" onclick="javascript:void(0)">[TRASH]</a>
@@ -667,18 +670,21 @@
     <div class="clr"></div>
 </script>
 
-
+<!--  recipe database main container template -->
 <script type="text/template" id="recipe_database_main_container_template">
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
             
             <table width="100%">
                 <tr>
-                    <td>
+                    <td style="vertical-align:top;">
                         <div id="recipe_database_items_wrapper"></div>
                     </td>
-                    <td width="200" style="vertical-align:top;">
+                    <td width="220" style="vertical-align:top;">
                         <div id="recipe_database_filter_wrapper"></div>
+                        <div class="clr"></div>
+                        <br>
+                        <div id="recipes_latest_wrapper"></div>
                     </td>
                 </tr>
             <table>
@@ -689,8 +695,13 @@
 </script>
 
 
-
+<!--  view/open recipe template -->
 <script type="text/template" id="recipe_database_view_recipe_template">
+    <%
+    if(!image){
+        image = model.get('default_image');
+    }
+    %>
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
             <% var my_recipes = model.get('my_recipes'); %>
@@ -760,6 +771,98 @@
                     </tr>
 
                 </table>
+                <br/>
+                <table width="100%">
+                    <thead>
+                        <th>MEAL ITEM/DESCRIPTION</th>
+                        <th>QUANTITY</th>
+                        <th>Protein</th>
+                        <th>Fat</th>
+                        <th>Carbs</th>
+                        <th>Energy</th>
+                        <th>Fat, Sat</th>
+                        <th>Sug</th>
+                        <th>Sod</th>
+                    </thead>
+                    <tbody>
+                    <% _.each(recipe_meals, function(item){ %>
+                        <tr >
+                            <td width="30%">
+                                <%= item.meal_name %>
+                            </td>
+                            <td>
+                                <%= item.quantity + ' ' + item.measurement %>
+                            </td>
+                            <td>
+                                <%= item.protein %>
+                            </td>
+                            <td>
+                                <%= item.fats %>
+                            </td>
+                            <td>
+                                <%= item.carbs %>
+                            </td>
+                            <td>
+                                <%= item.energy %>
+                            </td>
+                            <td>
+                                <%= item.saturated_fat %>
+                            </td>
+                            <td>
+                                <%= item.total_sugars %>
+                            </td>
+                            <td>
+                                <%= item.sodium %>
+                            </td>
+                        </tr>
+                    <% 
+                    })  
+                    %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                TOTALS 
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= calories %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= energy %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= protein %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= fats %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= carbs %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= total_sugars %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= sodium %>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <br>
+                <h5>COOKING INSTRUCTIONS / METHOD</h5>
+                <span style="width:100%" class="grey_title">
+                    <%= instructions %>
+                </span>
+                
+                <br>
+                <div id="comments_wrapper" style="width:99%"></div>
+                <div class="clr"></div>
+                <br/>
+                <input id="add_comment_0" class="" type="button" value="Add Comment" >
+                <div class="clr"></div>
             </div>
         </div>
     </div>
@@ -767,7 +870,13 @@
 </script>
 
 
+<!--  item recipe list template -->
 <script type="text/template" id="recipe_database_item_template">
+    <%
+    if(!image){
+        image = model.get('default_image');
+    }
+    %>
     <% var my_recipes = model.get('my_recipes'); %>
     <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
         <table width="100%">
@@ -841,8 +950,38 @@
                     <% } %>
                 </td>
             </tr>
-
         </table>
+        </br>
+        <div class="fitness_block_wrapper" style="">
+            <table width="100%">
+                <tr>
+                    <td>
+                        CALORIES
+                        <span class="grey_title"><%= calories || '0.00' %></span>
+                    </td>
+                    <td>
+                        ENERGY
+                        <span class="grey_title"><%= energy || '0.00' %></span>
+                    </td>
+                    <td>
+                        PROTEIN
+                        <span class="grey_title"><%= protein || '0.00' %></span>
+                    </td>
+                    <td>
+                        FAT
+                        <span class="grey_title"><%= fats || '0.00' %></span>
+                    </td>
+                    <td>
+                        CARB
+                        <span class="grey_title"><%= carbs || '0.00' %></span>
+                    </td>
+                    <td>
+                        SUGAR
+                        <span class="grey_title"><%= total_sugars || '0.00' %></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
     <br/>
     <hr>
@@ -851,6 +990,96 @@
 
 
 
+<!--  latest recipes item template -->
+<script type="text/template" id="recipes_latest_item_template">
+    <div class="recipe_database_latest_item_wrapper" style="margin-top: 0px;">
+        <table  width="100%">
+            <tr>
+                <td colspan="2">
+                     <h5><%= recipe_name %></h5>
+                </td>
+            </tr>
+            <tr>
+            <tr>
+                <td>AUTHOR:</td>
+                <td>
+                    <span class="grey_title">
+                         <%= author %>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>CREATED:</td>
+                <td>
+                    <span class="grey_title">
+                        <%
+                        var d1 = new Date(Date.parse(created));            
+                        var created_date = moment(d1).format("ddd, D MMM  YY"); 
+                        
+                        %>
+                        <%= created_date %>
+                    </span>
+                </td>
+            </tr>
+        </table>
+
+        <table width="100%">
+            <tr>
+                <td>
+                    CALORIES:
+                    <span class="grey_title"><%= calories || '0.00' %></span>
+                </td>
+                <td>
+                    PRO:
+                    <span class="grey_title"><%= protein || '0.00' %></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    ENERGY:
+                    <span class="grey_title"><%= energy || '0.00' %></span>
+                </td>
+                
+                <td>
+                    FAT:
+                    <span class="grey_title"><%= fats || '0.00' %></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    SUGAR:
+                    <span class="grey_title"><%= total_sugars || '0.00' %></span>
+                </td>
+                <td>
+                    CARB:
+                    <span class="grey_title"><%= carbs || '0.00' %></span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="text-align:center; vertical-align:bottom;">
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[VIEW]</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr>
+</script>
+
+<!--  latest recipes wrapper template -->
+<script type="text/template" id="recipes_latest_wrapper_template">
+    <div class="fitness_block_wrapper" style="">
+        <h5>LATEST RECIPES</h5>
+        <div class="clr"></div>
+        <hr class="orange_line">
+        <div class="internal_wrapper">
+            <div id="latest_recipes_container"></div>
+        </div>
+    </div>
+</script>
+
+
+<!--  categories filter template -->
 <script type="text/template" id="recipe_database_filter_template">
     <div class="fitness_block_wrapper" style="">
         <h5>FILTER CATEGORIES</h5>
@@ -868,3 +1097,9 @@
         </div>
     </div>
 </script>
+
+
+
+
+
+

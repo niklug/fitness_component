@@ -45,7 +45,7 @@ class FitnessFactory {
      public static function getCurrentGroupId($user_id) {
         
         if (!self::$group_id) {
-        return self::createCurrentGroupId($user_id);
+            self::$group_id = self::createCurrentGroupId($user_id);
         }
 
         return self::$group_id;
@@ -100,10 +100,13 @@ class FitnessFactory {
     
     
     public static function is_client($user_id) {
-        $group_id = self::createCurrentGroupId($user_id);
-        $parent_group_id =  self::REGISTERED_GROUP_ID;
-        $is_client = self::isChildGroup($group_id, $parent_group_id);
-        return $is_client;
+        if(self::$is_client == null) {
+            $group_id = self::getCurrentGroupId($user_id);
+            $parent_group_id =  self::REGISTERED_GROUP_ID;
+            self::$is_client = self::isChildGroup($group_id, $parent_group_id);
+            return self::$is_client;
+        }
+        return self::$is_client;
     }
     
     
@@ -203,11 +206,8 @@ class FitnessFactory {
         if(!$user_id) {
             $user_id = &JFactory::getUser()->id;
         }
-        
-        if($group_id == $parent_group_id) return $group_id;
 
-        $query = "SELECT id FROM #__usergroups WHERE (id='$group_id'  AND parent_id='$parent_group_id') "
-                . " OR (id='$parent_group_id')";
+        $query = "SELECT id FROM #__usergroups WHERE id='$group_id'  AND parent_id='$parent_group_id'";
 
         $group_id = self::customQuery($query, 0);
         
@@ -858,8 +858,17 @@ class FitnessHelper extends FitnessFactory
 
         $query = "SELECT a.*,"
                 . " (SELECT name FROM #__users WHERE id=a.created_by) author,"
-                . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer"
-                . " FROM #__fitness_nutrition_recipes AS a"
+                . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer,";
+                
+        $query .= " (SELECT ROUND(SUM(protein),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS protein,
+                   (SELECT ROUND(SUM(fats),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS fats,
+                   (SELECT ROUND(SUM(carbs),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS carbs,
+                   (SELECT ROUND(SUM(calories),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS calories,
+                   (SELECT ROUND(SUM(energy),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS energy,
+                   (SELECT ROUND(SUM(saturated_fat),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS saturated_fat,
+                   (SELECT ROUND(SUM(total_sugars),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS total_sugars,
+                   (SELECT ROUND(SUM(sodium),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS sodium";
+         $query .=  " FROM #__fitness_nutrition_recipes AS a"
                 . " "
                 . "WHERE a.id='$id' "
                 . "AND a.state='1'";
@@ -867,6 +876,15 @@ class FitnessHelper extends FitnessFactory
         $item = self::customQuery($query, 2);
         
         return $item;
+    }
+    
+    public function getRecipeMeals($recipe_id) {
+
+        $query = "SELECT * FROM #__fitness_nutrition_recipes_meals WHERE recipe_id='$recipe_id'";
+
+        $recipe_meals = self::customQuery($query, 1);
+
+        return $recipe_meals;      
     }
     
     public function getClient($client_id) {

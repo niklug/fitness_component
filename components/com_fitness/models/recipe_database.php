@@ -53,6 +53,9 @@ class FitnessModelrecipe_database extends JModelList {
         
         $data = json_decode($data_encoded);
         
+        $sort_by = $data->sort_by;
+        $order_dirrection = $data->order_dirrection;
+        
         $page = $data->page;
         $limit = $data->limit;
         
@@ -68,9 +71,6 @@ class FitnessModelrecipe_database extends JModelList {
         $user = &JFactory::getUser();
         $user_id = $user->id;
         
-        
-    
-         
         $query = "SELECT a.*,";
         
         //get total number
@@ -94,8 +94,20 @@ class FitnessModelrecipe_database extends JModelList {
         //
         
         $query .= " (SELECT name FROM #__users WHERE id=a.created_by) author,"
-                . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer"
-                . " FROM  #__fitness_nutrition_recipes AS a"
+                . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer,";
+      
+        $query .= " (SELECT ROUND(SUM(protein),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS protein,
+                   (SELECT ROUND(SUM(fats),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS fats,
+                   (SELECT ROUND(SUM(carbs),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS carbs,
+                   (SELECT ROUND(SUM(calories),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS calories,
+                   (SELECT ROUND(SUM(energy),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS energy,
+                   (SELECT ROUND(SUM(saturated_fat),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS saturated_fat,
+                   (SELECT ROUND(SUM(total_sugars),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS total_sugars,
+                   (SELECT ROUND(SUM(sodium),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS sodium";
+                
+                
+                
+        $query .= " FROM  #__fitness_nutrition_recipes AS a"
                 . " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type"
                 . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by"
                 . " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id"
@@ -113,7 +125,7 @@ class FitnessModelrecipe_database extends JModelList {
             $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
         }
                 
-        $query .= " AND a.state='1' ORDER BY a.recipe_name"
+        $query .= " AND a.state='1' ORDER BY a." . $sort_by . " " . $order_dirrection 
                 . " LIMIT $start, $limit";
 
                 
@@ -181,6 +193,7 @@ class FitnessModelrecipe_database extends JModelList {
         
         $id = $data->id;
         
+        // get recipe 
         try {
             $data = $helper->getRecipe($id);
         } catch (Exception $e) {
@@ -189,6 +202,7 @@ class FitnessModelrecipe_database extends JModelList {
             return array( 'status' => $status);
         }
         
+        // recipe types name
         try {
             $recipe_types_names = $this->getRecipeNames($data->recipe_type);
         } catch (Exception $e) {
@@ -197,6 +211,18 @@ class FitnessModelrecipe_database extends JModelList {
             return array( 'status' => $status);
         }
         $data->recipe_types_names = $recipe_types_names;
+        
+        // recipe meals
+        
+        try {
+            $recipe_meals = $helper->getRecipeMeals($id);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        
+        $data->recipe_meals = $recipe_meals;
         
         $result = array( 'status' => $status, 'data' => $data);
         
