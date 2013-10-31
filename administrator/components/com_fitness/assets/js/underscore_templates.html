@@ -660,12 +660,21 @@
     <div class="clr"></div>
 </script>
 
-<!--  submenu for view/open recipe view template -->
-<script type="text/template" id="recipe_database_submenu_recipe_content_template">
+<!--  submenu content for view/open My Recipes -->
+<script type="text/template" id="submenu_my_recipes_template">
     <div style="width:100%;">
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="" onclick="javascript:void(0)">[TRASH]</a>
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
         <a data-id="" style="cursor: pointer; float:right;margin-right:10px;" class="" onclick="javascript:void(0)">[EDIT]</a>
+    </div>
+    <div class="clr"></div>
+</script>
+
+<!--  submenu content for view/open Recipe Database -->
+<script type="text/template" id="submenu_recipe_database_template">
+    <div style="width:100%;">
+        <a data-id="" style="cursor: pointer;left;margin-right:10px;" id="copy_recipe" onclick="javascript:void(0)">[COPY TO MY RECIPES]</a>
+        <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
     </div>
     <div class="clr"></div>
 </script>
@@ -680,7 +689,7 @@
                     <td style="vertical-align:top;">
                         <div id="recipe_database_items_wrapper"></div>
                     </td>
-                    <td width="220" style="vertical-align:top;">
+                    <td width="200" style="vertical-align:top;">
                         <div id="recipe_database_filter_wrapper"></div>
                         <div class="clr"></div>
                         <br>
@@ -779,6 +788,7 @@
                         <th>Protein</th>
                         <th>Fat</th>
                         <th>Carbs</th>
+                        <th>Cals</th>
                         <th>Energy</th>
                         <th>Fat, Sat</th>
                         <th>Sug</th>
@@ -801,6 +811,9 @@
                             </td>
                             <td>
                                 <%= item.carbs %>
+                            </td>
+                            <td>
+                                <%= item.calories %>
                             </td>
                             <td>
                                 <%= item.energy %>
@@ -828,12 +841,6 @@
                                 TOTALS 
                             </td>
                             <td class="table_border_top table_border_bottom">
-                                <%= calories %>
-                            </td>
-                            <td class="table_border_top table_border_bottom">
-                                <%= energy %>
-                            </td>
-                            <td class="table_border_top table_border_bottom">
                                 <%= protein %>
                             </td>
                             <td class="table_border_top table_border_bottom">
@@ -841,6 +848,15 @@
                             </td>
                             <td class="table_border_top table_border_bottom">
                                 <%= carbs %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= calories %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= energy %>
+                            </td>
+                            <td class="table_border_top table_border_bottom">
+                                <%= saturated_fat %>
                             </td>
                             <td class="table_border_top table_border_bottom">
                                 <%= total_sugars %>
@@ -946,7 +962,7 @@
                     <% if(my_recipes) { %>
                         <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[TRASH RECIPE]</a>
                     <% } else { %>
-                        <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[QUICK COPY]</a>
+                        <a data-id="<%= id %>" style="cursor: pointer;" id="copy_recipe" onclick="javascript:void(0)">[QUICK COPY]</a>
                     <% } %>
                 </td>
             </tr>
@@ -1001,7 +1017,7 @@
             </tr>
             <tr>
             <tr>
-                <td>AUTHOR:</td>
+                <td width="40%">Author: </td>
                 <td>
                     <span class="grey_title">
                          <%= author %>
@@ -1009,7 +1025,7 @@
                 </td>
             </tr>
             <tr>
-                <td>CREATED:</td>
+                <td>Created:</td>
                 <td>
                     <span class="grey_title">
                         <%
@@ -1021,47 +1037,44 @@
                     </span>
                 </td>
             </tr>
-        </table>
-
-        <table width="100%">
             <tr>
+                <td>Calories:</td>
                 <td>
-                    CALORIES:
                     <span class="grey_title"><%= calories || '0.00' %></span>
                 </td>
+            </tr>
+            <tr>
+                <td>Protein:</td>
                 <td>
-                    PRO:
                     <span class="grey_title"><%= protein || '0.00' %></span>
                 </td>
             </tr>
             <tr>
+                <td>Fat:</td>
                 <td>
-                    ENERGY:
-                    <span class="grey_title"><%= energy || '0.00' %></span>
-                </td>
-                
-                <td>
-                    FAT:
                     <span class="grey_title"><%= fats || '0.00' %></span>
                 </td>
             </tr>
             <tr>
+                <td>Carb:</td>
                 <td>
-                    SUGAR:
-                    <span class="grey_title"><%= total_sugars || '0.00' %></span>
-                </td>
-                <td>
-                    CARB:
                     <span class="grey_title"><%= carbs || '0.00' %></span>
                 </td>
             </tr>
             <tr>
+                <td>Serves:</td>
+                <td>
+                    <span class="grey_title"><%= number_serves %></span>
+                </td>
+            </tr>
+            <tr>
                 <td></td>
-                <td style="text-align:center; vertical-align:bottom;">
+                <td style="text-align:right; vertical-align:bottom;">
                     <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[VIEW]</a>
                 </td>
             </tr>
         </table>
+
     </div>
     <hr>
 </script>

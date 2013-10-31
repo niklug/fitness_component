@@ -229,5 +229,75 @@ class FitnessModelrecipe_database extends JModelList {
         return $result;
     }
     
+    public function copyRecipe($table, $data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $id = $data->id;
+        
+        $user = &JFactory::getUser();
+
+        // get recipe 
+        try {
+            $recipe = $helper->getRecipeOriginalData($id);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+
+        // save recipe 
+        $created = FitnessHelper::getTimeCreated();
+            
+        $recipe->id = null;
+        $recipe->status = '1';
+        $recipe->created_by = $user->id;
+        $recipe->created = $created;
+        $recipe->reviewed_by = null;
+        
+        try {
+            $new_recipe_id = $helper->insertUpdateObj($recipe, '#__fitness_nutrition_recipes');
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+
+        
+        // get recipe meals
+        try {
+            $recipe_meals = $helper->getRecipeMeals($id);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+  
+        
+        
+        
+        // save recipe meals
+
+        foreach ($recipe_meals as $meal) {
+            try {
+                $meal->id = null;
+                $meal->recipe_id = $new_recipe_id;
+                $inserted_id = $helper->insertUpdateObj($meal, '#__fitness_nutrition_recipes_meals');
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
+        }
+        
+        $result = array( 'status' => $status, 'data' => $recipe);
+        
+        return $result;
+    }
+    
+
     
 }

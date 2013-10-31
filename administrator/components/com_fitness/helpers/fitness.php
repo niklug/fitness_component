@@ -252,6 +252,13 @@ class FitnessFactory {
         }
         return $result;
      }
+     
+     public static function getTimeCreated(){
+        $config = JFactory::getConfig();
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+        return $date->format('Y-m-d H:i:s');
+     }
 
 }
 
@@ -878,6 +885,21 @@ class FitnessHelper extends FitnessFactory
         return $item;
     }
     
+    public function getRecipeOriginalData($id) {
+
+        $query = "SELECT a.*";
+
+
+        $query .=  " FROM #__fitness_nutrition_recipes AS a"
+                . " "
+                . "WHERE a.id='$id' "
+                . "AND a.state='1'";
+
+        $item = self::customQuery($query, 2);
+        
+        return $item;
+    }
+    
     public function getRecipeMeals($recipe_id) {
 
         $query = "SELECT * FROM #__fitness_nutrition_recipes_meals WHERE recipe_id='$recipe_id'";
@@ -957,6 +979,27 @@ class FitnessHelper extends FitnessFactory
         return $ret;
     }
     
+    public function insertUpdateObj($obj, $table) {
+        $db = JFactory::getDbo();
+
+        if($obj->id) {
+            $insert = $db->updateObject($table, $obj, 'id');
+        } else {
+            $insert = $db->insertObject($table, $obj, 'id');
+        }
+
+        if (!$insert) {
+            throw new Exception($db->stderr());
+        }
+
+        $inserted_id = $db->insertid();
+
+        if(!$inserted_id) {
+            $inserted_id = $obj->id;
+        }
+
+        return $inserted_id;     
+    }
  
 }
 

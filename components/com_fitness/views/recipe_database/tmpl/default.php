@@ -170,16 +170,19 @@ defined('_JEXEC') or die;
             
             
             loadRecipes : function() {
-                
+
                 //pagination
                 var page = this.pagination_app_model.getLocalStorageItem('currentPage');
                 var limit = this.pagination_app_model.getLocalStorageItem('items_number');
                 //
-                this.getRecipes(page, limit);
+                this.set({'recipes' : null});
                 this.listenToOnce(this, "change:recipes", this.onGetRecipes);
+                this.getRecipes(page, limit);
+                
             },
             
             onGetRecipes : function() {
+            
                 if (this.has("recipes")){
                     var recipes = this.get("recipes");
                     
@@ -191,16 +194,17 @@ defined('_JEXEC') or die;
                     }
                     this.pagination_app_model.set({'items_total' : items_total});
                     //
-                    
                     this.populateRecipes(recipes);
                 }
             },
             populateRecipes : function(recipes) {
+            
                 $("#recipe_database_items_wrapper").html('');
                 
                 if(recipes.length == 0) {
                     $("#recipe_database_items_wrapper").html('<div style="text-align:center;">No Recipes Found.</div>');
                 }
+                
                 var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper"), model : this});
                 _.each(recipes, function(item){
                     recipe_item.render(item);
@@ -242,8 +246,22 @@ defined('_JEXEC') or die;
                 recipe_item.render(recipe);
             },
             
-            
-            
+            copy_recipe : function(recipe_id){
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = 'recipe_database';
+                var task = 'copyRecipe';
+                var table = this.get('recipes_db_table');
+                
+                data.id = recipe_id;
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+                    self.set("recipe_copied", output);
+                    //console.log(output);
+                });
+            }
+
         });
         
         
@@ -254,7 +272,7 @@ defined('_JEXEC') or die;
             },
             
             defaults: {
-                limit : 2,
+                limit : 15,
             },
             
             render : function(){
@@ -316,16 +334,14 @@ defined('_JEXEC') or die;
             initialize: function() {
                 this.recipe_items_model = this.attributes.recipe_items_model;
                 this.listenToOnce(this, "change:recipe_types", this.populateRecipeTypes);
-                
             },
 
             render : function(){
-                
                 this.populateRecipeTypes();
             },
             
             getRecipeTypes : function() {
-                
+
                 if(this.has("recipe_types")) return;
                 
                 var data = {};
@@ -356,7 +372,6 @@ defined('_JEXEC') or die;
                     'recipe_items_model' : this.recipe_items_model
                 });
                 categories_filter.render();
-
             },
         });
         
@@ -401,11 +416,44 @@ defined('_JEXEC') or die;
                 "click #close_recipe" : "onClickCloseRecipe",
             },
             render : function(){
-                var template = _.template($("#recipe_database_submenu_recipe_content_template").html());
+                var template = _.template($("#submenu_my_recipes_template").html());
                 this.$el.html(template);
             },
             onClickCloseRecipe : function() {
                 window.history.back();
+            }
+        });
+        
+        
+        var Submenu_recipe_database_view = Backbone.View.extend({
+            initialize: function(){
+                this.listenToOnce(this.options.recipe_items_model, "change:recipe_copied", this.redirectToRecipe);
+                this.render();
+            },
+            events: {
+                "click #close_recipe" : "onClickCloseRecipe",
+                "click #copy_recipe" : "onClickCopyRecipe",
+            },
+            render : function(){
+                var template = _.template($("#submenu_recipe_database_template").html());
+                this.$el.html(template);
+            },
+
+            onClickCloseRecipe : function() {
+                window.history.back();
+            },
+            
+            onClickCopyRecipe : function() {
+                var recipe_id = this.options.recipe_id;
+                var recipe_items_model = this.options.recipe_items_model;
+                recipe_items_model.copy_recipe(recipe_id);
+            },
+            
+            redirectToRecipe : function() {
+                var new_recipe_id = this.options.recipe_items_model.get('recipe_copied').id;
+                var controller = new Controller();
+                controller.navigate("!/my_recipes", true);
+                controller.navigate("!/nutrition_recipe/" + new_recipe_id, true);
             }
         });
         
@@ -428,6 +476,9 @@ defined('_JEXEC') or die;
         
         // list item
         var Recipe_item_view = Backbone.View.extend({
+            initialize: function(){
+                this.listenToOnce(this.model, "change:recipe_copied", this.redirectToRecipe);
+            },
             render : function(data){
                 var data = data
                 data.model = this.model;
@@ -437,12 +488,25 @@ defined('_JEXEC') or die;
             
             events: {
                 "click .view_recipe" : "onClickViewRecipe",
+                "click #copy_recipe" : "onClickCopyRecipe",
             },
             
             onClickViewRecipe : function(event) {
                 var id = $(event.target).attr("data-id");
                 var controller = new Controller();
                 controller.navigate("!/nutrition_recipe/" + id, true);
+            },
+            
+            onClickCopyRecipe : function(event) {
+                var recipe_id = $(event.target).attr('data-id');
+                this.model.copy_recipe(recipe_id);
+            },
+            
+            redirectToRecipe : function() {
+                var new_recipe_id = this.model.get('recipe_copied').id;
+                var controller = new Controller();
+                controller.navigate("!/my_recipes", true);
+                controller.navigate("!/nutrition_recipe/" + new_recipe_id, true);
             }
         });
         
@@ -470,7 +534,6 @@ defined('_JEXEC') or die;
             onFilterSelect : function(event){
                 var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
                 this.recipe_items_model.set({'filter_options' : ids});
-                console.log(ids);
             }
         });
         
@@ -490,6 +553,7 @@ defined('_JEXEC') or die;
             onClickViewRecipe : function(event) {
                 var id = $(event.target).attr("data-id");
                 var controller = new Controller();
+                controller.navigate("!/recipe_database", true);
                 controller.navigate("!/nutrition_recipe/" + id, true);
             }
         });
@@ -636,8 +700,14 @@ defined('_JEXEC') or die;
                 this.load_submenu();
                 
                 recipe_items_model.getRecipe(id);
-            
-                new Submenu_myrecipe_view({ el: $("#submenu_container"), recipe_items_model : recipe_items_model});
+                
+                var my_recipes = recipe_items_model.get('my_recipes');
+                
+                if(my_recipes) {
+                    new Submenu_myrecipe_view({ el: $("#submenu_container")});
+                } else {
+                    new Submenu_recipe_database_view({ el: $("#submenu_container"), recipe_id : id, recipe_items_model : recipe_items_model});
+                }
             }
  
             
