@@ -28,7 +28,8 @@ defined('_JEXEC') or die;
 <script type="text/javascript">
     
     (function($) {
-       
+
+        window.app = {};
         
         var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
@@ -42,7 +43,7 @@ defined('_JEXEC') or die;
         };
         
         // MODELS 
-        Recipe_database_model = Backbone.Model.extend({
+        window.app.Recipe_database_model = Backbone.Model.extend({
 
 
             ajaxCall : function(data, url, view, task, table, handleData) {
@@ -100,7 +101,7 @@ defined('_JEXEC') or die;
         });
         
         
-        var Recipe_items_model = Recipe_database_model.extend({
+        window.app.Recipe_items_model = window.app.Recipe_database_model.extend({
             defaults: {
                 filter_options : "",
                 sort_by : 'recipe_name',
@@ -205,7 +206,7 @@ defined('_JEXEC') or die;
                     $("#recipe_database_items_wrapper").html('<div style="text-align:center;">No Recipes Found.</div>');
                 }
                 
-                var recipe_item = new Recipe_item_view({ el: $("#recipe_database_items_wrapper"), model : this});
+                var recipe_item = new window.app.Recipe_item_view({ el: $("#recipe_database_items_wrapper"), model : this});
                 _.each(recipes, function(item){
                     recipe_item.render(item);
                 });
@@ -242,7 +243,7 @@ defined('_JEXEC') or die;
                     'anable_comment_email' : false
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
-                var recipe_item = new Recipe_view({ el: $("#recipe_main_container"), model : this, 'comments' : comments});
+                var recipe_item = new window.app.Recipe_view({ el: $("#recipe_main_container"), model : this, 'comments' : comments});
                 recipe_item.render(recipe);
             },
             
@@ -266,7 +267,7 @@ defined('_JEXEC') or die;
         
         
         
-        var Recipes_latest_model = Recipe_database_model.extend({
+        window.app.Recipes_latest_model = window.app.Recipe_database_model.extend({
             initialize: function(){
                 this.listenToOnce(this, "change:recipes_latest", this.populateRecipesLatest);
             },
@@ -312,7 +313,7 @@ defined('_JEXEC') or die;
                 
                 var recipes_latest = this.get('recipes_latest');
                 
-                var latest_recipes_wrapper_view = new Latest_recipes_wrapper_view({ el: $("#recipes_latest_wrapper")});
+                var latest_recipes_wrapper_view = new window.app.Latest_recipes_wrapper_view({ el: $("#recipes_latest_wrapper")});
                 latest_recipes_wrapper_view.render();
                 
                 $("#latest_recipes_container").html('');
@@ -320,7 +321,7 @@ defined('_JEXEC') or die;
                 if(recipes_latest.length == 0) {
                     $("#latest_recipes_container").html('<div style="text-align:center;">No Recipes Found.</div>');
                 }
-                var recipe_item = new Latest_recipes_item_view({ el: $("#latest_recipes_container"), model : this});
+                var recipe_item = new window.app.Latest_recipes_item_view({ el: $("#latest_recipes_container"), model : this});
                 _.each(recipes_latest, function(item){
                     recipe_item.render(item);
                 });
@@ -330,9 +331,8 @@ defined('_JEXEC') or die;
         });
         
         
-        var Filter_categories_model = Recipe_database_model.extend({
+        window.app.Filter_categories_model = window.app.Recipe_database_model.extend({
             initialize: function() {
-                this.recipe_items_model = this.attributes.recipe_items_model;
                 this.listenToOnce(this, "change:recipe_types", this.populateRecipeTypes);
             },
 
@@ -366,10 +366,9 @@ defined('_JEXEC') or die;
                 
                 var recipe_types = this.get('recipe_types');
                 
-                var categories_filter = new Filter_view({
+                var categories_filter = new window.app.Filter_view({
                     el: $("#recipe_database_filter_wrapper"),
-                    'recipe_types' : recipe_types,
-                    'recipe_items_model' : this.recipe_items_model
+                    'recipe_types' : recipe_types
                 });
                 categories_filter.render();
             },
@@ -378,9 +377,9 @@ defined('_JEXEC') or die;
 
                 
         // VIEWS
-        var Views = { }; 
+        window.app.Views = { }; 
         
-        var Mainmenu_view = Backbone.View.extend({
+        window.app.Mainmenu_view = Backbone.View.extend({
 
             el: $("#recipe_mainmenu"), 
 
@@ -390,7 +389,7 @@ defined('_JEXEC') or die;
             }
         });
         
-        var Submenu_view = Backbone.View.extend({
+        window.app.Submenu_view = Backbone.View.extend({
             el: $("#recipe_submenu"), 
             render : function(){
                 var template = _.template($("#recipe_database_submenu_template").html());
@@ -398,7 +397,7 @@ defined('_JEXEC') or die;
             }
         });
         
-        var Submenu_myrecipes_view = Backbone.View.extend({
+        window.app.Submenu_myrecipes_view = Backbone.View.extend({
             initialize: function(){
                 this.render();
             },
@@ -408,7 +407,7 @@ defined('_JEXEC') or die;
             }
         });
         
-        var Submenu_myrecipe_view = Backbone.View.extend({
+        window.app.Submenu_myrecipe_view = Backbone.View.extend({
             initialize: function(){
                 this.render();
             },
@@ -425,9 +424,9 @@ defined('_JEXEC') or die;
         });
         
         
-        var Submenu_recipe_database_view = Backbone.View.extend({
+        window.app.Submenu_recipe_database_view = Backbone.View.extend({
             initialize: function(){
-                this.listenToOnce(this.options.recipe_items_model, "change:recipe_copied", this.redirectToRecipe);
+                this.listenToOnce(window.app.recipe_items_model, "change:recipe_copied", this.redirectToRecipe);
                 this.render();
             },
             events: {
@@ -445,20 +444,19 @@ defined('_JEXEC') or die;
             
             onClickCopyRecipe : function() {
                 var recipe_id = this.options.recipe_id;
-                var recipe_items_model = this.options.recipe_items_model;
-                recipe_items_model.copy_recipe(recipe_id);
+                window.app.recipe_items_model.copy_recipe(recipe_id);
             },
             
             redirectToRecipe : function() {
-                var new_recipe_id = this.options.recipe_items_model.get('recipe_copied').id;
-                var controller = new Controller();
-                controller.navigate("!/my_recipes", true);
-                controller.navigate("!/nutrition_recipe/" + new_recipe_id, true);
+                var new_recipe_id = window.app.recipe_items_model.get('recipe_copied').id;
+
+                window.app.controller.navigate("!/my_recipes", true);
+                window.app.controller.navigate("!/nutrition_recipe/" + new_recipe_id, true);
             }
         });
         
         // on open recipe
-        var Recipe_view = Backbone.View.extend({
+        window.app.Recipe_view = Backbone.View.extend({
              render : function(data){
                 var data = data
                 data.model = this.model;
@@ -475,7 +473,7 @@ defined('_JEXEC') or die;
         });
         
         // list item
-        var Recipe_item_view = Backbone.View.extend({
+        window.app.Recipe_item_view = Backbone.View.extend({
             initialize: function(){
                 this.listenToOnce(this.model, "change:recipe_copied", this.redirectToRecipe);
             },
@@ -493,8 +491,8 @@ defined('_JEXEC') or die;
             
             onClickViewRecipe : function(event) {
                 var id = $(event.target).attr("data-id");
-                var controller = new Controller();
-                controller.navigate("!/nutrition_recipe/" + id, true);
+
+                window.app.controller.navigate("!/nutrition_recipe/" + id, true);
             },
             
             onClickCopyRecipe : function(event) {
@@ -504,16 +502,16 @@ defined('_JEXEC') or die;
             
             redirectToRecipe : function() {
                 var new_recipe_id = this.model.get('recipe_copied').id;
-                var controller = new Controller();
-                controller.navigate("!/my_recipes", true);
-                controller.navigate("!/nutrition_recipe/" + new_recipe_id, true);
+
+                window.app.controller.navigate("!/my_recipes", true);
+                window.app.controller.navigate("!/nutrition_recipe/" + new_recipe_id, true);
             }
         });
         
         
-        var Filter_view = Backbone.View.extend({
+        window.app.Filter_view = Backbone.View.extend({
             initialize: function(){
-                this.recipe_items_model = this.options.recipe_items_model;
+                
             },
             
             render : function(){
@@ -533,11 +531,11 @@ defined('_JEXEC') or die;
             
             onFilterSelect : function(event){
                 var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
-                this.recipe_items_model.set({'filter_options' : ids});
+                window.app.recipe_items_model.set({'filter_options' : ids});
             }
         });
         
-        var Latest_recipes_item_view = Backbone.View.extend({
+        window.app.Latest_recipes_item_view = Backbone.View.extend({
 
             render : function(data){
                 var data = data
@@ -552,13 +550,13 @@ defined('_JEXEC') or die;
             
             onClickViewRecipe : function(event) {
                 var id = $(event.target).attr("data-id");
-                var controller = new Controller();
-                controller.navigate("!/recipe_database", true);
-                controller.navigate("!/nutrition_recipe/" + id, true);
+
+                window.app.controller.navigate("!/recipe_database", true);
+                window.app.controller.navigate("!/nutrition_recipe/" + id, true);
             }
         });
         
-        var Latest_recipes_wrapper_view = Backbone.View.extend({
+        window.app.Latest_recipes_wrapper_view = Backbone.View.extend({
             render : function(){
                 var template = _.template($("#recipes_latest_wrapper_template").html());
                 this.$el.html(template);
@@ -567,7 +565,7 @@ defined('_JEXEC') or die;
 
 
 
-        var MainContainer_view = Backbone.View.extend({
+        window.app.MainContainer_view = Backbone.View.extend({
             
             initialize: function(){
                 this.render();
@@ -590,25 +588,23 @@ defined('_JEXEC') or die;
         
         
         
-
-        Views = { 
-            mainmenu: new Mainmenu_view(),
-            submenu: new Submenu_view(),
-            main_container : new MainContainer_view(),
+        //Creation global objects
+        window.app.Views = { 
+            mainmenu: new window.app.Mainmenu_view(),
+            submenu: new window.app.Submenu_view(),
+            main_container : new window.app.MainContainer_view(),
         };
         
-        var recipe_items_model = new Recipe_items_model(options);
         
-        var recipes_latest_model = new Recipes_latest_model(options);
-        
+        window.app.recipe_items_model = new window.app.Recipe_items_model(options);
+        window.app.recipes_latest_model = new window.app.Recipes_latest_model(options);
         var filter_options = options;
-        filter_options.recipe_items_model = recipe_items_model;
-        
-        var filter_categories_model = new Filter_categories_model(filter_options);
-        
+        filter_options.recipe_items_model = window.app.recipe_items_model;
+        window.app.filter_categories_model = new window.app.Filter_categories_model(filter_options);
+        //
         
          // CONTROLLER
-         var Controller = Backbone.Router.extend({
+         window.app.Controller = Backbone.Router.extend({
 
             routes : {
                 "": "my_recipes", 
@@ -625,19 +621,19 @@ defined('_JEXEC') or die;
                 
                 this.load_submenu();
                 // populate submenu
-                new Submenu_myrecipes_view({ el: $("#submenu_container"), recipe_items_model : recipe_items_model});
+                new window.app.Submenu_myrecipes_view({ el: $("#submenu_container")});
                 
-                recipe_items_model.set({my_recipes : true});
+                window.app.recipe_items_model.set({my_recipes : true});
                 
-                recipe_items_model.resetFilter();
+                window.app.recipe_items_model.resetFilter();
                 
-                recipe_items_model.loadRecipes();
+                window.app.recipe_items_model.loadRecipes();
                 
-                recipe_items_model.connectPagination();
+                window.app.recipe_items_model.connectPagination();
 
-                filter_categories_model.render();
+                window.app.filter_categories_model.render();
                 
-                recipes_latest_model.render();
+                window.app.recipes_latest_model.render();
              },
 
             recipe_database : function () {
@@ -646,17 +642,17 @@ defined('_JEXEC') or die;
                 
                 this.hide_submenu();
                 
-                recipe_items_model.set({my_recipes : false});
+                window.app.recipe_items_model.set({my_recipes : false});
                 
-                recipe_items_model.resetFilter();
+                window.app.recipe_items_model.resetFilter();
 
-                recipe_items_model.loadRecipes();
+                window.app.recipe_items_model.loadRecipes();
                 
-                recipe_items_model.connectPagination();
+                window.app.recipe_items_model.connectPagination();
    
-                filter_categories_model.render();
+                window.app.filter_categories_model.render();
                 
-                recipes_latest_model.render();
+                window.app.recipes_latest_model.render();
               },
 
             nutrition_database : function () {
@@ -670,25 +666,25 @@ defined('_JEXEC') or die;
                 
                 this.load_mainmenu();
                 
-                if (Views.main_container != null) {
-                    Views.main_container.render();
+                if (window.app.Views.main_container != null) {
+                    window.app.Views.main_container.render();
                 }
             },
             
             load_mainmenu : function() {
-                if (Views.mainmenu != null) {
-                    Views.mainmenu.render();
+                if (window.app.Views.mainmenu != null) {
+                    window.app.Views.mainmenu.render();
                 }
             },
             
             load_submenu : function() {
-                if (Views.submenu != null) {
-                    Views.submenu.render();
+                if (window.app.Views.submenu != null) {
+                    window.app.Views.submenu.render();
                 }
             },
             
             hide_submenu : function() {
-                $(Views.submenu.$el).html('');
+                $(window.app.Views.submenu.$el).html('');
             },
             
             clear_main_ontainer : function() {
@@ -699,21 +695,21 @@ defined('_JEXEC') or die;
                 this.clear_main_ontainer();
                 this.load_submenu();
                 
-                recipe_items_model.getRecipe(id);
+                window.app.recipe_items_model.getRecipe(id);
                 
-                var my_recipes = recipe_items_model.get('my_recipes');
+                var my_recipes = window.app.recipe_items_model.get('my_recipes');
                 
                 if(my_recipes) {
-                    new Submenu_myrecipe_view({ el: $("#submenu_container")});
+                    new window.app.Submenu_myrecipe_view({ el: $("#submenu_container")});
                 } else {
-                    new Submenu_recipe_database_view({ el: $("#submenu_container"), recipe_id : id, recipe_items_model : recipe_items_model});
+                    new window.app.Submenu_recipe_database_view({ el: $("#submenu_container"), recipe_id : id});
                 }
             }
  
             
         });
 
-        var controller = new Controller(); 
+        window.app.controller = new window.app.Controller(); 
 
         Backbone.history.start();  
         

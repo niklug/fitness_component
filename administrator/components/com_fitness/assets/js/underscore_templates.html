@@ -708,12 +708,12 @@
 <script type="text/template" id="recipe_database_view_recipe_template">
     <%
     if(!image){
-        image = model.get('default_image');
+        image = window.app.recipe_items_model.get('default_image');
     }
     %>
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
-            <% var my_recipes = model.get('my_recipes'); %>
+            <% var my_recipes = window.app.recipe_items_model.get('my_recipes'); %>
             <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
                 <table width="100%">
                     <tr>
@@ -759,7 +759,7 @@
                                     <td>STATUS</td>
                                     <td>
                                         <span class="grey_title">
-                                             <%= model.setStatus(status) %>
+                                             <%= window.app.recipe_items_model.setStatus(status) %>
                                         </span>
                                     </td>
                                 </tr>
@@ -890,10 +890,10 @@
 <script type="text/template" id="recipe_database_item_template">
     <%
     if(!image){
-        image = model.get('default_image');
+        image = window.app.recipe_items_model.get('default_image');
     }
     %>
-    <% var my_recipes = model.get('my_recipes'); %>
+    <% var my_recipes = window.app.recipe_items_model.get('my_recipes'); %>
     <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
         <table width="100%">
             <tr>
@@ -942,7 +942,7 @@
                             <td>STATUS</td>
                             <td>
                                 <span class="grey_title">
-                                     <%= model.setStatus(status) %>
+                                     <%= window.app.recipe_items_model.setStatus(status) %>
                                 </span>
                             </td>
                         </tr>
