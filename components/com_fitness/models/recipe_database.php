@@ -64,7 +64,7 @@ class FitnessModelrecipe_database extends JModelList {
         $filter_options = $data->filter_options;
         
         //get rid of empty element
-        $filter_options = implode(",",array_filter(explode(",",$filter_options)));
+        $filter_options = array_filter(explode(",",$filter_options));
         
         $current_page = $data->current_page;
         
@@ -75,17 +75,25 @@ class FitnessModelrecipe_database extends JModelList {
         
         //get total number
         $query .= " (SELECT COUNT(*) FROM #__fitness_nutrition_recipes AS a ";
-        $query .= " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type"
-                . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
+
+        $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
         $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         
-        $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
+        if ($current_page == 'my_favourites') {
+            $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
+        }
         
         
         $query .= " WHERE a.state='1' ";
         
+
         if($filter_options) {
-            $query .= " AND t.id IN ($filter_options)";
+            $query .= " AND ( FIND_IN_SET('$filter_option1', a.recipe_type) ";
+            
+            foreach ($filter_options as $filter_option) {
+                $query .= " OR FIND_IN_SET('$filter_option', a.recipe_type)";
+            }
+            $query .= ")";
         }
         
         if($current_page == 'my_recipes') {
@@ -114,17 +122,25 @@ class FitnessModelrecipe_database extends JModelList {
                 
                 
                 
-        $query .= " FROM  #__fitness_nutrition_recipes AS a"
-                . " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type"
-                . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
+        $query .= " FROM  #__fitness_nutrition_recipes AS a";
+
+        $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
         $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         
-        $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
+        if ($current_page == 'my_favourites') {
+            $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
+        }
         
         $query .= " WHERE a.state='1'";
         
+        $filter_option1 = $filter_options[0];
         if($filter_options) {
-            $query .= " AND t.id IN ($filter_options)";
+            $query .= " AND ( FIND_IN_SET('$filter_option1', a.recipe_type) ";
+            
+            foreach ($filter_options as $filter_option) {
+                $query .= " OR FIND_IN_SET('$filter_option', a.recipe_type)";
+            }
+            $query .= ")";
         }
         
         

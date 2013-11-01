@@ -627,6 +627,7 @@ defined('_JEXEC') or die;
             onFilterSelect : function(event){
                 var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
                 window.app.recipe_items_model.set({'filter_options' : ids});
+                //console.log(ids);
             }
         });
         
