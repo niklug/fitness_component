@@ -636,6 +636,7 @@
 <!--  main menu template -->
 <script type="text/template" id="recipe_database_mainmenu_template">
     <ul>
+        <li><a id="my_favourites_link" class="plan_menu_link"  href="#!/my_favourites">MY FAVOURITES</a></li>
         <li><a id="my_recipes_link" class="plan_menu_link"  href="#!/my_recipes">MY RECIPES</a></li>
         <li><a id="recipe_database_link" class="plan_menu_link"  href="#!/recipe_database">RECIPE DATABASE</a></li>
         <li><a id="nutrition_database_link" class="plan_menu_link"  href="#!/nutrition_database">NUTRITION DATABASE</a></li>
@@ -663,6 +664,8 @@
 <!--  submenu content for view/open My Recipes -->
 <script type="text/template" id="submenu_my_recipes_template">
     <div style="width:100%;">
+        <a data-id="<%= recipe_id %>" style="cursor: pointer;left;margin-right:10px;" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
+
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="" onclick="javascript:void(0)">[TRASH]</a>
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
         <a data-id="" style="cursor: pointer; float:right;margin-right:10px;" class="" onclick="javascript:void(0)">[EDIT]</a>
@@ -670,9 +673,23 @@
     <div class="clr"></div>
 </script>
 
+<!--  submenu content for view/open My Favourite -->
+<script type="text/template" id="submenu_my_favourites_template">
+    <div style="width:100%;">
+        <a data-id="<%= recipe_id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
+
+        <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
+
+    </div>
+    <div class="clr"></div>
+</script>
+
 <!--  submenu content for view/open Recipe Database -->
 <script type="text/template" id="submenu_recipe_database_template">
     <div style="width:100%;">
+        
+        <a data-id="<%= recipe_id %>" style="cursor: pointer;left;margin-right:10px;" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
+
         <a data-id="" style="cursor: pointer;left;margin-right:10px;" id="copy_recipe" onclick="javascript:void(0)">[COPY TO MY RECIPES]</a>
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
     </div>
@@ -713,7 +730,7 @@
     %>
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
-            <% var my_recipes = window.app.recipe_items_model.get('my_recipes'); %>
+            <% var current_page = window.app.recipe_items_model.get('current_page'); %>
             <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
                 <table width="100%">
                     <tr>
@@ -893,7 +910,7 @@
         image = window.app.recipe_items_model.get('default_image');
     }
     %>
-    <% var my_recipes = window.app.recipe_items_model.get('my_recipes'); %>
+    <% var current_page = window.app.recipe_items_model.get('current_page'); %>
     <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
         <table width="100%">
             <tr>
@@ -957,13 +974,23 @@
                     </table>
                 </td>
                 <td style="text-align:center; vertical-align:bottom;">
-                    <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[VIEW RECIPE]</a>
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[view recipe]</a>
                     <br/><br/>
-                    <% if(my_recipes) { %>
-                        <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[TRASH RECIPE]</a>
-                    <% } else { %>
-                        <a data-id="<%= id %>" style="cursor: pointer;" id="copy_recipe" onclick="javascript:void(0)">[QUICK COPY]</a>
+                    <% if ((current_page == 'my_recipes') || (current_page == 'recipe_database')) { %>
+                        <a data-id="<%= id %>" style="cursor: pointer;" class="add_favourite" onclick="javascript:void(0)">[add favourite]</a>
+                       <br/><br/>
                     <% } %>
+                     
+                    <% if(current_page == 'my_recipes') { %>
+                        <a data-id="" style="cursor: pointer;" class="" onclick="javascript:void(0)">[trash recipe]</a>
+                    <% } else if (current_page == 'recipe_database') { %>
+                        <a data-id="<%= id %>" style="cursor: pointer;" id="copy_recipe" onclick="javascript:void(0)">[quick copy]</a>
+                    <% } else if (current_page == 'my_favourites') { %>
+                        <a data-id="<%= id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
+                    <% } %>
+                
+                
+                    
                 </td>
             </tr>
         </table>
@@ -1070,7 +1097,7 @@
             <tr>
                 <td></td>
                 <td style="text-align:right; vertical-align:bottom;">
-                    <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[VIEW]</a>
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[view]</a>
                 </td>
             </tr>
         </table>

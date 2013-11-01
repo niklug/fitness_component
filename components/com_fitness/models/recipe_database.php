@@ -66,7 +66,7 @@ class FitnessModelrecipe_database extends JModelList {
         //get rid of empty element
         $filter_options = implode(",",array_filter(explode(",",$filter_options)));
         
-        $my_recipes = $data->my_recipes;
+        $current_page = $data->current_page;
         
         $user = &JFactory::getUser();
         $user_id = $user->id;
@@ -76,19 +76,26 @@ class FitnessModelrecipe_database extends JModelList {
         //get total number
         $query .= " (SELECT COUNT(*) FROM #__fitness_nutrition_recipes AS a ";
         $query .= " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type"
-                . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by"
-                . " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
+                . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
+        $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
+        
+        $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
+        
+        
         $query .= " WHERE a.state='1' ";
         
         if($filter_options) {
             $query .= " AND t.id IN ($filter_options)";
         }
         
-        if((bool)$my_recipes) {
+        if($current_page == 'my_recipes') {
             $query .= " AND a.created_by = '$user_id'";
-        } else {
+        } else if ($current_page == 'my_favourites') {
+            $query .= " AND mf.client_id='$user_id'";
+        } else  {
             $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
         }
+
           
         $query .= " ) items_total, ";
         //
@@ -109,9 +116,12 @@ class FitnessModelrecipe_database extends JModelList {
                 
         $query .= " FROM  #__fitness_nutrition_recipes AS a"
                 . " LEFT JOIN #__fitness_recipe_types AS t ON t.id=a.recipe_type"
-                . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by"
-                . " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id"
-                . " WHERE a.state='1'";
+                . " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
+        $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
+        
+        $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
+        
+        $query .= " WHERE a.state='1'";
         
         if($filter_options) {
             $query .= " AND t.id IN ($filter_options)";
@@ -119,13 +129,17 @@ class FitnessModelrecipe_database extends JModelList {
         
         
         
-        if((bool)$my_recipes) {
+        if($current_page == 'my_recipes') {
             $query .= " AND a.created_by = '$user_id'";
+        } else if ($current_page == 'my_favourites') {
+            $query .= " AND mf.client_id='$user_id'";
         } else {
             $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
         }
+        
+        
                 
-        $query .= " AND a.state='1' ORDER BY a." . $sort_by . " " . $order_dirrection 
+        $query .= "  ORDER BY a." . $sort_by . " " . $order_dirrection 
                 . " LIMIT $start, $limit";
 
                 
@@ -299,5 +313,76 @@ class FitnessModelrecipe_database extends JModelList {
     }
     
 
+    public function addFavourite($table, $data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $user = &JFactory::getUser();
+          
+        $recipe->client_id = $user->id;
+        $recipe->recipe_id = $data->recipe_id;
+        
+        //check if exists
+        $query = "SELECT id FROM $table WHERE client_id='$recipe->client_id' AND recipe_id='$recipe->recipe_id'";
+
+        try {
+            $exists = FitnessHelper::customQuery($query, 0);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        
+        if($exists) {
+            $status['success'] = 0;
+            $status['message'] =  "This recipe has already been added to your Favourites";
+            return array( 'status' => $status);
+        }
+        //
+        
+        try {
+            $inserted_id = $helper->insertUpdateObj($recipe, $table);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        
+        $result = array( 'status' => $status, 'data' => $inserted_id);
+        
+        return $result;
+    }
     
+    
+    public function removeFavourite($table, $data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $user = &JFactory::getUser();
+            
+        $recipe->client_id = $user->id;
+        $recipe->recipe_id = $data->recipe_id;
+        
+        $db = JFactory::getDBO();
+        
+        $query = "DELETE FROM $table WHERE client_id='$recipe->client_id' AND recipe_id='$recipe->recipe_id'";
+        
+        $db->setQuery($query);
+        
+        if (!$db->query()) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+        }
+
+        
+        $result = array( 'status' => $status, 'data' => $data->recipe_id);
+        
+        return $result;
+    }
 }

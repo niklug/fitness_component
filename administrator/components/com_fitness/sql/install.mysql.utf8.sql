@@ -1062,3 +1062,15 @@ FOREIGN KEY (group_id) REFERENCES #__usergroups(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
 
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_favourites` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `recipe_id` int(11) unsigned NOT NULL,
+  `client_id` int(11)  NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `recipe_id` (`recipe_id`),
+  KEY `client_id` (`client_id`),
+  FOREIGN KEY (recipe_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE,
+  FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
