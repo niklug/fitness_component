@@ -68,6 +68,8 @@ class FitnessModelrecipe_database extends JModelList {
         
         $current_page = $data->current_page;
         
+        $state = $data->state;
+                
         $user = &JFactory::getUser();
         $user_id = $user->id;
         
@@ -84,7 +86,7 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         
-        $query .= " WHERE a.state='1' ";
+        $query .= " WHERE a.state='$state' ";
         
 
         if($filter_options) {
@@ -96,7 +98,7 @@ class FitnessModelrecipe_database extends JModelList {
             $query .= ")";
         }
         
-        if($current_page == 'my_recipes') {
+        if(($current_page == 'my_recipes') OR ($current_page == 'trash_list')) {
             $query .= " AND a.created_by = '$user_id'";
         } else if ($current_page == 'my_favourites') {
             $query .= " AND mf.client_id='$user_id'";
@@ -131,7 +133,7 @@ class FitnessModelrecipe_database extends JModelList {
             $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
         }
         
-        $query .= " WHERE a.state='1'";
+        $query .= " WHERE a.state='$state'";
         
         $filter_option1 = $filter_options[0];
         if($filter_options) {
@@ -145,7 +147,7 @@ class FitnessModelrecipe_database extends JModelList {
         
         
         
-        if($current_page == 'my_recipes') {
+        if(($current_page == 'my_recipes') OR ($current_page == 'trash_list')) {
             $query .= " AND a.created_by = '$user_id'";
         } else if ($current_page == 'my_favourites') {
             $query .= " AND mf.client_id='$user_id'";
@@ -223,9 +225,11 @@ class FitnessModelrecipe_database extends JModelList {
         
         $id = $data->id;
         
+        $state = $data->state;
+        
         // get recipe 
         try {
-            $data = $helper->getRecipe($id);
+            $data = $helper->getRecipe($id, $state);
         } catch (Exception $e) {
             $status['success'] = 0;
             $status['message'] = '"' . $e->getMessage() . '"';
@@ -376,8 +380,6 @@ class FitnessModelrecipe_database extends JModelList {
     public function removeFavourite($table, $data_encoded) {
         $status['success'] = 1;
         
-        $helper = $this->helper;
-        
         $data = json_decode($data_encoded);
         
         $user = &JFactory::getUser();
@@ -396,8 +398,50 @@ class FitnessModelrecipe_database extends JModelList {
             $status['message'] = '"' . $e->getMessage() . '"';
         }
 
-        
         $result = array( 'status' => $status, 'data' => $data->recipe_id);
+        
+        return $result;
+    }
+    
+    public function deleteRecipe($table, $data_encoded) {
+        $status['success'] = 1;
+
+        $data = json_decode($data_encoded);
+
+        $db = JFactory::getDBO();
+        
+        $query = "DELETE FROM $table WHERE id='$data->id'";
+        
+        $db->setQuery($query);
+        
+        if (!$db->query()) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+        }
+        
+        $result = array( 'status' => $status, 'data' => $data->id);
+        
+        return $result;
+    }
+    
+    public function updateRecipe($table, $data_encoded) {
+        $status['success'] = 1;
+
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+
+        $db = JFactory::getDBO();
+        
+        try {
+            $helper->insertUpdateObj($data, $table);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        
+        $result = array( 'status' => $status, 'data' => $data->id);
         
         return $result;
     }

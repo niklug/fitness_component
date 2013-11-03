@@ -861,7 +861,7 @@ class FitnessHelper extends FitnessFactory
         return $ret;
     }
     
-    public function getRecipe($id) {
+    public function getRecipe($id, $state) {
         $user = &JFactory::getUser();
         $user_id = $user->id;
         
@@ -883,7 +883,7 @@ class FitnessHelper extends FitnessFactory
         $query .=  " FROM #__fitness_nutrition_recipes AS a"
                 . " "
                 . "WHERE a.id='$id' "
-                . "AND a.state='1'";
+                . "AND a.state='$state'";
 
         $item = self::customQuery($query, 2);
         
