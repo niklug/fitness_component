@@ -235,6 +235,7 @@ defined('_JEXEC') or die;
             onChangeRecipe : function() {
                 var recipe = this.get('recipe');
                 
+                                
                 var current_page = this.get('current_page');
                 
                 if(current_page == 'my_recipes') {
@@ -522,6 +523,7 @@ defined('_JEXEC') or die;
                 "click #close_recipe" : "onClickCloseRecipe",
                 "click #copy_recipe" : "onClickCopyRecipe",
                 "click .add_favourite" : "onClickAddFavourite",
+                "click .remove_favourites" : "onClickRemoveFavourites",
             },
             render : function(){
                 var variables = {'recipe_id' : this.recipe_id, 'is_favourite' : this.is_favourite};
@@ -540,6 +542,11 @@ defined('_JEXEC') or die;
             onClickAddFavourite : function(event) {
                 var recipe_id = $(event.target).attr('data-id');
                 window.app.recipe_items_model.add_favourite(recipe_id);
+            },
+            
+            onClickRemoveFavourites : function(event) {
+                var recipe_id = $(event.target).attr('data-id');
+                window.app.recipe_items_model.remove_favourite(recipe_id);
             },
             
             redirectToRecipe : function() {
@@ -570,6 +577,7 @@ defined('_JEXEC') or die;
                 window.history.back();
             },
             onClickRemoveFavourites : function(event) {
+            
                 var recipe_id = $(event.target).attr('data-id');
                 window.app.recipe_items_model.remove_favourite(recipe_id);
             },
