@@ -117,6 +117,9 @@ defined('_JEXEC') or die;
             setListeners : function() {
                 this.bind("change:filter_options", this.resetCurrentPage, this);
                 this.bind("change:recipe", this.onChangeRecipe, this);
+                
+                this.bind("change:favourite_removed", this.onRemoveFavourites, this);
+                this.bind("change:favourite_added", this.onAddFavourites, this);
             },
             
             resetFilter : function() {
@@ -207,7 +210,6 @@ defined('_JEXEC') or die;
                 if(recipes.length == 0) {
                     $("#recipe_database_items_wrapper").html('<div style="text-align:center;">No Recipes Found.</div>');
                 }
-                
                 var recipe_item = new window.app.Recipe_item_view({ el: $("#recipe_database_items_wrapper"), model : this});
                 _.each(recipes, function(item){
                     recipe_item.render(item);
@@ -232,6 +234,17 @@ defined('_JEXEC') or die;
             
             onChangeRecipe : function() {
                 var recipe = this.get('recipe');
+                
+                var current_page = this.get('current_page');
+                
+                if(current_page == 'my_recipes') {
+                    new window.app.Submenu_myrecipe_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id, 'is_favourite' : recipe.is_favourite});
+                } else if (current_page == 'recipe_database') {
+                    new window.app.Submenu_recipe_database_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id, 'is_favourite' : recipe.is_favourite});
+                } else if (current_page == 'my_favourites') {
+                    new window.app.Submenu_my_favourites_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id});
+                }
+                
                 this.populateRecipe(recipe);
             },
             
@@ -275,9 +288,9 @@ defined('_JEXEC') or die;
                 data.recipe_id = recipe_id;
 
                 var self = this;
+                this.set("favourite_added", null);
                 this.ajaxCall(data, url, view, task, table, function(output) {
-                    self.set("favourite_added", output);
-                    //console.log(output);
+                    self.set("favourite_added", recipe_id);
                 });
             },
             
@@ -291,10 +304,35 @@ defined('_JEXEC') or die;
                 data.recipe_id = recipe_id;
 
                 var self = this;
+                this.set("favourite_removed", null);
                 this.ajaxCall(data, url, view, task, table, function(output) {
-                    self.set("favourite_removed", output);
-                    //console.log(output);
+                    self.set("favourite_removed", recipe_id);
                 });
+            },
+            
+            hide_recipe_item : function(recipe_id) {
+                $(".recipe_database_item_wrapper[data-id='" + recipe_id + "']").fadeOut();
+            },
+            
+            onRemoveFavourites : function(){
+                var recipe_id = this.get('favourite_removed');
+                var current_page = this.get('current_page');
+                
+                if(current_page == 'my_favourites') {
+                    this.hide_recipe_item(recipe_id);
+                }
+                
+                if((current_page == 'my_recipes') || (current_page == 'recipe_database')) {
+                   $(".remove_favourites[data-id='" + recipe_id + "']").hide();
+                   $(".add_favourite[data-id='" + recipe_id + "']").show();
+                }
+                
+            },
+            
+            onAddFavourites : function() {
+                var recipe_id = this.get('favourite_added');
+                $(".remove_favourites[data-id='" + recipe_id + "']").show();
+                $(".add_favourite[data-id='" + recipe_id + "']").hide();
             },
 
         });
@@ -444,14 +482,16 @@ defined('_JEXEC') or die;
         window.app.Submenu_myrecipe_view = Backbone.View.extend({
             initialize: function(){
                 this.recipe_id = this.options.recipe_id;
+                this.is_favourite = this.options.is_favourite;
                 this.render();
             },
             events: {
                 "click #close_recipe" : "onClickCloseRecipe",
                 "click .add_favourite" : "onClickAddFavourite",
+                "click .remove_favourites" : "onClickRemoveFavourites",
             },
             render : function(){
-                var variables = {'recipe_id' : this.recipe_id};
+                var variables = {'recipe_id' : this.recipe_id, 'is_favourite' : this.is_favourite};
                 var template = _.template($("#submenu_my_recipes_template").html(), variables);
                 this.$el.html(template);
             },
@@ -463,12 +503,18 @@ defined('_JEXEC') or die;
                 var recipe_id = $(event.target).attr('data-id');
                 window.app.recipe_items_model.add_favourite(recipe_id);
             },
+            
+            onClickRemoveFavourites : function(event) {
+                var recipe_id = $(event.target).attr('data-id');
+                window.app.recipe_items_model.remove_favourite(recipe_id);
+            },
         });
         
         
         window.app.Submenu_recipe_database_view = Backbone.View.extend({
             initialize: function(){
                 this.recipe_id = this.options.recipe_id;
+                this.is_favourite = this.options.is_favourite;
                 this.listenToOnce(window.app.recipe_items_model, "change:recipe_copied", this.redirectToRecipe);
                 this.render();
             },
@@ -478,7 +524,7 @@ defined('_JEXEC') or die;
                 "click .add_favourite" : "onClickAddFavourite",
             },
             render : function(){
-                var variables = {'recipe_id' : this.recipe_id};
+                var variables = {'recipe_id' : this.recipe_id, 'is_favourite' : this.is_favourite};
                 var template = _.template($("#submenu_recipe_database_template").html(), variables);
                 this.$el.html(template);
             },
@@ -554,7 +600,8 @@ defined('_JEXEC') or die;
         window.app.Recipe_item_view = Backbone.View.extend({
             initialize: function(){
                 this.listenToOnce(this.model, "change:recipe_copied", this.redirectToRecipe);
-                this.listenToOnce(this.model, "change:favourite_removed", this.redirectToFavourites);
+                
+                
             },
             render : function(data){
                 var data = data
@@ -598,9 +645,7 @@ defined('_JEXEC') or die;
                 this.model.remove_favourite(recipe_id);
             },
             
-            redirectToFavourites : function(){
-                this.model.loadRecipes();
-            }
+            
         });
         
         
@@ -798,17 +843,8 @@ defined('_JEXEC') or die;
                 this.load_submenu();
                 
                 window.app.recipe_items_model.getRecipe(id);
-                
-                var current_page = window.app.recipe_items_model.get('current_page');
-                
-                if(current_page == 'my_recipes') {
-                    new window.app.Submenu_myrecipe_view({ el: $("#submenu_container"), 'recipe_id' : id});
-                } else if (current_page == 'recipe_database') {
-                    new window.app.Submenu_recipe_database_view({ el: $("#submenu_container"), 'recipe_id' : id});
-                } else if (current_page == 'my_favourites') {
-                    new window.app.Submenu_my_favourites_view({ el: $("#submenu_container"), 'recipe_id' : id});
-                }
-            }
+
+           }
  
             
         });
