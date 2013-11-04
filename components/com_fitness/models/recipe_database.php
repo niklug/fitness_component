@@ -236,6 +236,10 @@ class FitnessModelrecipe_database extends JModelList {
             return array( 'status' => $status);
         }
         
+        if(!$data->id){
+            return array( 'status' => $status, 'data' => null);
+        }
+        
         // recipe types name
         try {
             $recipe_types_names = $this->getRecipeNames($data->recipe_type);

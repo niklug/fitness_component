@@ -655,7 +655,7 @@
 <!--  submenu  My Recipes template -->
 <script type="text/template" id="recipe_database_submenu_content_template">
     <div style="width:100%;">
-        <a data-id="" style="cursor: pointer; float:left;" class="" onclick="javascript:void(0)">[CREATE RECIPE]</a>
+        <a data-id="" style="cursor: pointer; float:left;" id="new_recipe" onclick="javascript:void(0)">[CREATE RECIPE]</a>
         <a data-id="" style="cursor: pointer;float:right;" id="view_trash" onclick="javascript:void(0)">[VIEW TRASH]</a>
     </div>
     <div class="clr"></div>
@@ -681,6 +681,19 @@
     <div class="clr"></div>
 </script>
 
+<!--  submenu  Edit Recipe template -->
+<script type="text/template" id="submenu_edit_recipe_template">
+    <div style="width:100%;">
+        
+        <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="cancel" onclick="javascript:void(0)">[CANCEL]</a>
+
+        <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="save_close" onclick="javascript:void(0)">[SAVE/CLOSE]</a>
+
+        <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="save" onclick="javascript:void(0)">[SAVE]</a>
+    </div>
+    <div class="clr"></div>
+</script>
+
 <!--  submenu content for view/open My Recipes -->
 <script type="text/template" id="submenu_my_recipes_template">
     <div style="width:100%;">
@@ -699,7 +712,7 @@
 
         <a data-id="<%= recipe_id %>" style="cursor: pointer;float:right;margin-right:10px;" class="trash_recipe" onclick="javascript:void(0)">[TRASH]</a>
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
-        <a data-id="" style="cursor: pointer; float:right;margin-right:10px;" class="" onclick="javascript:void(0)">[EDIT]</a>
+        <a data-id="<%= recipe_id %>" style="cursor: pointer; float:right;margin-right:10px;" class="edit_recipe" onclick="javascript:void(0)">[EDIT]</a>
     </div>
     <div class="clr"></div>
 </script>
@@ -739,7 +752,7 @@
 </script>
 
 <!--  recipe database main container template -->
-<script type="text/template" id="recipe_database_main_container_template">
+<script type="text/template" id="recipe_database_recipes_container_template">
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
             
@@ -761,6 +774,92 @@
         </div>
     </div>
 </script>
+
+<!--  recipe database main container template -->
+<script type="text/template" id="recipe_database_edit_recipe_container_template">
+    <%
+    
+    var recipe = recipe || {}; 
+    
+    
+    %>
+    <div class="fitness_block_wrapper" style="margin-top: 20px;">
+        <div class="internal_wrapper">
+            <table width="100%">
+                <tr>
+                    <td width="70%">
+                        <table width="100%">
+                            <tr>
+                                <td>
+                                    RECIPE NAME
+                                </td>
+                                <td>
+
+                                    <input value="<%= recipe.recipe_name || '' %>" style="width:400px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    RECIPE TYPE
+                                </td>
+                                <td>
+                                <%  %>
+                                    <select multiple size="10" id="recipe_type" name="recipe_type[]" class="" style="width:200px;">
+                                        <% if (typeof recipe_types !== "undefined") { %>
+                                            <% _.each(recipe_types, function(item, key){ %>
+                                                  <option value="<%= item.id %>"><%= item.name %></option>
+                                            <% }) %>
+                                        <% } %>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    SERVES
+                                </td>
+                                <td>
+                                    <input value="<%= recipe.number_serves || '' %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    AUTHOR
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%= recipe.created_by || '' %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    STATUS
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    TRAINER
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="text-align: right;">
+
+                    </td>
+                </tr>
+            </table>
+            
+        </div>
+    </div>
+</script>
+
+
 
 
 <!--  view/open recipe template -->
