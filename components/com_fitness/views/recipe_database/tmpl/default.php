@@ -406,7 +406,7 @@ defined('_JEXEC') or die;
             },
             
             onRecipeDeleted : function() {
-                window.app.controller.navigate("!/my_recipes", true);
+                window.app.controller.navigate("!/trash_list", true);
             },
             
             onRecipeTrashed : function() {
@@ -608,7 +608,6 @@ defined('_JEXEC') or die;
             initialize: function(){
                 this.recipe_id = this.options.recipe_id;
                 this.is_favourite = this.options.is_favourite;
-                this.listenToOnce(window.app.recipe_items_model, "change:recipe_copied", this.redirectToRecipe);
                 this.render();
             },
             events: {
@@ -640,13 +639,6 @@ defined('_JEXEC') or die;
             onClickRemoveFavourites : function(event) {
                 var recipe_id = $(event.target).attr('data-id');
                 window.app.recipe_items_model.remove_favourite(recipe_id);
-            },
-            
-            redirectToRecipe : function() {
-                var new_recipe_id = window.app.recipe_items_model.get('recipe_copied').id;
-
-                window.app.controller.navigate("!/my_recipes", true);
-                window.app.controller.navigate("!/nutrition_recipe/" + new_recipe_id, true);
             },
             
             onClickTrashRecipe : function(event) {
@@ -714,7 +706,7 @@ defined('_JEXEC') or die;
                 this.render();
             },
             events: {
-                "click #close_trash_form" : "onClickCloseTrashForm",
+                "click .close_trash_form" : "onClickCloseTrashForm",
                 "click .delete_recipe" : "onClickDeleteRecipe",
                 "click .restore_recipe" : "onClickRestoreRecipe",
             },
@@ -725,8 +717,7 @@ defined('_JEXEC') or die;
             },
 
             onClickCloseTrashForm : function(){
-                window.app.controller.navigate("!/my_recipes", true);
-                window.app.controller.navigate("!/trash_list", true);
+                window.history.back();
             },
             
             onClickDeleteRecipe : function(event) {
@@ -760,9 +751,7 @@ defined('_JEXEC') or die;
         // list item
         window.app.Recipe_item_view = Backbone.View.extend({
             initialize: function(){
-                this.listenToOnce(this.model, "change:recipe_copied", this.redirectToRecipe);
-                
-                
+
             },
             render : function(data){
                 var data = data
@@ -797,13 +786,7 @@ defined('_JEXEC') or die;
                 this.model.add_favourite(recipe_id);
             },
             
-            redirectToRecipe : function() {
-                var new_recipe_id = this.model.get('recipe_copied').id;
-
-                window.app.controller.navigate("!/my_recipes", true);
-                window.app.controller.navigate("!/nutrition_recipe/" + new_recipe_id, true);
-            },
-            
+           
             onClickRemoveFavourites : function(event) {
                 var recipe_id = $(event.target).attr('data-id');
                 this.model.remove_favourite(recipe_id);
@@ -885,19 +868,10 @@ defined('_JEXEC') or die;
 
         window.app.MainContainer_view = Backbone.View.extend({
             
-            initialize: function(){
-                this.render();
-            },
-            
             el: $("#recipe_main_container"), 
 
             render : function(){
-                
-                var variables = {
-
-                };
-                
-                var template = _.template($("#recipe_database_main_container_template").html(), variables);
+                var template = _.template($("#recipe_database_main_container_template").html());
                 this.$el.html(template);
             },
         });
@@ -996,12 +970,13 @@ defined('_JEXEC') or die;
                 
                 this.load_mainmenu();
                 
-                if (window.app.Views.main_container != null) {
-                    window.app.Views.main_container.render();
-                }
+                window.app.Views.main_container.render();
+
             },
             
             trash_list : function() {
+                this.common_actions();
+                
                 this.load_submenu();
             
                 new window.app.Submenu_trash_list_view({ el: $("#submenu_container")});
