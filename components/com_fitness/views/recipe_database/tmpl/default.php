@@ -117,14 +117,6 @@ defined('_JEXEC') or die;
             
             setListeners : function() {
                 this.bind("change:filter_options", this.resetCurrentPage, this);
-                this.bind("change:recipe", this.onChangeRecipe, this);
-                
-                this.bind("change:favourite_removed", this.onRemoveFavourites, this);
-                this.bind("change:favourite_added", this.onAddFavourites, this);
-                
-                this.bind("change:recipe_restored", this.onTrashRestored, this);
-                this.bind("change:recipe_deleted", this.onRecipeDeleted, this);
-                this.bind("change:recipe_trashed", this.onRecipeTrashed, this);
             },
             
             resetFilter : function() {
@@ -238,13 +230,14 @@ defined('_JEXEC') or die;
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("recipe", output);
+                    self.onChangeRecipe();
                     //console.log(output);
                 });
             },
             
             onChangeRecipe : function() {
                 var recipe = this.get('recipe');
-                             
+                //console.log(recipe);            
                 var current_page = this.get('current_page');
 
 
@@ -306,6 +299,7 @@ defined('_JEXEC') or die;
                 this.set("favourite_added", null);
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("favourite_added", recipe_id);
+                    self.onAddFavourites();
                 });
             },
             
@@ -322,6 +316,7 @@ defined('_JEXEC') or die;
                 this.set("favourite_removed", null);
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("favourite_removed", recipe_id);
+                    self.onRemoveFavourites();
                 });
             },
             
@@ -364,6 +359,7 @@ defined('_JEXEC') or die;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("recipe_deleted", id);
                     self.hide_recipe_item(id);
+                    self.onRecipeDeleted();
                 });
             },
             
@@ -383,6 +379,7 @@ defined('_JEXEC') or die;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("recipe_restored", id);
                     self.hide_recipe_item(id);
+                    self.onTrashRestored();
                 });
             },
             
@@ -401,11 +398,11 @@ defined('_JEXEC') or die;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("recipe_trashed", id);
                     self.hide_recipe_item(id);
+                    self.onRecipeTrashed();
                 });
             },
             
             onTrashRestored : function() {
-
                 window.app.controller.navigate("!/trash_list", true);
             },
             

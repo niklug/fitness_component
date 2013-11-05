@@ -882,8 +882,8 @@ class FitnessHelper extends FitnessFactory
         
         $query .=  " FROM #__fitness_nutrition_recipes AS a"
                 . " "
-                . "WHERE a.id='$id' "
-                . "AND a.state='$state'";
+                . "WHERE a.id='$id' ";
+               // . "AND a.state='$state'";
 
         $item = self::customQuery($query, 2);
         
