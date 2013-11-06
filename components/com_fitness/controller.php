@@ -261,4 +261,58 @@ class FitnessController extends JController {
         $view->setModel($this->getModel('recipe_database'));
         $view -> updateRecipe(); 
     }
+    
+    function uploadImage() {
+        $filename = $_FILES['file']['name'];
+
+        $upload_folder = $_GET['upload_folder'];
+
+        $task = $_POST['method'];
+
+
+        if($task == 'clear') {
+            $filename = $_POST['filename'];
+            unlink($upload_folder . $filename);
+            echo $filename;
+            return false;
+        }
+
+
+        if($_FILES['file']['size']/1024 > 5024) {
+            echo 'too big file'; 
+            header("HTTP/1.0 404 Not Found");
+            return false;
+        }
+
+        $fileType="";
+
+        if(strstr($_FILES['file']['type'],"jpeg")) $fileType="jpg";
+
+        if(strstr($_FILES['file']['type'],"png")) $fileType="png";
+
+        if(strstr($_FILES['file']['type'],"gif")) $fileType="gif";
+
+        if(strstr($_FILES['file']['type'],"gif")) $fileType="bmp";
+
+        if(strstr($_FILES['file']['type'],"gif")) $fileType="jpeg";
+
+
+        if (!$fileType) {
+            echo 'Invalid file type';
+            header("HTTP/1.0 404 Not Found");
+            return false;
+        } 
+
+        if (file_exists($upload_folder .$filename) && $filename) {
+            echo 'Image with such name already exists!';
+            header("HTTP/1.0 404 Not Found");
+            return false;
+         }
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder . $filename)) {
+            echo "ok";
+        } else {
+            header("HTTP/1.0 404 Not Found");
+        }
+    }
 }

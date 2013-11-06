@@ -40,7 +40,9 @@ defined('_JEXEC') or die;
             'recipe_types_db_table' : '#__fitness_recipe_types',
             'recipe_comments_db_table' : '#__fitness_nutrition_recipes_comments',
             'recipes_favourites_db_table' : '#__fitness_nutrition_recipes_favourites',
-            'default_image' : 'administrator/components/com_fitness/assets/images/no_image.png'
+            'default_image' : 'administrator/components/com_fitness/assets/images/no_image.png',
+            'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Images' . DS  ?>',
+            'img_path' : 'images/Recipe_Images',
         };
         
         // MODELS 
@@ -939,10 +941,8 @@ defined('_JEXEC') or die;
                         window.app.recipe_items_model.getRecipe(id);
                         return false;
                     }
-                    
-                    
                 }
-                
+
                 if(this.recipe_types = this.options.filter_categories_model.get('recipe_types')) {
                    this.loadTemplate({'recipe_types' : this.recipe_types, 'recipe' : this.recipe});
                    return;
@@ -955,6 +955,27 @@ defined('_JEXEC') or die;
             loadTemplate : function(data) {
                 var template = _.template($("#recipe_database_edit_recipe_container_template").html(), data);
                 this.$el.html(template);
+                
+                var imagepath = this.recipe.image;
+                var fileNameIndex = imagepath.lastIndexOf("/") + 1;
+                var filename = imagepath.substr(fileNameIndex);
+
+
+
+                var image_upload_options = {
+                    'url' : window.app.recipe_items_model.get('fitness_frontend_url') + '&view=recipe_database&task=uploadImage&format=text',
+                    'picture' : filename,
+                    'default_image' : '',
+                    'upload_folder' : window.app.recipe_items_model.get('upload_folder'),
+                    'preview_height' : '180px',
+                    'preview_width' : '200px',
+                    'el' : $('#image_upload_content'),
+                    'img_path' : window.app.recipe_items_model.get('img_path'),
+
+                };
+
+                var image_upload = $.backbone_image_upload(image_upload_options); 
+                image_upload.render();
             },
 
 
@@ -1107,6 +1128,8 @@ defined('_JEXEC') or die;
                this.load_submenu();
                new window.app.Submenu_edit_recipe_view ({ el: $("#submenu_container")});
                window.app.Views.edit_recipe_container.render(id);
+               
+               
            }
  
             

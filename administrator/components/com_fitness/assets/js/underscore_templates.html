@@ -850,7 +850,7 @@
                         </table>
                     </td>
                     <td style="text-align: right;">
-
+                        <div id="image_upload_content"></div>
                     </td>
                 </tr>
             </table>
@@ -860,7 +860,22 @@
 </script>
 
 
+<script type="text/template" id="image_upload_template">
+        <div class="form-left-col" style="text-align:center;">
+            <form name="image_form">
+                <p>Select & Upload New Image <br/>
+                <a href="javascript:void(0)">[Add Image]</a>
+                <input type="file" name="change_image" id="change_image" style=" cursor: pointer; direction: ltr;font-size: 20px;margin: -32px 0 0; opacity: 0;position: inherit; right: 0;top: 0; width: 200px;"> 
+                <br/> Or drag image here</p>
+            </form>
+            <img style="margin: 5px; display: inline-block;  height: 180px; width: 200px;border:2px dashed #ccc" height="<%= preview_height%>"  width="<%= preview_width%>" id="preview_image" src="<%= img_path + '/' + picture %>"/>
+            <br/>
+            <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+            <a href="javascript:void(0)" class="clear_image">[Clear]</a>
+        </div>
 
+    </script>
+    
 
 <!--  view/open recipe template -->
 <script type="text/template" id="recipe_database_view_recipe_template">

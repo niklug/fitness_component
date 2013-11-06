@@ -73,5 +73,9 @@ class FitnessViewRecipe_database extends JView {
         echo json_encode($model->updateRecipe($table, $data_encoded));
     }
     
+    function uploadImage() {
+        echo 'fuck';
+    }
+    
 
 }

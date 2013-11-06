@@ -449,4 +449,60 @@ class FitnessModelrecipe_database extends JModelList {
         
         return $result;
     }
+    
+    public function uploadImage() {
+        error_reporting(E_ALL);
+
+        $filename = $_FILES['file']['name'];
+
+        $upload_folder = $_GET['upload_folder'];
+
+        $task = $_POST['task'];
+
+        if($task == 'clear') {
+            $filename = $_POST['filename'];
+            unlink($upload_folder. '/' . $filename);
+            echo $filename;
+            return false;
+        }
+
+
+        if($_FILES['file']['size']/1024 > 5024) {
+            echo 'too big file'; 
+            header('HTTP', true, 500);
+            return false;
+        }
+
+        $fileType="";
+
+        if(strstr($_FILES['file']['type'],"jpeg")) $fileType="jpg";
+
+        if(strstr($_FILES['file']['type'],"png")) $fileType="png";
+
+        if(strstr($_FILES['file']['type'],"gif")) $fileType="gif";
+
+        if(strstr($_FILES['file']['type'],"gif")) $fileType="bmp";
+
+        if(strstr($_FILES['file']['type'],"gif")) $fileType="jpeg";
+
+
+        if (!$fileType) {
+            echo 'Invalid file type';
+            header('HTTP', true, 500);
+            return false;
+        } 
+
+        if (file_exists('uploads/' .$filename) && $filename) {
+            echo 'Image with such name already exists!';
+           
+            return false;
+         }
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder. '/' . $filename)) {
+            echo "ok";
+        } else {
+            header('HTTP', true, 500);
+        }
+
+    }
 }
