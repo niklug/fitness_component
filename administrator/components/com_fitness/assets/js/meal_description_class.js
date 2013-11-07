@@ -11,6 +11,14 @@
         this._description_id = '_' + this._type + '_' + this._meal_id;
 
         this._doneTypingInterval = 1000;
+        
+        this.ingredient_model = function() {
+            var ingredient_model = '';
+            if(typeof this.options.ingredient_model !== 'undefined') {
+                ingredient_model = this.options.ingredient_model;
+            }
+            return ingredient_model;
+        }
     }
 
     ItemDescription.prototype.run = function() {
@@ -57,7 +65,11 @@
 
             $("#meal_quantity_input"+ this._description_id).die().live('focusout', function(e){
                 self.onQuantityInput($(this));
+
+                self.CalculateTotalsWithDelay([self._meal_id]);
             });
+            
+
 
             $(".delete_meal").die().live('click', function() {
                 var closest_TR = $(this).closest("tr");
@@ -75,6 +87,15 @@
             });
             $("#meals_content" + self._description_id).html(html);
         });
+        
+   
+        
+        if(this.ingredient_model() == 'recipe_database') {
+            // calculate totals on load
+            setInterval(function() {
+                self.CalculateTotalsWithDelay([self._meal_id]);
+            }, 2000);
+        }
     }
 
 
@@ -101,11 +122,18 @@
         html += '<tr id="totals_row' + this._description_id + '">';
         if(this.options.read_only == false) {
             html += '<td><input  type="button" id="add_item' + this._description_id + '" value="Add New Item">';
-            html += '<input  type="button" id="add_recipe' + this._description_id + '" value="RECIPE"></td>';
+
+            if(this.ingredient_model() == 'recipe_database') {
+                html += '<input  type="button" id="add_recipe' + this._description_id + '" value="RECIPE"></td>';
+            }
         }
         html += '</tr>';
         html += '</tfoot>';
         html += '</table>';
+        
+        if(this.ingredient_model() == 'recipe_database') {
+            html += this.totalsHtml(this._meal_id);
+        }
 
         return html;
     }
@@ -166,6 +194,39 @@
         return html;
     }
 
+    ItemDescription.prototype.totalsHtml = function(meal_id) {
+        var html = '';
+        html += '<table id="totals_' + meal_id + '" width="100%">';
+        html += '<tr style="text-align:center;">';
+        html += '<th class="totals_pagging"></th>';
+        html += '<th></th>';
+        html += '<th>PRO (g)</th>';
+        html += '<th>FAT (g)</th>';
+        html += '<th>CARB (g)</th>';
+        html += '<th>CALS</th>';
+        html += '<th>ENRG (kJ)</th>';
+        html += '<th>FAT, SAT (g)</th>';
+        html += '<th>SUG (g)</th>';
+        html += '<th>SOD (mg)</th>';
+        html += '<th></th>';
+        html += '</tr>';
+        html += '<tr >';
+        html += '<td class="totals_pagging" ></td>'
+        html += '<td><b>TOTALS</b></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_protein_total" id="meal_protein_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_fats_total" id="meal_fats_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_carbs_total" id="meal_carbs_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_calories_total" id="meal_calories_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_energy_total" id="meal_energy_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_saturated_fat_total" id="meal_saturated_fat_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sugars_total" id="meal_total_sugars_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sodium_total" id="meal_sodium_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="totals_right"></td>';
+        html += '</tr>';
+        html += '</table>';
+        return html;
+    }
+    
     ItemDescription.prototype.searchResultsTemplate = function(calculatedIngredient) {
         var html = '<div class="select_meal_form" id="select_meal_form' + this._description_id + '">';
         html += '<span id="results_count' + this._description_id + '"></span>';
@@ -188,7 +249,7 @@
             dataType : 'json',
             success : function(response) {
                 if(!response.status.success) {
-                    alert(response.status.Msg);
+                    alert(response.status.message);
                     return;
                 }
                 handleData(response);
@@ -239,7 +300,7 @@
             dataType : 'json',
             success : function(response) {
                 if(!response.status.success) {
-                    alert(response.status.Msg);
+                    alert(response.status.message);
                     return;
                 }
                 handleData(response.ingredient);
@@ -377,6 +438,16 @@
 
     ItemDescription.prototype.saveIngredient = function(calculatedIngredient, handleData) {
         var table = this.options.db_table;
+        
+
+        
+        if(this.ingredient_model() == 'recipe_database') {
+            calculatedIngredient.recipe_id = calculatedIngredient.nutrition_plan_id
+            delete calculatedIngredient.nutrition_plan_id;
+            delete calculatedIngredient.meal_id;
+            delete calculatedIngredient.type;
+        }
+        
         var ingredient_encoded = JSON.stringify(calculatedIngredient);
         var url = this.options.fitness_administration_url;
         $.ajax({
@@ -392,7 +463,7 @@
             dataType : 'json',
             success : function(response) {
                 if(!response.status.success) {
-                    alert(response.status.Msg);
+                    alert(response.status.message);
                     return;
                 }
                 handleData(response.inserted_id);
@@ -421,7 +492,7 @@
             dataType : 'json',
             success : function(response) {
                 if(!response.status.success) {
-                    alert(response.status.Msg);
+                    alert(response.status.message);
                     return;
                 }
                 handleData(response.id);
@@ -437,26 +508,41 @@
     ItemDescription.prototype.populateItemDescription =  function(handleData) {
         var table = this.options.db_table;
         var url = this.options.fitness_administration_url;
+        
         var nutrition_plan_id = this.options.nutrition_plan_id;
         var meal_id = this._meal_id;
         var type = this._type;
+        
+        var data = {
+            nutrition_plan_id : nutrition_plan_id,
+            meal_id : meal_id,
+            type : type,
+        }
+        
+        
+        if(this.ingredient_model() == 'recipe_database') {
+            data = {
+                recipe_id : nutrition_plan_id,
+            }
+        }
+        
         if(!nutrition_plan_id) return;
+        
+        var data_encoded = JSON.stringify(data);
         $.ajax({
             type : "POST",
             url : url,
             data : {
                 view : 'nutrition_plan',
-                format : 'text',
                 task : 'populateItemDescription',
-                nutrition_plan_id : nutrition_plan_id,
-                meal_id : meal_id,
-                type : type,
+                format : 'text',
+                data_encoded : data_encoded,
                 table : table
-              },
+            },
             dataType : 'json',
             success : function(response) {
                 if(!response.status.success) {
-                    alert(response.status.Msg);
+                    alert(response.status.message);
                     return;
                 }
                 handleData(response.data);
@@ -482,6 +568,77 @@
 
         return html;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ItemDescription.prototype.calculate_totals = function(meal_id) {
+
+       this.set_item_total(this.get_item_total('meal_protein_input_' + meal_id), 'meal_protein_input_total_' + meal_id);
+
+       this.set_item_total(this.get_item_total('meal_fats_input_' + meal_id), 'meal_fats_input_total_' + meal_id);
+
+       this.set_item_total(this.get_item_total('meal_carbs_input_' + meal_id), 'meal_carbs_input_total_' + meal_id);
+
+       this.set_item_total(this.get_item_total('meal_calories_input_' + meal_id), 'meal_calories_input_total_' + meal_id);
+
+       this.set_item_total(this.get_item_total('meal_energy_input_' + meal_id), 'meal_energy_input_total_' + meal_id);
+
+       this.set_item_total(this.get_item_total('meal_saturated_fat_input_' + meal_id), 'meal_saturated_fat_input_total_' + meal_id);
+
+       this.set_item_total(this.get_item_total('meal_total_sugars_input_' + meal_id), 'meal_total_sugars_input_total_' + meal_id);
+
+       this.set_item_total(this.get_item_total('meal_sodium_input_' + meal_id), 'meal_sodium_input_total_' + meal_id);
+
+    }
+
+    ItemDescription.prototype.get_item_total = function(element) {
+       var item_array = $("." +element);
+       var sum = 0;
+       item_array.each(function(){
+           var value = parseFloat($(this).val());
+           if(value > 0) {
+              sum += parseFloat(value); 
+           }
+
+       });
+
+       return this.round_2_sign(sum);
+    }
+
+
+    ItemDescription.prototype.set_item_total = function(value, element) {
+        $("#" + element).val(value);
+    }
+
+    ItemDescription.prototype.round_2_sign = function(value) {
+        return Math.round(value * 100)/100;
+    }
+
+
+    ItemDescription.prototype.CalculateTotalsWithDelay = function(meal_ids) {
+        var self = this;
+        //console.log(meal_ids);
+        setTimeout(
+            function(){
+                meal_ids.each(function(meal_id){
+                    self.calculate_totals(meal_id);
+                });
+            },
+            2000
+        );
+    }
+    
+    
+    
+    
+    
     
     // Add the  function to the top level of the jQuery object
     $.itemDescription = function(options, type, title, meal_id) {

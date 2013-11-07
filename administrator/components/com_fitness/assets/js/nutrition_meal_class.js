@@ -16,9 +16,16 @@
         }
         this.setEventListeners();
     }
+    
+    NutritionMeal.prototype.CalculateTotalsWithDelay = function(meal_id) {
+        var meal_description = $.itemDescription(this.item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', meal_id);
+        return meal_description.CalculateTotalsWithDelay(meal_id);
+    }
+     
 
     NutritionMeal.prototype.setEventListeners = function() {
         var self = this;
+        
         // on add meal click
         if(this.options.read_only == false) {
             $("#add_plan_meal").on('click', function() {
@@ -165,38 +172,13 @@
 
 
         if(meal_id) {
-            html += $.itemDescription(this.item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', meal_id).run();
+            var meal_description = $.itemDescription(this.item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', meal_id);
+            html += meal_description.run();
             html += $.itemDescription(this.item_description_options, 'supplement', 'SUPPLEMENT ITEM DESCRIPTION', meal_id).run();
             html += $.itemDescription(this.item_description_options, 'drinks', 'DRINKS & LIQUIDS ITEM DESCRIPTION', meal_id).run();
-
-            html += '<table id="totals_' + meal_id + '" width="100%">';
-            html += '<tr style="text-align:center;">';
-            html += '<th class="totals_pagging"></th>';
-            html += '<th></th>';
-            html += '<th>PRO (g)</th>';
-            html += '<th>FAT (g)</th>';
-            html += '<th>CARB (g)</th>';
-            html += '<th>CALS</th>';
-            html += '<th>ENRG (kJ)</th>';
-            html += '<th>FAT, SAT (g)</th>';
-            html += '<th>SUG (g)</th>';
-            html += '<th>SOD (mg)</th>';
-            html += '<th></th>';
-            html += '</tr>';
-            html += '<tr >';
-            html += '<td class="totals_pagging" ></td>'
-            html += '<td><b>TOTALS</b></td>';
-            html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_protein_total" id="meal_protein_input_total_' + meal_id + '" value=""></td>';
-            html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_fats_total" id="meal_fats_input_total_' + meal_id + '" value=""></td>';
-            html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_carbs_total" id="meal_carbs_input_total_' + meal_id + '" value=""></td>';
-            html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_calories_total" id="meal_calories_input_total_' + meal_id + '" value=""></td>';
-            html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_energy_total" id="meal_energy_input_total_' + meal_id + '" value=""></td>';
-            html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_saturated_fat_total" id="meal_saturated_fat_input_total_' + meal_id + '" value=""></td>';
-            html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sugars_total" id="meal_total_sugars_input_total_' + meal_id + '" value=""></td>';
-            html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sodium_total" id="meal_sodium_input_total_' + meal_id + '" value=""></td>';
-            html += '<td class="totals_right"></td>';
-            html += '</tr>';
-            html += '</table>';
+            
+            html += meal_description.totalsHtml(meal_id);
+            
             html += '<div class="clr"></div>';
             html += '<br/>';
 
@@ -212,6 +194,8 @@
 
         return html;
     }
+    
+    
 
 
     NutritionMeal.prototype.savePlanMeal = function(data, handleData) {
@@ -375,63 +359,7 @@
     }
 
 
-    NutritionMeal.prototype.calculate_totals = function(meal_id) {
-
-
-       this.set_item_total(this.get_item_total('meal_protein_input_' + meal_id), 'meal_protein_input_total_' + meal_id);
-
-       this.set_item_total(this.get_item_total('meal_fats_input_' + meal_id), 'meal_fats_input_total_' + meal_id);
-
-       this.set_item_total(this.get_item_total('meal_carbs_input_' + meal_id), 'meal_carbs_input_total_' + meal_id);
-
-       this.set_item_total(this.get_item_total('meal_calories_input_' + meal_id), 'meal_calories_input_total_' + meal_id);
-
-       this.set_item_total(this.get_item_total('meal_energy_input_' + meal_id), 'meal_energy_input_total_' + meal_id);
-
-       this.set_item_total(this.get_item_total('meal_saturated_fat_input_' + meal_id), 'meal_saturated_fat_input_total_' + meal_id);
-
-       this.set_item_total(this.get_item_total('meal_total_sugars_input_' + meal_id), 'meal_total_sugars_input_total_' + meal_id);
-
-       this.set_item_total(this.get_item_total('meal_sodium_input_' + meal_id), 'meal_sodium_input_total_' + meal_id);
-
-    }
-
-    NutritionMeal.prototype.get_item_total = function(element) {
-       var item_array = $("." +element);
-       var sum = 0;
-       item_array.each(function(){
-           var value = parseFloat($(this).val());
-           if(value > 0) {
-              sum += parseFloat(value); 
-           }
-
-       });
-
-       return this.round_2_sign(sum);
-    }
-
-
-    NutritionMeal.prototype.set_item_total = function(value, element) {
-        $("#" + element).val(value);
-    }
-
-    NutritionMeal.prototype.round_2_sign = function(value) {
-        return Math.round(value * 100)/100;
-    }
-
-
-    NutritionMeal.prototype.CalculateTotalsWithDelay = function(meal_ids) {
-        var self = this;
-        //console.log(meal_ids);
-        setTimeout(
-            function(){
-                meal_ids.each(function(meal_id){
-                    self.calculate_totals(meal_id);
-                });
-            },
-            2000
-        );
-    }
+    
         // Add the ItemDescription function to the top level of the jQuery object
     $.nutritionMeal = function(options, item_description_options, nutrition_comment_options) {
 

@@ -284,10 +284,31 @@ class FitnessModelnutrition_plan extends JModelAdmin
         }
         
         
-        public function populateItemDescription($nutrition_plan_id, $meal_id, $type, $table) {
+        public function populateItemDescription($data_encoded, $table) {
             $ret['success'] = 1;
             $db = JFactory::getDbo();
-            $query = "SELECT * FROM $table WHERE nutrition_plan_id='$nutrition_plan_id' AND  meal_id='$meal_id' AND type='$type' ";
+            
+            $data = json_decode($data_encoded);
+            
+            $query = "SELECT * FROM $table ";
+            
+            if($data->nutrition_plan_id) {
+                $query .= " WHERE  nutrition_plan_id='$data->nutrition_plan_id'";
+            }
+            
+            if($data->recipe_id) {
+                $query .= " WHERE  recipe_id='$data->recipe_id'";
+            }
+            
+            if($data->meal_id) {
+                $query .= " AND  meal_id='$data->meal_id'";
+            }
+            
+            if($data->type) {
+                $query .= " AND  type='$data->type'";
+            }
+            
+            
             $db->setQuery($query);
             if(!$db->query()) {
                 $ret['success'] = 0;

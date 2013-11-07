@@ -803,11 +803,21 @@
                                     RECIPE TYPE
                                 </td>
                                 <td>
-                                <%  %>
+                                <%
+                                var selected_types = [];
+                                if(typeof (recipe.recipe_type) !== 'undefined') {
+                                    selected_types = (recipe.recipe_type).split(","); 
+                                }
+                                %>
                                     <select multiple size="10" id="recipe_type" name="recipe_type[]" class="" style="width:200px;">
                                         <% if (typeof recipe_types !== "undefined") { %>
-                                            <% _.each(recipe_types, function(item, key){ %>
-                                                  <option value="<%= item.id %>"><%= item.name %></option>
+                                            <% _.each(recipe_types, function(item, key){
+                                                var selected = '';
+                                                if(selected_types.indexOf(item.id) != -1) {
+                                                    selected = 'selected';
+                                                }
+                                             %>
+                                                  <option <%= selected %> value="<%= item.id %>"><%= item.name %></option>
                                             <% }) %>
                                         <% } %>
                                     </select>
@@ -827,7 +837,7 @@
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <%= recipe.created_by || '' %>
+                                        <%= recipe.author || '' %>
                                     </span>
                                 </td>
                             </tr>
@@ -836,7 +846,7 @@
                                     STATUS
                                 </td>
                                 <td>
-                                    
+                                    <%= recipe_items_model.setStatus(recipe.status) %>
                                 </td>
                             </tr>
                             <tr>
@@ -844,7 +854,7 @@
                                     TRAINER
                                 </td>
                                 <td>
-
+                                    <%= recipe.trainer || '' %>
                                 </td>
                             </tr>
                         </table>
@@ -854,7 +864,9 @@
                     </td>
                 </tr>
             </table>
-            
+            <br/>
+            <div id="item_descriptions"></div>
+            <br/>
         </div>
     </div>
 </script>
@@ -1115,7 +1127,7 @@
                             <td>STATUS</td>
                             <td>
                                 <span class="grey_title">
-                                     <%= window.app.recipe_items_model.setStatus(status) %>
+                                     <%= model.setStatus(status) %>
                                 </span>
                             </td>
                         </tr>

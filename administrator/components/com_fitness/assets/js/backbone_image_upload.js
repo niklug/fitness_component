@@ -4,9 +4,6 @@
 (function($) {
     
     function BackboneImageUpload(options) {
-        
-        //alert('test');
-        console.log(options);
     
         window.Image_upload_model = Backbone.Model.extend({
 

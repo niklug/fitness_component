@@ -64,11 +64,9 @@ class FitnessViewNutrition_plan extends JView {
     
     function populateItemDescription() {
         $table = JRequest::getVar('table');
-        $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
-        $meal_id = JRequest::getVar('meal_id');
-        $type = JRequest::getVar('type');
+        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
         $model = $this -> getModel("nutrition_plan");
-        echo $model->populateItemDescription($nutrition_plan_id, $meal_id, $type, $table);
+        echo $model->populateItemDescription($data_encoded, $table);
     }
     
     

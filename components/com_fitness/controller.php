@@ -94,11 +94,8 @@ class FitnessController extends JController {
 
     function populateItemDescription() {
         $table = JRequest::getVar('table');
-        $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
-        $meal_id = JRequest::getVar('meal_id');
-        $type = JRequest::getVar('type');
-        
-        echo $this->admin_nutrition_plan_model->populateItemDescription($nutrition_plan_id, $meal_id, $type, $table);
+        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
+        echo $this->admin_nutrition_plan_model->populateItemDescription($data_encoded, $table);
     }
 
     function savePlanMeal() {

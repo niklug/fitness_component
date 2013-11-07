@@ -929,7 +929,7 @@ defined('_JEXEC') or die;
 
                 var id = parseInt(id);
                 
-                this.recipe  = {};
+                this.recipe  = {id : id};
                 
                 if(id) {
                    
@@ -944,24 +944,35 @@ defined('_JEXEC') or die;
                 }
 
                 if(this.recipe_types = this.options.filter_categories_model.get('recipe_types')) {
-                   this.loadTemplate({'recipe_types' : this.recipe_types, 'recipe' : this.recipe});
+                   this.loadTemplate({
+                       'recipe_types' : this.recipe_types,
+                       'recipe' : this.recipe,
+                       'recipe_items_model' : window.app.recipe_items_model
+                   });
                    return;
                 }
                 this.listenToOnce(this.options.filter_categories_model, "change:recipe_types", this.render);
                 this.options.filter_categories_model.getRecipeTypes();
-
             },
             
             loadTemplate : function(data) {
                 var template = _.template($("#recipe_database_edit_recipe_container_template").html(), data);
                 this.$el.html(template);
-                
+
+                this.connect_file_upload();
+                if(data.recipe.id) {
+                    this.connect_item_description();
+                }
+            },
+            
+            connect_file_upload : function() {
                 var imagepath = this.recipe.image;
-                var fileNameIndex = imagepath.lastIndexOf("/") + 1;
-                var filename = imagepath.substr(fileNameIndex);
-
-
-
+                var filename = '';
+                if(typeof imagepath !== 'undefined') {
+                    var fileNameIndex = imagepath.lastIndexOf("/") + 1;
+                    filename = imagepath.substr(fileNameIndex);
+                }
+                
                 var image_upload_options = {
                     'url' : window.app.recipe_items_model.get('fitness_frontend_url') + '&view=recipe_database&task=uploadImage&format=text',
                     'picture' : filename,
@@ -977,6 +988,23 @@ defined('_JEXEC') or die;
                 var image_upload = $.backbone_image_upload(image_upload_options); 
                 image_upload.render();
             },
+            
+            connect_item_description : function() {
+                var item_description_options = {
+                    'nutrition_plan_id' : this.recipe.id,
+                    'fitness_administration_url' : window.app.recipe_items_model.get('fitness_frontend_url'),
+                    'main_wrapper' : $("#item_descriptions"),
+                    'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
+                    'db_table' : '#__fitness_nutrition_recipes_meals',
+                    'parent_view' : '',
+                    'read_only' : false,
+                    'ingredient_model' : 'recipe_database'
+                }
+                var item_description_html = $.itemDescription(item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', 0).run();
+                $("#item_descriptions").html(item_description_html);
+            }
+            
+            
 
 
         });
