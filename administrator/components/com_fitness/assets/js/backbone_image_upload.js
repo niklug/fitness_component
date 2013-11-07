@@ -119,6 +119,7 @@
                     })
                     .done(function () {
                             console.log(self.pictureFile.name + ' uploaded successfully !' );
+                            $('#preview_image').attr('data-imagepath', self.model.get('img_path') + '/' + self.pictureFile.name);
                     })
                     .fail(function (response) {
                             alert(response.responseText)

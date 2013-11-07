@@ -434,7 +434,7 @@ class FitnessModelrecipe_database extends JModelList {
         $helper = $this->helper;
         
         $data = json_decode($data_encoded);
-
+        
         $db = JFactory::getDBO();
         
         try {

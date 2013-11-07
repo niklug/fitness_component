@@ -68,13 +68,9 @@ class FitnessViewRecipe_database extends JView {
     
     function updateRecipe() {
         $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST');
+        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
         $model = $this -> getModel("recipe_database");
         echo json_encode($model->updateRecipe($table, $data_encoded));
-    }
-    
-    function uploadImage() {
-        echo 'fuck';
     }
     
 

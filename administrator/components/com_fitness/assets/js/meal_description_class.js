@@ -123,7 +123,7 @@
         if(this.options.read_only == false) {
             html += '<td><input  type="button" id="add_item' + this._description_id + '" value="Add New Item">';
 
-            if(this.ingredient_model() == 'recipe_database') {
+            if(this.ingredient_model() != 'recipe_database') {
                 html += '<input  type="button" id="add_recipe' + this._description_id + '" value="RECIPE"></td>';
             }
         }
