@@ -435,6 +435,8 @@ class FitnessModelrecipe_database extends JModelList {
         
         $data = json_decode($data_encoded);
         
+        $data->instructions = html_entity_decode(urldecode($data->instructions), ENT_COMPAT, "UTF-8");
+        
         $db = JFactory::getDBO();
         
         try {
