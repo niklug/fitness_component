@@ -169,20 +169,20 @@ class FitnessModelrecipe_database extends JModelList {
             return array( 'status' => $status);
         }
         
-
-        $i = 0;
-        foreach ($data as $recipe) {
-            try {
-                $recipe_types_names = $this->getRecipeNames($recipe->recipe_type);
-            } catch (Exception $e) {
-                $status['success'] = 0;
-                $status['message'] = '"' . $e->getMessage() . '"';
-                return array( 'status' => $status);
+        if($recipe->recipe_type) {
+            $i = 0;
+            foreach ($data as $recipe) {
+                try {
+                    $recipe_types_names = $this->getRecipeNames($recipe->recipe_type);
+                } catch (Exception $e) {
+                    $status['success'] = 0;
+                    $status['message'] = '"' . $e->getMessage() . '"';
+                    return array( 'status' => $status);
+                }
+                $data[$i]->recipe_types_names = $recipe_types_names;
+                $i++;
             }
-            $data[$i]->recipe_types_names = $recipe_types_names;
-            $i++;
         }
-
         $result = array( 'status' => $status, 'data' => $data);
         
         return $result;
@@ -241,15 +241,16 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         // recipe types name
-        try {
-            $recipe_types_names = $this->getRecipeNames($data->recipe_type);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
+        if($data->recipe_type) {
+            try {
+                $recipe_types_names = $this->getRecipeNames($data->recipe_type);
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
+            $data->recipe_types_names = $recipe_types_names;
         }
-        $data->recipe_types_names = $recipe_types_names;
-        
         // recipe meals
         
         try {

@@ -838,6 +838,22 @@ defined('_JEXEC') or die;
 
         });
         
+        
+        window.app.Submenu_nutrition_database_list_view = Backbone.View.extend({
+            initialize: function(){
+                this.render();
+            },
+            events: {
+
+            },
+            render : function(){
+                var variables = {};
+                var template = _.template($("#submenu_nutrition_database_list_template").html(), variables);
+                this.$el.html(template);
+            },
+
+        });
+        
         // on open recipe
         window.app.Recipe_view = Backbone.View.extend({
              render : function(data){
@@ -914,6 +930,29 @@ defined('_JEXEC') or die;
                 window.app.recipe_items_model.restore_recipe(recipe_id);
             }
         });
+        
+        
+        // NUTRITION DATABASE list view
+        window.app.Recipe_database_list_view = Backbone.View.extend({
+            initialize: function(){
+  
+            },
+            render : function(data){
+                var data = data
+                var template = _.template($("#nutrition_database_list_template").html(), data);
+                this.$el.html(template);
+            },
+            
+            events: {
+                "click .add_item" : "onClickAddItem",
+            },
+            
+            onClickAddItem : function() {
+                
+            },
+
+        });
+        
         
         
         window.app.Filter_view = Backbone.View.extend({
@@ -1122,6 +1161,7 @@ defined('_JEXEC') or die;
             mainmenu: new window.app.Mainmenu_view(),
             submenu: new window.app.Submenu_view(),
             recipes_container : new window.app.MainRecipesContainer_view(),
+            nutrition_database_container : new window.app.Recipe_database_list_view({ el: $("#recipe_main_container")})
         };
         //
         
@@ -1191,10 +1231,14 @@ defined('_JEXEC') or die;
              },
 
             nutrition_database : function () {
-                window.app.recipe_items_model.set({state : '1'});
-                this.hide_submenu();
+                this.load_submenu();
+                // populate submenu
+                new window.app.Submenu_nutrition_database_list_view({ el: $("#submenu_container")});
+                
                 this.common_actions();
                 $("#nutrition_database_link").addClass("active_link");
+
+                window.app.Views.nutrition_database_container.render();
             },
 
             common_actions : function() {

@@ -751,6 +751,14 @@
     <div class="clr"></div>
 </script>
 
+<!--  submenu  Recipe Database List template -->
+<script type="text/template" id="submenu_nutrition_database_list_template">
+    <div style="width:100%;">
+        <a  style="cursor: pointer;float:right;margin-right:10px;" id="add_item" onclick="javascript:void(0)">[ADD ITEM]</a>
+    </div>
+    <div class="clr"></div>
+</script>
+
 <!--  recipe database main container template -->
 <script type="text/template" id="recipe_database_recipes_container_template">
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
@@ -927,10 +935,13 @@
                                     <td>RECIPE TYPE</td>
                                     <td>
                                         <span class="grey_title">
-                                            <% _.each(recipe_types_names, function(item){ %>
-                                                <%= item + "<br/>" %>
                                             <% 
-                                            })  
+                                            if(typeof recipe_types_names !== 'undefined') {
+                                                _.each(recipe_types_names, function(item){ %>
+                                                    <%= item + "<br/>" %>
+                                                <% 
+                                                })  
+                                            }
                                             %>
                                         </span>
                                     </td>
@@ -1085,7 +1096,7 @@
 <!--  item recipe list template -->
 <script type="text/template" id="recipe_database_item_template">
     <%
-    if(!image){
+    if(!image || image == 'images/Recipe_Images/'){
         image = window.app.recipe_items_model.get('default_image');
     }
     %>
@@ -1110,10 +1121,13 @@
                             <td>RECIPE TYPE</td>
                             <td>
                                 <span class="grey_title">
-                                    <% _.each(recipe_types_names, function(item){ %>
-                                        <%= item + "<br/>" %>
                                     <% 
-                                    })  
+                                    if(typeof recipe_types_names !== 'undefined') {
+                                        _.each(recipe_types_names, function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% 
+                                        })  
+                                    }
                                     %>
                                 </span>
                             </td>
@@ -1225,6 +1239,76 @@
 
 
 
+<!--  NUTRITION DATABASE list template -->
+<script type="text/template" id="nutrition_database_list_template">
+    
+
+    <div class="fitness_block_wrapper" style="margin-top: 20px;">
+        <div class="internal_wrapper">
+            <table width="100%">
+                <thead>
+                    <th>Ingredient Name</th>
+                    <th>Calories</th>
+                    <th>Energy</th>
+                    <th>Protein</th>
+                    <th>Energy</th>
+                    <th>Fat (total)</th>
+                    <th>Fat (sat)</th>
+                    <th>Carbs</th>
+                    <th>Sugar</th>
+                    <th>Sodium</th>
+                    <th>SD</th>
+                </thead>
+                <tbody>
+                <% 
+                if(typeof items !== 'undefined'){
+                    _.each(items, function(item){ 
+                     %>
+                        <tr >
+                            <td>
+                                <%= item.ingredient_name %>
+                            </td>
+                            <td>
+                                <%= item.calories || '0.00' %>
+                            </td>
+                            <td>
+                                <%= item.energy || '0.00' %>
+                            </td>
+                            <td>
+                                <%= item.protein || '0.00' %>
+                            </td>
+                            <td>
+                                <%= item.fats || '0.00' %>
+                            </td>
+                            <td>
+                                <%= item.saturated_fat || '0.00' %>
+                            </td>
+                            <td>
+                                <%= item.carbs || '0.00' %>
+                            </td>
+                            <td>
+                                <%= item.total_sugars || '0.00' %>
+                            </td>
+                            <td>
+                                <%= item.sodium || '0.00' %>
+                            </td>
+                            <td>
+                                <%= item.specific_gravity || '0.00' %>
+                            </td>
+                        </tr>
+                    <% 
+                    })
+                }
+                %>
+                </tbody>
+            </table>
+        <div style="text-align:center;" id="pagination_container"></div>
+        </div>
+    </div>
+</script>
+
+
+
 <!--  latest recipes item template -->
 <script type="text/template" id="recipes_latest_item_template">
     <div class="recipe_database_latest_item_wrapper" style="margin-top: 0px;">
@@ -1329,8 +1413,6 @@
         </div>
     </div>
 </script>
-
-
 
 
 

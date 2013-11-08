@@ -51,8 +51,11 @@
                 // Read the image file from the local file system 
                 // and display it in the img tag.
                 var reader = new FileReader();
+                var model = this.model;
+                var filename = this.pictureFile.name;
                 reader.onloadend = function () {
                     $('#preview_image').attr('src', reader.result);
+                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + filename);
                 };
                 reader.readAsDataURL(this.pictureFile);
                 return false;
@@ -83,8 +86,10 @@
                 // Read the image file from the local file system 
                 // and display it in the img tag.
                 var reader = new FileReader();
+                var model = this.model;
                 reader.onloadend = function() {
                     $('#preview_image').attr('src', reader.result);
+                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + file.name);
                 };
                 reader.readAsDataURL(this.pictureFile);
              
