@@ -453,59 +453,66 @@ class FitnessModelrecipe_database extends JModelList {
         return $result;
     }
     
-    public function uploadImage() {
-        error_reporting(E_ALL);
+   
 
-        $filename = $_FILES['file']['name'];
+    public function getIngredients($table, $data_encoded) {
+        $status['success'] = 1;
 
-        $upload_folder = $_GET['upload_folder'];
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $page = $data->page;
+        $limit = $data->limit;
+        
+        $start = ($page - 1) * $limit;
+        
+        $db = JFactory::getDBO();
+        
+        if($data->search) {
 
-        $task = $_POST['task'];
+            $search = $db->Quote('%' . $db->escape($data->search, true) . '%');
 
-        if($task == 'clear') {
-            $filename = $_POST['filename'];
-            unlink($upload_folder. '/' . $filename);
-            echo $filename;
-            return false;
+            $query .= "SELECT a.*";
+
+            $query .= " FROM $table AS a "
+                    . " WHERE a.ingredient_name LIKE $search"
+                    . " AND a.state='1'"
+                    . "  ORDER BY a.ingredient_name" 
+                    . " LIMIT $start, $limit";
+
+
+            try {
+                $ingredients = FitnessHelper::customQuery($query, 1);
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
+            
+        
+            $query = "SELECT COUNT(id) ";
+
+            $query .= " FROM $table  WHERE ingredient_name LIKE $search AND state='1'";
+
+            try {
+                $items_total = FitnessHelper::customQuery($query, 0);
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
         }
+        
+        //$items_total = 100;
+        
+        $data = array('ingredients' => $ingredients, 'items_total' => $items_total);
 
-
-        if($_FILES['file']['size']/1024 > 5024) {
-            echo 'too big file'; 
-            header('HTTP', true, 500);
-            return false;
-        }
-
-        $fileType="";
-
-        if(strstr($_FILES['file']['type'],"jpeg")) $fileType="jpg";
-
-        if(strstr($_FILES['file']['type'],"png")) $fileType="png";
-
-        if(strstr($_FILES['file']['type'],"gif")) $fileType="gif";
-
-        if(strstr($_FILES['file']['type'],"gif")) $fileType="bmp";
-
-        if(strstr($_FILES['file']['type'],"gif")) $fileType="jpeg";
-
-
-        if (!$fileType) {
-            echo 'Invalid file type';
-            header('HTTP', true, 500);
-            return false;
-        } 
-
-        if (file_exists('uploads/' .$filename) && $filename) {
-            echo 'Image with such name already exists!';
-           
-            return false;
-         }
-
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder. '/' . $filename)) {
-            echo "ok";
-        } else {
-            header('HTTP', true, 500);
-        }
-
+        $result = array( 'status' => $status, 'data' => $data);
+        
+        return $result;
     }
+    
+    
+    
 }

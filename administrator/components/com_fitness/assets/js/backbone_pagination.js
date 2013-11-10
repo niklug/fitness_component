@@ -15,14 +15,16 @@
             },
             
             initialize: function(){
-                
+
                 this.bind("change:items_total", this.onChangeItemsTotal, this);
                 this.bind("change:currentPage", this.onChangeCurrentPage, this);
                 this.bind("change:items_number", this.onChangeItemsNumber, this);
+                this.pagination_view = new Pagination_view({el: $("#pagination_container"), model : this});
+                
             },
             
             onChangeItemsTotal : function() {
-                this.pagination_view = new Pagination_view({el: $("#pagination_container"), model : this});
+                
                 this.pagination_view.render();
             }, 
             
@@ -161,14 +163,33 @@
             },
 
             renderPages: function() {
-               
-                var currentPage = this.model.getLocalStorageItem('currentPage');
-               
-                var pages = this.getPages();
+                var items_total = parseInt(this.model.get('items_total'));
+
+                if(this.itemsCollection.length < items_total) return;
+                
+                var currentPage = parseInt(this.model.getLocalStorageItem('currentPage'));
+                var pages = parseInt(this.getPages());
+
                 if (pages > 1) {
                     $("#ul-pagination li").remove();
                     
-                    for (i = 1; i <= pages; i++) {
+                    var start_page = 1;
+                    var end_page = pages;
+                    
+                    if(pages > 10) end_page = 10;
+                    
+                    if(pages > 10) {
+                        if(currentPage > 9) {
+                            start_page = currentPage - 5;
+                            if(currentPage < (pages - 5)) {
+                                end_page = currentPage + 5;
+                            } else {
+                                end_page = currentPage;
+                            }
+                        }
+                    }
+                    
+                    for (var i = start_page; i <= end_page; i++) {
                         var pageClass = '';
                         if(currentPage == i) pageClass = 'active_link';
                         var pageItem = new Pagination_page_view({pageIndex: i, pageClass: pageClass, model : this.model});

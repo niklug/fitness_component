@@ -312,4 +312,11 @@ class FitnessController extends JController {
             header("HTTP/1.0 404 Not Found");
         }
     }
+    
+    
+    function getIngredients() {
+        $view = $this -> getView('recipe_database', 'json');
+        $view->setModel($this->getModel('recipe_database'));
+        $view -> getIngredients(); 
+    }
 }

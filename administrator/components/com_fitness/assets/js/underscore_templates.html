@@ -621,6 +621,7 @@
             <option value="5">5</option>
             <option selected="selected" value="10">10</option>
             <option value="20">20</option>
+            <option value="50">50</option>
         </select> 
     </div>
 </script>
@@ -1239,75 +1240,103 @@
 
 
 
-<!--  NUTRITION DATABASE list template -->
+<!--  NUTRITION DATABASE list core template -->
 <script type="text/template" id="nutrition_database_list_template">
     
 
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
+        <br/>
+        <table>
+            <tr>
+                <td>
+                    <h5>Search Database</h5>
+                </td>
+                <td>
+                    <input id="search_field" style="display:inline-block;"  type="text" name="search" />
+                </td>
+                <td>
+                    <a style="cursor: pointer;" class="search_ingredients" onclick="javascript:void(0)">[Search]</a>
+                </td>
+            </tr>
+        </table>
+        <br/>
         <div class="internal_wrapper">
-            <table width="100%">
-                <thead>
-                    <th>Ingredient Name</th>
-                    <th>Calories</th>
-                    <th>Energy</th>
-                    <th>Protein</th>
-                    <th>Energy</th>
-                    <th>Fat (total)</th>
-                    <th>Fat (sat)</th>
-                    <th>Carbs</th>
-                    <th>Sugar</th>
-                    <th>Sodium</th>
-                    <th>SD</th>
-                </thead>
-                <tbody>
-                <% 
-                if(typeof items !== 'undefined'){
-                    _.each(items, function(item){ 
-                     %>
-                        <tr >
-                            <td>
-                                <%= item.ingredient_name %>
-                            </td>
-                            <td>
-                                <%= item.calories || '0.00' %>
-                            </td>
-                            <td>
-                                <%= item.energy || '0.00' %>
-                            </td>
-                            <td>
-                                <%= item.protein || '0.00' %>
-                            </td>
-                            <td>
-                                <%= item.fats || '0.00' %>
-                            </td>
-                            <td>
-                                <%= item.saturated_fat || '0.00' %>
-                            </td>
-                            <td>
-                                <%= item.carbs || '0.00' %>
-                            </td>
-                            <td>
-                                <%= item.total_sugars || '0.00' %>
-                            </td>
-                            <td>
-                                <%= item.sodium || '0.00' %>
-                            </td>
-                            <td>
-                                <%= item.specific_gravity || '0.00' %>
-                            </td>
-                        </tr>
-                    <% 
-                    })
-                }
-                %>
-                </tbody>
-            </table>
+        <div id="ingredients_items"></div>   
         <div style="text-align:center;" id="pagination_container"></div>
         </div>
     </div>
 </script>
 
 
+<!--  NUTRITION DATABASE list items template -->
+<script type="text/template" id="nutrition_database_list_items_template">
+    <table width="100%">
+        <thead>
+            <th>Ingredient Name</th>
+            <th>Calories</th>
+            <th>Energy</th>
+            <th>Protein</th>
+            <th>Fat (total)</th>
+            <th>Fat (sat)</th>
+            <th>Carbs</th>
+            <th>Sugar</th>
+            <th>Sodium</th>
+            <th>SG</th>
+        </thead>
+        <tbody>
+        <% 
+        if(typeof items !== 'undefined'){
+
+            _.each(items, function(item){ 
+             %>
+                <tr >
+                    <td>
+                        <%= item.ingredient_name %>
+                    </td>
+                    <td>
+                        <%= item.calories || '0.00' %>
+                    </td>
+                    <td>
+                        <%= item.energy || '0.00' %>
+                    </td>
+                    <td>
+                        <%= item.protein || '0.00' %>
+                    </td>
+                    <td>
+                        <%= item.fats || '0.00' %>
+                    </td>
+                    <td>
+                        <%= item.saturated_fat || '0.00' %>
+                    </td>
+                    <td>
+                        <%= item.carbs || '0.00' %>
+                    </td>
+                    <td>
+                        <%= item.total_sugars || '0.00' %>
+                    </td>
+                    <td>
+                        <%= item.sodium || '0.00' %>
+                    </td>
+                    <td>
+                        <%= item.specific_gravity || '0.00' %>
+                    </td>
+                </tr>
+            <% 
+            })
+        }
+        
+        if((typeof items !== 'undefined') && items.length == 0) {
+        %>
+        <tr>
+            <td style="text-align:center;" colspan="10">
+                <%= 'No Ingredients found.' %>
+            </td>
+        </tr>
+        <%
+        } %>
+        </tbody>
+    </table>
+</script>
 
 <!--  latest recipes item template -->
 <script type="text/template" id="recipes_latest_item_template">
