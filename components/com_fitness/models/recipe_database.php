@@ -169,9 +169,10 @@ class FitnessModelrecipe_database extends JModelList {
             return array( 'status' => $status);
         }
         
-        if($recipe->recipe_type) {
-            $i = 0;
-            foreach ($data as $recipe) {
+        
+        $i = 0;
+        foreach ($data as $recipe) {
+            if(!empty($recipe->recipe_type)) {
                 try {
                     $recipe_types_names = $this->getRecipeNames($recipe->recipe_type);
                 } catch (Exception $e) {
@@ -183,6 +184,7 @@ class FitnessModelrecipe_database extends JModelList {
                 $i++;
             }
         }
+    
         $result = array( 'status' => $status, 'data' => $data);
         
         return $result;
@@ -241,7 +243,7 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         // recipe types name
-        if($data->recipe_type) {
+        if(!empty($data->recipe_type)) {
             try {
                 $recipe_types_names = $this->getRecipeNames($data->recipe_type);
             } catch (Exception $e) {

@@ -173,7 +173,6 @@ defined('_JEXEC') or die;
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("recipes", output);
-                    
                 });
             },
             
@@ -639,6 +638,39 @@ defined('_JEXEC') or die;
                 });
             },
             
+            
+            saveIngredient  : function(id) {
+                console.log(window.recipe_database.validate_form() );
+                if(window.recipe_database.validate_form() != true) {
+                    alert('Invalid form');
+                    return false;
+                }
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = 'recipe_database';
+                var task = 'updateIngredient';
+                var table = this.get('ingredients_db_table');
+                
+                data.id = id || '';
+                data.ingredient_name = $("#jform_ingredient_name").val();
+                data.calories = $("#jform_calories").val();
+                data.energy = $("#jform_energy").val();
+                data.protein = $("#jform_protein").val();
+                data.fats = $("#jform_fats").val();
+                data.saturated_fat = $("#jform_saturated_fat").val();
+                data.carbs = $("#jform_carbs").val();
+                data.total_sugars = $("#jform_total_sugars").val();
+                data.sodium = $("#jform_sodium").val();
+                data.specific_gravity = $("#jform_specific_gravity").val();
+                data.description = encodeURIComponent($("#jform_description").html());
+                data.state = '1';
+                //console.log(data);
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+                    self.set("ingredient_saved", output);
+                });
+            }
         });
         
 
@@ -925,15 +957,71 @@ defined('_JEXEC') or die;
                 this.render();
             },
             events: {
-
+                "click #add_item" : "onClickAddItem",
             },
             render : function(){
                 var variables = {};
                 var template = _.template($("#submenu_nutrition_database_list_template").html(), variables);
                 this.$el.html(template);
             },
+            
+            onClickAddItem : function() {
+                window.app.controller.navigate("!/add_ingredient", true);
+            },
 
         });
+        
+        
+        window.app.Submenu_nutrition_database_item_view = Backbone.View.extend({
+            initialize: function(){
+                this.render();
+            },
+            events: {
+                "click #save" : "onClickSave",
+                "click #save_close" : "onClickSaveClose",
+                "click #save_new" : "onClickSaveNew",
+                "click #cancel" : "onClickCancel",
+                
+            },
+            render : function(){
+                var variables = {};
+                var template = _.template($("#submenu_nutrition_database_item_template").html(), variables);
+                this.$el.html(template);
+            },
+            
+            onClickSave : function(event) {
+                var id = $(event.target).attr('data-id');
+                               
+                window.app.nutrition_database_model.set({'action' : 'save', 'ingredient_id' : id});
+
+                $( "#add_ingredient_form" ).submit();
+            },
+            
+            onClickSaveClose : function(event) {
+                var id = $(event.target).attr('data-id');
+                               
+                window.app.nutrition_database_model.set({'action' : 'save_close', 'ingredient_id' : id});
+
+                $( "#add_ingredient_form" ).submit();
+            },
+            
+            onClickSaveNew : function(event) {
+                var id = $(event.target).attr('data-id');
+                               
+                window.app.nutrition_database_model.set({'action' : 'save_close', 'ingredient_id' : id});
+
+                $( "#add_ingredient_form" ).submit();
+            },
+            
+            onClickCancel : function() {
+               window.app.controller.navigate("!/nutrition_database", true);
+            },
+            
+      
+
+
+        });
+        
         
         // on open recipe
         window.app.Recipe_view = Backbone.View.extend({
@@ -1025,6 +1113,7 @@ defined('_JEXEC') or die;
             
             events: {
                 "click .search_ingredients" : "onClickSearch",
+                "click .clear" : "onClickClear",
             },
 
             onClickSearch : function() {
@@ -1032,6 +1121,13 @@ defined('_JEXEC') or die;
                 window.app.nutrition_database_model.set({'currentPage' : ""});
                 window.app.nutrition_database_model.loadIngredients();
             },
+            
+            onClickClear : function(){
+                $("#search_field").val('');
+                window.app.nutrition_database_model.setLocalStorageItem('currentPage', 1);
+                window.app.nutrition_database_model.set({'currentPage' : ""});
+                window.app.nutrition_database_model.loadIngredients();
+            }
 
         });
         
@@ -1040,6 +1136,12 @@ defined('_JEXEC') or die;
             initialize: function(){
                 this.render();
             },
+            
+            events: {
+                "click .ingredient_name" : "onClickIngredient",
+            },
+
+
             render : function(){
                 var ingredients = this.options.ingredients;
                 //console.log(ingredients);
@@ -1047,6 +1149,37 @@ defined('_JEXEC') or die;
                 var template = _.template($("#nutrition_database_list_items_template").html(), data);
                 this.$el.html(template);
             },
+            
+            onClickIngredient : function(event) {
+                var id = $(event.target).attr("data-id");
+                $('.description').hide();
+                $('.description[data-description="' + id + '"]').show();
+            }
+
+        });
+        
+        
+         // NUTRITION DATABASE item view
+        window.app.Nutrition_database_item_view = Backbone.View.extend({
+            initialize: function(){
+  
+            },
+            render : function(){
+                var template = _.template($("#nutrition_database_item_template").html());
+                this.$el.html(template);
+            },
+            
+            events: {
+                "submit #add_ingredient_form" : "onSubmit",
+            },
+            
+            onSubmit : function(event) {
+                event.preventDefault();
+                window.app.nutrition_database_model.saveIngredient();
+                return false;
+            }
+               
+
 
         });
         
@@ -1259,8 +1392,13 @@ defined('_JEXEC') or die;
             mainmenu: new window.app.Mainmenu_view(),
             submenu: new window.app.Submenu_view(),
             recipes_container : new window.app.MainRecipesContainer_view(),
-            nutrition_database_container : new window.app.Nutrition_database_list_view({ el: $("#recipe_main_container")})
+            nutrition_database_container : new window.app.Nutrition_database_list_view({ el: $("#recipe_main_container")}),
+            nutrition_database_item_container : new window.app.Nutrition_database_item_view({ el: $("#recipe_main_container")})
         };
+        
+        // connect backend Nutrition Database class
+        window.recipe_database = $.recipe_database({'specific_gravity' : '' });
+        window.recipe_database.run();
         //
         
          // CONTROLLER
@@ -1276,6 +1414,7 @@ defined('_JEXEC') or die;
                 "!/my_favourites" : "my_favourites",
                 "!/trash_list" : "trash_list",
                 "!/edit_recipe/:id" : "edit_recipe",
+                "!/add_ingredient" : "add_ingredient",
             },
 
             my_recipes : function () {
@@ -1339,6 +1478,16 @@ defined('_JEXEC') or die;
                 window.app.Views.nutrition_database_container.render();
                 
                 window.app.nutrition_database_model = new window.app.Nutrition_database_model(options);
+            },
+            
+            add_ingredient : function () {
+                this.load_submenu();
+                // populate submenu
+                new window.app.Submenu_nutrition_database_item_view({ el: $("#submenu_container")});
+                
+                window.app.Views.nutrition_database_item_container.render();
+                
+                $("#add_ingredient_form").validate();
             },
 
             common_actions : function() {

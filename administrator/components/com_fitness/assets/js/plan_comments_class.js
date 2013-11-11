@@ -25,6 +25,7 @@
             var comment_wrapper = $(this).closest("table").parent();
             var id = comment_wrapper.attr("data-id");
             var comment_text = $(this).closest("table").find("textarea.comment_textarea").val();
+            if(comment_text == '') return;
             var date = $(this).closest("table").find(".comment_date").text();
             var time = $(this).closest("table").find(".comment_time").text();
             var created = date + ' ' + time;

@@ -298,6 +298,10 @@ td.center, th.center, .center {
     padding: 5px;
 }
 
+.internal_wrapper2 {
+    padding: 5px;
+}
+
 .grey_title {
     color:#cccccc;
 }
@@ -696,8 +700,42 @@ td.center, th.center, .center {
     border-top:1px solid #fff !important;
 }
 
+.table_border_top_dark {
+    border-top:1px solid #474747 !important;
+}
+
+.table_border_bottom_dark {
+    border-bottom:1px solid #474747 !important;
+}
+
 .table_border_bottom {
     border-bottom:1px solid #fff !important;
 }
 
+.show_element{
+    display:block !important;
+}
 
+
+.hide_element{
+    display:none !important;
+}
+
+
+.width_50{
+   width:50px !important;
+}
+
+
+#ingradient_fields label {
+    display: block;
+    float: left;
+    font-size: 1em;
+    line-height: 2em;
+    min-width: 131px !important;
+}
+
+.error_message {
+    color: #CC0000;
+    padding-top: 7px;
+}
