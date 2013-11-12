@@ -314,13 +314,7 @@ class FitnessModelgoals extends JModelList {
         return $ret;
     }
     
-    public function sendGoalEmail($goal_id, $goal_status_id, $user_id) {
-        $goal = $this->getGoal($goal_id);
-        $trainer = JFactory::getUser($goal->primary_trainer);
-        return $this->sendEmail($trainer->email, 'Goal email', 'Test');
-    }
-    
-    
+   
     
     private function sendEmail($recipient, $Subject, $body) {
         

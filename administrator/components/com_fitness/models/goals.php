@@ -903,7 +903,6 @@ class FitnessModelgoals extends JModelList {
         
         $result = array('status' => $ret, 'data' => $data);
         return  $result;
-   
     }
 
 }

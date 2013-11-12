@@ -351,6 +351,7 @@ class FitnessHelper extends FitnessFactory
     function getContentCurl($url) {
         $ret['success'] = true;
         if(!function_exists('curl_version')) {
+            throw new Exception('cURL not anabled');
             $ret['success'] = false;
             $ret['message'] = 'cURL not anabled';
             return $ret;
@@ -381,6 +382,7 @@ class FitnessHelper extends FitnessFactory
         $db->setQuery($query);
         
         if (!$db->query()) {
+            throw new Exception($db->stderr());
             $status['success'] = 0;
             $status['message'] = $db->stderr();
             return $status;
@@ -399,8 +401,10 @@ class FitnessHelper extends FitnessFactory
         }
 
         if(!$all_trainers_id) {
+            $msg = 'No trainers assigned to this client.';
+            throw new Exception($msg);
             $status['success'] = 0;
-            $status['message'] = 'No trainers assigned to this client.';
+            $status['message'] = $msg;
         }
 
         $result = array( 'status' => $status, 'data' => $all_trainers_id);
@@ -427,6 +431,7 @@ class FitnessHelper extends FitnessFactory
         }
         $db->setQuery($query);
         if (!$db->query()) {
+            throw new Exception($db->stderr());
             $result['success'] = false;
             $result['message'] = $db->stderr();
             return $result;

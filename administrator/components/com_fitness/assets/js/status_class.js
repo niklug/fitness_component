@@ -145,6 +145,25 @@
     }
     
     Status.prototype.sendEmail = function(id, method) {
+        var data = {};
+        var url = this.options.fitness_administration_url;
+        var view = '';
+        var task = 'ajax_email';
+        var table = '';
+        
+        data.id = id;
+        data.view = 'Goal';
+        data.method = method;
+        
+        
+        $.AjaxCall(data, url, view, task, table, function(output){
+            console.log(output);
+        });
+    }
+    
+    
+    
+    Status.prototype.sendEmail_old = function(id, method) {
         var url = this.options.calendar_frontend_url;
         $.ajax({
             type : "POST",
