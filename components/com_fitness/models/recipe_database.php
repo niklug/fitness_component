@@ -103,7 +103,12 @@ class FitnessModelrecipe_database extends JModelList {
         } else if ($current_page == 'my_favourites') {
             $query .= " AND mf.client_id='$user_id'";
         } else  {
+            // except recipes created not by another clients
             $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
+            // by Business Profile 
+            $trainers_group_id = FitnessHelper::getTrainersGroupId();
+            $SUPERUSER_GROUP_ID = FitnessHelper::SUPERUSER_GROUP_ID;
+            $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
         }
 
           
@@ -129,6 +134,7 @@ class FitnessModelrecipe_database extends JModelList {
         $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
         $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         
+        
         if ($current_page == 'my_favourites') {
             $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
         }
@@ -152,7 +158,12 @@ class FitnessModelrecipe_database extends JModelList {
         } else if ($current_page == 'my_favourites') {
             $query .= " AND mf.client_id='$user_id'";
         } else {
+            // except recipes created not by another clients
             $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
+            // by Business Profile 
+            $trainers_group_id = FitnessHelper::getTrainersGroupId();
+            $SUPERUSER_GROUP_ID = FitnessHelper::SUPERUSER_GROUP_ID;
+            $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
         }
         
         
@@ -515,6 +526,28 @@ class FitnessModelrecipe_database extends JModelList {
         return $result;
     }
     
-    
+     public function updateIngredient($table, $data_encoded) {
+        $status['success'] = 1;
+
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $data->description = html_entity_decode(urldecode($data->description), ENT_COMPAT, "UTF-8");
+        
+        $db = JFactory::getDBO();
+        
+        try {
+            $helper->insertUpdateObj($data, $table);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        
+        $result = array( 'status' => $status, 'data' => $data->id);
+        
+        return $result;
+    }
     
 }

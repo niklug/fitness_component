@@ -10,6 +10,7 @@
 
 // no direct access
 defined('_JEXEC') or die;
+
 ?>
 
 <div style="opacity: 1;" class="fitness_wrapper">
@@ -266,7 +267,7 @@ defined('_JEXEC') or die;
                     'comment_obj' : {'user_name' : this.attributes.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : this.attributes.recipe_comments_db_table,
                     'read_only' : true,
-                    'anable_comment_email' : false
+                    'anable_comment_email' : true
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
                 var recipe_item = new window.app.Recipe_view({ el: $("#recipe_main_container"), model : this, 'comments' : comments});
@@ -639,8 +640,7 @@ defined('_JEXEC') or die;
             },
             
             
-            saveIngredient  : function(id) {
-                console.log(window.recipe_database.validate_form() );
+            saveIngredient  : function() {
                 if(window.recipe_database.validate_form() != true) {
                     alert('Invalid form');
                     return false;
@@ -651,7 +651,7 @@ defined('_JEXEC') or die;
                 var task = 'updateIngredient';
                 var table = this.get('ingredients_db_table');
                 
-                data.id = id || '';
+                data.id = this.get('ingredient_id') || '';
                 data.ingredient_name = $("#jform_ingredient_name").val();
                 data.calories = $("#jform_calories").val();
                 data.energy = $("#jform_energy").val();
@@ -664,13 +664,34 @@ defined('_JEXEC') or die;
                 data.specific_gravity = $("#jform_specific_gravity").val();
                 data.description = encodeURIComponent($("#jform_description").html());
                 data.state = '1';
-                //console.log(data);
+                console.log(data);
 
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("ingredient_saved", output);
+                    
+                    self.onIngredientSave(output);
                 });
+            },
+            
+            onIngredientSave : function(ingredient_id) {
+                console.log(ingredient_id);
+                this.set({'ingredient_id' : ingredient_id});
+                
+                var action = this.get('action');
+                console.log(action);
+                if(action == 'save_close') {
+                    window.app.controller.navigate("!/nutrition_database", true);
+                }
+                
+                if(action == 'save_new') {
+                    this.set({'ingredient_id' : ''});
+                    window.app.controller.navigate("!/nutrition_database", true)
+                    window.app.controller.navigate("!/add_ingredient", true);
+                }
             }
+            
+            
         });
         
 
@@ -989,26 +1010,23 @@ defined('_JEXEC') or die;
                 this.$el.html(template);
             },
             
-            onClickSave : function(event) {
-                var id = $(event.target).attr('data-id');
-                               
-                window.app.nutrition_database_model.set({'action' : 'save', 'ingredient_id' : id});
+            onClickSave : function() {
+
+                window.app.nutrition_database_model.set({'action' : 'save'});
 
                 $( "#add_ingredient_form" ).submit();
             },
             
-            onClickSaveClose : function(event) {
-                var id = $(event.target).attr('data-id');
+            onClickSaveClose : function() {
                                
-                window.app.nutrition_database_model.set({'action' : 'save_close', 'ingredient_id' : id});
+                window.app.nutrition_database_model.set({'action' : 'save_close'});
 
                 $( "#add_ingredient_form" ).submit();
             },
             
-            onClickSaveNew : function(event) {
-                var id = $(event.target).attr('data-id');
+            onClickSaveNew : function() {
                                
-                window.app.nutrition_database_model.set({'action' : 'save_close', 'ingredient_id' : id});
+                window.app.nutrition_database_model.set({'action' : 'save_new'});
 
                 $( "#add_ingredient_form" ).submit();
             },

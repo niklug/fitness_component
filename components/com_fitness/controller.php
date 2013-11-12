@@ -319,4 +319,10 @@ class FitnessController extends JController {
         $view->setModel($this->getModel('recipe_database'));
         $view -> getIngredients(); 
     }
+    
+    function updateIngredient() {
+        $view = $this -> getView('recipe_database', 'json');
+        $view->setModel($this->getModel('recipe_database'));
+        $view -> updateIngredient(); 
+    }
 }

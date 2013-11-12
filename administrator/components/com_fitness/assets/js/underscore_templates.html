@@ -1286,6 +1286,7 @@
 
 <!--  NUTRITION DATABASE list items template -->
 <script type="text/template" id="nutrition_database_list_items_template">
+    <div class="internal_wrapper">
     <table width="100%">
         <thead>
             <th>Ingredient Name</th>
@@ -1373,6 +1374,7 @@
         } %>
         </tbody>
     </table>
+    </div>
 </script>
 
 
@@ -1409,171 +1411,175 @@
                             MEASUREMENT UNIT
                         </td>
                         <td>
-                            <select id="jform_measurement_unit" class="inputbox" size="1" name="jform[measurement_unit]">
-                                <option selected="selected" value="0">-Select-</option>
+                            <select id="jform_measurement_unit" class="inputbox required" size="1" name="jform[measurement_unit]">
+                                <option value="">-Select-</option>
                                 <option value="1">GRAMS</option>
                                 <option value="2">MILLILITRES</option>
                             </select>
                         </td>
                     </tr>
                 </table>
-                <table width="100%">
-                    <tr>
-                        <td width="60">
-                            <div style="background-size: 40px auto;width:40px;height:40px; background-image:url('components/com_fitness/assets/images/exclamation.png'); background-repeat:no-repeat;"></div>
-                        </td>
-                        <td>
-                        <%
-                        if (!window.location.origin) {
-                           window.location.origin = window.location.protocol+"//"+window.location.host;
-                        }
-                        %>
-                            You are entering a liquid ingredient!<br/>
-                             See this <a target="_blank" href="administrator/components/com_fitness/assets/includes/Specific gravity appendix.pdf">LIST</a> for a suitable specific gravity
-                            for your product. Is this the correct ‘specific gravity’ for this ingredient?
-                        </td>
-                    </tr>
-                </table>
-                <br/>
-                <table>
-                    <tr>
-                        <td>
-                            <label id="jform_specific_gravity-lbl" class="" for="jform_specific_gravity">Specific Gravity</label> 
-                        </td>
-                        <td>
-                            <input id="jform_specific_gravity" class="inputbox number width_50" type="text" size="10" value="" name="jform[specific_gravity]">
-                        </td>
-                        <td>
-                            SG = ml for 100 grams 
-                        </td>
-                        <td>
-                            <input readonly id="specific_gravity_grams" class="inputbox width_50" type="text" size="10" value="" name="specific_gravity_grams"><span style="position: absolute;padding-top:5px;">ml</span>
-                        </td>
-                    </tr>
-                </table>
-                <br/>
-                <p>
-                    To correctly enter the nutritional values of this liquid ingredient into the
-                    database, you must enter the product nutritional values (from the nutrition panel
-                    on the product) taken from the <b>"average quantity per 100ml"</b> serving size column...
-                </p>
-                <br/>
-                <div class="clr"></div>
-                <table id="ingradient_fields" width="100%">
-                    <tr>
-                        <td class="millilitres_column" width="50%">
-                            <b>ENTER NUTRITION INFORMATION</b><br/>
-                            (as on product label: “average per 100ml”)
-                        </td>
-                        <td id="right_title"  width="50%">
-                            <b>Values as 100g Edible Portion (EP)</b><br/>
-                            (stored in nutrition database)                       
-                        </td>
-                    </tr>
+                <div class="main_fields_wrapper" style="display: none;"> 
+                    <div id="measurement_unit_wrapper" style="display:none;">
+                        <table width="100%">
+                            <tr>
+                                <td width="60">
+                                    <div style="background-size: 40px auto;width:40px;height:40px; background-image:url('components/com_fitness/assets/images/exclamation.png'); background-repeat:no-repeat;"></div>
+                                </td>
+                                <td>
+                                <%
+                                if (!window.location.origin) {
+                                   window.location.origin = window.location.protocol+"//"+window.location.host;
+                                }
+                                %>
+                                    You are entering a liquid ingredient!<br/>
+                                     See this <a target="_blank" href="administrator/components/com_fitness/assets/includes/Specific gravity appendix.pdf">LIST</a> for a suitable specific gravity
+                                    for your product. Is this the correct ‘specific gravity’ for this ingredient?
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table>
+                            <tr>
+                                <td>
+                                    <label id="jform_specific_gravity-lbl" class="" for="jform_specific_gravity">Specific Gravity</label> 
+                                </td>
+                                <td>
+                                    <input id="jform_specific_gravity" class="inputbox number width_50" type="text" size="10" value="" name="jform[specific_gravity]">
+                                </td>
+                                <td>
+                                    SG = ml for 100 grams 
+                                </td>
+                                <td>
+                                    <input readonly id="specific_gravity_grams" class="inputbox width_50" type="text" size="10" value="" name="specific_gravity_grams"><span style="position: absolute;padding-top:5px;">ml</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <p>
+                            To correctly enter the nutritional values of this liquid ingredient into the
+                            database, you must enter the product nutritional values (from the nutrition panel
+                            on the product) taken from the <b>"average quantity per 100ml"</b> serving size column...
+                        </p>
+                        <br/>
+                    </div>
+                    <div class="clr"></div>
+                    <table id="ingradient_fields" width="100%">
+                        <tr>
+                            <td class="millilitres_column" width="50%">
+                                <b>ENTER NUTRITION INFORMATION</b><br/>
+                                (as on product label: “average per 100ml”)
+                            </td>
+                            <td id="right_title"  width="50%">
+                                <b>Values as 100g Edible Portion (EP)</b><br/>
+                                (stored in nutrition database)                       
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td class="millilitres_column">
-                            (click <a style="cursor: pointer;" onclick="javascript:void(0)">here</a> to view an example) 
-                        </td>
-                        <td>
-                            <label id="jform_calories-lbl" class="" for="jform_calories">Calories</label>
-                            <input id="jform_calories" class="inputbox width_50" type="text" size="10" value="" name="jform[calories]">
-                        </td>
-                    </tr>
+                        <tr>
+                            <td class="millilitres_column">
+                                (click <a target="_blank" href="components/com_fitness/assets/images/ingredient_example.png">here</a> to view an example) 
+                            </td>
+                            <td>
+                                <label id="jform_calories-lbl" class="" for="jform_calories">Calories</label>
+                                <input  id="jform_calories" class="inputbox width_50" type="text" size="10" value="" name="jform[calories]">
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td class="millilitres_column">
-                            <label id="jform_energy-lbl" class="" for="jform_energy">Energy (kJ)</label>
-                            <input id="enter_energy" class="inputbox number width_50" type="text" size="10" value="" name="enter_energy">
-                        </td>
-                        <td>
-                            <label id="jform_energy-lbl" class="" for="jform_energy">Energy (kJ)</label>
-                            <input id="jform_energy" class="inputbox width_50" type="text" size="10" value="" name="jform[energy]">
-                        </td>
-                    </tr>
+                        <tr>
+                            <td class="millilitres_column">
+                                <label id="jform_energy-lbl" class="" for="jform_energy">Energy (kJ)</label>
+                                <input id="enter_energy" class="inputbox number width_50" type="text" size="10" value="" name="enter_energy">
+                            </td>
+                            <td>
+                                <label id="jform_energy-lbl" class="" for="jform_energy">Energy (kJ)</label>
+                                <input  id="jform_energy" class="inputbox width_50" type="text" size="10" value="" name="jform[energy]">
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td class="millilitres_column">
-                            <label id="jform_protein-lbl" class="hasTip" title="" for="jform_protein">Protein (g)</label>
-                            <input id="enter_protein" class="inputbox number width_50" type="text" size="10" value="" name="enter_protein">
-                        </td>
-                        <td>
-                            <label id="jform_protein-lbl" class="hasTip" title="" for="jform_protein">Protein (g)</label>
-                            <input id="jform_protein" class="inputbox  width_50" type="text" size="10" value="" name="jform[protein]">
-                        </td>
-                    </tr>
+                        <tr>
+                            <td class="millilitres_column">
+                                <label id="jform_protein-lbl" class="hasTip" title="" for="jform_protein">Protein (g)</label>
+                                <input id="enter_protein" class="inputbox number width_50" type="text" size="10" value="" name="enter_protein">
+                            </td>
+                            <td>
+                                <label id="jform_protein-lbl" class="hasTip" title="" for="jform_protein">Protein (g)</label>
+                                <input  id="jform_protein" class="inputbox  width_50" type="text" size="10" value="" name="jform[protein]">
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td class="millilitres_column">
-                            <label id="jform_fats-lbl" class="" for="jform_fats">Total Fat (g)</label>
-                            <input id="enter_fats" class="inputbox validate-numeri width_50" type="text" size="10" value="" name="enter_fats">
-                        </td>
-                        <td>
-                            <label id="jform_fats-lbl" class="" for="jform_fats">Total Fat (g)</label>
-                            <input id="jform_fats" class="inputbox width_50" type="text" size="10" value="" name="jform[fats]">
-                        </td>
-                    </tr>
+                        <tr>
+                            <td class="millilitres_column">
+                                <label id="jform_fats-lbl" class="" for="jform_fats">Total Fat (g)</label>
+                                <input id="enter_fats" class="inputbox validate-numeri width_50" type="text" size="10" value="" name="enter_fats">
+                            </td>
+                            <td>
+                                <label id="jform_fats-lbl" class="" for="jform_fats">Total Fat (g)</label>
+                                <input  id="jform_fats" class="inputbox width_50" type="text" size="10" value="" name="jform[fats]">
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td class="millilitres_column">
-                            <label id="jform_saturated_fat-lbl" class="hasTip" title="" for="jform_saturated_fat">Saturated Fat (g)</label>
-                            <input id="enter_saturated_fat" class="inputbox number width_50" type="text" size="10" value="" name="enter_saturated_fat">
-                            <div class="clr"></div>
-                        </td>
-                        <td>
-                            <label id="jform_saturated_fat-lbl" class="hasTip" title="" for="jform_saturated_fat">Saturated Fat (g)</label>
-                            <input id="jform_saturated_fat" class="inputbox width_50" type="text" size="10" value="" name="jform[saturated_fat]">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                           <div id="saturated_error" class="error_message"></div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td class="millilitres_column">
+                                <label id="jform_saturated_fat-lbl" class="hasTip" title="" for="jform_saturated_fat">Saturated Fat (g)</label>
+                                <input id="enter_saturated_fat" class="inputbox number width_50" type="text" size="10" value="" name="enter_saturated_fat">
+                                <div class="clr"></div>
+                            </td>
+                            <td>
+                                <label id="jform_saturated_fat-lbl" class="hasTip" title="" for="jform_saturated_fat">Saturated Fat (g)</label>
+                                <input  id="jform_saturated_fat" class="inputbox width_50" type="text" size="10" value="" name="jform[saturated_fat]">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                               <div id="saturated_error" class="error_message"></div>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td class="millilitres_column">
-                            <label id="jform_carbs-lbl" class="" for="jform_carbs">Carbohydrate (g)</label>
-                            <input id="enter_carbs" class="inputbox number width_50" type="text" size="10" value="" name="enter_carbs">
-                        </td>
-                        <td>
-                            <label id="jform_carbs-lbl" class="" for="jform_carbs">Carbohydrate (g)</label>
-                            <input id="jform_carbs" class="inputbox width_50" type="text" size="10" value="" name="jform[carbs]">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                           <div id="sum_100_error" class="error_message"></div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td class="millilitres_column">
+                                <label id="jform_carbs-lbl" class="" for="jform_carbs">Carbohydrate (g)</label>
+                                <input id="enter_carbs" class="inputbox number width_50" type="text" size="10" value="" name="enter_carbs">
+                            </td>
+                            <td>
+                                <label id="jform_carbs-lbl" class="" for="jform_carbs">Carbohydrate (g)</label>
+                                <input  id="jform_carbs" class="inputbox width_50" type="text" size="10" value="" name="jform[carbs]">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                               <div id="sum_100_error" class="error_message"></div>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td class="millilitres_column">
-                            <label id="jform_total_sugars-lbl" class="" for="jform_total_sugars">Sugar (g)</label>
-                            <input id="enter_total_sugars" class="inputbox number width_50" type="text" size="10" value="" name="enter_total_sugars">
-                        </td>
-                        <td>
-                            <label id="jform_total_sugars-lbl" class="" for="jform_total_sugars">Sugar (g)</label>
-                            <input id="jform_total_sugars" class="inputbox width_50" type="text" size="10" value="" name="jform[total_sugars]">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                           <div id="sugars_error" class="error_message"></div> 
-                        </td>
-                    </tr>
+                        <tr>
+                            <td class="millilitres_column">
+                                <label id="jform_total_sugars-lbl" class="" for="jform_total_sugars">Sugar (g)</label>
+                                <input id="enter_total_sugars" class="inputbox number width_50" type="text" size="10" value="" name="enter_total_sugars">
+                            </td>
+                            <td>
+                                <label id="jform_total_sugars-lbl" class="" for="jform_total_sugars">Sugar (g)</label>
+                                <input  id="jform_total_sugars" class="inputbox width_50" type="text" size="10" value="" name="jform[total_sugars]">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                               <div id="sugars_error" class="error_message"></div> 
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td class="millilitres_column">
-                            <label id="jform_sodium-lbl" class="hasTip" title="" for="jform_sodium">Sodium (mg)</label>
-                            <input id="enter_sodium" class="inputbox number width_50" type="text" size="10" value="" name="enter_sodium">
-                        </td>
-                        <td>
-                            <label id="jform_sodium-lbl" class="hasTip" title="" for="jform_sodium">Sodium (mg)</label>
-                            <input id="jform_sodium" class="inputbox width_50" type="text" size="10" value="" name="jform[sodium]">
-                        </td>
-                    </tr>
-                </table>
+                        <tr>
+                            <td class="millilitres_column">
+                                <label id="jform_sodium-lbl" class="hasTip" title="" for="jform_sodium">Sodium (mg)</label>
+                                <input id="enter_sodium" class="inputbox number width_50" type="text" size="10" value="" name="enter_sodium">
+                            </td>
+                            <td>
+                                <label id="jform_sodium-lbl" class="hasTip" title="" for="jform_sodium">Sodium (mg)</label>
+                                <input  id="jform_sodium" class="inputbox width_50" type="text" size="10" value="" name="jform[sodium]">
+                            </td>
+                        </tr>
+                    </table>
+                 </div>
             </form>
         </div>
     </div>

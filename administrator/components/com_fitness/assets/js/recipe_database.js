@@ -173,16 +173,26 @@
     }
 
     RecipeDatabase.prototype.set_measurement_unit = function(measurement_unit) {
+        $("#jform_calories, #jform_energy, #jform_protein, #jform_fats, #jform_saturated_fat, #jform_carbs, #jform_total_sugars, #jform_sodium, #enter_energy, #enter_protein, #enter_fats, #enter_saturated_fat, #enter_carbs, #enter_total_sugars, #enter_sodium").val('');
         if(measurement_unit == '2') {
             $("#measurement_unit_wrapper").show();
             this.show_left_column();
             $("#right_title").html("<b>Values as 100g Edible Portion (EP)</b><br/>(stored in nutrition database) ");
-        } else {
+            $(".main_fields_wrapper").show();
+            
+            $("#jform_calories, #jform_energy, #jform_protein, #jform_fats, #jform_saturated_fat, #jform_carbs, #jform_total_sugars, #jform_sodium").attr('readonly','readonly');
+            
+        } else if(measurement_unit == '1') {
             $("#jform_specific_gravity").val('');
             $("#specific_gravity_grams").val('');
             $("#measurement_unit_wrapper").hide();
             this.hide_left_column();
             $("#right_title").html("<b>Enter Nutrition Info</b><br/>(as on product label: “average per 100g”) ");
+            $(".main_fields_wrapper").show();
+            
+            $("#jform_calories, #jform_energy, #jform_protein, #jform_fats, #jform_saturated_fat, #jform_carbs, #jform_total_sugars, #jform_sodium").removeAttr('readonly');
+        } else {
+            $(".main_fields_wrapper").hide();
         }
     }
 

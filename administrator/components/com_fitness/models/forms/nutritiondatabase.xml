@@ -109,10 +109,10 @@
         type="list"
         label="Measurement Unit"
         description=""
-        class="inputbox"
+        class="inputbox required"
         size="1"
-        default="0">
-        <option value="0">-Select-</option>
+        >
+        <option value="">-Select-</option>
         <option value="1">GRAMS</option>
         <option value="2">MILLILITRES</option>
     </field>

@@ -49,158 +49,158 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
                 <li><?php echo $this->form->getLabel('measurement_unit'); ?>
                 <?php echo $this->form->getInput('measurement_unit'); ?></li>
-
-                <li id="measurement_unit_wrapper" style="display:none;">
-                    <p style="font-style:italic;">
-                        You are entering a liquid ingredient. See this <a target="_blank" href="<?php echo  JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS . 'includes' . DS . 'Specific gravity appendix.pdf' ?>">LIST</a> for a suitable specific gravity
-                        <br/>for your product. Is this the correct ‘specific gravity’ for this ingredient?
-                    </p>
-                    <table>
+                    <div class="main_fields_wrapper" style="display: none;">
+                        <li id="measurement_unit_wrapper" style="display:none;">
+                            <p style="font-style:italic;">
+                                You are entering a liquid ingredient. See this <a target="_blank" href="<?php echo  JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS . 'includes' . DS . 'Specific gravity appendix.pdf' ?>">LIST</a> for a suitable specific gravity
+                                <br/>for your product. Is this the correct ‘specific gravity’ for this ingredient?
+                            </p>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label id="jform_specific_gravity-lbl" class="" for="jform_specific_gravity">Specific Gravity</label> 
+                                    </td>
+                                    <td>
+                                        <input id="jform_specific_gravity" class="inputbox validate-numeric" type="text" size="10" value="" name="jform[specific_gravity]">
+                                    </td>
+                                    <td>
+                                        SG = ml for 100 grams 
+                                    </td>
+                                    <td>
+                                        <input readonly id="specific_gravity_grams" class="inputbox" type="text" size="10" value="" name="specific_gravity_grams"><span style="position: absolute;padding-top:5px;">ml</span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p>
+                                To correctly enter the nutritional values of this liquid ingredient into the
+                                database, you must enter the product nutritional values (from the nutrition panel
+                                on the product) taken from the "average quantity per 100ml" serving size column...
+                            </p>
+                        </li>
+                        <div class="clr"></div>
+                    </div>
+                </ul>
+                <div class="main_fields_wrapper" style="display: none;"> 
+                    <div class="clr"></div>
+                    <table id="ingradient_fields" width="100%">
                         <tr>
-                            <td>
-                                <label id="jform_specific_gravity-lbl" class="" for="jform_specific_gravity">Specific Gravity</label> 
+                            <td class="millilitres_column" width="50%">
+                                <b>Enter Nutrition Info</b><br/>
+                                (as on product label: “average per 100ml”)
+                            </td>
+                            <td id="right_title"  width="50%">
+                                <b>Values as 100g Edible Portion (EP)</b><br/>
+                                (stored in nutrition database)                       
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="millilitres_column">
+
                             </td>
                             <td>
-                                <input id="jform_specific_gravity" class="inputbox validate-numeric" type="text" size="10" value="" name="jform[specific_gravity]">
+                                <?php echo $this->form->getLabel('calories'); ?>
+                                <?php echo $this->form->getInput('calories'); ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="millilitres_column">
+                                <?php echo $this->form->getLabel('energy'); ?>
+                                <input id="enter_energy" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_energy">
                             </td>
                             <td>
-                                SG = ml for 100 grams 
+                                <?php echo $this->form->getLabel('energy'); ?>
+                                <?php echo $this->form->getInput('energy'); ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="millilitres_column">
+                                <?php echo $this->form->getLabel('protein'); ?>
+                                <input id="enter_protein" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_protein">
                             </td>
                             <td>
-                                <input readonly id="specific_gravity_grams" class="inputbox" type="text" size="10" value="" name="specific_gravity_grams"><span style="position: absolute;padding-top:5px;">ml</span>
+                                <?php echo $this->form->getLabel('protein'); ?>
+                                <?php echo $this->form->getInput('protein'); ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="millilitres_column">
+                                <?php echo $this->form->getLabel('fats'); ?>
+                                <input id="enter_fats" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_fats">
+                            </td>
+                            <td>
+                                <?php echo $this->form->getLabel('fats'); ?>
+                                <?php echo $this->form->getInput('fats'); ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="millilitres_column">
+                                <?php echo $this->form->getLabel('saturated_fat'); ?>
+                                <input id="enter_saturated_fat" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_saturated_fat">
+                                <div class="clr"></div>
+                            </td>
+                            <td>
+                                <?php echo $this->form->getLabel('saturated_fat'); ?>
+                                <?php echo $this->form->getInput('saturated_fat'); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                               <div id="saturated_error" class="error_message"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="millilitres_column">
+                                <?php echo $this->form->getLabel('carbs'); ?>
+                                <input id="enter_carbs" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_carbs">
+                            </td>
+                            <td>
+                                <?php echo $this->form->getLabel('carbs'); ?>
+                                <?php echo $this->form->getInput('carbs'); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                               <div id="sum_100_error" class="error_message"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="millilitres_column">
+                                <?php echo $this->form->getLabel('total_sugars'); ?>
+                                <input id="enter_total_sugars" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_total_sugars">
+                            </td>
+                            <td>
+                                <?php echo $this->form->getLabel('total_sugars'); ?>
+                                <?php echo $this->form->getInput('total_sugars'); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                               <div id="sugars_error" class="error_message"></div> 
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="millilitres_column">
+                                <?php echo $this->form->getLabel('sodium'); ?>
+                                <input id="enter_sodium" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_sodium">
+                            </td>
+                            <td>
+                                <?php echo $this->form->getLabel('sodium'); ?>
+                                <?php echo $this->form->getInput('sodium'); ?>
                             </td>
                         </tr>
                     </table>
-                    <p>
-                        To correctly enter the nutritional values of this liquid ingredient into the
-                        database, you must enter the product nutritional values (from the nutrition panel
-                        on the product) taken from the "average quantity per 100ml" serving size column...
-                    </p>
-                </li>
-                <div class="clr"></div>
-                                
-
-
-            </ul>
-            <div class="clr"></div>
-            <table id="ingradient_fields" width="100%">
-                <tr>
-                    <td class="millilitres_column" width="50%">
-                        <b>Enter Nutrition Info</b><br/>
-                        (as on product label: “average per 100ml”)
-                    </td>
-                    <td id="right_title"  width="50%">
-                        <b>Values as 100g Edible Portion (EP)</b><br/>
-                        (stored in nutrition database)                       
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="millilitres_column">
-                        
-                    </td>
-                    <td>
-                        <?php echo $this->form->getLabel('calories'); ?>
-			<?php echo $this->form->getInput('calories'); ?>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="millilitres_column">
-                        <?php echo $this->form->getLabel('energy'); ?>
-                        <input id="enter_energy" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_energy">
-                    </td>
-                    <td>
-                        <?php echo $this->form->getLabel('energy'); ?>
-                        <?php echo $this->form->getInput('energy'); ?>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="millilitres_column">
-                        <?php echo $this->form->getLabel('protein'); ?>
-                        <input id="enter_protein" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_protein">
-                    </td>
-                    <td>
-                        <?php echo $this->form->getLabel('protein'); ?>
-                        <?php echo $this->form->getInput('protein'); ?>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="millilitres_column">
-                        <?php echo $this->form->getLabel('fats'); ?>
-                        <input id="enter_fats" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_fats">
-                    </td>
-                    <td>
-                        <?php echo $this->form->getLabel('fats'); ?>
-                        <?php echo $this->form->getInput('fats'); ?>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="millilitres_column">
-                        <?php echo $this->form->getLabel('saturated_fat'); ?>
-                        <input id="enter_saturated_fat" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_saturated_fat">
-                        <div class="clr"></div>
-                    </td>
-                    <td>
-                        <?php echo $this->form->getLabel('saturated_fat'); ?>
-                        <?php echo $this->form->getInput('saturated_fat'); ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                       <div id="saturated_error" class="error_message"></div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="millilitres_column">
-                        <?php echo $this->form->getLabel('carbs'); ?>
-                        <input id="enter_carbs" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_carbs">
-                    </td>
-                    <td>
-                        <?php echo $this->form->getLabel('carbs'); ?>
-                        <?php echo $this->form->getInput('carbs'); ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                       <div id="sum_100_error" class="error_message"></div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="millilitres_column">
-                        <?php echo $this->form->getLabel('total_sugars'); ?>
-                        <input id="enter_total_sugars" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_total_sugars">
-                    </td>
-                    <td>
-                        <?php echo $this->form->getLabel('total_sugars'); ?>
-                        <?php echo $this->form->getInput('total_sugars'); ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                       <div id="sugars_error" class="error_message"></div> 
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="millilitres_column">
-                        <?php echo $this->form->getLabel('sodium'); ?>
-                        <input id="enter_sodium" class="inputbox validate-numeric" type="text" size="10" value="" name="enter_sodium">
-                    </td>
-                    <td>
-                        <?php echo $this->form->getLabel('sodium'); ?>
-                        <?php echo $this->form->getInput('sodium'); ?>
-                    </td>
-                </tr>
-            </table>
-            <br/>
-            <?php echo $this->form->getLabel('state'); ?>
-            <?php echo $this->form->getInput('state'); ?>
+                    <br/>
+                    <?php echo $this->form->getLabel('state'); ?>
+                    <?php echo $this->form->getInput('state'); ?>
+                </div>
         </fieldset>
     </div>
 
