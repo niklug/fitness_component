@@ -2,7 +2,7 @@
     $(document).ready(function() {
         $("#email_button").on('click', function() {
             var event_id = '<?php echo $event->id; ?>';
-            senSessionDetailsEmail(event_id);
+            sendSessionDetailsEmail(event_id, 'Workout');
         });
 
         $("#pdf_button").on('click', function() {
@@ -10,32 +10,30 @@
             printPage(htmlPage);
         });
     });  
+    
+    function sendSessionDetailsEmail(id, method) {
+        var data = {};
+        var url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+        var view = '';
+        var task = 'ajax_email';
+        var table = '';
 
-    function senSessionDetailsEmail(event_id) {
-        var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
-        var url = DATA_FEED_URL+ "&method=send_appointment_email";
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-               event_id : event_id
-            },
-            dataType : 'json',
-            success : function(response) {
-                //console.log(response);
-                if(response.success != true) {
-                    alert(response.Msg);
-                    return;
-                } 
-                alert('Email sent');  
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert("error");
-            }
-        }); 
-      
+        data.id = id;
+        data.view = 'Programs';
+        data.method = method;
+
+
+        $.AjaxCall(data, url, view, task, table, function(output){
+            var emails = output.split(',');
+            var message = 'Emails were sent to: ' +  "</br>";
+            $.each(emails, function(index, email) { 
+                message += email +  "</br>";
+            });
+            $("#emais_sended").append(message);
+        });
     }
+
+
 
     function printPage(htmlPage) {
         var w = window.open(htmlPage);

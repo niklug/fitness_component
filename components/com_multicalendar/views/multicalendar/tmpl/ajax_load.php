@@ -25,6 +25,7 @@ require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/functions.php' );
 require_once( JPATH_BASE . '/components/com_multicalendar/DC_MultiViewCal/php/list.inc.php' );
 
 require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'fitness.php';
+require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email.php';
 
 $db = & JFactory::getDBO();
 header('Content-type:text/javascript;charset=UTF-8');
@@ -84,19 +85,7 @@ switch ($method) {
         break;
     case "set_event_exircise_order":
         $ret = set_event_exircise_order();
-    case "send_appointment_email":
-        $ret = send_appointment_email(JRequest::getVar('event_id'), 'workout');
-        break;
-    case "sendAppointmentEmail":
-        $ret = sendAppointmentEmail('confirmation');
-        break;
-    case "sendNotifyEmail":
-        $ret = sendAppointmentEmail('notify');
-        break;
-    case "sendNotifyAssessmentEmail":
-        $ret = sendAppointmentEmail('notifyAssessment');
-        break;
-   
+
 
     // Recipe approved email
     case "sendRecipeEmail":
@@ -945,81 +934,6 @@ function set_event_exircise_order() {
 }
 
 /**
- * sends email to the client with appointment content, exercises , etc..
- */
-function send_appointment_email($event_id, $type) {
-    $helper = new FitnessHelper();
-    
-    $client_ids = $helper->getClientsByEvent($event_id);
-
-    switch ($type) {
-        case 'confirmation':
-            $subject = 'Appointment Confirmation';
-            $layout = '&layout=email_reminder';
-            break;
-        case 'notify':
-            $subject = 'Review Your Feedback';
-            $layout = '&layout=email_notify';
-            break;
-        case 'notifyAssessment':
-            $subject = 'Assessment Complete';
-            $layout = '&layout=email_notify_assessment';
-            break;
-
-        default:
-            $layout = '';
-            $subject = 'Workout/Training Session';
-            break;
-    }
-
-
-    foreach ($client_ids as $client_id) {
-        if (!$client_id)
-            continue;
-
-        $url = JURI::base() . 'index.php?option=com_multicalendar&view=pdf' . $layout . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
-
-        
-        $contents = $helper->getContentCurl($url);
-
-        if (!$contents['success']) {
-            return $contents;
-        }
-
-        $contents = $contents['data'];
-
-        $email = JFactory::getUser($client_id)->email;
-
-        $emails[] = $email;
-
-        $send = $helper->sendEmail($email, $subject, $contents);
-
-        if ($send != '1') {
-            $ret['success'] = false;
-            $ret['message'] = 'Email function error';
-            return $ret;
-        }
-        if ($type == 'confirmation') {
-            setSentEmailStatus($event_id, $client_id);
-        }
-    }
-
-    return $emails;
-}
-
-function setSentEmailStatus($event_id, $client_id) {
-    $db = & JFactory::getDBO();
-    $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
-    $db->setQuery($query);
-    if (!$db->query()) {
-        $ret['success'] = false;
-        $ret['message'] = $db->stderr();
-        return $ret;
-    }
-}
-
-
-/**
  * 
  * @return type
  */
@@ -1389,15 +1303,25 @@ function sendRemindersManually() {
     }
     $event_ids = $db->loadResultArray(0);
 
-    $emails = array();
-    foreach ($event_ids as $event_id) {
-        $emails = array_merge($emails, send_appointment_email($event_id, 'confirmation'));
-    }
-
-    $emails = implode(', ', $emails);
-    //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
+    $obj = new AppointmentEmail();
     $ret['success'] = true;
+    
+    foreach ($event_ids as $event_id) {
+        try {
+
+            $data_obj = new stdClass();
+            $data_obj->id = $event_id;
+            $data_obj->method = 'Appointment';
+
+            $emails  .= ' ' .$obj->processing($data_obj);
+        } catch (Exception $exc) {
+            $ret['success'] = 0;
+            $ret['message'] = $exc->getMessage();
+        }
+    }
+    
     $ret['message'] = $emails;
+
     return $ret;
 }
 
@@ -1411,36 +1335,6 @@ function deleteEvent() {
         $ret['success'] = false;
         $ret['message'] = $db->stderr();
     }
-    return $ret;
-}
-
-function getUserGroup($user_id) {
-    if (!$user_id) {
-        $user_id = &JFactory::getUser()->id;
-    }
-    $db = JFactory::getDBO();
-    $query = "SELECT title FROM #__usergroups WHERE id IN 
-        (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
-    $db->setQuery($query);
-    return $db->loadResult();
-}
-
-/*
- * administration Programs view
- */
-
-function sendAppointmentEmail($type) {
-    $event_id = JRequest::getVar('id');
-    if (!$event_id) {
-        $ret['success'] = false;
-        $ret['message'] = 'Error: no item id';
-        return $ret;
-    }
-    $emails = send_appointment_email($event_id, $type);
-    $emails = implode(', ', $emails);
-    //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
-    $ret['success'] = true;
-    $ret['message'] = $emails;
     return $ret;
 }
 

@@ -501,7 +501,6 @@
 
 
             $.AjaxCall(data, url, view, task, table, function(output){
-                console.log(output);
                 var emails = output.split(',');
                 var message = 'Emails were sent to: ' +  "</br>";
                 $.each(emails, function(index, email) { 

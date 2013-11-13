@@ -23,11 +23,11 @@ class FitnessEmail extends FitnessHelper
                 return new GoalStatusEmail();
                 break;
             case 'Assessment':
-                return new AppointmentStatusEmail();
+                return new AppointmentEmail();
                 break;
             
             case 'Programs':
-                return new AppointmentStatusEmail();
+                return new AppointmentEmail();
                 break;
 
             default:
@@ -58,12 +58,26 @@ class FitnessEmail extends FitnessHelper
             if($send != '1') {
                 throw new Exception('Email function error');
             }
+            
+            if ($data->method == 'Appointment') {//confirmation
+                $this->setSentEmailStatus($this->data->id, $recipient_id);
+            }
+            
             $i++;
         }
         
         $emails = implode(', ', $emails);
         
         return $emails;
+    }
+    
+    function setSentEmailStatus($event_id, $client_id) {
+        $db = & JFactory::getDBO();
+        $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            throw new Exception($db->stderr());
+        }
     }
 
 }
@@ -213,7 +227,7 @@ class GoalStatusEmail extends FitnessEmail {
 }
 
 
-class AppointmentStatusEmail extends FitnessEmail {
+class AppointmentEmail extends FitnessEmail {
     
     private function setParams($data) {
         $this->data = $data;
@@ -227,7 +241,7 @@ class AppointmentStatusEmail extends FitnessEmail {
         $send_to_trainer = false;
 
         switch ($data->method) {
-            //primary
+            //status
             case 'AppointmentAttended':
                 $subject = 'Appointment Complete';
                 $layout = 'email_status_attended';
@@ -243,6 +257,25 @@ class AppointmentStatusEmail extends FitnessEmail {
             case 'AppointmentNoshow':
                 $subject = 'You Missed Your Appointment';
                 $layout = 'email_status_no_show';
+                break;
+            //
+            case 'Appointment': //confirmation
+                $subject = 'Appointment Confirmation';
+                $layout = 'email_reminder';
+                break;
+            case 'Notify':
+                $subject = 'Review Your Feedback';
+                $layout = 'email_notify';
+                break;
+            
+            case 'NotifyAssessment':
+                $subject = 'Assessment Complete';
+                $layout = 'email_notify_assessment';
+                break;
+            
+            case 'Workout':
+                $subject = 'Workout/Training Session';
+                $layout = 'email_workout';
                 break;
             
             default:
