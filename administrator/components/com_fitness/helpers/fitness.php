@@ -1028,6 +1028,12 @@ class FitnessHelper extends FitnessFactory
         $client_ids = array_unique($client_ids);
         return $client_ids;
     }
+    
+    function getClientIdByNutritionPlanId($nutrition_plan_id) {
+        $query = "SELECT client_id FROM #__fitness_nutrition_plan WHERE id='$nutrition_plan_id' AND state='1'";
+        $user_id = self::customQuery($query, 0);
+        return $user_id;
+    }
  
 }
 

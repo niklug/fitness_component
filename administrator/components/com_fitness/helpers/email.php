@@ -29,6 +29,10 @@ class FitnessEmail extends FitnessHelper
             case 'Programs':
                 return new AppointmentEmail();
                 break;
+            
+            case 'NutritionPlan':
+                return new NutritionPlanEmail();
+                break;
 
             default:
                 break;
@@ -314,6 +318,66 @@ class AppointmentEmail extends FitnessEmail {
 
         return $data;
     }
+
+}
+
+
+
+class NutritionPlanEmail extends FitnessEmail {
+    
+    private function setParams($data) {
+        $this->data = $data;
+        $id = $data->id;
+        
+        if (!$id) {
+            throw new Exception('Error: no Nutrition Plan id');
+        }
+
+        switch ($data->method) {
+            case 'Notify':
+                $subject = 'Nutrition Plan Available';
+                $layout = 'email_notify_nutrition_plan';
+                break;
+ 
+            default:
+                break;
+        }
+        
+        $this->subject = $subject;
+
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&nutrition_plan_id=' . $id;
+    }
     
     
+    private function generate_contents(){
+        $contents = $this->getContentCurl($this->url);
+        $this->contents = $contents['data'];
+    }
+    
+    
+    private function get_recipients_ids() {
+        $ids = array();
+        
+        $client_id = $this->getClientIdByNutritionPlanId($this->data->id);
+
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+
+        $ids[] = $client_id;
+        
+        $this->recipients_ids = $ids;
+    }
+    
+    public function processing($data) {
+        $this->setParams($data);
+            
+        $this->generate_contents();
+
+        $this->get_recipients_ids();
+
+        $data = $this->send_mass_email();
+        
+        return $data;
+    }
 }

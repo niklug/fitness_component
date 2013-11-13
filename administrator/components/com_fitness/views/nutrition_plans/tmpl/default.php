@@ -303,7 +303,7 @@ $helper = new FitnessHelper();
 				</td>
                                 
                                 <td>
-                                      <a onclick="sendEmail('<?php echo $item->id ?>', 'NutritionPlanNotify')" class="send_email_button"></a>  
+                                      <a data-id='<?php echo $item->id ?>' onclick="javascript:void(0)" class="send_email_button"></a>  
                                 </td>
 
 
@@ -367,37 +367,35 @@ $helper = new FitnessHelper();
              form.submit();
              
         })
-
-
+        
+        $(".send_email_button").on('click', function() {
+             var id = $(this).attr('data-id');
+             sendEmail(id, 'Notify') 
+        })
+        
         function sendEmail(id, method) {
-            var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0&method=send' + method + 'Email';
-            $.ajax({
-                    type : "POST",
-                    url : url,
-                    data : {
-                        id : id
-                    },
-                    dataType : 'json',
-                    success : function(response) {
-                        if(response.success) {
-                            var emails = response.Msg.split(',');
+            var data = {};
+            var url = '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
 
-                            var message = 'Emails were sent to: ' +  "</br>";
-                            $.each(emails, function(index, email) { 
-                                message += email +  "</br>";
-                            });
-                            $("#emais_sended").append(message);
+            data.id = id;
+            data.view = 'NutritionPlan';
+            data.method = method;
 
-                        } else {
-                            alert(response.Msg);
-                        }
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown)
-                    {
-                        alert("error");
-                    }
+
+            $.AjaxCall(data, url, view, task, table, function(output){
+                console.log(output);
+                var emails = output.split(',');
+                var message = 'Emails were sent to: ' +  "</br>";
+                $.each(emails, function(index, email) { 
+                    message += email +  "</br>";
+                });
+                $("#emais_sended").append(message);
             });
         }
+
 
 
         $("#primary_trainer").on('change', function() {

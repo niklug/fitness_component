@@ -92,11 +92,7 @@ switch ($method) {
         $ret = sendRecipeEmail();
         break;
     //
-    // nutrition plan
-    case "sendNutritionPlanNotifyEmail":
-        $ret = sendNutritionPlanEmail('email_notify_nutrition_plan');
-        break;
-    //
+
     // nutrition diary
     case "sendDiaryPassEmail":
         $ret = sendNutritionDiaryEmail('email_diary_pass');
@@ -1398,53 +1394,7 @@ function getEmailByRecipeId($recipe_id) {
     return $user->email;
 }
 
-//nutrition plan email
-function sendNutritionPlanEmail($type) {
-    $nutrition_plan_id = JRequest::getVar('id');
 
-    if (!$nutrition_plan_id) {
-        $ret['success'] = false;
-        $ret['message'] = 'No nutrition plan id';
-        return $ret;
-    }
-    $subject = 'Nutrition Plan Available';
-
-    $url = JURI::base() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&nutrition_plan_id=' . $nutrition_plan_id;
-
-    $helper = new FitnessHelper();
-    $contents = $helper->getContentCurl($url);
-
-    $contents = $contents['data'];
-
-    $email = getEmailByNutritionPlanId($nutrition_plan_id);
-
-    $send = $helper->sendEmail($email, $subject, $contents);
-
-    if ($send != '1') {
-        $ret['success'] = false;
-        $ret['message'] = 'Email function error';
-        return $ret;
-    }
-    $ret['success'] = true;
-    $ret['message'] = $email;
-    return $ret;
-}
-
-function getEmailByNutritionPlanId($nutrition_plan_id) {
-    $db = & JFactory::getDBO();
-    $query = "SELECT client_id FROM #__fitness_nutrition_plan WHERE id='$nutrition_plan_id' AND state='1'";
-    $db->setQuery($query);
-    if (!$db->query()) {
-        $ret['success'] = false;
-        $ret['message'] = $db->stderr();
-        return $ret;
-    }
-    $user_id = $db->loadResult();
-
-    $user = &JFactory::getUser($user_id);
-
-    return $user->email;
-}
 
 // nutrition diary email
 function sendNutritionDiaryEmail($type) {
