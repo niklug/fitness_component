@@ -144,19 +144,23 @@ class GoalEmail extends FitnessEmail {
         $ids = array();
         
         $client = $this->getClientIdByGoalId($this->data->id , $this->goal_type);
-        
+
         $client_id = $client['data']['client_id'];
-        
+
         if (!$client_id) {
             throw new Exception('error: no client id');
         }
         
-        $ids[] = $client_id;
+        if($this->send_to_client) {
+
+            $ids[] = $client_id;
+        }
         
-        
-        $trainers_data = $this->getClientTrainers($client_id,  'all');
-        
-        $ids = array_merge($ids, $trainers_data['data']);
+        if($this->send_to_trainer) {
+            $trainers_data = $this->getClientTrainers($client_id,  'all');
+
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
         
         $this->recipients_ids = $ids;
     }

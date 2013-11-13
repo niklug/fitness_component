@@ -41,13 +41,31 @@
             sendGoalEmail : function() {
                 var goal_status = $.status({'calendar_frontend_url' : this.attributes.calendar_frontend_url});
                 var id = this.get('saved_item').id;
-                var email = 'GoalEvaluating';
+                var method = 'GoalEvaluating';
                 var goal_type = this.get('goal_type');
                 if(goal_type == 'mini_goal') {
-                    email = 'GoalEvaluatingMini';
+                    method = 'GoalEvaluatingMini';
                 }
-                goal_status.sendEmail(id, email);
+                this.sendEmail(id, method);
             },
+            
+            sendEmail : function(id, method) {
+                var data = {};
+                var url = this.attributes.fitness_frontend_url;
+                var view = '';
+                var task = 'ajax_email';
+                var table = '';
+ 
+                data.id = id;
+                data.view = 'Goal';
+                data.method = method;
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+
+                });
+            },
+    
             populateGoals : function() {
                 var data = {};
                 var url = this.get('fitness_frontend_url');
