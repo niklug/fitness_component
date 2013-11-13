@@ -483,36 +483,35 @@
                     break;
             }
             if(send_appointment_email) {
-                sendAppointmentStatusEmail(event_id, method, appointment_client_id);
+                sendAppointmentStatusEmail(event_id, method);
             }
         }
 
-        function sendAppointmentStatusEmail(event_id, method, appointment_client_id) {
-            var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
-            var url = DATA_FEED_URL+ "&method=send" + method + 'Email';
-            $.ajax({
-                type : "POST",
-                url : url,
-                data : {
-                   event_id : event_id,
-                   appointment_client_id : appointment_client_id
-                },
-                dataType : 'json',
-                success : function(response) {
-                    //console.log(response);
-                    if(response.success != true) {
-                        alert(response.message);
-                        return;
-                    } 
-                    alert('Email sent');  
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown)
-                {
-                    alert("error");
-                }
-            }); 
+               
+        function sendAppointmentStatusEmail(id, method) {
+            var data = {};
+            var url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
 
+            data.id = id;
+            data.view = 'Programs';
+            data.method = method;
+
+
+            $.AjaxCall(data, url, view, task, table, function(output){
+                console.log(output);
+                var emails = output.split(',');
+                var message = 'Emails were sent to: ' +  "</br>";
+                $.each(emails, function(index, email) { 
+                    message += email +  "</br>";
+                });
+                $("#emais_sended").append(message);
+            });
         }
+    
+        
 
         function event_status_html(event_status) {
              if(event_status == 1)  return '<a data-status="' + event_status + '" class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';

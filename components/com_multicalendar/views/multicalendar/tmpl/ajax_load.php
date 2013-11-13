@@ -97,19 +97,6 @@ switch ($method) {
         $ret = sendAppointmentEmail('notifyAssessment');
         break;
    
-    // appointment status emails
-    case "sendAppointmentAttendedEmail":
-        $ret = sendAppointmentStatusEmail('email_status_attended');
-        break;
-    case "sendAppointmentCancelledEmail":
-        $ret = sendAppointmentStatusEmail('email_status_cancelled');
-        break;
-    case "sendAppointmentLatecancelEmail":
-        $ret = sendAppointmentStatusEmail('email_status_late_cancel');
-        break;
-    case "sendAppointmentNoshowEmail":
-        $ret = sendAppointmentStatusEmail('email_status_no_show');
-        break;
 
     // Recipe approved email
     case "sendRecipeEmail":
@@ -1457,70 +1444,6 @@ function sendAppointmentEmail($type) {
     return $ret;
 }
 
-// Appointments status emails
-function sendAppointmentStatusEmail($type) {
-    $event_id = JRequest::getVar('id');
-    if (!$event_id) {
-        $ret['success'] = false;
-        $ret['message'] = 'error: no id';
-        return $ret;
-    }
-    
-    $helper = new FitnessHelper();
-
-    $client_ids = $helper->getClientsByEvent($event_id);
-
-    switch ($type) {
-        case 'email_status_attended':
-            $subject = 'Appointment Complete';
-            break;
-        case 'email_status_cancelled':
-            $subject = 'Appointment Cancelled';
-            break;
-        case 'email_status_late_cancel':
-            $subject = 'Late Appointment Cancellation';
-            break;
-        case 'email_status_no_show':
-            $subject = 'You Missed Your Appointment';
-            break;
-        default:
-            return;
-            break;
-    }
-
-
-    foreach ($client_ids as $client_id) {
-        if (!$client_id)
-            continue;
-
-        $url = JURI::base() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
-        
-        $contents = $helper->getContentCurl($url);
-
-        if (!$contents['success']) {
-            return $contents;
-        }
-
-        $contents = $contents['data'];
-
-        $email = JFactory::getUser($client_id)->email;
-
-        $emails[] = $email;
-
-        $send = $helper->sendEmail($email, $subject, $contents);
-
-        if ($send != '1') {
-            $ret['success'] = false;
-            $ret['message'] = 'Email function error';
-            return $ret;
-        }
-    }
-    $emails = implode(', ', $emails);
-    //sendEmail('npkorban@gmail.com', 'Appointment details, elitefit.com.au', $emails);
-    $ret['success'] = true;
-    $ret['message'] = $emails;
-    return $ret;
-}
 
 function getClientIdByAppointmentId($appointment_client_id) {
     $db = & JFactory::getDBO();

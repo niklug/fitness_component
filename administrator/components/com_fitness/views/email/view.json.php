@@ -39,12 +39,7 @@ class FitnessViewEmail extends JView {
         $result = array( 'status' => $status, 'data' => $data);
         
         echo  json_encode($result);
-        
-        die();
-        
-        $email->send();
-        
-        
+       
     }
 }
 

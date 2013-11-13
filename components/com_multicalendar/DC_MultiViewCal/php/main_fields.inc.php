@@ -126,8 +126,8 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
         });
         
         function businessLogic(business_profile_id) {
-            
-            if(!business_profile_id) {
+
+            if(!parseInt(business_profile_id)) {
                 return;
             }
             

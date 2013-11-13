@@ -20,14 +20,14 @@ class FitnessEmail extends FitnessHelper
         
         switch ($view) {
             case 'Goal':
-                return new GoalEmail();
+                return new GoalStatusEmail();
                 break;
             case 'Assessment':
-                return new AssessmentEmail();
+                return new AppointmentStatusEmail();
                 break;
             
             case 'Programs':
-                return new AssessmentEmail();
+                return new AppointmentStatusEmail();
                 break;
 
             default:
@@ -37,9 +37,7 @@ class FitnessEmail extends FitnessHelper
     
     protected function send_mass_email() {
         $emails = array();
-        
-        
-        
+
         $i = 0;
         foreach ($this->recipients_ids as $recipient_id) {
             
@@ -48,11 +46,13 @@ class FitnessEmail extends FitnessHelper
             $email = &JFactory::getUser($recipient_id)->email;
             
             $emails[] = $email;
+            
+            $contents = $this->contents;
  
-            if(is_array($this->contents)) {
+            if(is_array($contents)) {
                 $send = $this->sendEmail($email, $this->subject, $contents[$i]);
             } else {
-                $send = $this->sendEmail($email, $this->subject, $this->contents);
+                $send = $this->sendEmail($email, $this->subject, $contents);
             }
 
             if($send != '1') {
@@ -70,7 +70,7 @@ class FitnessEmail extends FitnessHelper
 
 
 
-class GoalEmail extends FitnessEmail {
+class GoalStatusEmail extends FitnessEmail {
     
     private function setParams($data) {
         $this->data = $data;
@@ -213,7 +213,7 @@ class GoalEmail extends FitnessEmail {
 }
 
 
-class AssessmentEmail extends FitnessEmail {
+class AppointmentStatusEmail extends FitnessEmail {
     
     private function setParams($data) {
         $this->data = $data;
