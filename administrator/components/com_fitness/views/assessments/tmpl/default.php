@@ -520,7 +520,8 @@ $helper = new FitnessHelper();
                 var appointment_title = $("#appointment_title_" + item_id).attr('data-appointment');
                 if(appointment_title == 'Personal Training') return  this.statuses;
                 return  this.statuses2;
-            }
+            },
+            'view' : 'Assessment'
         }
         
         var status = $.status(status_options);

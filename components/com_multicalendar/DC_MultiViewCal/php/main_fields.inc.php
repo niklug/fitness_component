@@ -57,7 +57,10 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
                         <tr>
                             <td>Business Name:</td>
                             <td>
-                                <?php echo $helper->generateSelect($helper->getBusinessProfileList($user->id), 'business_profile_id', 'business_profile_id', $business_profile_id , '', true, "required safe inputtext"); ?>
+                                <?php
+                                $business_profile_id = $event->business_profile_id;
+                                
+                                echo $helper->generateSelect($helper->getBusinessProfileList($user->id), 'business_profile_id', 'business_profile_id', $business_profile_id , '', true, "required safe inputtext"); ?>
                             </td>
                         </tr>
                         <tr id="client_select_tr">

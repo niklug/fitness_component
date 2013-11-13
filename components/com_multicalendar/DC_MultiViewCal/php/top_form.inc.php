@@ -501,7 +501,7 @@
                 success : function(response) {
                     //console.log(response);
                     if(response.success != true) {
-                        alert(response.Msg);
+                        alert(response.message);
                         return;
                     } 
                     alert('Email sent');  

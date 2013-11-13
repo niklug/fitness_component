@@ -168,12 +168,22 @@ switch ($method) {
         if (JRequest::getVar("id") != "") {
 
             $ret = updateDetailedCalendar(
-                    JRequest::getVar("id"), $st, $et, JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent") == 1) ? 1 : 0, JRequest::getVar('Description', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('comments', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('session_type', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('session_focus', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar("client_id"), JRequest::getVar("trainer_id"), JRequest::getVar("Location"), JRequest::getVar("colorvalue"), JRequest::getVar("frontend_published"), JRequest::getVar("published"), JRequest::getVar("rrule"), JRequest::getVar("rruleType"), JRequest::getVar("timezone")
+                    JRequest::getVar("id"), $st, $et, JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent") == 1) ? 1 : 0, JRequest::getVar('Description', '',
+                    'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('comments', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), 
+                    JRequest::getVar('session_type', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('session_focus', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), 
+                    JRequest::getVar("client_id"), JRequest::getVar("trainer_id"), JRequest::getVar("Location"), JRequest::getVar("colorvalue"), JRequest::getVar("frontend_published"),
+                    JRequest::getVar("published"), JRequest::getVar("rrule"), JRequest::getVar("rruleType"), JRequest::getVar("timezone"), JRequest::getVar("business_profile_id")
             );
         } else {
 
             $ret = addDetailedCalendar(
-                    $calid, $st, $et, JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent") == 1) ? 1 : 0, JRequest::getVar('Description', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('session_type', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('session_focus', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar("client_id"), JRequest::getVar("trainer_id"), JRequest::getVar("Location"), JRequest::getVar("colorvalue"), JRequest::getVar("rrule"), 0, JRequest::getVar("timezone")
+                    $calid, $st, $et, JRequest::getVar("Subject"), (JRequest::getVar("IsAllDayEvent") == 1) ? 1 : 0,
+                    JRequest::getVar('Description', '', 'POST', 'STRING', JREQUEST_ALLOWHTML),
+                    JRequest::getVar('session_type', '', 'POST', 'STRING', JREQUEST_ALLOWHTML),
+                    JRequest::getVar('session_focus', '', 'POST', 'STRING', JREQUEST_ALLOWHTML),
+                    JRequest::getVar("client_id"), JRequest::getVar("trainer_id"), JRequest::getVar("Location"), 
+                    JRequest::getVar("colorvalue"), JRequest::getVar("rrule"), 0, JRequest::getVar("timezone"),
+                    JRequest::getVar("business_profile_id")
             );
         }
         break;
@@ -277,7 +287,7 @@ $calid, $st, $et, $sub, $ade, $Location
 }
 
 function addDetailedCalendar(
-$calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $client_id, $trainer_id, $loc, $color, $rrule, $uid, $tz) {
+$calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $client_id, $trainer_id, $loc, $color, $rrule, $uid, $tz, $business_profile_id) {
 
     $ret = array();
 
@@ -298,7 +308,8 @@ $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $client_id, 
         `trainer_id`,
         `" . DC_MV_CAL_LOCATION . "`, 
         `" . DC_MV_CAL_COLOR . "`,
-        `rrule`,`uid`,`owner`, `published`) values (
+        `rrule`,`uid`,`owner`, `published`,
+        `business_profile_id`) values (
         
        " . $calid . ","
                     . $db->Quote($sub) . ", '"
@@ -311,7 +322,8 @@ $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $client_id, 
                     . $db->Quote($client_id) . ", "
                     . $db->Quote($trainer_id) . ", "
                     . $db->Quote($loc) . ", "
-                    . $db->Quote($color) . ", " . $db->Quote($rrule) . ", " . $db->Quote($uid) . ", " . $user->id . ",1 )";
+                    . $db->Quote($color) . ", " . $db->Quote($rrule) . ", " . $db->Quote($uid) . ", " . $user->id . ",1,"
+                    . $db->Quote($business_profile_id) ." )";
 
             $db->setQuery($sql);
             if (!$db->query()) {
@@ -566,7 +578,8 @@ function updateCalendar($id, $st, $et) {
 }
 
 function updateDetailedCalendar(
-$id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $client_id, $trainer_id, $loc, $color, $frontend_published, $published, $rrule, $rruleType, $tz
+$id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $client_id, $trainer_id, $loc, $color, $frontend_published, 
+        $published, $rrule, $rruleType, $tz, $business_profile_id
 ) {
 
     $ret = array();
@@ -596,7 +609,8 @@ $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $cli
                         . " `" . DC_MV_CAL_COLOR . "`=" . $db->Quote($color) . ", "
                         . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
                         . " `published`=" . $db->Quote($published) . ", "
-                        . " `rrule`=" . $db->Quote($rrule) . " "
+                        . " `rrule`=" . $db->Quote($rrule) . ", "
+                        . " `business_profile_id`=" . $db->Quote($business_profile_id) . " "
                         . "where `id`=" . $id;
                 $db->setQuery($sql);
                 if (!$db->query()) {
@@ -629,7 +643,7 @@ $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $cli
                 $db->setQuery($sql);
                 $db->query();
                 return addDetailedCalendar(
-                        JRequest::getVar('calid'), $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $client_id, $trainer_id, $loc, $color, "", $id, $tz
+                        JRequest::getVar('calid'), $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $client_id, $trainer_id, $loc, $color, "", $id, $tz, $business_profile_id
                 );
             }
             else {
@@ -648,7 +662,8 @@ $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $cli
                         . " `" . DC_MV_CAL_COLOR . "`=" . $db->Quote($color) . ", "
                         . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
                         . " `published`=" . $db->Quote($published) . ", "
-                        . " `rrule`=" . $db->Quote($rrule) . " "
+                        . " `rrule`=" . $db->Quote($rrule) . ", "
+                        . " `business_profile_id`=" . $db->Quote($business_profile_id) . " "
                         . "where `id`=" . $id;
                 $db->setQuery($sql);
                 if (!$db->query()) {
@@ -946,8 +961,9 @@ function set_event_exircise_order() {
  * sends email to the client with appointment content, exercises , etc..
  */
 function send_appointment_email($event_id, $type) {
-
-    $client_ids = getClientsByEvent($event_id);
+    $helper = new FitnessHelper();
+    
+    $client_ids = $helper->getClientsByEvent($event_id);
 
     switch ($type) {
         case 'confirmation':
@@ -976,7 +992,7 @@ function send_appointment_email($event_id, $type) {
 
         $url = JURI::base() . 'index.php?option=com_multicalendar&view=pdf' . $layout . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
 
-        $helper = new FitnessHelper();
+        
         $contents = $helper->getContentCurl($url);
 
         if (!$contents['success']) {
@@ -1015,28 +1031,6 @@ function setSentEmailStatus($event_id, $client_id) {
     }
 }
 
-/** get client email be event id
- * 
- * @param type $event_id
- * @return type
- */
-function getClientsByEvent($event_id) {
-
-    $db = & JFactory::getDBO();
-    $query = "SELECT DISTINCT client_id FROM #__dc_mv_events WHERE id='$event_id' AND client_id !='0'";
-    $query .= " UNION ";
-    $query .= "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id !='0'";
-
-    $db->setQuery($query);
-    if (!$db->query()) {
-        $ret['success'] = false;
-        $ret['message'] = $db->stderr();
-        return $ret;
-    }
-    $client_ids = $db->loadResultArray(0);
-    $client_ids = array_unique($client_ids);
-    return $client_ids;
-}
 
 /**
  * 
@@ -1471,8 +1465,10 @@ function sendAppointmentStatusEmail($type) {
         $ret['message'] = 'error: no id';
         return $ret;
     }
+    
+    $helper = new FitnessHelper();
 
-    $client_ids = getClientsByEvent($event_id);
+    $client_ids = $helper->getClientsByEvent($event_id);
 
     switch ($type) {
         case 'email_status_attended':
@@ -1498,7 +1494,7 @@ function sendAppointmentStatusEmail($type) {
             continue;
 
         $url = JURI::base() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&event_id=' . $event_id . '&client_id=' . $client_id;
-        $helper = new FitnessHelper();
+        
         $contents = $helper->getContentCurl($url);
 
         if (!$contents['success']) {

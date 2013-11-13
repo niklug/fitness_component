@@ -361,7 +361,8 @@ echo $this->loadTemplate('graph');?>
             'show_send_email' : true,
             setStatuses : function(item_id) {
                 return this.statuses;
-            }
+            },
+            'view' : 'Goal'
         }
         
         var mini_goal_status_options = {

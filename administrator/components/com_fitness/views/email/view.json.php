@@ -29,13 +29,7 @@ class FitnessViewEmail extends JView {
         try {
             $obj = FitnessEmail::factory($data->view);
             
-            $obj->setParams($data);
-            
-            $obj->generate_contents();
-            
-            $obj->get_recipients_ids();
-            
-            $data = $obj->send_mass_email();
+            $data = $obj->processing($data);
             
         } catch (Exception $exc) {
             $status['success'] = 0;

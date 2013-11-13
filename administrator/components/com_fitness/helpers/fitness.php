@@ -1010,6 +1010,24 @@ class FitnessHelper extends FitnessFactory
 
         return $inserted_id;     
     }
+    
+    public function getClientsByEvent($event_id) {
+        $db = & JFactory::getDBO();
+        $query = "SELECT DISTINCT client_id FROM #__dc_mv_events WHERE id='$event_id' AND client_id !='0'";
+        $query .= " UNION ";
+        $query .= "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id !='0'";
+
+        $db->setQuery($query);
+        if (!$db->query()) {
+            throw new Exception($db->stderr());
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
+            return $ret;
+        }
+        $client_ids = $db->loadResultArray(0);
+        $client_ids = array_unique($client_ids);
+        return $client_ids;
+    }
  
 }
 

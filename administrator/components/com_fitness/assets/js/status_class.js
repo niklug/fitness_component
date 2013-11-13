@@ -152,12 +152,18 @@
         var table = '';
         
         data.id = id;
-        data.view = 'Goal';
+        data.view = this.options.view;
         data.method = method;
         
         
         $.AjaxCall(data, url, view, task, table, function(output){
             console.log(output);
+            var emails = output.split(',');
+            var message = 'Emails were sent to: ' +  "</br>";
+            $.each(emails, function(index, email) { 
+                message += email +  "</br>";
+            });
+            $("#emais_sended").append(message);
         });
     }
     

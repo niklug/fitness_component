@@ -12,9 +12,6 @@ defined('_JEXEC') or die;
 
 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 
-/**
- * Fitness helper.
- */
 class FitnessEmail extends FitnessHelper
 {
 
@@ -25,11 +22,48 @@ class FitnessEmail extends FitnessHelper
             case 'Goal':
                 return new GoalEmail();
                 break;
+            case 'Assessment':
+                return new AssessmentEmail();
+                break;
+            
+            case 'Programs':
+                return new AssessmentEmail();
+                break;
 
             default:
                 break;
         }
+    }
+    
+    protected function send_mass_email() {
+        $emails = array();
+        
+        
+        
+        $i = 0;
+        foreach ($this->recipients_ids as $recipient_id) {
+            
+            if(!$recipient_id) continue;
+            
+            $email = &JFactory::getUser($recipient_id)->email;
+            
+            $emails[] = $email;
+ 
+            if(is_array($this->contents)) {
+                $send = $this->sendEmail($email, $this->subject, $contents[$i]);
+            } else {
+                $send = $this->sendEmail($email, $this->subject, $this->contents);
+            }
 
+            if($send != '1') {
+                throw new Exception('Email function error');
+            }
+            $i++;
+        }
+        
+        $emails = implode(', ', $emails);
+        
+        return $emails;
     }
 
 }
@@ -38,7 +72,7 @@ class FitnessEmail extends FitnessHelper
 
 class GoalEmail extends FitnessEmail {
     
-    public function setParams($data) {
+    private function setParams($data) {
         $this->data = $data;
         $id = $data->id;
         if (!$id) {
@@ -134,13 +168,13 @@ class GoalEmail extends FitnessEmail {
     }
     
     
-    public function generate_contents(){
+    private function generate_contents(){
         $contents = $this->getContentCurl($this->url);
         $this->contents = $contents['data'];
     }
     
     
-    public function get_recipients_ids() {
+    private function get_recipients_ids() {
         $ids = array();
         
         $client = $this->getClientIdByGoalId($this->data->id , $this->goal_type);
@@ -165,27 +199,88 @@ class GoalEmail extends FitnessEmail {
         $this->recipients_ids = $ids;
     }
     
-    public function send_mass_email() {
-        $emails = array();
-        
-        foreach ($this->recipients_ids as $recipient_id) {
+    public function processing($data) {
+        $this->setParams($data);
             
-            if(!$recipient_id) continue;
-            
-            $email = &JFactory::getUser($recipient_id)->email;
-            
-            $emails[] = $email;
-                
-            $send = $this->sendEmail($email, $this->subject, $this->contents);
+        $this->generate_contents();
 
-            if($send != '1') {
-                throw new Exception('Email function error');
-            }
-        }
+        $this->get_recipients_ids();
+
+        $data = $this->send_mass_email();
         
-        $emails = implode(', ', $emails);
-        
-        return $emails;
+        return $data;
     }
 }
 
+
+class AssessmentEmail extends FitnessEmail {
+    
+    private function setParams($data) {
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: no id');
+        }
+        
+        //default
+        $send_to_client = true;
+        $send_to_trainer = false;
+
+        switch ($data->method) {
+            //primary
+            case 'AppointmentAttended':
+                $subject = 'Appointment Complete';
+                $layout = 'email_status_attended';
+                break;
+            case 'AppointmentCancelled':
+                $subject = 'Appointment Cancelled';
+                $layout = 'email_status_cancelled';
+                break;
+            case 'AppointmentLatecancel':
+                $subject = 'Late Appointment Cancellation';
+                $layout = 'email_status_late_cancel';
+                break;
+            case 'AppointmentNoshow':
+                $subject = 'You Missed Your Appointment';
+                $layout = 'email_status_no_show';
+                break;
+            
+            default:
+                break;
+        }
+        
+        $this->subject = $subject;
+        $this->layout = $layout;
+    }
+
+    private function get_recipients_ids() {
+        $ids = $this->getClientsByEvent($this->data->id);
+        $this->recipients_ids = $ids;
+    }
+    
+    private function generate_contents(){
+        $contents = array();
+        foreach ($this->recipients_ids as $recipient_id) {
+            if(!$recipient_id)  continue;
+            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->data->id . '&client_id=' . $recipient_id;
+            $result = $this->getContentCurl($url);
+            $contents[] = $result['data'];
+        }
+        $this->contents = $contents;
+    }
+    
+    public function processing($data) {
+        
+        $this->setParams($data);
+        
+        $this->get_recipients_ids();
+        
+        $this->generate_contents();
+        
+        $data = $this->send_mass_email();
+
+        return $data;
+    }
+    
+    
+}
