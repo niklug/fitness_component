@@ -1040,6 +1040,12 @@ class FitnessHelper extends FitnessFactory
         $user_id = self::customQuery($query, 0);
         return $user_id;
     }
+    
+    function getUserIdByDiaryId($id) {
+        $query = "SELECT client_id FROM #__fitness_nutrition_diary WHERE id='$id'";
+        $user_id = self::customQuery($query, 0);
+        return $user_id;
+    }
  
 }
 

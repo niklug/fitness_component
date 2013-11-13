@@ -480,7 +480,8 @@ JHtml::_('behavior.keepalive');
             'show_send_email' : true,
              setStatuses : function(item_id) {
                 return this.statuses;
-            }
+            },
+            'view' : 'NutritionDiary'
         }
         
         // meal blocks object

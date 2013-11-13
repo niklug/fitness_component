@@ -85,17 +85,6 @@ switch ($method) {
         break;
     case "set_event_exircise_order":
         $ret = set_event_exircise_order();
-
-    // nutrition diary
-    case "sendDiaryPassEmail":
-        $ret = sendNutritionDiaryEmail('email_diary_pass');
-        break;
-    case "sendDiaryFailEmail":
-        $ret = sendNutritionDiaryEmail('email_diary_fail');
-        break;
-    case "sendDiarySubmittedEmail":
-        $ret = sendNutritionDiaryEmail('email_diary_submitted');
-        break;
     //
 
     case "update_exercise_field":
@@ -1328,84 +1317,7 @@ function deleteEvent() {
 }
 
 
-function getClientIdByAppointmentId($appointment_client_id) {
-    $db = & JFactory::getDBO();
-    $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE id='$appointment_client_id'";
-    $db->setQuery($query);
-    if (!$db->query()) {
-        $ret['success'] = false;
-        $ret['message'] = $db->stderr();
-        return $ret;
-    }
-    $client_id = $db->loadResult();
-    return $client_id;
-}
 
-
-// nutrition diary email
-function sendNutritionDiaryEmail($type) {
-    $diary_id = JRequest::getVar('id');
-
-    if (!$diary_id) {
-        $ret['success'] = false;
-        $ret['message'] = 'No nutrition diary id';
-        return $ret;
-    }
-    switch ($type) {
-        case 'email_diary_pass':
-            $subject = 'Nutrition Diary Results';
-            break;
-        case 'email_diary_fail':
-            $subject = 'Nutrition Diary Results';
-            break;
-        case 'email_diary_submitted':
-            $subject = 'Nutrition Diary Results';
-            break;
-        default:
-            return;
-            break;
-    }
-
-    $url = JURI::base() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $type . '&tpml=component&diary_id=' . $diary_id;
-
-    $helper = new FitnessHelper();
-    $contents = $helper->getContentCurl($url);
-
-    if (!$contents['success']) {
-        return $contents;
-    }
-
-    $contents = $contents['data'];
-
-    $email = getEmailByDiaryId($diary_id);
-
-    $send = $helper->sendEmail($email, $subject, $contents);
-
-    if ($send != '1') {
-        $ret['success'] = false;
-        $ret['message'] = 'Email function error';
-        return $ret;
-    }
-    $ret['success'] = true;
-    $ret['message'] = $email;
-    return $ret;
-}
-
-function getEmailByDiaryId($id) {
-    $db = & JFactory::getDBO();
-    $query = "SELECT client_id FROM #__fitness_nutrition_diary WHERE id='$id'";
-    $db->setQuery($query);
-    if (!$db->query()) {
-        $ret['success'] = false;
-        $ret['message'] = $db->stderr();
-        return $ret;
-    }
-    $user_id = $db->loadResult();
-
-    $user = &JFactory::getUser($user_id);
-
-    return $user->email;
-}
 
 jexit();
 ?>

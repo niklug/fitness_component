@@ -36,6 +36,10 @@ class FitnessEmail extends FitnessHelper
             case 'NutritionRecipe':
                 return new NutritionRecipeEmail();
                 break;
+            
+            case 'NutritionDiary':
+                return new NutritionDiaryEmail();
+                break;
 
             default:
                 break;
@@ -78,7 +82,7 @@ class FitnessEmail extends FitnessHelper
         return $emails;
     }
     
-    function setSentEmailStatus($event_id, $client_id) {
+    private function setSentEmailStatus($event_id, $client_id) {
         $db = & JFactory::getDBO();
         $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
         $db->setQuery($query);
@@ -426,6 +430,74 @@ class NutritionRecipeEmail extends FitnessEmail {
         $ids = array();
         
         $client_id = $this->getUserIdByNutritionRecipeId($this->data->id);
+
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+
+        $ids[] = $client_id;
+        
+        $this->recipients_ids = $ids;
+    }
+    
+    public function processing($data) {
+        $this->setParams($data);
+            
+        $this->generate_contents();
+
+        $this->get_recipients_ids();
+
+        $data = $this->send_mass_email();
+        
+        return $data;
+    }
+}
+
+
+class NutritionDiaryEmail extends FitnessEmail {
+    
+    private function setParams($data) {
+        $this->data = $data;
+        $id = $data->id;
+        
+        if (!$id) {
+            throw new Exception('Error: no Nutrition Diary id');
+        }
+
+        switch ($data->method) {
+            case 'DiaryPass':
+                $subject = 'Nutrition Diary Results';
+                $layout = 'email_diary_pass';
+                break;
+            case 'DiaryFail':
+                $subject = 'Nutrition Diary Results';
+                $layout = 'email_diary_fail';
+                break;
+            case 'DiarySubmitted':
+                $subject = 'Nutrition Diary Results';
+                $layout = 'email_diary_submitted';
+                break;
+ 
+            default:
+                break;
+        }
+        
+        $this->subject = $subject;
+
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&diary_id=' . $id;
+    }
+    
+    
+    private function generate_contents(){
+        $contents = $this->getContentCurl($this->url);
+        $this->contents = $contents['data'];
+    }
+    
+    
+    private function get_recipients_ids() {
+        $ids = array();
+        
+        $client_id = $this->getUserIdByDiaryId($this->data->id);
 
         if (!$client_id) {
             throw new Exception('error: no client id');

@@ -12,6 +12,8 @@ defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/controller.php';
 
+require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email.php';
+
 /**
  * Nutrition_diary controller class.
  */
@@ -122,15 +124,15 @@ class FitnessControllerNutrition_diaryForm extends FitnessController
                 $id = $return;
                 
                 if($submit_task) {
-                    if(function_exists('curl_version')) {
-                        // send email
-                        $url = JURI::root() . 'index.php?option=com_multicalendar&task=load&calid=0&id=' . $id . '&method=sendDiarySubmittedEmail';
-                        $ch = curl_init();
-                        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-                        curl_setopt($ch, CURLOPT_URL,$url);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                        $contents = curl_exec ($ch);
-                        curl_close ($ch);
+                     $obj = new NutritionDiaryEmail();
+                     try {
+
+                        $data_obj = new stdClass();
+                        $data_obj->id = $id;
+                        $data_obj->method = 'DiarySubmitted';
+                        $emails  .= ' ' .$obj->processing($data_obj);
+                    } catch (Exception $exc) {
+                       echo $exc->getMessage();
                     }
                 }
 

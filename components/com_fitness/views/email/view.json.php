@@ -22,9 +22,11 @@ class FitnessViewEmail extends JView {
     function run() {
         $status['success'] = 1;
     
-        $data_encoded = JRequest::getVar('data_encoded','','POST');
+        $data_encoded = JRequest::getVar('data_encoded');
+      
         
         $data = json_decode($data_encoded);
+        
         
         try {
             $obj = FitnessEmail::factory($data->view);
@@ -41,5 +43,7 @@ class FitnessViewEmail extends JView {
         echo  json_encode($result);
        
     }
+    
+
 }
 
