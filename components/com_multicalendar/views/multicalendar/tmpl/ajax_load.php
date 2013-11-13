@@ -86,13 +86,6 @@ switch ($method) {
     case "set_event_exircise_order":
         $ret = set_event_exircise_order();
 
-
-    // Recipe approved email
-    case "sendRecipeEmail":
-        $ret = sendRecipeEmail();
-        break;
-    //
-
     // nutrition diary
     case "sendDiaryPassEmail":
         $ret = sendNutritionDiaryEmail('email_diary_pass');
@@ -1347,53 +1340,6 @@ function getClientIdByAppointmentId($appointment_client_id) {
     $client_id = $db->loadResult();
     return $client_id;
 }
-
-function sendRecipeEmail() {
-    $recipe_id = JRequest::getVar('recipe_id');
-
-    $subject = 'Recipe Approved';
-
-    $url = JURI::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_recipe_approved&tpml=component&recipe_id=' . $recipe_id;
-
-    $helper = new FitnessHelper();
-    $contents = $helper->getContentCurl($url);
-
-    if (!$contents['success']) {
-        return $contents;
-    }
-
-    $contents = $contents['data'];
-
-    $email = getEmailByRecipeId($recipe_id);
-
-    $send = $helper->sendEmail($email, $subject, $contents);
-
-    if ($send != '1') {
-        $ret['success'] = false;
-        $ret['message'] = 'Email function error';
-        return $ret;
-    }
-    $ret['success'] = true;
-    $ret['message'] = $email;
-    return $ret;
-}
-
-function getEmailByRecipeId($recipe_id) {
-    $db = & JFactory::getDBO();
-    $query = "SELECT created_by FROM #__fitness_nutrition_recipes WHERE id='$recipe_id' AND state='1'";
-    $db->setQuery($query);
-    if (!$db->query()) {
-        $ret['success'] = false;
-        $ret['message'] = $db->stderr();
-        return $ret;
-    }
-    $user_id = $db->loadResult();
-
-    $user = &JFactory::getUser($user_id);
-
-    return $user->email;
-}
-
 
 
 // nutrition diary email

@@ -1034,6 +1034,12 @@ class FitnessHelper extends FitnessFactory
         $user_id = self::customQuery($query, 0);
         return $user_id;
     }
+    
+    function getUserIdByNutritionRecipeId($recipe_id) {
+        $query = "SELECT created_by FROM #__fitness_nutrition_recipes WHERE id='$recipe_id' AND state='1'";
+        $user_id = self::customQuery($query, 0);
+        return $user_id;
+    }
  
 }
 

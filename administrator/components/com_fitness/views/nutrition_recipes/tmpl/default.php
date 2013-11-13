@@ -327,8 +327,8 @@ $helper = new FitnessHelper();
             'status_button_place' : '#status_button_place_',
             'statuses' : {
                 '1' : {'label' : 'PENDING', 'class' : 'recipe_status_pending', 'email_alias' : ''},
-                '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : ''}, 
-                '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : ''}
+                '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : 'Approved'}, 
+                '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : 'NotApproved'}
             },
             'statuses2' : {},
             'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
@@ -338,8 +338,8 @@ $helper = new FitnessHelper();
                 return this.statuses;
             },
             'set_updater' : true,
-            'user_id' : '<?php echo JFactory::getUser()->id;?>'
-             
+            'user_id' : '<?php echo JFactory::getUser()->id;?>',
+            'view' : 'NutritionRecipe'
         }
         
         

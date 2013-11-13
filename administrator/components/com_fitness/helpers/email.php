@@ -33,6 +33,9 @@ class FitnessEmail extends FitnessHelper
             case 'NutritionPlan':
                 return new NutritionPlanEmail();
                 break;
+            case 'NutritionRecipe':
+                return new NutritionRecipeEmail();
+                break;
 
             default:
                 break;
@@ -359,6 +362,70 @@ class NutritionPlanEmail extends FitnessEmail {
         $ids = array();
         
         $client_id = $this->getClientIdByNutritionPlanId($this->data->id);
+
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+
+        $ids[] = $client_id;
+        
+        $this->recipients_ids = $ids;
+    }
+    
+    public function processing($data) {
+        $this->setParams($data);
+            
+        $this->generate_contents();
+
+        $this->get_recipients_ids();
+
+        $data = $this->send_mass_email();
+        
+        return $data;
+    }
+}
+
+
+class NutritionRecipeEmail extends FitnessEmail {
+    
+    private function setParams($data) {
+        $this->data = $data;
+        $id = $data->id;
+        
+        if (!$id) {
+            throw new Exception('Error: no Nutrition Recipe id');
+        }
+
+        switch ($data->method) {
+            case 'Approved':
+                $subject = 'Recipe Approved';
+                $layout = 'email_recipe_approved';
+                break;
+            case 'NotApproved':
+                $subject = 'Recipe Approved';
+                $layout = 'email_recipe_notapproved';
+                break;
+ 
+            default:
+                break;
+        }
+        
+        $this->subject = $subject;
+
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&recipe_id=' . $id;
+    }
+    
+    
+    private function generate_contents(){
+        $contents = $this->getContentCurl($this->url);
+        $this->contents = $contents['data'];
+    }
+    
+    
+    private function get_recipients_ids() {
+        $ids = array();
+        
+        $client_id = $this->getUserIdByNutritionRecipeId($this->data->id);
 
         if (!$client_id) {
             throw new Exception('error: no client id');

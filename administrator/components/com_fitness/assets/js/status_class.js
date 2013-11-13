@@ -167,40 +167,7 @@
         });
     }
     
-    
-    
-    Status.prototype.sendEmail_old = function(id, method) {
-        var url = this.options.calendar_frontend_url;
-        $.ajax({
-            type : "POST",
-            url : url,
-            data : {
-                id : id,
-                method : 'send' + method + 'Email'
-            },
-            dataType : 'json',
-            success : function(response) {
-                //console.log(response);
-                if(response.success) {
-                    
-                    var emails = response.message.split(',');
 
-                    var message = 'Emails were sent to: ' +  "</br>";
-                    $.each(emails, function(index, email) { 
-                        message += email +  "</br>";
-                    });
-                    $("#emais_sended").append(message);
-
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                alert(method + " error");
-            }
-        });
-    }
     
     // Add the  function to the top level of the jQuery object
     $.status = function(options) {

@@ -390,7 +390,8 @@ echo $this->loadTemplate('graph');?>
             'show_send_email' : true,
             setStatuses : function(item_id) {
                 return this.statuses;
-            }
+            },
+            'view' : 'Goal'
         }
         
         var goal_status = $.status(goal_status_options);
