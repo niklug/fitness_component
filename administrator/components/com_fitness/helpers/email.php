@@ -50,6 +50,23 @@ class FitnessEmail extends FitnessHelper
         }
     }
     
+    
+    
+    protected function setSentEmailStatus($event_id, $client_id) {
+        $db = & JFactory::getDBO();
+        $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            throw new Exception($db->stderr());
+        }
+    }
+    
+    
+    protected function generate_contents(){
+        $contents = $this->getContentCurl($this->url);
+        $this->contents = $contents['data'];
+    }
+    
     protected function send_mass_email() {
         $emails = array();
 
@@ -86,13 +103,17 @@ class FitnessEmail extends FitnessHelper
         return $emails;
     }
     
-    private function setSentEmailStatus($event_id, $client_id) {
-        $db = & JFactory::getDBO();
-        $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
-        $db->setQuery($query);
-        if (!$db->query()) {
-            throw new Exception($db->stderr());
-        }
+    public function processing($data) {
+
+        $this->setParams($data);
+        
+        $this->generate_contents();
+
+        $this->get_recipients_ids();
+        
+        $data = $this->send_mass_email();
+        
+        return $data;
     }
 
 }
@@ -101,7 +122,7 @@ class FitnessEmail extends FitnessHelper
 
 class GoalStatusEmail extends FitnessEmail {
     
-    private function setParams($data) {
+    protected function setParams($data) {
         $this->data = $data;
         $id = $data->id;
         if (!$id) {
@@ -197,13 +218,7 @@ class GoalStatusEmail extends FitnessEmail {
     }
     
     
-    private function generate_contents(){
-        $contents = $this->getContentCurl($this->url);
-        $this->contents = $contents['data'];
-    }
-    
-    
-    private function get_recipients_ids() {
+    protected function get_recipients_ids() {
         $ids = array();
         
         $client = $this->getClientIdByGoalId($this->data->id , $this->goal_type);
@@ -228,23 +243,12 @@ class GoalStatusEmail extends FitnessEmail {
         $this->recipients_ids = $ids;
     }
     
-    public function processing($data) {
-        $this->setParams($data);
-            
-        $this->generate_contents();
-
-        $this->get_recipients_ids();
-
-        $data = $this->send_mass_email();
-        
-        return $data;
-    }
 }
 
 
 class AppointmentEmail extends FitnessEmail {
     
-    private function setParams($data) {
+    protected function setParams($data) {
         $this->data = $data;
         $id = $data->id;
         if (!$id) {
@@ -301,12 +305,12 @@ class AppointmentEmail extends FitnessEmail {
         $this->layout = $layout;
     }
 
-    private function get_recipients_ids() {
+    protected function get_recipients_ids() {
         $ids = $this->getClientsByEvent($this->data->id);
         $this->recipients_ids = $ids;
     }
     
-    private function generate_contents(){
+    protected function generate_contents(){
         $contents = array();
         foreach ($this->recipients_ids as $recipient_id) {
             if(!$recipient_id)  continue;
@@ -336,7 +340,7 @@ class AppointmentEmail extends FitnessEmail {
 
 class NutritionPlanEmail extends FitnessEmail {
     
-    private function setParams($data) {
+    protected function setParams($data) {
         $this->data = $data;
         $id = $data->id;
         
@@ -359,14 +363,8 @@ class NutritionPlanEmail extends FitnessEmail {
         $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&nutrition_plan_id=' . $id;
     }
     
-    
-    private function generate_contents(){
-        $contents = $this->getContentCurl($this->url);
-        $this->contents = $contents['data'];
-    }
-    
-    
-    private function get_recipients_ids() {
+
+    protected function get_recipients_ids() {
         $ids = array();
         
         $client_id = $this->getClientIdByNutritionPlanId($this->data->id);
@@ -379,24 +377,13 @@ class NutritionPlanEmail extends FitnessEmail {
         
         $this->recipients_ids = $ids;
     }
-    
-    public function processing($data) {
-        $this->setParams($data);
-            
-        $this->generate_contents();
 
-        $this->get_recipients_ids();
-
-        $data = $this->send_mass_email();
-        
-        return $data;
-    }
 }
 
 
 class NutritionRecipeEmail extends FitnessEmail {
     
-    private function setParams($data) {
+    protected function setParams($data) {
         $this->data = $data;
         $id = $data->id;
         
@@ -423,14 +410,8 @@ class NutritionRecipeEmail extends FitnessEmail {
         $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&recipe_id=' . $id;
     }
     
-    
-    private function generate_contents(){
-        $contents = $this->getContentCurl($this->url);
-        $this->contents = $contents['data'];
-    }
-    
-    
-    private function get_recipients_ids() {
+
+    protected function get_recipients_ids() {
         $ids = array();
         
         $client_id = $this->getUserIdByNutritionRecipeId($this->data->id);
@@ -444,23 +425,12 @@ class NutritionRecipeEmail extends FitnessEmail {
         $this->recipients_ids = $ids;
     }
     
-    public function processing($data) {
-        $this->setParams($data);
-            
-        $this->generate_contents();
-
-        $this->get_recipients_ids();
-
-        $data = $this->send_mass_email();
-        
-        return $data;
-    }
 }
 
 
 class NutritionDiaryEmail extends FitnessEmail {
     
-    private function setParams($data) {
+    protected function setParams($data) {
         $this->data = $data;
         $id = $data->id;
         
@@ -491,14 +461,9 @@ class NutritionDiaryEmail extends FitnessEmail {
         $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&diary_id=' . $id;
     }
     
+
     
-    private function generate_contents(){
-        $contents = $this->getContentCurl($this->url);
-        $this->contents = $contents['data'];
-    }
-    
-    
-    private function get_recipients_ids() {
+    protected function get_recipients_ids() {
         $ids = array();
         
         $client_id = $this->getUserIdByDiaryId($this->data->id);
@@ -512,24 +477,13 @@ class NutritionDiaryEmail extends FitnessEmail {
         $this->recipients_ids = $ids;
     }
     
-    public function processing($data) {
-        $this->setParams($data);
-            
-        $this->generate_contents();
-
-        $this->get_recipients_ids();
-
-        $data = $this->send_mass_email();
-        
-        return $data;
-    }
 }
 
 
 
 class CommentEmail extends FitnessEmail {
     
-    private function setParams($data) {
+    protected function setParams($data) {
         
         $this->data = $data;
         $id = $data->id;
@@ -607,13 +561,8 @@ class CommentEmail extends FitnessEmail {
     }
     
     
-    private function generate_contents(){
-        $contents = $this->getContentCurl($this->url);
-        $this->contents = $contents['data'];
-    }
-    
-    
-    private function get_recipients_ids() {
+   
+    protected function get_recipients_ids() {
         $ids = array();
         
         if($this->send_to == 'all_trainers') {
@@ -637,15 +586,4 @@ class CommentEmail extends FitnessEmail {
         $this->recipients_ids = $ids;
     }
     
-    public function processing($data) {
-        $this->setParams($data);
-        
-        $this->generate_contents();
-
-        $this->get_recipients_ids();
-        
-        $data = $this->send_mass_email();
-        
-        return $data;
-    }
 }
