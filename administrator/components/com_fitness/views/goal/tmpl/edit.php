@@ -95,6 +95,7 @@ $helper = new FitnessHelper();
     <div class="clr"></div>
 
 </form>
+<div id="emais_sended"></div>
 
 
 
@@ -126,7 +127,8 @@ $helper = new FitnessHelper();
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_goal_comments',
             'read_only' : false,
-            'anable_comment_email' : true
+            'anable_comment_email' : true,
+            'comment_method' : 'GoalComment'
         }
         
         // comments

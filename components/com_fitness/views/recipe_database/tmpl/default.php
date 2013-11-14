@@ -1346,7 +1346,7 @@ defined('_JEXEC') or die;
                 var image_upload_options = {
                     'url' : window.app.recipe_items_model.get('fitness_frontend_url') + '&view=recipe_database&task=uploadImage&format=text',
                     'picture' : filename,
-                    'default_image' : '',
+                    'default_image' : window.app.recipe_items_model.get('default_image'),
                     'upload_folder' : window.app.recipe_items_model.get('upload_folder'),
                     'preview_height' : '180px',
                     'preview_width' : '200px',

@@ -80,6 +80,7 @@ $primary_goal = $this->backend_list_model->getGoal($primary_goal_id);
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 </form>
+<div id="emais_sended"></div>
 
 <script type="text/javascript">
     
@@ -95,7 +96,8 @@ $primary_goal = $this->backend_list_model->getGoal($primary_goal_id);
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_mini_goal_comments',
             'read_only' : false,
-            'anable_comment_email' : true
+            'anable_comment_email' : true,
+            'comment_method' : 'GoalComment'
         }
         
         // comments

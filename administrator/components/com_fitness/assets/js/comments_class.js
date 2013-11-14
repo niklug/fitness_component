@@ -215,6 +215,30 @@
     
     
     Comments.prototype.commentEmail = function(comment_obj) {
+        var data = comment_obj;
+        var url = this.options.fitness_administration_url;
+        var view = '';
+        var task = 'ajax_email';
+        var table = '';
+
+        data.view = 'Comment';
+        data.method = this.options.comment_method;
+        data.table = this.options.db_table;
+        
+        
+        $.AjaxCall(data, url, view, task, table, function(output){
+            console.log(output);
+            var emails = output.split(',');
+            var message = 'Emails were sent to: ' +  "</br>";
+            $.each(emails, function(index, email) { 
+                message += email +  "</br>";
+            });
+            $("#emais_sended").append(message);
+        });
+    }
+    
+    
+    Comments.prototype.commentEmail_old = function(comment_obj) {
 
         var data = comment_obj;
         var url = this.options.fitness_administration_url

@@ -40,6 +40,10 @@ class FitnessEmail extends FitnessHelper
             case 'NutritionDiary':
                 return new NutritionDiaryEmail();
                 break;
+            
+            case 'Comment':
+                return new CommentEmail();
+                break;
 
             default:
                 break;
@@ -515,6 +519,110 @@ class NutritionDiaryEmail extends FitnessEmail {
 
         $this->get_recipients_ids();
 
+        $data = $this->send_mass_email();
+        
+        return $data;
+    }
+}
+
+
+
+class CommentEmail extends FitnessEmail {
+    
+    private function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: no goal id');
+        }
+
+        switch ($data->method) {
+            case 'GoalComment':
+                $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+                $layout = 'email_goal_comment';
+                $goal_type = '1';
+                $goal_table = '#__fitness_goals';
+                if($this->data->table == '#__fitness_mini_goal_comments'){
+                    $goal_type = '2';
+                    $layout = 'email_goal_comment_mini';
+                    $goal_table = '#__fitness_mini_goals';
+                }
+                
+                $goal = $this->getGoal($this->data->item_id, $goal_table);
+                
+                $this->goal = $goal['data'];
+                
+                $status = $this->goal->status;
+                
+                if((($status == self::EVELUATING_GOAL_STATUS)) OR (($status == self::ASSESSING_GOAL_STATUS))) {
+                    return;
+                }
+                
+                $user_type = $this->getUserGroup($this->data->created_by);
+                
+                $send_to = 'all_trainers';
+                
+                if(($user_type['data'] == self::getTrainersGroupId()) OR ($user_type['data'] == self::ADMINISTRATOR_USERGROUP)) {
+                    $send_to = 'client_and_other_trainers'; 
+                }
+                
+                $this->send_to = $send_to;
+                $this->goal_type = $goal_type;
+                $this->goal_table = $goal_table;
+                $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&goal_type=' . $this->goal_type . '&comment_id=' . $this->data->id;
+                break;
+            
+            default:
+                return;
+                break;
+        }
+        
+        $this->subject = $subject;
+       
+    }
+    
+    
+    private function generate_contents(){
+        $contents = $this->getContentCurl($this->url);
+        $this->contents = $contents['data'];
+    }
+    
+    
+    private function get_recipients_ids() {
+        $ids = array();
+        
+        $client_id = $this->goal->user_id;
+        
+        
+        if($this->send_to == 'all_trainers') {
+            
+            $trainers_data = $this->getClientTrainers($client_id,  'all');
+            
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+        
+        if($this->send_to == 'client_and_other_trainers') {
+            
+            $ids[] = $client_id;
+            
+            $all_trainers = $this->getClientTrainers($client_id,  'all');
+            
+            $other_trainers = array_diff($all_trainers['data'], array($this->data->created_by));
+            
+            $ids = array_merge($ids, $other_trainers);
+        }
+        
+        $this->recipients_ids = $ids;
+    }
+    
+    public function processing($data) {
+        $this->setParams($data);
+        
+        $this->generate_contents();
+
+        $this->get_recipients_ids();
+        
         $data = $this->send_mass_email();
         
         return $data;

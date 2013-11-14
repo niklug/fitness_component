@@ -904,6 +904,13 @@
 
 
 <script type="text/template" id="image_upload_template">
+    <%
+    var image = img_path + '/' + picture;
+    if(!picture) {
+        image = default_image;
+    }
+    //console.log(image)
+    %>
         <div class="form-left-col" style="text-align:center;">
             <form name="image_form">
                 Select & Upload New Image 
@@ -914,7 +921,7 @@
                 <div class="clr"></div>
                 Or drag image here
             </form>
-            <img data-imagepath="<%= img_path + '/' + picture %>" style="margin: 5px; display: inline-block;  height: 180px; width: 200px;border:2px dashed #ccc" height="<%= preview_height%>"  width="<%= preview_width%>" id="preview_image" src="<%= img_path + '/' + picture %>"/>
+            <img data-imagepath="<%= img_path + '/' + picture %>" style="margin: 5px; display: inline-block;  height: 180px; width: 200px;border:2px dashed #ccc" height="<%= preview_height%>"  width="<%= preview_width%>" id="preview_image" src="<%= image %>"/>
             <br/>
             <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
             <a href="javascript:void(0)" class="clear_image">[Clear]</a>
@@ -926,7 +933,7 @@
 <!--  view/open recipe template -->
 <script type="text/template" id="recipe_database_view_recipe_template">
     <%
-    if(!image){
+    if(!image || image == 'images/Recipe_Images/'){
         image = window.app.recipe_items_model.get('default_image');
     }
     %>

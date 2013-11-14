@@ -447,9 +447,16 @@ class FitnessHelper extends FitnessFactory
     public function getGoal($id, $table) {
         $ret['success'] = true;
         $db = &JFactory::getDBo();
-        $query = "SELECT * FROM $table WHERE id='$id'";
+        $query = "SELECT a.* FROM $table AS a ";
+        if($table != '#__fitness_goals') {
+            $query = "SELECT a.*, pg.user_id AS user_id FROM $table AS a ";
+            $query .= " LEFT JOIN #__fitness_goals AS pg ON pg.id=a.primary_goal_id";
+        }
+        $query .=  " WHERE a.id='$id'";
+        
         $db->setQuery($query);
         if (!$db->query()) {
+            throw new Exception($db->stderr());
             $ret['success'] = false;
             $ret['message'] = $db->stderr();
             return $ret;
@@ -468,6 +475,7 @@ class FitnessHelper extends FitnessFactory
             (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
         $db->setQuery($query);
         if (!$db->query()) {
+            throw new Exception($db->stderr());
             $ret['success'] = false;
             $ret['message'] = $db->stderr();
             return $ret;

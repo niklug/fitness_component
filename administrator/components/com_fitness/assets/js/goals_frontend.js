@@ -674,7 +674,8 @@
                     'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : this.model.attributes.goals_comments_db_table,
                     'read_only' : true,
-                    'anable_comment_email' : true
+                    'anable_comment_email' : true,
+                    'comment_method' : 'GoalComment'
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
 
@@ -690,7 +691,8 @@
                     'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : this.model.attributes.minigoals_comments_db_table,
                     'read_only' : true,
-                    'anable_comment_email' : true
+                    'anable_comment_email' : true,
+                    'comment_method' : 'GoalComment'
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
 

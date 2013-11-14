@@ -257,12 +257,7 @@ class FitnessController extends JController
             $view->setModel($this->getModel('goals'));
             $view -> checkOverlapDate();
 	}
-        
-        function commentEmail() {
-            $view = $this -> getView('goals', 'json');
-            $view->setModel($this->getModel('goals'));
-            $view -> commentEmail();
-	}
+
         
         // business profile view
         function checkUniqueGroup() {
