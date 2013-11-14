@@ -150,7 +150,7 @@ $helper = new FitnessHelper();
 
 </form>
 
-
+<div id="emais_sended"></div>
 
 
 <script type="text/javascript">
@@ -584,7 +584,9 @@ $helper = new FitnessHelper();
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_nutrition_recipes_comments',
-            'read_only' : false
+            'read_only' : false,
+            'anable_comment_email' : true,
+            'comment_method' : 'RecipeComment'
         }
         
         var comments = $.comments(comment_options, comment_options.item_id, 0);

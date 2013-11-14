@@ -534,7 +534,7 @@ class CommentEmail extends FitnessEmail {
         $this->data = $data;
         $id = $data->id;
         if (!$id) {
-            throw new Exception('Error: no goal id');
+            throw new Exception('Error: no id');
         }
 
         switch ($data->method) {
@@ -551,9 +551,11 @@ class CommentEmail extends FitnessEmail {
                 
                 $goal = $this->getGoal($this->data->item_id, $goal_table);
                 
-                $this->goal = $goal['data'];
+                $this->item = $goal['data'];
                 
-                $status = $this->goal->status;
+                $this->item_creator = $this->item->user_id;
+                
+                $status = $this->item->status;
                 
                 if((($status == self::EVELUATING_GOAL_STATUS)) OR (($status == self::ASSESSING_GOAL_STATUS))) {
                     return;
@@ -572,6 +574,28 @@ class CommentEmail extends FitnessEmail {
                 $this->goal_table = $goal_table;
                 $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&goal_type=' . $this->goal_type . '&comment_id=' . $this->data->id;
                 break;
+                
+            case 'RecipeComment':
+                $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+                $layout = 'email_recipe_comment';
+                
+                $this->item = $this->getRecipeOriginalData($this->data->item_id);
+                
+                $this->item_creator = $this->item->created_by;
+                
+                $user_type = $this->getUserGroup($this->data->created_by);
+                
+                $send_to = 'all_trainers';
+                
+                if(($user_type['data'] == self::getTrainersGroupId()) OR ($user_type['data'] == self::ADMINISTRATOR_USERGROUP)) {
+                    $send_to = 'client_and_other_trainers'; 
+                }
+                
+                $this->send_to = $send_to;
+                $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+                break;
+                
+                
             
             default:
                 return;
@@ -592,21 +616,18 @@ class CommentEmail extends FitnessEmail {
     private function get_recipients_ids() {
         $ids = array();
         
-        $client_id = $this->goal->user_id;
-        
-        
         if($this->send_to == 'all_trainers') {
             
-            $trainers_data = $this->getClientTrainers($client_id,  'all');
+            $trainers_data = $this->getClientTrainers($this->item_creator,  'all');
             
             $ids = array_merge($ids, $trainers_data['data']);
         }
         
         if($this->send_to == 'client_and_other_trainers') {
             
-            $ids[] = $client_id;
+            $ids[] = $this->item_creator;
             
-            $all_trainers = $this->getClientTrainers($client_id,  'all');
+            $all_trainers = $this->getClientTrainers($this->item_creator,  'all');
             
             $other_trainers = array_diff($all_trainers['data'], array($this->data->created_by));
             

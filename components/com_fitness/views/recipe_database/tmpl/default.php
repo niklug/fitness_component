@@ -267,7 +267,8 @@ defined('_JEXEC') or die;
                     'comment_obj' : {'user_name' : this.attributes.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : this.attributes.recipe_comments_db_table,
                     'read_only' : true,
-                    'anable_comment_email' : true
+                    'anable_comment_email' : true,
+                    'comment_method' : 'RecipeComment'
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
                 var recipe_item = new window.app.Recipe_view({ el: $("#recipe_main_container"), model : this, 'comments' : comments});
