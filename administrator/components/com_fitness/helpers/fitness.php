@@ -53,7 +53,7 @@ class FitnessFactory {
     
     
     public static function is_superuser($user_id) {
-        if(self::getCurrentGroupId($user_id) == self::SUPERUSER_GROUP_ID) {
+        if(self::createCurrentGroupId($user_id) == self::SUPERUSER_GROUP_ID) {
             return true;
         }
         return false;
@@ -65,13 +65,13 @@ class FitnessFactory {
      */
     public static function is_trainer($user_id) {
         
-        if(self::$is_trainer == null) {
-            $group_id = self::getCurrentGroupId($user_id);
-            $parent_group_id =  self::MANAGER_GROUP_ID;
-            self::$is_trainer = self::isChildGroup($group_id, $parent_group_id);
-            return self::$is_trainer;
-        }
-        return self::$is_trainer;
+        $is_trainer = false;
+        $group_id = self::createCurrentGroupId($user_id);
+        $parent_group_id =  self::MANAGER_GROUP_ID;
+        $is_trainer = self::isChildGroup($group_id, $parent_group_id);
+        return $is_trainer;
+
+
     }
     
     

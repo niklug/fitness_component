@@ -107,6 +107,7 @@ class FitnessEmail extends FitnessHelper
 
         $this->setParams($data);
         
+        
         $this->generate_contents();
 
         $this->get_recipients_ids();
@@ -507,7 +508,7 @@ class CommentEmail extends FitnessEmail {
                 
                 $this->item = $goal['data'];
                 
-                $this->item_creator = $this->item->user_id;
+                $this->item_user_id = $this->item->user_id;
                 
                 $status = $this->item->status;
                 
@@ -515,12 +516,14 @@ class CommentEmail extends FitnessEmail {
                     return;
                 }
                 
-                $user_type = $this->getUserGroup($this->data->created_by);
-                
                 $send_to = 'all_trainers';
                 
-                if(($user_type['data'] == self::getTrainersGroupId()) OR ($user_type['data'] == self::ADMINISTRATOR_USERGROUP)) {
+                if(self::is_trainer($this->data->created_by))  {
                     $send_to = 'client_and_other_trainers'; 
+                }
+                
+                if(self::is_superuser($this->data->created_by)) {
+                    $send_to = ''; 
                 }
                 
                 $this->send_to = $send_to;
@@ -530,20 +533,32 @@ class CommentEmail extends FitnessEmail {
                 break;
                 
             case 'RecipeComment':
+                /*  if superuser or trainer comment onprivate recipe - send email to client and all his trainers (except trainer who made comment)
+                 *  if superuser or trainer make comment on global recipe - nothing sending
+                 *  if client make comment on personal or global recipe - send email to all his trainers
+                 */ 
                 $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
                 $layout = 'email_recipe_comment';
                 
                 $this->item = $this->getRecipeOriginalData($this->data->item_id);
                 
-                $this->item_creator = $this->item->created_by;
+                $this->item_user_id = $this->item->created_by;
                 
-                $user_type = $this->getUserGroup($this->data->created_by);
-                
+                    
                 $send_to = 'all_trainers';
                 
-                if(($user_type['data'] == self::getTrainersGroupId()) OR ($user_type['data'] == self::ADMINISTRATOR_USERGROUP)) {
+                if(self::is_client($this->data->created_by)) {
+                    $this->item_user_id = $this->data->created_by;
+                }
+                
+                if(self::is_trainer($this->data->created_by) OR self::is_superuser($this->data->created_by)) {
                     $send_to = 'client_and_other_trainers'; 
                 }
+                
+                if((self::is_trainer($this->data->created_by) OR self::is_superuser($this->data->created_by)) && (self::is_trainer($this->item->created_by) OR self::is_superuser($this->item->created_by))) {
+                    $send_to = ''; 
+                }
+        
                 
                 $this->send_to = $send_to;
                 $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
@@ -564,25 +579,25 @@ class CommentEmail extends FitnessEmail {
    
     protected function get_recipients_ids() {
         $ids = array();
-        
+        //client makes comment
         if($this->send_to == 'all_trainers') {
             
-            $trainers_data = $this->getClientTrainers($this->item_creator,  'all');
+            $trainers_data = $this->getClientTrainers($this->item_user_id,  'all');
             
             $ids = array_merge($ids, $trainers_data['data']);
         }
-        
+        // trainer  makes comment
         if($this->send_to == 'client_and_other_trainers') {
+           //add client
+            $ids[] = $this->item_user_id;
             
-            $ids[] = $this->item_creator;
-            
-            $all_trainers = $this->getClientTrainers($this->item_creator,  'all');
-            
+            $all_trainers = $this->getClientTrainers($this->item_user_id,  'all');
+            //add client trainers, except trainer who created a comment
             $other_trainers = array_diff($all_trainers['data'], array($this->data->created_by));
             
             $ids = array_merge($ids, $other_trainers);
         }
-        
+
         $this->recipients_ids = $ids;
     }
     
