@@ -207,7 +207,7 @@ class FitnessFactory {
             $user_id = &JFactory::getUser()->id;
         }
 
-        $query = "SELECT id FROM #__usergroups WHERE id='$group_id'  AND parent_id='$parent_group_id'";
+        $query = "SELECT id FROM #__usergroups WHERE (id='$group_id'  AND parent_id='$parent_group_id') OR (id='$group_id'  AND id='$parent_group_id')";
 
         $group_id = self::customQuery($query, 0);
         
@@ -973,12 +973,40 @@ class FitnessHelper extends FitnessFactory
         }
         
         $business_profile = $this->getBusinessByTrainerGroup($group_id);
+         
+        
         if(!$business_profile['success']) {
             $ret['success'] = 0;
             $ret['message'] = $business_profile['message'];
         }
+        
+        
         $business_profile = $business_profile['data'];
+       
+        
         $ret['data'] = $business_profile->id;
+        
+        // if is client
+        if(self::is_client($user_id)) {
+            $user = &JFactory::getUser($user_id);
+            $groups = $user->get('groups');
+            $group_id = array_shift(array_values($groups));
+            
+            $BusinessProfile = $this->getBusinessByUserGroup($group_id);
+            if(!$BusinessProfile['success']) {
+                $ret['success'] = 0;
+                $ret['message'] = $BusinessProfile['message'];
+            }
+            
+            $business_profile = $BusinessProfile['data'];
+            
+            $business_profile_id = $business_profile->business_profile_id;
+            
+            $ret['data']  = $business_profile_id;
+            
+        }
+        
+        
 
         return $ret;
     }

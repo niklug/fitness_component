@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `#__fitness_clients` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-`business_profile_id` INT(11)  NOT NULL ,
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
 `user_id` INT(11)  NOT NULL ,
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 `primary_trainer` INT(11)  NOT NULL ,
@@ -774,6 +774,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_comments` (
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE
@@ -873,6 +874,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_comments` (
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
@@ -885,6 +887,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_meal_comments` (
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   KEY `sub_item_id` (`sub_item_id`),
@@ -974,6 +977,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_meal_comments` (
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   KEY `sub_item_id` (`sub_item_id`),
@@ -989,6 +993,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_comments` (
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_diary(id) ON DELETE CASCADE
@@ -1003,6 +1008,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goal_comments` (
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   FOREIGN KEY (item_id) REFERENCES #__fitness_goals(id) ON DELETE CASCADE
@@ -1015,6 +1021,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_mini_goal_comments` (
   `comment` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   FOREIGN KEY (item_id) REFERENCES #__fitness_mini_goals(id) ON DELETE CASCADE

@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 
 /**
  * Fitness model.
@@ -393,6 +394,16 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $obj = json_decode($data_encoded);
             $obj->created_by = $user->id;
             
+            $helper = new FitnessHelper();
+            $businessProfile = $helper->getBusinessProfileId($user->id);
+            if(!$businessProfile['success']) {
+                $ret['success'] = 0;
+                $ret['message'] =  $businessProfile['message'];
+            }
+            $business_profile_id = $businessProfile['data'];
+            
+            $obj->business_profile_id = $business_profile_id;
+            
             if($obj->id) {
                 $insert = $db->updateObject($table, $obj, 'id');
             } else {
@@ -435,12 +446,31 @@ class FitnessModelnutrition_plan extends JModelAdmin
         
         
         public function populatePlanComments($item_id, $sub_item_id, $table) {
+            $user = &JFactory::getUser();
+            $helper = new FitnessHelper();
+            $user_id = $user->id;
             $ret['success'] = 1;
             $db = JFactory::getDbo();
-            $query = "SELECT c.*, u.name AS user_name FROM $table AS c
-                LEFT JOIN #__users AS u ON u.id=c.created_by
-                WHERE item_id='$item_id' 
-                AND sub_item_id='$sub_item_id'";
+            $query = "SELECT a.*, u.name AS user_name FROM $table AS a";
+            $query .= " LEFT JOIN #__users AS u ON u.id=a.created_by";
+      
+            $query .= " WHERE a.item_id='$item_id'";
+            $query .= " AND a.sub_item_id='$sub_item_id'";
+
+            $businessProfile = $helper->getBusinessProfileId($user_id);
+            
+            if(!$businessProfile['success']) {
+                $ret['success'] = 0;
+                $ret['message'] =  $businessProfile['message'];
+            }
+            $business_profile_id = $businessProfile['data'];
+            
+           
+            if(!FitnessHelper::is_superuser($user_id)) {
+                $query .= " AND (a.business_profile_id='$business_profile_id' OR a.business_profile_id='0')";
+            }
+            
+
             $db->setQuery($query);
             if(!$db->query()) {
                 $ret['success'] = 0;
