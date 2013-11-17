@@ -739,3 +739,12 @@ td.center, th.center, .center {
     color: #CC0000;
     padding-top: 7px;
 }
+
+.chat_image {
+    background-image: url("../images/chat_arrow.png");
+    float: left;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-size: 25px;
+}

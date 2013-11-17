@@ -667,3 +667,12 @@
 .choosen_link{
     font-weight: bold;
 }
+
+.chat_image {
+    background-image: url("../images/chat_arrow.png");
+    float: left;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-size: 25px;
+}

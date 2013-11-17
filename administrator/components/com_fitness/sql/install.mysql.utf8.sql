@@ -769,6 +769,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_meals` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) unsigned NOT NULL,
   `item_id` int(11) unsigned NOT NULL,
   `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
@@ -869,6 +870,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_meals` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`parent_id` int(11) unsigned NOT NULL,
   `item_id` int(11) unsigned NOT NULL,
   `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
@@ -882,6 +884,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_comments` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_meal_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`parent_id` int(11) unsigned NOT NULL,
   `item_id` int(11) unsigned NOT NULL,
   `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
@@ -972,6 +975,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_ingredients` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_meal_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`parent_id` int(11) unsigned NOT NULL,
   `item_id` int(11) unsigned NOT NULL,
   `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
@@ -988,6 +992,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_meal_comments` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`parent_id` int(11) unsigned NOT NULL,
   `item_id` int(11) unsigned NOT NULL,
   `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
@@ -1003,6 +1008,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_diary_comments` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_goal_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`parent_id` int(11) unsigned NOT NULL,
   `item_id` int(11) unsigned NOT NULL,
   `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,
@@ -1016,6 +1022,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goal_comments` (
 
 CREATE TABLE IF NOT EXISTS `#__fitness_mini_goal_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`parent_id` int(11) unsigned NOT NULL,
   `item_id` int(11) unsigned NOT NULL,
   `sub_item_id` int(11) unsigned NOT NULL,
   `comment` text NOT NULL,

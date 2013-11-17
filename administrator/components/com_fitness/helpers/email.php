@@ -533,7 +533,7 @@ class CommentEmail extends FitnessEmail {
                 break;
                 
             case 'RecipeComment':
-                /*  if superuser or trainer comment onprivate recipe - send email to client and all his trainers (except trainer who made comment)
+                /*  if superuser or trainer make comment on private recipe - send email to client and all his trainers (except trainer who made comment)
                  *  if superuser or trainer make comment on global recipe - nothing sending
                  *  if client make comment on personal or global recipe - send email to all his trainers
                  */ 

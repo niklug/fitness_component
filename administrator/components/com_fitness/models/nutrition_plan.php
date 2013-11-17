@@ -470,6 +470,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 $query .= " AND (a.business_profile_id='$business_profile_id' OR a.business_profile_id='0')";
             }
             
+            $query .= "  ORDER BY CASE WHEN a.parent_id = '0' THEN  a.id ELSE  a.parent_id  END";
 
             $db->setQuery($query);
             if(!$db->query()) {
