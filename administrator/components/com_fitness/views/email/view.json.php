@@ -27,7 +27,7 @@ class FitnessViewEmail extends JView {
         $data = json_decode($data_encoded);
         
         try {
-            $obj = FitnessEmail::factory($data->view);
+            $obj = FitnessEmail::factory($data);
             
             $data = $obj->processing($data);
             

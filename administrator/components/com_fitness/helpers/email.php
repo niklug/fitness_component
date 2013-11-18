@@ -16,9 +16,9 @@ class FitnessEmail extends FitnessHelper
 {
 
     
-    public static function factory($view) {
+    public static function factory($data) {
         
-        switch ($view) {
+        switch ($data->view) {
             case 'Goal':
                 return new GoalStatusEmail();
                 break;
@@ -42,8 +42,17 @@ class FitnessEmail extends FitnessHelper
                 break;
             
             case 'Comment':
-                return new CommentEmail();
-                break;
+                switch ($data->method) {
+                    case 'GoalComment':
+                        return new CommentGoalEmail();
+                    break;
+                    case 'RecipeComment':
+                        return new CommentRecipeEmail();
+                    break;
+                    default:
+                        return;
+                    break;
+                }
 
             default:
                 break;
@@ -106,8 +115,7 @@ class FitnessEmail extends FitnessHelper
     public function processing($data) {
 
         $this->setParams($data);
-        
-        
+
         $this->generate_contents();
 
         $this->get_recipients_ids();
@@ -482,94 +490,52 @@ class NutritionDiaryEmail extends FitnessEmail {
 
 
 
-class CommentEmail extends FitnessEmail {
+class CommentGoalEmail extends FitnessEmail {
     
     protected function setParams($data) {
         
         $this->data = $data;
         $id = $data->id;
         if (!$id) {
-            throw new Exception('Error: no id');
+            throw new Exception('Error: no comment id');
         }
 
-        switch ($data->method) {
-            case 'GoalComment':
-                $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
-                $layout = 'email_goal_comment';
-                $goal_type = '1';
-                $goal_table = '#__fitness_goals';
-                if($this->data->table == '#__fitness_mini_goal_comments'){
-                    $goal_type = '2';
-                    $layout = 'email_goal_comment_mini';
-                    $goal_table = '#__fitness_mini_goals';
-                }
-                
-                $goal = $this->getGoal($this->data->item_id, $goal_table);
-                
-                $this->item = $goal['data'];
-                
-                $this->item_user_id = $this->item->user_id;
-                
-                $status = $this->item->status;
-                
-                if((($status == self::EVELUATING_GOAL_STATUS)) OR (($status == self::ASSESSING_GOAL_STATUS))) {
-                    return;
-                }
-                
-                $send_to = 'all_trainers';
-                
-                if(self::is_trainer($this->data->created_by))  {
-                    $send_to = 'client_and_other_trainers'; 
-                }
-                
-                if(self::is_superuser($this->data->created_by)) {
-                    $send_to = ''; 
-                }
-                
-                $this->send_to = $send_to;
-                $this->goal_type = $goal_type;
-                $this->goal_table = $goal_table;
-                $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&goal_type=' . $this->goal_type . '&comment_id=' . $this->data->id;
-                break;
-                
-            case 'RecipeComment':
-                /*  if superuser or trainer make comment on private recipe - send email to client and all his trainers (except trainer who made comment)
-                 *  if superuser or trainer make comment on global recipe - nothing sending
-                 *  if client make comment on personal or global recipe - send email to all his trainers
-                 */ 
-                $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
-                $layout = 'email_recipe_comment';
-                
-                $this->item = $this->getRecipeOriginalData($this->data->item_id);
-                
-                $this->item_user_id = $this->item->created_by;
-                
-                    
-                $send_to = 'all_trainers';
-                
-                if(self::is_client($this->data->created_by)) {
-                    $this->item_user_id = $this->data->created_by;
-                }
-                
-                if(self::is_trainer($this->data->created_by) OR self::is_superuser($this->data->created_by)) {
-                    $send_to = 'client_and_other_trainers'; 
-                }
-                
-                if((self::is_trainer($this->data->created_by) OR self::is_superuser($this->data->created_by)) && (self::is_trainer($this->item->created_by) OR self::is_superuser($this->item->created_by))) {
-                    $send_to = ''; 
-                }
-        
-                
-                $this->send_to = $send_to;
-                $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
-                break;
-                
-                
-            
-            default:
-                return;
-                break;
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        $layout = 'email_goal_comment';
+        $goal_type = '1';
+        $goal_table = '#__fitness_goals';
+        if($this->data->table == '#__fitness_mini_goal_comments'){
+            $goal_type = '2';
+            $layout = 'email_goal_comment_mini';
+            $goal_table = '#__fitness_mini_goals';
         }
+
+        $goal = $this->getGoal($this->data->item_id, $goal_table);
+
+        $this->item = $goal['data'];
+
+        $this->item_user_id = $this->item->user_id;
+
+        $status = $this->item->status;
+
+        if((($status == self::EVELUATING_GOAL_STATUS)) OR (($status == self::ASSESSING_GOAL_STATUS))) {
+            return;
+        }
+
+        $send_to = 'all_trainers';
+
+        if(self::is_trainer($this->data->created_by))  {
+            $send_to = 'client_and_other_trainers'; 
+        }
+
+        if(self::is_superuser($this->data->created_by)) {
+            $send_to = ''; 
+        }
+
+        $this->send_to = $send_to;
+        $this->goal_type = $goal_type;
+        $this->goal_table = $goal_table;
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&goal_type=' . $this->goal_type . '&comment_id=' . $this->data->id;
         
         $this->subject = $subject;
        
@@ -596,6 +562,115 @@ class CommentEmail extends FitnessEmail {
             $other_trainers = array_diff($all_trainers['data'], array($this->data->created_by));
             
             $ids = array_merge($ids, $other_trainers);
+        }
+
+        $this->recipients_ids = $ids;
+    }
+    
+}
+
+
+
+
+class CommentRecipeEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: comment id');
+        }
+        /*  if superuser or trainer make comment on private recipe - send email to client and all his trainers (except trainer who made comment)
+         *  if superuser or trainer make comment on global recipe - nothing sending
+         *  if client make comment on personal or global recipe - send email to all his trainers
+         */ 
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        $layout = 'email_recipe_comment';
+
+        $this->item = $this->getRecipeOriginalData($this->data->item_id);
+
+        $this->recipe_created_by = $this->item->created_by;
+        
+        $this->comment_created_by = $this->data->created_by;
+        
+        // $this->item - recipe object
+        // $this->data - comment object
+        
+        
+        // if recipe is global and comment created by superuser
+        if((self::is_superuser($this->recipe_created_by) OR (self::is_trainer($this->recipe_created_by))) AND self::is_superuser($this->comment_created_by)) {
+            $this->condition = 'global_superuser';
+        }
+        
+        
+        
+        // if recipe is global and comment created by trainer
+        if((self::is_superuser($this->recipe_created_by) OR (self::is_trainer($this->recipe_created_by))) AND self::is_trainer($this->comment_created_by)) {
+            $this->condition = 'global_trainer';
+        }
+        
+        
+        
+        // if recipe is global and comment created by client
+        if((self::is_superuser($this->recipe_created_by) OR (self::is_trainer($this->recipe_created_by))) AND self::is_client($this->comment_created_by)) {
+            $this->condition = 'global_client';
+        }
+        
+        
+
+        // if recipe is private and comment created by superuser
+        if(self::is_client($this->recipe_created_by) AND self::is_superuser($this->comment_created_by)) {
+            $this->condition = 'private_superuser';
+        }
+        
+        
+        // if recipe is private and comment created by trainer
+        if(self::is_client($this->recipe_created_by) AND self::is_trainer($this->comment_created_by)) {
+            $this->condition = 'private_trainer';
+        }
+        
+        
+        // if recipe is private and comment created by client
+        if(self::is_client($this->recipe_created_by) AND self::is_client($this->comment_created_by)) {
+            $this->condition = 'private_client';
+        }
+        
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        
+        $ids = array();
+        
+        switch ($this->condition) {
+            case 'global_superuser': // no comment email
+                // nobody
+                break;
+            case 'global_trainer': // comment email to trainer's clients
+                $trainer_clients = $this->getTrainerClients($this->comment_created_by);
+                $ids = array_merge($ids, $trainer_clients);
+                break;
+            case 'global_client': // comment email to client's trainers
+                $trainers_data = $this->getClientTrainers($this->comment_created_by,  'all');
+                $ids = array_merge($ids, $trainers_data['data']);
+                break;
+            case 'private_superuser': // comment email to client (recipe creator)
+                $ids = array_merge($ids, array($this->recipe_created_by));
+                break;
+            case 'private_trainer': // comment email to client (recipe creator)
+                $ids = array_merge($ids, array($this->recipe_created_by));
+                break;
+            case 'private_client': // comment email to client's trainers
+                $trainers_data = $this->getClientTrainers($this->comment_created_by,  'all');
+                $ids = array_merge($ids, $trainers_data['data']);
+                break;
+            default:
+                break;
         }
 
         $this->recipients_ids = $ids;

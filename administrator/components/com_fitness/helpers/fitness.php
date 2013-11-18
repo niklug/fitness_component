@@ -100,52 +100,47 @@ class FitnessFactory {
     
     
     public static function is_client($user_id) {
-        if(self::$is_client == null) {
-            $group_id = self::getCurrentGroupId($user_id);
-            $parent_group_id =  self::REGISTERED_GROUP_ID;
-            self::$is_client = self::isChildGroup($group_id, $parent_group_id);
-            return self::$is_client;
-        }
-        return self::$is_client;
+        $is_client = false;
+
+        $group_id = self::createCurrentGroupId($user_id);
+        $parent_group_id =  self::REGISTERED_GROUP_ID;
+        $is_client = self::isChildGroup($group_id, $parent_group_id);
+
+        return $is_client;
     }
     
     
     public static function is_primary_administrator($user_id) {
-        
-        if(self::$is_primary_administrator == null) {
-            if(!$user_id) {
-                $user_id = &JFactory::getUser()->id;
-            }
-            $primary_administrator_id = self::getAdministratorId('primary_administrator', $user_id);
 
-            if($user_id == $primary_administrator_id) {
-                self::$is_primary_administrator = $primary_administrator_id;
-            } else {
-                self::$is_primary_administrator = false;
-            }
-            return self::$is_primary_administrator;
+        if(!$user_id) {
+            $user_id = &JFactory::getUser()->id;
+        }
+        $primary_administrator_id = self::getAdministratorId('primary_administrator', $user_id);
+
+        if($user_id == $primary_administrator_id) {
+            self::$is_primary_administrator = $primary_administrator_id;
+        } else {
+            self::$is_primary_administrator = false;
         }
         return self::$is_primary_administrator;
+
     }
     
     
     public static function is_secondary_administrator($user_id) {
-   
-        if(self::$is_secondary_administrator == null) {
-            
-            if(!$user_id) {
-                $user_id = &JFactory::getUser()->id;
-            }
-            $secondary_administrator_id = self::getAdministratorId('secondary_administrator', $user_id);
-            
-            if($user_id == $secondary_administrator_id) {
-                self::$is_secondary_administrator = $secondary_administrator_id;
-            } else {
-                self::$is_secondary_administrator = false;
-            }
-            return self::$is_secondary_administrator;
+        
+        if(!$user_id) {
+            $user_id = &JFactory::getUser()->id;
+        }
+        $secondary_administrator_id = self::getAdministratorId('secondary_administrator', $user_id);
+
+        if($user_id == $secondary_administrator_id) {
+            self::$is_secondary_administrator = $secondary_administrator_id;
+        } else {
+            self::$is_secondary_administrator = false;
         }
         return self::$is_secondary_administrator;
+
     }
     
     
@@ -1065,23 +1060,35 @@ class FitnessHelper extends FitnessFactory
         return $client_ids;
     }
     
-    function getClientIdByNutritionPlanId($nutrition_plan_id) {
+    public function getClientIdByNutritionPlanId($nutrition_plan_id) {
         $query = "SELECT client_id FROM #__fitness_nutrition_plan WHERE id='$nutrition_plan_id' AND state='1'";
         $user_id = self::customQuery($query, 0);
         return $user_id;
     }
     
-    function getUserIdByNutritionRecipeId($recipe_id) {
+    public function getUserIdByNutritionRecipeId($recipe_id) {
         $query = "SELECT created_by FROM #__fitness_nutrition_recipes WHERE id='$recipe_id' AND state='1'";
         $user_id = self::customQuery($query, 0);
         return $user_id;
     }
     
-    function getUserIdByDiaryId($id) {
+    public function getUserIdByDiaryId($id) {
         $query = "SELECT client_id FROM #__fitness_nutrition_diary WHERE id='$id'";
         $user_id = self::customQuery($query, 0);
         return $user_id;
     }
+    
+    public function getTrainerClients($id) {
+        $query = "SELECT user_id FROM #__fitness_clients"
+                . " WHERE primary_trainer='$id'"
+                . " OR  FIND_IN_SET('$id', other_trainers)"
+                . " AND state='1'";
+        
+        $result = self::customQuery($query, 3);
+        
+        return $result;
+    }
+    
  
 }
 

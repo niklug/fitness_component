@@ -29,7 +29,7 @@ class FitnessViewEmail extends JView {
         
         
         try {
-            $obj = FitnessEmail::factory($data->view);
+            $obj = FitnessEmail::factory($data);
             
             $data = $obj->processing($data);
             
