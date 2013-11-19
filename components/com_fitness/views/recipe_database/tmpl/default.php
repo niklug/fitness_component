@@ -441,6 +441,10 @@ defined('_JEXEC') or die;
                 data.image = $("#preview_image").attr('data-imagepath');
                 data.instructions = encodeURIComponent($("#instructions").html());
                 data.created_by = this.get('user_id');
+   
+                data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");  
+
+               
                 data.state = '1';
                 //console.log(data);
 

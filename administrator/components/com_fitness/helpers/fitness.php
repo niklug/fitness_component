@@ -172,7 +172,9 @@ class FitnessFactory {
         }
         
         if (!$trainers_group_id) {
-            JError::raiseWarning( 100, 'No Trainers Group assigned!' );
+            $message = 'No Trainers Group assigned!';
+            throw new Exception($message);
+            JError::raiseWarning( 100, $message);
         }
 
         return $trainers_group_id;
@@ -818,6 +820,7 @@ class FitnessHelper extends FitnessFactory
         $sql = "SELECT * FROM #__fitness_business_profiles WHERE id='$id' AND state='1'";
         $db->setQuery($sql);
         if(!$db->query()) {
+            throw new Exception($db->getErrorMsg());
             $ret['success'] = 0;
             $ret['message'] = $db->getErrorMsg();
         }
@@ -847,6 +850,7 @@ class FitnessHelper extends FitnessFactory
         $sql = "SELECT * FROM #__fitness_user_groups WHERE group_id='$group_id' AND state='1'";
         $db->setQuery($sql);
         if(!$db->query()) {
+            throw new Exception($db->getErrorMsg());
             $ret['success'] = 0;
             $ret['message'] = $db->getErrorMsg();
         }
@@ -900,13 +904,12 @@ class FitnessHelper extends FitnessFactory
     
     public function getRecipeOriginalData($id) {
 
-        $query = "SELECT a.*";
-
+        $query = "SELECT a.*, t.name AS recipe_type ";
 
         $query .=  " FROM #__fitness_nutrition_recipes AS a"
-                . " "
-                . "WHERE a.id='$id' "
-                . "AND a.state='1'";
+                . " LEFT JOIN #__fitness_recipe_types AS t  ON a.recipe_type=t.id"
+                . " WHERE a.id='$id' "
+                . " AND a.state='1'";
 
         $item = self::customQuery($query, 2);
         
@@ -1000,8 +1003,6 @@ class FitnessHelper extends FitnessFactory
             $ret['data']  = $business_profile_id;
             
         }
-        
-        
 
         return $ret;
     }
@@ -1012,6 +1013,7 @@ class FitnessHelper extends FitnessFactory
         $sql = "SELECT * FROM #__fitness_business_profiles WHERE group_id='$group_id' AND state='1'";
         $db->setQuery($sql);
         if(!$db->query()) {
+            throw new Exception($db->getErrorMsg());
             $ret['success'] = 0;
             $ret['message'] = $db->getErrorMsg();
         }

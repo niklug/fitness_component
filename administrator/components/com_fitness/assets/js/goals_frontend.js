@@ -552,6 +552,8 @@
                 data.end_date = $("#deadline").val();
                 data.start_date_column = 'start_date';
                 data.end_date_column = 'deadline';
+                
+                data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
 
                 var model = this.model;
 
