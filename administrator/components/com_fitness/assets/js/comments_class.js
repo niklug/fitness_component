@@ -19,7 +19,11 @@
         $("#add_comment_" + this.sub_item_id).die().live('click', function() {
             var comment_obj = self.options.comment_obj;
             comment_obj.parent_id = 0;
-            var comment_template = self.createCommentTemplate(comment_obj);
+            
+            var comment_template = '<hr>';
+            
+            comment_template += self.createCommentTemplate(comment_obj);
+            
             $("#comments_wrapper_" + self.sub_item_id).append(comment_template);
             
         });
@@ -68,14 +72,19 @@
             
             var items = parseInt($("#comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-parent_id="' + parent_id + '"]').length);
             
-              
+            //  after last reply item
             if(parent_id && (items != 0)) {
+                //$('.reply_comment[data-id="' + parent_id + '"]').remove();
+                //comment_template += '<input style="margin-left:35px;" data-id="' + parent_id + '" id="reply_comment_' + self.sub_item_id + '" class="reply_comment" type="button"  value="Reply">'
+                //comment_template = '<div class="clr"></div>';
                 $("#comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-parent_id="' + parent_id + '"]').last().after(comment_template);
             } 
-            console.log(items);
+             
+            // if no reply items yet
             if (items == 0) {
                 $("#comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-id="' + parent_id + '"]').last().after(comment_template);
             }
+            
 
         });
         
@@ -85,7 +94,10 @@
             var html = '';
             comments.each(function(comment_obj){
             
-            html += self.createCommentTemplate(comment_obj);
+                if(parseInt(comment_obj.parent_id) == 0) {
+                    html += '<hr>';
+                }
+                html += self.createCommentTemplate(comment_obj);
             });
             $("#comments_wrapper_" + self.sub_item_id).append(html);
 
@@ -96,6 +108,7 @@
     
     Comments.prototype.generateHtml = function() {
         var html = '<h5>QUESTIONS / COMMENTS / INSTRUCTIONS</h5>';
+        html += '<br/>';
         html += '<div style="position:relative;" id="comments_wrapper_' + this.sub_item_id + '">';
         html += '</div>';
         return html;
@@ -154,9 +167,11 @@
         comment_template += '</table>';
 
         if(comment_obj.id && !parent_id) {
-            comment_template += '<input data-id="' + comment_obj.id + '" id="reply_comment_' + this.sub_item_id + '" class="reply_comment" type="button"  value="Reply">'
+            comment_template += '<input style="margin-left:7px;" data-id="' + comment_obj.id + '" id="reply_comment_' + this.sub_item_id + '" class="reply_comment" type="button"  value="Reply">'
             
         }
+        
+        
         
         comment_template += '</div>';
 

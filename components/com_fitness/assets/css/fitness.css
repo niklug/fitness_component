@@ -748,3 +748,13 @@ td.center, th.center, .center {
     background-repeat: no-repeat;
     background-size: 25px;
 }
+
+.dark_input_style {
+    font-size: 13px !important;
+    width: 231px;
+    color: #696969 !important;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1) !important;
+    border: medium none !important;
+    outline: medium none !important;
+    padding: 7px 10px !important;
+}

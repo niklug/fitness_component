@@ -815,7 +815,7 @@
                                 </td>
                                 <td>
 
-                                    <input value="<%= recipe.recipe_name || '' %>" style="width:400px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
+                                    <input class="dark_input_style" value="<%= recipe.recipe_name || '' %>" style="width:400px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
                                 </td>
                             </tr>
                             <tr>
@@ -829,7 +829,7 @@
                                     selected_types = (recipe.recipe_type).split(","); 
                                 }
                                 %>
-                                    <select multiple size="10" id="recipe_type" name="recipe_type[]" class="" style="width:200px;">
+                                    <select multiple size="10" id="recipe_type" name="recipe_type[]" class="dark_input_style" style="width:200px;">
                                         <% if (typeof recipe_types !== "undefined") { %>
                                             <% _.each(recipe_types, function(item, key){
                                                 var selected = '';
@@ -848,7 +848,7 @@
                                     SERVES
                                 </td>
                                 <td>
-                                    <input value="<%= recipe.number_serves || '' %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
+                                    <input class="dark_input_style" value="<%= recipe.number_serves || '' %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
                                 </td>
                             </tr>
                             <tr>
@@ -1685,7 +1685,7 @@
         <div class="clr"></div>
         <hr class="orange_line">
         <div class="internal_wrapper">
-            <select multiple size="<%= items.length + 1 %>" id="categories_filter" name="categories_filter[]" class="" style="width:100%;">
+            <select class="dark_input_style" multiple size="<%= items.length + 1 %>" id="categories_filter" name="categories_filter[]"  style="width:100%;">
                 <option value="">ALL CATEGORIES</option>
                 <% if (typeof items !== "undefined") { %>
                     <% _.each(items, function(item, key){ %>
