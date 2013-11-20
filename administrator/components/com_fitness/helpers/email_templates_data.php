@@ -67,13 +67,14 @@ class RecipeEmailTemplateData extends EmailTemplateData  {
     protected function getBusinessProfileData() {
         
         
-        $business_profile_id = $this->getBubinessIdByClientId($this->item->created_by);
+        $business_profile_id = $this->getBusinessProfileId($this->item->created_by);
         
-        $business_profile = $this->getBusinessProfile($business_profile_id);
+        $business_profile = $this->getBusinessProfile($business_profile_id['data']);
         
         $business_profile = $business_profile['data'];
         
         $this->business_profile = $business_profile;
+
     }
     
     protected function setParams() {
@@ -122,4 +123,56 @@ class RecipeEmailTemplateData extends EmailTemplateData  {
 
     
 }
+
+
+
+
+
+class GoalEmailTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->comment_id = $params['comment_id'];
+    }
+    
+    protected function getItemData() {
+        
+    }
+    
+    protected function getBusinessProfileData() {
+        
+        
+        $business_profile_id = $this->getBubinessIdByClientId($this->item->created_by);
+        
+        $business_profile = $this->getBusinessProfile($business_profile_id);
+        
+        $business_profile = $business_profile['data'];
+        
+        $this->business_profile = $business_profile;
+    }
+    
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+        
+        $layout = &JRequest::getVar('layout');
+        
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&recipe_id=' . $this->id . '&comment_id=' . $this->comment_id;
+        
+        $data->open_link = JUri::root() . 'index.php/contact/nutrition-database#!/nutrition_database/nutrition_recipe/' . $this->id;
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+               
+        return $data;
+    }
+
+    
+}
+
 

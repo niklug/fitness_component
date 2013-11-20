@@ -407,7 +407,7 @@ class NutritionRecipeEmail extends FitnessEmail {
                 $this->send_to = 'send_to_client';
                 break;
             case 'NotApproved':
-                $subject = 'Recipe Approved';
+                $subject = 'Recipe Not Approved';
                 $layout = 'email_recipe_notapproved';
                 $this->send_to = 'send_to_client';
                 break;
@@ -597,10 +597,7 @@ class CommentRecipeEmail extends FitnessEmail {
         if (!$id) {
             throw new Exception('Error: comment id');
         }
-        /*  if superuser or trainer make comment on private recipe - send email to client and all his trainers (except trainer who made comment)
-         *  if superuser or trainer make comment on global recipe - nothing sending
-         *  if client make comment on personal or global recipe - send email to all his trainers
-         */ 
+
         $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
         $layout = 'email_recipe_comment';
 
