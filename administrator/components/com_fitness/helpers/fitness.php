@@ -904,16 +904,21 @@ class FitnessHelper extends FitnessFactory
     
     public function getRecipeOriginalData($id) {
 
-        $query = "SELECT a.*, t.name AS recipe_type ";
+        $query = "SELECT a.* ";
 
         $query .=  " FROM #__fitness_nutrition_recipes AS a"
-                . " LEFT JOIN #__fitness_recipe_types AS t  ON a.recipe_type=t.id"
+               
                 . " WHERE a.id='$id' "
                 . " AND a.state='1'";
 
         $item = self::customQuery($query, 2);
         
         return $item;
+    }
+    
+    function getRecipeNames($ids) {
+        $query = "SELECT name FROM #__fitness_recipe_types WHERE id IN ($ids) AND state='1'";
+        return self::customQuery($query, 3);
     }
     
     public function getRecipeMeals($recipe_id) {
@@ -1087,6 +1092,16 @@ class FitnessHelper extends FitnessFactory
                 . " AND state='1'";
         
         $result = self::customQuery($query, 3);
+        
+        return $result;
+    }
+    
+    
+     public function getCommentData($comment_id, $table) {
+
+        $query = "SELECT * FROM $table WHERE id='$comment_id'";
+        
+        $result = self::customQuery($query, 2);
         
         return $result;
     }

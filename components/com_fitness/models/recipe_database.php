@@ -185,7 +185,7 @@ class FitnessModelrecipe_database extends JModelList {
         foreach ($data as $recipe) {
             if(!empty($recipe->recipe_type)) {
                 try {
-                    $recipe_types_names = $this->getRecipeNames($recipe->recipe_type);
+                    $recipe_types_names = $helper->getRecipeNames($recipe->recipe_type);
                 } catch (Exception $e) {
                     $status['success'] = 0;
                     $status['message'] = '"' . $e->getMessage() . '"';
@@ -201,12 +201,6 @@ class FitnessModelrecipe_database extends JModelList {
         return $result;
     }
     
-    
-
-    function getRecipeNames($ids) {
-        $query = "SELECT name FROM #__fitness_recipe_types WHERE id IN ($ids) AND state='1'";
-        return FitnessHelper::customQuery($query, 3);
-    }
     
     public function getRecipeTypes() {
         $status['success'] = 1;
@@ -256,7 +250,7 @@ class FitnessModelrecipe_database extends JModelList {
         // recipe types name
         if(!empty($data->recipe_type)) {
             try {
-                $recipe_types_names = $this->getRecipeNames($data->recipe_type);
+                $recipe_types_names = $helper->getRecipeNames($data->recipe_type);
             } catch (Exception $e) {
                 $status['success'] = 0;
                 $status['message'] = '"' . $e->getMessage() . '"';

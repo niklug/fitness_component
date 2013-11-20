@@ -13,25 +13,25 @@
                 text-decoration:none;
             }
             .lightContainer a, .lightContainer a:visited{
-                color:#FFF;
+                color:#000;
             }
             .lightContainer a:hover {
-                color:#005A00 !important;
+                color:#0e0601 !important;
             }
             .darkContainer a, .darkContainer a:visited {
-                color:#FFF;
+                color:#CCC;
             }
             .darkContainer a:hover {
-                color:#005A00 !important;
+                color:#FFA600 !important;
             }
             .readMore a:hover {
-                background-color:#002500 !important;
-                color: #005A00 !important;
+                background-color:#5D3B01 !important;
+                color: #FFA600 !important;
             }
             body {
                 margin:0;
                 background-color:#dddddd;
-                color:#005A00;
+                color:#FFA600;
                 font-family:Arial, Helvetica, sans-serif;
                 font-size:12px;
                 -webkit-text-size-adjust: none;
@@ -48,12 +48,15 @@
         </style>
     </head>
     <body>
+
         <?php
         require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email_templates_data.php';
 
         $recipe_id = &JRequest::getVar('recipe_id');
+        
+        $comment_id = &JRequest::getVar('comment_id');
         // 
-        $params = array('method' => 'Recipe', 'id' => $recipe_id);
+        $params = array('method' => 'Recipe', 'id' => $recipe_id, 'comment_id' => $comment_id);
 
         try {
             $obj = EmailTemplateData::factory($params);
@@ -63,7 +66,6 @@
             echo $exc->getMessage();
             die();
         }
-        
         ?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
@@ -79,7 +81,7 @@
                                 <!--Start Of Company Name And Slogan [row number #1]-->
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#005A00" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
+                                        <td bgcolor="#FFA600" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
                                             <img alt="Elite Fitness Training" height="78" src="<?php echo $data->header_image  ?>" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
@@ -99,19 +101,19 @@
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;"> RECIPE APPROVED... Bon Appétit!</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">REVIEW COMMENTS  </h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->user_name;?>,</p>
-                                                                    <p>Your recently added recipe has been approved... great work! </p>
-                                                                    <p>Additional comments or instructions may be available for you! Please take a moment to review your recipe.</p></td>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->user_name;?>,
+                                                                    </p>
+                                                                    <p>Additional comments or instructions have been posted about this recipe. Please take a moment to review this recipe and take into account and action any requests or instructions.</p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">RECIPE NAME: </td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->item->recipe_name;?></td>
+                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">RECIPE NAME: </td>
+                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->item->recipe_name;?> </td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">RECIPE TYPE:</td>
@@ -122,14 +124,24 @@
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->created;?></td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="28%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">ASSESSED BY: <br /></td>
-                                                                <td width="72%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->reviewed_by;?></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">CREATED BY: <br /></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->created_by;?></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">COMMENT BY: <br />
+                                                                    DATE / TIME:</td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->comment->created_by?> <br />
+                                                                                                                                                                                                    <?php echo $data->comment->created;?></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">COMMENTS: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->comment->comment_text;?> </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td class="readMore" width="160" height="22" bgcolor="#0A1C00" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#005A00; text-align:center;">
-                                                                    <a target="_blank" href="<?php echo $data->open_link; ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#005A00;">CLICK HERE TO OPEN</a>
+                                                                <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFA600; text-align:center;">
+                                                                    <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#FFA600;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -148,16 +160,16 @@
                                 <!--Start Of Content [row number #3]-->
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#005A00" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">What makes a good nutritional recipe?</h2>
+                                        <td bgcolor="#FFA600" style="padding:20px;">
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">What makes a good nutritional recipe?</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
                                                         <img alt="image" height="100" src="<?php echo $data->path ?>/nutrition.png" width="100" border="0" vspace="0" hspace="0" /></td>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                        <p>First of all, does your recipe fit with your macronutrients? Remember that you are trying to hit very specific daily targets 
-                                                            of protein, fats and carbohydrates!
-                                                            <p>Are the macronutrients that make up your recipe from a quality source? For example, the protein you get from a McDonalds 'Big Mac'   is not the same as getting protein from organic grass fed lean beef!</p></td>
+                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;">
+                                                        First of all, does your recipe fit with your macronutrients? Remember that you are trying to hit very specific daily targets 
+                                                        of protein, fats and carbohydrates!
+                                                        <p>Are the macronutrients that make up your recipe from a quality source? For example, the protein you get from a McDonalds 'Big Mac'   is not the same as getting protein from organic grass fed lean beef!</p></td>
                                                 </tr>
 
                                             </table>
@@ -165,6 +177,11 @@
                                     </tr>
                                 </table>
                                 <!--End Of Content [row number #3]-->
+                                <!--Start Of two Content Container [row number #4]-->
+
+                                <!--End Of Two Column Container [row number #4]-->
+                                <!--Start Of Content [row number #5]-->
+                                <!--End Of Content [row number #5]-->
                                 <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
@@ -173,4 +190,5 @@
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
 
-<?php include  __DIR__ . DS .'bottom.php'; ?>                                          
+
+                                            <?php include __DIR__ . DS . 'bottom.php'; ?>                                          

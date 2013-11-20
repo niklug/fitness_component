@@ -450,10 +450,34 @@ defined('_JEXEC') or die;
 
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
+                    if(parseInt(id) == 0) {
+                        self.email_new_recipe(output);
+                    }
                     self.set("recipe_saved", output);
                 });
-            }
+            },
+            
+            email_new_recipe : function(id) {
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = '';
+                var task = 'ajax_email';
+                var table = '';
 
+                data.id = id;
+                data.view = 'NutritionRecipe';
+                data.method = 'NewRecipe';
+                this.ajaxCall(data, url, view, task, table, function(output){
+                    console.log(output);
+                    var emails = output.split(',');
+                    var message = 'Emails were sent to: ' +  "</br>";
+                    $.each(emails, function(index, email) { 
+                        message += email +  "</br>";
+                    });
+                    $("#emais_sended").append(message);
+               });
+            }
+ 
         });
         
         
@@ -1434,6 +1458,7 @@ defined('_JEXEC') or die;
                 "!/recipe_database": "recipe_database", 
                 "!/nutrition_database": "nutrition_database", 
                 "!/nutrition_recipe/:id" : "nutrition_recipe",
+                "!/nutrition_database/nutrition_recipe/:id" : "nutrition_database_recipe",
                 "!/my_favourites" : "my_favourites",
                 "!/trash_list" : "trash_list",
                 "!/edit_recipe/:id" : "edit_recipe",
@@ -1559,8 +1584,20 @@ defined('_JEXEC') or die;
 
             nutrition_recipe : function(id) {
                 
+                var current_page = window.app.recipe_items_model.get('current_page');
+                
+                console.log(window.app.recipe_items_model);
+                
                 this.clear_main_ontainer();
                 this.load_submenu();
+                
+                window.app.recipe_items_model.getRecipe(id);
+
+           },
+           
+           nutrition_database_recipe : function(id) {
+
+                this.clear_main_ontainer();
                 
                 window.app.recipe_items_model.getRecipe(id);
 

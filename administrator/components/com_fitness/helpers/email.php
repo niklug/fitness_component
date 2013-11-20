@@ -404,10 +404,17 @@ class NutritionRecipeEmail extends FitnessEmail {
             case 'Approved':
                 $subject = 'Recipe Approved';
                 $layout = 'email_recipe_approved';
+                $this->send_to = 'send_to_client';
                 break;
             case 'NotApproved':
                 $subject = 'Recipe Approved';
                 $layout = 'email_recipe_notapproved';
+                $this->send_to = 'send_to_client';
+                break;
+            case 'NewRecipe':
+                $subject = 'New Recipe Created';
+                $layout = 'email_new_recipe';
+                $this->send_to = 'send_to_trainers';
                 break;
  
             default:
@@ -428,8 +435,17 @@ class NutritionRecipeEmail extends FitnessEmail {
         if (!$client_id) {
             throw new Exception('error: no client id');
         }
-
-        $ids[] = $client_id;
+        
+        if($this->send_to == 'send_to_client') {
+            $ids[] = $client_id;
+        }
+        
+        if($this->send_to == 'send_to_trainers') {
+            
+            $trainers_data = $this->getClientTrainers($client_id,  'all');
+            
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
         
         $this->recipients_ids = $ids;
     }
@@ -636,7 +652,7 @@ class CommentRecipeEmail extends FitnessEmail {
             $this->condition = 'private_client';
         }
         
-        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&recipe_id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
         $this->subject = $subject;
        
     }
