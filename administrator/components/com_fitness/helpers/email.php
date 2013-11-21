@@ -200,6 +200,8 @@ class GoalStatusEmail extends FitnessEmail {
                 $subject = 'Evaluate Mini Goal';
                 $layout = 'email_goal_evaluating_mini';
                 $goal_type = '2';
+                $send_to_client = false;
+                $send_to_trainer = true;
                 break;
             case 'GoalInprogressMini':
                 $subject = 'Mini Goal Scheduled';
