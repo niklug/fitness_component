@@ -51,25 +51,5 @@ function mySql2PhpTime($sqlDate){
 
 }
 
-//npkorban
-
-function getGoalCommentData($comment_id, $goal_type) {
-    // $goal_type: 1-> Primary Goal; 2 -> Mini Goal
-    $db = JFactory::getDbo();
-    $table = '#__fitness_goal_comments';
-
-    if($goal_type == '2') {
-        $table = '#__fitness_mini_goal_comments';
-    }
-    
-    $query = "SELECT * FROM $table WHERE id='$comment_id'";
-    
-    $db->setQuery($query);
-    if (!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $result = $db->loadObject();
-    return $result;
-}
 
 ?>

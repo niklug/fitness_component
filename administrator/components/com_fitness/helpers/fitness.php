@@ -1125,12 +1125,7 @@ class FitnessHelper extends FitnessFactory
                 WHERE g.id='$goal_id'"; 
         }
 
-        $db->setQuery($query);
-        if (!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $result = $db->loadObject();
-        return $result;
+        return self::customQuery($query, 2);;
     }
     
  

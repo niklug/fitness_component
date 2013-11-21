@@ -540,12 +540,8 @@ class CommentGoalEmail extends FitnessEmail {
 
         $send_to = 'all_trainers';
 
-        if(self::is_trainer($this->data->created_by))  {
+        if(self::is_trainer($this->data->created_by) OR self::is_superuser($this->data->created_by))  {
             $send_to = 'client_and_other_trainers'; 
-        }
-
-        if(self::is_superuser($this->data->created_by)) {
-            $send_to = ''; 
         }
 
         $this->send_to = $send_to;
