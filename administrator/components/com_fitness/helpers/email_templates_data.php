@@ -27,6 +27,10 @@ class EmailTemplateData extends FitnessHelper
             case 'Appointment':
                 return new AppointmentEmailTemplateData($params);
                 break;
+            
+            case 'Diary':
+                return new DiaryEmailTemplateData($params);
+                break;
 
             default:
                 break;
@@ -257,6 +261,66 @@ class AppointmentEmailTemplateData extends EmailTemplateData  {
     }
 
 }
+
+
+
+
+class DiaryEmailTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->layout = $params['layout'];
+
+    }
+    
+    protected function getItemData() {
+        $this->item = $this->getDiary($this->id);
+       
+        $this->business_profile_user = $this->item->client_id;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&diary_id=' .  $this->id;
+        $data->open_link = JUri::root() . 'index.php?option=com_fitness&view=nutrition_diaryform&layout=edit&Itemid=' . $this->id;
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $user = &JFactory::getUser($this->item->user_id );
+        $data->client_name = $user->name;
+
+        $user = &JFactory::getUser($this->item->trainer_id);
+        $data->trainer_name =  $user->name;
+        
+        $date = JFactory::getDate($this->item ->entry_date);
+        $data->entry_date =  $date->toFormat('%A, %d %b %Y');
+
+        $date = JFactory::getDate($this->item ->submit_date);
+        $data->submit_date =  $date->toFormat('%A, %d %b %Y');
+
+        $date = JFactory::getDate($this->item ->submit_date);
+        $data->submit_time = $date->format('H:i');
+
+        if($this->item->submit_date == '0000-00-00 00:00:00') {
+            $data->submit_date = 'Not Submitted';
+            $data->submit_time = '';
+        }
+        
+        $data->submit_date = $data->submit_date . ' ' . $data->submit_time;
+        
+        return $data;
+    }
+
+}
+
 
 
 

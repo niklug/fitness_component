@@ -1085,6 +1085,12 @@ class FitnessHelper extends FitnessFactory
         return $user_id;
     }
     
+    
+    function getDiary($id) {
+        $query = "SELECT * FROM #__fitness_nutrition_diary WHERE id='1'";
+        return self::customQuery($query, 2);
+    }
+
     public function getTrainerClients($id) {
         $query = "SELECT user_id FROM #__fitness_clients"
                 . " WHERE primary_trainer='$id'"

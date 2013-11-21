@@ -40,7 +40,7 @@
                 
             label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_TERMS_CONDITIONS"
             description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_TERMS_CONDITIONS" 
-                
+              filter="raw"   
                 
                  /> 
 

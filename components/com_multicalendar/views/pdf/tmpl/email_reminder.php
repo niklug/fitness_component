@@ -383,39 +383,17 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
-                                <!--End Of Two Column Container [row number #4]-->
-                                <!--Start Of Content [row number #5]-->
-                                <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
+                               
+                                
+                                <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:#810109; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#e76708" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">CANCELLATION POLICY</h2>
-                                            <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                <tr>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;"><p>24 hours notice is required to reschedule or cancel any training session or appointment.</p>
-                                                        <p> If less than 24 hours notice is given, FULL FEES will apply for that appointment, unless...<br />
-                                                            - your appointment time can be filled by another client.<br />
-                                                            - your appointment is able to be rescheduled to another time on the same day (availability depending).</p>
-                                                        <p>If you are late to your appointment, your appointment will still end at the scheduled time.</p>
-                                                        <p>If you do no show up to your appointment or cancel last minute, FULL FEES apply.</p>
-                                                        <p>If you are training early to mid-morning and you need to cancel or reschedule your appointment, you must do so BEFORE 3pm the preceding day to allow time to fill your appointment. Failure to do so will incur FULL SESSION FEES if you cancel too late!</p></td>
-                                                </tr>
-
-                                            </table>
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">&nbsp;</h2>
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter;">3 'STRIKES' POLICY</h2>
-                                            <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                <tr>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;"><p>If you break any of the before mentioned policies, one 'Strike' will be recorded against you.</p>
-                                                        <p>Each 'Strike' is cumulative and will remain on your record for a period of 1 month.</p>
-                                                        <p>Gaining a 3rd 'Strike' will result in your training being suspended for a length of time determined by your trainer. If this continues, you will no longer be able to continue training with Elite Fitness.</p></td>
-                                                </tr>
-
-                                            </table>
+                                        <td bgcolor="#e76708" valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                            <?php echo $data->business_profile->terms_conditions;?>
                                         </td>
                                     </tr>
                                 </table>
-                                <!--End Of Content [row number #5]-->
-                                <!--Start Of Footer [row number #6]-->
+                                
+                        
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>

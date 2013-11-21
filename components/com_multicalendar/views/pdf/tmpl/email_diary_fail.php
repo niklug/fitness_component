@@ -49,37 +49,21 @@
     </head>
     <body>
 <?php
-require_once( JPATH_COMPONENT . '/DC_MultiViewCal/php/list.inc.php' );
+        require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email_templates_data.php';
 
-$diary_id = &JRequest::getVar('diary_id');
+        $diary_id = &JRequest::getVar('diary_id');
+        $layout = JRequest::getVar('layout');
+        // 
+        $params = array('method' => 'Diary', 'id' => $diary_id, 'layout' => $layout);
 
+        try {
+            $obj = EmailTemplateData::factory($params);
 
-$diary = getNutritionDiaryData($diary_id);
-
-$user = &JFactory::getUser($diary->client_id);
-$client_name = $user->name;
-
-$user = &JFactory::getUser($diary->trainer_id);
-$trainer_name = $user->name;
-
-$date = JFactory::getDate($diary->entry_date);
-$entry_date =  $date->toFormat('%A, %d %b %Y');
-
-
-$date = JFactory::getDate($diary->submit_date);
-$submit_date =  $date->toFormat('%A, %d %b %Y');
-
-$date = JFactory::getDate($diary->submit_date);
-$submit_time = $date->format('H:i');
-
-if($diary->submit_date == '0000-00-00 00:00:00') {
-    $submit_date = 'Not Submitted';
-    $submit_time = '';
-}
-
-
-$path = JUri::base() . 'components/com_multicalendar/views/pdf/tmpl/images/';
-$sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=email_diary_fail&tpml=component&diary_id=' . $diary_id;
+            $data = $obj->processing();
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+            die();
+        }
 ?>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
@@ -87,7 +71,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                     <table width="630" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; text-align:left; margin:0 auto;">
                         <tr>
                             <td style="font-family:Arial, Helvetica, sans-serif; font-size:11px; line-height:15pt; color:#df833e;">
-                                <a href="<?php echo $sitelink ?>" style="color:#999999;">Having trouble viewing this email? Click here to open in your web browser.</a>
+                                <a href="<?php echo $data->sitelink ?>" style="color:#999999;">Having trouble viewing this email? Click here to open in your web browser.</a>
                             </td>
                         </tr>
                         <tr>
@@ -96,7 +80,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td bgcolor="#78000D" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
-                                            <img alt="Elite Fitness Training" height="78" src="<?php echo $path ?>/logo.png" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
+                                            <img alt="Elite Fitness Training" height="78" src="<?php echo $data->header_image  ?>" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
                                 </table>
@@ -104,7 +88,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                 <!--Start Of Main Content [row number #2]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px;">
@@ -121,7 +105,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $client_name;?>,</p>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->client_name;?>,</p>
                                                                     <p>You did not achieve a satisfactory score for this diary entry! You can now log-in to view your results and trainer feedback.</p>
                                                                     <p>You should discuss with your trainer what you can do to further improve your nutrition. This is a vital part of achieving your envisioned results!</p>
                                                                     <p>Please take a few moments to review your diary entry, take into account your trainers comments and action any requests or instructions.</p></td>
@@ -131,15 +115,15 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                                                     SUBMITTED: <br />
                                                                     ASSESSED BY: </td>
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    <?php echo $entry_date?><br />
-                                                                    <?php echo $submit_date. ' ' . $submit_time; ?> <br />
-                                                                    <?php echo $trainer_name;?><br /></td>
+                                                                    <?php echo $data->entry_date; ?><br />
+                                                                    <?php echo $data->submit_date; ?> <br />
+                                                                    <?php echo $data->trainer_name; ?><br /></td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFF; text-align:center;">
-                                                                    <a href="#" style="display:block; text-decoration:none; height:22px; line-height:22px; color:78000D;">CLICK HERE TO OPEN</a>
+                                                                    <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:78000D;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -151,7 +135,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $path ?>/borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $data->path ?>/borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
                                 <!--End Of Main Content [row number #2]-->
@@ -163,7 +147,7 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
-                                                        <img alt="image" height="100" src="<?php echo $path ?>/nutrition.png" width="100" border="0" vspace="0" hspace="0" /></td>
+                                                        <img alt="image" height="100" src="<?php echo $data->path ?>/nutrition.png" width="100" border="0" vspace="0" hspace="0" /></td>
                                                     <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                         <p>Stay focused! Talk to your trainer about ways to improve your nutrition mindset and subsequently change your lifestyle towards making smarter choices.</p>
                                                         <p>A big part of staying on track with your nutrition is being prepared! You need to plan for the week ahead, or at least the next few days. This will help ensure you are ready for your busy week, preparation really is the key to success!</p></td>
@@ -173,63 +157,12 @@ $sitelink = JUri::base() . 'index.php?option=com_multicalendar&view=pdf&layout=e
                                         </td>
                                     </tr>
                                 </table>
-                                <!--End Of Content [row number #3]-->
-                                <!--Start Of two Content Container [row number #4]-->
 
-                                <!--End Of Two Column Container [row number #4]-->
-                                <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
 
-                                            <table align="center" width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse; text-align:right;">
-                                                <tr>
-                                                    <td width="20" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e; margin:0; padding:0; text-align:left;" valign="top">
-                                                        <img alt="image" height="16" src="<?php echo $path ?>/bulb.png" width="13" /></td>
-                                                    <td width="450" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF; margin:0; padding:0 10px 0 0; text-align:left;" valign="top">
-                                                        Want to tell your friends about us?...</td>
-                                                    <td width="26" valign="middle">
-                                                        <a href="http://www.facebook.com/EliteTraining"><img alt="Facebook" height="16" src="<?php echo $path ?>/facebook.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
-                                                    <td width="26" valign="middle">
-                                                        <a href="http://www.twitter.com/EliteMelbourne"><img alt="Twitter" height="16" src="<?php echo $path ?>/twitter.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
-                                                    <td width="26" valign="middle">
-                                                        <a href="http://www.youtube.com/EliteFitnessPT">
-                                                            <img alt="YouTube" height="16" src="<?php echo $path ?>/youtube.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
-                                                    <td width="26" valign="middle">
-                                                        <a href="http://www.instagram.com/EliteMelbourne">
-                                                            <img alt="Instagram" height="16" src="<?php echo $path ?>/instagram.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
-                                                    <td width="26" valign="middle">
-                                                        <a href="https://plus.google.com/117163734672496632130/about">
-                                                            <img alt="Google" height="16" src="<?php echo $path ?>/google.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
-                                                    <td width="26" valign="middle">
-                                                        <a href="http://www.linkedin.com/pub/paul-meier/21/785/b1">
-                                                            <img alt="Linkedin" height="16" src="<?php echo $path ?>/in.png" width="16" border="0" vspace="0" hspace="0" /></a></td>
-                                                </tr>
-                                            </table>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td height="2" bgcolor="#140901" style="padding:0 0 15px 0; line-height:0;">
-                                            <img alt="" height="2" src="<?php echo $path ?>/hr.png" width="620" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#140901" style="padding:0px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF;">
-                                            Copyright © ELITE FITNESS TRAINING<br />
-                                            <a href="www.elitefit.com.au" style="color:#FFF;">www.elitefit.com.au</a> | <a href="mailto:info@elitefit.com.au" style="color:#FFF;">info@elitefit.com.au</a> | +64 2205 0590<br />
-                                            Having trouble viewing this email? <a href="<?php echo $sitelink ?>" style="color:#FFF;">Click Here</a> to open in your web browser.
-                                        </td>
-                                    </tr>
-                                </table>
-                                <!--End Of Footer [row number #6]-->
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </body>
-</html>
+                                            <?php include __DIR__ . DS . 'bottom.php'; ?>   
