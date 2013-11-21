@@ -120,6 +120,7 @@ class FitnessEmail extends FitnessHelper
 
         $this->get_recipients_ids();
         
+               
         $data = $this->send_mass_email();
         
         return $data;
@@ -317,7 +318,16 @@ class AppointmentEmail extends FitnessEmail {
     }
 
     protected function get_recipients_ids() {
-        $ids = $this->getClientsByEvent($this->data->id);
+        
+        
+        if((int)$this->data->appointment_client_id) {
+            $client_id = $this->getClientIdByAppointmentClientId($this->data->appointment_client_id);
+            $ids =  array($client_id);
+        } else {
+            $ids = $this->getClientsByEvent($this->data->id);
+        }
+
+        
         $this->recipients_ids = $ids;
     }
     
@@ -338,6 +348,7 @@ class AppointmentEmail extends FitnessEmail {
         
         $this->get_recipients_ids();
         
+                
         $this->generate_contents();
         
         $data = $this->send_mass_email();

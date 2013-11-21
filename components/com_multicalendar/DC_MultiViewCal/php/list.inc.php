@@ -17,68 +17,6 @@ function getLocations() {
     return $locations;
 }
 
-function getUserGroupById($user_id) {
-    if(!$user_id) {
-        $user_id = &JFactory::getUser()->id;
-    }
-    $db = JFactory::getDBO();
-    $query = "SELECT title FROM #__usergroups WHERE id IN 
-        (SELECT group_id FROM #__user_usergroup_map WHERE user_id='$user_id')";
-    $db->setQuery($query);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    return $db->loadResult();
-}
-
-/** get clients from fitness component
- * npkorban
- * 
- * @return type
- */
-function getClients() { 
-    $db	= & JFactory::getDBO();
-    $query = "SELECT #__fitness_clients.user_id, #__users.name FROM #__fitness_clients LEFT JOIN #__users ON #__fitness_clients.user_id = #__users.id";
-    $user = &JFactory::getUser();
-    if (getUserGroupById($user->id) != 'Super Users') {
-        $query .= " WHERE #__fitness_clients.primary_trainer = '$user->id'";
-    }
-    $db->setQuery($query);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $clients = $db->loadObjectList();
-    return $clients;
-}
-
-
-
-/** get clients from fitness component
- * npkorban
- * 
- * @return type
- */
-function getTrainers() { 
-    $trainers_group_id = FitnessHelper::getTrainersGroupId();
-    
-    $db	= & JFactory::getDBO();
-    $query = "SELECT id, username FROM #__users "
-            . "INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id "
-            . "WHERE #__user_usergroup_map.group_id='$trainers_group_id'";
-    $user = &JFactory::getUser();
-    if (getUserGroupById($user->id) != 'Super Users') {
-        $query .= " AND #__users.id = '$user->id'";
-    }
-    $db->setQuery($query);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $trainers = $db->loadObjectList();
-    return $trainers;
-}
-
-
-
 /** get Appointment (category) from fitness component
  * npkorban
  * 
@@ -174,8 +112,7 @@ $dc_locations = getLocations();
 
 $appointments = getAppointments();
 $dc_subjects = $appointments[0];
-$clients = getClients();
-$trainers  = getTrainers();
+
 
 define("JC_JQUERY_MV",true);
 global $JC_JQUERY_SPECIAL ;

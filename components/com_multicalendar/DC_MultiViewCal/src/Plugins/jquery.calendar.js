@@ -2036,6 +2036,7 @@
                     success: function(data) {//function(datastr) {
 						//datastr =datastr.replace(/"\\\/(Date\([0-9-]+\))\\\/"/gi, 'new $1');
                         //var data = (new Function("return " + datastr))();
+                        console.log(data);
                         if(data.error) {
                             alert(data.error);
                             return;

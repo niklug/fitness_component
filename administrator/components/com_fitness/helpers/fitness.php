@@ -174,7 +174,6 @@ class FitnessFactory {
         if (!$trainers_group_id) {
             $message = 'No Trainers Group assigned!';
             throw new Exception($message);
-            JError::raiseWarning( 100, $message);
         }
 
         return $trainers_group_id;
@@ -1065,6 +1064,13 @@ class FitnessHelper extends FitnessFactory
         $client_ids = $db->loadResultArray(0);
         $client_ids = array_unique($client_ids);
         return $client_ids;
+    }
+    
+    
+    
+    public function getClientIdByAppointmentClientId($appointment_client_id) {
+        $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE id='$appointment_client_id'";
+        return self::customQuery($query, 0);
     }
     
     public function getClientIdByNutritionPlanId($nutrition_plan_id) {

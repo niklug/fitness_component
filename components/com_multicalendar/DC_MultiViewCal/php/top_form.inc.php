@@ -460,6 +460,7 @@
         }
 
         function appointmentEmailLogic(event_id, event_status, appointment_client_id){
+            
             var send_appointment_email = $(".send_appointment_email").is(':checked');
             var method;
             switch(event_status) {
@@ -483,12 +484,12 @@
                     break;
             }
             if(send_appointment_email) {
-                sendAppointmentStatusEmail(event_id, method);
+                sendAppointmentStatusEmail(event_id, method, appointment_client_id);
             }
         }
 
                
-        function sendAppointmentStatusEmail(id, method) {
+        function sendAppointmentStatusEmail(id, method, appointment_client_id) {
             var data = {};
             var url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
             var view = '';
@@ -498,9 +499,11 @@
             data.id = id;
             data.view = 'Programs';
             data.method = method;
+            data.appointment_client_id = appointment_client_id;
 
 
             $.AjaxCall(data, url, view, task, table, function(output){
+                console.log(output);
                 var emails = output.split(',');
                 var message = 'Emails were sent to: ' +  "</br>";
                 $.each(emails, function(index, email) { 
