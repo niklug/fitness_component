@@ -1125,7 +1125,12 @@ class FitnessHelper extends FitnessFactory
                 WHERE g.id='$goal_id'"; 
         }
 
-        return self::customQuery($query, 2);;
+        return self::customQuery($query, 2);
+    }
+    
+    function getEvent($event_id) {
+       $query = "SELECT * FROM #__dc_mv_events WHERE id='$event_id'";
+       return self::customQuery($query, 2);
     }
     
  

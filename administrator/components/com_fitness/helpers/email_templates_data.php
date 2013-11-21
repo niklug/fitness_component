@@ -24,6 +24,9 @@ class EmailTemplateData extends FitnessHelper
             case 'Goal':
                 return new GoalEmailTemplateData($params);
                 break;
+            case 'Appointment':
+                return new AppointmentEmailTemplateData($params);
+                break;
 
             default:
                 break;
@@ -198,8 +201,63 @@ class GoalEmailTemplateData extends EmailTemplateData  {
                
         return $data;
     }
-
-    
 }
+
+
+
+class AppointmentEmailTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->client_id = $params['client_id'];
+        $this->layout = $params['layout'];
+
+    }
+    
+    protected function getItemData() {
+        $this->item = $this->getEvent($this->id);
+        
+        if (!$this->client_id) {
+            $this->client_id = $this->item->client_id;
+        }
+        
+        $this->business_profile_user = $this->client_id;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' .  $this->id  . '&client_id=' . $this->client_id;
+        
+        $data->open_link = JUri::root() . '';
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $user = &JFactory::getUser($this->client_id);
+        $data->client_name = $user->name;
+
+        $user = &JFactory::getUser($this->item->trainer_id);
+        $data->trainer_name =  $user->name;
+
+        $date = JFactory::getDate($this->item->starttime);
+        $data->start_date = $date->toFormat('%A, %d %b %Y');
+
+        $date = JFactory::getDate($this->item->starttime);
+   
+        $data->start_time = $date->format('H:i');
+        
+        return $data;
+    }
+
+}
+
+
 
 

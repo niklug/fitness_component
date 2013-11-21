@@ -146,14 +146,7 @@
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $data->path ?>/borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
-                                <!--End Of Main Content [row number #2]-->
-                                <!--Start Of Content [row number #3]--><!--End Of Content [row number #3]-->
-                                <!--Start Of two Content Container [row number #4]-->
 
-                                <!--End Of Two Column Container [row number #4]-->
-                                <!--Start Of Content [row number #5]-->
-                                <!--End Of Content [row number #5]-->
-                                <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
