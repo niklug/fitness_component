@@ -8,14 +8,14 @@
 
        <field name="entry_date" type="calendar"
                 
-            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_ENTRY_DATE"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_ENTRY_DATE" 
+            label="Date of Entry"
+            description="" 
        /> 
 
        <field name="submit_date" type="calendar"
-                
-            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_SUBMIT_DATE"
-            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_SUBMIT_DATE" 
+
+            label="Date Submitted"
+            description="" 
          /> 
        
         <field name="created" type="calendar"

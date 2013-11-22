@@ -71,11 +71,17 @@ class FitnessViewNutrition_diary extends JView
                 require_once JPATH_COMPONENT_ADMINISTRATOR . DS .  'models' . DS . 'nutrition_diaries.php';
                 $backend_list_model  = new FitnessModelNutrition_diaries();
                 
+                
+                // connect backend goals model
+                require_once JPATH_COMPONENT_ADMINISTRATOR . DS .  'models' . DS . 'goals.php';
+                $backend_goals_model  = new FitnessModelgoals();
+                
                 $model = $this->getModel();
                 
                 $this->assign('model', $model);
                 $this->assign('frontend_form_model', $frontend_form_model);
                 $this->assign('backend_list_model', $backend_list_model);
+                $this->assign('backend_goals_model', $backend_goals_model);
 		$this->addToolbar();
 		parent::display($tpl);
 	}

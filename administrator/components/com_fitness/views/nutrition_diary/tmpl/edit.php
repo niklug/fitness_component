@@ -13,15 +13,26 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+
+$helper = new FitnessHelper();
+
+$nutrition_plan = $helper->getNutritionPlan($this->item->nutrition_plan_id);
+
+$primary_goal = $helper->getGoalData($nutrition_plan->primary_goal_id, 1);
+
+$mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="nutrition_diary-form" class="form-validate">
     <div class="width-100 fltlft">
         <table width="100%">
             <tr>
-                <td width="30%">
+                <td width="50%">
                     <fieldset style="min-height: 130px;" class="adminform">
-                        <legend>CLIENT & TRAINER(S) </legend>
+                        <legend>CLIENT & TRAINERS </legend>
                         <table>
                             <tr>
                                 <td>
@@ -69,14 +80,7 @@ JHtml::_('behavior.keepalive');
                                 <td>
                                     <?php echo $this->item->entry_date; ?>
                                 </td>
-                                <td>
-                                    Primary Goal
-                                </td>
-                                <td>
-                                    <span class="grey_title">
-                                        <?php echo $this->frontend_form_model->getGoalName($this->item->goal_category_id); ?>
-                                    </span>
-                                </td>
+                                
                             </tr>
                             <tr>
                                 <td>
@@ -85,14 +89,7 @@ JHtml::_('behavior.keepalive');
                                 <td>
                                     <?php echo $this->item->created; ?>
                                 </td>
-                                <td>
-                                    Nutrition Focus
-                                </td>
-                                <td>
-                                    <span class="grey_title">
-                                        <?php echo $this->frontend_form_model->getNutritionFocusName($this->item->nutrition_focus); ?>
-                                    </span>               
-                                </td>
+                                
                             </tr>
                             <tr>
                                 <td>
@@ -107,12 +104,7 @@ JHtml::_('behavior.keepalive');
                                     }
                                     ?>
                                 </td>
-                                <td>
-                                    
-                                </td>
-                                <td>
-
-                                </td>
+                 
                             </tr>
                             <tr>
                                 <td>
@@ -126,6 +118,169 @@ JHtml::_('behavior.keepalive');
                     </fieldset>
                 </td>
             </tr>
+            
+            <tr>
+                <td colspan="2">
+                    <fieldset class="adminform">
+                        <legend>CURRENT GOALS & TRAINING FOCUS</legend>
+                        <table width="100%">
+                            <tr>
+                                <td width="50%">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="100">
+                                                Primary Goal
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $primary_goal->category_name; ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Start Date
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $primary_goal->start_date ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Achieve By 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $primary_goal->deadline ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Status 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php  echo $this->backend_goals_model->status_html($primary_goal->id, $primary_goal->status, 'status_button_passive')   ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Goal Details 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $primary_goal->details ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                </td>
+                                <td>
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="100">
+                                                Mini  Goal
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $mini_goal->category_name; ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100">
+                                                Training Period 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $mini_goal->training_period_name; ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Start Date
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $mini_goal->start_date ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Achieve By 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $mini_goal->deadline ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Status 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php  echo $this->backend_goals_model->status_html($mini_goal->id, $mini_goal->status, 'status_button_passive')   ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Goal Details 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <?php echo $mini_goal->details ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="2">
+                    <fieldset   class="adminform">
+                        <legend>NUTRITION FOCUS</legend>
+                            <table width="100%">
+                                <tr>
+                                    <td width="100">
+                                        Nutrition Focus
+                                    </td>
+                                    <td>
+                                        <span class="grey_title">
+                                            <?php echo $this->frontend_form_model->getNutritionFocusName($this->item->nutrition_focus); ?>
+                                        </span>               
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="100">
+                                        Nutrition Details
+                                    </td>
+                                    <td>
+                                        <span class="grey_title">
+                                            <?php echo $nutrition_plan->trainer_comments;?>
+                                        </span>               
+                                    </td>
+                                </tr>
+                            </table>
+                        
+                        </fieldset>
+                </td>
+            </tr>
+            
             <tr>
                 <td colspan="2">
                     <fieldset  id="daily_micronutrient" class="adminform">

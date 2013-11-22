@@ -1080,7 +1080,7 @@ class FitnessHelper extends FitnessFactory
     }
     
     public function getNutritionPlan($id) {
-       $query = "SELECT p.*, c.name AS primary_goal, f.name AS nutrition_focus FROM #__fitness_nutrition_plan AS p
+       $query = "SELECT p.*,  p.primary_goal AS primary_goal_id,  c.name AS primary_goal, f.name AS nutrition_focus FROM #__fitness_nutrition_plan AS p
            LEFT JOIN #__fitness_goals AS g ON g.id=p.primary_goal
            LEFT JOIN #__fitness_goal_categories AS c ON c.id=g.goal_category_id
            LEFT JOIN #__fitness_nutrition_focus AS f ON f.id=p.nutrition_focus
@@ -1138,11 +1138,12 @@ class FitnessHelper extends FitnessFactory
 
         if($goal_type == '2') {
 
-            $query = "SELECT g.*, mc.name AS category_name,  u.primary_trainer, g.start_date AS created, pc.name AS primary_goal_name, u.user_id AS user_id FROM #__fitness_mini_goals AS g
+            $query = "SELECT g.*, mc.name AS category_name,  u.primary_trainer, g.start_date AS created, pc.name AS primary_goal_name, u.user_id AS user_id, tp.name AS training_period_name FROM #__fitness_mini_goals AS g
                 LEFT JOIN #__fitness_mini_goal_categories AS mc ON g.mini_goal_category_id=mc.id
                 LEFT JOIN #__fitness_goals AS pg ON g.primary_goal_id=pg.id
                 LEFT JOIN #__fitness_goal_categories AS pc ON pc.id=pg.goal_category_id
                 LEFT JOIN #__fitness_clients AS u ON pg.user_id=u.user_id
+                LEFT JOIN #__fitness_training_period AS tp ON tp.id=g.training_period_id
                 WHERE g.id='$goal_id'"; 
         }
 
