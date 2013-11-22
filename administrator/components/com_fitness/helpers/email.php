@@ -382,7 +382,7 @@ class NutritionPlanEmail extends FitnessEmail {
         
         $this->subject = $subject;
 
-        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&nutrition_plan_id=' . $id;
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id;
     }
     
 

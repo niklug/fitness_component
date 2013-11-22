@@ -31,6 +31,9 @@ class EmailTemplateData extends FitnessHelper
             case 'Diary':
                 return new DiaryEmailTemplateData($params);
                 break;
+            case 'NutritionPlan':
+                return new NutritionPlanEmailTemplateData($params);
+                break;
 
             default:
                 break;
@@ -294,7 +297,7 @@ class DiaryEmailTemplateData extends EmailTemplateData  {
         
         $data->header_image  = JUri::root() . $data->business_profile->header_image;
         
-        $user = &JFactory::getUser($this->item->user_id );
+        $user = &JFactory::getUser($this->item->client_id);
         $data->client_name = $user->name;
 
         $user = &JFactory::getUser($this->item->trainer_id);
@@ -316,6 +319,54 @@ class DiaryEmailTemplateData extends EmailTemplateData  {
         
         $data->submit_date = $data->submit_date . ' ' . $data->submit_time;
         
+        return $data;
+    }
+
+}
+
+
+
+
+
+class NutritionPlanEmailTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->layout = $params['layout'];
+
+    }
+    
+    protected function getItemData() {
+        $this->item = $this->getNutritionPlan($this->id);
+        
+        $this->business_profile_user = $this->item->client_id;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        $data->sitelink = JUri::root() .  'index.php?option=com_multicalendar&view=pdf&layout=email_notify_nutrition_plan&tpml=component&id=' . $this->id;
+        
+        $data->open_link = JUri::root() . 'index.php?option=com_fitness&view=nutrition_planning';
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $user = &JFactory::getUser($this->item->client_id );
+        $data->client_name = $user->name;
+
+        $user = &JFactory::getUser($this->item->trainer_id);
+        $data->trainer_name =  $user->name;
+        
+        $date = JFactory::getDate($this->item ->active_start);
+        $data->active_start =  $date->toFormat('%A, %d %b %Y');
+
         return $data;
     }
 
