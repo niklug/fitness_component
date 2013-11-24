@@ -220,6 +220,12 @@
 
 
     MacronutrientTargets.prototype.generateHtml = function(o) {
+        
+        var anable_readonly = '';
+        if(this.options.readonly) {
+            anable_readonly = 'readonly';
+        }
+        
         var html = '<fieldset id="' + this.type + 'fieldset"  class="adminform">';
         html += '<legend>' + this.title + '</legend>';
         html += '<table class="nutrition_targets_table" width="100%">';
@@ -231,7 +237,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="' + o.calories + '" id="' + this.type + '_calories" class="required  validate-numeric" />';
+        html += '<input ' + anable_readonly + ' type="text" value="' + o.calories + '" id="' + this.type + '_calories" class="required  validate-numeric" />';
         html += '</td>'
 
         html += '<td>';
@@ -243,7 +249,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="' + o.water + '" id="' + this.type + '_water" class="required  validate-numeric" />';
+        html += '<input  ' + anable_readonly + '  type="text" value="' + o.water + '" id="' + this.type + '_water" class="required  validate-numeric" />';
         html += '</td>';
 
         html += '<td>';
@@ -261,7 +267,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="' + o.protein + '" id="' + this.type + '_protein" class="required  validate-numeric ' + this.type + '_percent_value" />';
+        html += '<input  ' + anable_readonly + ' type="text" value="' + o.protein + '" id="' + this.type + '_protein" class="required  validate-numeric ' + this.type + '_percent_value" />';
         html += '</td>'
 
         html += '<td>';
@@ -273,7 +279,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_protein_grams" readonly class="' + this.type + '_grams_value" />';
+        html += '<input  ' + anable_readonly + '  type="text" value="" id="' + this.type + '_protein_grams" readonly class="' + this.type + '_grams_value" />';
         html += '</td>';
 
         html += '<td>';
@@ -284,7 +290,7 @@
         html += 'Macronutrients Targets';
         html += '</td>';
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_protein_cals" readonly class="' + this.type + '_cals_value" />';
+        html += '<input  ' + anable_readonly + '  type="text" value="" id="' + this.type + '_protein_cals" readonly class="' + this.type + '_cals_value" />';
         html += '</td>'
 
         html += '<td>';
@@ -298,7 +304,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="' + o.fats + '" id="' + this.type + '_fats" class="required  validate-numeric ' + this.type + '_percent_value" />';
+        html += '<input  ' + anable_readonly + '  type="text" value="' + o.fats + '" id="' + this.type + '_fats" class="required  validate-numeric ' + this.type + '_percent_value" />';
         html += '</td>'
 
         html += '<td>';
@@ -309,7 +315,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_fats_grams" readonly class="' + this.type + '_grams_value" />';
+        html += '<input  ' + anable_readonly + '  type="text" value="" id="' + this.type + '_fats_grams" readonly class="' + this.type + '_grams_value" />';
         html += '</td>';
 
         html += '<td>';
@@ -319,7 +325,7 @@
         html += '<td>';
         html += '</td>';
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_fats_cals"readonly class="' + this.type + '_cals_value" />';
+        html += '<input  ' + anable_readonly + '  type="text" value="" id="' + this.type + '_fats_cals"readonly class="' + this.type + '_cals_value" />';
         html += '</td>'
 
         html += '<td>';
@@ -333,7 +339,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="' + o.carbs + '" id="' + this.type + '_carbs" class="required  validate-numeric ' + this.type + '_percent_value" />';
+        html += '<input  ' + anable_readonly + ' type="text" value="' + o.carbs + '" id="' + this.type + '_carbs" class="required  validate-numeric ' + this.type + '_percent_value" />';
         html += '</td>'
 
         html += '<td>';
@@ -344,7 +350,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_carbs_grams" readonly class="' + this.type + '_grams_value" />';
+        html += '<input  ' + anable_readonly + ' type="text" value="" id="' + this.type + '_carbs_grams" readonly class="' + this.type + '_grams_value" />';
         html += '</td>';
 
         html += '<td>';
@@ -354,7 +360,7 @@
         html += '<td>';
         html += '</td>';
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_carbs_cals" readonly class="' + this.type + '_cals_value" />';
+        html += '<input  ' + anable_readonly + ' type="text" value="" id="' + this.type + '_carbs_cals" readonly class="' + this.type + '_cals_value" />';
         html += '</td>'
 
         html += '<td>';
@@ -370,7 +376,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_total" readonly />';
+        html += '<input  ' + anable_readonly + ' type="text" value="" id="' + this.type + '_total" readonly />';
         html += '</td>'
 
         html += '<td>';
@@ -381,7 +387,7 @@
         html += '</td>';
 
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_total_grams" readonly />';
+        html += '<input ' + anable_readonly + '  type="text" value="" id="' + this.type + '_total_grams" readonly />';
         html += '</td>';
 
         html += '<td>';
@@ -391,7 +397,7 @@
         html += '<td>';
         html += '</td>';
         html += '<td>';
-        html += '<input type="text" value="" id="' + this.type + '_total_cals" readonly />';
+        html += '<input  ' + anable_readonly + ' type="text" value="" id="' + this.type + '_total_cals" readonly />';
         html += '</td>'
 
         html += '<td>';

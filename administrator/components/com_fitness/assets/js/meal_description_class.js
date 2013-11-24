@@ -100,20 +100,22 @@
 
 
     ItemDescription.prototype.generateHtml = function() {
-        var html = '<table width="100%">';
+        var html = '<table class="meal_table" width="100%">';
         html += '<thead>';
         html += '<tr>';
         html += '<th class="ingredient_title">' + this._title + '</th>';
         html += '<th>QUANTITY</th>';
-        html += '<th>PRO (g)</th>';
-        html += '<th>FAT (g)</th>';
-        html += '<th>CARB (g)</th>';
-        html += '<th>CALS</th>';
-        html += '<th>ENRG (kJ)</th>';
-        html += '<th>FAT, SAT (g)</th>';
-        html += '<th>SUG (g)</th>';
-        html += '<th>SOD (mg)</th>';
-        html += '<th></th>';
+        html += '<th class="ingredient_cell">PRO (g)</th>';
+        html += '<th class="ingredient_cell">FAT (g)</th>';
+        html += '<th class="ingredient_cell">CARB (g)</th>';
+        html += '<th class="ingredient_cell">CALS</th>';
+        html += '<th class="ingredient_cell">ENRG (kJ)</th>';
+        html += '<th class="ingredient_cell">FAT, SAT (g)</th>';
+        html += '<th class="ingredient_cell">SUG (g)</th>';
+        html += '<th class="ingredient_cell">SOD (mg)</th>';
+        
+        html += '<th class="ingredient_cell_delete"></th>';
+
         html += '</tr>';
         html += '</thead>';
         html += '<tbody id="meals_content' + this._description_id + '">';
@@ -140,14 +142,19 @@
 
     ItemDescription.prototype.createIngredientTR = function(calculatedIngredient) {
 
+        var read_only_attr = '';
+        if(this.options.read_only == true) {
+            read_only_attr = 'readonly';
+        }
+
         var html = '<tr data-ingredient_id="' + calculatedIngredient.ingredient_id + '"  data-id="' + calculatedIngredient.id + '">'
 
         html += '<td>';
-        html += '<input  size="60" type="text"  class="meal_name_input" value="' + calculatedIngredient.meal_name + '">';
+        html += '<input ' + read_only_attr + ' size="60" type="text"  class="meal_name_input" value="' + calculatedIngredient.meal_name + '">';
         html += '</td>';
 
         html += '<td>';
-        html += '<input size="5" type="text"  class="meal_quantity_input" id="meal_quantity_input' + this._description_id + '" value="' + calculatedIngredient.quantity + '">';
+        html += '<input ' + read_only_attr + ' size="5" type="text"  class="meal_quantity_input" id="meal_quantity_input' + this._description_id + '" value="' + calculatedIngredient.quantity + '">';
         html += '<span class="grams_mil">' + calculatedIngredient.measurement + '</span>';
         html += '</td>';
 
@@ -183,11 +190,12 @@
         html += '<input readonly size="5" type="text"  class="number_input meal_sodium_input_' + this._meal_id + '" value="' + calculatedIngredient.sodium + '">';
         html += '</td>';
 
-        html += '<td>';
+        html += '<td class="ingredient_cell_delete">';
         if(this.options.read_only == false) {
-        html += '<a href="javascript:void(0)" class="delete_meal" title="delete"></a>';
+            html += '<a href="javascript:void(0)" class="delete_meal" title="delete"></a>';
         }
         html += '</td>';
+        
 
         html += '</tr>';
 
@@ -196,23 +204,26 @@
 
     ItemDescription.prototype.totalsHtml = function(meal_id) {
         var html = '';
-        html += '<table id="totals_' + meal_id + '" width="100%">';
-        html += '<tr style="text-align:center;">';
-        html += '<th class="totals_pagging"></th>';
-        html += '<th></th>';
-        html += '<th>PRO (g)</th>';
-        html += '<th>FAT (g)</th>';
-        html += '<th>CARB (g)</th>';
-        html += '<th>CALS</th>';
-        html += '<th>ENRG (kJ)</th>';
-        html += '<th>FAT, SAT (g)</th>';
-        html += '<th>SUG (g)</th>';
-        html += '<th>SOD (mg)</th>';
-        html += '<th></th>';
+        html += '<table class="meal_table" id="totals_' + meal_id + '" width="100%">';
+        html += '<thead>';
+        html += '<tr style="text-align:left;">';
+        html += '<th class="totals_pagging meal_invisible_cell"></th>';
+        html += '<th  class="meal_invisible_cell" ></th>';
+        html += '<th class="ingredient_cell">PRO (g)</th>';
+        html += '<th class="ingredient_cell">FAT (g)</th>';
+        html += '<th class="ingredient_cell">CARB (g)</th>';
+        html += '<th class="ingredient_cell">CALS</th>';
+        html += '<th class="ingredient_cell">ENRG (kJ)</th>';
+        html += '<th class="ingredient_cell">FAT, SAT (g)</th>';
+        html += '<th class="ingredient_cell">SUG (g)</th>';
+        html += '<th class="ingredient_cell">SOD (mg)</th>';
+        html += '<th class="ingredient_cell_delete"></th>';
         html += '</tr>';
+        html += '</thead>';
+        html += '<tbody>';
         html += '<tr >';
-        html += '<td class="totals_pagging" ></td>'
-        html += '<td><b>TOTALS</b></td>';
+        html += '<td class="totals_pagging meal_invisible_cell" ></td>'
+        html += '<td style="text-align:right;" class="meal_invisible_cell" ><b>TOTALS</b></td>';
         html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_protein_total" id="meal_protein_input_total_' + meal_id + '" value=""></td>';
         html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_fats_total" id="meal_fats_input_total_' + meal_id + '" value=""></td>';
         html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_carbs_total" id="meal_carbs_input_total_' + meal_id + '" value=""></td>';
@@ -220,9 +231,11 @@
         html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_energy_total" id="meal_energy_input_total_' + meal_id + '" value=""></td>';
         html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_saturated_fat_total" id="meal_saturated_fat_input_total_' + meal_id + '" value=""></td>';
         html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sugars_total" id="meal_total_sugars_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_row"><input readonly size="5" type="text" class="meal_sodium_total" id="meal_sodium_input_total_' + meal_id + '" value=""></td>';
-        html += '<td class="totals_right"></td>';
+        html += '<td class="totals_row "><input readonly size="5" type="text" class="meal_sodium_total" id="meal_sodium_input_total_' + meal_id + '" value=""></td>';
+        html += '<td class="ingredient_cell_delete">';
+        html += '</td>';
         html += '</tr>';
+        html += '</tbody>';
         html += '</table>';
         return html;
     }

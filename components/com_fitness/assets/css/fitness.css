@@ -423,7 +423,6 @@ td.center, th.center, .center {
     display: inline-block;
     height: 15px;
     width: 15px;
-    margin-left: 10px;
 }
 
 .fitness_wrapper .meal_date{
@@ -758,3 +757,17 @@ td.center, th.center, .center {
     outline: medium none !important;
     padding: 7px 10px !important;
 }
+
+.ingredient_cell {
+    width:57px;
+}
+
+
+.ingredient_cell_delete {
+    width:15px !important; 
+}
+
+.meal_invisible_cell {
+    background: none repeat scroll 0 0 rgba(6, 7, 9, 0.93) !important;
+}
+

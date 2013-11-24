@@ -18,7 +18,7 @@
     }
     
     NutritionMeal.prototype.CalculateTotalsWithDelay = function(meal_id) {
-        var meal_description = $.itemDescription(this.item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', meal_id);
+        var meal_description = $.itemDescription(this.item_description_options, 'meal', 'MEAL ITEMS', meal_id);
         return meal_description.CalculateTotalsWithDelay(meal_id);
     }
      
@@ -113,15 +113,19 @@
     }
 
     NutritionMeal.prototype.generateHtml = function(o) {
+        var read_only_attr = '';
+        if(this.options.read_only == true) {
+            read_only_attr = 'readonly';
+        }
         var meal_id = o.id;
         var html = '';
         html += '<div data-id="' + meal_id + '" id="meal_wrapper_' + meal_id + '">';
         html += '<hr>';
-        html += '<table data-id="' + meal_id + '" width="100%">';
+        html += '<table  data-id="' + meal_id + '" width="100%">';
         html += '<tr>';
 
         html += '<td style="text-align:right;">';
-        html += 'What time did you eat this meal?';
+        html += 'TIME OF MEAL';
         
         var date_field_type = 'text';
         var date_field_value = (o.meal_time).substring(0, 10);
@@ -131,7 +135,7 @@
         }
         
         html += '<input  size="5" type="' + date_field_type + '"  class="meal_date required" value="' + date_field_value + '" readonly>';
-        html += '<input  size="4" type="text"  class="meal_time required " value="' + (o.meal_time).substring(11, 16) + '">';
+        html += '<input ' + read_only_attr + ' size="4" type="text"  class="meal_time required " value="' + (o.meal_time).substring(11, 16) + '">';
 
         if(this.options.read_only == false) {
             html += '<input title="Save/Update Meal" class="save_plan_meal " type="button"  value="Save">';
@@ -145,9 +149,9 @@
         
         html += '<tr>';
         html += '<td style="text-align:right;" class="meal_center_desc">';
-        html += 'How much water did you drink only with THIS meal?';
+        html += 'WATER CONSUMED WITH THIS MEAL';
 
-        html += '<input  size="5" type="text"  class="required water" value="' + o.water + '">';
+        html += '<input  ' + read_only_attr + ' size="5" type="text"  class="required water" value="' + o.water + '">';
 
         html += '<span class="grey_title">millilitres</span>';
         html += '</td>';
@@ -155,9 +159,9 @@
 
         html += '<tr>';
         html += '<td style="text-align:right;">';
-        html += 'How much water did you drink between (before) this meal and your last meal? (workout/training inclusive)';
+        html += 'WATER CONSUMED BEFORE THIS MEAL - BUT AFTER THE PREVIOUS MEAL (WORKOUT / TRAINING INCLUSIVE)';
 
-        html += '<input  size="5" type="text"  class="required previous_water" value="' + o.previous_water + '">';
+        html += '<input ' + read_only_attr + '  size="5" type="text"  class="required previous_water" value="' + o.previous_water + '">';
 
         html += '<span class="grey_title">millilitres</span>';
         html += '</td>';
@@ -170,12 +174,11 @@
         html += '</tr>';
         html += '</table>';
 
-
         if(meal_id) {
-            var meal_description = $.itemDescription(this.item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', meal_id);
+            var meal_description = $.itemDescription(this.item_description_options, 'meal', 'MEAL ITEMS', meal_id);
             html += meal_description.run();
-            html += $.itemDescription(this.item_description_options, 'supplement', 'SUPPLEMENT ITEM DESCRIPTION', meal_id).run();
-            html += $.itemDescription(this.item_description_options, 'drinks', 'DRINKS & LIQUIDS ITEM DESCRIPTION', meal_id).run();
+            html += $.itemDescription(this.item_description_options, 'supplement', 'SUPPLEMENTS', meal_id).run();
+            html += $.itemDescription(this.item_description_options, 'drinks', 'DRINKS & LIQUIDS', meal_id).run();
             
             html += meal_description.totalsHtml(meal_id);
             

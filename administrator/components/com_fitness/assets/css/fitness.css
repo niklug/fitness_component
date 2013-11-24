@@ -439,7 +439,7 @@
 
 
 #totals_row , .totals_row{
-    background-color:#E1E9E9;
+    background-color:#c6c6c6;
     text-align: center;
 }
 
@@ -452,6 +452,7 @@
     background-color: #ffffff;
     background: none;
 }
+
 
 .comment_wrapper, .comment_textarea {
     width: 600px !important;
@@ -675,4 +676,37 @@
     height: 25px;
     background-repeat: no-repeat;
     background-size: 25px;
+}
+
+
+.meal_table  thead tr {
+    background: #4F4F4F !important;
+    color: #fff;
+}
+
+.meal_table  tbody tr {
+    background-color: #E1E9E9;
+}
+
+.meal_table   tr input[type="text"]{
+    margin: 0 5px;
+}
+
+
+.meal_table  thead tr th{
+    padding: 3px;
+}
+
+.ingredient_cell {
+    width:70px;
+}
+
+.meal_invisible_cell{
+    background-color: #fff !important;
+}
+
+
+.ingredient_cell_delete {
+    width:10px !important; 
+    background-color: #fff !important;
 }

@@ -27,6 +27,11 @@
         this.setEnergyVariancePercents();
         this.setDailyTotalWater();
         this.setDailyVarianceWater();
+        this.setDailyTargetGrams();
+        this.setDailyTargetPercents();
+        this.setDailyTargetEnergy();
+        this.setDailyTargetCalories();
+        this.setDailyTargetWater();
         
         if(this.options.draw_chart) {
             this.setScores(this.options.chart_container);
@@ -308,6 +313,38 @@
         this.set_item_total(this.get_item_total('meal_sodium_total'), 'daily_sodium_grams');
 
     }
+    
+    CalculateSummary.prototype.setDailyTargetGrams = function() {
+        
+        var target_kind = this.getDayKindPrefix();
+        this.setTargetGramsValue('daily_target_protein_grams', this.getTargetGramsValue('protein', target_kind));
+        this.setTargetGramsValue('daily_target_fats_grams', this.getTargetGramsValue('fats', target_kind));
+        this.setTargetGramsValue('daily_target_carbs_grams', this.getTargetGramsValue('carbs', target_kind));
+    }
+    
+    
+    CalculateSummary.prototype.setDailyTargetPercents = function() {
+        var target_kind = this.getDayKindPrefix();
+        this.setTargetPercentsValue('daily_target_protein_percents', this.getTargetPercentsValue('protein', target_kind));
+        this.setTargetPercentsValue('daily_target_fats_percents', this.getTargetPercentsValue('fats', target_kind));
+        this.setTargetPercentsValue('daily_target_carbs_percents', this.getTargetPercentsValue('carbs', target_kind));
+    }
+    
+    CalculateSummary.prototype.setDailyTargetEnergy = function() {
+        $("#daily_target_energy").val(this.getDailyTargetEnergy());
+    }
+    
+    CalculateSummary.prototype.setDailyTargetCalories= function() {
+        var target_kind = this.getDayKindPrefix();
+        var dayly_target_calories = this.getTargetPercentsValue('calories', target_kind);
+        $("#daily_target_calories").val(dayly_target_calories);
+    }
+    
+    CalculateSummary.prototype.setDailyTargetWater= function() {
+        var target_kind = this.getDayKindPrefix();
+        var dayly_target_water = this.getTargetPercentsValue('water', target_kind);
+        $("#daily_target_water").val(dayly_target_water);
+    }
 
 
     CalculateSummary.prototype.setDailyTotalsPercents = function() {
@@ -339,9 +376,19 @@
     CalculateSummary.prototype.getTargetGramsValue = function(name, target_kind) {
         return $("#" + target_kind + name + "_grams").val();
     }
-
+    
+    CalculateSummary.prototype.setTargetGramsValue = function(name, value) {
+        return $("#"  + name ).val(value);
+    }
+    
+        
+    
     CalculateSummary.prototype.getTargetPercentsValue = function(name, target_kind) {
         return $("#" + target_kind + name).val();
+    }
+    
+    CalculateSummary.prototype.setTargetPercentsValue = function(name, value) {
+        return $("#"  + name ).val(value);
     }
 
 
