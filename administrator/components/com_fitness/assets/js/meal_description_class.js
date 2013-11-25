@@ -574,7 +574,7 @@
         html += '<div id="recipes_list_wrapper">';
         html += '<a href="javascript:void(0)" id="close_recipe_list" title="Close"></a>';
         html += ' <iframe scrolling="auto" style="overflow-y: auto;overflow-x: hidden;" width="100%" height="100%"';
-        html += 'src="' + this.options.fitness_administration_url + '&view=recipe_database&tmpl=component&layout=popup_view&nutrition_plan_id=';
+        html += 'src="' + this.options.fitness_administration_url + '&view=recipe_database&tmpl=component&nutrition_plan_id=';
         html += this.options.nutrition_plan_id +'&meal_id=' + this._meal_id + '&type=' + this._type +'&parent_view=' + this.options.parent_view + '">'
         html += '</iframe> ';
         html += '</div>';

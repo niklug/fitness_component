@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 ?>
 
 <div style="opacity: 1;" class="fitness_wrapper">
+
     <h2>RECIPE DATABASE</h2>
     
     <div id="recipe_mainmenu"></div>
@@ -764,9 +765,36 @@ defined('_JEXEC') or die;
 
             el: $("#recipe_mainmenu"), 
 
+            events: {
+                "click #my_favourites_link" : "onClickFavourites",
+                "click #my_recipes_link" : "onClickMy_recipes",
+                "click #recipe_database_link" : "onClickRecipe_database",
+                "click #nutrition_database_link" : "onClickNutrition_database",
+            },
+
             render : function(){
                 var template = _.template($("#recipe_database_mainmenu_template").html());
                 this.$el.html(template);
+            },
+            
+            onClickFavourites : function() {
+                window.app.controller.navigate("!/my_favourites", true);
+                return false;
+            },
+            
+            onClickMy_recipes : function() {
+                window.app.controller.navigate("!/my_recipes", true);
+                return false;
+            },
+            
+            onClickRecipe_database : function() {
+                window.app.controller.navigate("!/recipe_database", true);
+                return false;
+            },
+            
+            onClickNutrition_database : function() {
+                window.app.controller.navigate("!/nutrition_database", true);
+                return false;
             }
         });
         
@@ -1714,6 +1742,7 @@ defined('_JEXEC') or die;
                
                window.app.recipe_items_model.getRecipe(recipe_id);
            }
+           
  
             
         });

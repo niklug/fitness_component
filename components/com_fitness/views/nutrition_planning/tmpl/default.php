@@ -683,6 +683,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
 
         var controller = new Controller(); 
         
+        
 
         Backbone.history.start();  
         
