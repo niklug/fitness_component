@@ -32,6 +32,13 @@ defined('_JEXEC') or die;
 
         window.app = {};
         
+        var add_diary_options = {
+            'nutrition_plan_id' : '<?php echo JRequest::getVar('nutrition_plan_id'); ?>',
+            'meal_id' : '<?php echo JRequest::getVar('meal_id'); ?>',
+            'type' : '<?php echo JRequest::getVar('type'); ?>',
+            'parent_view' : '<?php echo JRequest::getVar('parent_view');?>'
+        };
+        
         var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
@@ -45,6 +52,7 @@ defined('_JEXEC') or die;
             'default_image' : 'administrator/components/com_fitness/assets/images/no_image.png',
             'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Images' . DS  ?>',
             'img_path' : 'images/Recipe_Images',
+            'add_diary_options' : add_diary_options
         };
         
         // MODELS 
@@ -118,7 +126,8 @@ defined('_JEXEC') or die;
                 
                 this.setListeners();
                 this.connectPagination();
-            },
+                this.nutrition_plan_id = this.attributes.add_diary_options.nutrition_plan_id;
+           },
             
             setListeners : function() {
                 this.bind("change:filter_options", this.resetCurrentPage, this);
@@ -246,11 +255,11 @@ defined('_JEXEC') or die;
 
 
                 if(current_page == 'my_recipes') {
-                    new window.app.Submenu_myrecipe_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id, 'is_favourite' : recipe.is_favourite});
+                    new window.app.Submenu_myrecipe_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id, 'is_favourite' : recipe.is_favourite, 'nutrition_plan_id' : this.nutrition_plan_id});
                 } else if (current_page == 'recipe_database') {
-                    new window.app.Submenu_recipe_database_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id, 'is_favourite' : recipe.is_favourite});
+                    new window.app.Submenu_recipe_database_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id, 'is_favourite' : recipe.is_favourite, 'nutrition_plan_id' : this.nutrition_plan_id});
                 } else if (current_page == 'my_favourites') {
-                    new window.app.Submenu_my_favourites_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id});
+                    new window.app.Submenu_my_favourites_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id, 'nutrition_plan_id' : this.nutrition_plan_id});
                 }  else if (current_page == 'trash_list') {
                     new window.app.Submenu_trash_form_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id});
                 } else if (current_page == 'edit_recipe') {
@@ -468,13 +477,39 @@ defined('_JEXEC') or die;
                 data.view = 'NutritionRecipe';
                 data.method = 'NewRecipe';
                 this.ajaxCall(data, url, view, task, table, function(output){
-                    console.log(output);
+                    //console.log(output);
                     var emails = output.split(',');
                     var message = 'Emails were sent to: ' +  "</br>";
                     $.each(emails, function(index, email) { 
                         message += email +  "</br>";
                     });
                     $("#emais_sended").append(message);
+               });
+            },
+            
+            add_diary : function(data) {
+                var url = this.get('fitness_frontend_url');
+                var view = 'nutrition_plan';
+                var task = 'importRecipe';
+                                
+                data.nutrition_plan_id = this.nutrition_plan_id;
+                data.meal_id = this.attributes.add_diary_options.meal_id;
+                data.type = this.attributes.add_diary_options.type;
+                data.parent_view = this.attributes.add_diary_options.parent_view;
+
+                if(data.parent_view == 'nutrition_diary_frontend'){
+                    data.db_table =  '#__fitness_nutrition_diary_ingredients';
+                }
+                
+                if(data.parent_view == 'nutrition_plan_backend'){
+                    data.db_table = '#__fitness_nutrition_plan_ingredients';
+                }
+                
+                var table = data.db_table;
+                
+                //console.log(data);
+                this.ajaxCall(data, url, view, task, table, function(output){
+                    window.parent.location.reload();
                });
             }
  
@@ -693,7 +728,7 @@ defined('_JEXEC') or die;
                 data.specific_gravity = $("#jform_specific_gravity").val();
                 data.description = encodeURIComponent($("#jform_description").html());
                 data.state = '1';
-                console.log(data);
+                //console.log(data);
 
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
@@ -704,11 +739,8 @@ defined('_JEXEC') or die;
             },
             
             onIngredientSave : function(ingredient_id) {
-                console.log(ingredient_id);
                 this.set({'ingredient_id' : ingredient_id});
-                
                 var action = this.get('action');
-                console.log(action);
                 if(action == 'save_close') {
                     window.app.controller.navigate("!/nutrition_database", true);
                 }
@@ -772,6 +804,7 @@ defined('_JEXEC') or die;
             initialize: function(){
                 this.recipe_id = this.options.recipe_id;
                 this.is_favourite = this.options.is_favourite;
+                this.nutrition_plan_id = this.options.nutrition_plan_id;
                 this.render();
             },
             events: {
@@ -780,9 +813,10 @@ defined('_JEXEC') or die;
                 "click .remove_favourites" : "onClickRemoveFavourites",
                 "click .trash_recipe" : "onClickTrashRecipe",
                 "click .edit_recipe" : "onClickEditRecipe",
+                "click .add_diary" : "onClickAddDiary",
             },
             render : function(){
-                var variables = {'recipe_id' : this.recipe_id, 'is_favourite' : this.is_favourite};
+                var variables = {'recipe_id' : this.recipe_id, 'is_favourite' : this.is_favourite, 'nutrition_plan_id' : this.nutrition_plan_id };
                 var template = _.template($("#submenu_my_recipes_template").html(), variables);
                 this.$el.html(template);
             },
@@ -808,7 +842,12 @@ defined('_JEXEC') or die;
             onClickEditRecipe : function(event) {
                 var recipe_id = $(event.target).attr('data-id');
                 window.app.controller.navigate("!/edit_recipe/" + recipe_id, true);
-            }
+            },
+            
+            onClickAddDiary : function(event) {
+                var id = $(event.target).attr('data-id');
+                window.app.controller.navigate("!/add_diary/" + id, true);
+            },
         });
         
         
@@ -816,6 +855,7 @@ defined('_JEXEC') or die;
             initialize: function(){
                 this.recipe_id = this.options.recipe_id;
                 this.is_favourite = this.options.is_favourite;
+                this.nutrition_plan_id = this.options.nutrition_plan_id;
                 this.render();
             },
             events: {
@@ -824,9 +864,10 @@ defined('_JEXEC') or die;
                 "click .add_favourite" : "onClickAddFavourite",
                 "click .remove_favourites" : "onClickRemoveFavourites",
                 "click .trash_recipe" : "onClickTrashRecipe",
+                "click .add_diary" : "onClickAddDiary",
             },
             render : function(){
-                var variables = {'recipe_id' : this.recipe_id, 'is_favourite' : this.is_favourite};
+                var variables = {'recipe_id' : this.recipe_id, 'is_favourite' : this.is_favourite, 'nutrition_plan_id' : this.nutrition_plan_id};
                 var template = _.template($("#submenu_recipe_database_template").html(), variables);
                 this.$el.html(template);
             },
@@ -858,6 +899,11 @@ defined('_JEXEC') or die;
                 var recipe_id = $(event.target).attr('data-id');
                 window.app.recipe_items_model.trash_recipe(recipe_id);
             },
+            
+            onClickAddDiary : function(event) {
+                var id = $(event.target).attr('data-id');
+                window.app.controller.navigate("!/add_diary/" + id, true);
+            },
         });
         
         
@@ -865,14 +911,16 @@ defined('_JEXEC') or die;
             initialize: function(){
                 this.listenToOnce(window.app.recipe_items_model, "change:favourite_removed", this.redirectToFavourites);
                 this.recipe_id = this.options.recipe_id;
+                this.nutrition_plan_id = this.options.nutrition_plan_id;
                 this.render();
             },
             events: {
                 "click #close_recipe" : "onClickCloseRecipe",
                 "click .remove_favourites" : "onClickRemoveFavourites",
+                "click .add_diary" : "onClickAddDiary",
             },
             render : function(){
-                var variables = {'recipe_id' : this.recipe_id};
+                var variables = {'recipe_id' : this.recipe_id, 'nutrition_plan_id' : this.nutrition_plan_id};
                 var template = _.template($("#submenu_my_favourites_template").html(), variables);
                 this.$el.html(template);
             },
@@ -886,7 +934,12 @@ defined('_JEXEC') or die;
             },
             redirectToFavourites : function(){
                 window.app.controller.navigate("!/my_favourites", true);
-            }
+            },
+            
+            onClickAddDiary : function(event) {
+                var id = $(event.target).attr('data-id');
+                window.app.controller.navigate("!/add_diary/" + id, true);
+            },
         });
         
         
@@ -1063,9 +1116,44 @@ defined('_JEXEC') or die;
             onClickCancel : function() {
                window.app.controller.navigate("!/nutrition_database", true);
             },
-            
-      
 
+        });
+        
+        
+        window.app.Submenu_add_diary_view = Backbone.View.extend({
+            initialize: function(){
+                this.render();
+            },
+            events: {
+                "click #add_diary" : "onClickAddDiary",
+                "click #cancel" : "onClickCancel",
+            },
+            render : function(){
+                var variables = {'recipe_id' : this.options.recipe_id, 'nutrition_plan_id' : this.options.nutrition_plan_id};
+                var template = _.template($("#submenu_add_diary_template").html(), variables);
+                this.$el.html(template);
+            },
+            
+            onClickAddDiary : function(event) {
+                var recipe_id = $(event.target).attr("data-recipe_id");
+                var number_serves = parseInt($("#number_serves").val());
+
+                if(!number_serves) {
+                    alert('Wrong Value Number of serves!');
+                    return false;
+                }
+                
+                var data = {};
+                data.recipe_id = recipe_id;
+                data.number_serves = number_serves;
+                
+                window.app.recipe_items_model.add_diary(data);
+                
+            },
+            
+            onClickCancel : function() {
+                window.app.controller.navigate("!/recipe_database", true);
+            },
 
         });
         
@@ -1107,6 +1195,7 @@ defined('_JEXEC') or die;
                 "click .trash_recipe" : "onClickTrashRecipe",
                 "click .delete_recipe" : "onClickDeleteRecipe",
                 "click .restore_recipe" : "onClickRestoreRecipe",
+                "click .add_diary" : "onClickAddDiary",
             },
             
             onClickViewRecipe : function(event) {
@@ -1144,7 +1233,12 @@ defined('_JEXEC') or die;
             onClickRestoreRecipe : function(event) {
                 var recipe_id = $(event.target).attr('data-id');
                 window.app.recipe_items_model.restore_recipe(recipe_id);
-            }
+            },
+            
+            onClickAddDiary : function(event) {
+                var id = $(event.target).attr('data-id');
+                window.app.controller.navigate("!/add_diary/" + id, true);
+            },
         });
         
         
@@ -1425,7 +1519,7 @@ defined('_JEXEC') or die;
 
         });
         
-        
+
         
         //Creation global object
         window.app.recipe_items_model = new window.app.Recipe_items_model(options);
@@ -1463,6 +1557,7 @@ defined('_JEXEC') or die;
                 "!/trash_list" : "trash_list",
                 "!/edit_recipe/:id" : "edit_recipe",
                 "!/add_ingredient" : "add_ingredient",
+                "!/add_diary/:id" : "add_diary",
             },
 
             my_recipes : function () {
@@ -1585,9 +1680,7 @@ defined('_JEXEC') or die;
             nutrition_recipe : function(id) {
                 
                 var current_page = window.app.recipe_items_model.get('current_page');
-                
-                console.log(window.app.recipe_items_model);
-                
+             
                 this.clear_main_ontainer();
                 this.load_submenu();
                 
@@ -1609,7 +1702,17 @@ defined('_JEXEC') or die;
                new window.app.Submenu_edit_recipe_view ({ el: $("#submenu_container"), 'recipe_id' : id});
                
                window.app.Views.edit_recipe_container = new window.app.EditRecipeContainer_view({'recipe_id' : id, 'filter_categories_model' : window.app.filter_categories_model});
-
+           },
+           
+           add_diary : function(id) {
+               var recipe_id = id;
+               var nutrition_plan_id = window.app.recipe_items_model.get('nutrition_plan_id');
+               window.app.recipe_items_model.set({current_page : 'add_diary'});
+               this.clear_main_ontainer();
+               this.load_submenu();
+               new window.app.Submenu_add_diary_view ({ el: $("#submenu_container"), 'recipe_id' : recipe_id, 'nutrition_plan_id' : nutrition_plan_id});
+               
+               window.app.recipe_items_model.getRecipe(recipe_id);
            }
  
             

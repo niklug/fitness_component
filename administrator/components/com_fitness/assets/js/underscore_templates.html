@@ -709,7 +709,10 @@
             <a data-id="<%= recipe_id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
 
             <a data-id="<%= recipe_id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
-
+       
+        <% if(nutrition_plan_id) {%>
+         &#32;<a data-id="<%= recipe_id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
+        <% } %>
 
         <a data-id="<%= recipe_id %>" style="cursor: pointer;float:right;margin-right:10px;" class="trash_recipe" onclick="javascript:void(0)">[TRASH]</a>
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
@@ -722,6 +725,9 @@
 <script type="text/template" id="submenu_my_favourites_template">
     <div style="width:100%;">
         <a data-id="<%= recipe_id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
+        <% if(nutrition_plan_id) {%>
+         &#32;<a data-id="<%= recipe_id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
+        <% } %>
 
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
 
@@ -745,8 +751,14 @@
 
             <a data-id="<%= recipe_id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
 
+        
+        <a data-id="" style="cursor: pointer;left;" id="copy_recipe" onclick="javascript:void(0)">[COPY TO MY RECIPES]</a>
 
-        <a data-id="" style="cursor: pointer;left;margin-right:10px;" id="copy_recipe" onclick="javascript:void(0)">[COPY TO MY RECIPES]</a>
+        <% if(nutrition_plan_id) {%>
+         &#32;<a data-id="<%= recipe_id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
+        <% } %>
+    
+    
         <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
     </div>
     <div class="clr"></div>
@@ -767,6 +779,18 @@
         <a  style="cursor: pointer;float:right;margin-right:10px;" id="save_new" onclick="javascript:void(0)">[SAVE/NEW]</a>
         <a  style="cursor: pointer;float:right;margin-right:10px;" id="save_close" onclick="javascript:void(0)">[SAVE/CLOSE]</a>
         <a  style="cursor: pointer;float:right;margin-right:10px;" id="save" onclick="javascript:void(0)">[SAVE]</a>
+    </div>
+    <div class="clr"></div>
+</script>
+
+
+
+<!--  submenu  Add Diary template -->
+<script type="text/template" id="submenu_add_diary_template">
+    <div style="width:100%;">
+        <div style="float:left;">Number of serves to add to my diary entry <input  style="display:inline;width:25px" maxlength="2" type="text" id="number_serves" name="number_serves"/> </div>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" id="cancel" onclick="javascript:void(0)">[CANCEL]</a>
+        <a data-recipe_id="<%= recipe_id %>" style="cursor: pointer;float:right;margin-right:10px;" id="add_diary" onclick="javascript:void(0)">[ENTER]</a>
     </div>
     <div class="clr"></div>
 </script>
@@ -901,6 +925,7 @@
         </div>
     </div>
 </script>
+
 
 
 <script type="text/template" id="image_upload_template">
@@ -1189,6 +1214,11 @@
                     </table>
                 </td>
                 <td style="text-align:center; vertical-align:bottom;">
+                    <% if(model.nutrition_plan_id) {   %>
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[add to diary]</a>
+                    <br/><br/>
+                    <% } %>
+            
                     <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[view recipe]</a>
                     
                     <% if ((current_page == 'my_recipes') || (current_page == 'recipe_database')) { %>

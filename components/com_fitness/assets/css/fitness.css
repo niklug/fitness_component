@@ -525,14 +525,16 @@ td.center, th.center, .center {
     width: 70px;
 }
 
+
 #recipes_list_wrapper {
     background-color: #FFFFFF;
     border: 7px ridge #CCCCCC;
-    height: 500px;
-    margin-left: 10px;
+    height: 100%;
+    left: 50%;
+    margin-left: -500px;
     position: fixed;
-    top: 100px;
-    width: 98%;
+    top: 0;
+    width: 1000px;
     z-index: 999;
 }
 

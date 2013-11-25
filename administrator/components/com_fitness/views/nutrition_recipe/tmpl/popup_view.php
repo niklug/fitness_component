@@ -221,7 +221,7 @@ if($parent_view == 'nutrition_plan_backend') $table = '#__fitness_nutrition_plan
                 dataType : 'json',
                 success : function(response) {
                     if(!response.status.success) {
-                        alert(response.status.Msg);
+                        alert(response.status.message);
                         return;
                     }
                     handleData(response.status.success);

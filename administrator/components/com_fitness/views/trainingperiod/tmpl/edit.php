@@ -12,53 +12,8 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
-?>
-<script type="text/javascript">
-    function getScript(url,success) {
-        var script = document.createElement('script');
-        script.src = url;
-        var head = document.getElementsByTagName('head')[0],
-        done = false;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState
-                || this.readyState == 'loaded'
-                || this.readyState == 'complete')) {
-                done = true;
-                success();
-                script.onload = script.onreadystatechange = null;
-                head.removeChild(script);
-            }
-        };
-        head.appendChild(script);
-    }
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',function() {
-        js = jQuery.noConflict();
-        js(document).ready(function(){
-            
 
-            Joomla.submitbutton = function(task)
-            {
-                if (task == 'trainingperiod.cancel') {
-                    Joomla.submitform(task, document.getElementById('trainingperiod-form'));
-                }
-                else{
-                    
-                    if (task != 'trainingperiod.cancel' && document.formvalidator.isValid(document.id('trainingperiod-form'))) {
-                        
-                        Joomla.submitform(task, document.getElementById('trainingperiod-form'));
-                    }
-                    else {
-                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                    }
-                }
-            }
-        });
-    });
-</script>
+?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="trainingperiod-form" class="form-validate">
     <div class="width-60 fltlft">
@@ -90,3 +45,32 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         }
     </style>
 </form>
+
+
+
+<script type="text/javascript">
+    
+    (function($) {
+
+        Joomla.submitbutton = function(task)
+            {
+                if (task == 'trainingperiod.cancel') {
+                    Joomla.submitform(task, document.getElementById('trainingperiod-form'));
+                }
+                else{
+                    
+                    if (task != 'trainingperiod.cancel' && document.formvalidator.isValid(document.id('trainingperiod-form'))) {
+                        
+                        Joomla.submitform(task, document.getElementById('trainingperiod-form'));
+                    }
+                    else {
+                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+                    }
+                }
+            }
+
+    })($js);
+    
+
+        
+</script>
