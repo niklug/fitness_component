@@ -17,15 +17,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     <h2>NUTRITION PLAN</h2>
     
     <div id="plan_menu">
-        <ul>
-            <li><a id="nutrition_focus_link" class="plan_menu_link"  href="#!/nutrition_focus">NUTRITION FOCUS</a></li>
-            <li><a id="daily_targets_link" class="plan_menu_link"  href="#!/daily_targets">DAILY TARGETS</a></li>
-            <li><a id="shopping_list_link" class="plan_menu_link"  href="#!/shopping_list">SHOPPING LISTS</a></li>
-            <li><a id="diary_guide_link" class="plan_menu_link"  href="#!/diary_guide">DIARY GUIDE</a></li>
-            <li><a id="information_link" class="plan_menu_link"  href="#!/information">INFORMATION</a></li>
-            <li><a id="archive_focus_link" class="plan_menu_link"  href="#!/archive">ARCHIVE</a></li>
-            <li style="display:none;" id="close_tab" ><a id="close_link" class="plan_menu_link"  href="#!/close">CLOSE</a></li>
-        </ul>
+
     </div>
     
     <br/>
@@ -623,6 +615,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                  $("#close_tab").hide();
                  // connect Graph from Goals frontend logic
                  $.goals_frontend(options);
+                 
             },
 
             daily_targets: function () {
@@ -731,7 +724,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
                     
             events: {
-
+                
             },
             loadTemplate : function(variables, target) {
                 var template = _.template( $("#" +target).html(), variables );
@@ -749,6 +742,66 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
            
 
         });
+        
+        Nutrition_plan_menu_view = Backbone.View.extend({
+            
+            el: $("#plan_menu"), 
+            
+            initialize: function(){
+                this.render();
+            },
+            
+            render: function(){
+                this.loadTemplate();
+            },
+                    
+            events: {
+                "click #nutrition_focus_link" : "onClickNutrition_focus",
+                "click #daily_targets_link" : "onClickDaily_targets",
+                "click #shopping_list_link" : "onClickShopping_list",
+                "click #diary_guide_link" : "onClickDiary_guide",
+                "click #information_link" : "onClickInformation",
+                "click #archive_focus_link" : "onClickArchive_focus",
+                "click #close_tab" : "onClickClose",
+            },
+            
+            loadTemplate : function(variables, target) {
+                var template = _.template( $("#nutrition_plan_menu_template").html(), variables );
+                this.$el.html(template);
+            },
+            
+            onClickNutrition_focus : function() {
+                controller.navigate("!/nutrition_focus", true);
+            },
+            
+            onClickDaily_targets : function() {
+                controller.navigate("!/daily_targets", true);
+            },
+            
+            onClickShopping_list : function() {
+                controller.navigate("!/shopping_list", true);
+            },
+            
+            onClickDiary_guide : function() {
+                controller.navigate("!/diary_guide", true);
+            },
+            
+            onClickInformation : function() {
+                controller.navigate("!/information", true);
+            },
+            
+            onClickArchive_focus : function() {
+                controller.navigate("!/archive", true);
+            },
+            
+            onClickClose : function() {
+                controller.navigate("!/close", true);
+            }
+
+        });
+        
+        
+        new Nutrition_plan_menu_view();
 
         
         $(".preview").on('click', function() {
