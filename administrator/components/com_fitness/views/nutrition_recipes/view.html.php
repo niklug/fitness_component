@@ -128,7 +128,7 @@ class FitnessViewNutrition_recipes extends JView
 
 	}
         
-        function getRecipeName($id) {
+        function getRecipeTypeByName($id) {
             $db = JFactory::getDbo();
             $sql = "SELECT name FROM #__fitness_recipe_types WHERE id='$id' AND state='1'";
             $db->setQuery($sql);

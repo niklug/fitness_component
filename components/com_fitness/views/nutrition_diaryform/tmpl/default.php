@@ -491,6 +491,8 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
         /* MEALS BLOCK */
         var item_description_options = {
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'logged_in_admin' : false,
+            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'main_wrapper' : $("#diary_guide"),
             'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},

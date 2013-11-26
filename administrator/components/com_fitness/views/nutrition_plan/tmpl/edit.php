@@ -265,6 +265,7 @@ $helper = new FitnessHelper();
 </form>
 
 
+
 <script type="text/javascript">
     
 
@@ -323,6 +324,8 @@ $helper = new FitnessHelper();
 
         var item_description_options = {
             'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'logged_in_admin' : <?php echo JFactory::getApplication()->isAdmin();?>,
+            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'main_wrapper' : $("#diary_guide"),
             'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},

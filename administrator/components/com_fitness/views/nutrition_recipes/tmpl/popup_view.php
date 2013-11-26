@@ -203,7 +203,8 @@ $parent_view  = JRequest::getVar('parent_view');
 </form>
 <script type="text/javascript">
 
-    $(document).ready(function(){
+    (function($) {
+    
         $("#reset_filtered").click(function(){
             var form = $("#adminForm");
             form.find("select").val('');
@@ -211,6 +212,9 @@ $parent_view  = JRequest::getVar('parent_view');
             form.submit();
         });
 
-    });
 
+
+    })($js);
+    
+    
 </script>
