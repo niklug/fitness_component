@@ -307,31 +307,100 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
                         <br/>
                         <hr>
                         <br/>
-                        <div  style="float:left; width:500px;">
-                            <table width="100%">
+                        
+                        <table width="100%">
+                            <thead>
+                            <th class="table_header" colspan="2">
+                                NUTRITION ENTRY TOTALS
+                            </th>
+                            </thead>
+                            
+                        </table>
+                        
+                        <table width="100%">
+                            <tr>
+                                <td style="vertical-align: top;text-align: center;" width="35%">
+                                    <div style="width: 100%;" class="pie-container">
+                                        <h3>MACRONUTRIENT SCORES</h3>
+                                        <div id="placeholder_targets" class="placeholder_pie"></div>
+                                    </div>
+                                    <div class="clr"></div>
+                     
+                                    <table style="text-align: left;margin-top: 100px;" width="200">
+                                        <tr>
+                                            <td> <h5>CALORIE TOTAL</h5></td>
+                                            <td id="calories_total" style="font-size: 28px;color:#008313;font-weight: bold;">
+                                               
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><h5>WATER TOTAL</h5></td>
+                                            <td id="water_total" style="font-size: 28px;color:#009FE3;font-weight: bold;"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                     <?php  include   JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS . 'nutrition_diary' . DS . 'tmpl'. DS . 'plan_summary_view.php'; ?>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <div class="clr"></div>
+                        <table  width="100%">
+                            <thead>
+                            <th class="table_header" colspan="3">
+                                NUTRITION ENTRY SCORES
+                            </th>
+                            </thead>
+                            <tbody  style="text-align: center;">
                                 <tr>
-                                    <td  id="pie_td" class="center">
-                                        <div class="pie-container">
-                                            <h3>MACRONUTRIENT SCORES</h3>
-                                            <div id="placeholder_targets" class="placeholder_pie"></div>
-                                        </div>
+                                    <td colspan="3">
+                                        <h5>MACRONUTRIENT SCORES</h5>
                                     </td>
-                                    <td>
-                                        <h3 style="text-align: center;">FINAL SCORE</h3>
+                                </tr>
+                                <tr >
+                                    <td id="protein_score_graph">
+                                        
+                                    </td>
+                                    <td id="fat_score_graph">
+                                        
+                                    </td>
+                                    <td id="carbs_score_graph">
+                                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="clr"></div>
+                        <br/>
+                        
+                        
+                        <table  style="text-align: center" width="100%">
+                            <thead>
+                            <th><h5>WATER SCORE</h5></th>
+                            <th><h5>CALORIE SCORE</h5></th>
+                            <th><h5>FINAL SCORE</h5></th>
+                            <th><h5>FINAL RESULT</h5></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="water_score"  style="text-align: center;font-size: 36px;color:#008313;font-weight: bold;"></td>
+                                    <td id="calorie_score" style="text-align: center;font-size: 36px;color:#009FE3;font-weight: bold;"></td>
+                                    <td  style="text-align: center">
                                         <div id="final_score"></div>
-                                         <br/>
-                                        <div id="status_button_place_<?php echo $this->item->id;?>">
+                                    </td>
+                                    <td  style="text-align: center;">
+                                        <div style="display: inline-block;" id="status_button_place_<?php echo $this->item->id;?>">
                                             
                                                 <?php echo $this->backend_list_model->status_html($this->item->id, $this->item->status) ?>
                                         </div>
                                     </td>
                                 </tr>
-                            </table>
-                        </div>
-                        <div style="float:right">
-                            <?php  include   JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS . 'nutrition_diary' . DS . 'tmpl'. DS . 'plan_summary_view.php'; ?>
-                        </div>
-                        <div class="clr"></div>
+                            </tbody>
+                        </table>
+                        
+                        <br/>
                         <div class="clr"></div>
                         
                         <hr>
@@ -501,8 +570,13 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
             }
         }
         
+
     })($js);
 
     
 </script>
+<!--
+=IF(H69<200; IF(H69>0;100+ABS(H69)-((1+(100/200))*ABS(H69)); 100+H69); 0)
+
+-->
 

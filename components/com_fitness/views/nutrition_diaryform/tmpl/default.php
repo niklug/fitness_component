@@ -324,34 +324,92 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
             ?>
             <tr>
                 <td colspan="2">
-                    <div class="fitness_block_wrapper" style="min-height: 380px;">
+                    <div class="fitness_block_wrapper" style="min-height: 440px;">
+                        <h3>FINAL SCORES & ASSESSMENT</h3>
+                        <hr class="orange_line">
                         <div class="internal_wrapper">
                             <div  style="float:left; width:300px;<?php echo  $score_hidden;?>">
                                 <div class="score_pie_container pie-container">
-                                    <h5 style="text-align: center;">MACRONUTRIENT SCORES</h5>
+                                    <h6 style="text-align: center;">MACRONUTRIENT SCORES</h6>
                                     <div id="placeholder_scope" class="placeholder_pie"></div>
                                 </div>
-                                <table id="total_score" width="100%">
+                                <div class="clr"></div>
+                     
+                                <table style="text-align: left;margin-top: 70px;margin-left: 40px;" width="250">
                                     <tr>
-                                        <td>
-                                            <h5 style="text-align: center;">FINAL SCORE</h5>
+                                        <td> <h6>CALORIE TOTAL</h6></td>
+                                        <td id="calories_total" style="line-height: 45px;font-size: 28px;color:#008313;font-weight: bold;">
+
                                         </td>
-                                        <td>
-                                           <div id="final_score" ></div>
-                                        </td>
-                                        <td>
-                                            <div id="status_button_place" >
-                                                <?php echo $this->frontend_list_model->status_html_stamp($this->item->status) ?>
-                                            </div>
-                                        </td>
-                                            
-                                            
+                                    </tr>
+                                    <tr>
+                                        <td><h6>WATER TOTAL</h6></td>
+                                        <td id="water_total" style="font-size: 28px;color:#009FE3;font-weight: bold;"></td>
                                     </tr>
                                 </table>
                             </div>
                             <div style="float:right; font-size: 10px;">
                                 <?php  include   JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS . 'nutrition_diary' . DS . 'tmpl'. DS . 'plan_summary_view.php'; ?>
                             </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr style="<?php echo  $score_hidden;?>">
+                <td colspan="2">
+                    <div class="fitness_block_wrapper" style="min-height: 320px;">
+                        <h3>FINAL SCORES & ASSESSMENT</h3>
+                        <hr class="orange_line">
+                        <div class="internal_wrapper">
+                            <table width="100%">
+                                <thead  style="background: none;" >
+                                <th class="table_header" colspan="3">
+                                    NUTRITION ENTRY SCORES
+                                </th>
+                                </thead>
+                                <tbody  style="text-align: center;">
+                                    <tr >
+                                        <td id="protein_score_graph">
+
+                                        </td>
+                                        <td id="fat_score_graph">
+
+                                        </td>
+                                        <td id="carbs_score_graph">
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="clr"></div>
+                            <br/>
+
+
+                            <table  style="text-align: center" width="100%">
+                                <thead style="background: none; text-align: center;">
+                                <th><h6>WATER SCORE</h6></th>
+                                <th><h6>CALORIE SCORE</h6></th>
+                                <th><h6>FINAL SCORE</h6></th>
+                                <th><h6>FINAL RESULT</h6></th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="water_score"  style="text-align: center;font-size: 36px;color:#008313;font-weight: bold;"></td>
+                                        <td id="calorie_score" style="text-align: center;font-size: 36px;color:#009FE3;font-weight: bold;"></td>
+                                        <td  style="text-align: center">
+                                            <div id="final_score"></div>
+                                        </td>
+                                        <td  style="text-align: center;">
+                                            <div style="display: inline-block;" id="status_button_place">
+
+                                                    <?php echo $this->frontend_list_model->status_html_stamp($this->item->status) ?>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </td>
@@ -375,6 +433,7 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
             }
             ?>
         </table>
+        <br/><br/>
 
 
 

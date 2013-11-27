@@ -651,11 +651,14 @@
 /* end pie*/
 
 #final_score{
-    color: #008000;
+    color: #009FE3;
     font-size: 36px;
     font-weight: bold;
-    margin-top: 70px;
-    text-align: center;
+    border:3px solid;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 5px;
+    width:150px;
 }
 
 #status_button_place {
@@ -710,3 +713,30 @@
     width:10px !important; 
     background-color: #fff !important;
 }
+
+.table_header{
+    text-align: center;
+    background: none repeat scroll 0 0 #4F4F4F !important;
+    color:#fff;
+    padding: 5px;
+    font-size: 14px;
+}
+
+
+.score_gradient {
+    background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.05, #1C4EE6),
+    color-stop(0.17, #00BF03),
+    color-stop(0.42, #F0E51D),
+    color-stop(0.77, #C90000)
+    );
+    background-image: -o-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -moz-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -webkit-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -ms-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: linear-gradient(to left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+}
+

@@ -33,9 +33,71 @@
         this.setDailyTargetCalories();
         this.setDailyTargetWater();
         
+        this.setCalorieTotal();
+        this.setWaterTotal();
+        
+        this.setCalorieScore();
+        this.setWaterScore();
+        
+        this.connectMacronutrientScores();
+        
         if(this.options.draw_chart) {
             this.setScores(this.options.chart_container);
         }
+
+    }
+    
+    CalculateSummary.prototype.setCalorieTotal = function() {
+        var calories_total = this.get_item_total('meal_calories_total');
+        var target_kind = this.getDayKindPrefix();
+        var dayly_target_calories = this.getTargetPercentsValue('calories', target_kind);
+        
+        var calorieTotal = this.round_2_sign(100 * (calories_total / dayly_target_calories));
+
+        $("#calories_total").html(calorieTotal + '%');
+    }
+    
+    CalculateSummary.prototype.setWaterTotal = function() {
+        var daily_total_water  = this.getDailyTotalWater();
+        
+        var target_kind = this.getDayKindPrefix();
+        var dayly_target_water = this.getTargetPercentsValue('water', target_kind);
+        
+        var waterTotal = this.round_2_sign(100 * (daily_total_water / dayly_target_water));
+
+        $("#water_total").html(waterTotal + '%');
+    }
+    
+    CalculateSummary.prototype.setCalorieScore = function() {
+        var calories_variance_percents = this.getCaloriesVariancePercents('calories');
+        var cvp = calories_variance_percents;
+        
+        var calorie_score = 0;
+        
+        if(cvp < 200) {
+            calorie_score = 100 + Math.abs(cvp) - ((1 + (100/200)) * Math.abs(cvp));
+        } else {
+            calorie_score = 100 + cvp;
+        }
+        
+        calorie_score = this.round_2_sign(calorie_score);
+        
+        $("#calorie_score").html(calorie_score + '%');
+
+    }
+    
+    CalculateSummary.prototype.setWaterScore = function() {
+
+        var daily_total_water  = this.getDailyTotalWater();
+        
+        var target_kind = this.getDayKindPrefix();
+        var dayly_target_water = this.getTargetPercentsValue('water', target_kind);
+        
+        var water_score = this.round_2_sign(100 * (daily_total_water / dayly_target_water));
+        
+        water_score = this.round_2_sign(water_score);
+        
+        $("#water_score").html(water_score + '%');
 
     }
     
@@ -43,6 +105,12 @@
         var protein_variance = $("#variance_protein_percents").val();
         var carbs_variance = $("#variance_carbs_percents").val();
         var fats_variance = $("#variance_fats_percents").val();
+        
+        
+        var protein_totals = $("#daily_protein_percents").val();
+        var carbs_totals = $("#daily_carbs_percents").val();
+        var fats_totals = $("#daily_fats_percents").val();
+
         
         var protein= this.calculateScores(protein_variance);
         var carbs = this.calculateScores(carbs_variance);
@@ -70,9 +138,9 @@
         var dayly_target_fats = this.getTargetPercentsValue('fats', target_kind);
 
         var data = [
-            {label: "Protein: <br/>"  + protein + '%' , data: [[1, dayly_target_protein]]},
-            {label: "Carbs: <br/>" + carbs + '%', data: [[1, dayly_target_carbs]]},
-            {label: "Fat: <br/>" + fats + '%', data: [[1, dayly_target_fats]]}
+            {label: "Protein: <br/>"  + protein_totals + '%' , data: [[1, dayly_target_protein]]},
+            {label: "Carbs: <br/>" + carbs_totals + '%', data: [[1, dayly_target_carbs]]},
+            {label: "Fat: <br/>" + fats_totals + '%', data: [[1, dayly_target_fats]]}
         ];
         
         
@@ -433,6 +501,37 @@
     CalculateSummary.prototype.round_2_sign = function(value) {
         return Math.round(value * 100)/100;
     }
+    
+    
+    CalculateSummary.prototype.connectMacronutrientScores = function() {
+        
+        var protein_totals = $("#daily_protein_percents").val();
+        var carbs_totals = $("#daily_carbs_percents").val();
+        var fats_totals = $("#daily_fats_percents").val();
+        
+        var data = {};
+        
+        data.el = "#protein_score_graph";
+        data.title = 'PROTEIN SCORE';
+        data.width = '200px';
+        data.level =  protein_totals + '%';
+        $.gredient_graph(data);
+        
+        
+        data.el = "#fat_score_graph";
+        data.title = 'FATS SCORE';
+        data.width = '200px';
+        data.level = fats_totals + '%';
+        $.gredient_graph(data);
+        
+        data.el = "#carbs_score_graph";
+        data.title = 'CARBOHYDRATE SCORE';
+        data.width = '200px';
+        data.level = carbs_totals + '%';
+        $.gredient_graph(data);
+    }
+    
+    
     // Add the  function to the top level of the jQuery object
     $.calculateSummary = function(options) {
 

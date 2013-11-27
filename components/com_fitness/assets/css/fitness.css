@@ -207,11 +207,13 @@ a:hover, a:active, a:focus {
 }
 
 .status_button_stamp {
+    background-position: 0 10px;
     background-repeat: no-repeat;
-    background-size: 74px 29px;
-    height: 30px;
-    width: 80px;
+    background-size: 169px 60px;
+    display: inline-block;
+    height: 73px;
     margin-left: 10px;
+    width: 170px;
 }
 
 
@@ -583,13 +585,15 @@ td.center, th.center, .center {
 
 
 #final_score{
-    color: #008000;
-    font-size: 24px;
+    color: #009FE3;
+    font-size: 36px;
     font-weight: bold;
-    text-align: center;
-    padding: 4px;
+    border:3px solid;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 15px;
+    width:150px;
 }
-
 #status_button_place {
     text-align: center;
 }
@@ -773,3 +777,19 @@ td.center, th.center, .center {
     background: none repeat scroll 0 0 rgba(6, 7, 9, 0.93) !important;
 }
 
+.score_gradient {
+    background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.05, #1C4EE6),
+    color-stop(0.17, #00BF03),
+    color-stop(0.42, #F0E51D),
+    color-stop(0.77, #C90000)
+    );
+    background-image: -o-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -moz-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -webkit-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -ms-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: linear-gradient(to left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+}

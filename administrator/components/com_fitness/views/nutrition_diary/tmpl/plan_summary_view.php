@@ -191,6 +191,21 @@
             <td></td>
             <td></td>
         </tr>
+        <tr>
+            <td><b style="color:#E0230C;">VARIANCE (% cals/kj)</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <input class="number_input"  readonly size="5" type="text"  id="variance_calories_percents" name="variance_calories_percents" value="">
+            </td>
+            <td>
+                <input class="number_input"  readonly size="5" type="text"  id="variance_energy_percents" name="variance_energy_percents" value="">
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
 
         <tr>
             <td>&nbsp;</td>
