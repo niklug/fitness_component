@@ -78,6 +78,14 @@ fieldset.radio label{
     background-image: url("../images/preview.png");
 }
 
+.trash_icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url("../images/trash_icon.png");
+    background-size: 16px;
+}
+
 a:hover, a:active, a:focus {
     background: none ;
 }
@@ -115,8 +123,8 @@ a:hover, a:active, a:focus {
 }
 
 .status_distinction {
-    background-color: #DBFFDB !important;
-    border: 2px solid #429625;
+    background-color: #009FE3 !important;
+    border: 2px solid #1C4EE6;
 }
 
 .status_submitted {

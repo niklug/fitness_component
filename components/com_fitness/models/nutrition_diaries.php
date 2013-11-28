@@ -11,6 +11,8 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
 /**
  * Methods supporting a list of Fitness records.
  */
@@ -148,6 +150,58 @@ class FitnessModelNutrition_diaries extends JModelList {
         $html = '<div class=" status_button_stamp ' . $class . '"></div>';
 
         return $html;
+    }
+    
+    
+    public function getDiaries($table, $data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $sort_by = $data->sort_by;
+        
+        $order_dirrection = $data->order_dirrection;
+        
+        $page = $data->page;
+        $limit = $data->limit;
+        
+        $start = ($page - 1) * $limit;
+        
+        $state = $data->state;
+                
+        $user = &JFactory::getUser();
+        $user_id = $user->id;
+        
+  
+                
+        $query .= " SELECT a.*, u.name AS assessed_by_name,";
+        //get total number
+        $query .= " (SELECT COUNT(*) FROM $table AS a ";
+        $query .= " WHERE a.client_id='$user_id'";
+        $query .= " AND a.state='$state'";
+        $query .= " ) items_total ";
+        //
+        $query .= " FROM $table AS a";
+        $query .= " LEFT JOIN #__users AS u ON u.id=a.assessed_by";
+        $query .= " WHERE a.client_id='$user_id'";
+        $query .= " AND a.state='$state'";
+        $query .= " ORDER BY " . $sort_by . " " . $order_dirrection;
+        $query .= " LIMIT $start, $limit";
+
+                
+        try {
+            $data = FitnessHelper::customQuery($query, 1);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+ 
+        $result = array( 'status' => $status, 'data' => $data);
+        
+        return $result;
     }
 
 }

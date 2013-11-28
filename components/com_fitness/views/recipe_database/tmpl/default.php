@@ -1198,7 +1198,7 @@ defined('_JEXEC') or die;
                         
             loadComments : function(){
                 var comments_html = this.options.comments.run();
-                $("#comments_wrapper").html(comments_html)
+                $("#comments_wrapper").html(comments_html);
             },
             
         });

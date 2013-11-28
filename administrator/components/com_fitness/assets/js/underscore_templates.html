@@ -1778,4 +1778,96 @@
 
 
 
+<!-- Nutrition Diary -->
+<script type="text/template" id="diary_list_submenu_template">
+    <div class="fitness_block_wrapper" style="height:30px;margin-top: 20px;">
+        <div class="internal_wrapper">
+            <div id="submenu_container"></div>
+        </div>
+        <hr class="orange_line">
+    </div>
+</script>
+
+
+
+<!--  submenu Diary List -->
+<script type="text/template" id="submenu_diary_list_template">
+    <div style="width:100%;">
+        
+        <a  style="cursor: pointer;float:left;margin-right:10px;" id="add" onclick="javascript:void(0)">[NEW ENTRY]</a>
+
+        <a  style="cursor: pointer;float:right;margin-right:10px;" id="trash" onclick="javascript:void(0)">[TRASH]</a>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" id="view_trash" onclick="javascript:void(0)">[VIEW TRASH]</a>
+    </div>
+    <div class="clr"></div>
+</script>
+
+
+<!--  Diary List template -->
+<script type="text/template" id="diary_list_template">
+    <%
+    var items = model.get('items');
+
+    %>
+    <div class="fitness_block_wrapper" style="margin-top: 20px;">
+        <div class="internal_wrapper">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_entry_date" onclick="javascript:void(0)">ENTRY DATE</a></th>
+                        <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_status" onclick="javascript:void(0)">STATUS</a></th>
+                        <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_score" onclick="javascript:void(0)">SCORE</a></th>
+                        <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_assessed_by" onclick="javascript:void(0)">ASSESSED BY</a></th>
+                        <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_submit_date" onclick="javascript:void(0)">SUBMIT DATE</a></th>
+                        <th>VIEW</th>
+                        <th>TRASH</th>
+                        <th><input style="margin-left:2px;" class="trash_all_checkbox" type="checkbox"/></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <%  _.each(items, function(item, key){ %>
+                    
+                    <tr>
+                        <td><%= moment(new Date(Date.parse(item.entry_date))).format("ddd, D MMM  YY")  %></td>
+                        <td><%= model.setStatus(item.status) %></td>
+                        <td>
+                            <% if (item.score != '0') { %>
+                                <%= item.score + '%' %>
+                            <% } else { %> 
+                                <%= '-' %>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (item.assessed_by_name) { %>
+                                <%= item.assessed_by_name %>
+                            <% } else { %> 
+                                <%= '-' %>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (item.submit_date != '0000-00-00 00:00:00') { %>
+                                <%= moment(new Date(Date.parse(item.submit_date))).format("ddd, D MMM  YY  HH:MM") %>
+                            <% } else { %> 
+                                <%= '-' %>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if(parseInt(item.status) != 5) { %>
+                                <a  data-id="<%= item.id %>" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span class="preview"></span></a>
+                            <% } %>
+                        </td>
+                        <td><a  data-id="<%= item.id %>" style="cursor: pointer;" class="trash" onclick="javascript:void(0)"><span class="trash_icon"></span></a></td>
+                        <td><input data-id="<%= item.id %>" class="trash_checkbox" type="checkbox"/></td>
+                    </tr>
+
+                <% }) %>
+                </tbody>
+            </table>
+            <div style="text-align:center;" id="pagination_container"></div>
+        </div>
+    </div>
+    
+    
+</script>
+
 
