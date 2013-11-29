@@ -86,6 +86,14 @@ fieldset.radio label{
     background-size: 16px;
 }
 
+.restore_icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url("../images/restore_icon.png");
+    background-size: 16px;
+}
+
 a:hover, a:active, a:focus {
     background: none ;
 }

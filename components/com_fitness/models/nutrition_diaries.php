@@ -26,6 +26,7 @@ class FitnessModelNutrition_diaries extends JModelList {
      * @since    1.6
      */
     public function __construct($config = array()) {
+        $this->helper = new FitnessHelper();
         parent::__construct($config);
     }
 
@@ -204,4 +205,56 @@ class FitnessModelNutrition_diaries extends JModelList {
         return $result;
     }
 
+    public function updateDiary($table, $data_encoded) {
+        $status['success'] = 1;
+
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+        
+        $id_list = $data->ids;
+        
+        $ids = explode(",", $id_list);
+        
+        unset($data->ids);
+
+        foreach ($ids as $id) {
+            $data->id = $id;
+            try {
+                $helper->insertUpdateObj($data, $table);
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
+    
+        }
+        
+        $result = array( 'status' => $status, 'data' => $id_list);
+        
+        return $result;
+    }
+    
+    public function deleteDiary($table, $data_encoded) {
+        $status['success'] = 1;
+        
+        $data = json_decode($data_encoded);
+        
+        $id_list = $data->ids;
+        
+        $db = $this->getDbo();
+        
+        $query = "DELETE FROM $table WHERE id IN ($id_list)";
+        
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $status['success'] = false;
+            $status['message'] = $db->stderr();
+            return $ret;
+        }
+        
+        $result = array( 'status' => $status, 'data' => $id_list);
+        
+        return $result;
+    }
 }

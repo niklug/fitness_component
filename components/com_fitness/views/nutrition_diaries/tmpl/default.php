@@ -170,6 +170,74 @@ defined('_JEXEC') or die;
                     this.pagination_app_model.set({'items_total' : items_total});
                 }             
             }, 
+            
+            
+            
+            trash_item : function(ids) {
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = 'nutrition_diaries';
+                var task = 'updateDiary';
+                var table = this.get('diary_db_table');
+                
+                data.ids = ids;
+                
+                data.state = '-2';
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+                    self.set("item_trashed", output);
+                    self.hide_items(output);
+                    console.log(output);
+                });
+            },
+            
+            restore_item : function(ids) {
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = 'nutrition_diaries';
+                var task = 'updateDiary';
+                var table = this.get('diary_db_table');
+                
+                data.ids = ids;
+                
+                data.state = '1';
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+                    self.set("item_restored", output);
+                    self.hide_items(output);
+                    console.log(output);
+                });
+            },
+            
+            delete_item : function(ids) {
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = 'nutrition_diaries';
+                var task = 'deleteDiary';
+                var table = this.get('diary_db_table');
+                
+                data.ids = ids;
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+                    self.set("item_deleted", output);
+                    self.hide_items(output);
+                    console.log(output);
+                });
+            },
+            
+            hide_items : function(items) {
+                
+                var items = items.split(",");
+                
+                console.log(items);
+                
+                _.each(items, function(item, key){ 
+                    $("#diary_item_" + item).fadeOut();
+                });
+            },
 
         });
         
@@ -201,7 +269,7 @@ defined('_JEXEC') or die;
             events: {
                 "click #add" : "onClickAdd",
                 "click #view_trash" : "onClickViewTrash",
-                "click #trash" : "onClickTrash",
+                "click #trash_selected" : "onClickTrashSelected",
             },
             
             render : function(){
@@ -215,11 +283,61 @@ defined('_JEXEC') or die;
             },
             
             onClickViewTrash : function() {
-                
+                window.app.controller.navigate("!/trash_list", true);
             },
             
-            onClickTrash : function() {
+            onClickTrashSelected : function() {
+                var selected = new Array();
+                $('.trash_checkbox:checked').each(function() {
+                    selected.push($(this).attr('data-id'));
+                });
+                var items = selected.join(",");
                 
+                if(items) {
+                    window.app.items_model.trash_item(items);
+                }
+            },
+                        
+            close :function() {
+                $(this.el).unbind();
+		$(this.el).remove();
+            }
+        });
+        
+        window.app.Submenu_trash_list_view = Backbone.View.extend({
+            initialize: function(){
+                this.render();
+            },
+            
+            events: {
+                "click #close_trash" : "onClickCloseTrash",
+                "click #trash" : "onClickTrash",
+                "click #delete_selected" : "onClickDeleteSelected",
+            },
+            
+            render : function(){
+                var variables = {};
+                var template = _.template($("#submenu_diary_trash_list_template").html(), variables);
+                this.$el.html(template);
+            },
+            
+           
+            onClickCloseTrash : function() {
+                window.app.controller.navigate("!/list_view", true);
+            },
+            
+            onClickDeleteSelected : function() {
+                var selected = new Array();
+                $('.trash_checkbox:checked').each(function() {
+                    selected.push($(this).attr('data-id'));
+                });
+                
+                var items = selected.join(",");
+                
+                if(items) {
+                    window.app.items_model.delete_item(items);
+                }
+                //console.log(selected.join(","));
             },
             
             close :function() {
@@ -242,6 +360,11 @@ defined('_JEXEC') or die;
                 "click #sort_score" : "onClickSortScore",
                 "click #sort_assessed_by" : "onClickAssessedBy",
                 "click #sort_submit_date" : "onClickSubmitDate",
+                "click .trash" : "onClickTrash",
+                "click #select_trashed" : "onClickSelectTrashed",
+                "click .restore" : "onClickRestore",
+                "click .delete" : "onClickDelete",
+                
             },
             
             el: $("#main_container"), 
@@ -278,9 +401,32 @@ defined('_JEXEC') or die;
                 window.app.items_model.loadItems();
             },
             
+            onClickTrash : function(event) {
+                var id = $(event.target).attr('data-id');
+                window.app.items_model.trash_item(id);
+            },
+            
+            onClickRestore : function(event) {
+                var id = $(event.target).attr('data-id');
+                window.app.items_model.restore_item(id);
+            },
+            
+            onClickDelete : function(event) {
+                var id = $(event.target).attr('data-id');
+                window.app.items_model.delete_item(id);
+            },
+            
+            onClickSelectTrashed : function(event) {
+                $(".trash_checkbox").prop("checked", false);
+                
+                if($(event.target).attr("checked")) {
+                    $(".trash_checkbox").prop("checked", true);
+                }
+            },
+            
             close :function() {
                 $(this.el).unbind();
-		$(this.el).remove();
+		//$(this.el).remove();
             }
           
         });
@@ -293,12 +439,17 @@ defined('_JEXEC') or die;
 
             routes : {
                 "": "list_view", 
-                "!/": "list_view", 
+                "!/list_view": "list_view", 
+                "!/trash_list" : "trash_list",
             },
             
             list_view : function() {
+                this.hide_submenu();
                 this.load_submenu('list');
-                
+                window.app.items_model.set({'state' : '1'});
+                if(typeof window.app.list_view !== 'undefined') {
+                    this.reset_main_container();
+                }
                 window.app.list_view = new window.app.List_view({el : $("#main_container")});
                 
             },
@@ -308,16 +459,35 @@ defined('_JEXEC') or die;
                 
                 if(type == 'list') {
                     window.app.submenu_list_view = new window.app.Submenu_list_view({el : $("#submenu_container")})
+                } else if(type == 'trash_list') {
+                    window.app.submenu_trash_view = new window.app.Submenu_trash_list_view({el : $("#submenu_container")})
                 }
             },
             
             hide_submenu : function() {
-                window.app.submenu_view.close();
-                window.app.submenu_list_view.close();
+                if (window.app.submenu_list_view != null) {
+                    window.app.submenu_list_view.close();
+                }
+                if (window.app.submenu_trash_view != null) {
+                    window.app.submenu_trash_view.close();
+                }
+
             },
             
             reset_main_container : function() {
                 window.app.list_view.close();
+            },
+            
+            trash_list : function() {
+                this.hide_submenu();
+                this.load_submenu('trash_list');
+                window.app.items_model.set({'state' : '-2'});
+                if(typeof window.app.list_view !== 'undefined') {
+                    this.reset_main_container();
+                }
+                window.app.list_view = new window.app.List_view({el : $("#main_container")});
+                
+             
             }
             
         });

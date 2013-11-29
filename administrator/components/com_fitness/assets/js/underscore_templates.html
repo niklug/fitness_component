@@ -1796,8 +1796,18 @@
         
         <a  style="cursor: pointer;float:left;margin-right:10px;" id="add" onclick="javascript:void(0)">[NEW ENTRY]</a>
 
-        <a  style="cursor: pointer;float:right;margin-right:10px;" id="trash" onclick="javascript:void(0)">[TRASH]</a>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" id="trash_selected" onclick="javascript:void(0)">[X]</a>
         <a  style="cursor: pointer;float:right;margin-right:10px;" id="view_trash" onclick="javascript:void(0)">[VIEW TRASH]</a>
+    </div>
+    <div class="clr"></div>
+</script>
+
+<!--  submenu Diary Trash List -->
+<script type="text/template" id="submenu_diary_trash_list_template">
+    <div style="width:100%;">
+
+        <a  style="cursor: pointer;float:right;margin-right:10px;" id="delete_selected" onclick="javascript:void(0)">[X]</a>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" id="close_trash" onclick="javascript:void(0)">[CLOSE TRASH]</a>
     </div>
     <div class="clr"></div>
 </script>
@@ -1807,7 +1817,7 @@
 <script type="text/template" id="diary_list_template">
     <%
     var items = model.get('items');
-
+    var state = model.get('state');
     %>
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
@@ -1819,15 +1829,27 @@
                         <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_score" onclick="javascript:void(0)">SCORE</a></th>
                         <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_assessed_by" onclick="javascript:void(0)">ASSESSED BY</a></th>
                         <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_submit_date" onclick="javascript:void(0)">SUBMIT DATE</a></th>
-                        <th>VIEW</th>
-                        <th>TRASH</th>
-                        <th><input style="margin-left:2px;" class="trash_all_checkbox" type="checkbox"/></th>
+                        <th>        
+                            <% if(state == '1') { %>
+                                VIEW
+                            <% } else { %>
+                                RESTORE
+                            <% } %>
+                        </th>
+                        <th>
+                            <% if(state == '1') { %>
+                                TRASH
+                            <% } else { %>
+                                DELETE
+                            <% } %>
+                        </th>
+                        <th><input style="margin-left:2px;" id="select_trashed" type="checkbox"/></th>
                     </tr>
                 </thead>
                 <tbody>
                 <%  _.each(items, function(item, key){ %>
                     
-                    <tr>
+                    <tr id="diary_item_<%= item.id%>">
                         <td><%= moment(new Date(Date.parse(item.entry_date))).format("ddd, D MMM  YY")  %></td>
                         <td><%= model.setStatus(item.status) %></td>
                         <td>
@@ -1853,10 +1875,27 @@
                         </td>
                         <td>
                             <% if(parseInt(item.status) != 5) { %>
-                                <a  data-id="<%= item.id %>" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span class="preview"></span></a>
+                                <% if(state == '1') { %>
+                                    <a style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
+                                <% } else { %>
+                                    <a style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
+                                <% } %>
+                                
+                            <% } %>
+                        
+                            <% if(parseInt(item.status) == 5 && state == '-2') { %>
+
+                                    <a style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
+                                    
                             <% } %>
                         </td>
-                        <td><a  data-id="<%= item.id %>" style="cursor: pointer;" class="trash" onclick="javascript:void(0)"><span class="trash_icon"></span></a></td>
+                        <td>
+                            <% if(state == '-2') { %>
+                                <a  style="cursor: pointer;" class="delete" onclick="javascript:void(0)"><span data-id="<%= item.id %>" class="trash_icon"></span></a>
+                            <% } else { %>
+                                <a  style="cursor: pointer;" class="trash" onclick="javascript:void(0)"><span data-id="<%= item.id %>" class="trash_icon"></span></a>
+                            <% } %>
+                        </td>
                         <td><input data-id="<%= item.id %>" class="trash_checkbox" type="checkbox"/></td>
                     </tr>
 
