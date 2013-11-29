@@ -350,4 +350,10 @@ class FitnessController extends JController {
         $view -> deleteDiary(); 
     }
     
+    function getDiaryDays() {
+        $view = $this -> getView('nutrition_diaries', 'json');
+        $view->setModel($this->getModel('nutrition_diaries'));
+        $view -> getDiaryDays(); 
+    }
+    
 }

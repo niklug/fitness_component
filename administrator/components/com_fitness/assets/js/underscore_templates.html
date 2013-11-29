@@ -1812,6 +1812,15 @@
     <div class="clr"></div>
 </script>
 
+<!--  submenu Diary New Item -->
+<script type="text/template" id="submenu_diary_create_item_template">
+    <div style="width:100%;">
+        <a  style="cursor: pointer;left;margin-right:10px;" id="next" onclick="javascript:void(0)">NEXT</a>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" id="cancel" onclick="javascript:void(0)">CANCEL</a>
+    </div>
+    <div class="clr"></div>
+</script>
+
 
 <!--  Diary List template -->
 <script type="text/template" id="diary_list_template">
@@ -1910,3 +1919,79 @@
 </script>
 
 
+<!--  Create Item template -->
+<script type="text/template" id="diary_create_item_template">
+    <div class="fitness_block_wrapper" style="margin-top: 20px;">
+            <div class="internal_wrapper">
+                <form action="" id="create_item_form">
+                    Select a Date for this Diary Entry
+                    &nbsp;
+                    <input style="width:70px;" readonly type="text" name="entry_date" id="entry_date" size="6" class="required dark_input_style">
+                    
+                    <div class="clr"></div>
+                    <br/>
+                    
+                    WHAT IS YOUR ACTIVITY LEVEL FOR TODAY?
+   
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <fieldset id="jform_activity_level" class="radio inputbox">
+                                    <input id="jform_activity_level0" class="" type="radio"  value="1" >
+                                    <label class="" for="jform_activity_level0" >Heavy Training Day</label>
+                                    <input id="jform_activity_level1" class="" type="radio" value="2" >
+                                    <label class="" for="jform_activity_level1" >Light Training Day</label>
+                                    <input id="jform_activity_level2" class="" type="radio" value="3" >
+                                    <label class="" for="jform_activity_level2" >Recovery/Rest Day</label>
+                                </fieldset>
+
+                            </td>
+                            <td id="pie_td" style="visibility: hidden;" class="center">
+                                <div class="pie-container">
+                                    <h5>MACRONUTRIENT RATIOS</h5>
+                                    <div id="placeholder_targets" class="placeholder_pie"></div>
+                                </div>
+                            </td>
+                            <td id="calories_td"  style="visibility: hidden;" class="center">
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                           <h5>TARGET CALORIE INTAKE</h5> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="calories_value" style="font-size: 48px; color:#00983A; font-weight: bold;">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td  style="font-size: 22px; color:#00983A;font-weight: bold; height: 40px;">
+                                            calories
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <h5>TARGET WATER INTAKE</h5>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="water_value" style="font-size:48px; color:#3F9EEB; font-weight: bold;">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">
+                                            millilitres
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table> 
+                    
+                </form>
+            </div>
+    </div>
+
+</script>

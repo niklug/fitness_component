@@ -257,4 +257,27 @@ class FitnessModelNutrition_diaries extends JModelList {
         
         return $result;
     }
+    
+    public function getDiaryDays($table, $data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $user = &JFactory::getUser();
+        $user_id = $user->id;
+        
+        $query = "SELECT entry_date FROM $table WHERE client_id='$user_id'";
+        
+        try {
+            $data = FitnessHelper::customQuery($query, 3);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        
+        $result = array( 'status' => $status, 'data' => $data);
+        
+        return $result;
+    }
 }

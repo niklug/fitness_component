@@ -188,7 +188,6 @@ defined('_JEXEC') or die;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("item_trashed", output);
                     self.hide_items(output);
-                    console.log(output);
                 });
             },
             
@@ -207,7 +206,6 @@ defined('_JEXEC') or die;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("item_restored", output);
                     self.hide_items(output);
-                    console.log(output);
                 });
             },
             
@@ -224,20 +222,55 @@ defined('_JEXEC') or die;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     self.set("item_deleted", output);
                     self.hide_items(output);
-                    console.log(output);
                 });
             },
             
             hide_items : function(items) {
-                
                 var items = items.split(",");
-                
-                console.log(items);
-                
                 _.each(items, function(item, key){ 
                     $("#diary_item_" + item).fadeOut();
                 });
             },
+
+        });
+        
+        
+        window.app.Create_item_model = window.app.Diary_model.extend({
+            
+            defaults: {
+
+            },
+            
+            initialize: function(){
+                _.bindAll(this, 'getDiaryDays', 'disableDays');
+                this.getDiaryDays();
+            },
+            
+            getDiaryDays : function() {
+                var data = {};
+                var url = this.get('fitness_frontend_url');
+                var view = 'nutrition_diaries';
+                var task = 'getDiaryDays';
+                var table = this.get('diary_db_table');
+
+                var self = this;
+                this.ajaxCall(data, url, view, task, table, function(output) {
+                    self.set("disabled_days", output);
+                    console.log(output);
+                });
+            },
+
+            disableDays : function(date) {
+                
+                var disabledDays = this.get('disabled_days');
+                    
+                var calendar_date = moment(date).format("YYYY-MM-DD");
+                var result =  [true];
+                if(_.contains(disabledDays, calendar_date)) {
+                    result =  [false];
+                }
+                return result
+            }
 
         });
         
@@ -257,7 +290,7 @@ defined('_JEXEC') or die;
             
             close :function() {
                 $(this.el).unbind();
-		$(this.el).remove();
+                $(this.el).empty();
             }
         });
         
@@ -279,7 +312,7 @@ defined('_JEXEC') or die;
             },
             
             onClickAdd : function() {
-                
+                window.app.controller.navigate("!/create_item", true);
             },
             
             onClickViewTrash : function() {
@@ -300,7 +333,7 @@ defined('_JEXEC') or die;
                         
             close :function() {
                 $(this.el).unbind();
-		$(this.el).remove();
+                $(this.el).empty();
             }
         });
         
@@ -342,7 +375,38 @@ defined('_JEXEC') or die;
             
             close :function() {
                 $(this.el).unbind();
-		$(this.el).remove();
+                $(this.el).empty();
+            }
+        });
+        
+        
+        window.app.Submenu_create_item_view = Backbone.View.extend({
+            initialize: function(){
+                this.render();
+            },
+            
+            events: {
+                "click #next" : "onClickNext",
+                "click #cancel" : "onClickCancel",
+            },
+            
+            render : function(){
+                var variables = {};
+                var template = _.template($("#submenu_diary_create_item_template").html(), variables);
+                this.$el.html(template);
+            },
+            
+            onClickNext : function() {
+                $( "#create_item_form" ).submit();
+            },
+            
+            onClickCancel : function() {
+                window.app.controller.navigate("!/list_view", true);
+            },
+
+            close : function() {
+                $(this.el).unbind();
+                $(this.el).empty();
             }
         });
         
@@ -369,7 +433,7 @@ defined('_JEXEC') or die;
             
             el: $("#main_container"), 
             
-            render : function(){
+            render : function() {
                 var data = {'model' : window.app.items_model};
                 var template = _.template($("#diary_list_template").html(), data);
                 this.$el.html(template);
@@ -426,10 +490,64 @@ defined('_JEXEC') or die;
             
             close :function() {
                 $(this.el).unbind();
-		//$(this.el).remove();
-            }
+                window.app.items_model.set({'items' : null});
+                $(this.el).empty();
+                
+	    }
           
         });
+        
+        
+        
+         window.app.Create_item_view = Backbone.View.extend({
+            
+            initialize: function(){
+                this.listenTo(this.model, "change:disabled_days", this.render);
+            },
+            
+            events: {
+                "submit #create_item_form" : "onSubmit",
+            },
+            
+            el: $("#main_container"), 
+            
+            render : function() {
+                
+                var data = {'model' : window.app.items_model};
+                var template = _.template($("#diary_create_item_template").html(), data);
+                this.$el.html(template);
+                this.loadPlugins();
+            },
+            
+            loadPlugins : function() {
+
+                $("#create_item_form").validate();
+                
+                this.setCalendar();
+            },
+            
+            onSubmit : function(event) {
+                event.preventDefault();
+                alert('To be Continued..');
+                return false;
+            },
+            
+            setCalendar : function() {
+
+                var self = this;
+                 
+                $( "#entry_date" ).datepicker({ dateFormat: "yy-mm-dd",  minDate : 0, beforeShowDay: self.model.disableDays});
+
+            },
+            
+            close :function() {
+                $(this.el).unbind();
+                $(this.el).empty();
+                
+	    }
+          
+        });
+        
         
         // init items model
         window.app.items_model = new window.app.Items_model(options);
@@ -441,17 +559,29 @@ defined('_JEXEC') or die;
                 "": "list_view", 
                 "!/list_view": "list_view", 
                 "!/trash_list" : "trash_list",
+                "!/create_item" : "create_item",
+                "!/item_view/:id" : "item_view",
             },
             
             list_view : function() {
+                
                 this.hide_submenu();
                 this.load_submenu('list');
                 window.app.items_model.set({'state' : '1'});
-                if(typeof window.app.list_view !== 'undefined') {
-                    this.reset_main_container();
-                }
-                window.app.list_view = new window.app.List_view({el : $("#main_container")});
-                
+                this.reset_main_container();
+                window.app.list_view = new window.app.List_view();
+            },
+            
+            create_item : function() {
+                this.hide_submenu();
+                this.reset_main_container();
+                this.load_submenu('create_item');
+                window.app.create_item_view = new window.app.Create_item_view({model : new window.app.Create_item_model(options)});
+            },
+            
+            item_view : function(id) {
+                this.hide_submenu();
+                //this.load_submenu('item');
             },
             
             load_submenu : function(type) {
@@ -461,33 +591,41 @@ defined('_JEXEC') or die;
                     window.app.submenu_list_view = new window.app.Submenu_list_view({el : $("#submenu_container")})
                 } else if(type == 'trash_list') {
                     window.app.submenu_trash_view = new window.app.Submenu_trash_list_view({el : $("#submenu_container")})
+                } else if(type == 'create_item') {
+                    window.app.submenu_create_item_view = new window.app.Submenu_create_item_view({el : $("#submenu_container")})
                 }
             },
             
             hide_submenu : function() {
-                if (window.app.submenu_list_view != null) {
+                if (typeof window.app.submenu_list_view !== 'undefined') {
                     window.app.submenu_list_view.close();
                 }
-                if (window.app.submenu_trash_view != null) {
+                if (typeof window.app.submenu_trash_view !== 'undefined') {
                     window.app.submenu_trash_view.close();
                 }
-
+                if (typeof window.app.submenu_view !== 'undefined') {
+                    window.app.submenu_view.close();
+                }
+                if (typeof window.app.submenu_create_item_view !== 'undefined') {
+                    window.app.submenu_create_item_view.close();
+                }
             },
             
             reset_main_container : function() {
-                window.app.list_view.close();
+                if (typeof window.app.list_view !== 'undefined') {
+                    window.app.list_view.close();
+                }
+                if (typeof window.app.create_item_view !== 'undefined') {
+                    window.app.create_item_view.close();
+                }
             },
             
             trash_list : function() {
                 this.hide_submenu();
                 this.load_submenu('trash_list');
                 window.app.items_model.set({'state' : '-2'});
-                if(typeof window.app.list_view !== 'undefined') {
-                    this.reset_main_container();
-                }
-                window.app.list_view = new window.app.List_view({el : $("#main_container")});
-                
-             
+                this.reset_main_container();
+                window.app.list_view = new window.app.List_view();
             }
             
         });
