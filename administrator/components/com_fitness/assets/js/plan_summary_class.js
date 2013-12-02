@@ -12,7 +12,7 @@
 
     CalculateSummary.prototype.run = function() {
         var self = this;
-        setInterval(function() {
+        this.interval = setInterval(function() {
             self.calculateFields();
         }, 2000);
     }

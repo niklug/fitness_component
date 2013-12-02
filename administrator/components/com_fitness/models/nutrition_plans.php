@@ -327,11 +327,8 @@ class FitnessModelnutrition_plans extends JModelList {
             AND client_id='$client_id'
             AND state='1'
         ";
-        $db->setQuery($query);
-        if(!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $result = $db->loadObjectList();
+        
+        $result = FitnessHelper::customQuery($query, 1);
         
         foreach ($result as $item) {
             if($item->force_active == '1') {

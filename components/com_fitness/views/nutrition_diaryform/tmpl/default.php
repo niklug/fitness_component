@@ -325,7 +325,7 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
             <tr>
                 <td colspan="2">
                     <div class="fitness_block_wrapper" style="min-height: 440px;">
-                        <h3>FINAL SCORES & ASSESSMENT</h3>
+                        <h3>NUTRITION ENTRY TOTALS</h3>
                         <hr class="orange_line">
                         <div class="internal_wrapper">
                             <div  style="float:left; width:300px;<?php echo  $score_hidden;?>">

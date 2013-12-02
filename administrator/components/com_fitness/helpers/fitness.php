@@ -408,6 +408,42 @@ class FitnessHelper extends FitnessFactory
         return $result;
     }
     
+    
+    function  get_client_trainers_names($client_id, $type) {
+        
+        $db = & JFactory::getDBO();
+        $user = &JFactory::getUser();
+
+        $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
+        $db->setQuery($query);
+        
+        if (!$db->query()) {
+            throw new Exception($db->stderr());
+        }
+        
+        $primary_trainer= $db->loadResultArray(0);
+        $other_trainers = $db->loadResultArray(1);
+        $other_trainers = explode(',', $other_trainers[0]);
+        $all_trainers_id = array_unique(array_merge($primary_trainer, $other_trainers));
+
+        if($type == 'secondary') {
+            $all_trainers_id = $other_trainers;
+        }
+        
+        if($type == 'primary') {
+            $all_trainers_id = $primary_trainer;
+        }
+        
+        foreach ($all_trainers_id as $user_id) {
+            $user = &JFactory::getUser($user_id);
+            $all_trainers_name[] = $user->name;
+        }
+
+        $data = array_combine($all_trainers_id, $all_trainers_name);
+
+        return $data;
+    }
+    
     /**
      * 
      * @param type $id
@@ -1102,7 +1138,7 @@ class FitnessHelper extends FitnessFactory
     
     
     function getDiary($id) {
-        $query = "SELECT * FROM #__fitness_nutrition_diary WHERE id='1'";
+        $query = "SELECT * FROM #__fitness_nutrition_diary WHERE id='$id'";
         return self::customQuery($query, 2);
     }
 
