@@ -213,7 +213,7 @@ $helper = new FitnessHelper();
                                         $recipe_types = split(',', $item->recipe_type);
                                         foreach ($recipe_types as $recipe_type) {
                                             if($recipe_type) {
-                                                echo $this->getRecipeName($recipe_type) . "<br/>";
+                                                echo $helper->getRecipeName($recipe_type) . "<br/>";
                                             }
                                         }
 

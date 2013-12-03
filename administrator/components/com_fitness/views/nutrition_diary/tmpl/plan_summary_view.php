@@ -2,9 +2,9 @@
     <thead>
         <tr>
             <th></th>
-            <th>PRO (g)</th>
-            <th>FAT (g)</th>
-            <th>CARB (g)</th>
+            <th>PRO</th>
+            <th>FAT</th>
+            <th>CARB</th>
             <th>CALS</th>
             <th>ENRG (kJ)</th>
             <th>FAT, SAT (g)</th>

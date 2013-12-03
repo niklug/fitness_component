@@ -116,7 +116,7 @@ class FitnessModelrecipe_database extends JModelList {
         //
         
         $query .= " (SELECT name FROM #__users WHERE id=a.created_by) author,"
-                . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer,";
+                . " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer,";
       
         $query .= " (SELECT ROUND(SUM(protein),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS protein,
                    (SELECT ROUND(SUM(fats),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS fats,
@@ -302,7 +302,7 @@ class FitnessModelrecipe_database extends JModelList {
         $recipe->status = '1';
         $recipe->created_by = $user->id;
         $recipe->created = $created;
-        $recipe->reviewed_by = null;
+        $recipe->assessed_by = null;
         
         try {
             $new_recipe_id = $helper->insertUpdateObj($recipe, '#__fitness_nutrition_recipes');

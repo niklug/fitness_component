@@ -497,6 +497,23 @@
     background-color:#E62C2F;
 }
 
+
+.yellow_style_total {
+    color:#F0E51D;
+}
+
+.green_style_total {
+    color: #1BC721;
+}
+
+.orange_style_total {
+    color:#FF7570;
+}
+
+.red_style_total {
+    color:#E62C2F;
+}
+
 .adminformlist li {
     clear: both;
 }
@@ -651,7 +668,6 @@
 /* end pie*/
 
 #final_score{
-    color: #009FE3;
     font-size: 36px;
     font-weight: bold;
     border:3px solid;

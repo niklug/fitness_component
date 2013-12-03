@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
     <div style="padding: 2px;" id="submenu"></div>
     
     <div id="main_container"></div>
-    
+
 </div>
 
 
@@ -394,7 +394,7 @@ defined('_JEXEC') or die;
 
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
-                    //console.log(output);
+                    console.log(output);
                 });
             }
             
@@ -950,7 +950,7 @@ defined('_JEXEC') or die;
                     'db_table' : '#__fitness_nutrition_diary_meals',
                     'read_only' : submitted,
                     'import_date' : true,
-                    'import_date_source' : '#jform_entry_date'
+                    'import_date_source' : '#entry_date'
                 }
                 
                 var nutrition_comment_options = {
@@ -1113,6 +1113,7 @@ defined('_JEXEC') or die;
                     window.app.item_model.unset();
                 }
                 
+                $("#main_container").html('<div style="width:100%;text-align:center;margin-top:10px;"><div class="ajax_loader"></div></div>');
                 
             },
             
@@ -1128,6 +1129,7 @@ defined('_JEXEC') or die;
 
                 this.hide_submenu();
                 this.reset_main_container();
+
                 this.load_submenu('item', id);
                 window.app.item_model = new window.app.Item_model(options);
                 window.app.item_model.unset('disabled_days');
@@ -1137,6 +1139,7 @@ defined('_JEXEC') or die;
                 window.app.item_model.unset('rest_target');
                 window.app.item_model.unset('item');
                 window.app.item_view = new window.app.Item_view({model : window.app.item_model, 'item_id' : id});
+
             },
             
             

@@ -314,6 +314,7 @@ td.center, th.center, .center {
 
 .internal_wrapper {
     padding: 5px;
+    min-height: 19px;
 }
 
 .internal_wrapper2 {
@@ -587,6 +588,23 @@ td.center, th.center, .center {
     background-color:#E62C2F !important;
 }
 
+.fitness_wrapper .yellow_style_total {
+    color:yellow!important;
+}
+
+.fitness_wrapper .green_style_total {
+    color:#1BC721 !important;
+}
+
+.fitness_wrapper .orange_style_total {
+    color:#FF7570 !important;
+}
+
+.fitness_wrapper .red_style_total {
+    color:#E62C2F !important;
+}
+
+
 
 .fitness_wrapper #recipes_list_wrapper {
     background-color: #FFFFFF;
@@ -601,7 +619,6 @@ td.center, th.center, .center {
 
 
 #final_score{
-    color: #009FE3;
     font-size: 36px;
     font-weight: bold;
     border:3px solid;
@@ -808,4 +825,12 @@ td.center, th.center, .center {
     background-image: -webkit-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
     background-image: -ms-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
     background-image: linear-gradient(to left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+}
+
+.ajax_loader {
+
+    background: url('../images/ajax-loader.gif') 0  0 no-repeat;
+    width: 66px;
+    height: 66px;
+    display: inline-block;
 }

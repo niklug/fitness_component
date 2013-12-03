@@ -125,47 +125,74 @@
         html += '<tr>';
 
         html += '<td style="text-align:right;">';
-        html += 'TIME OF MEAL';
+        html += '<h6 style="font-size:10px;display:inline-block;">WHAT TIME WAS THIS MEAL CONSUMED?</h6>';
         
         var date_field_type = 'text';
         var date_field_value = (o.meal_time).substring(0, 10);
+
         if(this.options.import_date) {
             date_field_value = $(this.options.import_date_source).val();
             date_field_type = 'hidden';
         }
-        
-        html += '<input  size="5" type="' + date_field_type + '"  class="meal_date required" value="' + date_field_value + '" readonly>';
-        html += '<input ' + read_only_attr + ' size="4" type="text"  class="meal_time required " value="' + (o.meal_time).substring(11, 16) + '">';
 
-        if(this.options.read_only == false) {
-            html += '<input title="Save/Update Meal" class="save_plan_meal " type="button"  value="Save">';
-        }
-       
-        if(this.options.read_only == false) {
-            html += '<a href="javascript:void(0)" class="delete_plan_meal" title="Delete Meal"></a>';
-        }
+        html += '</td>';
+        html += '<td width="50" style="text-align:center;">';
+        html += '<input  size="5" type="' + date_field_type + '"  class="meal_date required" value="' + date_field_value + '" readonly>';
+        
+        html += '<input style="width:43px;" ' + read_only_attr + ' size="5" type="text"  class="meal_time required " value="' + (o.meal_time).substring(11, 16) + '">';
+        
+        html += '</td>';
+        
+        html += '<td width="40">';
+        html += '<span class="grey_title">hh:mm</span>';
+
         html += '</td>';
         html += '</tr>';
         
         html += '<tr>';
         html += '<td style="text-align:right;" class="meal_center_desc">';
-        html += 'WATER CONSUMED WITH THIS MEAL';
+        html += '<h6 style="font-size:10px;display:inline-block;">HOW MUCH WATER WAS CONSUMED WITH THIS MEAL?</h6>';
 
+        html += '</td>';
+        html += '<td style="text-align:center;">';
         html += '<input  ' + read_only_attr + ' size="5" type="text"  class="required water" value="' + o.water + '">';
-
+        html += '</td>';
+        
+        html += '<td >';
         html += '<span class="grey_title">millilitres</span>';
         html += '</td>';
         html += '</tr>';
 
         html += '<tr>';
         html += '<td style="text-align:right;">';
-        html += 'WATER CONSUMED BEFORE THIS MEAL - BUT AFTER THE PREVIOUS MEAL (WORKOUT / TRAINING INCLUSIVE)';
-
+        html += '<h6 style="font-size:10px;display:inline-block;">HOW MUCH WATER WAS CONSUMED BEFORE THIS MEAL - BUT AFTER THE PREVIOUS MEAL? (WORKOUT / TRAINING INCLUSIVE)</h6>';
+        
+        html += '</td>';
+        html += '<td style="text-align:center;">';
         html += '<input ' + read_only_attr + '  size="5" type="text"  class="required previous_water" value="' + o.previous_water + '">';
 
+        html += '</td>';
+        
+        html += '<td >';
         html += '<span class="grey_title">millilitres</span>';
         html += '</td>';
         html += '</tr>';
+        
+       
+        if(this.options.read_only == false) {
+            html += '<tr>';
+            html += '<td style="text-align:right;">';
+            html += '<h6 style="font-size:10px;display:inline-block;">SAVE THIS INFORMATION TO CONTINUE ... (or delete this entry)</h6>';
+            html += '</td>';
+            html += '<td style="text-align:center;">';
+            html += '<input title="Save/Update Meal" class="save_plan_meal " type="button"  value="Save">';
+            html += '</td>';
+            html += '<td >';
+            html += '<a href="javascript:void(0)" class="delete_plan_meal" title="Delete Meal"></a>';
+            html += '</td>';
+            html += '</tr>';
+        }
+        
         
         html += '<tr>';
         html += '<td style="text-align:right;"  class="error_wrapper" style="color:red">';
@@ -320,7 +347,7 @@
         }
 
         if(!date) {
-            error_wrapper.html('Dete is empty!');
+            error_wrapper.html('Date is empty!');
             result = false;               
         }
 

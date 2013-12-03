@@ -741,6 +741,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes` (
   `status` int(1) NOT NULL,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL,
+`assessed_by` INT(11)  NOT NULL ,
   `state` tinyint(1) NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;

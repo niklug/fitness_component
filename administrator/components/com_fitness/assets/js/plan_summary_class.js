@@ -168,6 +168,7 @@
 
 
     CalculateSummary.prototype.setVarianceRangeStylePRO_FATS_CARBS = function(element, value) {
+
         var abs_value = Math.abs(value); 
         var input_class = '';
         element.removeClass('green_style orange_style red_style');
@@ -175,11 +176,11 @@
             input_class = 'green_style'; 
         }
 
-        if((abs_value > 15) && (abs_value <= 30)) {
+        if((abs_value > 15) && (abs_value <= 40)) {
             input_class = 'orange_style'; 
         }
 
-        if(abs_value > 30) {
+        if(abs_value > 40) {
             input_class = 'red_style'; 
         }
         element.addClass(input_class);
@@ -189,21 +190,21 @@
     CalculateSummary.prototype.setVarianceRangeFinalScore = function(element, value) {
         var abs_value = Math.abs(value); 
         var input_class = '';
-        element.removeClass('yellow_style green_style orange_style red_style');
+        element.removeClass('yellow_style_total green_style_total orange_style_total red_style_total');
         if((abs_value >= 0) && (abs_value <= 70)) {
-            input_class = 'red_style'; 
+            input_class = 'red_style_total'; 
         }
         
         if((abs_value >= 70) && (abs_value <= 80)) {
-            input_class = 'orange_style'; 
+            input_class = 'orange_style_total'; 
         }
 
         if((abs_value > 80) && (abs_value <= 90)) {
-            input_class = 'yellow_style'; 
+            input_class = 'yellow_style_total'; 
         }
 
         if(abs_value > 90) {
-            input_class = 'green_style'; 
+            input_class = 'green_style_total'; 
         }
         element.addClass(input_class);
     }
@@ -274,8 +275,8 @@
         var variance_calories_value = this.calculateVariance('calories');
         variance_calories_element.val(variance_calories_value);
 
-        this.setVarianceRangeStyleCalories(variance_calories_element, variance_calories_value);
-        this.setVarianceRangeStyleCalories($("#variance_calories_percents"), variance_calories_value);
+        this.setVarianceRangeStyleCalories(variance_calories_element, this.getCaloriesVariancePercents('calories'));
+        this.setVarianceRangeStyleCalories($("#variance_calories_percents"), this.getCaloriesVariancePercents('calories'));
 
         $("#variance_energy").val(this.calculateVarianceEnergy());
     }
@@ -324,27 +325,31 @@
         var variance_protein_grams_element = $("#variance_protein_grams");
         var variance_protein_grams_value = this.calculateVarianceGrams('protein');
         variance_protein_grams_element.val(variance_protein_grams_value);
-        this.setVarianceRangeStylePRO_FATS_CARBS(variance_protein_grams_element, variance_protein_grams_value);
-        this.setVarianceRangeStylePRO_FATS_CARBS($("#variance_protein_percents"), variance_protein_grams_value);
+        this.setVarianceRangeStylePRO_FATS_CARBS(variance_protein_grams_element, this.calculateVariancePercents('protein'));
 
         var variance_fats_grams_element = $("#variance_fats_grams");
         var variance_fats_grams_value = this.calculateVarianceGrams('fats');
         variance_fats_grams_element.val(variance_fats_grams_value);
-        this.setVarianceRangeStylePRO_FATS_CARBS(variance_fats_grams_element, variance_fats_grams_value);
-        this.setVarianceRangeStylePRO_FATS_CARBS($("#variance_fats_percents"), variance_fats_grams_value);
+        this.setVarianceRangeStylePRO_FATS_CARBS(variance_fats_grams_element, this.calculateVariancePercents('fats'));
+        
 
         var variance_carbs_grams_element = $("#variance_carbs_grams");
         var variance_carbs_grams_value = this.calculateVarianceGrams('carbs');
         variance_carbs_grams_element.val(variance_carbs_grams_value);
-        this.setVarianceRangeStylePRO_FATS_CARBS(variance_carbs_grams_element, variance_carbs_grams_value);
-        this.setVarianceRangeStylePRO_FATS_CARBS($("#variance_carbs_percents"), variance_carbs_grams_value);
+        this.setVarianceRangeStylePRO_FATS_CARBS(variance_carbs_grams_element, this.calculateVariancePercents('carbs'));
+        
     }
 
 
     CalculateSummary.prototype.setVariancePercents = function() {
         $("#variance_protein_percents").val(this.calculateVariancePercents('protein'));
+        this.setVarianceRangeStylePRO_FATS_CARBS($("#variance_protein_percents"), this.calculateVariancePercents('protein'));
+        
         $("#variance_fats_percents").val(this.calculateVariancePercents('fats'));
+        this.setVarianceRangeStylePRO_FATS_CARBS($("#variance_fats_percents"), this.calculateVariancePercents('fats'));
+        
         $("#variance_carbs_percents").val(this.calculateVariancePercents('carbs'));
+        this.setVarianceRangeStylePRO_FATS_CARBS($("#variance_carbs_percents"), this.calculateVariancePercents('carbs'));
     }
 
     CalculateSummary.prototype.calculateVarianceGrams = function(name) {
@@ -505,32 +510,72 @@
     
     CalculateSummary.prototype.connectMacronutrientScores = function() {
         
-        var protein_totals = $("#daily_protein_percents").val();
-        var carbs_totals = $("#daily_carbs_percents").val();
-        var fats_totals = $("#daily_fats_percents").val();
+        var vpp = parseFloat($("#variance_protein_percents").val());
+        var protein_graph_score = this.calculateGraphScore(vpp);
         
+        
+        var vcp = parseFloat($("#variance_carbs_percents").val());
+        var carbs_graph_score = this.calculateGraphScore(vcp);
+        
+        var vfp = parseFloat($("#variance_fats_percents").val());
+        var fats_graph_score = this.calculateGraphScore(vfp);
+        
+        
+
         var data = {};
+        
+        
         
         data.el = "#protein_score_graph";
         data.title = 'PROTEIN SCORE';
-        data.width = '200px';
-        data.level =  protein_totals + '%';
+        data.width = '250px';
+        data.level =  protein_graph_score + '%';
         $.gredient_graph(data);
         
         
         data.el = "#fat_score_graph";
         data.title = 'FATS SCORE';
-        data.width = '200px';
-        data.level = fats_totals + '%';
+        data.width = '250px';
+        data.level = fats_graph_score + '%';
         $.gredient_graph(data);
         
         data.el = "#carbs_score_graph";
         data.title = 'CARBOHYDRATE SCORE';
-        data.width = '200px';
-        data.level = carbs_totals + '%';
+        data.width = '250px';
+        data.level = carbs_graph_score + '%';
         $.gredient_graph(data);
     }
     
+    
+    CalculateSummary.prototype.calculateGraphScore = function(vpp) {
+  
+        var result = 0;
+        
+        if(vpp < 200) {
+            if(vpp > 0) {
+                result = 100 + Math.abs(vpp) - ((1.5) * Math.abs(vpp));
+            } else {
+                result = 100 + vpp;
+            }
+        }
+        
+        return this.round_2_sign(result);
+    }
+    
+    CalculateSummary.prototype.calculateGraphScore = function(vpp) {
+      
+        var result = 0;
+        
+        if(vpp < 200) {
+            if(vpp > 0) {
+                result = 100 + Math.abs(vpp) - ((1.5) * Math.abs(vpp));
+            } else {
+                result = 100 + vpp;
+            }
+        }
+        
+        return this.round_2_sign(result);
+    }
     
     // Add the  function to the top level of the jQuery object
     $.calculateSummary = function(options) {

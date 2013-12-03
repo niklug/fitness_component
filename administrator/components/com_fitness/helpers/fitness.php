@@ -429,17 +429,23 @@ class FitnessHelper extends FitnessFactory
         if($type == 'secondary') {
             $all_trainers_id = $other_trainers;
         }
-        
+
         if($type == 'primary') {
             $all_trainers_id = $primary_trainer;
         }
+    
+        
         
         foreach ($all_trainers_id as $user_id) {
-            $user = &JFactory::getUser($user_id);
-            $all_trainers_name[] = $user->name;
+            if($user_id) {
+                $user = &JFactory::getUser($user_id);
+                $all_trainers_name[] = $user->name;
+            }
+                
+     
         }
 
-        $data = array_combine($all_trainers_id, $all_trainers_name);
+        $data = array_combine(array_filter($all_trainers_id), $all_trainers_name);
 
         return $data;
     }
@@ -914,7 +920,7 @@ class FitnessHelper extends FitnessFactory
         
         $query = "SELECT a.*,"
                 . " (SELECT name FROM #__users WHERE id=a.created_by) author,"
-                . " (SELECT name FROM #__users WHERE id=a.reviewed_by) trainer,";
+                . " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer,";
                 
         $query .= " (SELECT ROUND(SUM(protein),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS protein,
                    (SELECT ROUND(SUM(fats),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS fats,
@@ -954,6 +960,11 @@ class FitnessHelper extends FitnessFactory
     function getRecipeNames($ids) {
         $query = "SELECT name FROM #__fitness_recipe_types WHERE id IN ($ids) AND state='1'";
         return self::customQuery($query, 3);
+    }
+    
+    function getRecipeName($id) {
+        $query = "SELECT name FROM #__fitness_recipe_types WHERE id='$ids' AND state='1'";
+        return self::customQuery($query, 0);
     }
     
     public function getRecipeMeals($recipe_id) {

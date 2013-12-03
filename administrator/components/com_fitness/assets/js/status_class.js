@@ -58,7 +58,7 @@
     Status.prototype.setUpdaterId = function(item_id) {
         var user_id = this.options.user_id;
         var data = {
-                'reviewed_by' : user_id,
+                'assessed_by' : user_id,
                 'id' : item_id
         };
         

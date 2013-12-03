@@ -332,6 +332,9 @@ class FitnessModelNutrition_diaries extends JModelList {
 
         $query = "SELECT a.*, gc.id AS primary_goal_id, gc.name AS primary_goal_name,
             g.start_date AS primary_goal_start_date, g.deadline AS primary_goal_deadline,
+            g.details AS primary_goal_details, g.status AS primary_goal_status,
+            mg.start_date AS mini_goal_start_date, mg.deadline AS mini_goal_deadline,
+            mg.details AS mini_goal_details, mg.status AS mini_goal_status,
             mgc.name AS mini_goal_name,
             tp.name AS training_period_name, nf.name AS nutrition_focus_name,
             (SELECT name FROM #__users WHERE id=a.client_id) client_name,

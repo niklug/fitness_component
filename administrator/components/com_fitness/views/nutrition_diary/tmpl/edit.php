@@ -57,7 +57,9 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
                                 <td>
                                     <span class="grey_title">
                                         <?php
-                                        $secondary_trainers = $this->model->get_client_trainers($this->item->client_id);
+                                        $secondary_trainers = $helper->get_client_trainers_names($this->item->client_id, 'secondary');
+                                        
+                                  
                                         
                                         foreach ($secondary_trainers as $trainer) {
                                             echo $trainer . "<br/>";
@@ -321,7 +323,7 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
                             <tr>
                                 <td style="vertical-align: top;text-align: center;" width="35%">
                                     <div style="width: 100%;" class="pie-container">
-                                        <h3>MACRONUTRIENT SCORES</h3>
+                                        <h3>MACRONUTRIENT TOTALS</h3>
                                         <div id="placeholder_targets" class="placeholder_pie"></div>
                                     </div>
                                     <div class="clr"></div>
@@ -385,8 +387,8 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td id="water_score"  style="text-align: center;font-size: 36px;color:#008313;font-weight: bold;"></td>
-                                    <td id="calorie_score" style="text-align: center;font-size: 36px;color:#009FE3;font-weight: bold;"></td>
+                                    <td id="water_score"  style="text-align: center;font-size: 36px;color:#009FE3;font-weight: bold;"></td>
+                                    <td id="calorie_score" style="text-align: center;font-size: 36px;color:#008313;font-weight: bold;"></td>
                                     <td  style="text-align: center">
                                         <div id="final_score"></div>
                                     </td>
@@ -530,7 +532,9 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
              setStatuses : function(item_id) {
                 return this.statuses;
             },
-            'view' : 'NutritionDiary'
+            'set_updater' : true,
+            'view' : 'NutritionDiary',
+            'user_id' : '<?php echo JFactory::getUser()->id;?>',
         }
         
         // meal blocks object
