@@ -55,6 +55,10 @@
 
         $("#delete_comment_" + this.sub_item_id).die().live('click', function(){
             var comment_wrapper = $(this).closest("table").parent();
+                        
+            $(this).closest("table").parent().prev().prev().remove();
+            $(this).closest("table").parent().prev().remove();
+            
             var id = comment_wrapper.attr('data-id');
             
             self.deletePlanComment(id, function(output) {

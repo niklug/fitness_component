@@ -1751,7 +1751,7 @@
         <div style="width:100%;">
             <div style="padding: 0 4px">
                 <div style="width:100%;height: 30px;" class="gradient_bar score_gradient">
-                    <div style="width: 2px;height: 100%;background-color: #000; margin-left: <%= level %>;"></div>
+                    <div class="gradient_bar_score_mark" style="width: 2px;height: 100%; margin-left: <%= level %>;"></div>
                 </div>
             </div>
 
@@ -1862,7 +1862,7 @@
                 <thead>
                     <tr>
                         <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_entry_date" onclick="javascript:void(0)">ENTRY DATE</a></th>
-                        <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_status" onclick="javascript:void(0)">STATUS</a></th>
+                        <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_status" onclick="javascript:void(0)">STATUS/RESULT</a></th>
                         <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_score" onclick="javascript:void(0)">SCORE</a></th>
                         <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_assessed_by" onclick="javascript:void(0)">ASSESSED BY</a></th>
                         <th><a title="Click to sort by this column" style="cursor: pointer;"id="sort_submit_date" onclick="javascript:void(0)">SUBMIT DATE</a></th>
@@ -1905,7 +1905,10 @@
                         </td>
                         <td>
                             <% if (item.submit_date != '0000-00-00 00:00:00') { %>
-                                <%= moment(new Date(Date.parse(item.submit_date))).format("ddd, D MMM  YY  HH:MM") %>
+                                <%= moment(new Date(Date.parse(item.submit_date))).format("ddd, D MMM  YYYY") %>
+                                &nbsp;@&nbsp;
+                                <%= moment(new Date(Date.parse(item.submit_date))).format("HH:mm") %>
+                        
                             <% } else { %> 
                                 <%= '-' %>
                             <% } %>
@@ -2031,7 +2034,7 @@
             </tr>
             <tr>
                 <td   width="40%">
-                    <div class="fitness_block_wrapper" style="min-height:200px;">
+                    <div class="fitness_block_wrapper" style="min-height:250px;">
                         <h3>MY TRAINERS</h3>
                         <hr class="orange_line">
                         <div class="internal_wrapper">
@@ -2080,29 +2083,30 @@
                     </div>
                 </td>
                 <td   >
-                    <div class="fitness_block_wrapper" style="min-height:200px;">
+                    <div class="fitness_block_wrapper" style="min-height:250px;">
                         <h3>MY DIARY ENTRY DETAILS</h3>
                         <hr class="orange_line">
                         <div class="internal_wrapper">
                             <table width="100%">
                                 <tr>
-                                    <td>
+                                    <td width="150">
                                         Date of Entry
                                     </td>
                                     <td>
                                         <span class="grey_title">
-                                        <% if(submitted) {
+                                        <% //if(submitted) {
                                                 var d1 = new Date(Date.parse(item.entry_date));            
-                                                var entry_date = moment(d1).format("dddd, D MMMM  YYYY"); 
+                                                var entry_date = moment(d1).format("ddd, D MMM  YYYY"); 
                                         %>
                                                 <%= entry_date%> 
+                                                 <input value="<%= item.entry_date %>" style="width:70px;" readonly type="hidden" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
                                         <%
-                                            } else {
+                                           /* } else {
                                         %>
                                             <input value="<%= item.entry_date %>" style="width:70px;" readonly type="text" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
                                         <%
                                             }
-                                        %>
+                                        */%>
                                         </span>
                                     </td>
                                 </tr>
@@ -2114,7 +2118,7 @@
                                         <span class="grey_title">
                                         <%
                                             var d2 = new Date(Date.parse(item.created));            
-                                            var created = moment(d2).format("dddd, D MMMM  YYYY");    
+                                            var created = moment(d2).format("ddd, D MMM  YYYY HH:mm");    
                                         %>
                                         <%= created || '-' %>
                                         </span>
@@ -2129,7 +2133,7 @@
                                         <%
                                             if (submitted) {
                                                 var d3 = new Date(Date.parse(item.submit_date));    
-                                                var submit_date = moment(d3).format("dddd, D MMMM  YYYY HH:MM");    
+                                                var submit_date = moment(d3).format("ddd, D MMM  YYYY HH:mm");    
                                             }
                                         %>
                                         <%= submit_date || '-' %>
@@ -2162,13 +2166,6 @@
                         <h3>MY CURRENT GOALS & TRAINING FOCUS</h3>
                         <hr class="orange_line">
                         <div class="internal_wrapper">
-                        
-                        <%
-                        
-                        console.log(model);
-                        
-                        %>
-                        
                             <table width="100%">
                                 <tr>
                                     <td width="50%" style="vertical-align:top;">
@@ -2209,7 +2206,7 @@
                                                 </td>
                                                 <td>
                                                     <span class="grey_title">
-                                                        <%=  model.setStatus(active_plan_data.primary_goal_status)  %>
+                                                        <%=  model.setStatusGoal(active_plan_data.primary_goal_status)  %>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -2274,7 +2271,7 @@
                                                 </td>
                                                 <td>
                                                     <span class="grey_title">
-                                                        <%=  model.setStatus(active_plan_data.mini_goal_status)  %>
+                                                        <%=  model.setStatusGoal(active_plan_data.mini_goal_status)  %>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -2462,8 +2459,8 @@
                                             <th>CARB</th>
                                             <th>CALS</th>
                                             <th>ENRG (kJ)</th>
-                                            <th>FAT, SAT (g)</th>
-                                            <th>SUG (g)</th>
+                                            <th>FAT, SAT</th>
+                                            <th>SUG</th>
                                             <th>SOD (mg)</th>
                                         </tr>
                                     </thead>
@@ -2758,7 +2755,7 @@
                                         <td  style="text-align: center;">
                                             <div style="display: inline-block;" id="status_button_place">
                                                 <%=
-                                                   model.status_html_stamp('3')
+                                                   model.status_html_stamp(item.status)
                                                 %>
                                             </div>
                                         </td>

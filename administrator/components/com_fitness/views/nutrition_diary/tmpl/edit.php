@@ -535,6 +535,7 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
             'set_updater' : true,
             'view' : 'NutritionDiary',
             'user_id' : '<?php echo JFactory::getUser()->id;?>',
+            'set_score' : true
         }
         
         // meal blocks object

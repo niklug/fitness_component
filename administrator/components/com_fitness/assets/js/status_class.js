@@ -62,6 +62,14 @@
                 'id' : item_id
         };
         
+        var score = parseFloat($("#score_input").val());
+        
+        if(this.options.set_score !== 'undefined' && this.options.set_score == true) {
+            data.score = score;
+        }
+        
+        
+        
         var self = this;
 
         this.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateStatus', self.options.db_table, function(output) {

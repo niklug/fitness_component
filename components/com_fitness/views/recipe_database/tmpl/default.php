@@ -265,8 +265,10 @@ defined('_JEXEC') or die;
                     new window.app.Submenu_trash_form_view({ el: $("#submenu_container"), 'recipe_id' : recipe.id});
                 } else if (current_page == 'edit_recipe') {
                     return false;
+                } else if(current_page == 'add_diary') {
+                    var nutrition_plan_id = window.app.recipe_items_model.get('nutrition_plan_id');
+                    new window.app.Submenu_add_diary_view ({ el: $("#submenu_container"), 'recipe_id' : recipe.id, 'nutrition_plan_id' : nutrition_plan_id, 'number_serves_recipe' : recipe.number_serves});
                 }
-                
                 this.populateRecipe(recipe);
             },
             
@@ -507,9 +509,9 @@ defined('_JEXEC') or die;
                 }
                 
                 var table = data.db_table;
-                
-                //console.log(data);
+ 
                 this.ajaxCall(data, url, view, task, table, function(output){
+         
                     window.parent.location.reload();
                });
             }
@@ -1167,13 +1169,15 @@ defined('_JEXEC') or die;
                 var number_serves = parseInt($("#number_serves").val());
 
                 if(!number_serves) {
-                    alert('Wrong Value Number of serves!');
+                    $("#number_serves").addClass("red_style_border");
                     return false;
                 }
                 
                 var data = {};
                 data.recipe_id = recipe_id;
                 data.number_serves = number_serves;
+ 
+                data.number_serves_recipe = this.options.number_serves_recipe;
                 
                 window.app.recipe_items_model.add_diary(data);
                 
@@ -1734,12 +1738,9 @@ defined('_JEXEC') or die;
            
            add_diary : function(id) {
                var recipe_id = id;
-               var nutrition_plan_id = window.app.recipe_items_model.get('nutrition_plan_id');
                window.app.recipe_items_model.set({current_page : 'add_diary'});
                this.clear_main_ontainer();
                this.load_submenu();
-               new window.app.Submenu_add_diary_view ({ el: $("#submenu_container"), 'recipe_id' : recipe_id, 'nutrition_plan_id' : nutrition_plan_id});
-               
                window.app.recipe_items_model.getRecipe(recipe_id);
            }
            

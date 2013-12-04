@@ -427,6 +427,10 @@
     text-align: center;
 }
 
+.fitness_wrapper .red_style_border {
+    border: 2px solid #FF0000;
+}
+
 #quantity_wrapper {
     text-align: center;
     margin: 5px 0;
@@ -564,7 +568,7 @@
 }
 
 .status_distinction {
-    background-color: #009FE3 !important;
+    background-color: #BFEFFF !important;
     border: 2px solid #1C4EE6;
 }
 
@@ -756,3 +760,6 @@
     background-image: linear-gradient(to left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
 }
 
+.gradient_bar_score_mark {
+    background-color: #000000;
+}

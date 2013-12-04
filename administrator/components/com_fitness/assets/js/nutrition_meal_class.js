@@ -339,6 +339,8 @@
         var meal_time = date + ' ' + time;
         var water = closest_table.find(".water").val();
         var previous_water = closest_table.find(".previous_water").val();
+        
+        $(".meal_date, .meal_time, .water, .previous_water").removeClass("red_style_border");
 
         var data = {
             'meal_time' : meal_time,
@@ -347,38 +349,49 @@
         }
 
         if(!date) {
-            error_wrapper.html('Date is empty!');
+            $(".meal_date").addClass("red_style_border");
+            //error_wrapper.html('Date is empty!');
             result = false;               
         }
 
+
         if(!this.validateTime(time)) {
-            error_wrapper.html('Wrong Meal Time!');
+            
+            $(".meal_time").addClass("red_style_border");
+            //error_wrapper.html('Wrong Meal Time!');
             result = false;
         }
 
+
         if(!water) {
-            error_wrapper.html('Water Value Empty!');
+            $(".water").addClass("red_style_border");
+            //error_wrapper.html('Water Value Empty!');
             result = false;
         }
 
         if(!this.validateFloat(water)) {
-            error_wrapper.html('Wrong Water Value!');
+            $(".water").addClass("red_style_border");
+            //error_wrapper.html('Wrong Water Value!');
             result = false;
         }
-
+        
         if(!previous_water) {
-            error_wrapper.html('Previous Water Value Empty!');
+            $(".previous_water").addClass("red_style_border");
+            //error_wrapper.html('Previous Water Value Empty!');
             result = false;
         }
 
         if(!this.validateFloat(previous_water)) {
-            error_wrapper.html('Wrong Previous Water Value!');
+            $(".previous_water").addClass("red_style_border");
+            //error_wrapper.html('Wrong Previous Water Value!');
             result = false;
         }
 
         if(result) {
             result = data;
         }
+        
+        
         return result;
     }
 

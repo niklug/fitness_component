@@ -131,7 +131,7 @@ a:hover, a:active, a:focus {
 }
 
 .status_distinction {
-    background-color: #009FE3 !important;
+    background-color: #BFEFFF !important;
     border: 2px solid #1C4EE6;
 }
 
@@ -588,6 +588,10 @@ td.center, th.center, .center {
     background-color:#E62C2F !important;
 }
 
+.fitness_wrapper .red_style_border {
+    border: 2px solid #FF0000;
+}
+
 .fitness_wrapper .yellow_style_total {
     color:yellow!important;
 }
@@ -833,4 +837,30 @@ td.center, th.center, .center {
     width: 66px;
     height: 66px;
     display: inline-block;
+}
+
+.gradient_bar_score_mark {
+    background-color: #ffffff;
+}
+
+
+
+#close_recipe_list_frontend_wpapper #close_recipe_list {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+  font-size: 16px;
+  width: 63px;
+  height: 29px;
+}
+
+#close_recipe_list_frontend_wpapper {
+  border: 1px solid #CCCCCC;
+  height: 29px;
+  line-height: 2.3em;
+  list-style: none outside none;
+  padding: 0 10px;
+  position: absolute;
+  right: 47px;
+  text-align: center;
+  top: 78px;
+  width: 73px;
 }

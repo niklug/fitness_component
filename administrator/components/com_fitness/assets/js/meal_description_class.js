@@ -45,7 +45,7 @@
             });
 
             $("#close_recipe_list").die().live('click', function() {
-                $(this).parent().remove();
+                $("#recipes_list_wrapper").remove();
             });
 
 
@@ -105,13 +105,13 @@
         html += '<tr>';
         html += '<th class="ingredient_title">' + this._title + '</th>';
         html += '<th>QUANTITY</th>';
-        html += '<th class="ingredient_cell">PRO (g)</th>';
-        html += '<th class="ingredient_cell">FAT (g)</th>';
-        html += '<th class="ingredient_cell">CARB (g)</th>';
+        html += '<th class="ingredient_cell">PRO</th>';
+        html += '<th class="ingredient_cell">FAT</th>';
+        html += '<th class="ingredient_cell">CARB</th>';
         html += '<th class="ingredient_cell">CALS</th>';
         html += '<th class="ingredient_cell">ENRG (kJ)</th>';
-        html += '<th class="ingredient_cell">FAT, SAT (g)</th>';
-        html += '<th class="ingredient_cell">SUG (g)</th>';
+        html += '<th class="ingredient_cell">FAT, SAT</th>';
+        html += '<th class="ingredient_cell">SUG</th>';
         html += '<th class="ingredient_cell">SOD (mg)</th>';
         
         html += '<th class="ingredient_cell_delete"></th>';
@@ -209,13 +209,13 @@
         html += '<tr style="text-align:left;">';
         html += '<th class="totals_pagging meal_invisible_cell"></th>';
         html += '<th  class="meal_invisible_cell" ></th>';
-        html += '<th class="ingredient_cell">PRO (g)</th>';
-        html += '<th class="ingredient_cell">FAT (g)</th>';
-        html += '<th class="ingredient_cell">CARB (g)</th>';
+        html += '<th class="ingredient_cell">PRO</th>';
+        html += '<th class="ingredient_cell">FAT</th>';
+        html += '<th class="ingredient_cell">CARB</th>';
         html += '<th class="ingredient_cell">CALS</th>';
         html += '<th class="ingredient_cell">ENRG (kJ)</th>';
-        html += '<th class="ingredient_cell">FAT, SAT (g)</th>';
-        html += '<th class="ingredient_cell">SUG (g)</th>';
+        html += '<th class="ingredient_cell">FAT, SAT</th>';
+        html += '<th class="ingredient_cell">SUG </th>';
         html += '<th class="ingredient_cell">SOD (mg)</th>';
         html += '<th class="ingredient_cell_delete"></th>';
         html += '</tr>';
@@ -575,10 +575,10 @@
         }
         var html = '';
         html += '<div id="recipes_list_wrapper">';
-        html += '<a href="javascript:void(0)" id="close_recipe_list" title="Close"></a>';
+        html += '<div id="close_recipe_list_frontend_wpapper"><a href="javascript:void(0)" id="close_recipe_list" title="Close">[CLOSE]</a></div>';
         html += ' <iframe scrolling="auto" style="overflow-y: auto;overflow-x: hidden;" width="100%" height="100%"';
         html += 'src="' + this.options.fitness_frontend_url + '&view=recipe_database&tmpl=component&nutrition_plan_id=';
-        html += this.options.nutrition_plan_id +'&meal_id=' + this._meal_id + '&type=' + this._type +'&parent_view=' + this.options.parent_view + '">'
+        html += this.options.nutrition_plan_id +'&meal_id=' + this._meal_id + '&type=' + this._type +'&parent_view=' + this.options.parent_view + '#!/my_favourites">'
         html += '</iframe> ';
         html += '</div>';
 

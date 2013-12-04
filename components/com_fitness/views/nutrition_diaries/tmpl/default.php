@@ -100,6 +100,43 @@ defined('_JEXEC') or die;
                 return html;
             },
             
+            setStatusGoal : function(status) {
+                var style_class;
+                var text;
+                switch(status) {
+                    case '1' :
+                        style_class = 'goal_status_pending';
+                        text = 'PENDING';
+                        break;
+                    case '2' :
+                        style_class = 'goal_status_complete';
+                        text = 'COMPLETE';
+                        break;
+                    case '3' :
+                        style_class = 'goal_status_incomplete';
+                        text = 'INCOMPLETE';
+                        break;
+                    case '4' :
+                        style_class = 'goal_status_evaluating';
+                        text = 'EVALUATING';
+                        break;
+                    case '5' :
+                        style_class = 'goal_status_inprogress';
+                        text = 'IN PROGRESS';
+                        break;
+                    case '6' :
+                        style_class = 'goal_status_assessing';
+                        text = 'ASSESSING';
+                        break;
+                    default :
+                        style_class = 'goal_status_evaluating';
+                        text = 'EVALUATING';
+                        break;
+                }
+                var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                return html;
+            },
+            
             status_html_stamp : function(status) {
                 var class_name, text;
                 switch(status) {
@@ -592,7 +629,7 @@ defined('_JEXEC') or die;
             
             onSubmit : function() {
                 this.model.sendSubmitEmail()
-                this.redirectToItem();
+                this.redirectToList();
             },
             
             redirectToItem : function() {
@@ -618,7 +655,6 @@ defined('_JEXEC') or die;
                 data.trainer_id = this.active_plan_data.trainer_id;
                 data.goal_category_id = this.active_plan_data.mini_goal;
                 data.nutrition_focus = this.active_plan_data.nutrition_focus;
-                data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
                 data.state = '1';
                 return data;
             },
@@ -816,7 +852,7 @@ defined('_JEXEC') or die;
             
             setCalendar : function() {
                 var self = this;
-                $( "#entry_date" ).datepicker({ dateFormat: "yy-mm-dd",  minDate : 0, beforeShowDay: self.model.disableDays});
+                $( "#entry_date" ).datepicker({ dateFormat: "yy-mm-dd",  minDate : -5, beforeShowDay: self.model.disableDays});
             },
             
             onChooseTrainingDay : function(event) {
@@ -905,10 +941,11 @@ defined('_JEXEC') or die;
             
             setCalendar : function() {
                 var self = this;
-                $( "#entry_date" ).datepicker({ dateFormat: "yy-mm-dd",  minDate : 0, beforeShowDay: self.model.disableDays});
+                $( "#entry_date" ).datepicker({ dateFormat: "yy-mm-dd",  minDate : -5, beforeShowDay: self.model.disableDays});
             },
             
             onChooseTrainingDay : function(event) {
+                return false; // not allow change here
                 this.activity_level = $(event.target).val();
                 this.model.setTargetData(this.activity_level);
                 
@@ -1126,7 +1163,6 @@ defined('_JEXEC') or die;
             },
             
             item_view : function(id) {
-
                 this.hide_submenu();
                 this.reset_main_container();
 
