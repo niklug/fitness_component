@@ -804,11 +804,25 @@
 <!--  submenu  Add Diary template -->
 <script type="text/template" id="submenu_add_diary_template">
     <div style="width:100%;">
-        <div style="float:left;">Number of serves to add to my diary entry <input  style="display:inline;width:25px" maxlength="2" type="text" id="number_serves" name="number_serves"/> </div>
+        <div style="float:left;margin-top:-5px;">
+            <table>
+                <tr>
+                    <td>
+                        <div class="notice_image_20"></div>
+                    </td>
+                    <td>
+                        Number of serves to add to my diary entry
+                    </td>
+                    <td>
+                        <input  style="display:inline;width:25px" maxlength="2" type="text" id="number_serves" name="number_serves"/> 
+                    </td>
+                </tr>
+            </table>
+        </div>
         <a  style="cursor: pointer;float:right;margin-right:10px;" id="cancel" onclick="javascript:void(0)">[CANCEL]</a>
         <a data-recipe_id="<%= recipe_id %>" style="cursor: pointer;float:right;margin-right:10px;" id="add_diary" onclick="javascript:void(0)">[ENTER]</a>
     </div>
-    <div class="clr"></div>
+
 </script>
 
 <!--  recipe database main container template -->
@@ -1477,7 +1491,7 @@
                         <table width="100%">
                             <tr>
                                 <td width="60">
-                                    <div style="background-size: 40px auto;width:40px;height:40px; background-image:url('components/com_fitness/assets/images/exclamation.png'); background-repeat:no-repeat;"></div>
+                                    <div class="notice_image"></div>
                                 </td>
                                 <td>
                                 <%
@@ -1841,9 +1855,6 @@
         <a data-id="<%= item_id %>" style="cursor: pointer;left;margin-right:10px; float:right;" id="close" onclick="javascript:void(0)">[CLOSE]</a>
         <% if (!submitted) { %>
             <a data-id="<%= item_id %>" style="cursor: pointer;left;margin-right:10px; float:right;" id="delete" onclick="javascript:void(0)">[DELETE]</a>
-        
-            <a data-id="<%= item_id %>" style="cursor: pointer;left;margin-right:10px; float:right;" id="save_close" onclick="javascript:void(0)">[SAVE/CLOSE]</a>
-            <a data-id="<%= item_id %>" style="cursor: pointer;left;margin-right:10px; float:right;" id="save" onclick="javascript:void(0)">[SAVE]</a>
         <% } %>
     </div>
     <div class="clr"></div>

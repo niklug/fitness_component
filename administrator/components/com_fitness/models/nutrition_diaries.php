@@ -63,6 +63,10 @@ class FitnessModelnutrition_diaries extends JModelList {
 
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
+                
+        
+               	$this->setState('filter.score.from', $app->getUserStateFromRequest($this->context.'.filter.score.from', 'filter_from_score', '', 'string'));
+		$this->setState('filter.score.to', $app->getUserStateFromRequest($this->context.'.filter.score.to', 'filter_to_score', '', 'string'));
 
         
 		//Filtering entry_date
@@ -73,6 +77,7 @@ class FitnessModelnutrition_diaries extends JModelList {
 		$this->setState('filter.submit_date.from', $app->getUserStateFromRequest($this->context.'.filter.submit_date.from', 'filter_from_submit_date', '', 'string'));
 		$this->setState('filter.submit_date.to', $app->getUserStateFromRequest($this->context.'.filter.submit_date.to', 'filter_to_submit_date', '', 'string'));
 
+                
 
                 // Filter by primary trainer
                 $primary_trainer = $app->getUserStateFromRequest($this->context . '.filter.primary_trainer', 'filter_primary_trainer', '', 'string');
@@ -93,7 +98,7 @@ class FitnessModelnutrition_diaries extends JModelList {
                 
                 // Filter by diary status
                 $diary_status = $app->getUserStateFromRequest($this->context . '.filter.diary_status', 'filter_diary_status', '', 'string');
-                $this->setState('filter.diary_status', $goal_status);
+                $this->setState('filter.diary_status', $diary_status);
                 
                 // Filter by business profile
                 $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
@@ -206,7 +211,17 @@ class FitnessModelnutrition_diaries extends JModelList {
                 }
             }
 
-        
+                
+                //Filtering score
+		$filter_score_from = $this->state->get("filter.score.from");
+		if ($filter_score_from) {
+			$query->where("a.score >= '".$db->escape($filter_score_from)."'");
+		}
+		$filter_score_to = $this->state->get("filter.score.to");
+		if ($filter_score_to) {
+			$query->where("a.score <= '".$db->escape($filter_score_to)."'");
+		}
+            
 
 		//Filtering entry_date
 		$filter_entry_date_from = $this->state->get("filter.entry_date.from");
@@ -262,6 +277,9 @@ class FitnessModelnutrition_diaries extends JModelList {
 
                 if ($diary_status) {
                     $query->where('a.status = ' . (int) $diary_status);
+                    if($diary_status == '1') {
+                        $query->where('a.status = ' . (int) $diary_status . ' OR a.status="0"');
+                    }
                 } 
 
 

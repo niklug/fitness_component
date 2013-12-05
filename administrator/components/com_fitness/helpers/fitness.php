@@ -696,7 +696,7 @@ class FitnessHelper extends FitnessFactory
             $trainers_group_id = self::getTrainersGroupId();
         }
         $db = &JFactory::getDBo();
-        $query = "SELECT id AS value, username AS text FROM #__users "
+        $query = "SELECT id AS value, name AS text FROM #__users "
                 . "INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id"
                 . " WHERE #__user_usergroup_map.group_id='$trainers_group_id'";
         $db->setQuery($query);

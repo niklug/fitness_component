@@ -107,20 +107,7 @@ class FitnessViewNutrition_diary extends JView
 
 		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_NUTRITION_DIARY'), 'nutrition_diary.png');
 
-		// If not checked out, can save the item.
-		if (!$checkedOut && ($canDo->get('core.edit')||($canDo->get('core.create'))))
-		{
-
-			JToolBarHelper::apply('nutrition_diary.apply', 'JTOOLBAR_APPLY');
-			JToolBarHelper::save('nutrition_diary.save', 'JTOOLBAR_SAVE');
-		}
-		if (!$checkedOut && ($canDo->get('core.create'))){
-			JToolBarHelper::custom('nutrition_diary.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-		}
-		// If an existing item, can save to a copy.
-		if (!$isNew && $canDo->get('core.create')) {
-			JToolBarHelper::custom('nutrition_diary.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-		}
+		
 		if (empty($this->item->id)) {
 			JToolBarHelper::cancel('nutrition_diary.cancel', 'JTOOLBAR_CANCEL');
 		}

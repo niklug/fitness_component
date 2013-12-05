@@ -201,11 +201,16 @@
 #jform_active_start, #jform_active_finish,
 #filter_from_submit_date, #filter_to_submit_date, #filter_from_entry_date, #filter_to_entry_date,
 #primary_goal_start_date, #primary_goal_deadline
+
 {
     width: 70px;
 }
 
 
+#filter_from_score, #filter_to_score
+{
+    width: 30px;
+}
 
 
 

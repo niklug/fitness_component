@@ -68,6 +68,19 @@ $helper = new FitnessHelper();
 		</div>
             
             
+                <div class='filter-select fltrt'>
+			<?php
+			$selected_from_score = JRequest::getVar('filter_from_score');
+			$selected_to_score = JRequest::getVar('filter_to_score');
+                        ?>
+                        <label class="filter-search-lbl" for="filter_from_score"><?php echo JText::_('Score From (%):'); ?></label>
+                        <input maxlength="3" type="text" id="filter_from_score" name="filter_from_score" value="<?php echo $selected_from_score?>" onchange="this.form.submit();"/>
+
+                        <label class="filter-search-lbl" for="filter_from_active_start"><?php echo JText::_('Score To (%):'); ?></label>
+                        <input maxlength="3"  type="text" id="filter_to_score" name="filter_to_score" value="<?php echo $selected_to_score?>" onchange="this.form.submit();"/>
+		</div>
+            
+            
 
 	</fieldset>
     	         
@@ -76,7 +89,7 @@ $helper = new FitnessHelper();
         
         <div class='filter-select fltrt'>
             <select name="filter_published" class="inputbox" onchange="this.form.submit()">
-                <option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED'); ?></option>
+                <option value="">-Published-</option>
                 <?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true); ?>
             </select>
         </div>
@@ -85,9 +98,11 @@ $helper = new FitnessHelper();
         
         <?php
         
-        $status[] = JHTML::_('select.option', '1', 'Pending' );
-        $status[] = JHTML::_('select.option', '2', 'Complete' );
-        $status[] = JHTML::_('select.option', '3', 'Incomplete' );
+        $status[] = JHTML::_('select.option', '1', 'IN PROGRESS' );
+        $status[] = JHTML::_('select.option', '2', 'PASS' );
+        $status[] = JHTML::_('select.option', '3', 'FAIL' );
+        $status[] = JHTML::_('select.option', '4', 'DISTINCTION' );
+        $status[] = JHTML::_('select.option', '5', 'SUBMITTED' );
 
         ?>
 
@@ -139,12 +154,13 @@ $helper = new FitnessHelper();
         <?php
         $db = JFactory::getDbo();
 
-        $sql = "SELECT d.assessed_by AS value, u.name AS text FROM #__fitness_nutrition_diary  AS d LEFT JOIN #__users AS u ON d.assessed_by=u.id";
+        $sql = "SELECT DISTINCT d.assessed_by AS value, u.name AS text FROM #__fitness_nutrition_diary  AS d LEFT JOIN #__users AS u ON d.assessed_by=u.id WHERE d.assessed_by !='0'";
         $db->setQuery($sql);
         if(!$db->query()) {
             JError::raiseError($db->getErrorMsg());
         }
         $assessed_by = $db->loadObjectList();
+
         ?>
         
         <div class='filter-select fltrt'>
