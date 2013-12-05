@@ -28,20 +28,20 @@
         
         // on add meal click
         if(this.options.read_only == false) {
-            $("#add_plan_meal").on('click', function() {
+            $("#add_plan_meal").die().live('click', function() {
                 var meal_html = self.generateHtml(self.options.meal_obj);
                 self.options.main_wrapper.append(meal_html);
                 self.attachDateTimeListener();
             })
 
             // on Level of activity  choose
-            $(this.options.activity_level).on('click', function() {
+            $(this.options.activity_level).die().live('click', function() {
                 self.options.add_meal_button.show();
             })
 
 
             // on save meal click
-            $(".save_plan_meal").live('click', function() {
+            $(".save_plan_meal").die().live('click', function() {
                 var closest_table = $(this).closest("table");
                 var data =  self.validateFields(closest_table);
                 
@@ -67,7 +67,7 @@
             })
 
             // on delete meal click
-            $(".delete_plan_meal").live('click', function() {
+            $(".delete_plan_meal").die().live('click', function() {
                 var closest_table = $(this).closest("table");
                 var id = closest_table.attr('data-id');
                 self.deletePlanMeal(id, function(output) {
@@ -104,9 +104,14 @@
             self.options.main_wrapper.html(html);
 
             self.attachDateTimeListener();
+            
+            // clear previous interval
+            if(typeof window.meals_interval !== 'undefined') {
+                clearInterval(window.meals_interval);
+            }
 
             // calculate totals on load
-            setInterval(function() {
+            window.meals_interval = setInterval(function() {
                 self.CalculateTotalsWithDelay(meal_ids);
             }, 2000);
         });
@@ -349,7 +354,7 @@
         }
 
         if(!date) {
-            $(".meal_date").addClass("red_style_border");
+            closest_table.find(".meal_date").addClass("red_style_border");
             //error_wrapper.html('Date is empty!');
             result = false;               
         }
@@ -357,32 +362,32 @@
 
         if(!this.validateTime(time)) {
             
-            $(".meal_time").addClass("red_style_border");
+            closest_table.find(".meal_time").addClass("red_style_border");
             //error_wrapper.html('Wrong Meal Time!');
             result = false;
         }
 
 
         if(!water) {
-            $(".water").addClass("red_style_border");
+            closest_table.find(".water").addClass("red_style_border");
             //error_wrapper.html('Water Value Empty!');
             result = false;
         }
 
         if(!this.validateFloat(water)) {
-            $(".water").addClass("red_style_border");
+            closest_table.find(".water").addClass("red_style_border");
             //error_wrapper.html('Wrong Water Value!');
             result = false;
         }
         
         if(!previous_water) {
-            $(".previous_water").addClass("red_style_border");
+             closest_table.find(".previous_water").addClass("red_style_border");
             //error_wrapper.html('Previous Water Value Empty!');
             result = false;
         }
 
         if(!this.validateFloat(previous_water)) {
-            $(".previous_water").addClass("red_style_border");
+            closest_table.find(".previous_water").addClass("red_style_border");
             //error_wrapper.html('Wrong Previous Water Value!');
             result = false;
         }

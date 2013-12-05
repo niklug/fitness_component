@@ -81,19 +81,8 @@ class FitnessViewNutrition_diaries extends JView
 
         //Check if the form exists before showing the add/edit buttons
         $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/nutrition_diary';
-        if (file_exists($formPath)) {
 
-            if ($canDo->get('core.create')) {
-			    JToolBarHelper::addNew('nutrition_diary.add','JTOOLBAR_NEW');
-		    }
-
-		    if ($canDo->get('core.edit') && isset($this->items[0])) {
-			    JToolBarHelper::editList('nutrition_diary.edit','JTOOLBAR_EDIT');
-		    }
-
-        }
-
-		if ($canDo->get('core.edit.state')) {
+        if ($canDo->get('core.edit.state')) {
 
             if (isset($this->items[0]->state)) {
 			    JToolBarHelper::divider();

@@ -80,7 +80,10 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
                                     <?php echo $this->form->getLabel('entry_date'); ?> 
                                 </td>
                                 <td>
-                                    <?php echo $this->item->entry_date; ?>
+                                    <?php
+                                    $date = JFactory::getDate($this->item->entry_date);
+                                    echo  $date->toFormat('%A, %d %b %Y');
+                                    ?>
                                 </td>
                                 
                             </tr>
@@ -89,7 +92,10 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
                                     <?php echo $this->form->getLabel('created'); ?> 
                                 </td>
                                 <td>
-                                    <?php echo $this->item->created; ?>
+                                    <?php
+                                    $date = JFactory::getDate($this->item->created);
+                                    echo  $date->toFormat('%A, %d %b %Y') . ' @ ' . $date->format('H:i');
+                                    ?>
                                 </td>
                                 
                             </tr>
@@ -100,7 +106,8 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
                                 <td>
                                     <?php 
                                     if($this->item->submit_date != '0000-00-00 00:00:00') {
-                                        echo $this->item->submit_date;
+                                        $date = JFactory::getDate($this->item->submit_date);
+                                        echo  $date->toFormat('%A, %d %b %Y') . ' @ ' . $date->format('H:i');
                                     } else {
                                         echo 'Not Submitted';
                                     }

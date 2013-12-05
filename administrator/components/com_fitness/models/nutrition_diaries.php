@@ -106,7 +106,7 @@ class FitnessModelnutrition_diaries extends JModelList {
         $this->setState('params', $params);
 
         // List state information.
-        parent::populateState('a.client_id', 'asc');
+        parent::populateState('a.entry_date', 'DESC');
     }
 
     /**

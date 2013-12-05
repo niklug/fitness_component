@@ -1037,6 +1037,8 @@ defined('_JEXEC') or die;
 
                 this.nutrition_meal.run();
                 
+                window.nutrition_meal = this.nutrition_meal;
+                
                 
                 this.calculateSummary.run();
 
@@ -1184,6 +1186,10 @@ defined('_JEXEC') or die;
         window.app.controller = new window.app.Controller(); 
 
         Backbone.history.start();  
+        
+        window.fuckAlert = function() {
+            alert('fuck');
+        }
         
         
     })($js);

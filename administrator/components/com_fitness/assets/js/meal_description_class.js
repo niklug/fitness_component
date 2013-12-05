@@ -91,8 +91,14 @@
    
         
         if(this.ingredient_model() == 'recipe_database') {
+            
+            // clear previous interval
+            if(typeof window.calculate_totals_interval !== 'undefined') {
+                clearInterval(window.calculate_totals_interval);
+            }
+            
             // calculate totals on load
-            setInterval(function() {
+            window.calculate_totals_interval = setInterval(function() {
                 self.CalculateTotalsWithDelay([self._meal_id]);
             }, 2000);
         }

@@ -42,6 +42,7 @@ defined('_JEXEC') or die;
         
         var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'base_url' : '<?php echo JURI::root();?>',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
             'user_id' : '<?php echo JFactory::getUser()->id;?>',
@@ -509,10 +510,14 @@ defined('_JEXEC') or die;
                 }
                 
                 var table = data.db_table;
- 
+
                 this.ajaxCall(data, url, view, task, table, function(output){
-         
-                    window.parent.location.reload();
+
+                    window.parent.nutrition_meal.run();
+                    
+                    var elem = window.parent.document.getElementById("recipes_list_wrapper");
+                    elem.parentNode.removeChild(elem);
+
                });
             }
  
