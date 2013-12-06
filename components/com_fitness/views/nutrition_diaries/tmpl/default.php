@@ -493,6 +493,7 @@ defined('_JEXEC') or die;
                 if(items) {
                     window.app.items_model.trash_item(items);
                 }
+                $("#select_trashed").prop("checked", false);
             },
                         
             close :function() {
@@ -534,7 +535,7 @@ defined('_JEXEC') or die;
                 if(items) {
                     window.app.items_model.delete_item(items);
                 }
-                //console.log(selected.join(","));
+                $("#select_trashed").prop("checked", false);
             },
             
             close :function() {

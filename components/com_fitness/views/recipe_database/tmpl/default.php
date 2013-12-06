@@ -1188,8 +1188,10 @@ defined('_JEXEC') or die;
                 
             },
             
-            onClickCancel : function() {
-                window.app.controller.navigate("!/recipe_database", true);
+            onClickCancel : function(event) {
+                var id = $(event.target).attr("data-recipe_id");
+                window.app.controller.navigate("!/my_favourites", true);
+                window.app.controller.navigate("!/nutrition_recipe/" + id, true);
             },
 
         });

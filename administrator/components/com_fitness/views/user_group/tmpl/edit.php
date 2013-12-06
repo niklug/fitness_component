@@ -149,6 +149,29 @@ $helper = new FitnessHelper();
         hideSelectOption(value, '#jform_other_trainers', all_options);
         
         
+        
+        $("#group_id").on('change', function() {
+            var group_id = $(this).val();
+            
+            var data = {};
+            var url = '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            var view = 'business_profile';
+            var task = 'checkUniqueGroup';
+            var table = '#__fitness_user_groups';
+            data.value = group_id;
+            data.column = 'group_id';
+            
+            $.AjaxCall(data, url, view, task, table, function(output) {
+                var group_exists = output;
+                if(group_exists) {
+                    alert('User Group already in use!');
+                    $("#group_id").val('');
+                }
+            });
+            
+        });
+        
+        
 
         function hideSelectOption(value, element, all_options) {
             
