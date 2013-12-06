@@ -18,14 +18,19 @@
                 ingredient_model = this.options.ingredient_model;
             }
             return ingredient_model;
-        }
+        };
+
     }
 
     ItemDescription.prototype.run = function() {
+        
         var item_description_html = this.generateHtml();
         //this.options.main_wrapper.append(item_description_html);
         this.setEventListeners();
+
         return item_description_html;
+        
+        
     }
 
     ItemDescription.prototype.setEventListeners = function() {
@@ -43,6 +48,72 @@
                 var recipesListHtml = self.recipesListHtml();
                 $("body").append(recipesListHtml);
             });
+            
+            $("#save_as_recipe"+ self._description_id).die().live('click', function() {
+                var meal_id = $(this).attr('data-meal_id');
+                
+                var data = {};
+                
+                data.meal_id = meal_id;
+                
+                data.description_id = self._description_id;
+                
+                data.type = self._type;
+                
+                self.getRecipeTypes(data);
+
+            });
+            
+            
+            $("#save_as_recipe_cancel_"+ self._description_id).die().live('click', function() {
+                $("#save_as_recipe_form_" + self._description_id).empty();
+            });
+            
+            $("#save_as_recipe_save_"+ self._description_id).die().live('click', function() {
+                $("#save_as_recipe_serves_" + self._description_id).removeClass("red_style_border");
+                $("#save_as_recipe_recipe_name_" + self._description_id).removeClass("red_style_border");
+                $("#save_as_recipe_recipe_type_" + self._description_id).removeClass("red_style_border");
+                
+                var meal_id = $(this).attr('data-meal_id');
+                var type = $(this).attr('data-type');
+                
+                
+                var recipe_name = $("#save_as_recipe_recipe_name_" + self._description_id).val();
+                
+                if(!recipe_name) {
+                    $("#save_as_recipe_recipe_name_" + self._description_id).addClass("red_style_border");
+                    return false;
+                }
+                
+                
+                var number_serves = parseInt($("#save_as_recipe_serves_" + self._description_id).val());
+
+                if(!number_serves) {
+                    $("#save_as_recipe_serves_" + self._description_id).addClass("red_style_border");
+                    return false;
+                }
+               
+                
+                var recipe_type = $("#save_as_recipe_recipe_type_" + self._description_id).val();
+                
+                if(!recipe_type) {
+                    $("#save_as_recipe_recipe_type_" + self._description_id).addClass("red_style_border");
+                    return false;
+                }
+                
+                var data = {};
+                
+                data.recipe_name = recipe_name;
+                data.number_serves = number_serves;
+                data.recipe_type = $("#save_as_recipe_recipe_type_" + self._description_id).find(':selected').map(function(){ return this.value }).get().join(",");
+                data.meal_id = meal_id;
+                data.type = type;
+                
+                self.save_as_recipe(data);
+                $("#save_as_recipe_form_" + self._description_id).empty();
+            });
+            
+            
 
             $("#close_recipe_list").die().live('click', function() {
                 $("#recipes_list_wrapper").remove();
@@ -132,9 +203,21 @@
             html += '<td><input  type="button" id="add_item' + this._description_id + '" value="Add New Item">';
 
             if(this.ingredient_model() != 'recipe_database') {
-                html += '<input  type="button" id="add_recipe' + this._description_id + '" value="My Favourites"></td>';
+                html += '<input  type="button" id="add_recipe' + this._description_id + '" value="My Favourites">';
+                html += '<input data-meal_id="' + this._meal_id  + '"  type="button" id="save_as_recipe' + this._description_id + '" value="Save As Recipe"></td>'; 
+                html += '</tr>';
+                
+                
+                html += '<tr>';
+                html += '<td colspan="11">';
+                html += '<div class="clr"></div>';
+                html += '<div id="save_as_recipe_form_' + this._description_id + '"></div>';
+                html += '<div class="clr"></div>';
+                html += '</td>';
+                html += '</tr>';
             }
         }
+        
         html += '</tr>';
         html += '</tfoot>';
         html += '</table>';
@@ -671,8 +754,87 @@
     }
     
     
+    ItemDescription.prototype.save_as_recipe = function(data) {
+        var url = this.options.fitness_administration_url;
+        
+        var view = 'nutrition_diaries'
+        var task = 'saveAsRecipe';
+        var table = '#__fitness_nutrition_diary_ingredients';
+        
+        $.AjaxCall(data, url, view, task, table, function(output) {
+            console.log(output);
+        });
+    }
     
     
+    ItemDescription.prototype.load_save_as_recipe_form = function(o, recipe_types) {
+        var html = '';
+        html += '<table style="width:100%;border: 1px solid #FFFFFF !important;">';
+        html += '';
+        
+        html += '<td>';
+        html += 'RECIPE NAME';
+        html += '</td>';
+        html += '<td>';
+        html += '<input maxlength="100" style="width:250px;" type="text" id="save_as_recipe_recipe_name_' + o.description_id + '"/>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += '# OF SERVES';
+        html += '</td>';
+        html += '<td>';
+        html += '<input maxlength="3" style="width:20px;" type="text" id="save_as_recipe_serves_' + o.description_id + '"/>';
+        html += '</td>';
+        
+        html += '<td>';
+        html += 'RECIPE TYPE';
+        html += '</td>';
+        html += '<td>';
+
+        html += '<select class="dark_input_style" multiple size="5" id="save_as_recipe_recipe_type_' + o.description_id + '"  style="width:200px;">';
+            recipe_types.each(function(item){
+                html += '<option value="' +  item.id + '">' + item.name + '</option>';
+            });
+        html += '</select>';
+        
+        
+        html += '</td>'
+
+        html += '<td>';
+        html += '<a style="cursor: pointer;float:right;" id="save_as_recipe_cancel_' + o.description_id + '" onclick="javascript:void(0)">[CANCEL]</a>';
+        html += '</td>';
+        html += '<td>';
+        html += '<a data-meal_id="' + o.meal_id + '" data-type="' + o.type + '" style="cursor: pointer;float:right;margin-left:10px;" id="save_as_recipe_save_' + o.description_id + '" onclick="javascript:void(0)">[SAVE]</a>';
+        html += '</td>'
+        
+        html += '</tr>';
+        html += '</table>';
+        html += '<br/>';
+        html += '<div class="clr"></div>';
+        
+        return html;
+    }
+    
+    
+    
+    ItemDescription.prototype.getRecipeTypes = function(o) {
+
+        var data = {};
+        var url = this.options.fitness_administration_url;
+        var view = 'recipe_database';
+        var task = 'getRecipeTypes';
+        var table = '#__fitness_recipe_types';
+
+        var self = this;
+        var obj = o;
+        $.AjaxCall(data, url, view, task, table, function(output) {
+            
+            var form_html = self.load_save_as_recipe_form(obj, output);
+                
+            $("#save_as_recipe_form_" + obj.description_id).html(form_html);
+        });
+
+    }
     
     
     // Add the  function to the top level of the jQuery object

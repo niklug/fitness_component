@@ -191,7 +191,9 @@ class FitnessFactory {
         $group_id = self::customQuery($query, 0);
         
         if (!$group_id) {
-            JError::raiseWarning( 100, 'User Group not found!' );
+            $message = 'User Group not found!';
+            throw new Exception($message);
+            JError::raiseWarning( 100,  $message);
         }
         return $group_id;
     }
@@ -974,6 +976,13 @@ class FitnessHelper extends FitnessFactory
         $recipe_meals = self::customQuery($query, 1);
 
         return $recipe_meals;      
+    }
+    
+    public function getDiaryIngredients($meal_id, $type) {
+
+        $query = "SELECT * FROM #__fitness_nutrition_diary_ingredients WHERE meal_id='$meal_id' AND type='$type'";
+
+        return  self::customQuery($query, 1);
     }
     
     public function getClient($client_id) {

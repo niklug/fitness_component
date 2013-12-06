@@ -443,4 +443,77 @@ class FitnessModelNutrition_diaries extends JModelList {
         
         return $result;
     }
+    
+    
+     public function saveAsRecipe($table, $data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = $this->helper;
+        
+        $data = json_decode($data_encoded);
+
+        $meal_id = $data->meal_id;
+        $type = $data->type;
+        
+        $user = &JFactory::getUser();
+
+
+        // save recipe 
+        $created = FitnessHelper::getTimeCreated();
+            
+        $recipe->id = null;
+        $recipe->status = '1';
+        $recipe->created_by = $user->id;
+        $recipe->created = $created;
+        $recipe->assessed_by = null;
+        
+ 
+        $recipe->recipe_name = $data->recipe_name;
+        $recipe->recipe_type = $data->recipe_type;
+        $recipe->number_serves = $data->number_serves;
+   
+        
+        try {
+            $new_recipe_id = $helper->insertUpdateObj($recipe, '#__fitness_nutrition_recipes');
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+        
+        
+        
+
+        
+        // get recipe meals
+        try {
+            $recipe_meals = $helper->getDiaryIngredients($meal_id, $type);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+  
+
+        // save recipe meals
+
+        foreach ($recipe_meals as $meal) {
+            try {
+                unset($meal->nutrition_plan_id);
+                unset($meal->meal_id);
+                unset($meal->type);
+                $meal->id = null;
+                $meal->recipe_id = $new_recipe_id;
+                $inserted_id = $helper->insertUpdateObj($meal, '#__fitness_nutrition_recipes_meals');
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
+        }
+        
+        $result = array( 'status' => $status, 'data' => $recipe);
+        
+        return $result;
+    }
 }

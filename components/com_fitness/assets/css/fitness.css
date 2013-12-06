@@ -589,7 +589,7 @@ td.center, th.center, .center {
 }
 
 .fitness_wrapper .red_style_border {
-    border: 2px solid #FF0000;
+    border: 2px solid #FF0000 !important;
 }
 
 .fitness_wrapper .yellow_style_total {
