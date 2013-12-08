@@ -49,6 +49,9 @@ class FitnessEmail extends FitnessHelper
                     case 'RecipeComment':
                         return new CommentRecipeEmail();
                     break;
+                    case 'DiaryComment':
+                        return new CommentDiaryEmail();
+                    break;
                     default:
                         return;
                     break;
@@ -489,6 +492,10 @@ class NutritionDiaryEmail extends FitnessEmail {
                 $subject = 'Nutrition Diary Results';
                 $layout = 'email_diary_submitted';
                 break;
+            case 'DiaryDistinction':
+                $subject = 'Nutrition Diary Results';
+                $layout = 'email_diary_distinction';
+                break;
  
             default:
                 break;
@@ -699,3 +706,96 @@ class CommentRecipeEmail extends FitnessEmail {
     }
     
 }
+
+
+
+class CommentDiaryEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: no comment id');
+        }
+
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        $layout = 'email_diary_comment';
+
+        $diary = $this->getDiary($this->data->item_id);
+
+        $this->item = $diary;
+ 
+
+        $this->item_user_id = $this->item->client_id;
+
+        $status = $this->item->status;
+
+        //
+        if($status == self::INPROGRESS_DIARY_STATUS OR $status == '0') {
+           
+            if(self::is_client($this->data->created_by)) {
+                return;
+            }
+            
+            if(self::is_trainer($this->data->created_by))  {
+                $send_to = 'client'; 
+            }
+        }
+        
+        //
+        if($status == self::SUBMITTED_DIARY_STATUS) {
+            
+            if(self::is_client($this->data->created_by)) {
+                return;
+            }
+            
+            if(self::is_trainer($this->data->created_by))  {
+                return;
+            }
+            
+        }
+        
+        //
+        if($status == self::PASS_DIARY_STATUS OR $status == self::FAIL_DIARY_STATUS OR $status == self::DISTINCTION_DIARY_STATUS) {
+            
+            if(self::is_client($this->data->created_by)) {
+                $send_to = 'all_trainers';
+            }
+            
+            if(self::is_trainer($this->data->created_by))  {
+                $send_to = 'client'; 
+            }
+        }
+
+        $this->send_to = $send_to;
+
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&diary_id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+        
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        $ids = array();
+        //client makes a comment
+        if($this->send_to == 'all_trainers') {
+            
+            $trainers_data = $this->getClientTrainers($this->item_user_id,  'all');
+            
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+        // trainer  makes a comment
+        if($this->send_to == 'client') {
+           //add client
+            $ids[] = $this->item_user_id;
+        }
+
+        $this->recipients_ids = $ids;
+    }
+    
+}
+
+

@@ -48,7 +48,7 @@
         </style>
     </head>
     <body>
-<?php
+        <?php
         require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email_templates_data.php';
 
         $diary_id = &JRequest::getVar('diary_id');
@@ -115,13 +115,14 @@
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <?php echo $data->entry_date; ?><br />
                                                                     <?php echo $data->submit_date; ?> <br />
-                                                                    
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFA600; text-align:center;">
-                                                                    <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#FFA600;">CLICK HERE TO OPEN</a>
+                                                                    <?php if($data->status != FitnessHelper::SUBMITTED_DIARY_STATUS) { ?>
+                                                                        <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#FFA600;">CLICK HERE TO OPEN</a>
+                                                                    <?php } ?>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -154,7 +155,13 @@
                                         </td>
                                     </tr>
                                 </table>
-       
+                                <!--End Of Content [row number #3]-->
+                                <!--Start Of two Content Container [row number #4]-->
+
+                                <!--End Of Two Column Container [row number #4]-->
+                                <!--Start Of Content [row number #5]-->
+                                <!--End Of Content [row number #5]-->
+                                <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>

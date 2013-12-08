@@ -13,25 +13,25 @@
                 text-decoration:none;
             }
             .lightContainer a, .lightContainer a:visited{
-                color:#482104;
+                color:#FFF;
             }
             .lightContainer a:hover {
-                color:#0e0601 !important;
+                color:#000066 !important;
             }
             .darkContainer a, .darkContainer a:visited {
-                color:#790010;
+                color:#FFF;
             }
             .darkContainer a:hover {
-                color:#790010 !important;
+                color:#00C !important;
             }
             .readMore a:hover {
-                background-color:#410009 !important;
-                color: #790010 !important;
+                background-color:#191919 !important;
+                color: #00C !important;
             }
             body {
                 margin:0;
                 background-color:#dddddd;
-                color:#790010;
+                color:#000066;
                 font-family:Arial, Helvetica, sans-serif;
                 font-size:12px;
                 -webkit-text-size-adjust: none;
@@ -48,7 +48,7 @@
         </style>
     </head>
     <body>
-        <?php
+                <?php
         require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email_templates_data.php';
 
         $diary_id = &JRequest::getVar('diary_id');
@@ -79,7 +79,7 @@
                                 <!--Start Of Company Name And Slogan [row number #1]-->
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#78000D" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
+                                        <td bgcolor="#000066" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
                                             <img alt="Elite Fitness Training" height="78" src="<?php echo $data->header_image  ?>" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
@@ -99,30 +99,30 @@
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">OH NO - YOUR ENTRY FAILED!</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">YOU HAVE ACHIEVED A DISTINCTION!</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->client_name;?>,</p>
-                                                                    <p>You did not achieve a satisfactory score for this diary entry! You can now log-in to view your results and trainer feedback.</p>
-                                                                    <p>You should discuss with your trainer what you can do to further improve your nutrition. This is a vital part of achieving your envisioned results!</p>
+                                                                    <p>You have achieved a distinction for this diary entry... WELL DONE!</p>
+                                                                    <p>You should discuss with your trainer how you can continue to maintain these high nutritional standards. This is a vital part of achieving your envisioned results!</p>
                                                                     <p>Please take a few moments to review your diary entry, take into account your trainers comments and action any requests or instructions.</p></td>
                                                             </tr>
                                                             <tr>
                                                                 <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">ENTRY DATE: <br />
                                                                     SUBMITTED: <br />
-                                                                    ASSESSED BY: </td>
+                                                                    ASSESSED BY: <br /></td>
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <?php echo $data->entry_date; ?><br />
                                                                     <?php echo $data->submit_date; ?> <br />
-                                                                    <?php echo $data->trainer_name; ?><br /></td>
+                                                                    <?php echo $data->assessed_by_name; ?><br /></td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFF; text-align:center;">
+                                                                <td class="readMore" width="160" height="22" bgcolor="#1B1B1B" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; text-align:center;">
                                                                     <?php if($data->status != FitnessHelper::SUBMITTED_DIARY_STATUS) { ?>
                                                                         <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#FFA600;">CLICK HERE TO OPEN</a>
                                                                     <?php } ?>
@@ -144,22 +144,24 @@
                                 <!--Start Of Content [row number #3]-->
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#78000D" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">What should you do now?</h2>
+                                        <td bgcolor="#000066" style="padding:20px;">
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">What makes a good nutrition diary entry?</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
                                                         <img alt="image" height="100" src="<?php echo $data->path ?>/nutrition.png" width="100" border="0" vspace="0" hspace="0" /></td>
                                                     <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                        <p>Stay focused! Talk to your trainer about ways to improve your nutrition mindset and subsequently change your lifestyle towards making smarter choices.</p>
-                                                        <p>A big part of staying on track with your nutrition is being prepared! You need to plan for the week ahead, or at least the next few days. This will help ensure you are ready for your busy week, preparation really is the key to success!</p></td>
+                                                        <p>First of all, does your entry fit with your macronutrients? Remember that you are trying to hit very specific daily targets 
+                                                            of protein, fats and carbohydrates!
+                                                            <p>Are the macronutrients that make up your entry from a quality source? For example, the protein you get from a McDonalds 'Big Mac'   is not the same as getting protein from organic grass fed lean beef!</p></td>
                                                 </tr>
 
                                             </table>
                                         </td>
                                     </tr>
                                 </table>
-
+                                <!--End Of Content [row number #3]-->
+                                <!--Start Of Footer [row number #6]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>

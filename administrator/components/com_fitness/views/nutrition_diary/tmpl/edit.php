@@ -500,7 +500,9 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_nutrition_diary_meal_comments',
-            'read_only' : false
+            'read_only' : false,
+            'anable_comment_email' : true,
+            'comment_method' : 'DiaryComment'
         }
         
         var nutrition_bottom_comment_options = {
@@ -508,7 +510,9 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
             'db_table' : '#__fitness_nutrition_diary_comments',
-            'read_only' : false
+            'read_only' : false,
+            'anable_comment_email' : true,
+            'comment_method' : 'DiaryComment'
         }
         
         var calculate_summary_options = {
@@ -528,9 +532,9 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place_',
             'statuses' : {
-                '2' : {'label' : 'PASS', 'class' : 'status_pass', 'email_alias' : 'DiaryPass'},
-                '3' : {'label' : 'FAIL', 'class' : 'status_fail', 'email_alias' : 'DiaryFail'}, 
-                '4' : {'label' : 'DISTINCTION', 'class' : 'status_distinction', 'email_alias' : ''}
+                '<?php echo FitnessHelper::PASS_DIARY_STATUS ?>' : {'label' : 'PASS', 'class' : 'status_pass', 'email_alias' : 'DiaryPass'},
+                '<?php echo FitnessHelper::FAIL_DIARY_STATUS ?>' : {'label' : 'FAIL', 'class' : 'status_fail', 'email_alias' : 'DiaryFail'}, 
+                '<?php echo FitnessHelper::DISTINCTION_DIARY_STATUS ?>' : {'label' : 'DISTINCTION', 'class' : 'status_distinction', 'email_alias' : 'DiaryDistinction'}
             },
             'statuses2' : {},
             'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',

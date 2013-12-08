@@ -273,6 +273,17 @@ class FitnessHelper extends FitnessFactory
     const ASSESSING_GOAL_STATUS = '6';
 
     const ADMINISTRATOR_USERGROUP = 'Super Users';
+    
+    
+    
+    //Diary
+    const INPROGRESS_DIARY_STATUS = '1';
+    const PASS_DIARY_STATUS = '2';
+    const FAIL_DIARY_STATUS = '3';
+    const DISTINCTION_DIARY_STATUS = '4';
+    const SUBMITTED_DIARY_STATUS = '5';
+    //
+    
     /**
      * Configure the Linkbar.
      */

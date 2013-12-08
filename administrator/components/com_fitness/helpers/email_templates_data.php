@@ -273,6 +273,7 @@ class DiaryEmailTemplateData extends EmailTemplateData  {
     public function __construct($params) {
         $this->id = $params['id'];
         $this->layout = $params['layout'];
+        $this->comment_id = $params['comment_id'];
 
     }
     
@@ -292,8 +293,8 @@ class DiaryEmailTemplateData extends EmailTemplateData  {
         
         $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
 
-        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&diary_id=' .  $this->id;
-        $data->open_link = JUri::root() . 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' . $this->id;
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&diary_id=' .  $this->id . '&comment_id=' . $this->comment_id;
+        $data->open_link = JUri::root() . 'index.php/contact/nutrition-diary#!/item_view/' . $this->id . '&comment_id=' . $this->comment_id;
         
         $data->header_image  = JUri::root() . $data->business_profile->header_image;
         
@@ -302,6 +303,9 @@ class DiaryEmailTemplateData extends EmailTemplateData  {
 
         $user = &JFactory::getUser($this->item->trainer_id);
         $data->trainer_name =  $user->name;
+        
+        $user = &JFactory::getUser($this->item->assessed_by);
+        $data->assessed_by_name =  $user->name;
         
         $date = JFactory::getDate($this->item ->entry_date);
         $data->entry_date =  $date->toFormat('%A, %d %b %Y');
@@ -318,6 +322,19 @@ class DiaryEmailTemplateData extends EmailTemplateData  {
         }
         
         $data->submit_date = $data->submit_date . ' ' . $data->submit_time;
+        
+        //comments
+        if($this->comment_id) {
+            $comment = $this->getCommentData($this->comment_id, '#__fitness_nutrition_diary_comments');
+            
+            $date = JFactory::getDate($comment->created);
+        
+            $data->comment->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
+
+            $data->comment->created_by = JFactory::getUser($comment->created_by)->name;
+            
+            $data->comment->comment_text = $comment->comment;
+        }
         
         return $data;
     }

@@ -98,11 +98,11 @@ $helper = new FitnessHelper();
         
         <?php
         
-        $status[] = JHTML::_('select.option', '1', 'IN PROGRESS' );
-        $status[] = JHTML::_('select.option', '2', 'PASS' );
-        $status[] = JHTML::_('select.option', '3', 'FAIL' );
-        $status[] = JHTML::_('select.option', '4', 'DISTINCTION' );
-        $status[] = JHTML::_('select.option', '5', 'SUBMITTED' );
+        $status[] = JHTML::_('select.option', FitnessHelper::INPROGRESS_DIARY_STATUS, 'IN PROGRESS' );
+        $status[] = JHTML::_('select.option', FitnessHelper::PASS_DIARY_STATUS, 'PASS' );
+        $status[] = JHTML::_('select.option', FitnessHelper::FAIL_DIARY_STATUS, 'FAIL' );
+        $status[] = JHTML::_('select.option', FitnessHelper::DISTINCTION_DIARY_STATUS, 'DISTINCTION' );
+        $status[] = JHTML::_('select.option', FitnessHelper::SUBMITTED_DIARY_STATUS, 'SUBMITTED' );
 
         ?>
 
@@ -390,9 +390,9 @@ $helper = new FitnessHelper();
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place_',
             'statuses' : {
-                '2' : {'label' : 'PASS', 'class' : 'status_pass', 'email_alias' : 'DiaryPass'},
-                '3' : {'label' : 'FAIL', 'class' : 'status_fail', 'email_alias' : 'DiaryFail'}, 
-                '4' : {'label' : 'DISTINCTION', 'class' : 'status_distinction', 'email_alias' : ''}
+                '<?php echo FitnessHelper::PASS_DIARY_STATUS ?>' : {'label' : 'PASS', 'class' : 'status_pass', 'email_alias' : 'DiaryPass'},
+                '<?php echo FitnessHelper::FAIL_DIARY_STATUS ?>' : {'label' : 'FAIL', 'class' : 'status_fail', 'email_alias' : 'DiaryFail'}, 
+                '<?php echo FitnessHelper::DISTINCTION_DIARY_STATUS ?>' : {'label' : 'DISTINCTION', 'class' : 'status_distinction', 'email_alias' : 'DiaryDistinction'}
             },
             'statuses2' : {},
             'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',

@@ -996,7 +996,9 @@ defined('_JEXEC') or die;
                     'fitness_administration_url' : this.model.attributes.fitness_administration_url,
                     'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : '#__fitness_nutrition_diary_meal_comments',
-                    'read_only' : scored
+                    'read_only' : scored,
+                    'anable_comment_email' : true,
+                    'comment_method' : 'DiaryComment'
                 }
                 
                 var nutrition_bottom_comment_options = {
@@ -1004,7 +1006,9 @@ defined('_JEXEC') or die;
                     'fitness_administration_url' : this.model.attributes.fitness_administration_url,
                     'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : '#__fitness_nutrition_diary_comments',
-                    'read_only' : scored
+                    'read_only' : scored,
+                    'anable_comment_email' : true,
+                    'comment_method' : 'DiaryComment'
                 }
                 
                 var calculate_summary_options = {
