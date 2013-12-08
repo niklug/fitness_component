@@ -156,6 +156,12 @@
         if(method && send_email) {
             this.sendEmail(item_id, method);
         }
+        
+        var send_email_batch_process = this.options.send_email_batch_process;
+
+        if(method && send_email_batch_process && send_email_batch_process) {
+            this.sendEmail(item_id, method);
+        }
      
     }
     

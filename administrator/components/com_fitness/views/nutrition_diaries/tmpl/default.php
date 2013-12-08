@@ -379,43 +379,55 @@ $helper = new FitnessHelper();
         
         
         
-        var batch_status_options = {
+        var status_options = {
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'db_table' : '#__fitness_nutrition_diary',
-            
             'status_button' : 'status_button',
             'status_button_dialog' : 'status_button_dialog',
             'dialog_status_wrapper' : 'dialog_status_wrapper',
             'dialog_status_template' : '#dialog_status_template',
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place_',
-            
-            
-            'target_element' : '#batch_process_wrapper',
-            'title' : 'Choose status to apply to selected nutrition diary entries',
-            'email_checkbox_title' : 'Send notification email to all clients',
             'statuses' : {
-                '2' : {'label' : 'PASS', 'class' : 'status_pass',  'email_alias' : 'DiaryPass'},
-                '3' : {'label' : 'FAIL', 'class' : 'status_fail',  'email_alias' : 'DiaryFail'}, 
-                '4' : {'label' : 'DISTINCTION', 'class' : 'status_distinction'}
+                '2' : {'label' : 'PASS', 'class' : 'status_pass', 'email_alias' : 'DiaryPass'},
+                '3' : {'label' : 'FAIL', 'class' : 'status_fail', 'email_alias' : 'DiaryFail'}, 
+                '4' : {'label' : 'DISTINCTION', 'class' : 'status_distinction', 'email_alias' : ''}
             },
+            'statuses2' : {},
+            'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
+            'hide_image_class' : 'hideimage',
+            'show_send_email' : true,
             
             setStatuses : function(item_id) {
                 return this.statuses;
             },
-                    
             'set_updater' : true,
             'view' : 'NutritionDiary',
             'user_id' : '<?php echo JFactory::getUser()->id;?>',
-            'set_score' : true
+            'set_score' : true,
+            
+            'batch_anabled' : true,
+            'target_element' : '#batch_process_wrapper',
+            'title' : 'Choose status to apply to selected nutrition diary entries',
+            'email_checkbox_title' : 'Send notification email to all clients',
         }
 
 
 
-        var batch_status = $.batch_status(batch_status_options);
+        var batch_status = $.batch_status(status_options);
         
         batch_status.run();
+        
+        
+        
+        // status
+        var score_status = $.status(status_options);
+        score_status.run();
+        
+        
+        
+        
         
 
     })($js);

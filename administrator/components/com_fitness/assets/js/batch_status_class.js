@@ -48,7 +48,7 @@
         
         html += '<div class="clr"></div>';
         
-        html += '<input type="checkbox" id="send_diary_email" />';
+        html += '<input type="checkbox" id="send_email_batch_process" />';
         
         html += '<div style="padding-top:4px;">' + this.options.email_checkbox_title + '</div>';
         
@@ -63,11 +63,20 @@
     BatchStatus.prototype.processing = function(ids, status) {
         this.status_class.options = this.options;
         
+        var send_email_batch_process = $("#send_email_batch_process").is(':checked');
+            
+        this.status_class.options.send_email_batch_process = send_email_batch_process;
+        
         var self = this;
         
         $.each(ids, function(item, value) {
             self.status_class.setStatus(value, status);
         });
+        
+        $("#send_email_batch_process").prop('checked', false);
+        $('input[type="checkbox"][name="cid\\[\\]"]:checked').prop('checked', false);
+        $('input[type="checkbox"][name="checkall-toggle"]:checked').prop('checked', false);
+        
     }
 
     
