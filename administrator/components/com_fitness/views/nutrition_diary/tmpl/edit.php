@@ -536,7 +536,8 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
             'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
             'hide_image_class' : 'hideimage',
             'show_send_email' : true,
-             setStatuses : function(item_id) {
+            
+            setStatuses : function(item_id) {
                 return this.statuses;
             },
             'set_updater' : true,
@@ -587,8 +588,4 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
 
     
 </script>
-<!--
-=IF(H69<200; IF(H69>0;100+ABS(H69)-((1+(100/200))*ABS(H69)); 100+H69); 0)
-
--->
 

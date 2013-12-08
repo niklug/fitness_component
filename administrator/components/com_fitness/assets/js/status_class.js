@@ -36,21 +36,28 @@
         $("." + this.options.status_button_dialog).die().live('click', function() {
             var item_id = $(this).attr('data-item_id');
             var status = $(this).attr('data-status_id');
-            var data = {
-                'status' : status,
-                'id' : item_id
-            };
-
-            self.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateStatus', self.options.db_table, function(output) {
-                self.emailLogic(item_id, status);
-                var status_button_html = self.statusButtonHtml(item_id, status);
-                $(self.options.status_button_place + '' + item_id).html(status_button_html);
-                self.closeDialog();
-                if((self.options.set_updater !== 'undefined') && (self.options.set_updater == true)) {
-                    self.setUpdaterId(item_id);
-                }
-            });
+            self.setStatus(item_id, status);
         })
+
+    }
+    
+    Status.prototype.setStatus= function(item_id, status) {
+        var data = {
+            'status' : status,
+            'id' : item_id
+        };
+        
+        var self = this;
+
+        this.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateStatus', self.options.db_table, function(output) {
+            self.emailLogic(item_id, status);
+            var status_button_html = self.statusButtonHtml(item_id, status);
+            $(self.options.status_button_place + '' + item_id).html(status_button_html);
+            self.closeDialog();
+            if((self.options.set_updater !== 'undefined') && (self.options.set_updater == true)) {
+                self.setUpdaterId(item_id);
+            }
+        });
 
     }
     

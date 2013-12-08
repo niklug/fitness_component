@@ -432,8 +432,8 @@
     text-align: center;
 }
 
-.fitness_wrapper .red_style_border {
-    border: 2px solid #FF0000;
+ .red_style_border {
+    border: 2px solid #FF0000 !important;
 }
 
 #quantity_wrapper {
