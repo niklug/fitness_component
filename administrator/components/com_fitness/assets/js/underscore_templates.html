@@ -861,7 +861,7 @@
         <div class="internal_wrapper">
             <table width="100%">
                 <tr>
-                    <td width="70%">
+                    <td width="50%">
                         <table width="100%">
                             <tr>
                                 <td>
@@ -869,7 +869,7 @@
                                 </td>
                                 <td>
 
-                                    <input class="dark_input_style" value="<%= recipe.recipe_name || '' %>" style="width:400px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
+                                    <input class="dark_input_style" value="<%= recipe.recipe_name || '' %>" style="width:300px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
                                 </td>
                             </tr>
                             <tr>
@@ -936,6 +936,9 @@
                     <td style="text-align: right;">
                         <div id="image_upload_content"></div>
                     </td>
+                    <td style="text-align: right;">
+                        <div id="video_upload_content"></div>
+                    </td>
                 </tr>
             </table>
             <br/>
@@ -966,24 +969,58 @@
     }
     //console.log(image)
     %>
-        <div class="form-left-col" style="text-align:center;">
-            <form name="image_form">
-                Select & Upload New Image 
-                <div class="clr"></div>
-                <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Image]</a>
-                <div class="clr"></div>
-                <input type="file" name="change_image" id="change_image" style=" cursor: pointer !important; direction: ltr;font-size: 20px;margin:-22px 0 0; opacity: 0;position: relative;display: inline; right: 0;top:0px; width: 200px;"> 
-                <div class="clr"></div>
-                Or drag image here
-            </form>
-            <img data-imagepath="<%= img_path + '/' + picture %>" style="margin: 5px; display: inline-block;  height: 180px; width: 200px;border:2px dashed #ccc" height="<%= preview_height%>"  width="<%= preview_width%>" id="preview_image" src="<%= image %>"/>
-            <br/>
-            <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
-            <a href="javascript:void(0)" class="clear_image">[Clear]</a>
-        </div>
+    <div class="form-left-col" style="text-align:center;">
+        <form name="image_form">
+            Select & Upload New Image 
+            <div class="clr"></div>
+            <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Image]</a>
+            <div class="clr"></div>
+            <input type="file" name="change_image" id="change_image" style=" cursor: pointer !important; direction: ltr;font-size: 20px;margin:-22px 0 0; opacity: 0;position: relative;display: inline; right: 0;top:0px; width: 200px;"> 
+            <div class="clr"></div>
+            Or drag image here
+        </form>
+        <img data-imagepath="<%= img_path + '/' + picture %>" style="margin: 5px; display: inline-block;  height: 180px; width: 200px;border:2px dashed #ccc" height="<%= preview_height%>"  width="<%= preview_width%>" id="preview_image" src="<%= image %>"/>
+        <br/>
+        <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+        <a href="javascript:void(0)" class="clear_image">[Clear]</a>
+    </div>
 
-    </script>
+</script>
     
+    
+    <script type="text/template" id="video_upload_template">
+    <%
+    var full_video_path = video_path + '/' + video;
+    var video_html = '';
+    
+    if(!video) {
+        var background_image = 'url(' + "'" + default_video_image  + "')" ;
+        full_video_path = default_video_image;
+    } else {
+        var background_image = 'none';
+        video_html = '<div style="margin-top:80px;">' + video + '</div>';
+    }
+    console.log(video)
+    %>
+    <div class="form-left-col" style="text-align:center;">
+        <form name="video_form">
+            Select & Upload New Video 
+            <div class="clr"></div>
+            <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Video]</a>
+            <div class="clr"></div>
+            <input type="file" name="change_video" id="change_video" style=" cursor: pointer !important; direction: ltr;font-size: 20px;margin:-22px 0 0; opacity: 0;position: relative;display: inline; right: 0;top:0px; width: 200px;"> 
+            <div class="clr"></div>
+            Or drag video here
+        </form>
+        
+        <div data-videopath="<%= full_video_path %>" style=" background-image: <%= background_image%>; background-repeat: no-repeat;background-position: -23px 10px;margin: 5px; display: inline-block; border:2px dashed #ccc;height:<%= preview_height%>;width:<%= preview_width%>;" id="preview_video"><%= video_html %></div>
+        <br/>
+        <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+        <a href="javascript:void(0)" class="clear_video">[Clear]</a>
+    </div>
+
+</script>
+
 
 <!--  view/open recipe template -->
 <script type="text/template" id="recipe_database_view_recipe_template">

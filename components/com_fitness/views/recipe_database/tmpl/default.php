@@ -52,8 +52,11 @@ defined('_JEXEC') or die;
             'recipe_comments_db_table' : '#__fitness_nutrition_recipes_comments',
             'recipes_favourites_db_table' : '#__fitness_nutrition_recipes_favourites',
             'default_image' : 'administrator/components/com_fitness/assets/images/no_image.png',
+            'default_video_image' : '/administrator/components/com_fitness/assets/images/no_video_image.png',
             'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Images' . DS  ?>',
+            'video_upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Videos' . DS  ?>',
             'img_path' : 'images/Recipe_Images',
+            'video_path' : 'images/Recipe_Videos',
             'add_diary_options' : add_diary_options
         };
         
@@ -452,6 +455,7 @@ defined('_JEXEC') or die;
                 }
                 data.number_serves = $("#number_serves").val();
                 data.image = $("#preview_image").attr('data-imagepath');
+                data.video = $("#preview_video").attr('data-videopath');
                 data.instructions = encodeURIComponent($("#instructions").html());
                 data.created_by = this.get('user_id');
    
@@ -1488,6 +1492,7 @@ defined('_JEXEC') or die;
                 this.$el.html(template);
 
                 this.connect_file_upload();
+                this.connect_video_upload();
                 if(data.recipe.id) {
                     this.connect_item_description();
                     this.connect_comments();
@@ -1519,6 +1524,34 @@ defined('_JEXEC') or die;
 
                 var image_upload = $.backbone_image_upload(image_upload_options); 
                 image_upload.render();
+            },
+            
+            connect_video_upload : function() {
+                
+                var videopath = '';
+                if(this.recipe) {
+                    videopath = this.recipe.video;
+                }
+                var filename = '';
+                if(typeof videopath !== 'undefined') {
+                    var fileNameIndex = videopath.lastIndexOf("/") + 1;
+                    filename = videopath.substr(fileNameIndex);
+                }
+                
+                var video_upload_options = {
+                    'url' : window.app.recipe_items_model.get('fitness_frontend_url') + '&view=recipe_database&task=uploadVideo&format=text',
+                    'video' : filename,
+                    'default_video_image' : window.app.recipe_items_model.get('default_video_image'),
+                    'upload_folder' : window.app.recipe_items_model.get('video_upload_folder'),
+                    'preview_height' : '180px',
+                    'preview_width' : '250px',
+                    'el' : $('#video_upload_content'),
+                    'video_path' : window.app.recipe_items_model.get('video_path'),
+
+                };
+
+                var video_upload = $.backbone_video_upload(video_upload_options); 
+                video_upload.render();
             },
             
             connect_item_description : function() {

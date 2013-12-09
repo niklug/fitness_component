@@ -283,15 +283,15 @@ class FitnessController extends JController {
 
         $fileType="";
 
-        if(strstr($_FILES['file']['type'],"jpeg")) $fileType="jpg";
+        if(strstr($_FILES['file']['type'],"jpg")) $fileType="jpg";
 
         if(strstr($_FILES['file']['type'],"png")) $fileType="png";
 
         if(strstr($_FILES['file']['type'],"gif")) $fileType="gif";
 
-        if(strstr($_FILES['file']['type'],"gif")) $fileType="bmp";
+        if(strstr($_FILES['file']['type'],"bmp")) $fileType="bmp";
 
-        if(strstr($_FILES['file']['type'],"gif")) $fileType="jpeg";
+        if(strstr($_FILES['file']['type'],"jpeg")) $fileType="jpeg";
 
 
         if (!$fileType) {
@@ -312,6 +312,79 @@ class FitnessController extends JController {
             header("HTTP/1.0 404 Not Found");
         }
     }
+    
+    
+    
+    function uploadVideo() {
+        $filename = $_FILES['file']['name'];
+
+        $upload_folder = $_GET['upload_folder'];
+
+        $task = $_POST['method'];
+
+
+        if($task == 'clear') {
+            $filename = $_POST['filename'];
+            unlink($upload_folder . $filename);
+            echo $filename;
+            return false;
+        }
+
+
+        if($_FILES['file']['size']/1024 > 10024) {
+            echo 'too big file'; 
+            header("HTTP/1.0 404 Not Found");
+            return false;
+        }
+
+        $fileType="";
+
+        if(strstr($_FILES['file']['type'],"flv")) $fileType="flv";
+
+        if(strstr($_FILES['file']['type'],"3gp")) $fileType="3gp";
+
+        if(strstr($_FILES['file']['type'],"avi")) $fileType="avi";
+
+        if(strstr($_FILES['file']['type'],"mp4")) $fileType="mp4";
+
+        if(strstr($_FILES['file']['type'],"mpg")) $fileType="mpg";
+        
+        if(strstr($_FILES['file']['type'],"mov")) $fileType="mov";
+        
+        if(strstr($_FILES['file']['type'],"wmv")) $fileType="wmv";
+        
+        if(strstr($_FILES['file']['type'],"asf")) $fileType="asf";
+        
+        if(strstr($_FILES['file']['type'],"rm")) $fileType="rm";
+        
+        if(strstr($_FILES['file']['type'],"swf")) $fileType="swf";
+        
+        if(strstr($_FILES['file']['type'],"mpeg")) $fileType="mpeg";
+        
+        if(strstr($_FILES['file']['type'],"mpeg4")) $fileType="mpeg4";
+        
+        if(strstr($_FILES['file']['type'],"vid")) $fileType="vid";
+
+
+        if (!$fileType) {
+            echo 'Invalid file type';
+            header("HTTP/1.0 404 Not Found");
+            return false;
+        } 
+
+        if (file_exists($upload_folder .$filename) && $filename) {
+            echo 'Video with such name already exists!';
+            header("HTTP/1.0 404 Not Found");
+            return false;
+         }
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder . $filename)) {
+            echo "ok";
+        } else {
+            header("HTTP/1.0 404 Not Found");
+        }
+    }
+    
     
     
     function getIngredients() {

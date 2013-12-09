@@ -736,6 +736,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes` (
   `recipe_name` varchar(255) NOT NULL,
   `recipe_type` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
+  `video` varchar(255) NOT NULL,
   `number_serves` int(3) NOT NULL,
   `instructions` text NOT NULL,
   `status` int(1) NOT NULL,
