@@ -261,6 +261,10 @@ class FitnessController extends JController {
     
     function uploadImage() {
         $filename = $_FILES['file']['name'];
+        
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+        $filename =  $_GET['image_name']  . '.' . $ext;
 
         $upload_folder = $_GET['upload_folder'];
 
@@ -275,13 +279,14 @@ class FitnessController extends JController {
         }
 
 
-        if($_FILES['file']['size']/1024 > 5024) {
+        if($_FILES['file']['size']/1024 > 1024) {
             echo 'too big file'; 
             header("HTTP/1.0 404 Not Found");
             return false;
         }
 
         $fileType="";
+        
 
         if(strstr($_FILES['file']['type'],"jpg")) $fileType="jpg";
 
@@ -295,17 +300,20 @@ class FitnessController extends JController {
 
 
         if (!$fileType) {
-            echo 'Invalid file type';
+            echo  $_FILES['file']['type'] . 'Invalid file type';
             header("HTTP/1.0 404 Not Found");
             return false;
         } 
+        
+        unlink($upload_folder . $filename);
 
         if (file_exists($upload_folder .$filename) && $filename) {
-            echo 'Image with such name already exists!';
+            echo 'Crear existing image first!';
             header("HTTP/1.0 404 Not Found");
             return false;
          }
-
+         
+        
         if (move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder . $filename)) {
             echo "ok";
         } else {
@@ -317,6 +325,11 @@ class FitnessController extends JController {
     
     function uploadVideo() {
         $filename = $_FILES['file']['name'];
+        
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+        $filename =  $_GET['video_name']  . '.' . $ext;
+ 
 
         $upload_folder = $_GET['upload_folder'];
 
@@ -336,6 +349,8 @@ class FitnessController extends JController {
             header("HTTP/1.0 404 Not Found");
             return false;
         }
+        
+
 
         $fileType="";
 
@@ -371,9 +386,11 @@ class FitnessController extends JController {
             header("HTTP/1.0 404 Not Found");
             return false;
         } 
+        
+        unlink($upload_folder . $filename);
 
         if (file_exists($upload_folder .$filename) && $filename) {
-            echo 'Video with such name already exists!';
+            echo 'Crear existing video first!';
             header("HTTP/1.0 404 Not Found");
             return false;
          }

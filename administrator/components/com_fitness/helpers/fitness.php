@@ -284,6 +284,10 @@ class FitnessHelper extends FitnessFactory
     const SUBMITTED_DIARY_STATUS = '5';
     //
     
+
+    
+    //
+
     /**
      * Configure the Linkbar.
      */

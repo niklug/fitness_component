@@ -16,7 +16,9 @@
             template: _.template($('#video_upload_template').html()),
 
             initialize: function() {
+                _.bindAll(this, 'render', 'drop_video', 'change_video', 'file_validation', 'save_video', 'clear_video');
                 this.model.on("destroy", this.close, this);
+                this.video_name  = this.model.get('video_name');
             },
 
             render: function(eventName) {
@@ -55,10 +57,14 @@
                 var reader = new FileReader();
                 var model = this.model;
                 var filename = this.videoFile.name;
+                   
+                this.filetype = filename.split('.').pop();
+                
+                var self = this;
                 reader.onloadend = function () {
                     $('#preview_video').css('background-image', 'none');
-                    $('#preview_video').html('<div style="margin-top:80px;">' + filename + '</div>');
-                    $('#preview_video').attr('data-videopath', model.get('video_path') + '/' + filename);
+                    $('#preview_video').html('<div style="margin-top:80px;">' + self.video_name + '.' + self.filetype + '</div>');
+                    $('#preview_video').attr('data-videopath', model.get('video_path') + '/' + self.video_name + '.' + self.filetype );
                 };
                 reader.readAsDataURL(this.videoFile);
                 return false;
@@ -81,10 +87,14 @@
                 // and display it in the img tag.
                 var reader = new FileReader();
                 var model = this.model;
+                
+                this.filetype = file.split('.').pop();
+                
+                var self = this;
                 reader.onloadend = function() {
                     $('#preview_video').css('background-image', 'none');
-                    $('#preview_video').html('<div style="margin-top:80px;">' + file.name + '</div>');
-                    $('#preview_video').attr('data-videopath', model.get('video_path') + '/' + file.name);
+                    $('#preview_video').html('<div style="margin-top:80px;">' + self.video_name + '.' + self.filetype + '</div>');
+                    $('#preview_video').attr('data-videopath', model.get('video_path') + '/' + self.video_name + '.' + self.filetype);
                 };
                 reader.readAsDataURL(this.videoFile);
              
@@ -98,7 +108,6 @@
 		  alert("File \""+file.name+"\" is not a valid video file.");
 		  return false;	
 		} 
- 
 		// check file size
 		if (parseInt(file.size / 1024) > 10024) {  
 		  alert("File \""+file.name+"\" is too big.");
@@ -111,20 +120,26 @@
             save_video : function () {
                 var self = this;
                 if (this.videoFile) {
-                    //console.log( this.videoFile.name);
-                    this.model.set("video", this.videoFile.name);
 
-                    // append photo into FormData object 
+                    // append  into FormData object 
                     var fileData = new FormData();
                     fileData.append('file', this.videoFile);
+                    
+                    var filename = this.videoFile.name;
+                    
+                    this.filetype = filename.split('.').pop();
+                    
+                    this.model.set("video", this.video_name + '.' + this.filetype);
                     
                     var url = this.model.get("url");
                     
                     var upload_folder = this.model.get("upload_folder");
                     
-                    url = url +'&upload_folder=' + upload_folder;
-
-
+                    url = url +'&upload_folder=' + upload_folder +'&video_name=' + self.video_name;
+                    
+                    var ajax_load_html= '<div style="width:100%;text-align:center;margin-top:80px;margin-left: 28px;"><div class="ajax_loader"></div></div>';
+                    
+                    $('#preview_video').html(ajax_load_html);
                     // upload FormData object by XMLHttpRequest
                     $.ajax({
                             url:  url,
@@ -136,7 +151,8 @@
                     })
                     .done(function () {
                             console.log(self.videoFile.name + ' uploaded successfully !' );
-                            $('#preview_video').attr('data-videopath', self.model.get('video_path') + '/' + self.videoFile.name);
+                            $('#preview_video').attr('data-videopath', self.model.get('video_path') + '/' + self.video_name + '.' + self.filetype);
+                            $('#preview_video').html('<div style="margin-top:80px;">' +  'Video uploaded successfully!' + '</div>');
                     })
                     .fail(function (response) {
                             alert(response.responseText)

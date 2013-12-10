@@ -854,8 +854,7 @@
     <%
     
     var recipe = recipe || {}; 
-    
-    
+   
     %>
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
@@ -933,12 +932,14 @@
                             </tr>
                         </table>
                     </td>
+                    <% if(recipe.id) { %>
                     <td style="text-align: right;">
                         <div id="image_upload_content"></div>
                     </td>
                     <td style="text-align: right;">
                         <div id="video_upload_content"></div>
                     </td>
+                    <% } %>
                 </tr>
             </table>
             <br/>
@@ -967,7 +968,6 @@
     if(!picture) {
         image = default_image;
     }
-    //console.log(image)
     %>
     <div class="form-left-col" style="text-align:center;">
         <form name="image_form">
@@ -1000,7 +1000,6 @@
         var background_image = 'none';
         video_html = '<div style="margin-top:80px;">' + video + '</div>';
     }
-    console.log(video)
     %>
     <div class="form-left-col" style="text-align:center;">
         <form name="video_form">

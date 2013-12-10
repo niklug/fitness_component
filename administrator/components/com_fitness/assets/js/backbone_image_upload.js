@@ -16,7 +16,9 @@
             template: _.template($('#image_upload_template').html()),
 
             initialize: function() {
+                _.bindAll(this, 'render', 'drop_image', 'change_image', 'file_validation', 'save_image', 'clear_image');
                 this.model.on("destroy", this.close, this);
+                this.image_name  = this.model.get('image_name');
             },
 
             render: function(eventName) {
@@ -55,9 +57,11 @@
                 var reader = new FileReader();
                 var model = this.model;
                 var filename = this.pictureFile.name;
+                
+                var self = this;
                 reader.onloadend = function () {
                     $('#preview_image').attr('src', reader.result);
-                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + filename);
+                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + self.image_name);
                 };
                 reader.readAsDataURL(this.pictureFile);
                 return false;
@@ -79,16 +83,18 @@
                 // and display it in the img tag.
                 var reader = new FileReader();
                 var model = this.model;
+                
+                var self = this;
                 reader.onloadend = function() {
                     $('#preview_image').attr('src', reader.result);
-                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + file.name);
+                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + self.image_name);
                 };
                 reader.readAsDataURL(this.pictureFile);
              
                 return false;
             },
             
-             file_validation : function(file) {
+            file_validation : function(file) {
                 var imageType = /image.*/;  
   		// check file type
 		if (!file.type.match(imageType)) {  
@@ -96,7 +102,7 @@
 		  return false;	
 		} 
 		// check file size
-		if (parseInt(file.size / 1024) > 524) {  
+		if (parseInt(file.size / 1024) > 1024) {  
 		  alert("File \""+file.name+"\" is too big.");
 		  return false;	
 		} 
@@ -107,20 +113,22 @@
             save_image : function () {
                 var self = this;
                 if (this.pictureFile) {
-                    //console.log( this.pictureFile.name);
-                    this.model.set("picture", this.pictureFile.name);
-
                     // append photo into FormData object 
                     var fileData = new FormData();
                     fileData.append('file', this.pictureFile);
+                    
+                    var filename = this.pictureFile.name;
+                    
+                    this.filetype = filename.split('.').pop();
+                    
+                    this.model.set("picture", this.image_name + '.' + this.filetype);
                     
                     var url = this.model.get("url");
                     
                     var upload_folder = this.model.get("upload_folder");
                     
-                    url = url +'&upload_folder=' + upload_folder;
-
-
+                    url = url +'&upload_folder=' + upload_folder +'&image_name=' + self.image_name;
+                    
                     // upload FormData object by XMLHttpRequest
                     $.ajax({
                             url:  url,
@@ -132,7 +140,7 @@
                     })
                     .done(function () {
                             console.log(self.pictureFile.name + ' uploaded successfully !' );
-                            $('#preview_image').attr('data-imagepath', self.model.get('img_path') + '/' + self.pictureFile.name);
+                            $('#preview_image').attr('data-imagepath', self.model.get('img_path') + '/' + self.image_name + '.' + self.filetype);
                     })
                     .fail(function (response) {
                             alert(response.responseText)

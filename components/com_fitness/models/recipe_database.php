@@ -431,9 +431,21 @@ class FitnessModelrecipe_database extends JModelList {
             $status['message'] = '"' . $e->getMessage() . '"';
         }
         
+        $this->deleteRecipeMedia($data->id);
+        
         $result = array( 'status' => $status, 'data' => $data->id);
         
         return $result;
+    }
+    
+    private function deleteRecipeMedia($id) {
+        $image_upload_folder = JPATH_ROOT . DS . 'images' . DS . 'Recipe_Images' . DS;   
+        $video_upload_folder = JPATH_ROOT . DS . 'images' . DS . 'Recipe_Videos' . DS;  
+        
+        array_map('unlink', glob($image_upload_folder . $id . ".*"));
+        
+        array_map('unlink', glob($video_upload_folder . $id . ".*"));
+        
     }
     
     public function updateRecipe($table, $data_encoded) {
