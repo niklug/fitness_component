@@ -59,6 +59,25 @@ $helper = new FitnessHelper();
                             (image dimensions should match width 200px be height 180px)
                         </td>
                     </tr>
+                    
+                    <tr>
+                        <td>
+                            Recipe Video
+                        </td>
+                        <td style="text-align: left;">
+                            <div id="video_upload_content"></div>
+                        </td>
+                    </tr>
+                    
+                    
+                    <tr>
+                        <td  colspan="2" >
+                            <div id="recipe_video_wrapper"></div>
+                        </td>
+                    </tr>
+                    
+                    
+                    
                     <tr>
                         <td>
                             <?php echo $this->form->getLabel('recipe_type'); ?>
@@ -145,6 +164,7 @@ $helper = new FitnessHelper();
     <?php echo $this->form->getInput('created'); ?>
     </div>
     <input type="hidden" name="task" value="" />
+    <?php echo $this->form->getInput('video'); ?>
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 
@@ -594,6 +614,67 @@ $helper = new FitnessHelper();
         $("#comments_wrapper").html(comments_html);
         
         
+       
+        
+        
+        
+        
+        //VIDEO
+        
+        var videopath = '<?php echo $this->item->video;?>';
+        var filename = '';
+        if(typeof videopath !== 'undefined') {
+            var fileNameIndex = videopath.lastIndexOf("/") + 1;
+            filename = videopath.substr(fileNameIndex);
+        }
+                
+                
+                
+        var video_upload_options = {
+            'url' : '<?php echo JURI::root();?>index.php?option=com_fitness&view=recipe_database&task=uploadVideo&format=text',
+            'base_url' : '<?php echo JURI::root();?>',
+            'video' : filename,
+            'default_image' : 'administrator/components/com_fitness/assets/images/no_image.png',
+            'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
+            'no_video_image_big' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_big.png',
+            'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Videos' . DS  ?>',
+            'video_path' : 'images/Recipe_Videos',
+            'preview_height' : '180px',
+            'preview_width' : '250px',
+            'el' : $('#video_upload_content'),
+
+            'video_name' : '<?php echo $this->item->id;?>',
+            
+
+        };
+
+        var video_upload = $.backbone_video_upload(video_upload_options); 
+        video_upload.render();
+        
+        
+        //PLAYER
+        var base_url = video_upload_options.base_url;
+
+
+        var imageType = /no_video_image.*/;  
+
+        
+        var recipe_name = '<?php echo $this->item->recipe_name ?>';
+
+        if (!videopath.match(imageType) && videopath) {  
+
+            jwplayer("recipe_video_wrapper").setup({
+                file: base_url + videopath,
+                image: "",
+                height: 340,
+                width: 600,
+                title : recipe_name
+            });
+        }
+
+        
+        
+        
         Joomla.submitbutton = function(task)
         {
             if (task == 'nutrition_recipe.cancel') {
@@ -602,6 +683,10 @@ $helper = new FitnessHelper();
             else{
 
                 if (task != 'nutrition_recipe.cancel' && document.formvalidator.isValid(document.id('nutrition_recipe-form'))) {
+
+                    var video_path = $("#preview_video").attr('data-videopath');
+                    
+                    $("#jform_video_input").val(video_path);
 
                     Joomla.submitform(task, document.getElementById('nutrition_recipe-form'));
                 }

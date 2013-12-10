@@ -19,10 +19,10 @@
                 
             label="Recipe Image"
             description="" 
-                
-                
-                
+
             directory="images" /> 
+       
+        <field name="video" id="video_input"  type="hidden" /> 
        
        <field name="recipe_type" type="text" class="inputbox"
               label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_RECIPE_TYPE"

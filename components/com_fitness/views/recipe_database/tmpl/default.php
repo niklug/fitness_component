@@ -27,14 +27,6 @@ defined('_JEXEC') or die;
 </div>
 
 
-<?php
-
-$file = JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jwplayer' . DS . 'test.mp4';
-
-?>
-
-
-
 <script type="text/javascript">
     
     (function($) {
@@ -1233,12 +1225,16 @@ $file = JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'as
                 
                 var video_path = recipe.video;
                 
+                
+                
                 var base_url = this.model.get('base_url');
 
                 
                 var imageType = /no_video_image.*/;  
+                
+                console.log(video_path);
   
-		if (!video_path.match(imageType)) {  
+		if (!video_path.match(imageType) && video_path) {  
             
                     jwplayer("recipe_video_wrapper").setup({
                         file: base_url + video_path,
