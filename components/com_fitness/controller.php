@@ -356,8 +356,6 @@ class FitnessController extends JController {
 
         if(strstr($_FILES['file']['type'],"flv")) $fileType="flv";
 
-        if(strstr($_FILES['file']['type'],"3gp")) $fileType="3gp";
-
         if(strstr($_FILES['file']['type'],"avi")) $fileType="avi";
 
         if(strstr($_FILES['file']['type'],"mp4")) $fileType="mp4";
@@ -369,8 +367,6 @@ class FitnessController extends JController {
         if(strstr($_FILES['file']['type'],"wmv")) $fileType="wmv";
         
         if(strstr($_FILES['file']['type'],"asf")) $fileType="asf";
-        
-        if(strstr($_FILES['file']['type'],"rm")) $fileType="rm";
         
         if(strstr($_FILES['file']['type'],"swf")) $fileType="swf";
         
@@ -388,6 +384,7 @@ class FitnessController extends JController {
         } 
         
         unlink($upload_folder . $filename);
+        
 
         if (file_exists($upload_folder .$filename) && $filename) {
             echo 'Crear existing video first!';

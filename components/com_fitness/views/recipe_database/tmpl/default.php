@@ -27,6 +27,13 @@ defined('_JEXEC') or die;
 </div>
 
 
+<?php
+
+$file = JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jwplayer' . DS . 'test.mp4';
+
+?>
+
+
 
 <script type="text/javascript">
     
@@ -54,6 +61,7 @@ defined('_JEXEC') or die;
             'recipes_favourites_db_table' : '#__fitness_nutrition_recipes_favourites',
             'default_image' : 'administrator/components/com_fitness/assets/images/no_image.png',
             'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
+            'no_video_image_big' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_big.png',
             'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Images' . DS  ?>',
             'video_upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Videos' . DS  ?>',
             'img_path' : 'images/Recipe_Images',
@@ -1210,12 +1218,39 @@ defined('_JEXEC') or die;
                 var template = _.template($("#recipe_database_view_recipe_template").html(), data);
                 this.$el.html(template);
                 this.loadComments();
+                this.loadVideoPlayer();
             },
                         
             loadComments : function(){
                 var comments_html = this.options.comments.run();
                 $("#comments_wrapper").html(comments_html);
             },
+            
+            loadVideoPlayer : function() {
+                var recipe = this.model.get('recipe');
+                
+                var no_video_image_big = this.model.get('no_video_image_big');
+                
+                var video_path = recipe.video;
+                
+                var base_url = this.model.get('base_url');
+
+                
+                var imageType = /no_video_image.*/;  
+  
+		if (!video_path.match(imageType)) {  
+            
+                    jwplayer("recipe_video_wrapper").setup({
+                        file: base_url + video_path,
+                        image: "",
+                        height: 340,
+                        width: 600,
+                        title : recipe.recipe_name
+                    });
+                } else {
+                    $("#recipe_video_wrapper").css('background-image', 'url(' +  no_video_image_big + ')');
+                }
+            }
             
         });
         
