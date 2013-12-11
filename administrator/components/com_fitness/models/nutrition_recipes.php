@@ -58,6 +58,9 @@ class FitnessModelnutrition_recipes extends JModelList {
 
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
+        
+        $status = $app->getUserStateFromRequest($this->context . '.filter.status', 'filter_status', '', 'string');
+        $this->setState('filter.status', $status);
 
         
         //Filtering created
@@ -172,17 +175,22 @@ class FitnessModelnutrition_recipes extends JModelList {
         } else if ($published === '') {
             $query->where('(a.state IN (0, 1))');
         }
+        
+        // Filter by published state
+        $status = $this->getState('filter.status');
+        if (is_numeric($status)) {
+            $query->where('a.status = '.(int) $status);
+            if($status == '1') {
+                $query->where('a.status = ' . (int) $status . ' OR a.status="0"');
+            }
+        }
 
 
         // Filter by search in title
         $search = $this->getState('filter.search');
         if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
-            } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('( a.recipe_name LIKE '.$search.'  OR  a.state LIKE '.$search.' )');
-            }
+                $query->where('( a.recipe_name LIKE '.$search.'  )');
         }
 
         
@@ -206,10 +214,18 @@ class FitnessModelnutrition_recipes extends JModelList {
                 
                 //Filtering recipe type
 		$filter_recipe_type = $this->state->get("filter.recipe_type");
-		if ($filter_recipe_type) {
-			$query->where("a.recipe_type LIKE '%".$db->escape($filter_recipe_type)."%'");
-		}
-
+                
+          
+                if($filter_recipe_type) {
+                    $query->where(" FIND_IN_SET('$filter_recipe_type', a.recipe_type) ");
+                }
+                
+                
+                // Filter by business profile
+                $business_profile_id = $this->getState('filter.business_profile_id');
+                if (is_numeric($business_profile_id)) {
+                    $query->where('c.business_profile_id = '.(int) $business_profile_id);
+                } 
 
         // Add the list ordering clause.
         $orderCol = $this->state->get('list.ordering');

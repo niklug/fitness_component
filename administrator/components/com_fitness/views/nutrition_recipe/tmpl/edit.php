@@ -667,8 +667,17 @@ $helper = new FitnessHelper();
                 file: base_url + videopath,
                 image: "",
                 height: 340,
-                width: 600,
-                title : recipe_name
+                width: 640,
+                events: {
+                    onReady: function () { 
+                        this.play();
+
+                        var self = this;
+                        setTimeout(function(){
+                            self.pause(); 
+                        },3000);
+                    }
+                }
             });
         }
 

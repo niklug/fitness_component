@@ -1231,20 +1231,29 @@ defined('_JEXEC') or die;
 
                 
                 var imageType = /no_video_image.*/;  
-                
-                console.log(video_path);
+
   
 		if (!video_path.match(imageType) && video_path) {  
             
-                    jwplayer("recipe_video_wrapper").setup({
+                    jwplayer("recipe_video").setup({
                         file: base_url + video_path,
                         image: "",
                         height: 340,
-                        width: 600,
-                        title : recipe.recipe_name
+                        width: 640,
+                         
+                        events: {
+                            onReady: function () { 
+                                this.play();
+
+                                var self = this;
+                                setTimeout(function(){
+                                    self.pause(); 
+                                },3000);
+                            }
+                        }
                     });
                 } else {
-                    $("#recipe_video_wrapper").css('background-image', 'url(' +  no_video_image_big + ')');
+                    $("#recipe_video").css('background-image', 'url(' +  no_video_image_big + ')');
                 }
             }
             

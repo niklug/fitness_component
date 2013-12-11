@@ -882,3 +882,7 @@ td.center, th.center, .center {
   height: 20px;
   width: 20px;
 }
+
+ #recipe_video {
+    border: 3px solid #FFFFFF;
+}

@@ -34,7 +34,7 @@ $helper = new FitnessHelper();
                 </div>
             
 		<div class="filter-search fltlft">
-			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+			<label class="filter-search-lbl" for="filter_search">Recipe Name</label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button id="reset_filtered" type="button" ><?php echo JText::_('Reset All'); ?></button>
@@ -47,21 +47,35 @@ $helper = new FitnessHelper();
 
 		<div class='filter-select fltrt'>
 			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+				<option value="">Published</option>
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
 			</select>
 		</div>
+            
+                <?php
+
+                $status[] = JHTML::_('select.option', FitnessHelper::PENDING_RECIPE_STATUS, 'PENDING' );
+                $status[] = JHTML::_('select.option', FitnessHelper::APPROVED_RECIPE_STATUS, 'APPROVED' );
+                $status[] = JHTML::_('select.option', FitnessHelper::NOTAPPROVED_RECIPE_STATUS, 'NOT APPROVED' );
+                ?>
+
+                <div class='filter-select fltrt'>
+                        <select name="filter_status" class="inputbox" onchange="this.form.submit()">
+                                <option value=""><?php echo JText::_('-Status-');?></option>
+                                <?php echo JHtml::_('select.options', $status, "value", "text", $this->state->get('filter.status'), true);?>
+                        </select>
+                </div>
              
                 <?php //Filter for the field created_by
                 $db = JFactory::getDbo();
                 $sql = "SELECT DISTINCT r.created_by AS value, u.name AS text FROM #__fitness_nutrition_recipes AS r 
                     LEFT JOIN #__users AS u ON u.id=r.created_by
-                    WHERE r.state='1'";
+                    WHERE r.state='1' ORDER BY u.name  ASC";
                 $db->setQuery($sql);
                 if(!$db->query()) {
                     JError::raiseError($db->getErrorMsg());
                 }
-                $clients = $db->loadAssocList();
+                $clients = array_filter($db->loadAssocList());
                 ?>
                 <div class='filter-select fltrt'>
                         <select name="filter_created_by" class="inputbox" onchange="this.form.submit()">
@@ -74,7 +88,7 @@ $helper = new FitnessHelper();
                     <?php
                     $recipeTypes = $helper->JErrorFromAjaxDecorator($helper->getRecipeTypes());
                                         
-                    $helper->generateSelect($recipeTypes, 'filter_recipe_type', 'filter_recipe_type', $this->state->get('filter.recipe_type') , 'Recipe Type', false, "inputbox"); 
+                    echo $helper->generateSelect($recipeTypes, 'filter_recipe_type', 'filter_recipe_type', $this->state->get('filter.recipe_type') , 'Recipe Type', false, "inputbox"); 
      
                     ?>
 
@@ -95,6 +109,9 @@ $helper = new FitnessHelper();
                 <div class='filter-select fltrt'>
                     <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id') , 'Business Name', false, "inputbox"); ?>
 		</div>
+            
+                
+
                
 	</fieldset>
     
@@ -301,9 +318,11 @@ $helper = new FitnessHelper();
 
     (function($) {
         $("#reset_filtered").click(function(){
+            var limit = $("#limit").val();
             var form = $("#adminForm");
             form.find("select").val('');
             form.find("input").val('');
+            $("#limit").val(limit);
             form.submit();
         });
         
@@ -326,9 +345,9 @@ $helper = new FitnessHelper();
             'status_button_template' : '#status_button_template',
             'status_button_place' : '#status_button_place_',
             'statuses' : {
-                '1' : {'label' : 'PENDING', 'class' : 'recipe_status_pending', 'email_alias' : ''},
-                '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : 'Approved'}, 
-                '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : 'NotApproved'}
+                '<?php echo FitnessHelper::PENDING_RECIPE_STATUS ?>' : {'label' : 'PENDING', 'class' : 'recipe_status_pending', 'email_alias' : ''},
+                '<?php echo FitnessHelper::APPROVED_RECIPE_STATUS ?>' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : 'Approved'}, 
+                '<?php echo FitnessHelper::NOTAPPROVED_RECIPE_STATUS ?>' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : 'NotApproved'}
             },
             'statuses2' : {},
             'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',

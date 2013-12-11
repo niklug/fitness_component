@@ -399,9 +399,11 @@ $helper = new FitnessHelper();
         });
 
         $("#reset_filtered").click(function(){
+            var limit = $("#limit").val();
             var form = $("#adminForm");
             form.find("select").val('');
             form.find("input").val('');
+            $("#limit").val(limit);
             form.submit();
         });
 

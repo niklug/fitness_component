@@ -284,6 +284,12 @@ class FitnessHelper extends FitnessFactory
     const SUBMITTED_DIARY_STATUS = '5';
     //
     
+    //Recipe
+    const PENDING_RECIPE_STATUS = '1';
+    const APPROVED_RECIPE_STATUS = '2';
+    const NOTAPPROVED_RECIPE_STATUS = '3';
+    //
+    
 
     
     //
@@ -765,7 +771,6 @@ class FitnessHelper extends FitnessFactory
      * @return string
      */
     public function generateSelect($items, $name, $id, $selected, $select, $required, $class) {
- 
         $html = '<select ';
         
         $html .= ' name="' . $name . '" ';
@@ -773,8 +778,6 @@ class FitnessHelper extends FitnessFactory
         $html .= ' id="' . $id . '" ';
         
         $html .= ' class="' . $class . '" ';
-        
-        $html .= ' required="required" ';
         
         if($required) {
             $html .= 'required="required"';
@@ -980,7 +983,7 @@ class FitnessHelper extends FitnessFactory
     }
     
     function getRecipeName($id) {
-        $query = "SELECT name FROM #__fitness_recipe_types WHERE id='$ids' AND state='1'";
+        $query = "SELECT name FROM #__fitness_recipe_types WHERE id='$id' AND state='1'";
         return self::customQuery($query, 0);
     }
     

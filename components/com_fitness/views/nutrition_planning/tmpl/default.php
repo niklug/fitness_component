@@ -596,33 +596,33 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         
         var Controller = Backbone.Router.extend({
             routes: {
-                "": "nutrition_focus", 
-                "!/": "nutrition_focus", 
-                "!/nutrition_focus": "nutrition_focus", 
-                "!/daily_targets": "daily_targets", 
-                "!/shopping_list": "shopping_list", 
+                "": "overview", 
+                "!/": "overview", 
+                "!/overview": "overview", 
+                "!/targets": "targets", 
+                "!/macronutrients": "macronutrients", 
                 "!/diary_guide": "diary_guide", 
                 "!/information": "information", 
                 "!/archive": "archive", 
                 "!/close": "close", 
             },
 
-            nutrition_focus: function () {
+            overview: function () {
                  $(".block").hide();
                  $("#nutrition_focus_wrapper").show();
                  $(".plan_menu_link").removeClass("active_link");
-                 $("#nutrition_focus_link").addClass("active_link");
+                 $("#overview_link").addClass("active_link");
                  $("#close_tab").hide();
                  // connect Graph from Goals frontend logic
                  $.goals_frontend(options);
                  
             },
 
-            daily_targets: function () {
+            targets: function () {
                  $(".block").hide();
                  $("#daily_targets_wrapper").show();
                  $(".plan_menu_link").removeClass("active_link");
-                 $("#daily_targets_link").addClass("active_link");
+                 $("#targets_link").addClass("active_link");
                  $("#close_tab").hide();
                  
                  //draw targets
@@ -632,11 +632,11 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                  
             },
 
-            shopping_list: function () {
+            macronutrients: function () {
                  $(".block").hide();
                  $("#shopping_list_wrapper").show();
                  $(".plan_menu_link").removeClass("active_link");
-                 $("#shopping_list_link").addClass("active_link");
+                 $("#macronutrients_link").addClass("active_link");
                  $("#close_tab").hide();
             },
                     
@@ -756,9 +756,10 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
                     
             events: {
-                "click #nutrition_focus_link" : "onClickNutrition_focus",
-                "click #daily_targets_link" : "onClickDaily_targets",
-                "click #shopping_list_link" : "onClickShopping_list",
+                "click #overview_link" : "onClickOverview",
+                "click #targets_link" : "onClickTargets",
+                "click #macronutrients_link" : "onClickMacronutrients",
+                "click #supplements_link" : "onClickSupplements",
                 "click #diary_guide_link" : "onClickDiary_guide",
                 "click #information_link" : "onClickInformation",
                 "click #archive_focus_link" : "onClickArchive_focus",
@@ -770,16 +771,20 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 this.$el.html(template);
             },
             
-            onClickNutrition_focus : function() {
-                controller.navigate("!/nutrition_focus", true);
+            onClickOverview : function() {
+                controller.navigate("!/overview", true);
             },
             
-            onClickDaily_targets : function() {
-                controller.navigate("!/daily_targets", true);
+            onClickTargets : function() {
+                controller.navigate("!/targets", true);
             },
             
-            onClickShopping_list : function() {
-                controller.navigate("!/shopping_list", true);
+            onClickMacronutrients : function() {
+                controller.navigate("!/macronutrients", true);
+            },
+            
+            onClickSupplements : function() {
+                controller.navigate("!/supplements", true);
             },
             
             onClickDiary_guide : function() {
