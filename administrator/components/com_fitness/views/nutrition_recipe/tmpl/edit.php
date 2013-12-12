@@ -668,13 +668,16 @@ $helper = new FitnessHelper();
                 image: "",
                 height: 340,
                 width: 640,
+                autostart: true,
+                mute: true,
+                controls: false,
                 events: {
                     onReady: function () { 
-                        this.play();
-
                         var self = this;
                         setTimeout(function(){
-                            self.pause(); 
+                            self.pause();
+                            self.setMute(false);
+                            self.setControls(true);
                         },3000);
                     }
                 }

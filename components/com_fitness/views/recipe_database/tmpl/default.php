@@ -1240,14 +1240,16 @@ defined('_JEXEC') or die;
                         image: "",
                         height: 340,
                         width: 640,
-                         
+                        autostart: true,
+                        mute: true,
+                        controls: false,
                         events: {
                             onReady: function () { 
-                                this.play();
-
                                 var self = this;
                                 setTimeout(function(){
-                                    self.pause(); 
+                                    self.pause();
+                                    self.setMute(false);
+                                    self.setControls(true);
                                 },3000);
                             }
                         }
@@ -1628,7 +1630,7 @@ defined('_JEXEC') or die;
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
 
                 var comments_html = comments.run();
-                $("#comments_wrapper").html(comments_html)
+                $("#comments_wrapper").html(comments_html);
             },
             
             close :function() {

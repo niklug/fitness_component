@@ -16,13 +16,12 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
 <div style="opacity: 1;" class="fitness_wrapper">
     <h2>NUTRITION PLAN</h2>
     
-    <div id="plan_menu">
-
-    </div>
+    <div id="plan_menu"></div>
     
     <br/>
     
-    <div id="nutrition_focus_wrapper" class="block">
+    <!-- OVERVIEW -->
+    <div id="overview_wrapper" class="block">
         <table width="100%">
             <tr>
                 <td width="40%">
@@ -244,8 +243,8 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     
      </div>
     
-    
-    <div id="daily_targets_wrapper" class="block">
+    <!-- TARGETS -->
+    <div id="targets_wrapper" class="block">
         <div class="fitness_block_wrapper" style="min-height: 300px;">
             <h3>DAILY MACRONUTRIENT & CALORIE TARGETS</h3>
             <hr class="orange_line">
@@ -347,11 +346,18 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 </table> 
             </div>
         </div>
+        <div class="clr"></div>
+        <br/>
+        <div id="targets_comments_wrapper" style="width:100%"></div>
+        <div class="clr"></div>
+        <br/>
+        <input id="add_comment_0" class="" type="button" value="Add Comment" >
+        <div class="clr"></div>
     </div>
     
     
-    
-    <div id="shopping_list_wrapper" class="block">
+    <!-- MACRONUTRIENTS -->
+    <div id="macronutrients_wrapper" class="block">
         <div>
             <h3 style="color:#FFFFFF !important;">ALLOWED MACRONUTRIENTS / SHOPPING LIST</h3>
         </div>
@@ -412,9 +418,19 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 ?>
             </div>
         </div>
-        
+
+        <div class="clr"></div>
         <br/>
+        <div id="macronutrients_comments_wrapper" style="width:100%"></div>
+        <div class="clr"></div>
+        <br/>
+        <input id="add_comment_1" class="" type="button" value="Add Comment" >
+        <div class="clr"></div>
         
+    </div>
+    
+    <!-- SUPPLEMENTS -->
+    <div id="supplements_wrapper" class="block">
         <div>
             <h3 style="color:#FFFFFF !important;">SUPPLEMENTS / SHOPPING LIST</h3>
         </div>
@@ -450,14 +466,14 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 </table> 
             </div>
         </div>
-        
     </div>
 
-    
-    <div id="diary_guide_wrapper" class="block">
-        DIARY GUIDE
+    <!-- NUTRITION GUIDE -->
+    <div id="nutrition_guide_wrapper" class="block">
+        Nutrition GUIDE
     </div>
     
+    <!-- INFORMATION -->
     <div id="information_wrapper" class="block">
         <div>
             <h3 style="color:#FFFFFF !important;">NUTRITION INFORMATION</h3>
@@ -471,6 +487,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         </div>
     </div>
     
+    <!-- ARCHIVE -->
     <div id="archive_wrapper" class="block">
         <div class="fitness_block_wrapper" style="min-height: 100px;">
             <h3>NUTRITION PLAN HISTORY</h3>
@@ -543,7 +560,6 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
 
 
 
-
 <script type="text/javascript">
     
     (function($) {
@@ -558,7 +574,16 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             'minigoals_db_table' : '#__fitness_mini_goals',
             'goals_comments_db_table' : '#__fitness_goal_comments',
             'minigoals_comments_db_table' : '#__fitness_mini_goal_comments',
+            'nutrition_plan_targets_comments_db_table' : '#__fitness_nutrition_plan_targets_comments',
+            'nutrition_plan_macronutrients_comments_db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
+            
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+            
+            'item_id' : '<?php echo  $nutrition_plan_id?>'
         };
+
+
+
 
         //TARGETS
         var heavy_target = <?php echo $heavy_target;?>;
@@ -594,94 +619,10 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         }
         
         
-        var Controller = Backbone.Router.extend({
-            routes: {
-                "": "overview", 
-                "!/": "overview", 
-                "!/overview": "overview", 
-                "!/targets": "targets", 
-                "!/macronutrients": "macronutrients", 
-                "!/diary_guide": "diary_guide", 
-                "!/information": "information", 
-                "!/archive": "archive", 
-                "!/close": "close", 
-            },
-
-            overview: function () {
-                 $(".block").hide();
-                 $("#nutrition_focus_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
-                 $("#overview_link").addClass("active_link");
-                 $("#close_tab").hide();
-                 // connect Graph from Goals frontend logic
-                 $.goals_frontend(options);
-                 
-            },
-
-            targets: function () {
-                 $(".block").hide();
-                 $("#daily_targets_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
-                 $("#targets_link").addClass("active_link");
-                 $("#close_tab").hide();
-                 
-                 //draw targets
-                 setTargetData(1);
-                 setTargetData(2);
-                 setTargetData(3);
-                 
-            },
-
-            macronutrients: function () {
-                 $(".block").hide();
-                 $("#shopping_list_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
-                 $("#macronutrients_link").addClass("active_link");
-                 $("#close_tab").hide();
-            },
-                    
-            diary_guide: function () {
-                 $(".block").hide();
-                 $("#diary_guide_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
-                 $("#diary_guide_link").addClass("active_link");
-                 $("#close_tab").hide();
-            },
-                    
-            information: function () {
-                 $(".block").hide();
-                 $("#information_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
-                 $("#information_link").addClass("active_link");
-                 $("#close_tab").hide();
-            },
-                    
-            archive: function () {
-                 $(".block").hide();
-                 $("#archive_wrapper").show();
-                 $(".plan_menu_link").removeClass("active_link");
-                 $("#archive_focus_link").addClass("active_link");
-                 $("#close_tab").hide();
-            },
-                    
-            close: function() {
-                 
-                 //alert('closing');
-                 $("#close_tab").hide();
-                 this.archive();
-            }
-                    
-            
-        });
-
-        var controller = new Controller(); 
         
-        
-
-        Backbone.history.start();  
         
        
-        Nutrition_plan_model = Backbone.Model.extend({
+        window.Nutrition_plan_model = Backbone.Model.extend({
             defaults: {
 
             },
@@ -706,15 +647,44 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                     //console.log(output);
                     self.set("plan_data", output);
                 });
+            },
+            
+            connect_targets_comments : function() {
+                var comment_options = {
+                    'item_id' :  this.get('item_id'),
+                    'fitness_administration_url' : this.get('fitness_frontend_url'),
+                    'comment_obj' : {'user_name' : this.get('user_name'), 'created' : "", 'comment' : ""},
+                    'db_table' : this.get('nutrition_plan_targets_comments_db_table'),
+                    'read_only' : true,
+                    'anable_comment_email' : false
+                }
+                var comments = $.comments(comment_options, comment_options.item_id, 0);
+
+                var comments_html = comments.run();
+                $("#targets_comments_wrapper").html(comments_html);
+            },
+            
+            connect_macronutrients_comments : function() {
+                var comment_options = {
+                    'item_id' :  this.get('item_id'),
+                    'fitness_administration_url' : this.get('fitness_frontend_url'),
+                    'comment_obj' : {'user_name' : this.get('user_name'), 'created' : "", 'comment' : ""},
+                    'db_table' : this.get('nutrition_plan_macronutrients_comments_db_table'),
+                    'read_only' : true,
+                    'anable_comment_email' : false
+                }
+                var comments = $.comments(comment_options, comment_options.item_id, 1);
+
+                var comments_html = comments.run();
+                $("#macronutrients_comments_wrapper").html(comments_html);
             }
             
         });
         
         
         ////
-        Nutrition_focus_view = Backbone.View.extend({
+        window.Nutrition_focus_view = Backbone.View.extend({
             initialize: function(){
-                this.model = new Nutrition_plan_model(options);
                 this.render();
             },
             render: function(){
@@ -743,7 +713,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
 
         });
         
-        Nutrition_plan_menu_view = Backbone.View.extend({
+        window.Nutrition_plan_menu_view = Backbone.View.extend({
             
             el: $("#plan_menu"), 
             
@@ -760,7 +730,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 "click #targets_link" : "onClickTargets",
                 "click #macronutrients_link" : "onClickMacronutrients",
                 "click #supplements_link" : "onClickSupplements",
-                "click #diary_guide_link" : "onClickDiary_guide",
+                "click #nutrition_guide_link" : "onClickNutrition_guide",
                 "click #information_link" : "onClickInformation",
                 "click #archive_focus_link" : "onClickArchive_focus",
                 "click #close_tab" : "onClickClose",
@@ -772,41 +742,41 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
             
             onClickOverview : function() {
-                controller.navigate("!/overview", true);
+                window.controller.navigate("!/overview", true);
             },
             
             onClickTargets : function() {
-                controller.navigate("!/targets", true);
+                window.controller.navigate("!/targets", true);
             },
             
             onClickMacronutrients : function() {
-                controller.navigate("!/macronutrients", true);
+                window.controller.navigate("!/macronutrients", true);
             },
             
             onClickSupplements : function() {
-                controller.navigate("!/supplements", true);
+                window.controller.navigate("!/supplements", true);
             },
             
-            onClickDiary_guide : function() {
-                controller.navigate("!/diary_guide", true);
+            onClickNutrition_guide : function() {
+                window.controller.navigate("!/nutrition_guide", true);
             },
             
             onClickInformation : function() {
-                controller.navigate("!/information", true);
+                window.controller.navigate("!/information", true);
             },
             
             onClickArchive_focus : function() {
-                controller.navigate("!/archive", true);
+                window.controller.navigate("!/archive", true);
             },
             
             onClickClose : function() {
-                controller.navigate("!/close", true);
+                window.controller.navigate("!/close", true);
             }
 
         });
         
         
-        new Nutrition_plan_menu_view();
+        window.nutrition_plan_menu_view = new window.Nutrition_plan_menu_view();            
 
         
         $(".preview").on('click', function() {
@@ -818,8 +788,100 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             $(".plan_menu_link").removeClass("active_link");
             $("#close_link").addClass("active_link");
             
-            new Nutrition_focus_view({ el: $("#close_wrapper"), 'nutrition_plan_id' : id, 'template' : 'nutrition_plan_template'});
+            new window.Nutrition_focus_view({ el: $("#close_wrapper"), model : window.nutrition_plan_model, 'nutrition_plan_id' : id, 'template' : 'nutrition_plan_template'});
         });
+        
+        
+        //INIT
+        window.nutrition_plan_model = new window.Nutrition_plan_model(options);
+        
+        //CONTROLLER
+        
+        var Controller = Backbone.Router.extend({
+            routes: {
+                "": "overview", 
+                "!/": "overview", 
+                "!/overview": "overview", 
+                "!/targets": "targets", 
+                "!/macronutrients": "macronutrients", 
+                "!/supplements": "supplements", 
+                "!/nutrition_guide": "nutrition_guide", 
+                "!/information": "information", 
+                "!/archive": "archive", 
+                "!/close": "close", 
+            },
+
+            overview: function () {
+                 this.common_actions();
+                 $("#overview_wrapper").show();
+                 $("#overview_link").addClass("active_link");
+                 // connect Graph from Goals frontend logic
+                 $.goals_frontend(options);
+                 
+            },
+
+            targets: function () {
+                 this.common_actions();
+                 $("#targets_wrapper").show();
+                 $("#targets_link").addClass("active_link");
+                  
+                 //draw targets
+                 setTargetData(1);
+                 setTargetData(2);
+                 setTargetData(3);
+                 
+                 window.nutrition_plan_model.connect_targets_comments();
+                 
+            },
+
+            macronutrients: function () {
+                 this.common_actions();
+                 $("#macronutrients_wrapper").show();
+                 $("#macronutrients_link").addClass("active_link");
+                 window.nutrition_plan_model.connect_macronutrients_comments();
+            },
+            
+            supplements: function () {
+                 this.common_actions();
+                 $("#supplements_wrapper").show();
+                 $("#supplements_link").addClass("active_link");
+
+            },
+                    
+            nutrition_guide: function () {
+                 this.common_actions();
+                 $("#nutrition_guide_wrapper").show();
+                 $("#nutrition_guide_link").addClass("active_link");
+            },
+                    
+            information: function () {
+                 this.common_actions();
+                 $("#information_wrapper").show();
+                 $("#information_link").addClass("active_link");
+            },
+                    
+            archive: function () {
+                 this.common_actions();
+                 $("#archive_wrapper").show();
+                 $("#archive_focus_link").addClass("active_link");
+            },
+                    
+            close: function() {
+                 $("#close_tab").hide();
+                 this.archive();
+            },
+            
+            common_actions : function() {
+                $(".block, #close_tab").hide();
+                $(".plan_menu_link").removeClass("active_link")
+            }
+                    
+            
+        });
+
+        window.controller = new Controller(); 
+
+        Backbone.history.start();  
        
 
     })($js);

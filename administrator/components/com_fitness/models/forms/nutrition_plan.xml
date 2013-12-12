@@ -43,7 +43,7 @@
               filter="safehtml" /> 
 
         
-        <field name="force_active" type="radio" default="0" label="FORCE PLANNER ACTIVE" description="">
+        <field name="force_active" type="radio" default="0" label="Force Planner Active" description="">
           <option value="1">JYES</option>
           <option value="0">JNO</option>
         </field>

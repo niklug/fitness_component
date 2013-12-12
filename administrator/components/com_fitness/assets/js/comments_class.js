@@ -5,6 +5,9 @@
     function Comments(options, item_id, sub_item_id) {
         this.options = options;
         this.item_id = item_id;
+        if(typeof item_id === 'undefined' || ! item_id) {
+            alert('Comment class error: No item_id');
+        }
         this.sub_item_id = sub_item_id;
     }
 

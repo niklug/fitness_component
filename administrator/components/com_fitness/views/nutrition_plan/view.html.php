@@ -57,7 +57,15 @@ class FitnessViewNutrition_plan extends JView
                 $document->addStyleSheet( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
                 
                 $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
-		$this->addToolbar();
+		
+                
+                // connect backend list model
+                require_once JPATH_COMPONENT_ADMINISTRATOR . DS .  'models' . DS . 'nutrition_plans.php';
+                $backend_list_model  = new FitnessModelnutrition_plans();
+                
+                $this->assign('backend_list_model', $backend_list_model);
+                
+                $this->addToolbar();
 		parent::display($tpl);
 	}
 
@@ -112,5 +120,13 @@ class FitnessViewNutrition_plan extends JView
             }
             $result = $db->loadResult();
             return $result;
+        }
+        public function showActiveStatus($id, $active_id) {
+            $html = '<span style="color:red;">INACTIVE</span>';
+            if((int)$id == (int)$active_id) {
+                $html = '<span style="color:green;">ACTIVE</span>';
+            } 
+            $html = '<span style="color:red;">INACTIVE</span>';
+            return $html; 
         }
 }

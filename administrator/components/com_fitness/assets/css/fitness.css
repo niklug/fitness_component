@@ -776,3 +776,58 @@
     height: 66px;
     display: inline-block;
 }
+
+
+#plan_menu, #recipe_mainmenu {
+    width: 100%;
+}
+
+#plan_menu ul, #recipe_mainmenu ul {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+#plan_menu ul li, #recipe_mainmenu ul li {
+    border: 1px solid #818283;
+    float: left;
+    line-height: 1.7em;
+    list-style: none outside none;
+    padding: 0 10px;
+    position: relative;
+    text-align: center;
+    width: auto;
+    background-color:#D2D2D2;
+}
+
+#plan_menu ul li a , #recipe_mainmenu ul li a{
+    text-decoration: none !important;
+    color: #000;
+    font-size: 16px;
+    
+}
+
+#plan_menu ul li a:hover, #plan_menu ul li a:active, .active_link,
+#recipe_mainmenu ul li a:hover, #recipe_mainmenu ul li a:active, .active_link {
+    color:#BC4A26 !important;
+    border-bottom: 2px solid #BC4A26;
+    font-weight:bold;
+}
+
+.notice_image {
+    background-size: 40px auto;
+    width:40px;height:40px; 
+    background-image:url("../../../../../components/com_fitness/assets/images/exclamation.png");
+    background-repeat:no-repeat;
+    display:inline-block;
+}
+
+.notice_image_20 {
+  background-image: url("../../../../../components/com_fitness/assets/images/exclamation.png");
+  background-repeat: no-repeat;
+  background-size: 20px auto;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}

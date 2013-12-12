@@ -38,10 +38,9 @@
         
         this.setCalorieScore();
         this.setWaterScore();
-        
-        this.connectMacronutrientScores();
-        
+
         if(this.options.draw_chart) {
+            this.connectMacronutrientScores();
             this.setScores(this.options.chart_container);
         }
 
