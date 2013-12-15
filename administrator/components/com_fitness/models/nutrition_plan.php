@@ -607,4 +607,143 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return json_encode($result);      
         }
         
+        public function nutrition_plan_protocol() {
+
+            $method = JRequest::getVar('_method');
+            
+            if(!$method) {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+            
+                       
+            $model = json_decode(JRequest::getVar('model'));
+         
+            $table = '#__fitness_nutrition_plan_supplement_protocols';
+            
+            $helper = new FitnessHelper();
+            
+            switch ($method) {
+                case 'GET': // Get Item(s)
+                    $query = "SELECT * FROM $table";
+                    $items = FitnessHelper::customQuery($query, 1);
+                    return $items;
+                    break;
+                case 'PUT': // Update
+                    try {
+                        $id = $helper->insertUpdateObj($model, $table);
+                    } catch (Exception $e) {
+                            echo $e->getMessage();
+                            header("HTTP/1.0 404 Not Found");
+                            die();
+                    }
+                    break;
+                case 'POST': // Create
+                    try {
+                        $id = $helper->insertUpdateObj($model, $table);
+                    } catch (Exception $e) {
+                            echo $e->getMessage();
+                            header("HTTP/1.0 404 Not Found");
+                            die();
+                    }
+                    break;
+                case 'DELETE': // Delete Item
+                    $id = str_replace('/', '', end(array_keys($_GET)));
+                    try {
+                        $id = $helper->deleteRow($id, $table);
+                    } catch (Exception $e) {
+                            echo $e->getMessage();
+                            header("HTTP/1.0 404 Not Found");
+                            die();
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+   
+            $model->id = $id;
+            
+            return $model;
+        }
+        
+        
+        
+        
+        public function nutrition_plan_supplement() {
+
+            $method = JRequest::getVar('_method');
+            
+            if(!$method) {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+            
+                       
+            $model = json_decode(JRequest::getVar('model'));
+            
+                        
+            $table = '#__fitness_nutrition_plan_supplements';
+            
+            $helper = new FitnessHelper();
+            
+            switch ($method) {
+                case 'GET': // Get Item(s)
+                    
+                    $id = JRequest::getVar('id');
+                    $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
+                    $protocol_id = JRequest::getVar('protocol_id');
+                    
+                    $query = "SELECT * FROM $table WHERE 1";
+                    
+                    if($id) {
+                        $query .= " AND id='$id'";
+                    }
+                    if($nutrition_plan_id) {
+                        $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+                    }
+                    if($protocol_id) {
+                        $query .= " AND protocol_id='$protocol_id'";
+                    }
+                    
+                    $items = FitnessHelper::customQuery($query, 1);
+                    return $items;
+                    break;
+                case 'PUT': // Update
+                    try {
+                        $id = $helper->insertUpdateObj($model, $table);
+                    } catch (Exception $e) {
+                            echo $e->getMessage();
+                            header("HTTP/1.0 404 Not Found");
+                            die();
+                    }
+                    break;
+                case 'POST': // Create
+                    try {
+                        $id = $helper->insertUpdateObj($model, $table);
+                    } catch (Exception $e) {
+                            echo $e->getMessage();
+                            header("HTTP/1.0 404 Not Found");
+                            die();
+                    }
+                    break;
+                case 'DELETE': // Delete Item
+                    $id = str_replace('/', '', end(array_keys($_GET)));
+                    try {
+                        $id = $helper->deleteRow($id, $table);
+                    } catch (Exception $e) {
+                            echo $e->getMessage();
+                            header("HTTP/1.0 404 Not Found");
+                            die();
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+   
+            $model->id = $id;
+            
+            return $model;
+        }
+        
+        
 }

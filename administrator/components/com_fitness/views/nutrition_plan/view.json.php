@@ -142,4 +142,15 @@ class FitnessViewNutrition_plan extends JView {
     }
     
     
+    function nutrition_plan_protocol() {
+        $model = $this -> getModel("nutrition_plan");
+        echo  json_encode($model->nutrition_plan_protocol());
+    }
+    
+    function nutrition_plan_supplement() {
+        $model = $this -> getModel("nutrition_plan");
+        echo  json_encode($model->nutrition_plan_supplement());
+    }
+    
+    
 }

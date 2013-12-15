@@ -274,10 +274,23 @@ class FitnessController extends JController
 	}
         
         
-         public function ajax_email(){
+        public function ajax_email(){
             $view = $this -> getView('email', 'json');
             $view -> run(); 
         }
+        
+        public function nutrition_plan_protocol(){
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> nutrition_plan_protocol();
+        }
+        
+        public function nutrition_plan_supplement(){
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> nutrition_plan_supplement();
+        }
+        
 
         
         

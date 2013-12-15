@@ -329,7 +329,7 @@
         return html;
     }
     
-    ItemDescription.prototype.searchResultsTemplate = function(calculatedIngredient) {
+    ItemDescription.prototype.searchResultsTemplate = function() {
         var html = '<div class="select_meal_form" id="select_meal_form' + this._description_id + '">';
         html += '<span id="results_count' + this._description_id + '"></span>';
         html += '<select size="25" class="ingredients_results" id="ingredients_results' + this._description_id + '"></select>';
@@ -358,7 +358,7 @@
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                alert("error");
+                alert("error Get Ingredients");
             }
         });
     }

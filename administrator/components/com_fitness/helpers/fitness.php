@@ -1122,6 +1122,19 @@ class FitnessHelper extends FitnessFactory
         return $inserted_id;     
     }
     
+    public function deleteRow($id, $table) {
+        $db = JFactory::getDbo();
+
+        $query = "DELETE FROM $table WHERE id='$id'";
+        
+        $db->setQuery($query);
+        if (!$db->query()) {
+            throw new Exception($db->stderr());
+        }
+
+        return $id;     
+    }
+    
     public function getClientsByEvent($event_id) {
         $db = & JFactory::getDBO();
         $query = "SELECT DISTINCT client_id FROM #__dc_mv_events WHERE id='$event_id' AND client_id !='0'";
