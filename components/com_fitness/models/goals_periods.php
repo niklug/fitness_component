@@ -218,16 +218,6 @@ class FitnessModelgoals_periods extends JModelList {
         return $html;
     }
     
-    public function getPlanShoppingList($id) {
-        $db = JFactory::getDbo();
-        $sql = "SELECT * FROM #__fitness_nutrition_plan_shopping_list WHERE nutrition_plan_id='$id'";
-        $db->setQuery($sql);
-        if(!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $result = $db->loadObjectList();
-        return $result;
-    }
     
     public function getUserPans($client_id, $nutrition_plan_id) {
         $db = JFactory::getDbo();

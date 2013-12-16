@@ -2862,7 +2862,7 @@
         <div class="clr"></div>
         <div id="supplements_list_<%= id %>" class="supplements_list"></div>
         <div class="clr"></div>
-        <%  if(name) { %>
+        <%  if(id) { %>
         <br>
         <input data-id="<%= id %>"  class="add_supplement" type="button" value="New Supplement" >
         <div class="clr"></div>
@@ -2878,9 +2878,6 @@
 
 
 <script type="text/template" id="nutrition_plan_supplement_template">
-    <%
-    
-    %>
     <div id="supplement_wrapper_<%= id %>" style="padding:5px; margin-top:10px;border: 1px dashed #CCCCCC;" class="supplement_wrapper">
         <form class="supplement_form">
             <table width="100%">
@@ -2928,5 +2925,84 @@
     <div class="select_meal_form" class="select_meal_form">
         <span class="results_count"></span>
         <select size="25" class="supplement_name_results"></select>
+    </div>
+</script>
+
+
+<script type="text/template" id="nutrition_plan_frontend_protocol_item_template">
+    <div style="border:1px solid #ccc;padding:0px; margin-top:10px;" class="protocol_wrapper">
+    
+        <table width="100%">
+            <tr>
+                <td width="200">
+                    <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">PROTOCOL NAME</div>
+                </td>
+                <td width="200">
+                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;" ><%= name %></div>
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+        <hr class="orange_line">
+        
+        <div class="internal_wrapper">
+        
+            <div id="supplements_list_<%= id %>" class="supplements_list"></div>
+
+            <br>
+            <div class="clr"></div>
+            <%  if(id) { %>
+            <div class="comments_wrapper" style="width:100%"></div>
+            <div class="clr"></div>
+            <input id="add_comment_<%= id %>" class="" type="button" value="Add Comment" >
+            <div class="clr"></div>
+            <% } %>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="nutrition_plan_frontend_supplement_template">
+    <div style="margin-top:10px;">
+        <table width="100%">
+            <tr>
+                <td width="200">
+                    <div style="color: #BC4A26 !important;font-size:14px;font-weight: bold; padding: 2px;">SUPPLEMENT NAME</div>
+                </td>
+                <td>
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <div style="color: #fff !important;font-size:12px;font-weight: bold; padding: 2px;" ><%= name %></div>
+                            </td>
+                            <td style="text-align:right;" width="150">
+                                <a class="view_product" data-url="<%= url %>"  href="javascript:void(0)">[VIEW PRODUCT]</a> 
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+    
+            <tr>
+                <td width="200">
+                    <div style="color: #BC4A26 !important;font-size:14px;font-weight: bold; padding: 2px;">DESCRIPTION</div>
+                </td>
+                <td>
+                    <div style="color: #fff !important;font-size:12px;font-weight: bold; padding: 2px;" ><%= description %></div>
+                </td>
+            </tr>
+    
+            <tr>
+                <td width="200">
+                    <div style="color: #BC4A26 !important;font-size:14px;font-weight: bold; padding: 2px;">RECOMMENDED USAGE</div>
+                </td>
+                <td>
+                    <div style="color: #fff !important;font-size:12px;font-weight: bold; padding: 2px;" ><%= comments %></div>
+                </td>
+            </tr>
+        </table>
+        <div class="clr"></div>
+        <hr>
     </div>
 </script>

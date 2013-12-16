@@ -476,5 +476,12 @@ class FitnessController extends JController {
         $view -> saveAsRecipe(); 
     }
     
-    
+    public function nutrition_plan_protocol(){
+        echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_protocol());
+    }
+
+    public function nutrition_plan_supplement(){
+        echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_supplement());
+    }
+        
 }

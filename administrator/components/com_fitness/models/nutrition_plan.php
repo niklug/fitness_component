@@ -624,7 +624,18 @@ class FitnessModelnutrition_plan extends JModelAdmin
             
             switch ($method) {
                 case 'GET': // Get Item(s)
-                    $query = "SELECT * FROM $table";
+                    $id = JRequest::getVar('id');
+                    $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
+                    
+                    $query = "SELECT * FROM $table WHERE 1";
+                    
+                    if($id) {
+                        $query .= " AND id='$id'";
+                    }
+                    if($nutrition_plan_id) {
+                        $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+                    }
+
                     $items = FitnessHelper::customQuery($query, 1);
                     return $items;
                     break;

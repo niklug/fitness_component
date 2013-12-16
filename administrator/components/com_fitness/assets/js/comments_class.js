@@ -59,8 +59,9 @@
         $("#delete_comment_" + this.sub_item_id).die().live('click', function(){
             var comment_wrapper = $(this).closest("table").parent();
                         
-            $(this).closest("table").parent().prev().prev().remove();
-            $(this).closest("table").parent().prev().remove();
+            $(this).closest("table").parent().prev("hr").remove();
+            
+            //console.log($(this).closest("table").parent().prev("hr"));
             
             var id = comment_wrapper.attr('data-id');
             
@@ -81,9 +82,6 @@
             
             //  after last reply item
             if(parent_id && (items != 0)) {
-                //$('.reply_comment[data-id="' + parent_id + '"]').remove();
-                //comment_template += '<input style="margin-left:35px;" data-id="' + parent_id + '" id="reply_comment_' + self.sub_item_id + '" class="reply_comment" type="button"  value="Reply">'
-                //comment_template = '<div class="clr"></div>';
                 $("#comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-parent_id="' + parent_id + '"]').last().after(comment_template);
             } 
              
@@ -131,7 +129,7 @@
          
         var current_time = this.getCurrentDate(d1);
         
-        var comment_template = '<div class="clr"></div>';
+        var comment_template = '';
         
         comment_template += '<div data-id="' + comment_obj.id + '"  data-parent_id="' + parent_id+ '" class="comment_wrapper">';
 
@@ -179,7 +177,7 @@
         }
         
         
-        
+        comment_template += '<div class="clr"></div>';
         comment_template += '</div>';
 
         return comment_template;

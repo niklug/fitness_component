@@ -232,7 +232,7 @@ $helper = new FitnessHelper();
             </fieldset>
             <div class="clr"></div>
             <br/>
-            <div id="macronutrients_comments_wrapper" style="width:100%"></div>
+            <div id="macronutrients_comments_wrapper" stle="width:100%"></div>
             <div class="clr"></div>
             <br/>
             <input id="add_comment_1" class="" type="button" value="Add Comment" >
@@ -242,11 +242,6 @@ $helper = new FitnessHelper();
         <!-- SUPPLEMENTS -->
         <div id="supplements_wrapper" class="block">
             <fieldset  class="adminform">
-                <?php
-                if(!$this->item->id) {
-                    echo 'Save form to proceed add Shopping Items';
-                }
-                ?>
                 <legend>SUPPLEMENTS & SUPPLEMENT PROTOCOLS</legend>
                 <div id="protocols_wrapper">
 
@@ -428,13 +423,6 @@ $helper = new FitnessHelper();
 
 
 
-        var shopping_list_options = {
-            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'item_obj' : {'name' : "", 'usage' : "", 'comments' : "", 'url' : ""}
-        }
-
-
         var calculate_summary_options = {
             'activity_level' : "input[name='jform[activity_level]']",
             'draw_chart' : false
@@ -457,8 +445,6 @@ $helper = new FitnessHelper();
         // meal blocks object
         var nutrition_meal = $.nutritionMeal(nutrition_meal_options, item_description_options, nutrition_comment_options);
 
-        // shopping list
-        //var shopping_list = $.shoppingList(shopping_list_options);
 
         //bottom comments
         var plan_comments = $.comments(nutrition_bottom_comment_options, nutrition_comment_options.item_id, 0);
@@ -473,9 +459,6 @@ $helper = new FitnessHelper();
         macronutrient_targets_rest.run();
 
         nutrition_meal.run();
-
-
-        //shopping_list.run();
 
         var plan_comments_html = plan_comments.run();
         $("#plan_comments_wrapper").html(plan_comments_html);
@@ -679,23 +662,23 @@ $helper = new FitnessHelper();
 		this.protocolListItemViews = {};
 
 		this.collection.on("add", function(protocol) {
-                        var comment_options = {
-                            'item_id' : window.protocol_options.nutrition_plan_id,
-                            'fitness_administration_url' : window.protocol_options.fitness_backend_url,
-                            'comment_obj' : {'user_name' : window.protocol_options.user_name, 'created' : "", 'comment' : ""},
-                            'db_table' : window.protocol_options.protocol_comments_db_table,
-                            'read_only' : false,
-                        }
-                        var comments = $.comments(comment_options, comment_options.item_id, protocol.id);
+                    var comment_options = {
+                        'item_id' : window.protocol_options.nutrition_plan_id,
+                        'fitness_administration_url' : window.protocol_options.fitness_backend_url,
+                        'comment_obj' : {'user_name' : window.protocol_options.user_name, 'created' : "", 'comment' : ""},
+                        'db_table' : window.protocol_options.protocol_comments_db_table,
+                        'read_only' : false,
+                    }
+                    var comments = $.comments(comment_options, comment_options.item_id, protocol.id);
 
-			window.app.nutrition_plan_protocol_view = new window.app.Nutrition_plan_protocol_view({model : protocol, 'comments' : comments}); 
-			$(self.el).append( window.app.nutrition_plan_protocol_view.render().el );
-			self.protocolListItemViews[ protocol.cid ] = window.app.nutrition_plan_protocol_view;
+                    window.app.nutrition_plan_protocol_view = new window.app.Nutrition_plan_protocol_view({collection : this,  model : protocol, 'comments' : comments}); 
+                    $(self.el).append( window.app.nutrition_plan_protocol_view.render().el );
+                    self.protocolListItemViews[ protocol.cid ] = window.app.nutrition_plan_protocol_view;
 		});
 		
 		this.collection.on("remove", function(protocol, options) {
-			self.protocolListItemViews[ protocol.cid ].close();
-			delete self.protocolListItemViews[ protocol.cid ];
+                    self.protocolListItemViews[ protocol.cid ].close();
+                    delete self.protocolListItemViews[ protocol.cid ];
 		});
             },
             
@@ -774,12 +757,11 @@ $helper = new FitnessHelper();
 
             
             onClickSaveProtocol : function(event) {
-                var protocol_name_field = $(event.target).parent().find('.protocol_name');
+                var protocol_name_field = this.$el.find('.protocol_name');
                 var protocol_name = protocol_name_field.attr('value');
                 
                 protocol_name_field.removeClass("red_style_border");
-                
-                
+               
                 this.model.set({ name : protocol_name});
                 
                 if (!this.model.isValid()) {
@@ -790,10 +772,11 @@ $helper = new FitnessHelper();
                 
                 var self = this;
                 if (this.model.isNew()) {
-                    self.collection.create(this.model, {
+                    this.collection.create(this.model, {
+                        wait: true,
                         success: function (model, response) {
                             self.close();
-                            //console.log(self.collection);
+                            //console.log(model.toJSON());
                         },
                         error: function (model, response) {
                             alert(response.responseText);
@@ -825,7 +808,7 @@ $helper = new FitnessHelper();
              
              close :function() {
                 $(this.el).unbind();
-		$(this.el).empty();
+		$(this.el).remove();
             },
              
 
@@ -842,7 +825,7 @@ $helper = new FitnessHelper();
         window.app.Nutrition_plan_supplement_view = Backbone.View.extend({
            
             initialize: function(){
-                _.bindAll(this, 'onClickSaveSupplement');
+                _.bindAll(this, 'onClickSaveSupplement', 'onInputSupplementName');
             },
             
             render: function(){
@@ -863,14 +846,31 @@ $helper = new FitnessHelper();
                 
                 this.model.set(data);
 
+                //validation
+                var supplement_name_field = this.$el.find('.supplement_name');
+                supplement_name_field.removeClass("red_style_border");
+                var supplement_url_field = this.$el.find('.supplement_url');
+                supplement_url_field.removeClass("red_style_border");
                 if (!this.model.isValid()) {
-                    alert(this.model.validationError);
-                    return false;
+                    var validate_error = this.model.validationError;
+                    
+                    if(validate_error == 'name') {
+                        supplement_name_field.addClass("red_style_border");
+                        return false;
+                    } else if(validate_error == 'url') {
+                        supplement_url_field.addClass("red_style_border");
+                        return false;
+                    } else {
+                        alert(this.model.validationError);
+                        return false;
+                    }
+                    
                 }
                 
                 var self = this;
                 if (this.model.isNew()) {
                     this.collection.create(this.model, {
+                        wait: true,
                         success: function (model, response) {
                             self.close();
                             //console.log(self.collection);
@@ -910,9 +910,10 @@ $helper = new FitnessHelper();
                 var search_text = o.val();
                 
                 var id = this.model.get('id');
-   
+                
+                $(".select_meal_form").parent().remove();
                 this.ingredients_search_results_view = new window.app.Ingredients_search_results_view({model : this.model, 'parent_view_el' : this.$el});
-                this.ingredients_search_results_view.render().el
+                this.ingredients_search_results_view.render().el;
                 
                 o.parent().append(this.ingredients_search_results_view.render().el);
 
@@ -964,7 +965,7 @@ $helper = new FitnessHelper();
             
             close :function() {
                 $(this.el).unbind();
-                $(this.el).empty();
+                $(this.el).remove();
             },
             
         });
@@ -974,7 +975,6 @@ $helper = new FitnessHelper();
 
             initialize : function () {
                 _.bindAll(this, 'onClickOption', 'render');
-                this.render();
             },
 
             render : function (eventName) {
@@ -1033,7 +1033,7 @@ $helper = new FitnessHelper();
             
             close : function() {
                 $(this.el).unbind();
-                $(this.el).empty();
+                $(this.el).remove();
             },
 
         });
@@ -1045,6 +1045,7 @@ $helper = new FitnessHelper();
             
             defaults : {
                 id : null,
+                nutrition_plan_id : window.protocol_options.nutrition_plan_id,
                 name : null,
             },
             
@@ -1076,19 +1077,12 @@ $helper = new FitnessHelper();
                   return 'Protocol Id is not valid';
                 }
                 if (!attrs.name) {
-                  return 'Supplement Name is empty';
+                  return 'name';
                 }
-                /*
-                if (!attrs.description) {
-                  return 'Supplement Description is empty';
-                }
-                if (!attrs.comments) {
-                  return 'Supplement Comments is empty';
-                }
-                */
+
                 var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
                 if (attrs.url && !regexp.test(attrs.url) ) {
-                  return 'Shop URL is not valid';
+                  return 'url';
                 }
             }
         });
@@ -1160,11 +1154,11 @@ $helper = new FitnessHelper();
                  
                  window.app.protocols = new window.app.Protocols_collection(); 
                  
-                 window.app.protocols.fetch();
+                 window.app.protocols.fetch({data: {nutrition_plan_id : window.protocol_options.nutrition_plan_id}});
                  
                  window.app.nutrition_plan_protocols_view = new window.app.Nutrition_plan_protocols_view({el : $("#protocol_list"), collection : window.app.protocols}); 
                 
-                 window.app.nutrition_plan_protocols_view.render().el;
+                 //window.app.nutrition_plan_protocols_view.render().el;
 
             },
                     

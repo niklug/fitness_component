@@ -951,13 +951,16 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_supplement_protocols` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_shopping_list` (
+
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_supplements` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nutrition_plan_id` int(11) unsigned NOT NULL,
   `protocol_id` int(11) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `comments` varchar(255) NOT NULL,
+  `comments` text NOT NULL,
   `url` varchar(255) NOT NULL,
   `created_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
