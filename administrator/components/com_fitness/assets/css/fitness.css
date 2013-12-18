@@ -779,7 +779,7 @@
 
 
 #plan_menu, #recipe_mainmenu {
-    width: 100%;
+    width: auto;
 }
 
 #plan_menu ul, #recipe_mainmenu ul {
@@ -814,6 +814,48 @@
     border-bottom: 2px solid #BC4A26;
     font-weight:bold;
 }
+
+
+
+
+#nutrition_guide_menu {
+    width: auto;
+}
+
+#nutrition_guide_menu ul {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+#nutrition_guide_menu ul li {
+  border: 1px solid #818283;
+  float: left;
+  list-style: none outside none;
+  margin-right: 10px;
+  padding: 0 5px;
+  position: relative;
+  text-align: center;
+  width: auto;
+  line-height: 1.4em;
+}
+
+#nutrition_guide_menu ul li a{
+    text-decoration: none !important;
+    color: #000;
+    font-size: 14px;
+}
+
+#nutrition_guide_menu ul li a:hover, #nutrition_guide_menu ul li a:active, #nutrition_guide_menu ul li a.active {
+    color:#BC4A26 !important;
+    border-bottom: 2px solid #BC4A26;
+    font-weight:bold;
+}
+
+
+
+
 
 .notice_image {
     background-size: 40px auto;

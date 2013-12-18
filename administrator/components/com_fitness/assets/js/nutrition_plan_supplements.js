@@ -435,6 +435,9 @@
                 if (!attrs.name) {
                   return 'Protocol Name is empty';
                 }
+                if (!attrs.nutrition_plan_id) {
+                  return 'Nurtition Plan Id is not valid';
+                }
             }
         });
         

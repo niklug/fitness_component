@@ -249,9 +249,9 @@ $helper = new FitnessHelper();
             </fieldset>
         </div>
         
-        <!-- NUTRITION GUIDE -->
-        <div id="nutrition_guide_wrapper" class="block">
-            <fieldset id="nutrition_guide"  class="adminform">
+        <!-- NUTRITION GUIDE OLD -->
+        <div id="nutrition_guide_old_wrapper" class="block">
+            <fieldset id="nutrition_guide_old"  class="adminform">
                 <?php
                 if(!$this->item->id) {
                     echo 'Save form to proceed add Meals';
@@ -294,6 +294,11 @@ $helper = new FitnessHelper();
                 <input id="add_comment_0" class="" type="button" value="Add Comment" >
                 <div class="clr"></div>
             </fieldset>
+        </div>
+        
+        <!-- NUTRITION GUIDE-->
+        <div id="nutrition_guide_wrapper" class="block">
+
         </div>
         
         <!-- INFORMATION -->
@@ -384,7 +389,7 @@ $helper = new FitnessHelper();
             'logged_in_admin' : <?php echo JFactory::getApplication()->isAdmin();?>,
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'main_wrapper' : $("#nutrition_guide"),
+            'main_wrapper' : $("#nutrition_guide_old"),
             'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
             'db_table' : '#__fitness_nutrition_plan_ingredients',
             'parent_view' : 'nutrition_plan_backend',
@@ -557,6 +562,7 @@ $helper = new FitnessHelper();
                 "click #targets_link" : "onClickTargets",
                 "click #macronutrients_link" : "onClickMacronutrients",
                 "click #supplements_link" : "onClickSupplements",
+                "click #nutrition_guide_old_link" : "onClickNutrition_guide_old",
                 "click #nutrition_guide_link" : "onClickNutrition_guide",
                 "click #information_link" : "onClickInformation",
                 "click #archive_focus_link" : "onClickArchive_focus",
@@ -585,10 +591,14 @@ $helper = new FitnessHelper();
                 window.app.controller.navigate("!/supplements", true);
             },
             
-            onClickNutrition_guide : function() {
-                window.app.controller.navigate("!/nutrition_guide", true);
+            onClickNutrition_guide_old : function() {
+                window.app.controller.navigate("!/nutrition_guide_old", true);
             },
             
+            onClickNutrition_guide: function() {
+                window.app.controller.navigate("!/nutrition_guide", true);
+            },
+
             onClickInformation : function() {
                 window.app.controller.navigate("!/information", true);
             },
@@ -629,6 +639,226 @@ $helper = new FitnessHelper();
         //
         
         
+        // NUTRITION GUIDE
+         window.app.exercice_day_options = {
+
+            'fitness_backend_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            
+            'nutrition_plan_id' : '<?php echo  $this->item->id ?>',
+    
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+                   
+            'exercice_day_meal_comments_db_table' : '#__fitness_nutrition_plan_exercice_day_meal_comments'
+        };
+        
+        
+        
+        
+        window.app.Nutrition_guide_menu = Backbone.View.extend({
+            el : $("#nutrition_guide_wrapper"),
+
+            template : _.template($('#nutrition_guide_menu_template').html()),
+
+            initialize:function () {
+                this.render();
+            },
+
+            render:function () {
+                $(this.el).html(this.template());
+                return this;
+            },
+
+            events:{
+                "click .example_day_link": "onChooseDay"
+            },
+
+            onChooseDay:function (event) {
+                $(".example_day_link").removeClass("active");
+                var day = $(event.target).attr('data-id');
+                $(event.target).addClass("active");
+                window.app.controller.navigate("!/example_day/" + day, true);
+            }
+
+        });
+        
+        
+        window.app.Exercice_day_view = Backbone.View.extend({
+            
+            initialize:function () {
+
+            },
+
+            render: function(){
+                var template = _.template( $("#nutrition_plan_exercice_day_template").html());
+                this.$el.html(template);
+                
+                var self = this;
+                
+		this.mealListItemViews = {};
+
+		this.collection.on("add", function(meal) {
+                    window.app.nutrition_plan_exercise_day_meal_view = new window.app.Nutrition_plan_exercise_day_meal_view({collection : this,  model : meal}); 
+                    self.$el.find("#exercice_day_meal_list").append( window.app.nutrition_plan_exercise_day_meal_view.render().el );
+                    self.mealListItemViews[ meal.cid ] = window.app.nutrition_plan_exercise_day_meal_view;
+		});
+		
+		this.collection.on("remove", function(meal, options) {
+                    self.mealListItemViews[ meal.cid ].close();
+                    delete self.mealListItemViews[ meal.cid ];
+		});
+
+                return this;
+            },
+
+            events:{
+                "click #add_meal": "add_meal"
+            },
+
+            add_meal:function () {
+                var example_day_id = this.options.example_day_id;
+                window.app.controller.navigate("!/example_day/" + example_day_id);
+                window.app.controller.navigate("!/add_example_day_meal/" + example_day_id, true);
+            }
+
+        });
+        
+        
+        window.app.Nutrition_plan_exercise_day_meal_view = Backbone.View.extend({
+           
+            initialize: function(){
+                _.bindAll(this, 'onClickSaveMeal', 'onClickDeleteMeal','close', 'render');
+                this.model.on("destroy", this.close, this);
+            },
+            
+            render: function(){
+                var template = _.template( $("#nutrition_plan_exercice_day_item_template").html(), this.model.toJSON());
+                this.$el.html(template);
+                this.$el.find('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+                return this;
+            },
+            
+     
+            events: {
+                "click .save_exercice_day_meal" : "onClickSaveMeal",
+                "click .delete_exercice_day_meal" : "onClickDeleteMeal",
+            },
+
+            onClickSaveMeal : function(event) {
+                event.preventDefault();
+                var data = Backbone.Syphon.serialize(this);
+                
+                this.model.set(data);
+
+                //validation
+                var meal_description_field = this.$el.find('.meal_description');
+                meal_description_field.removeClass("red_style_border");
+                var meal_time_field = this.$el.find('.meal_time');
+                meal_time_field.removeClass("red_style_border");
+                if (!this.model.isValid()) {
+                    var validate_error = this.model.validationError;
+                    
+                    if(validate_error == 'description') {
+                        meal_description_field.addClass("red_style_border");
+                        return false;
+                    } else if(validate_error == 'meal_time') {
+                        meal_time_field.addClass("red_style_border");
+                        return false;
+                    } else {
+                        alert(this.model.validationError);
+                        return false;
+                    }
+                }
+                
+                var self = this;
+                if (this.model.isNew()) {
+                    this.collection.create(this.model, {
+                        wait: true,
+                        success: function (model, response) {
+                            self.close();
+                            //console.log(self.collection);
+                        },
+                        error: function (model, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                } else {
+                    this.model.save(null, {
+                        success: function (model, response) {
+                            //console.log(self.collection);
+                        },
+                        error: function (model, response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+             },
+             
+             onClickDeleteMeal : function(event) {
+                var self = this;
+                this.model.destroy({
+                    success: function (model) {
+                        self.close();
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+             
+             close :function() {
+                $(this.el).unbind();
+		$(this.el).remove();
+            },
+ 
+        });
+        
+        
+        
+        //MODELS
+        
+        window.app.Exercise_day_meal_model = Backbone.Model.extend({
+            urlRoot : window.app.exercice_day_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&',
+            
+            defaults : {
+                id : null,
+                description : null,
+                nutrition_plan_id : window.app.exercice_day_options.nutrition_plan_id,
+                example_day_id : null,
+                meal_time : null,
+            },
+            
+            validate: function(attrs, options) {
+                if (!attrs.description) {
+                  return 'description';
+                }
+                if (!attrs.nutrition_plan_id) {
+                  return 'Nurtition Plan Id is not valid';
+                }
+                if (!attrs.example_day_id) {
+                  return 'error: No example_day_id';
+                }
+                var result = false, m;
+                var re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
+                if ((m = attrs.meal_time.match(re))) {
+                    result = (m[1].length == 2 ? "" : "0") + m[1] + ":" + m[2];
+                }
+                if (!attrs.meal_time || !result) {
+                  return 'meal_time';
+                }
+            }
+        });
+        
+        
+        
+        
+        
+        // COLLECTIONS
+        window.app.Exercise_day_meals_collection = Backbone.Collection.extend({
+            url : window.app.exercice_day_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&',
+            model: window.app.Exercise_day_meal_model
+        });
+
+        
         
         
         //CONTROLLER
@@ -640,10 +870,16 @@ $helper = new FitnessHelper();
                 "!/overview": "overview", 
                 "!/targets": "targets", 
                 "!/macronutrients": "macronutrients", 
-                "!/nutrition_guide": "nutrition_guide", 
+                "!/nutrition_guide_old": "nutrition_guide_old", 
                 "!/information": "information", 
                 "!/archive": "archive", 
                 "!/close": "close", 
+                
+                "!/nutrition_guide": "nutrition_guide", 
+                "!/example_day/:id": "example_day", 
+                "!/add_example_day_meal/:id": "add_example_day_meal", 
+                
+                
             },
  
             overview: function () {
@@ -670,10 +906,10 @@ $helper = new FitnessHelper();
             },
             
                     
-            nutrition_guide: function () {
+            nutrition_guide_old: function () {
                  this.common_actions();
-                 $("#nutrition_guide_wrapper").show();
-                 $("#nutrition_guide_link").addClass("active_link");
+                 $("#nutrition_guide_old_wrapper").show();
+                 $("#nutrition_guide_old_link").addClass("active_link");
             },
                     
             information: function () {
@@ -698,6 +934,33 @@ $helper = new FitnessHelper();
                 $(".plan_menu_link").removeClass("active_link")
             },
      
+            nutrition_guide : function () {
+                 this.common_actions();
+                 $("#nutrition_guide_wrapper").show();
+                 $("#nutrition_guide_link").addClass("active_link");
+                 
+                 new window.app.Nutrition_guide_menu();
+                 
+                 this.example_day(1);
+                 $(".example_day_link").first().addClass("active");
+            },
+            
+            example_day : function(example_day_id) {
+               
+                window.app.exercise_day_meal_collection = new window.app.Exercise_day_meals_collection(); 
+                 
+                window.app.exercise_day_meal_collection.fetch({data: {
+                        nutrition_plan_id : window.app.exercice_day_options.nutrition_plan_id,
+                        example_day_id : example_day_id
+                }});
+                
+                $('#exercice_day_wrapper').html(new window.app.Exercice_day_view({collection : window.app.exercise_day_meal_collection, 'example_day_id' : example_day_id}).render().el);
+            },
+            
+            add_example_day_meal : function(example_day_id) {
+                this.nutrition_plan_exercise_day_meal_view = new window.app.Nutrition_plan_exercise_day_meal_view({model : new window.app.Exercise_day_meal_model({'example_day_id' : example_day_id}), collection : window.app.exercise_day_meal_collection}); 
+                $("#exercice_day_meal_list").append(this.nutrition_plan_exercise_day_meal_view.render().el );
+            },
             
         });
 

@@ -1147,3 +1147,16 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_favourites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
+
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_example_day_meals` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nutrition_plan_id` int(10) unsigned NOT NULL,
+  `example_day_id` int(10) unsigned NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `meal_time` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nutrition_plan_id` (`nutrition_plan_id`),
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
