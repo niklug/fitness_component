@@ -256,8 +256,11 @@ $helper = new FitnessHelper();
             var meal_id = closest_TR.attr('data-id');
             deleteMeal(meal_id, closest_TR);
         });
+        
+        
 
-        populateTable(_recipe_id, _meals_content);
+            populateTable(_recipe_id, _meals_content);
+  
 
 
         // FUNCTIONS 
@@ -609,9 +612,12 @@ $helper = new FitnessHelper();
             'comment_method' : 'RecipeComment'
         }
         
-        var comments = $.comments(comment_options, comment_options.item_id, 0);
-        var comments_html = comments.run();
-        $("#comments_wrapper").html(comments_html);
+        if(comment_options.item_id) {
+        
+            var comments = $.comments(comment_options, comment_options.item_id, 0);
+            var comments_html = comments.run();
+            $("#comments_wrapper").html(comments_html);
+        }
         
         
        

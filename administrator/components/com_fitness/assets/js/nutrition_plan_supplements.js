@@ -102,7 +102,12 @@
                 
                 if(this.protocol_id ){ 
   
-                    this.supplement_collection.fetch({data: {nutrition_plan_id : window.app.protocol_options.nutrition_plan_id, protocol_id : this.protocol_id}});
+                    this.supplement_collection.fetch({
+                        data: {nutrition_plan_id : window.app.protocol_options.nutrition_plan_id, protocol_id : this.protocol_id},
+                        error: function (model, response) {
+                            alert(response.responseText);
+                        }
+                    });
                 }
                 
                 
@@ -508,7 +513,12 @@
                  
                  window.app.protocols = new window.app.Protocols_collection(); 
                  
-                 window.app.protocols.fetch({data: {nutrition_plan_id : window.app.protocol_options.nutrition_plan_id}});
+                 window.app.protocols.fetch({
+                     data: {nutrition_plan_id : window.app.protocol_options.nutrition_plan_id},
+                     error: function (model, response) {
+                        alert(response.responseText);
+                     }
+                 });
                  
                  window.app.nutrition_plan_protocols_view = new window.app.Nutrition_plan_protocols_view({el : $("#protocol_list"), collection : window.app.protocols}); 
 

@@ -157,5 +157,15 @@ class FitnessViewNutrition_plan extends JView {
         echo  json_encode($model->nutrition_plan_exercie_day_meal());
     }
     
+    function nutrition_guide_add_recipe_list() {
+        $model = $this -> getModel("nutrition_plan");
+        echo  json_encode($model->nutrition_guide_add_recipe_list());
+    }
+    
+    function getRecipeTypes() {
+        $model = $this -> getModel("nutrition_plan");
+        echo  json_encode($model->getRecipeTypes());
+    }
+    
     
 }

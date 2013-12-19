@@ -53,6 +53,11 @@
                 var store_value =  localStorage.getItem(name);
                 if(!store_value) return value;
                 return store_value;
+            },
+            
+            reset : function() {
+                this.set({'currentPage' : "", 'items_total' : 0});
+                this.setLocalStorageItem('currentPage', 1);
             }
         });
 
@@ -110,6 +115,7 @@
                 this.model.setLocalStorageItem('currentPage',  1);
                 this.model.setLocalStorageItem('items_number', items_number);
                 this.model.set({'items_number' : items_number});
+                this.model.set({'currentPage' : 1});
             },
             
             onClickNext : function() {
@@ -195,7 +201,9 @@
                         $("#ul-pagination").append(pageItem.render().el);
                     }
                 }
-            }
+            },
+            
+            
         });
 
         return new Pagination_app_model();

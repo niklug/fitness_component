@@ -634,7 +634,7 @@
     </div>
     <div style="width:100%;text-align: center;">
         Display # 
-        <select name="items_number" id="items_number">
+        <select style="float:none;" name="items_number" id="items_number">
             <option value="2">2</option>
             <option value="5">5</option>
             <option selected="selected" value="10">10</option>
@@ -3048,7 +3048,149 @@
             </table>
         </form>
         <div class="clr"></div>
-        <div  class=""></div>
+        <div  class="meal_recipes"></div>
+        <% if(id) { %>
+            <input style="float:left;"  class="add_meal_recipe" type="button" value="ADD RECIPE" >
+        <% } %>
         <div class="clr"></div>
     </div>
+</script>
+
+<script type="text/template" id="example_day_add_recipe_template">
+    <label style="font-weight:bold;"> ADD RECIPE TO NUTRITION GUIDE </label>
+    <input class="cancel_add_recipe" style="float:right" type="button" value="Cancel" >
+    <div class="clr"></div>
+    <table>
+        <tr>
+            <td>
+                <div class="exercice_day_meal_recipes_list" style="width:700px;"></div>
+                <br>
+                <div style="text-align:center;width:700px;" id="pagination_container"></div
+            </td>
+            <td style="vertical-align:top;">
+                <div id="recipe_database_filter_wrapper"> </div>
+            </td>
+        </tr>
+    </table>
+
+    
+</script>
+
+
+<!--  -->
+<script type="text/template" id="nutrition_guide_add_recipe_item_template">
+
+    <div  class="recipe_database_item_wrapper" style="margin-top: 10px; border:1px solid #000;">
+        <table width="100%">
+            <tr>
+                <td width="50%">
+                    <table  width="100%">
+                        <tr>
+                            <td width="40%">RECIPE NAME</td>
+                            <td width="60%">
+                                  <%= recipe_name %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>AUTHOR</td>
+                            <td>
+                                 <%= author %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>SERVES</td>
+                            <td>
+                                 <%= number_serves %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>STATUS</td>
+                            <td>
+                                <%= window.fitness_helper.setRecipeStatus(status) %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>APPROVED BY</td>
+                            <td>
+                                 <%= trainer || '-' %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input class="view_add_recipe"  type="button" value="VIEW RECIPE" >
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="30%">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                CALORIES
+                            </td>
+                            <td>
+                                <%= calories || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                ENERGY
+                            </td>
+                            <td>
+                                <%= energy || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                PROTEIN
+                            </td>
+                            <td>
+                                <%= protein || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                FAT
+                            </td>
+                            <td>
+                                <%= fats || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                CARB
+                            </td>
+                            <td>
+                                <%= carbs || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                SUGAR
+                            </td>
+                            <td>
+                                <%= total_sugars || '0.00' %>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <%
+                    if(!image || image == 'images/Recipe_Images/'){
+                        image = window.fitness_helper.get('default_recipe_image');
+                    }
+                    image = window.fitness_helper.get('base_url') + image;
+                    %>
+                    <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+                </td>
+            </tr>
+        </table>
+        <div class="clr"></div>
+    </div>
+    
+    
 </script>

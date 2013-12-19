@@ -645,7 +645,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
                 case 'POST': // Create
@@ -654,7 +653,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
                 case 'DELETE': // Delete Item
@@ -664,7 +662,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
 
@@ -724,7 +721,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
                 case 'POST': // Create
@@ -733,7 +729,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
                 case 'DELETE': // Delete Item
@@ -743,7 +738,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
 
@@ -801,7 +795,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
                 case 'POST': // Create
@@ -810,7 +803,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
                 case 'DELETE': // Delete Item
@@ -820,7 +812,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     } catch (Exception $e) {
                             echo $e->getMessage();
                             header("HTTP/1.0 404 Not Found");
-                            die();
                     }
                     break;
 
@@ -831,6 +822,51 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $model->id = $id;
             
             return $model;
+        }
+        
+        public function nutrition_guide_add_recipe_list() {
+            require_once  JPATH_COMPONENT_SITE  . DS .'models' . DS . 'recipe_database.php';
+            
+            $recipe_database = new FitnessModelrecipe_database();
+            
+            $table = '#__fitness_nutrition_recipes';
+            
+            $data = new stdClass();
+            
+            $data->sort_by = JRequest::getVar('sort_by'); 
+            $data->order_dirrection = JRequest::getVar('order_dirrection'); 
+            $data->page = JRequest::getVar('page'); 
+            $data->limit = JRequest::getVar('limit'); 
+            $data->state = JRequest::getVar('state'); 
+            $data->filter_options = JRequest::getVar('filter_options'); 
+            $data->current_page= JRequest::getVar('current_page'); 
+            
+            $data_encoded= json_encode($data);
+            
+            $recipes = $recipe_database->getRecipes($table, $data_encoded);
+            
+            if(!$recipes['status']['success']) {
+                echo $recipes['status']['message'];
+                header("HTTP/1.0 404 Not Found");
+            }
+            
+            $recipes = $recipes['data'];
+                    
+            return $recipes;
+        }
+        
+        public function getRecipeTypes() {
+
+            $helper = new FitnessHelper();
+
+            $recipeTypes = $helper->getRecipeTypes();
+
+            if(!$recipeTypes['success']) {
+                echo $recipeTypes['message'];
+                header("HTTP/1.0 404 Not Found");
+            }
+            $data = $recipeTypes['data'];
+            return $data;
         }
         
 }

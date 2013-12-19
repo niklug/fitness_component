@@ -4,7 +4,7 @@
          //// Helper Model
         Helper_model = Backbone.Model.extend({
             defaults: {
-                
+                'default_recipe_image' : '/administrator/components/com_fitness/assets/images/no_image.png'
             },
 
             initialize: function(){
@@ -99,7 +99,33 @@
                     var all_options_select2 = $(select2).html();
                     this.hideSelectOption(value, select2, all_options_select2);
                 }
-            }
+            },
+            
+            setRecipeStatus : function(status) {
+                var style_class;
+                var text;
+                switch(status) {
+                    case '1' :
+                        style_class = 'recipe_status_pending';
+                        text = 'PENDING';
+                        break;
+                    case '2' :
+                        style_class = 'recipe_status_approved';
+                        text = 'APPROVED';
+                        break;
+                    case '3' :
+                        style_class = 'recipe_status_notapproved';
+                        text = 'NOT APPROVED';
+                        break;
+                   
+                    default :
+                        style_class = 'recipe_status_pending';
+                        text = 'PENDING';
+                        break;
+                }
+                var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                return html;
+            },
 
         });
         
