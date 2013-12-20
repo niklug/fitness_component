@@ -118,7 +118,7 @@ class FitnessViewNutrition_plan extends JView {
         $table = JRequest::getVar('table');
         $data_encoded = JRequest::getVar('data_encoded');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->importRecipe($data_encoded, $table);
+        echo json_encode($model->importRecipe($data_encoded, $table));
     }
     
     function saveShoppingItem() {
@@ -167,5 +167,14 @@ class FitnessViewNutrition_plan extends JView {
         echo  json_encode($model->getRecipeTypes());
     }
     
+    function getRecipe() {
+        $model = $this -> getModel("nutrition_plan");
+        echo  json_encode($model->getRecipe());
+    }
+    
+    function nutrition_guide_recipes() {
+        $model = $this -> getModel("nutrition_plan");
+        echo  json_encode($model->nutrition_guide_recipes());
+    }
     
 }

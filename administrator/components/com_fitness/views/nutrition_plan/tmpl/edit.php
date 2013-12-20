@@ -727,17 +727,57 @@ $helper = new FitnessHelper();
         window.app.Nutrition_plan_exercise_day_meal_view = Backbone.View.extend({
            
             initialize: function(){
-                _.bindAll(this, 'onClickSaveMeal', 'onClickDeleteMeal','close', 'render');
+                _.bindAll(this, 'onClickSaveMeal', 'onClickDeleteMeal','close', 'render', 'addRecipe');
                 this.model.on("destroy", this.close, this);
+                
+                this.recipes_collection = new window.app.Nutrition_guide_recipes_collection();
+                
+                this.recipes_collection.bind("add", this.addRecipe, this);
+                
+                var self = this;
+                this.recipes_collection.fetch({
+                    data: {
+                        meal_id : self.model.get('id')
+                    },
+                    wait : true,
+                    success : function(collection, response) {
+                        //console.log(collection);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+               
             },
             
             render: function(){
                 var template = _.template( $("#nutrition_plan_exercice_day_item_template").html(), this.model.toJSON());
                 this.$el.html(template);
                 this.$el.find('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+                
+                this.connectComments();
+                
                 return this;
             },
             
+            connectComments : function() {
+                var meal_id = this.model.get('id');
+                var comment_options = {
+                    'item_id' : window.app.exercice_day_options.nutrition_plan_id,
+                    'fitness_administration_url' : window.app.exercice_day_options.fitness_backend_url,
+                    'comment_obj' : {'user_name' : window.app.exercice_day_options.user_name, 'created' : "", 'comment' : ""},
+                    'db_table' : window.app.exercice_day_options.exercice_day_meal_comments_db_table,
+                    'read_only' : false,
+                }
+                var comments = $.comments(comment_options, comment_options.item_id, meal_id).run();
+                this.$el.find(".comments_wrapper").html(comments);
+                console.log(comments);
+            },
+           
+            addRecipe : function(model) {
+                this.item_view = new window.app.Nutrition_guide_recipe_view({collection : this.recipes_collection, model : model}); 
+                this.$el.find(".meal_recipes").append( this.item_view.render().el );
+            },
      
             events: {
                 "click .save_exercice_day_meal" : "onClickSaveMeal",
@@ -839,6 +879,8 @@ $helper = new FitnessHelper();
 
             
             addRecipeItem : function(model) {
+                var meal_id = this.model.get('id');
+                model.set({'meal_id' : meal_id});
                 this.item_view = new window.app.Nutrition_guide_add_recipe_item_view({collection : this.collection, model : model}); 
                 this.container_el.append( this.item_view.render().el );
 
@@ -880,19 +922,118 @@ $helper = new FitnessHelper();
         
         
         window.app.Nutrition_guide_add_recipe_item_view = Backbone.View.extend({
-
+            initialize : function() {
+                _.bindAll(this, 'render',  'onClickViewRecipe', 'onClickEnterServes');
+                this.original_recipe_model = new window.app.Nutrition_guide_add_original_recipe_model();
+            },
             render:function () {
                 var template = _.template( $("#nutrition_guide_add_recipe_item_template").html(), this.model.toJSON());
                 this.$el.html(template);
                 return this;
             },
-        });
-        
-        window.app.Filter_view = Backbone.View.extend({
-            initialize: function(){
-                
+            
+            events: {
+                "click .view_add_recipe" : "onClickViewRecipe",
+                "click .enter_number_serves" : "onClickEnterServes"
             },
             
+            onClickViewRecipe : function() {
+                var recipe_id = this.model.get('id');
+                
+                this.recipe_ingredients_collection = new window.app.Nutrition_guide_recipe_ingredients_collection();
+                
+                this.container_el = this.$el.find(".recipe_details");
+                var self = this;
+                this.recipe_ingredients_collection.fetch({
+                    data: {
+                        id : recipe_id
+                    },
+                    success : function (collection, response) {
+                        self.container_el.html( new window.app.Nutrition_guide_add_recipe_details_view({model : response}).render().el );
+                        self.$el.find(".view_add_recipe").hide();
+                        self.$el.find(".number_serves_wrapper, .recipe_details").show();
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            
+            onClickEnterServes : function() {
+                var number_serves = parseInt(this.$el.find(".number_serves").val());
+                this.$el.find(".number_serves").removeClass("red_style_border");
+                if(!number_serves) {
+                    this.$el.find(".number_serves").addClass("red_style_border");
+                    return false;
+                }
+                
+                this.original_recipe_model.set(this.model.toJSON());
+                
+                var original_recipe_id = this.model.get('id');
+                
+                this.original_recipe_model.set({'number_serves_new' : number_serves, 'original_recipe_id' : original_recipe_id});
+                
+                this.original_recipe_model.unset('id');
+                
+                this.$el.find(".number_serves_wrapper, .recipe_details").hide();
+                this.$el.find(".view_add_recipe").show();
+                
+                
+                this.original_recipe_model.save(null, {
+                    success: function (model, response) {
+                        console.log(response);
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        });
+        
+        
+        window.app.Nutrition_guide_recipe_view = Backbone.View.extend({
+            render:function () {
+                var template = _.template( $("#nutrition_guide_recipe_template").html(), this.model.toJSON());
+                this.$el.html(template);
+                return this;
+            },
+            
+            events: {
+                "click .save_recipe" : "onClickSaveRecipe",
+                "click .delete_recipe" : "onClickDeleteRecipe"
+            },
+            
+            onClickSaveRecipe : function() {
+                var recipe_comments = this.$el.find('.recipe_comments').val();
+                this.model.set({'description' : recipe_comments});
+                 this.model.save(null, {
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+            }, 
+            
+            onClickDeleteRecipe : function() {
+                var self = this;
+                this.model.destroy({
+                    success: function (model) {
+                        self.close();
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            
+            close :function() {
+                $(this.el).unbind();
+		$(this.el).remove();
+            },
+        });
+        
+        
+        window.app.Filter_view = Backbone.View.extend({
+
             render : function(){
                 var data = {'items' : this.model}
                 var template = _.template($("#recipe_database_filter_template").html(),data);
@@ -911,6 +1052,15 @@ $helper = new FitnessHelper();
                 window.app.nutrition_guide_add_recipe_collection.reset();
                 window.app.get_recipe_params_model.set({'filter_options' : ids});
             }
+        });
+        
+        window.app.Nutrition_guide_add_recipe_details_view = Backbone.View.extend({
+
+            render : function(){
+                var template = _.template($("#nutrition_guide_add_recipe_details_template").html(), this.model);
+                this.$el.html(template);
+                return this;
+            },
         });
         
         
@@ -969,7 +1119,10 @@ $helper = new FitnessHelper();
             urlRoot : window.app.exercice_day_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=nutrition_guide_add_recipe_list&',
         });
         
-        
+        window.app.Nutrition_guide_add_original_recipe_model = Backbone.Model.extend({
+            urlRoot : window.app.exercice_day_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=nutrition_guide_recipes&',
+        });
+
         
         
         
@@ -987,6 +1140,14 @@ $helper = new FitnessHelper();
         
         window.app.Recipe_types_collection = Backbone.Collection.extend({
             url : window.app.exercice_day_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=recipe_types&'
+        });
+        
+        window.app.Nutrition_guide_recipe_ingredients_collection = Backbone.Collection.extend({
+            url : window.app.exercice_day_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=get_recipe&'
+        });
+        
+        window.app.Nutrition_guide_recipes_collection = Backbone.Collection.extend({
+            url : window.app.exercice_day_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=nutrition_guide_recipes&'
         });
         
         //CONTROLLER
@@ -1113,6 +1274,7 @@ $helper = new FitnessHelper();
             },
             
             add_meal_recipe : function(meal_id) {
+                
                 window.app.nutrition_guide_add_recipe_collection.reset();
                 this.get_database_recipes();
                 
@@ -1128,7 +1290,7 @@ $helper = new FitnessHelper();
             
             set_recipes_model : function() {
                 window.app.nutrition_guide_add_recipe_collection.reset();
-                window.app.get_recipe_params_model.set({"page" :  window.app.pagination_app_model.get('currentPage') || 1, "limit" : localStorage.getItem('items_number')});
+                window.app.get_recipe_params_model.set({"page" :  window.app.pagination_app_model.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
     
             }
   

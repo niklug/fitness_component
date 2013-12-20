@@ -489,13 +489,14 @@ class FitnessModelnutrition_plan extends JModelAdmin
         public function importRecipe($data_encoded, $table) {
             $ret['success'] = 1;
             $db = JFactory::getDbo();
-            
+          
             $user = &JFactory::getUser();
             $obj = json_decode($data_encoded);
             
             $query = "SELECT * FROM #__fitness_nutrition_recipes_meals WHERE recipe_id='$obj->recipe_id'";
             $db->setQuery($query);
             if(!$db->query()) {
+                throw new Exception($db->getErrorMsg());
                 $ret['success'] = 0;
                 $ret['message'] =  $db->getErrorMsg();
             }
@@ -503,11 +504,16 @@ class FitnessModelnutrition_plan extends JModelAdmin
             
             $coef = $obj->number_serves / $obj->number_serves_recipe;
             
-            
+
             foreach ($ingredients as $ingredient) {
                 $data = new stdClass();
                 $data->nutrition_plan_id = $obj->nutrition_plan_id;
-                $data->meal_id = $obj->meal_id;
+                if($obj->meal_id) {
+                    $data->meal_id = $obj->meal_id;
+                }
+                if($obj->recipe_id_created) {
+                    $data->recipe_id = $obj->recipe_id_created;
+                }
                 $data->type = $obj->type;
                 $data->ingredient_id = $ingredient->ingredient_id;
                 $data->meal_name = $ingredient->meal_name;
@@ -524,19 +530,15 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 
                 $insert = $db->insertObject($table, $data, 'id');
                 if (!$insert) {
+                    throw new Exception($db->getErrorMsg());
                     $ret['success'] = false;
                     $ret['message'] = $db->stderr();
                 }
             }
-            /*
-            $ret['success'] = 0;
-            
-            $ret['message'] = print_r($data, true);
 
-            */
             $result = array('status' => $ret);
             
-            return json_encode($result);     
+            return $result;     
         }
         
         
@@ -640,29 +642,14 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     return $items;
                     break;
                 case 'PUT': // Update
-                    try {
-                        $id = $helper->insertUpdateObj($model, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'POST': // Create
-                    try {
-                        $id = $helper->insertUpdateObj($model, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'DELETE': // Delete Item
                     $id = str_replace('/', '', end(array_keys($_GET)));
-                    try {
-                        $id = $helper->deleteRow($id, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->deleteRow($id, $table);
                     break;
 
                 default:
@@ -716,29 +703,14 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     return $items;
                     break;
                 case 'PUT': // Update
-                    try {
-                        $id = $helper->insertUpdateObj($model, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'POST': // Create
-                    try {
-                        $id = $helper->insertUpdateObj($model, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'DELETE': // Delete Item
                     $id = str_replace('/', '', end(array_keys($_GET)));
-                    try {
-                        $id = $helper->deleteRow($id, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->deleteRow($id, $table);
                     break;
 
                 default:
@@ -790,29 +762,14 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     return $items;
                     break;
                 case 'PUT': // Update
-                    try {
-                        $id = $helper->insertUpdateObj($model, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'POST': // Create
-                    try {
-                        $id = $helper->insertUpdateObj($model, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'DELETE': // Delete Item
                     $id = str_replace('/', '', end(array_keys($_GET)));
-                    try {
-                        $id = $helper->deleteRow($id, $table);
-                    } catch (Exception $e) {
-                            echo $e->getMessage();
-                            header("HTTP/1.0 404 Not Found");
-                    }
+                    $id = $helper->deleteRow($id, $table);
                     break;
 
                 default:
@@ -867,6 +824,146 @@ class FitnessModelnutrition_plan extends JModelAdmin
             }
             $data = $recipeTypes['data'];
             return $data;
+        }
+        
+        public function getRecipe() {
+            require_once  JPATH_COMPONENT_SITE  . DS .'models' . DS . 'recipe_database.php';
+            
+            $recipe_database = new FitnessModelrecipe_database();
+            
+            $table = '#__fitness_nutrition_recipes';
+            
+            $data = new stdClass();
+            
+            $data->id = JRequest::getVar('id'); 
+            $data->status = 1; 
+            
+            $data_encoded= json_encode($data);
+            
+            $recipes = $recipe_database->getRecipe($table, $data_encoded);
+            
+            if(!$recipes['status']['success']) {
+                echo $recipes['status']['message'];
+                header("HTTP/1.0 404 Not Found");
+            }
+            
+            $recipe = $recipes['data'];
+                    
+            return $recipe;
+        }
+        
+        public function nutrition_guide_recipes() {
+            
+            $method = JRequest::getVar('_method');
+            
+            if(!$method) {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+       
+            $model = json_decode(JRequest::getVar('model'));
+
+            $table = '#__fitness_nutrition_plan_example_day_meal_recipes';
+            $ingredients_table = '#__fitness_nutrition_plan_example_day_ingredients';
+            $ingredients_table_WHERE = 'recipe_id=r.id';
+            
+            $helper = new FitnessHelper();
+            
+            
+            switch ($method) {
+                case 'GET': // Get Item(s)
+                    
+                    $meal_id = JRequest::getVar('meal_id');
+                    if(!$meal_id) return;
+                    
+                    $query = "SELECT * FROM $table WHERE 1";
+                    
+                    if($id) {
+                        $query .= " AND id='$id'";
+                    }
+                               
+                    $query = "SELECT r.*, a.*, r.number_serves AS number_serves, r.id AS id,";
+                    
+                    $query .= " (SELECT name FROM #__users WHERE id=a.created_by) author,";
+                    $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer,";
+                    
+                    $query .= " (SELECT ROUND(SUM(protein),2) FROM "    . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS protein,
+                       (SELECT ROUND(SUM(fats),2) FROM "                . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS fats,
+                       (SELECT ROUND(SUM(carbs),2) FROM "               . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS carbs,
+                       (SELECT ROUND(SUM(calories),2) FROM "            . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS calories,
+                       (SELECT ROUND(SUM(energy),2) FROM "              . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS energy,
+                       (SELECT ROUND(SUM(saturated_fat),2) FROM "       . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS saturated_fat,
+                       (SELECT ROUND(SUM(total_sugars),2) FROM "        . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS total_sugars,
+                       (SELECT ROUND(SUM(sodium),2) FROM "              . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS sodium";
+        
+                    $query .= " FROM $table AS r ";
+                    $query .= " LEFT JOIN  #__fitness_nutrition_recipes AS a ON a.id=r.original_recipe_id";
+                    
+                    if($meal_id) {
+                        $query .= " WHERE meal_id='$meal_id'";
+                    }
+
+                    $data = FitnessHelper::customQuery($query, 1);
+                    /*
+                    $i = 0;
+                    foreach ($data as $recipe) {
+                        if(!empty($recipe->recipe_type)) {
+                            $recipe_types_names = $helper->getRecipeNames($recipe->recipe_type);
+                            $data[$i]->recipe_types_names = $recipe_types_names;
+                            $i++;
+                        }
+                    }
+                    */
+                    return $data;
+                    break;
+                case 'PUT': 
+                    //update
+                    $item_id = str_replace('/', '', end(array_keys($_GET)));
+                        if($item_id) {
+                            $obj = new stdClass();
+                            $obj->id = $item_id;
+                            $obj->original_recipe_id = $model->original_recipe_id;
+                            $obj->meal_id = $model->meal_id;
+                            $obj->number_serves = $model->number_serves_new;
+                            $obj->description = $model->description;
+
+                            $id = $helper->insertUpdateObj($obj, $table);
+                        }
+                    break;
+                case 'POST': // Create
+
+                    $obj = new stdClass();
+                    $obj->original_recipe_id = $model->original_recipe_id;
+                    $obj->meal_id = $model->meal_id;
+                    $obj->number_serves = $model->number_serves_new;
+
+                    $id = $helper->insertUpdateObj($obj, $table);
+
+                    if($id) {
+                        $ingredient_obj = new stdClass();
+                        $ingredient_obj->recipe_id = $model->original_recipe_id;
+                        $ingredient_obj->recipe_id_created = $id;
+                        $ingredient_obj->number_serves = $model->number_serves_new;
+                        $ingredient_obj->number_serves_recipe = $model->number_serves;
+                        $ingredient_obj_encoded = json_encode($ingredient_obj);
+
+                        $ingredient_table = '#__fitness_nutrition_plan_example_day_ingredients';
+                        $this->importRecipe($ingredient_obj_encoded, $ingredient_table);
+                    }
+                    break;
+                case 'DELETE': // Delete Item
+                    $id = str_replace('/', '', end(array_keys($_GET)));
+                    $id = $helper->deleteRow($id, $table);
+                    break;
+
+                default:
+                    break;
+            }
+            
+            
+   
+            $model->id = $id;
+            
+            return $model;
         }
         
 }

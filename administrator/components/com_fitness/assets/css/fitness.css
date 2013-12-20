@@ -905,3 +905,25 @@
         padding: 0 2px !important;
     }
 /* */
+
+.table_border_top_dark {
+    border-top:1px solid #ccc;
+    
+}
+
+.table_border_top {
+    border-top:1px solid #ccc !important;
+}
+
+
+.table_border_bottom_dark {
+    border-bottom:1px solid #ccc !important;
+}
+
+.table_border_bottom {
+    border-bottom:1px solid #ccc !important;
+}
+
+.internal_wrapper {
+    padding: 5px;
+}
