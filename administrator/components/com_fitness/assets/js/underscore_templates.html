@@ -609,7 +609,7 @@
         <li><a onclick="javascript:void(0)"  id="targets_link" class="plan_menu_link"  href="javascript:void(0)">TARGETS</a></li>
         <li><a onclick="javascript:void(0)"  id="macronutrients_link" class="plan_menu_link"  href="javascript:void(0)">MACRONUTRIENTS</a></li>
         <li><a onclick="javascript:void(0)"  id="supplements_link" class="plan_menu_link"  href="javascript:void(0)">SUPPLEMENTS</a></li>
-        <li><a onclick="javascript:void(0)"  id="nutrition_guide_old_link" class="plan_menu_link"  href="javascript:void(0)">NUTRITION GUIDE OLD</a></li>
+        <li><a onclick="javascript:void(0)"  id="diary_guide_link" class="plan_menu_link"  href="javascript:void(0)">DIARY GUIDE</a></li>
         <li><a onclick="javascript:void(0)"  id="nutrition_guide_link" class="plan_menu_link"  href="javascript:void(0)">NUTRITION GUIDE</a></li>
         <li><a onclick="javascript:void(0)"  id="information_link" class="plan_menu_link"  href="javascript:void(0)">INFORMATION</a></li>
         <li><a onclick="javascript:void(0)"  id="archive_focus_link" class="plan_menu_link"  href="javascript:void(0)">ARCHIVE</a></li>
@@ -3015,19 +3015,41 @@
                 <li><a  data-id="7" class="example_day_link"  href="javascript:void(0)">Example Day 7</a></li>
             </ul>
         </legend>
-        <div id="exercice_day_wrapper"></div>
+        <div id="example_day_wrapper"></div>
    </fieldset>
 </script>
 
-<script type="text/template" id="nutrition_plan_exercice_day_template">
-    <div id="exercice_day_meal_list"></div>
+<script type="text/template" id="nutrition_guide_menu_frontend_template">
+    <div id="nutrition_guide_menu" style="padding:2px;">
+        <ul>
+            <li><a  data-id="1" class="example_day_link"  href="javascript:void(0)">[Example Day 1]</a></li>
+            <li><a  data-id="2" class="example_day_link"  href="javascript:void(0)">[Example Day 2]</a></li>
+            <li><a  data-id="3" class="example_day_link"  href="javascript:void(0)">[Example Day 3]</a></li>
+            <li><a  data-id="4" class="example_day_link"  href="javascript:void(0)">[Example Day 4]</a></li>
+            <li><a  data-id="5" class="example_day_link"  href="javascript:void(0)">[Example Day 5]</a></li>
+            <li><a  data-id="6" class="example_day_link"  href="javascript:void(0)">[Example Day 6]</a></li>
+            <li><a  data-id="7" class="example_day_link"  href="javascript:void(0)">[Example Day 7]</a></li>
+        </ul>
+    </div>
+    <hr class="orange_line">
+    <div id="example_day_wrapper" class="internal_wrapper">some </div>
+</script>
+
+<script type="text/template" id="nutrition_plan_example_day_template">
+    <div id="example_day_meal_list"></div>
     <div class="clr"></div>
     <input id="add_meal" class="" type="button" value="New Meal" >
     <div class="clr"></div>
 </script>
 
+<script type="text/template" id="nutrition_plan_example_day_frontend_template">
+    <div id="example_day_meal_list"></div>
+    <div class="clr"></div>
+</script>
 
-<script type="text/template" id="nutrition_plan_exercice_day_item_template">
+
+
+<script type="text/template" id="nutrition_plan_example_day_item_template">
     <div style="border:1px solid #000;padding:5px; margin-top:10px;" >
          <form>
             <table width="100%">
@@ -3041,8 +3063,8 @@
                         <input style="width:61px;"  size="5" type="text" name="meal_time"  class="meal_time"  value="<%= meal_time %>">
                     </td>
                     <td>
-                        <input style="float:right;"  class="delete_exercice_day_meal" type="button" value="Delete" >
-                        <input style="float:right;"  class="save_exercice_day_meal" type="submit" value="Save" >
+                        <input style="float:right;"  class="delete_example_day_meal" type="button" value="Delete" >
+                        <input style="float:right;"  class="save_example_day_meal" type="submit" value="Save" >
                     </td>
                 </tr>
             </table>
@@ -3066,6 +3088,39 @@
     </div>
 </script>
 
+<script type="text/template" id="nutrition_plan_example_day_item_frontend_template">
+    <div style="border:1px solid #000;padding:4px 4px 4px 0; margin-top:10px;" >
+    <hr class="orange_line">
+        <table width="100%">
+            <tr>
+                <td width="180">
+                    <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">MEAL DESCRIPTION</div>
+                </td>
+                <td width="450">
+                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;"><%= description %></div>
+                </td>
+                <td width="200" style="text-align:right;">
+                    <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">MEAL TIME</div>
+                </td>
+                <td style="text-align:right;">
+                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;"><%= meal_time %></div>
+                </td>
+            </tr>
+        </table>
+        <hr class="orange_line">
+        <div style="width:100%;"  class="meal_recipes"></div>
+        <div class="clr"></div>
+        <%  if(id) { %>
+            <br>
+            <hr>
+            <div class="comments_wrapper" style="width:100%"></div>
+            <div class="clr"></div>
+            <input id="add_comment_<%= id %>" class="" type="button" value="Add Comment" >
+            <div class="clr"></div>
+        <% } %>
+    </div>
+</script>
+
 <script type="text/template" id="example_day_add_recipe_template">
     <label style="font-weight:bold;"> ADD RECIPE TO NUTRITION GUIDE </label>
     <input class="cancel_add_recipe" style="float:right" type="button" value="CLOSE" >
@@ -3073,7 +3128,7 @@
     <table>
         <tr>
             <td>
-                <div class="exercice_day_meal_recipes_list" style="width:700px;"></div>
+                <div class="example_day_meal_recipes_list" style="width:700px;"></div>
                 <br>
                 <div style="text-align:center;width:700px;" id="pagination_container"></div
             </td>
@@ -3434,4 +3489,133 @@
     </div>
 
 </script>
+
+
+
+<!--  -->
+<script type="text/template" id="nutrition_guide_recipe_frontend_template">
+
+    <div  class="recipe_database_item_wrapper" style="margin-top: 10px; border:1px dashed #ccc;padding:5px;">
+        <table width="100%">
+            <tr>
+                <td width="50%">
+                    <table  width="100%">
+                        <tr>
+                            <td width="40%" class="orange_label">RECIPE NAME</td>
+                            <td width="60%">
+                                  <%= recipe_name %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">AUTHOR</td>
+                            <td>
+                                 <%= author %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">SERVES</td>
+                            <td>
+                                 <%= number_serves %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">STATUS</td>
+                            <td>
+                                <%= window.fitness_helper.setRecipeStatus(status) %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">APPROVED BY</td>
+                            <td>
+                                 <%= trainer || '-' %>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="30%">
+                    <table width="100%">
+                        <tr>
+                            <td class="orange_label">
+                                CALORIES
+                            </td>
+                            <td>
+                                <%= calories || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="orange_label">
+                                ENERGY
+                            </td>
+                            <td>
+                                <%= energy || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="orange_label">
+                                PROTEIN
+                            </td>
+                            <td>
+                                <%= protein || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="orange_label">
+                                FAT
+                            </td>
+                            <td>
+                                <%= fats || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="orange_label">
+                                CARB
+                            </td>
+                            <td>
+                                <%= carbs || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">
+                                SUGAR
+                            </td>
+                            <td>
+                                <%= total_sugars || '0.00' %>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <%
+                    if(!image || image == 'images/Recipe_Images/'){
+                        image = window.fitness_helper.get('default_recipe_image');
+                    }
+                    //image = window.fitness_helper.get('base_url') + image;
+                    %>
+                    <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+                </td>
+            </tr>
+        </table>
+        <div class="clr"></div>
+        <table width="100%">
+            <tr>
+                <td>
+                    COMMENTS
+                </td>
+                <td>
+                    <textarea style="width:500px;" class="recipe_comments" rows="4"class="required"><%= description %></textarea> 
+                </td>
+                <td style="text-align:right;">
+                    <a style="float:right;" href="javascript:void(0)" class="view_recipe">[VIEW RECIPE] </a>
+                 </td>
+            </tr>
+        </table>
+        <div class="clr"></div>
+    </div>
+
+</script>
+
 

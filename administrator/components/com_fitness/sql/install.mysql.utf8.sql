@@ -827,7 +827,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_supplements_comments` (
   FOREIGN KEY (sub_item_id) REFERENCES #__fitness_nutrition_plan_supplement_protocols(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_exercice_day_meal_comments` (
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_example_day_meal_comments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL,
   `item_id` int(11) unsigned NOT NULL,

@@ -438,8 +438,8 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     </div>
 
     <!-- NUTRITION GUIDE -->
-    <div id="nutrition_guide_wrapper" class="block">
-        Nutrition GUIDE
+    <div id="nutrition_guide_wrapper" class="block fitness_block_wrapper">
+        
     </div>
     
     <!-- INFORMATION -->
@@ -956,7 +956,176 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         // END SUPPLEMENTS
         
         
+        // NUTRITION GUIDE
+        // connect helper class
+        var helper_options = {
+            'ajax_call_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'base_url' : '<?php echo JURI::root();?>',
+        }
+        window.fitness_helper = $.fitness_helper(helper_options);
         
+        window.app.example_day_options = {
+
+            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            
+            'nutrition_plan_id' : '<?php echo  $nutrition_plan_id ?>',
+    
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+                   
+            'example_day_meal_comments_db_table' : '#__fitness_nutrition_plan_example_day_meal_comments'
+        };
+        
+        window.app.Nutrition_guide_menu = Backbone.View.extend({
+            el : $("#nutrition_guide_wrapper"),
+
+            template : _.template($('#nutrition_guide_menu_frontend_template').html()),
+
+            initialize:function () {
+                this.render();
+            },
+
+            render:function () {
+                $(this.el).html(this.template());
+                return this;
+            },
+
+            events:{
+                "click .example_day_link": "onChooseDay"
+            },
+
+            onChooseDay:function (event) {
+                $(".example_day_link").removeClass("active");
+                var day = $(event.target).attr('data-id');
+                $(event.target).addClass("active");
+                window.app.controller.navigate("!/example_day/" + day, true);
+            }
+
+        });
+        
+        window.app.Example_day_view = Backbone.View.extend({
+            render: function(){
+                var template = _.template( $("#nutrition_plan_example_day_frontend_template").html());
+                this.$el.html(template);
+                
+                var self = this;
+                
+		this.mealListItemViews = {};
+
+		this.collection.on("add", function(meal) {
+                    window.app.nutrition_plan_example_day_meal_view = new window.app.Nutrition_plan_example_day_meal_view({collection : this,  model : meal}); 
+                    self.$el.find("#example_day_meal_list").append( window.app.nutrition_plan_example_day_meal_view.render().el );
+		});
+               
+                return this;
+            },
+        });
+        
+        window.app.Nutrition_plan_example_day_meal_view = Backbone.View.extend({
+           
+            initialize: function(){
+                _.bindAll(this,'close', 'render');
+                this.model.on("destroy", this.close, this);
+                
+                this.recipes_collection = new window.app.Nutrition_guide_recipes_collection();
+                
+                this.recipes_collection.bind("add", this.addRecipe, this);
+                
+                var self = this;
+                this.recipes_collection.fetch({
+                    data: {
+                        meal_id : self.model.get('id')
+                    },
+                    wait : true,
+                    success : function(collection, response) {
+                        //console.log(collection);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+               
+            },
+            
+            render: function(){
+                var template = _.template( $("#nutrition_plan_example_day_item_frontend_template").html(), this.model.toJSON());
+                this.$el.html(template);
+               
+                this.connectComments();
+                
+                return this;
+            },
+            
+            addRecipe : function(model) {
+                this.item_view = new window.app.Nutrition_guide_recipe_view({collection : this.recipes_collection, model : model}); 
+                this.$el.find(".meal_recipes").append( this.item_view.render().el );
+            },
+            
+            connectComments : function() {
+                var meal_id = this.model.get('id');
+                var comment_options = {
+                    'item_id' : window.app.example_day_options.nutrition_plan_id,
+                    'fitness_administration_url' : window.app.example_day_options.fitness_backend_url,
+                    'comment_obj' : {'user_name' : window.app.example_day_options.user_name, 'created' : "", 'comment' : ""},
+                    'db_table' : window.app.example_day_options.example_day_meal_comments_db_table,
+                    'read_only' : false,
+                }
+                var comments = $.comments(comment_options, comment_options.item_id, meal_id).run();
+                this.$el.find(".comments_wrapper").html(comments);
+            },
+           
+            close :function() {
+                $(this.el).unbind();
+		$(this.el).remove();
+            },
+ 
+        });
+        
+        
+        window.app.Nutrition_guide_recipe_view = Backbone.View.extend({
+            render:function () {
+                var template = _.template( $("#nutrition_guide_recipe_frontend_template").html(), this.model.toJSON());
+                this.$el.html(template);
+                return this;
+            },
+            
+            events: {
+                "click .view_recipe" : "onClickViewRecipe",
+            },
+            
+            onClickViewRecipe : function(event) {
+                var url = helper_options.base_url + 'index.php?option=com_fitness&view=recipe_database#!/nutrition_recipe/' + this.model.get('original_recipe_id');
+                window.open(url);
+            }, 
+            
+        });
+        
+        
+        //MODELS
+        window.app.Example_day_meal_model = Backbone.Model.extend({
+            urlRoot : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&',
+            
+            defaults : {
+                id : null,
+                description : null,
+                nutrition_plan_id : window.app.example_day_options.nutrition_plan_id,
+                example_day_id : null,
+                meal_time : null,
+            },
+        });
+        
+        
+         // COLLECTIONS
+        window.app.Example_day_meals_collection = Backbone.Collection.extend({
+            url : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&',
+            model: window.app.Example_day_meal_model
+        });
+        
+        window.app.Nutrition_guide_recipes_collection = Backbone.Collection.extend({
+            url : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_guide_recipes&'
+        });
+        
+        
+        // END NUTRITION GUIDE
         
         
         
@@ -975,6 +1144,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 "!/information": "information", 
                 "!/archive": "archive", 
                 "!/close": "close", 
+                "!/example_day/:id": "example_day", 
             },
 
             overview: function () {
@@ -1026,6 +1196,30 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                  this.common_actions();
                  $("#nutrition_guide_wrapper").show();
                  $("#nutrition_guide_link").addClass("active_link");
+                 
+                 new window.app.Nutrition_guide_menu();
+                 
+                 this.example_day(1);
+                 $(".example_day_link").first().addClass("active");
+            },
+            
+            example_day : function(example_day_id) {
+               
+                window.app.example_day_meal_collection = new window.app.Example_day_meals_collection(); 
+                 
+                window.app.example_day_meal_collection.fetch({data: {
+                        nutrition_plan_id : window.app.example_day_options.nutrition_plan_id,
+                        example_day_id : example_day_id
+                    },
+                    success : function (collection, response) {
+                        //console.log(response);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+                
+                $('#example_day_wrapper').html(new window.app.Example_day_view({collection : window.app.example_day_meal_collection, 'example_day_id' : example_day_id}).render().el);
             },
                     
             information: function () {
