@@ -86,12 +86,16 @@ $helper = new FitnessHelper();
             
                 <div class='filter-select fltrt'>
                     <?php
-                    $recipeTypes = $helper->JErrorFromAjaxDecorator($helper->getRecipeTypes());
-                                        
-                    echo $helper->generateSelect($recipeTypes, 'filter_recipe_type', 'filter_recipe_type', $this->state->get('filter.recipe_type') , 'Recipe Type', false, "inputbox"); 
-     
+                    $recipe_variations = $helper->getRecipeVariations();
+                    echo $helper->generateSelect($recipe_variations, 'filter_recipe_variation', 'filter_recipe_variation', $this->state->get('filter.recipe_variation') , 'Recipe Variation', false, "inputbox"); 
                     ?>
-
+		</div>
+            
+                <div class='filter-select fltrt'>
+                    <?php
+                    $recipeTypes = $helper->JErrorFromAjaxDecorator($helper->getRecipeTypes());
+                    echo $helper->generateSelect($recipeTypes, 'filter_recipe_type', 'filter_recipe_type', $this->state->get('filter.recipe_type') , 'Recipe Type', false, "inputbox"); 
+                    ?>
 		</div>
             
 		
@@ -128,7 +132,10 @@ $helper = new FitnessHelper();
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_RECIPES_RECIPE_NAME', 'a.recipe_name', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_RECIPES_RECIPE_TYPE', 'a.recipe_type', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_RECIPES_RECIPE_TYPE', 'a.recipe_variation', $listDirn, $listOrder); ?>
+				</th>
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Recipe Variation', 'a.recipe_type', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'Author Name', 'a.created_by', $listDirn, $listOrder); ?>
@@ -236,6 +243,17 @@ $helper = new FitnessHelper();
 
                                     ?>
 				</td>
+                                <td>
+                                    <?php 
+                                        $recipe_variations = split(',', $item->recipe_variation);
+                                        foreach ($recipe_variations as $recipe_variation) {
+                                            if($recipe_variation) {
+                                                echo $helper->getRecipeVariationName($recipe_variation) . "<br/>";
+                                            }
+                                        }
+
+                                    ?>
+				</td>
 				<td>
 					<?php echo $item->created_by; ?>
 				</td>
@@ -326,7 +344,7 @@ $helper = new FitnessHelper();
             form.submit();
         });
         
-         $("#filter_recipe_type, #business_profile_id").on('change', function() {
+         $("#filter_recipe_type, #filter_recipe_variation, #business_profile_id").on('change', function() {
              var form = $("#adminForm");
              form.submit();
         })

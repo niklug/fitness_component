@@ -95,6 +95,7 @@ class FitnessTablenutrition_recipe extends JTable {
             $this->ordering = self::getNextOrder();
         }
         $this->recipe_type = implode(',',$this->recipe_type);
+        $this->recipe_variation = implode(',',$this->recipe_variation);
         return parent::check();
     }
 

@@ -76,6 +76,7 @@ class FitnessModelnutrition_recipe extends JModelAdmin
             
 		}
                 $data->recipe_type = explode(',',$data->recipe_type);
+                $data->recipe_variation = explode(',',$data->recipe_variation);
 		return $data;
 	}
 

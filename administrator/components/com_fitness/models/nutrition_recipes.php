@@ -31,6 +31,7 @@ class FitnessModelnutrition_recipes extends JModelList {
                 'id', 'a.id',
                 'recipe_name', 'a.recipe_name',
                 'recipe_type', 'a.recipe_type',
+                'recipe_variation', 'a.recipe_variation',
                 'created_by', 'a.created_by',
                 'created', 'a.created',
                 'status', 'a.status',
@@ -71,6 +72,9 @@ class FitnessModelnutrition_recipes extends JModelList {
 
         //Filtering recipe type
         $this->setState('filter.recipe_type', $app->getUserStateFromRequest($this->context.'.filter.recipe_type', 'filter_recipe_type', '', 'string'));
+        
+        //Filtering recipe variation
+        $this->setState('filter.recipe_variation', $app->getUserStateFromRequest($this->context.'.filter.recipe_variation', 'filter_recipe_variation', '', 'string'));
 
                 // Filter by business profile
         $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
@@ -220,6 +224,14 @@ class FitnessModelnutrition_recipes extends JModelList {
                     $query->where(" FIND_IN_SET('$filter_recipe_type', a.recipe_type) ");
                 }
                 
+                
+                //Filtering recipe variation
+		$filter_recipe_variation= $this->state->get("filter.recipe_variation");
+                
+          
+                if($filter_recipe_variation) {
+                    $query->where(" FIND_IN_SET('$filter_recipe_variation', a.recipe_variation) ");
+                }
                 
                 // Filter by business profile
                 $business_profile_id = $this->getState('filter.business_profile_id');

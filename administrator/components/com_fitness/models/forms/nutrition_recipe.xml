@@ -27,6 +27,9 @@
        <field name="recipe_type" type="text" class="inputbox"
               label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_RECIPE_TYPE"
         /> 
+       <field name="recipe_variation" type="text" class="inputbox"
+              label="Recipe Variation"
+        /> 
        
         <field name="number_serves"  size="3" class="inputbox" type="text" default="1" label="NUMBER OF SERVES"
             description="" /> 

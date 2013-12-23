@@ -926,12 +926,18 @@ class FitnessHelper extends FitnessFactory
         $sql = "SELECT id, name, id AS value, name AS text FROM #__fitness_recipe_types WHERE state='1' ORDER BY name ASC";
         $db->setQuery($sql);
         if(!$db->query()) {
+            throw new Exception($db->getErrorMsg());
             $ret['success'] = 0;
             $ret['message'] = $db->getErrorMsg();
         }
         $ret['data'] = $db->loadObjectList();
         
         return $ret;
+    }
+    
+    public function getRecipeVariations() {
+        $query = "SELECT id, name, id AS value, name AS text FROM #__fitness_recipe_variations WHERE state='1' ORDER BY name ASC";
+        return self::customQuery($query, 1);
     }
     
     public function getRecipe($id, $state) {
@@ -984,6 +990,11 @@ class FitnessHelper extends FitnessFactory
     
     function getRecipeName($id) {
         $query = "SELECT name FROM #__fitness_recipe_types WHERE id='$id' AND state='1'";
+        return self::customQuery($query, 0);
+    }
+    
+    function getRecipeVariationName($id) {
+        $query = "SELECT name FROM #__fitness_recipe_variations WHERE id='$id' AND state='1'";
         return self::customQuery($query, 0);
     }
     

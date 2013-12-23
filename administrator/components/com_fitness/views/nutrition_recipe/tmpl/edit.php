@@ -81,18 +81,25 @@ $helper = new FitnessHelper();
                     <tr>
                         <td>
                             <?php echo $this->form->getLabel('recipe_type'); ?>
-                        </td>
-                        <td>
                             <?php
-                            $recipes = $helper->getRecipeTypes();
-                            if(!$recipes['success']) {
-                                JError::raiseError($recipes['message']);
+                            $recipe_types = $helper->getRecipeTypes();
+                            if(!$recipe_types['success']) {
+                                JError::raiseError($recipe_types['message']);
                             }
-                            $recipes = $recipes['data'];
+                            $recipe_types = $recipe_types['data'];
                                            
-                            echo $helper->generateMultipleSelect($recipes, 'jform[recipe_type]', 'jform_recipe_type', $this->item->recipe_type, '', true, 'inputbox');
+                            echo $helper->generateMultipleSelect($recipe_types, 'jform[recipe_type]', 'jform_recipe_type', $this->item->recipe_type, '', true, 'inputbox');
                             
                             ?> 
+                        </td>
+                        <td>
+                            <?php echo $this->form->getLabel('recipe_variation'); ?>
+                            <?php
+                            $recipe_variations = $helper->getRecipeVariations();
+                            echo $helper->generateMultipleSelect($recipe_variations, 'jform[recipe_variation]', 'jform_recipe_variation', $this->item->recipe_variation, '', true, 'inputbox');
+                            
+                            ?> 
+                     
                         </td>
                     </tr>
                 </tbody>

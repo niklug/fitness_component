@@ -38,6 +38,11 @@ class FitnessViewRecipe_database extends JView {
         echo json_encode($model->getRecipeTypes($table, $data_encoded));
     }
     
+    function getRecipeVariations() {
+        $model = $this -> getModel("recipe_database");
+        echo json_encode($model->getRecipeVariations());
+    }
+    
     function copyRecipe() {
         $table = JRequest::getVar('table');
         $data_encoded = JRequest::getVar('data_encoded','','POST');

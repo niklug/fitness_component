@@ -841,6 +841,9 @@
                         <div id="recipe_database_filter_wrapper"></div>
                         <div class="clr"></div>
                         <br>
+                        <div id="recipe_variations_filter_wrapper"> </div>
+                        <div class="clr"></div>
+                        <br>
                         <div id="recipes_latest_wrapper"></div>
                     </td>
                 </tr>
@@ -851,7 +854,7 @@
     </div>
 </script>
 
-<!--  recipe database main container template -->
+<!--  recipe database edit recipe template -->
 <script type="text/template" id="recipe_database_edit_recipe_container_template">
     <%
     
@@ -887,6 +890,31 @@
                                     <select multiple size="10" id="recipe_type" name="recipe_type[]" class="dark_input_style" style="width:200px;">
                                         <% if (typeof recipe_types !== "undefined") { %>
                                             <% _.each(recipe_types, function(item, key){
+                                                var selected = '';
+                                                if(selected_types.indexOf(item.id) != -1) {
+                                                    selected = 'selected';
+                                                }
+                                             %>
+                                                  <option <%= selected %> value="<%= item.id %>"><%= item.name %></option>
+                                            <% }) %>
+                                        <% } %>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    RECIPE VARIATION
+                                </td>
+                                <td>
+                                <%
+                                var selected_types = [];
+                                if(typeof (recipe.recipe_variation) !== 'undefined') {
+                                    selected_variation = (recipe.recipe_variation).split(","); 
+                                }
+                                %>
+                                    <select multiple size="10" id="recipe_variation" name="recipe_variation[]" class="dark_input_style" style="width:200px;">
+                                        <% if (typeof recipe_variations !== "undefined") { %>
+                                            <% _.each(recipe_variations, function(item, key){
                                                 var selected = '';
                                                 if(selected_types.indexOf(item.id) != -1) {
                                                     selected = 'selected';
@@ -994,10 +1022,10 @@
     <%
     var full_video_path = video_path + '/' + video;
     var video_html = '';
-    
+   
     if(!video) {
         var background_image = 'url(' + "'" + default_video_image  + "')" ;
-        full_video_path = default_video_image;
+        full_video_path = '';
     } else {
         var background_image = 'none';
         video_html = '<div style="margin-top:80px;">' + video + '</div>';
@@ -1798,6 +1826,25 @@
     </div>
 </script>
 
+
+<!--  recipe variations template -->
+<script type="text/template" id="recipe_variations_filter_template">
+    <div class="fitness_block_wrapper" style="">
+        <h5>RECIPE VARIATIONS</h5>
+        <div class="clr"></div>
+        <hr class="orange_line">
+        <div class="internal_wrapper">
+            <select class="dark_input_style" multiple size="<%= items.length + 1 %>" id="recipe_variations_filter" name="recipe_variations_filter[]"  style="width:100%;">
+                <option value="">ALL VARIATIONS</option>
+                <% if (typeof items !== "undefined") { %>
+                    <% _.each(items, function(item, key){ %>
+                          <option value="<%= item.id %>"><%= item.name %></option>
+                    <% }) %>
+                <% } %>
+            </select>
+        </div>
+    </div>
+</script>
 
 
 <!--  Gredient Graph template -->
@@ -3134,6 +3181,8 @@
             </td>
             <td style="vertical-align:top;">
                 <div id="recipe_database_filter_wrapper"> </div>
+                <div class="clr"></div>
+                <div id="recipe_variations_filter_wrapper"> </div>
             </td>
         </tr>
     </table>

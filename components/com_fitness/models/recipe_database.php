@@ -66,6 +66,11 @@ class FitnessModelrecipe_database extends JModelList {
         //get rid of empty element
         $filter_options = array_filter(explode(",",$filter_options));
         
+        $recipe_variations_filter_options = $data->recipe_variations_filter_options;
+        
+        //get rid of empty element
+        $recipe_variations_filter_options = array_filter(explode(",",$recipe_variations_filter_options));
+        
         $current_page = $data->current_page;
         
         $state = $data->state;
@@ -88,12 +93,23 @@ class FitnessModelrecipe_database extends JModelList {
         
         $query .= " WHERE a.state='$state' ";
         
-
+        $filter_option1 = $filter_options[0];
         if($filter_options) {
             $query .= " AND ( FIND_IN_SET('$filter_option1', a.recipe_type) ";
             
             foreach ($filter_options as $filter_option) {
                 $query .= " OR FIND_IN_SET('$filter_option', a.recipe_type)";
+            }
+            $query .= ")";
+        }
+        
+        
+        $recipe_variations_filter_options1 = $recipe_variations_filter_options[0];        
+        if($recipe_variations_filter_options) {
+            $query .= " AND ( FIND_IN_SET('$recipe_variations_filter_options1', a.recipe_variation) ";
+            
+            foreach ($recipe_variations_filter_options as $filter_option) {
+                $query .= " OR FIND_IN_SET('$filter_option', a.recipe_variation)";
             }
             $query .= ")";
         }
@@ -141,12 +157,21 @@ class FitnessModelrecipe_database extends JModelList {
         
         $query .= " WHERE a.state='$state'";
         
-        $filter_option1 = $filter_options[0];
+        
         if($filter_options) {
             $query .= " AND ( FIND_IN_SET('$filter_option1', a.recipe_type) ";
             
             foreach ($filter_options as $filter_option) {
                 $query .= " OR FIND_IN_SET('$filter_option', a.recipe_type)";
+            }
+            $query .= ")";
+        }
+        
+        if($recipe_variations_filter_options) {
+            $query .= " AND ( FIND_IN_SET('$recipe_variations_filter_options1', a.recipe_variation) ";
+            
+            foreach ($recipe_variations_filter_options as $filter_option) {
+                $query .= " OR FIND_IN_SET('$filter_option', a.recipe_variation)";
             }
             $query .= ")";
         }
@@ -220,6 +245,13 @@ class FitnessModelrecipe_database extends JModelList {
         $result = array( 'status' => $status, 'data' => $data);
         
         return $result;
+    }
+    
+    public function getRecipeVariations() {
+        
+        $helper = $this->helper;
+        
+        return $helper->getRecipeVariations();
     }
     
     
