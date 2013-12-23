@@ -15,7 +15,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * Fitness model.
  */
-class FitnessModelrecipe_type extends JModelAdmin
+class FitnessModelrecipe_variation extends JModelAdmin
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -33,7 +33,7 @@ class FitnessModelrecipe_type extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'Recipe_type', $prefix = 'FitnessTable', $config = array())
+	public function getTable($type = 'Recipe_variation', $prefix = 'FitnessTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -52,7 +52,7 @@ class FitnessModelrecipe_type extends JModelAdmin
 		$app	= JFactory::getApplication();
 
 		// Get the form.
-		$form = $this->loadForm('com_fitness.recipe_type', 'recipe_type', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_fitness.recipe_variation', 'recipe_variation', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
 			return false;
 		}
@@ -69,7 +69,7 @@ class FitnessModelrecipe_type extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_fitness.edit.recipe_type.data', array());
+		$data = JFactory::getApplication()->getUserState('com_fitness.edit.recipe_variation.data', array());
 
 		if (empty($data)) {
 			$data = $this->getItem();
@@ -112,7 +112,7 @@ class FitnessModelrecipe_type extends JModelAdmin
 			// Set ordering to the last item if not set
 			if (@$table->ordering === '') {
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__fitness_recipe_types');
+				$db->setQuery('SELECT MAX(ordering) FROM #__fitness_recipe_variations');
 				$max = $db->loadResult();
 				$table->ordering = $max+1;
 			}

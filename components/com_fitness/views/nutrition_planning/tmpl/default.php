@@ -1067,7 +1067,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                     'fitness_administration_url' : window.app.example_day_options.fitness_backend_url,
                     'comment_obj' : {'user_name' : window.app.example_day_options.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : window.app.example_day_options.example_day_meal_comments_db_table,
-                    'read_only' : false,
+                    'read_only' : true,
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, meal_id).run();
                 this.$el.find(".comments_wrapper").html(comments);
@@ -1093,7 +1093,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
             
             onClickViewRecipe : function(event) {
-                var url = helper_options.base_url + 'index.php?option=com_fitness&view=recipe_database#!/nutrition_recipe/' + this.model.get('original_recipe_id');
+                var url = helper_options.base_url + 'index.php?option=com_fitness&view=recipe_database&Itemid=1002#!/nutrition_recipe/' + this.model.get('original_recipe_id');
                 window.open(url);
             }, 
             

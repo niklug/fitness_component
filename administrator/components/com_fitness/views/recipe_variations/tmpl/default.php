@@ -25,7 +25,7 @@ $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=recipe_types'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=recipe_variations'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
@@ -67,7 +67,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th width="10%">
 					<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
 					<?php if ($canOrder && $saveOrder) :?>
-						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'recipe_types.saveorder'); ?>
+						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'recipe_variations.saveorder'); ?>
 					<?php endif; ?>
 				</th>
                 <?php } ?>
@@ -108,10 +108,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 				<td>
 				<?php if (isset($item->checked_out) && $item->checked_out) : ?>
-					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'recipe_types.', $canCheckin); ?>
+					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'recipe_variations.', $canCheckin); ?>
 				<?php endif; ?>
 				<?php if ($canEdit) : ?>
-					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=recipe_type.edit&id='.(int) $item->id); ?>">
+					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=recipe_variation.edit&id='.(int) $item->id); ?>">
 					<?php echo $this->escape($item->name); ?></a>
 				<?php else : ?>
 					<?php echo $this->escape($item->name); ?>
@@ -121,7 +121,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 
                 <?php if (isset($this->items[0]->state)) { ?>
 				    <td class="center">
-					    <?php echo JHtml::_('jgrid.published', $item->state, $i, 'recipe_types.', $canChange, 'cb'); ?>
+					    <?php echo JHtml::_('jgrid.published', $item->state, $i, 'recipe_variations.', $canChange, 'cb'); ?>
 				    </td>
                 <?php } ?>
                 <?php if (isset($this->items[0]->ordering)) { ?>
@@ -129,11 +129,11 @@ $saveOrder	= $listOrder == 'a.ordering';
 					    <?php if ($canChange) : ?>
 						    <?php if ($saveOrder) :?>
 							    <?php if ($listDirn == 'asc') : ?>
-								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'recipe_types.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'recipe_types.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'recipe_variations.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'recipe_variations.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							    <?php elseif ($listDirn == 'desc') : ?>
-								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'recipe_types.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'recipe_types.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'recipe_variations.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'recipe_variations.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							    <?php endif; ?>
 						    <?php endif; ?>
 						    <?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>

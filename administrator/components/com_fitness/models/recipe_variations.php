@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Fitness records.
  */
-class FitnessModelrecipe_types extends JModelList {
+class FitnessModelrecipe_variations extends JModelList {
 
     /**
      * Constructor.
@@ -98,7 +98,7 @@ class FitnessModelrecipe_types extends JModelList {
                         'list.select', 'a.*'
                 )
         );
-        $query->from('`#__fitness_recipe_types` AS a');
+        $query->from('`#__fitness_recipe_variations` AS a');
 
         
 

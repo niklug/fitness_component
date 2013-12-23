@@ -15,10 +15,10 @@ JHtml::_('behavior.keepalive');
 
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="recipe_type-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="recipe_variation-form" class="form-validate">
     <div class="width-60 fltlft">
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_FITNESS_LEGEND_RECIPE_TYPE'); ?></legend>
+            <legend></legend>
             <ul class="adminformlist">
 				<li><?php echo $this->form->getLabel('name'); ?>
 				<?php echo $this->form->getInput('name'); ?></li>
@@ -50,14 +50,14 @@ JHtml::_('behavior.keepalive');
 
         Joomla.submitbutton = function(task)
             {
-                if (task == 'recipe_type.cancel') {
-                    Joomla.submitform(task, document.getElementById('recipe_type-form'));
+                if (task == 'recipe_variation.cancel') {
+                    Joomla.submitform(task, document.getElementById('recipe_variation-form'));
                 }
                 else{
                     
-                    if (task != 'recipe_type.cancel' && document.formvalidator.isValid(document.id('recipe_type-form'))) {
+                    if (task != 'recipe_variation.cancel' && document.formvalidator.isValid(document.id('recipe_variation-form'))) {
                         
-                        Joomla.submitform(task, document.getElementById('recipe_type-form'));
+                        Joomla.submitform(task, document.getElementById('recipe_variation-form'));
                     }
                     else {
                         alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');

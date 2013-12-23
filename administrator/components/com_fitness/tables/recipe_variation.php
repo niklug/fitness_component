@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 /**
  * recipe_type Table class
  */
-class FitnessTablerecipe_type extends JTable {
+class FitnessTablerecipe_variation extends JTable {
 
     /**
      * Constructor
@@ -21,7 +21,7 @@ class FitnessTablerecipe_type extends JTable {
      * @param JDatabase A database connector object
      */
     public function __construct(&$db) {
-        parent::__construct('#__fitness_recipe_types', 'id', $db);
+        parent::__construct('#__fitness_recipe_variations', 'id', $db);
     }
 
     /**
@@ -52,9 +52,9 @@ class FitnessTablerecipe_type extends JTable {
             $registry->loadArray($array['metadata']);
             $array['metadata'] = (string) $registry;
         }
-        if(!JFactory::getUser()->authorise('core.admin', 'com_fitness.recipe_type.'.$array['id'])){
-            $actions = JFactory::getACL()->getActions('com_fitness','recipe_type');
-            $default_actions = JFactory::getACL()->getAssetRules('com_fitness.recipe_type.'.$array['id'])->getData();
+        if(!JFactory::getUser()->authorise('core.admin', 'com_fitness.recipe_variation.'.$array['id'])){
+            $actions = JFactory::getACL()->getActions('com_fitness','recipe_variation');
+            $default_actions = JFactory::getACL()->getAssetRules('com_fitness.recipe_variation.'.$array['id'])->getData();
             $array_jaccess = array();
             foreach($actions as $action){
                 $array_jaccess[$action->name] = $default_actions[$action->name];
@@ -181,7 +181,7 @@ class FitnessTablerecipe_type extends JTable {
     */
     protected function _getAssetName() {
         $k = $this->_tbl_key;
-        return 'com_fitness.recipe_type.' . (int) $this->$k;
+        return 'com_fitness.recipe_variation.' . (int) $this->$k;
     }
  
     /**

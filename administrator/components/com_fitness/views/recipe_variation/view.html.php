@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View to edit
  */
-class FitnessViewRecipe_type extends JView
+class FitnessViewRecipe_variation extends JView
 {
 	protected $state;
 	protected $item;
@@ -60,27 +60,27 @@ class FitnessViewRecipe_type extends JView
         }
 		$canDo		= FitnessHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_RECIPE_TYPE'), 'recipe_type.png');
+		JToolBarHelper::title(JText::_('Add/Edit Recipe Variation'), 'recipe_type.png');
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit')||($canDo->get('core.create'))))
 		{
 
-			JToolBarHelper::apply('recipe_type.apply', 'JTOOLBAR_APPLY');
-			JToolBarHelper::save('recipe_type.save', 'JTOOLBAR_SAVE');
+			JToolBarHelper::apply('recipe_variation.apply', 'JTOOLBAR_APPLY');
+			JToolBarHelper::save('recipe_variation.save', 'JTOOLBAR_SAVE');
 		}
 		if (!$checkedOut && ($canDo->get('core.create'))){
-			JToolBarHelper::custom('recipe_type.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+			JToolBarHelper::custom('recipe_variation.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 		}
 		// If an existing item, can save to a copy.
 		if (!$isNew && $canDo->get('core.create')) {
-			JToolBarHelper::custom('recipe_type.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+			JToolBarHelper::custom('recipe_variation.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
 		}
 		if (empty($this->item->id)) {
-			JToolBarHelper::cancel('recipe_type.cancel', 'JTOOLBAR_CANCEL');
+			JToolBarHelper::cancel('recipe_variation.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else {
-			JToolBarHelper::cancel('recipe_type.cancel', 'JTOOLBAR_CLOSE');
+			JToolBarHelper::cancel('recipe_variation.cancel', 'JTOOLBAR_CLOSE');
 		}
 
 	}

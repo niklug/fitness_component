@@ -13,15 +13,15 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controlleradmin');
 
 /**
- * Recipe_types list controller class.
+ * Recipe_variations list controller class.
  */
-class FitnessControllerRecipe_types extends JControllerAdmin
+class FitnessControllerRecipe_variations extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
-	public function getModel($name = 'recipe_type', $prefix = 'FitnessModel')
+	public function getModel($name = 'recipe_variation', $prefix = 'FitnessModel')
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;

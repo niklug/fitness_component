@@ -13,13 +13,13 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controllerform');
 
 /**
- * Recipe_type controller class.
+ * Recipe_variation controller class.
  */
-class FitnessControllerRecipe_type extends JControllerForm
+class FitnessControllerRecipe_variation extends JControllerForm
 {
 
     function __construct() {
-        $this->view_list = 'recipe_types';
+        $this->view_list = 'recipe_variations';
         parent::__construct();
     }
 
