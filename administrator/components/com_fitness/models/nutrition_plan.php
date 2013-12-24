@@ -796,6 +796,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $data->limit = JRequest::getVar('limit'); 
             $data->state = JRequest::getVar('state'); 
             $data->filter_options = JRequest::getVar('filter_options'); 
+            $data->recipe_variations_filter_options = JRequest::getVar('recipe_variations_filter_options'); 
             $data->current_page= JRequest::getVar('current_page'); 
             
             $data_encoded= json_encode($data);
@@ -964,6 +965,12 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $model->id = $id;
             
             return $model;
+        }
+        
+        
+        public function recipe_variations() {
+            $helper = new FitnessHelper();
+            return $helper->getRecipeVariations();
         }
         
 }

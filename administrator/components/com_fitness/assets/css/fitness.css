@@ -927,3 +927,12 @@
 .internal_wrapper {
     padding: 5px;
 }
+
+.recipe_filter {
+    border: 1px solid #ccc;
+}
+
+.recipe_filter h5 {
+  margin: 0;
+  padding: 5px;
+}

@@ -324,6 +324,12 @@ class FitnessController extends JController
             $view -> nutrition_guide_recipes();
         }
         
+        
+        function recipe_variations() {
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> recipe_variations(); 
+        }
 
 
 }

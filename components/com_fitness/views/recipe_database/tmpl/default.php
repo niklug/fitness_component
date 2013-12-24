@@ -143,6 +143,7 @@ defined('_JEXEC') or die;
            
             resetFilter : function() {
                 this.unbind("change:filter_options", this.resetCurrentPage);
+                this.unbind("change:recipe_variations_filter_options", this.resetCurrentPage);
                 this.set({'filter_options' : '', 'recipe_variations_filter_options' : ''});
                 this.bind("change:filter_options", this.resetCurrentPage, this);
                 this.bind("change:recipe_variations_filter_options", this.resetCurrentPage, this);
@@ -1445,17 +1446,23 @@ defined('_JEXEC') or die;
         window.app.Recipe_variations_filter_view = Backbone.View.extend({
 
             render : function(){
+                var template = _.template($("#recipe_variations_filter_template").html());
+                this.$el.html(template);
+                this.populateSelect();
+                return this;
+            },
+            
+            populateSelect : function() {
+                
                 var self = this;
-                window.app.recipe_variations_collection = new window.app.Recipe_variations_collection();
-                window.app.recipe_variations_collection.fetch({
-                    success : function (collection, response) {
-                        var template = _.template($("#recipe_variations_filter_template").html(), {'items' : response});
-                        self.$el.html(template);
-                    },
-                    error : function (collection, response) {
-                        alert(response.responseText);
-                    }
-                });
+                this.collection.on("add", function(model) {
+                    self.$el.find("#recipe_variations_filter").append('<option value="' + model.get('id') + '">' + model.get('name') + '</option>');
+		});
+                
+                _.each(this.collection.models, function (model) { 
+                    self.$el.find("#recipe_variations_filter").append('<option value="' + model.get('id') + '">' + model.get('name') + '</option>');
+                }, this);
+  
             },
             
             events: {
@@ -1467,6 +1474,11 @@ defined('_JEXEC') or die;
                 var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
                 window.app.recipe_items_model.set({'recipe_variations_filter_options' : ids});
                 //console.log(ids);
+            },
+            
+            close :function() {
+                $(this.el).unbind();
+		$(this.el).remove();
             }
         });
         
@@ -1554,10 +1566,9 @@ defined('_JEXEC') or die;
                 this.recipe = window.app.recipe_items_model.get('recipe');
                 
                 this.recipe_types = this.options.filter_categories_model.get('recipe_types');
-                
-                this.recipe_variations_collection = new window.app.Recipe_variations_collection();
+  
                 var self = this;
-                this.recipe_variations_collection.fetch({
+                window.app.recipe_variations_collection.fetch({
                     success : function (collection, response) {
                         self.loadTemplate({
                            'recipe_types' : self.recipe_types,
@@ -1730,6 +1741,15 @@ defined('_JEXEC') or die;
                 "!/add_ingredient" : "add_ingredient",
                 "!/add_diary/:id" : "add_diary",
             },
+            
+            initialize: function(){
+                window.app.recipe_variations_collection = new window.app.Recipe_variations_collection();
+                window.app.recipe_variations_collection.fetch({
+                    error : function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
 
             my_recipes : function () {
                 window.app.recipe_items_model.set({state : '1'});
@@ -1767,8 +1787,17 @@ defined('_JEXEC') or die;
                 window.app.filter_categories_model.render();
                 
                 window.app.recipes_latest_model.render();
-                this.recipe_variations_filter_view = new window.app.Recipe_variations_filter_view({collection : new window.app.Recipe_variations_collection(), el : $("#recipe_variations_filter_wrapper")});
-                this.recipe_variations_filter_view.render();
+                
+                if(typeof window.app.recipe_variations_filter_view !== 'undefined') {
+                    window.app.recipe_variations_filter_view.close();
+                }
+
+                window.app.recipe_variations_filter_view = new window.app.Recipe_variations_filter_view({collection : window.app.recipe_variations_collection});
+
+                $("#recipe_variations_filter_wrapper").html(window.app.recipe_variations_filter_view.render().el );
+                
+                
+                
             },
             
             my_favourites : function () {
@@ -1813,6 +1842,9 @@ defined('_JEXEC') or die;
                 this.load_mainmenu();
                 
                 window.app.Views.recipes_container.render();
+                
+                
+
 
             },
             

@@ -1809,7 +1809,7 @@
 
 <!--  categories filter template -->
 <script type="text/template" id="recipe_database_filter_template">
-    <div class="fitness_block_wrapper" style="">
+    <div class="fitness_block_wrapper recipe_filter" style="">
         <h5>FILTER CATEGORIES</h5>
         <div class="clr"></div>
         <hr class="orange_line">
@@ -1823,26 +1823,24 @@
                 <% } %>
             </select>
         </div>
+        <div class="clr"></div>
     </div>
 </script>
 
 
 <!--  recipe variations template -->
 <script type="text/template" id="recipe_variations_filter_template">
-    <div class="fitness_block_wrapper" style="">
+    <div class="fitness_block_wrapper recipe_filter" style="">
         <h5>RECIPE VARIATIONS</h5>
         <div class="clr"></div>
         <hr class="orange_line">
         <div class="internal_wrapper">
-            <select class="dark_input_style" multiple size="<%= items.length + 1 %>" id="recipe_variations_filter" name="recipe_variations_filter[]"  style="width:100%;">
+            <select class="dark_input_style" multiple size="12" id="recipe_variations_filter" name="recipe_variations_filter[]"  style="width:100%;">
                 <option value="">ALL VARIATIONS</option>
-                <% if (typeof items !== "undefined") { %>
-                    <% _.each(items, function(item, key){ %>
-                          <option value="<%= item.id %>"><%= item.name %></option>
-                    <% }) %>
-                <% } %>
+
             </select>
         </div>
+        <div class="clr"></div>
     </div>
 </script>
 
@@ -3182,6 +3180,7 @@
             <td style="vertical-align:top;">
                 <div id="recipe_database_filter_wrapper"> </div>
                 <div class="clr"></div>
+                <br>
                 <div id="recipe_variations_filter_wrapper"> </div>
             </td>
         </tr>

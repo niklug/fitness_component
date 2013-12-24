@@ -873,6 +873,8 @@ $helper = new FitnessHelper();
                 
                 this.connectFilter();
                 
+                this.connectRecipeVariationsFilter();
+                
                 return this;
             },
 
@@ -905,7 +907,7 @@ $helper = new FitnessHelper();
                 
                 var self = this;
                 
-                this.recipe_types_collection .fetch({
+                this.recipe_types_collection.fetch({
                     wait : true,
                     success : function(collection, response) {
                         self.filter_container.html(new window.app.Filter_view({model : response}).render().el);
@@ -914,7 +916,24 @@ $helper = new FitnessHelper();
                         alert(response.responseText);
                     }
                 })
+            },
+            
+            connectRecipeVariationsFilter : function() {
+                this.recipe_variations_filter_container = this.$el.find("#recipe_variations_filter_wrapper");
                 
+                this.recipe_variations_collection = new window.app.Recipe_variations_collection();
+                
+                var self = this;
+                
+                this.recipe_variations_collection.fetch({
+                    wait : true,
+                    success : function(collection, response) {
+                        self.recipe_variations_filter_container.html(new window.app.Recipe_variations_filter_view({collection : collection}).render().el);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                })
             }
 
         });
@@ -1063,6 +1082,48 @@ $helper = new FitnessHelper();
         });
         
         
+        window.app.Recipe_variations_filter_view = Backbone.View.extend({
+
+            render : function(){
+                var template = _.template($("#recipe_variations_filter_template").html());
+                this.$el.html(template);
+                this.populateSelect();
+                return this;
+            },
+            
+            populateSelect : function() {
+                
+                var self = this;
+                this.collection.on("add", function(model) {
+                    self.$el.find("#recipe_variations_filter").append('<option value="' + model.get('id') + '">' + model.get('name') + '</option>');
+		});
+                
+                _.each(this.collection.models, function (model) { 
+                    self.$el.find("#recipe_variations_filter").append('<option value="' + model.get('id') + '">' + model.get('name') + '</option>');
+                }, this);
+  
+            },
+            
+            events: {
+                "change #recipe_variations_filter" : "onFilterSelect",
+            },
+            
+        
+            onFilterSelect : function(event){
+                var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
+                window.app.pagination_app_model.reset();
+                window.app.nutrition_guide_add_recipe_collection.reset();
+                window.app.get_recipe_params_model.set({'recipe_variations_filter_options' : ids});
+                //console.log(ids);
+            },
+            
+            close :function() {
+                $(this.el).unbind();
+		$(this.el).remove();
+            }
+        });
+        
+        
         
         //MODELS
         
@@ -1108,6 +1169,7 @@ $helper = new FitnessHelper();
                 limit : localStorage.getItem('items_number') || 10,
                 state : 1,
                 filter_options : '',
+                recipe_variations_filter_options : '',
                 current_page : 'recipe_database'
             }
         });
@@ -1147,6 +1209,10 @@ $helper = new FitnessHelper();
         
         window.app.Nutrition_guide_recipes_collection = Backbone.Collection.extend({
             url : window.app.example_day_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=nutrition_guide_recipes&'
+        });
+        
+        window.app.Recipe_variations_collection = Backbone.Collection.extend({
+            url : window.app.example_day_options.fitness_backend_url + '&format=text&view=recipe_database&task=recipe_variations&'
         });
         
         //CONTROLLER

@@ -177,4 +177,9 @@ class FitnessViewNutrition_plan extends JView {
         echo  json_encode($model->nutrition_guide_recipes());
     }
     
+    function recipe_variations() {
+        $model = $this -> getModel("nutrition_plan");
+        echo json_encode($model->recipe_variations());
+    }
+    
 }
