@@ -58,10 +58,12 @@
                 var model = this.model;
                 var filename = this.pictureFile.name;
                 
+                this.filetype = filename.split('.').pop();
+                
                 var self = this;
                 reader.onloadend = function () {
-                    $('#preview_image').attr('src', reader.result);
-                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + self.image_name);
+                    $('#preview_image').css('background-image',"url(" + reader.result +")");
+                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + self.image_name + '.' + self.filetype);
                 };
                 reader.readAsDataURL(this.pictureFile);
                 return false;
@@ -83,11 +85,12 @@
                 // and display it in the img tag.
                 var reader = new FileReader();
                 var model = this.model;
+   
                 
                 var self = this;
                 reader.onloadend = function() {
-                    $('#preview_image').attr('src', reader.result);
-                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + self.image_name);
+                    $('#preview_image').css('background-image',"url(" + reader.result +")");
+                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + file.name);
                 };
                 reader.readAsDataURL(this.pictureFile);
              
@@ -129,6 +132,10 @@
                     
                     url = url +'&upload_folder=' + upload_folder +'&image_name=' + self.image_name;
                     
+                    var ajax_load_html= '<div style="width:100%;text-align:center;margin-top:80px;margin-left: 28px;"><div class="ajax_loader"></div></div>';
+                    
+                    $('#preview_image').html(ajax_load_html);
+                    
                     // upload FormData object by XMLHttpRequest
                     $.ajax({
                             url:  url,
@@ -140,7 +147,9 @@
                     })
                     .done(function () {
                             console.log(self.pictureFile.name + ' uploaded successfully !' );
+                            $('#preview_image').html('');
                             $('#preview_image').attr('data-imagepath', self.model.get('img_path') + '/' + self.image_name + '.' + self.filetype);
+                            $('#preview_image').css('background-image',"url(" + self.model.get('base_url') + self.model.get('img_path') + '/' + self.image_name + '.' + self.filetype +")");
                     })
                     .fail(function (response) {
                             alert(response.responseText)
@@ -180,7 +189,7 @@
                     
                 this.pictureFile = null;
                 this.model.set({"picture" : ''});
-                $('#preview_image').attr('src', this.model.get("default_image"));
+                $('#preview_image').css('background-image',"url(" + this.model.get("default_image") +")");
                 $('#preview_image').attr('data-imagepath', '');
             }
 

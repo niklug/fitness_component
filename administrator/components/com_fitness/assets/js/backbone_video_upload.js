@@ -87,14 +87,12 @@
                 // and display it in the img tag.
                 var reader = new FileReader();
                 var model = this.model;
-                
-                this.filetype = file.split('.').pop();
-                
+                            
                 var self = this;
                 reader.onloadend = function() {
                     $('#preview_video').css('background-image', 'none');
-                    $('#preview_video').html('<div style="margin-top:80px;">' + self.video_name + '.' + self.filetype + '</div>');
-                    $('#preview_video').attr('data-videopath', model.get('video_path') + '/' + self.video_name + '.' + self.filetype);
+                    $('#preview_video').html('<div style="margin-top:80px;">' +  file.name+ '</div>');
+                    $('#preview_video').attr('data-videopath', model.get('video_path') + '/' + file.name);
                 };
                 reader.readAsDataURL(this.videoFile);
              

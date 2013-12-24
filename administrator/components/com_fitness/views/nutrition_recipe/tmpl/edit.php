@@ -38,40 +38,21 @@ $helper = new FitnessHelper();
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_NUTRITION_RECIPE'); ?></legend>
             <table>
-                <thead>
                     <tr>
-                        <td>
+                        <td width="150">
                             <?php echo $this->form->getLabel('recipe_name'); ?>
                         </td>
                         <td>
                             <?php echo $this->form->getInput('recipe_name'); ?>
                         </td>
                     </tr>
-                </thead>
-                <tbody>
                     <tr>
-                        <td>
-                            <?php echo $this->form->getLabel('image'); ?>
-                        </td>
-                        <td>
-                            <?php echo $this->form->getInput('image'); ?>
-                            <div class="clr"></div>
-                            (image dimensions should match width 200px be height 180px)
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>
-                            Recipe Video
+                        <td style="text-align: left;">
+                            <div id="image_upload_content"></div>
                         </td>
                         <td style="text-align: left;">
                             <div id="video_upload_content"></div>
-                        </td>
-                    </tr>
-                    
-                    
-                    <tr>
-                        <td  colspan="2" >
+                        <td style="vertical-align: bottom;" >
                             <div id="recipe_video_wrapper"></div>
                         </td>
                     </tr>
@@ -172,6 +153,7 @@ $helper = new FitnessHelper();
     </div>
     <input type="hidden" name="task" value="" />
     <?php echo $this->form->getInput('video'); ?>
+    <?php echo $this->form->getInput('image'); ?>
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 
@@ -626,6 +608,34 @@ $helper = new FitnessHelper();
             $("#comments_wrapper").html(comments_html);
         }
         
+        //IMAGE
+        
+        var imagepath = '<?php echo $this->item->image;?>';
+        var filename = '';
+        if(typeof imagepath !== 'undefined') {
+            var fileNameIndex = imagepath.lastIndexOf("/") + 1;
+            filename = imagepath.substr(fileNameIndex);
+        }
+
+
+
+        var image_upload_options = {
+            'url' : '<?php echo JURI::root();?>index.php?option=com_fitness&view=recipe_database&task=uploadImage&format=text',
+            'base_url' : '<?php echo JURI::root();?>',
+            'picture' : filename,
+            'default_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_image.png',
+            'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Images' . DS  ?>',
+            'preview_height' : '180px',
+            'preview_width' : '200px',
+            'el' : $('#image_upload_content'),
+            'img_path' : 'images/Recipe_Images',
+            'image_name' : '<?php echo $this->item->id;?>'
+
+        };
+
+        var image_upload = $.backbone_image_upload(image_upload_options); 
+        image_upload.render();
+        
         
        
         
@@ -647,7 +657,6 @@ $helper = new FitnessHelper();
             'url' : '<?php echo JURI::root();?>index.php?option=com_fitness&view=recipe_database&task=uploadVideo&format=text',
             'base_url' : '<?php echo JURI::root();?>',
             'video' : filename,
-            'default_image' : 'administrator/components/com_fitness/assets/images/no_image.png',
             'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
             'no_video_image_big' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_big.png',
             'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Videos' . DS  ?>',
@@ -655,7 +664,6 @@ $helper = new FitnessHelper();
             'preview_height' : '180px',
             'preview_width' : '250px',
             'el' : $('#video_upload_content'),
-
             'video_name' : '<?php echo $this->item->id;?>',
             
 
@@ -679,8 +687,8 @@ $helper = new FitnessHelper();
             jwplayer("recipe_video_wrapper").setup({
                 file: base_url + videopath,
                 image: "",
-                height: 340,
-                width: 640,
+                height: 200,
+                width: 300,
                 autostart: true,
                 mute: true,
                 controls: false,
@@ -712,6 +720,10 @@ $helper = new FitnessHelper();
                     var video_path = $("#preview_video").attr('data-videopath');
                     
                     $("#jform_video_input").val(video_path);
+                    
+                    var image_path = $("#preview_image").attr('data-imagepath');
+                    
+                    $("#jform_image_input").val(image_path);
 
                     Joomla.submitform(task, document.getElementById('nutrition_recipe-form'));
                 }

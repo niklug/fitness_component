@@ -51,7 +51,7 @@ defined('_JEXEC') or die;
             'recipe_types_db_table' : '#__fitness_recipe_types',
             'recipe_comments_db_table' : '#__fitness_nutrition_recipes_comments',
             'recipes_favourites_db_table' : '#__fitness_nutrition_recipes_favourites',
-            'default_image' : 'administrator/components/com_fitness/assets/images/no_image.png',
+            'default_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_image.png',
             'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
             'no_video_image_big' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_big.png',
             'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Recipe_Images' . DS  ?>',
@@ -454,6 +454,7 @@ defined('_JEXEC') or die;
                     return;
                 }
                 data.recipe_type = $("#recipe_type").find(':selected').map(function(){ return this.value }).get().join(",");
+                data.recipe_variation = $("#recipe_variation").find(':selected').map(function(){ return this.value }).get().join(",");
                 if(!data.recipe_type) {
                     alert('Select Recipe Type!')
                     return;
@@ -1618,6 +1619,7 @@ defined('_JEXEC') or die;
                     'preview_width' : '200px',
                     'el' : $('#image_upload_content'),
                     'img_path' : window.app.recipe_items_model.get('img_path'),
+                    'base_url' : window.app.recipe_items_model.get('base_url'),
                     'image_name' : this.recipe_id
 
                 };
@@ -1647,6 +1649,7 @@ defined('_JEXEC') or die;
                     'preview_width' : '250px',
                     'el' : $('#video_upload_content'),
                     'video_path' : window.app.recipe_items_model.get('video_path'),
+                    'base_url' : window.app.recipe_items_model.get('base_url'),
                     'video_name' : this.recipe_id
 
                 };

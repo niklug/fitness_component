@@ -859,7 +859,6 @@
     <%
     
     var recipe = recipe || {}; 
-   
     %>
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
@@ -868,7 +867,7 @@
                     <td width="50%">
                         <table width="100%">
                             <tr>
-                                <td>
+                                <td >
                                     RECIPE NAME
                                 </td>
                                 <td>
@@ -902,7 +901,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td >
                                     RECIPE VARIATION
                                 </td>
                                 <td>
@@ -911,12 +910,13 @@
                                 if(typeof (recipe.recipe_variation) !== 'undefined') {
                                     selected_variation = (recipe.recipe_variation).split(","); 
                                 }
+
                                 %>
                                     <select multiple size="10" id="recipe_variation" name="recipe_variation[]" class="dark_input_style" style="width:200px;">
                                         <% if (typeof recipe_variations !== "undefined") { %>
                                             <% _.each(recipe_variations, function(item, key){
                                                 var selected = '';
-                                                if(selected_types.indexOf(item.id) != -1) {
+                                                if(selected_variation.indexOf(item.id) != -1) {
                                                     selected = 'selected';
                                                 }
                                              %>
@@ -931,7 +931,7 @@
                                     SERVES
                                 </td>
                                 <td>
-                                    <input class="dark_input_style" value="<%= recipe.number_serves || '' %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
+                                    <input class="dark_input_style" value="<%= recipe.number_serves || '-' %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
                                 </td>
                             </tr>
                             <tr>
@@ -940,7 +940,7 @@
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <%= recipe.author || '' %>
+                                        <%= recipe.author || '-' %>
                                     </span>
                                 </td>
                             </tr>
@@ -957,7 +957,7 @@
                                     TRAINER
                                 </td>
                                 <td>
-                                    <%= recipe.trainer || '' %>
+                                    <%= recipe.trainer || '-' %>
                                 </td>
                             </tr>
                         </table>
@@ -994,10 +994,12 @@
 
 <script type="text/template" id="image_upload_template">
     <%
-    var image = img_path + '/' + picture;
+    var background_image =  'url(' + "'" + base_url + img_path + '/' + picture  + "')" ;
+
     if(!picture) {
-        image = default_image;
-    }
+        background_image = 'url(' + "'" + default_image  + "')" ;
+        full_image_path = '';
+    } 
     %>
     <div class="form-left-col" style="text-align:center;">
         <form name="image_form">
@@ -1009,7 +1011,11 @@
             <div class="clr"></div>
             Or drag image here
         </form>
-        <img data-imagepath="<%= img_path + '/' + picture %>" style="margin: 5px; display: inline-block;  height: 180px; width: 200px;border:2px dashed #ccc" height="<%= preview_height%>"  width="<%= preview_width%>" id="preview_image" src="<%= image %>"/>
+        <div data-imagepath="<%= img_path + '/' + picture %>" 
+            class="recipe_database_image"
+            style=" background-image: <%= background_image %>; border:2px dashed #ccc;display: inline-block; margin: 5px;"
+            id="preview_image">
+        </div>
         <br/>
         <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
         <a href="javascript:void(0)" class="clear_image">[Clear]</a>
@@ -1042,7 +1048,7 @@
             Or drag video here
         </form>
         
-        <div data-videopath="<%= full_video_path %>" style=" background-image: <%= background_image%>; background-repeat: no-repeat;background-position: -23px 10px;margin: 5px; display: inline-block; border:2px dashed #ccc;height:<%= preview_height%>;width:<%= preview_width%>;" id="preview_video"><%= video_html %></div>
+        <div data-videopath="<%= full_video_path %>" style=" background-image: <%= background_image%>; background-repeat: no-repeat;background-size:100% 100%;margin: 5px; display: inline-block; border:2px dashed #ccc;height:<%= preview_height%>;width:<%= preview_width%>;" id="preview_video"><%= video_html %></div>
         <br/>
         <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
         <a href="javascript:void(0)" class="clear_video">[Clear]</a>
@@ -1054,9 +1060,16 @@
 <!--  view/open recipe template -->
 <script type="text/template" id="recipe_database_view_recipe_template">
     <%
+    
+     
     if(!image || image == 'images/Recipe_Images/'){
         image = window.app.recipe_items_model.get('default_image');
+    } else {
+        image  = window.app.recipe_items_model.get('base_url') + image
     }
+    var background_image = 'url(' + "'" + image  + "')" ;
+
+
     %>
     <div class="fitness_block_wrapper" style="margin-top: 20px;">
         <div class="internal_wrapper">
@@ -1125,7 +1138,7 @@
                         </td>
                         <td width="30%" ></td>
                         <td width="30%" style="text-align:center; vertical-align:middle;">
-                            <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+                            <div class="recipe_database_image" style="display: inline-block;background-image: <%= background_image %>"></div>
                         </td>
                     </tr>
 
@@ -1242,16 +1255,21 @@
 <!--  item recipe list template -->
 <script type="text/template" id="recipe_database_item_template">
     <%
+    
     if(!image || image == 'images/Recipe_Images/'){
         image = window.app.recipe_items_model.get('default_image');
+    } else {
+        image  = window.app.recipe_items_model.get('base_url') + image
     }
+    var background_image = 'url(' + "'" + image  + "')" ;
+
     %>
     <% var current_page = window.app.recipe_items_model.get('current_page'); %>
     <div    class="recipe_database_item_wrapper" data-id="<%= id%>" style="margin-top: 0px;">
         <table width="100%">
             <tr>
                 <td width="30%" style="text-align:center; vertical-align:middle;">
-                    <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+                    <div class="recipe_database_image" style="display: inline-block;background-image: <%= background_image %>"></div>
                 </td>
                 <td width="50%">
                     <table  width="100%">

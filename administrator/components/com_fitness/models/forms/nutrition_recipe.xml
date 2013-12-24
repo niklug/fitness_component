@@ -15,13 +15,8 @@
          required="true" 
         filter="safehtml" /> 
        
-       <field name="image" type="media"
-                
-            label="Recipe Image"
-            description="" 
-
-            directory="images" /> 
-       
+        <field name="image" id="image_input"  type="hidden" /> 
+        
         <field name="video" id="video_input"  type="hidden" /> 
        
        <field name="recipe_type" type="text" class="inputbox"
