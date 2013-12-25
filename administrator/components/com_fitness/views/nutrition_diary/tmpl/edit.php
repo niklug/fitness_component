@@ -499,7 +499,7 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
             'item_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_diary_meal_comments',
+            'db_table' : '#__fitness_nutrition_diary_comments',
             'read_only' : false,
             'anable_comment_email' : true,
             'comment_method' : 'DiaryComment'

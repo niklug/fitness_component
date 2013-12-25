@@ -995,7 +995,7 @@ defined('_JEXEC') or die;
                     'item_id' : this.item.id,
                     'fitness_administration_url' : this.model.attributes.fitness_administration_url,
                     'comment_obj' : {'user_name' : this.model.attributes.user_name, 'created' : "", 'comment' : ""},
-                    'db_table' : '#__fitness_nutrition_diary_meal_comments',
+                    'db_table' : '#__fitness_nutrition_diary_comments',
                     'read_only' : scored,
                     'anable_comment_email' : true,
                     'comment_method' : 'DiaryComment'

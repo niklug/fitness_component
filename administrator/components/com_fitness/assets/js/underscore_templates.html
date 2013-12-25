@@ -906,7 +906,7 @@
                                 </td>
                                 <td>
                                 <%
-                                var selected_types = [];
+                                var selected_variation = [];
                                 if(typeof (recipe.recipe_variation) !== 'undefined') {
                                     selected_variation = (recipe.recipe_variation).split(","); 
                                 }
@@ -954,7 +954,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    TRAINER
+                                    ASSESSED BY
                                 </td>
                                 <td>
                                     <%= recipe.trainer || '-' %>
@@ -1127,7 +1127,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>TRAINER</td>
+                                    <td>ASSESSED BY</td>
                                     <td>
                                         <span class="grey_title">
                                              <%= trainer || '-' %>
@@ -1321,7 +1321,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>TRAINER</td>
+                            <td>ASSESSED BY</td>
                             <td>
                                 <span class="grey_title">
                                      <%= trainer || '-' %>

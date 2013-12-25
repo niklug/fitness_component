@@ -580,7 +580,7 @@ if(in_array($this->item->status, array('2', '3', '4'))) {
             'item_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_diary_meal_comments',
+            'db_table' : '#__fitness_nutrition_diary_comments',
             'read_only' : '<?php echo $scored ?>'
         }
         

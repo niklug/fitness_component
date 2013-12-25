@@ -117,7 +117,7 @@
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <?php echo $data->entry_date; ?><br />
                                                                     <?php echo $data->submit_date; ?> <br />
-                                                                    <?php echo $data->trainer_name; ?><br /></td>
+                                                                    <?php echo $data->assessed_by_name; ?><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">COMMENT BY: <br />
