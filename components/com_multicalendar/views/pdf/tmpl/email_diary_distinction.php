@@ -22,11 +22,11 @@
                 color:#FFF;
             }
             .darkContainer a:hover {
-                color:#00C !important;
+                color:#fff !important;
             }
             .readMore a:hover {
                 background-color:#191919 !important;
-                color: #00C !important;
+                color: #fff !important;
             }
             body {
                 margin:0;
@@ -124,7 +124,7 @@
                                                             <tr>
                                                                 <td class="readMore" width="160" height="22" bgcolor="#1B1B1B" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; text-align:center;">
                                                                     <?php if($data->item->status != FitnessHelper::SUBMITTED_DIARY_STATUS) { ?>
-                                                                        <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#FFA600;">CLICK HERE TO OPEN</a>
+                                                                        <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#03F;">CLICK HERE TO OPEN</a>
                                                                     <?php } ?>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>

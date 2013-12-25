@@ -142,7 +142,7 @@ class FitnessController extends JController {
         $table = JRequest::getVar('table');
         $data_encoded = JRequest::getVar('data_encoded');
         
-        echo $this->admin_nutrition_plan_model->importRecipe($data_encoded, $table);
+        echo json_encode($this->admin_nutrition_plan_model->importRecipe($data_encoded, $table));
     }
 
     function saveShoppingItem() {

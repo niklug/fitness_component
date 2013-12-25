@@ -1746,12 +1746,25 @@ defined('_JEXEC') or die;
             },
             
             initialize: function(){
+                // history
+                this.routesHit = 0;
+                Backbone.history.on('route', function() { this.routesHit++; }, this);
+                //
                 window.app.recipe_variations_collection = new window.app.Recipe_variations_collection();
                 window.app.recipe_variations_collection.fetch({
                     error : function (collection, response) {
                         alert(response.responseText);
                     }
                 });
+            },
+
+
+            back: function() {
+                if(this.routesHit > 1) {
+                  window.history.back();
+                } else {
+                  this.navigate('', {trigger:true, replace:true});
+                }
             },
 
             my_recipes : function () {

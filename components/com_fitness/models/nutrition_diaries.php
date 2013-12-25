@@ -470,6 +470,7 @@ class FitnessModelNutrition_diaries extends JModelList {
  
         $recipe->recipe_name = $data->recipe_name;
         $recipe->recipe_type = $data->recipe_type;
+        $recipe->recipe_variation = $data->recipe_variation;
         $recipe->number_serves = $data->number_serves;
    
         

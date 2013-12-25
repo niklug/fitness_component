@@ -112,6 +112,22 @@ $helper = new FitnessHelper();
                         <?php echo JHtml::_('select.options', $status, "value", "text", $this->state->get('filter.diary_status'), true);?>
                 </select>
         </div>
+        
+        
+        <?php
+        
+        $activity_level[] = JHTML::_('select.option', 1, $helper->_activity_level[1] );
+        $activity_level[] = JHTML::_('select.option', 2, $helper->_activity_level[2]);
+        $activity_level[] = JHTML::_('select.option', 3, $helper->_activity_level[3] );
+
+        ?>
+
+        <div class='filter-select fltrt'>
+                <select name="filter_activity_level" class="inputbox" onchange="this.form.submit()">
+                        <option value=""><?php echo JText::_('-Activity Level-');?></option>
+                        <?php echo JHtml::_('select.options', $activity_level, "value", "text", $this->state->get('filter.activity_level'), true);?>
+                </select>
+        </div>
 
         <?php
         $db = JFactory::getDbo();
@@ -129,26 +145,6 @@ $helper = new FitnessHelper();
                         <?php echo JHtml::_('select.options', $nutrition_focus, "id", "name", $this->state->get('filter.nutrition_focus'), true);?>
                 </select>
         </div>
-
-        
-        
-        <?php
-        $db = JFactory::getDbo();
-        $sql = "SELECT id, name FROM #__fitness_goal_categories WHERE state='1' ";
-        $db->setQuery($sql);
-        if(!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $goal_category= $db->loadObjectList();
-        ?>
-
-        <div class='filter-select fltrt'>
-                <select name="filter_goal_category" class="inputbox" onchange="this.form.submit()">
-                        <option value=""><?php echo JText::_('-Primary Goal-');?></option>
-                        <?php echo JHtml::_('select.options', $goal_category, "id", "name", $this->state->get('filter.goal_category'), true);?>
-                </select>
-        </div>
-        
         
                 
         <?php
@@ -205,7 +201,7 @@ $helper = new FitnessHelper();
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_DIARIES_ASSESSED_BY', 'a.assessed_by', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_DIARIES_PRIMARY_GOAL', 'gn.primary_goal_name', $listDirn, $listOrder); ?>
+                                    <?php echo JHtml::_('grid.sort',  'Activity Level', 'a.activity_level', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_DIARIES_NUTRITION_FOCUS', 'nf.nutrition_focus_name', $listDirn, $listOrder); ?>
@@ -268,12 +264,22 @@ $helper = new FitnessHelper();
 
 				<td>
                                     <a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutrition_diary.edit&id='.(int) $item->id); ?>">
-					<?php echo $item->entry_date; ?>
+                                    <?php
+                                        $date = JFactory::getDate($item->entry_date);
+                                        echo  $date->toFormat('%A, %d %b %Y');
+                                    ?>
                                     </a>
    
 				</td>
 				<td>
-					<?php echo $item->submit_date; ?>
+					<?php 
+                                        if($item->submit_date != '0000-00-00 00:00:00') {
+                                            $date = JFactory::getDate($item->submit_date);
+                                            echo  $date->toFormat('%A, %d %b %Y');
+                                        } else {
+                                            echo '-';
+                                        }
+                                        ?>
 				</td>
 				<td>
                                         <?php echo JFactory::getUser($item->client_id)->name; ?>
@@ -285,7 +291,9 @@ $helper = new FitnessHelper();
                                         <?php echo JFactory::getUser($item->assessed_by)->name; ?>
 				</td>
 				<td>
-					<?php echo $item->primary_goal_name; ?>
+					<?php
+                                            echo $helper->_activity_level[$item->activity_level];
+                                        ?>
 				</td>
 				<td>
 					<?php echo $item->nutrition_focus_name; ?>

@@ -489,7 +489,7 @@ class NutritionDiaryEmail extends FitnessEmail {
                 $layout = 'email_diary_fail';
                 break;
             case 'DiarySubmitted':
-                $subject = 'Nutrition Diary Results';
+                $subject = 'Nutrition Diary Submitted';
                 $layout = 'email_diary_submitted';
                 break;
             case 'DiaryDistinction':

@@ -37,6 +37,7 @@ class FitnessModelnutrition_diaries extends JModelList {
                 'goal_category_id', 'gn.primary_goal_name',
                 'nutrition_focus', 'a.nutrition_focus',
                 'status', 'a.status',
+                'activity_level', 'a.activity_level',
                 'score', 'a.score',
                 'trainer_comments', 'a.trainer_comments',
                 'business_name', 'business_name',
@@ -99,6 +100,10 @@ class FitnessModelnutrition_diaries extends JModelList {
                 // Filter by diary status
                 $diary_status = $app->getUserStateFromRequest($this->context . '.filter.diary_status', 'filter_diary_status', '', 'string');
                 $this->setState('filter.diary_status', $diary_status);
+                
+                // Filter by activity level
+                $activity_level = $app->getUserStateFromRequest($this->context . '.filter.activity_level', 'filter_activity_level', '', 'string');
+                $this->setState('filter.activity_level', $activity_level);
                 
                 // Filter by business profile
                 $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
@@ -280,6 +285,14 @@ class FitnessModelnutrition_diaries extends JModelList {
                     if($diary_status == '1') {
                         $query->where('a.status = ' . (int) $diary_status . ' OR a.status="0"');
                     }
+                } 
+                
+                          
+                 // Filter by activitylevel
+                $activity_level= $this->getState('filter.activity_level');
+                
+                if ($activity_level) {
+                    $query->where('a.activity_level = ' . (int) $activity_level);
                 } 
 
 

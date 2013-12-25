@@ -415,7 +415,7 @@ $helper = new FitnessHelper();
             'item_id' : '<?php echo $this->item->id;?>',
             'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_plan_meal_comments',
+            'db_table' : '#__fitness_nutrition_plan_comments',
             'read_only' : false
         }
 

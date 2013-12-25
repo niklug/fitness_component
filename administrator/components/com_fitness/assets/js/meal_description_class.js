@@ -47,6 +47,7 @@
             $("#add_recipe"+ self._description_id).die().live('click', function() {
                 var recipesListHtml = self.recipesListHtml();
                 $("body").append(recipesListHtml);
+                $("body").css('overflow', 'hidden')
             });
             
             $("#save_as_recipe"+ self._description_id).die().live('click', function() {
@@ -60,7 +61,7 @@
                 
                 data.type = self._type;
                 
-                self.getRecipeTypes(data);
+                self.getRecipeTypesAndVariations(data);
 
             });
             
@@ -106,6 +107,7 @@
                 data.recipe_name = recipe_name;
                 data.number_serves = number_serves;
                 data.recipe_type = $("#save_as_recipe_recipe_type_" + self._description_id).find(':selected').map(function(){ return this.value }).get().join(",");
+                data.recipe_variation = $("#save_as_recipe_recipe_variation_" + self._description_id).find(':selected').map(function(){ return this.value }).get().join(",");
                 data.meal_id = meal_id;
                 data.type = type;
                 
@@ -117,6 +119,7 @@
 
             $("#close_recipe_list").die().live('click', function() {
                 $("#recipes_list_wrapper").remove();
+                $("body").css('overflow', 'auto')
             });
 
 
@@ -767,10 +770,10 @@
     }
     
     
-    ItemDescription.prototype.load_save_as_recipe_form = function(o, recipe_types) {
+    ItemDescription.prototype.load_save_as_recipe_form = function(o, recipe_types, recipe_variations) {
         var html = '';
-        html += '<table style="width:100%;border: 1px solid #FFFFFF !important;">';
-        html += '';
+        html += '<table style="width:400px;border: 1px solid #FFFFFF !important;">';
+        html += '<tr>';
         
         html += '<td>';
         html += 'RECIPE NAME';
@@ -778,14 +781,18 @@
         html += '<td>';
         html += '<input maxlength="100" style="width:250px;" type="text" id="save_as_recipe_recipe_name_' + o.description_id + '"/>';
         html += '</td>';
+        html += '</tr>';
         
+        html += '<tr>';
         html += '<td>';
         html += '# OF SERVES';
         html += '</td>';
         html += '<td>';
         html += '<input maxlength="3" style="width:20px;" type="text" id="save_as_recipe_serves_' + o.description_id + '"/>';
         html += '</td>';
+        html += '</tr>';
         
+        html += '<tr>';
         html += '<td>';
         html += 'RECIPE TYPE';
         html += '</td>';
@@ -796,15 +803,31 @@
                 html += '<option value="' +  item.id + '">' + item.name + '</option>';
             });
         html += '</select>';
-        
-        
-        html += '</td>'
 
+        html += '</td>';
+        html += '</tr>';
+        
+         html += '<tr>';
         html += '<td>';
-        html += '<a style="cursor: pointer;float:right;" id="save_as_recipe_cancel_' + o.description_id + '" onclick="javascript:void(0)">[CANCEL]</a>';
+        html += 'VARIATION';
         html += '</td>';
         html += '<td>';
-        html += '<a data-meal_id="' + o.meal_id + '" data-type="' + o.type + '" style="cursor: pointer;float:right;margin-left:10px;" id="save_as_recipe_save_' + o.description_id + '" onclick="javascript:void(0)">[SAVE]</a>';
+
+        html += '<select class="dark_input_style" multiple size="5" id="save_as_recipe_recipe_variation_' + o.description_id + '"  style="width:200px;">';
+            recipe_variations.each(function(item){
+                html += '<option value="' +  item.id + '">' + item.name + '</option>';
+            });
+        html += '</select>';
+
+        html += '</td>';
+        html += '</tr>';
+        
+        html += '<tr>';
+        html += '<td>';
+        html += '</td>';
+        html += '<td style="text-align:left;">';
+        html += '<a style="cursor: pointer;" id="save_as_recipe_cancel_' + o.description_id + '" onclick="javascript:void(0)">[CANCEL]</a>';
+        html += '<a data-meal_id="' + o.meal_id + '" data-type="' + o.type + '" style="cursor: pointer;margin-left:20px;" id="save_as_recipe_save_' + o.description_id + '" onclick="javascript:void(0)">[SAVE]</a>';
         html += '</td>'
         
         html += '</tr>';
@@ -817,24 +840,67 @@
     
     
     
-    ItemDescription.prototype.getRecipeTypes = function(o) {
+    ItemDescription.prototype.getRecipeTypesAndVariations = function(o) {
 
-        var data = {};
         var url = this.options.fitness_administration_url;
-        var view = 'recipe_database';
-        var task = 'getRecipeTypes';
-        var table = '#__fitness_recipe_types';
-
         var self = this;
         var obj = o;
-        $.AjaxCall(data, url, view, task, table, function(output) {
+        
+        $.when( 
+                
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                    view : 'recipe_database',
+                    task : 'getRecipeTypes',
+                    format : 'text',
+                    table : '#__fitness_recipe_types'
+                },
+                dataType : 'json',
+                success : function(response) {
+                    if(!response.status.success) {
+                        alert(response.status.message);
+                        return;
+                    }
+                    //console.log(response.data);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert('getRecipeTypes error');
+                }
+            }), 
             
-            var form_html = self.load_save_as_recipe_form(obj, output);
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                    view : 'recipe_database',
+                    task : 'recipe_variations',
+                    format : 'text',
+                    table :  '#__fitness_recipe_variations'
+                },
+                dataType : 'json',
+                success : function(response) {
+                    //console.log(response);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert('getRecipeTypes error');
+                }
+            })
+        )
+
+        .then( function( data1, data2 ) {
+            var recipe_types = data1[0]['data'];
+            var recipe_variations = data2[0];
+           
+            var form_html = self.load_save_as_recipe_form(obj, recipe_types, recipe_variations);
                 
             $("#save_as_recipe_form_" + obj.description_id).html(form_html);
         });
-
     }
+
     
     
     // Add the  function to the top level of the jQuery object

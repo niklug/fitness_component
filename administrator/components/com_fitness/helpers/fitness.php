@@ -290,8 +290,13 @@ class FitnessHelper extends FitnessFactory
     const NOTAPPROVED_RECIPE_STATUS = '3';
     //
     
-
+   //Activity Level
+    //const ACTIVITY_LEVEL_HEAVY = '1';
+    //const ACTIVITY_LEVEL_LIGHT = '2';
+    //const ACTIVITY_LEVEL_REST = '3';
+    //
     
+    public $_activity_level = array('', 'Heavy Training Day', 'Light Training Day', 'Recovery/Rest Training Day');
     //
 
     /**

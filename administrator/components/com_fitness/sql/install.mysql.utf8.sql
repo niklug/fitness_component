@@ -955,21 +955,6 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_comments` (
   FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_meal_comments` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-`parent_id` int(11) unsigned NOT NULL,
-  `item_id` int(11) unsigned NOT NULL,
-  `sub_item_id` int(11) unsigned NOT NULL,
-  `comment` text NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-`business_profile_id` INT(11) UNSIGNED NOT NULL ,
-  PRIMARY KEY (`id`),
-  KEY `item_id` (`item_id`),
-  KEY `sub_item_id` (`sub_item_id`),
-  FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
-  FOREIGN KEY (sub_item_id) REFERENCES #__fitness_nutrition_plan_meals(id) ON DELETE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_supplement_protocols` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
