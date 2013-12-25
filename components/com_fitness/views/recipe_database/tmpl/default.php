@@ -918,7 +918,7 @@ defined('_JEXEC') or die;
             },
 
             onClickCloseRecipe : function() {
-                window.history.back();
+                window.app.controller.back();
             },
             
             onClickCopyRecipe : function() {
@@ -970,7 +970,7 @@ defined('_JEXEC') or die;
                 this.$el.html(template);
             },
             onClickCloseRecipe : function() {
-                window.history.back();
+                window.app.controller.back();
             },
             onClickRemoveFavourites : function(event) {
             
@@ -1023,7 +1023,7 @@ defined('_JEXEC') or die;
             },
 
             onClickCloseTrashForm : function(){
-                window.history.back();
+                window.app.controller.back();
             },
             
             onClickDeleteRecipe : function(event) {
@@ -1199,9 +1199,7 @@ defined('_JEXEC') or die;
             },
             
             onClickCancel : function(event) {
-                var id = $(event.target).attr("data-recipe_id");
-                window.app.controller.navigate("!/my_favourites", true);
-                window.app.controller.navigate("!/nutrition_recipe/" + id, true);
+                window.app.controller.back();
             },
 
         });
