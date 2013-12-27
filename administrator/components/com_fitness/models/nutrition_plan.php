@@ -973,4 +973,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return $helper->getRecipeVariations();
         }
         
+        public function getRemoteImages($url) {
+            $helper = new FitnessHelper();
+            return $helper->getRemoteImages($url);
+        }
+        
 }

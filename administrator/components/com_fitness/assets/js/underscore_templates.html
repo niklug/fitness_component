@@ -11,7 +11,7 @@
         })  
         if(show_send_email) {
         %>
-            <input type="checkbox" id="send_diary_email" name="send_diary_email" value="1"> <span style="font-size:12px;">Send email</span>
+            <input type="checkbox" checked id="send_diary_email" name="send_diary_email" value="1"> <span style="font-size:12px;">Send email</span>
         <% } %>
     </div>
       
@@ -607,11 +607,11 @@
      <ul>
         <li><a onclick="javascript:void(0)"  id="overview_link" class="plan_menu_link"  href="javascript:void(0)">OVERVIEW</a></li>
         <li><a onclick="javascript:void(0)"  id="targets_link" class="plan_menu_link"  href="javascript:void(0)">TARGETS</a></li>
-        <li><a onclick="javascript:void(0)"  id="macronutrients_link" class="plan_menu_link"  href="javascript:void(0)">MACRONUTRIENTS</a></li>
+        <li><a onclick="javascript:void(0)"  id="macronutrients_link" class="plan_menu_link"  href="javascript:void(0)">MACROS</a></li>
         <li><a onclick="javascript:void(0)"  id="supplements_link" class="plan_menu_link"  href="javascript:void(0)">SUPPLEMENTS</a></li>
         <li><a onclick="javascript:void(0)"  id="diary_guide_link" class="plan_menu_link"  href="javascript:void(0)">DIARY GUIDE</a></li>
         <li><a onclick="javascript:void(0)"  id="nutrition_guide_link" class="plan_menu_link"  href="javascript:void(0)">NUTRITION GUIDE</a></li>
-        <li><a onclick="javascript:void(0)"  id="information_link" class="plan_menu_link"  href="javascript:void(0)">INFORMATION</a></li>
+        <li><a onclick="javascript:void(0)"  id="information_link" class="plan_menu_link"  href="javascript:void(0)">INFO</a></li>
         <li><a onclick="javascript:void(0)"  id="archive_focus_link" class="plan_menu_link"  href="javascript:void(0)">ARCHIVE</a></li>
         <li style="display:none;" id="close_tab" ><a onclick="javascript:void(0)"  id="close_link" class="plan_menu_link"  href="javascript:void(0)">CLOSE</a></li>
     </ul>
@@ -2950,10 +2950,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td width="70%">
                         <label>DESCRIPTION</label>
                         <div class="clr"></div>
                         <textarea readonly rows="4" cols="50" class="supplement_description" name="description" style="border:1px solid #ccc;width:100%;min-height:50px;"><%= description %></textarea>
+                    </td>
+                    <td>
+                        <div class="shop_url_slider"></div>
                     </td>
                 </tr>
                 <tr>
@@ -2993,8 +2996,8 @@
                 <td width="200">
                     <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">PROTOCOL NAME</div>
                 </td>
-                <td width="200">
-                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;" ><%= name %></div>
+                <td >
+                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;" ><%= name.toUpperCase() %></div>
                 </td>
                 <td>
                 </td>
@@ -3685,3 +3688,8 @@
 </script>
 
 
+<script type="text/template" id="thumbnail_slide_template">
+    <div class="thumbnail_slide_wrapper">
+        <div class="images_wrapper"><div>
+    </div>
+</script>

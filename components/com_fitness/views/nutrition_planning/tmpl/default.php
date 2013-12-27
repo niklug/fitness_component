@@ -359,7 +359,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     <!-- MACRONUTRIENTS -->
     <div id="macronutrients_wrapper" class="block">
         <div>
-            <h3 style="color:#FFFFFF !important;">ALLOWED MACRONUTRIENTS / SHOPPING LIST</h3>
+            <h3 style="color:#FFFFFF !important;">ALLOWED MACRONUTRIENTS</h3>
         </div>
         <div class="fitness_block_wrapper" style="min-height: 100px;">
             <h3>ALLOWED PROTEINS</h3>
@@ -438,7 +438,12 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     </div>
 
     <!-- NUTRITION GUIDE -->
-    <div id="nutrition_guide_wrapper" class="block fitness_block_wrapper">
+    
+    <div id="nutrition_guide_wrapper" class="block">
+        <div>
+            <h3 style="color:#FFFFFF !important;">DAILY MENU & NUTRITION GUIDE</h3>
+        </div>
+        <div id="nutrition_guide_container" class="fitness_block_wrapper"></div>
         
     </div>
     
@@ -976,7 +981,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         };
         
         window.app.Nutrition_guide_menu = Backbone.View.extend({
-            el : $("#nutrition_guide_wrapper"),
+            el : $("#nutrition_guide_container"),
 
             template : _.template($('#nutrition_guide_menu_frontend_template').html()),
 

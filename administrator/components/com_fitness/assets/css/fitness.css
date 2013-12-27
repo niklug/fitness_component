@@ -523,6 +523,11 @@
     color:#E62C2F;
 }
 
+.blue_style_total {
+    color:  #264db3 !important;
+}
+
+
 .adminformlist li {
     clear: both;
 }
@@ -883,6 +888,14 @@
   width: 200px;
 }
 
+.thumbnail_slide_image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  border: 1px solid #ccc;
+  height: 100px;
+  width: 120px;
+}
 /* backbone pagination  */
  #bac_nav {
         padding: 0;

@@ -212,19 +212,30 @@
         window.app.Nutrition_plan_supplement_view = Backbone.View.extend({
            
             initialize: function(){
-                _.bindAll(this, 'onClickSaveSupplement', 'onInputSupplementName');
+                _.bindAll(this, 'onClickSaveSupplement', 'onInputSupplementName', 'onInputSupplementUrl', 'onGetRemoteImages', 'connectThumbnailSlide');
+                this.remote_images_collection = new window.app.Remote_images_collection();
+                this.remote_images_filtered_collection = new window.app.Remote_images_filtered_collection();
             },
             
             render: function(){
                 var template = _.template( $("#nutrition_plan_supplement_template").html(), this.model.toJSON());
                 this.$el.html(template);
+                
+                this.connectThumbnailSlide();
+                
                 return this;
+            },
+            
+            connectThumbnailSlide : function() {
+                this.thumbnail_slide_view = new  window.app.Thumbnail_slide_view({collection : this.remote_images_filtered_collection});
+                this.$el.find(".shop_url_slider").html(this.thumbnail_slide_view.render().el);
             },
                     
             events: {
                 "submit form" : "onClickSaveSupplement",
                 "click .delete_supplement" : "onClickDeleteSupplement",
-                "input .supplement_name" : "onInputSupplementName"
+                "input .supplement_name" : "onInputSupplementName",
+                "focusout .supplement_url" : "onInputSupplementUrl"
             },
 
             onClickSaveSupplement : function(event) {
@@ -317,8 +328,8 @@
                                     self.ingredients_search_results_view.$el.find(".supplement_name_results").html(output.html);
                                     self.ingredients_search_results_view.$el.find(".supplement_name_results").find(":odd").css("background-color", "#F0F0EE")
                                 })
-                            },
-                        self.options.doneTypingInterval
+                        },
+                        1000
                     );
                 }
       
@@ -348,6 +359,93 @@
                         alert("error getSearchIngredients");
                     }
                 });
+            },
+            
+            onInputSupplementUrl : function(event) {
+                this.remote_images_filtered_collection.reset();
+                
+                var o = $(event.target);
+                var typingTimer;
+                var url = o.val();
+                
+                var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+                if (!url || !regexp.test(url) ) {
+                  return;
+                }
+                var self = this;
+                this.remote_images_collection.fetch({
+                    data: {url : url},
+                    wait : true,
+                    success : function(collection, response) {
+                        self.onGetRemoteImages(response);
+                    },
+                    error: function (model, response) {
+                       alert(response.responseText);
+                    }
+                });
+            },
+            
+            onGetRemoteImages : function(image_urls) {
+                
+                var images = [];
+                var self = this;
+                _.each(image_urls, function(image_url) {
+                    var img = new Image();
+                    img.src = image_url;
+
+                    img.onload = function() {
+                        if(
+                            img.width > 100 &&
+                            img.height > 100 &&
+                            img.width < 400 &&
+                            img.height < 400
+                          ) {
+                            images.push(img);
+                            self.remote_images_filtered_collection.add([{src : img.src}])
+                        }
+                    };
+                });
+            },
+            
+            close :function() {
+                $(this.el).unbind();
+                $(this.el).remove();
+            },
+            
+        });
+        
+        window.app.Thumbnail_slide_view = Backbone.View.extend({
+           
+            initialize: function(){
+                this.collection.on('add', this.addImage, this);
+                this.collection.on('reset', this.resetImages, this);
+            },
+            
+            render: function(){
+                var template = _.template( $("#thumbnail_slide_template").html());
+                this.$el.html(template);
+                this.wrapper = this.$el.find(".images_wrapper");
+                return this;
+            },
+            
+            addImage : function(model) {
+                var image_url = model.get('src');
+                var background_image = 'url(' + "'" + image_url  + "')" ;
+                this.wrapper.append('<div class="thumbnail_slide_image" style="background-image:' + background_image + '"></div>');
+                
+                //this.connectSliding();
+                
+                console.log(image_url);
+            },
+            
+            resetImages : function() {
+                this.wrapper.html('');
+            },
+            
+            connectSliding : function () {
+                this.wrapper.children().first().addClass('active');
+                this.wrapper.children().hide();    
+                this.wrapper.find('.active').show();
             },
             
             close :function() {
@@ -489,6 +587,14 @@
         window.app.Supplements_collection = Backbone.Collection.extend({
             url : window.app.protocol_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_supplement&',
             model: window.app.Supplement_model
+        });
+        
+        
+        window.app.Remote_images_collection = Backbone.Collection.extend({
+            url : window.app.protocol_options.fitness_backend_url + '&format=text&view=nutrition_plan&task=remote_images&'
+        });
+        
+        window.app.Remote_images_filtered_collection = Backbone.Collection.extend({
         });
         
         

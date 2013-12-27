@@ -190,21 +190,26 @@
         var abs_value = Math.abs(value); 
         var input_class = '';
         element.removeClass('yellow_style_total green_style_total orange_style_total red_style_total');
-        if((abs_value >= 0) && (abs_value <= 70)) {
+        if((abs_value >= 0) && (abs_value <= 40)) {
             input_class = 'red_style_total'; 
         }
         
-        if((abs_value >= 70) && (abs_value <= 80)) {
+        if((abs_value > 40) && (abs_value <= 55)) {
             input_class = 'orange_style_total'; 
         }
 
-        if((abs_value > 80) && (abs_value <= 90)) {
+        if((abs_value > 55) && (abs_value <= 79)) {
             input_class = 'yellow_style_total'; 
         }
-
-        if(abs_value > 90) {
+        
+        if((abs_value > 79) && (abs_value <= 93)) {
             input_class = 'green_style_total'; 
         }
+
+        if(abs_value > 93) {
+            input_class = 'blue_style_total'; 
+        }
+       
         element.addClass(input_class);
     }
 

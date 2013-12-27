@@ -608,6 +608,10 @@ td.center, th.center, .center {
     color:#E62C2F !important;
 }
 
+.fitness_wrapper .blue_style_total {
+    color:  #264db3 !important;
+}
+
 
 
 .fitness_wrapper #recipes_list_wrapper {

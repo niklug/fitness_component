@@ -1215,6 +1215,7 @@ $helper = new FitnessHelper();
             url : window.app.example_day_options.fitness_backend_url + '&format=text&view=recipe_database&task=recipe_variations&'
         });
         
+       
         //CONTROLLER
         
         var Controller = Backbone.Router.extend({

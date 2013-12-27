@@ -182,4 +182,10 @@ class FitnessViewNutrition_plan extends JView {
         echo json_encode($model->recipe_variations());
     }
     
+    function remote_images() {
+        $url = JRequest::getVar('url');
+        $model = $this -> getModel("nutrition_plan");
+        echo json_encode($model->getRemoteImages($url));
+    }
+    
 }

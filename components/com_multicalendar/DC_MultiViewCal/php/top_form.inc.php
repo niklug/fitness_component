@@ -416,7 +416,7 @@
             html += '<a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';     
             html += '<a data-status="4" class="set_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';      
             html += '<a data-status="5" class="set_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';      
-            html += '<input type="checkbox" class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>';      
+            html += '<input type="checkbox" checked class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>';      
             return html;     
         }
 
@@ -913,5 +913,5 @@
               <a data-status="3" class="set_client_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>
               <a data-status="4" class="set_client_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>
               <a data-status="5" class="set_client_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>
-              <input type="checkbox" class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>
+              <input type="checkbox" checked class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>
       </div>
