@@ -973,6 +973,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_supplements` (
   `description` text NOT NULL,
   `comments` text NOT NULL,
   `url` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
   `created_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nutrition_plan_id` (`nutrition_plan_id`),
