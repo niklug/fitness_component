@@ -1208,7 +1208,8 @@ defined('_JEXEC') or die;
         // on open recipe
         window.app.Recipe_view = Backbone.View.extend({
              render : function(data){
-                var data = data
+                var data = data;
+                console.log(data);
                 data.model = this.model;
                 var template = _.template($("#recipe_database_view_recipe_template").html(), data);
                 this.$el.html(template);
@@ -1285,6 +1286,7 @@ defined('_JEXEC') or die;
                 "click .delete_recipe" : "onClickDeleteRecipe",
                 "click .restore_recipe" : "onClickRestoreRecipe",
                 "click .add_diary" : "onClickAddDiary",
+                "click .show_recipe_variations" : "onClickShowRecipeVariations",
             },
             
             onClickViewRecipe : function(event) {
@@ -1328,6 +1330,12 @@ defined('_JEXEC') or die;
                 var id = $(event.target).attr('data-id');
                 window.app.controller.navigate("!/add_diary/" + id, true);
             },
+            onClickShowRecipeVariations : function(event) {
+                var id = $(event.target).attr('data-id');
+                
+                $('.show_recipe_variations[data-id="' + id + '"]').hide();
+                $('.recipe_variations[data-id="' + id + '"]').show();
+            }
         });
         
         

@@ -309,7 +309,7 @@ class AppointmentEmail extends FitnessEmail {
             
             case 'Workout':
                 $subject = 'Workout/Training Session';
-                $layout = 'email_workout';
+                $layout = 'email_pdf_workout';
                 break;
             
             default:

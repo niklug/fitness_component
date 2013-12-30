@@ -205,7 +205,7 @@ class FitnessModelrecipe_database extends JModelList {
             return array( 'status' => $status);
         }
         
-        
+        //recipe types
         $i = 0;
         foreach ($data as $recipe) {
             if(!empty($recipe->recipe_type)) {
@@ -220,6 +220,26 @@ class FitnessModelrecipe_database extends JModelList {
                 $i++;
             }
         }
+        
+        //recipe variation
+        
+        $i = 0;
+        foreach ($data as $recipe) {
+
+            if(!empty($recipe->recipe_variation)) {
+
+                try {
+                    $recipe_variations_names = $helper->getRecipeVariationNames($recipe->recipe_variation);
+                } catch (Exception $e) {
+                    $status['success'] = 0;
+                    $status['message'] = '"' . $e->getMessage() . '"';
+                    return array( 'status' => $status);
+                }
+                $data[$i]->recipe_variations_names = $recipe_variations_names;
+                $i++;
+            }
+        }
+    
     
         $result = array( 'status' => $status, 'data' => $data);
         
@@ -289,6 +309,18 @@ class FitnessModelrecipe_database extends JModelList {
                 return array( 'status' => $status);
             }
             $data->recipe_types_names = $recipe_types_names;
+        }
+        
+        // recipe variations name
+        if(!empty($data->recipe_variation)) {
+            try {
+                $recipe_variations_names = $helper->getRecipeVariationNames($data->recipe_variation);
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
+            $data->recipe_variations_names = $recipe_variations_names;
         }
         // recipe meals
         

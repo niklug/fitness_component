@@ -440,7 +440,7 @@
                 
                 this.connectSliding();
                 
-                console.log(image_url);
+                //console.log(image_url);
             },
             
             resetImages : function() {
@@ -461,8 +461,9 @@
                 this.$el.find('.slide_images_total').text(items_number);
                 if(items_number >1) {
                     this.$el.find('.slider_nav').show();
-                    this.$el.find('.supplement_image').val(this.collection.first().get('src'));
                 }
+                this.$el.parent().find('.supplement_image').val(this.collection.first().get('src'));
+            
             },
             
             onClickPrev : function() {

@@ -278,6 +278,7 @@ a:hover, a:active, a:focus {
     color: #BC4A26;
     background-color: #BC4A26;
     border: 0;
+    height: 2px;
 }
 
 .fitness_wrapper .pagination {

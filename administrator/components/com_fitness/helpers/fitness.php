@@ -1003,6 +1003,11 @@ class FitnessHelper extends FitnessFactory
         return self::customQuery($query, 0);
     }
     
+    function getRecipeVariationNames($ids) {
+        $query = "SELECT name FROM #__fitness_recipe_variations WHERE id IN ($ids) AND state='1'";
+        return self::customQuery($query, 3);
+    }
+    
     public function getRecipeMeals($recipe_id) {
 
         $query = "SELECT * FROM #__fitness_nutrition_recipes_meals WHERE recipe_id='$recipe_id'";

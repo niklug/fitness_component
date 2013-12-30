@@ -28,6 +28,7 @@
     %>
 </script>
 
+
 <!-- Goals frontend  -->
 <script type="text/template" id="default_goal_list_template">
     <div style="width:100%;text-align: right;">
@@ -1088,7 +1089,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>RECIPE TYPE</td>
+                                    <td style="vertical-align:top;">RECIPE TYPE</td>
                                     <td>
                                         <span class="grey_title">
                                             <% 
@@ -1097,8 +1098,25 @@
                                                     <%= item + "<br/>" %>
                                                 <% 
                                                 })  
-                                            }
-                                            %>
+                                            }else { %> 
+                                                <%= '-' %>
+                                            <% } %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align:top;">VARIATIONS</td>
+                                    <td>
+                                        <span class="grey_title">
+                                            <% 
+                                            if(typeof recipe_variations_names !== 'undefined') {
+                                                _.each(recipe_variations_names, function(item){ %>
+                                                    <%= item + "<br/>" %>
+                                                <% 
+                                                })  
+                                            }else { %> 
+                                                <%= '-' %>
+                                            <% } %>
                                         </span>
                                     </td>
                                 </tr>
@@ -1137,7 +1155,7 @@
                             </table>
                         </td>
                         <td width="30%" ></td>
-                        <td width="30%" style="text-align:center; vertical-align:middle;">
+                        <td width="30%" style="text-align:center; vertical-align:top;">
                             <div class="recipe_database_image" style="display: inline-block;background-image: <%= background_image %>"></div>
                         </td>
                     </tr>
@@ -1268,7 +1286,7 @@
     <div    class="recipe_database_item_wrapper" data-id="<%= id%>" style="margin-top: 0px;">
         <table width="100%">
             <tr>
-                <td width="30%" style="text-align:center; vertical-align:middle;">
+                <td width="30%" style="text-align:center; vertical-align:top;">
                     <div class="recipe_database_image" style="display: inline-block;background-image: <%= background_image %>"></div>
                 </td>
                 <td width="50%">
@@ -1282,7 +1300,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>RECIPE TYPE</td>
+                            <td style="vertical-align:top;">RECIPE TYPE</td>
                             <td>
                                 <span class="grey_title">
                                     <% 
@@ -1291,8 +1309,27 @@
                                             <%= item + "<br/>" %>
                                         <% 
                                         })  
-                                    }
-                                    %>
+                                    }else { %> 
+                                        <%= '-' %>
+                                    <% } %>
+                                </span>
+                            </td>
+                        </tr>
+                
+                        <tr>
+                            <td style="vertical-align:top;">VARIATIONS</td>
+                            <td>
+                                <a data-id="<%= id %>" style="cursor: pointer;" class="show_recipe_variations" onclick="javascript:void(0)">[show]</a>
+                                <span data-id="<%= id %>" style="display:none;" class="grey_title recipe_variations">
+                                    <% 
+                                    if(typeof recipe_variations_names !== 'undefined') {
+                                        _.each(recipe_variations_names, function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% 
+                                        })  
+                                    } else { %> 
+                                        <%= '-' %>
+                                    <% } %>
                                 </span>
                             </td>
                         </tr>
@@ -3041,59 +3078,51 @@
     <div style="margin-top:10px;">
         <table width="100%">
             <tr>
-                
-                <% if(image) {
-                    var background_image = 'url(' + "'" + image  + "')" ;
-                %>
-                <td width="200">
-                    <div class="recipe_database_image" style="background-image:<%= background_image %>"></div>
-                </td>
-                <% } %>
-                
-                
                 <td>
                     <table width="100%">
                         <tr>
                             <td width="180">
-                                <div style="color: #BC4A26 !important;font-size:14px;font-weight: bold; padding: 2px;">SUPPLEMENT NAME</div>
+                                <div style="color: #BC4A26 !important;font-weight: bold; padding: 2px;">SUPPLEMENT NAME</div>
                             </td>
                             <td>
-                                <table width="100%">
-                                    <tr>
-                                        <td>
-                                            <div style="color: #fff !important;font-size:12px;font-weight: bold; padding: 2px;" ><%= name %></div>
-                                        </td>
-                                        <td style="text-align:right;" width="150">
-
-                                            <a class="view_product" data-url="<%= url %>"  href="javascript:void(0)">[VIEW PRODUCT]</a> 
-                                        </td>
-                                    </tr>
-                                </table>
+                                <div style="color: #fff !important;padding: 2px;" ><%= name %></div>
                             </td>
 
                         </tr>
 
                         <tr>
-                            <td>
-                                <div style="color: #BC4A26 !important;font-size:14px;font-weight: bold; padding: 2px;">DESCRIPTION</div>
+                            <td style="vertical-align:top;">
+                                <div  style="color: #BC4A26 !important;font-weight: bold; padding: 2px;">DESCRIPTION</div>
                             </td>
                             <td>
-                                <div style="color: #fff !important;font-size:12px;font-weight: bold; padding: 2px;" ><%= description %></div>
+                                <div style="color: #fff !important;padding: 2px;" ><%= description %></div>
                             </td>
 
                         </tr>
 
                         <tr>
-                            <td>
-                                <div style="color: #BC4A26 !important;font-size:14px;font-weight: bold; padding: 2px;">RECOMMENDED USAGE</div>
+                            <td style="vertical-align:top;">
+                                <div style=";color: #BC4A26 !important;font-weight: bold; padding: 2px;">RECOMMENDED USAGE</div>
                             </td>
                             <td>
-                                <div style="color: #fff !important;font-size:12px;font-weight: bold; padding: 2px;" ><%= comments %></div>
+                                <div style="color: #fff !important; padding: 2px;" ><%= comments %></div>
                             </td>
 
                         </tr>
                     </table>
                 </td>
+                
+                <td style="vertical-align:top;" width="200">
+                    
+                    <% if(image) {
+                        var background_image = 'url(' + "'" + image  + "')" ;
+                    %>
+                        <div class="recipe_database_image" style="border: none;background-image:<%= background_image %>"></div>
+                        <div class="clr"></div>
+                    <% } %>
+                    <a style="float:right;margin-top:5px;" class="view_product" data-url="<%= url %>"  href="javascript:void(0)">[VIEW PRODUCT]</a> 
+                </td>
+                
             </tr>
         </table>
         <div class="clr"></div>
@@ -3157,7 +3186,7 @@
                 <tr>
                     <td width="650">
                         <label>MEAL DESCRIPTION</label>
-                        <input  size="71" type="text"  class="meal_description" name="description" value="<%= description %>">
+                        <input  size="71" type="text"  class="meal_description" name="description" value="<%= description.toUpperCase() %>">
                     </td>
                     <td width="250">
                         <label>MEAL TIME</label>
@@ -3198,7 +3227,7 @@
                     <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">MEAL DESCRIPTION</div>
                 </td>
                 <td width="450">
-                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;"><%= description %></div>
+                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;"><%= description.toUpperCase() %></div>
                 </td>
                 <td width="200" style="text-align:right;">
                     <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">MEAL TIME</div>
