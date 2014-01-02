@@ -42,6 +42,10 @@ class EmailTemplateData extends FitnessHelper
                 return new EmailPdfNutritionPlanMacros($params);
                 break;
             
+            case 'EmailPdfNutritionPlanSupplements' : 
+                return new EmailPdfNutritionPlanSupplements($params);
+                break;
+            
             
             
 
@@ -507,6 +511,19 @@ class EmailPdfNutritionPlanMacros extends EmailTemplateData  {
         $data->mini_goal_deadline =  $date->toFormat('%A, %d %b %Y');
         
         return $data;
+    }
+
+}
+
+
+class EmailPdfNutritionPlanSupplements extends EmailPdfNutritionPlanMacros  {
+
+    protected function getItemData() {
+        $this->item = $this->getPlanData($this->id);
+        
+        $this->item->protocols = $this->getPlanProtocols($this->id);
+
+        $this->business_profile_user = $this->item->client_id;
     }
 
 }

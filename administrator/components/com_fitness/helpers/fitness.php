@@ -1319,5 +1319,28 @@ class FitnessHelper extends FitnessFactory
         $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$event_id'ORDER BY `#__fitness_events_exercises`.`order` ASC ";
         return self::customQuery($query, 1);
     }
+    
+    public function getPlanProtocols($id) {
+        $query = "SELECT * FROM #__fitness_nutrition_plan_supplement_protocols WHERE nutrition_plan_id='$id'";
+        $data = self::customQuery($query, 1);
+
+        $i = 0;
+        foreach ($data as $protocol) {
+            if(!empty($protocol->id)) {
+                $supplements = $this->getPlanSupplements($protocol->id);
+                
+                $data[$i]->supplements = $supplements;
+                $i++;
+            }
+        }
+        
+        return $data;
+    }
+    
+    public function getPlanSupplements($id) {
+        $query = "SELECT * FROM #__fitness_nutrition_plan_supplements WHERE protocol_id='$id'";
+        $protocols = self::customQuery($query, 1);
+        return $protocols;
+    }
 }
 

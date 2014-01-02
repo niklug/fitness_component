@@ -364,8 +364,8 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                     <h3 style="color:#FFFFFF !important;">ALLOWED MACRONUTRIENTS</h3>
                 </td>
                 <td>
-                    <a data-id="<?php echo $nutrition_plan_id; ?>" style="float:right;"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
-                    <a data-id="<?php echo $nutrition_plan_id; ?>"  style="float:right;" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
+                    <a data-id="<?php echo $nutrition_plan_id; ?>" style="float:right;" id="pdf_button_macros"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
+                    <a data-id="<?php echo $nutrition_plan_id; ?>"  style="float:right;" id="email_button_macros" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
                 </td>
             </tr>
         </table>
@@ -440,9 +440,17 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     
     <!-- SUPPLEMENTS -->
     <div id="supplements_wrapper" class="block">
-        <div>
-            <h3 style="color:#FFFFFF !important;">SUPPLEMENTS & SUPPLEMENT PROTOCOLS</h3>
-        </div>
+        <table width="100%">
+            <tr>
+                <td  class="left">
+                    <h3 style="color:#FFFFFF !important;">SUPPLEMENTS & SUPPLEMENT PROTOCOLS</h3>
+                </td>
+                <td>
+                    <a data-id="<?php echo $nutrition_plan_id; ?>" style="float:right;" id="pdf_button_supplements"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
+                    <a data-id="<?php echo $nutrition_plan_id; ?>"  style="float:right;" id="email_button_supplements" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
+                </td>
+            </tr>
+        </table>
         <div id="protocols_wrapper"></div>
     </div>
 
@@ -989,12 +997,13 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         
         
         //EMAIL_PDF
-        $(".pdf_button").on('click', function() {
+        //MACROS
+        $("#pdf_button_macros").on('click', function() {
             var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_macros&id=<?php echo  $nutrition_plan_id?>&client_id=<?php echo JFactory::getUser()->id;?>';
             window.fitness_helper.printPage(htmlPage);
         });
         
-        $(".email_button").on('click', function() {
+        $("#email_button_macros").on('click', function() {
             var data = {};
             data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
             data.view = '';
@@ -1004,6 +1013,25 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             data.id = <?php echo  $nutrition_plan_id?>;
             data.view = 'NutritionPlan';
             data.method = 'email_pdf_nutrition_plan_macros';
+            window.fitness_helper.sendEmail(data);
+        });
+        
+        //Supplements
+        $("#pdf_button_supplements").on('click', function() {
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_supplements&id=<?php echo  $nutrition_plan_id?>&client_id=<?php echo JFactory::getUser()->id;?>';
+            window.fitness_helper.printPage(htmlPage);
+        });
+        
+        $("#email_button_supplements").on('click', function() {
+            var data = {};
+            data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
+
+            data.id = <?php echo  $nutrition_plan_id?>;
+            data.view = 'NutritionPlan';
+            data.method = 'email_pdf_nutrition_plan_supplements';
             window.fitness_helper.sendEmail(data);
         });
         //
