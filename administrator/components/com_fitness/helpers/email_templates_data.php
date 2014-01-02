@@ -34,6 +34,9 @@ class EmailTemplateData extends FitnessHelper
             case 'NutritionPlan':
                 return new NutritionPlanEmailTemplateData($params);
                 break;
+            case 'EmailPdfWorkout' : 
+                return new EmailPdfWorkoutTemplateData($params);
+                break;
 
             default:
                 break;
@@ -384,6 +387,65 @@ class NutritionPlanEmailTemplateData extends EmailTemplateData  {
         $date = JFactory::getDate($this->item ->active_start);
         $data->active_start =  $date->toFormat('%A, %d %b %Y');
 
+        return $data;
+    }
+
+}
+
+
+//PDF
+class EmailPdfWorkoutTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->client_id = $params['client_id'];
+        $this->layout = $params['layout'];
+
+    }
+    
+    protected function getItemData() {
+        $this->item = $this->getEvent($this->id);
+        $this->business_profile_user = $this->client_id;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=' . $this->layout . '&event_id=' .  $this->id  . '&client_id=' . $this->client_id;
+        
+        $data->open_link = JUri::root() . '';
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $user = &JFactory::getUser($this->client_id);
+        $data->client_name = $user->name;
+
+        $user = &JFactory::getUser($this->item->trainer_id);
+        $data->trainer_name =  $user->name;
+
+        $date = JFactory::getDate($this->item->starttime);
+        $data->start_date = $date->toFormat('%A, %d %b %Y');
+
+        $date = JFactory::getDate($this->item->starttime);
+   
+        $data->start_time = $date->format('H:i');
+        
+        $date = JFactory::getDate($this->item->endtime);
+        $data->end_date = $date->toFormat('%A, %d %b %Y');
+
+        $date = JFactory::getDate($this->item->endtime);
+   
+        $data->end_time = $date->format('H:i');
+        
+        $data->exercises = $this->getExercises($this->id);
+        
         return $data;
     }
 

@@ -1294,6 +1294,9 @@ class FitnessHelper extends FitnessFactory
         return $images;
     }
     
- 
+    public function getExercises($event_id) {
+        $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$event_id'ORDER BY `#__fitness_events_exercises`.`order` ASC ";
+        return self::customQuery($query, 1);
+    }
 }
 

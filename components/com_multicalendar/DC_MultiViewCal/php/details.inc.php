@@ -6,7 +6,7 @@
         });
 
         $("#pdf_button").on('click', function() {
-            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=<?php echo $event->id?>';
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=<?php echo $event->id?>&client_id=<?php echo JRequest::getVar( 'cid' )?>';
             printPage(htmlPage);
         });
     });  
@@ -37,7 +37,6 @@
 
     function printPage(htmlPage) {
         var w = window.open(htmlPage);
-        w.print();
     }
 
 </script> 
