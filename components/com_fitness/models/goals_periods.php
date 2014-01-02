@@ -13,6 +13,8 @@ jimport('joomla.application.component.modellist');
 
 // connect backend model
 require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'goals.php';
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 /**
  * Methods supporting a list of Fitness_goals records.
  */
@@ -260,23 +262,20 @@ class FitnessModelgoals_periods extends JModelList {
         $data = json_decode($data_encoded);
         $id = $data->id;
 
+        $helper = new FitnessHelper();
+       
+        try {
+            $plan_data = $helper->getPlanData($id);
+        } catch (Exception $e) {
+            $status['success'] = 0;
+            $status['message'] = '"' . $e->getMessage() . '"';
+            return array( 'status' => $status);
+        }
+
+        $client_id = $plan_data->client_id;
+        
         require_once JPATH_COMPONENT_SITE .  '/models/nutrition_diaryform.php';
         $nutrition_diaryform_model  = new FitnessModelNutrition_diaryForm();
-       
-        $plan_data = $nutrition_diaryform_model->getPlanData($id);
-        
-               
-        if(!$plan_data['status']) {
-            $status['success'] = 0;
-            $status['message'] = $plan_data['message'];
-            $result = array('status' => $status);
-            return $result;
-        }
-        
-             
-        $plan_data = $plan_data['data'];
-        
-        $client_id = $plan_data->client_id;
         
         $client_trainers = $nutrition_diaryform_model->get_client_trainers($client_id);
         

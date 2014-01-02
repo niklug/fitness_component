@@ -1196,6 +1196,27 @@ class FitnessHelper extends FitnessFactory
        return self::customQuery($query, 2);
     }
     
+    function getPlanData($id) {
+        $query = "SELECT a.*, gc.id AS primary_goal_id, gc.name AS primary_goal_name,
+            g.start_date AS primary_goal_start_date, g.deadline AS primary_goal_deadline,
+            mg.start_date AS mini_goal_start_date, mg.deadline AS mini_goal_deadline,
+            mgc.name AS mini_goal_name,
+            tp.name AS training_period_name, nf.name AS nutrition_focus_name,
+            (SELECT name FROM #__users WHERE id=a.client_id) client_name,
+            (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name
+            FROM #__fitness_nutrition_plan AS a
+            LEFT JOIN #__fitness_goals AS g ON g.id = a.primary_goal
+            LEFT JOIN #__fitness_goal_categories AS gc  ON g.goal_category_id=gc.id
+            LEFT JOIN #__fitness_mini_goals AS mg ON mg.id = a.mini_goal
+            LEFT JOIN #__fitness_mini_goal_categories AS mgc  ON mg.mini_goal_category_id=mgc.id
+            LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
+            LEFT JOIN #__fitness_nutrition_focus AS nf ON nf.id=a.nutrition_focus
+
+            WHERE a.id='$id' AND a.state='1'";
+        
+        return self::customQuery($query, 2);
+    }
+    
     public function getUserIdByNutritionRecipeId($recipe_id) {
         $query = "SELECT created_by FROM #__fitness_nutrition_recipes WHERE id='$recipe_id' AND state='1'";
         $user_id = self::customQuery($query, 0);

@@ -37,6 +37,8 @@
 
     function printPage(htmlPage) {
         var w = window.open(htmlPage);
+        setTimeout(function(){w.print()},3000);
+        return false
     }
 
 </script> 

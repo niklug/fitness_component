@@ -13,6 +13,8 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.modelform');
 jimport('joomla.event.dispatcher');
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
 /**
  * Fitness model.
  */
@@ -334,46 +336,18 @@ class FitnessModelNutrition_diaryForm extends JModelForm
         
         if(!$active_plan_id) return;
         
-        $active_plan_data = $this->getPlanData($active_plan_id);
-        
-        if(!$active_plan_data['status']) {
-            JError::raiseError($active_plan_data['message']);
-            return false;
+        $helper = new FitnessHelper();
+       
+        try {
+            $active_plan_data = $helper->getPlanData($active_plan_id);
+        } catch (Exception $e) {
+            Error::raiseError($e->getMessage());
         }
-        
-        return $active_plan_data['data'];
+
+        return $active_plan_data;
     }
     
-    function getPlanData($id) {
-        $ret['status'] = 1;
-        $db = & JFactory::getDBO();
-        $query = "SELECT a.*, gc.id AS primary_goal_id, gc.name AS primary_goal_name,
-            g.start_date AS primary_goal_start_date, g.deadline AS primary_goal_deadline,
-            mgc.name AS mini_goal_name,
-            tp.name AS training_period_name, nf.name AS nutrition_focus_name,
-            (SELECT name FROM #__users WHERE id=a.client_id) client_name,
-            (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name
-            FROM #__fitness_nutrition_plan AS a
-            LEFT JOIN #__fitness_goals AS g ON g.id = a.primary_goal
-            LEFT JOIN #__fitness_goal_categories AS gc  ON g.goal_category_id=gc.id
-            LEFT JOIN #__fitness_mini_goals AS mg ON mg.id = a.mini_goal
-            LEFT JOIN #__fitness_mini_goal_categories AS mgc  ON mg.mini_goal_category_id=mgc.id
-            LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
-            LEFT JOIN #__fitness_nutrition_focus AS nf ON nf.id=a.nutrition_focus
-            
-              
-            WHERE a.id='$id' AND a.state='1'";
-        $db->setQuery($query);
-        if(!$db->query()) {
-            $ret['status'] = 0;
-            $ret['message'] = $db->getErrorMsg();
-            return $ret;
-        }
-        
-        $ret['data'] =  $db->loadObject();
-        
-        return $ret;
-    }
+
     
      function getGoalName($id) {
         $db = JFactory::getDbo();

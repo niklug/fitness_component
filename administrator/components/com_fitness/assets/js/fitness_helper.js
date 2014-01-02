@@ -126,7 +126,27 @@
                 var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
                 return html;
             },
-
+            
+            printPage : function(htmlPage) {
+                var w = window.open(htmlPage);
+                setTimeout(function(){w.print()},3000);
+                return false
+            },
+            
+            sendEmail : function(o) {
+                var data = {};
+                data.id = o.id;
+                data.view = o.view;
+                data.method = o.method;
+                this.ajaxCall(data, o.url, o.view, o.task, o.table, function(output) {
+                    var emails = output.split(',');
+                    var message = 'Emails were sent to: ' +  "</br>";
+                    $.each(emails, function(index, email) { 
+                        message += email +  "</br>";
+                    });
+                    $("#emais_sended").append(message);
+                });
+            },
         });
         
         return new Helper_model(options);

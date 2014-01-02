@@ -377,22 +377,40 @@ class NutritionPlanEmail extends FitnessEmail {
             case 'Notify':
                 $subject = 'Nutrition Plan Available';
                 $layout = 'email_notify_nutrition_plan';
+                
+                break;
+            case 'email_pdf_nutrition_plan_macros':
+                $subject = 'Nutrition Plan Macros Details';
+                $layout = 'email_pdf_nutrition_plan_macros';
+                $this->client_id = JFactory::getUser()->id;
+                
                 break;
  
             default:
                 break;
         }
         
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id;
+        
+        if($this->client_id) {
+            $this->url .= '&client_id=' . $this->client_id;
+        }
+        
         $this->subject = $subject;
 
-        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id;
     }
     
 
     protected function get_recipients_ids() {
         $ids = array();
         
-        $client_id = $this->getClientIdByNutritionPlanId($this->data->id);
+        if($data->method == 'Notify') {
+            $client_id = $this->getClientIdByNutritionPlanId($this->data->id);
+        }
+        
+        if($this->data->method == 'email_pdf_nutrition_plan_macros') {
+            $client_id = $this->client_id;
+        }
 
         if (!$client_id) {
             throw new Exception('error: no client id');

@@ -37,6 +37,13 @@ class EmailTemplateData extends FitnessHelper
             case 'EmailPdfWorkout' : 
                 return new EmailPdfWorkoutTemplateData($params);
                 break;
+            
+            case 'EmailPdfNutritionPlanMacros' : 
+                return new EmailPdfNutritionPlanMacros($params);
+                break;
+            
+            
+            
 
             default:
                 break;
@@ -455,3 +462,51 @@ class EmailPdfWorkoutTemplateData extends EmailTemplateData  {
 
 
 
+class EmailPdfNutritionPlanMacros extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->client_id = $params['client_id'];
+        $this->layout = $params['layout'];
+
+    }
+    
+    protected function getItemData() {
+        $this->item = $this->getPlanData($this->id);
+        $this->business_profile_user = $this->item->client_id;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=' . $this->layout . '&id=' .  $this->id  . '&client_id=' . $this->client_id;
+        
+        $user = &JFactory::getUser($this->item->client_id );
+        $data->client_name = $user->name;
+
+        $user = &JFactory::getUser($this->item->trainer_id);
+        $data->trainer_name =  $user->name;
+        
+        $date = JFactory::getDate($this->item ->primary_goal_start_date);
+        $data->primary_goal_start_date =  $date->toFormat('%A, %d %b %Y');
+        
+        $date = JFactory::getDate($this->item ->primary_goal_deadline);
+        $data->primary_goal_deadline =  $date->toFormat('%A, %d %b %Y');
+        
+        $date = JFactory::getDate($this->item ->mini_goal_start_date);
+        $data->mini_goal_start_date =  $date->toFormat('%A, %d %b %Y');
+        
+        $date = JFactory::getDate($this->item ->mini_goal_deadline);
+        $data->mini_goal_deadline =  $date->toFormat('%A, %d %b %Y');
+        
+        return $data;
+    }
+
+}
