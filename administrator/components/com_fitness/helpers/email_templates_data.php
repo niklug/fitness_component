@@ -476,7 +476,7 @@ class EmailPdfNutritionPlanMacros extends EmailTemplateData  {
     
     protected function getItemData() {
         $this->item = $this->getPlanData($this->id);
-        $this->business_profile_user = $this->item->client_id;
+        $this->business_profile_user = $this->client_id;
     }
     
    
@@ -488,6 +488,8 @@ class EmailPdfNutritionPlanMacros extends EmailTemplateData  {
         $data->business_profile = $this->business_profile;
         
         $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
 
         $user = &JFactory::getUser($this->item->client_id );
         $data->client_name = $user->name;
@@ -521,6 +523,8 @@ class EmailPdfNutritionPlanSupplements extends EmailPdfNutritionPlanMacros  {
         $this->item->protocols = $this->getPlanProtocols($this->id);
 
         $this->business_profile_user = $this->item->client_id;
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
     }
 
 }
@@ -543,7 +547,7 @@ class EmailPdfNutritionGuide extends EmailTemplateData  {
         
         $this->item = $data;
         
-        $this->business_profile_user = $this->item->client_id;
+        $this->business_profile_user = $this->client_id;
     }
     
    
@@ -556,7 +560,7 @@ class EmailPdfNutritionGuide extends EmailTemplateData  {
         
         $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
 
-        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
         
         return $data;
     }

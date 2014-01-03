@@ -60,7 +60,7 @@
                             $html .= '<tr>';
                             $html .= '<td style="vertical-align:top;" width="100">';
                             if($recipe->image) {
-                            $html .= '<img style="float: left; width:100px; height: 100px; background-size: 100px auto;" src="' . $recipe->image . '">';
+                            $html .= '<img style="float: left; width:100px; height: 100px; background-size: 100px auto;" src="' . JUri::root() . $recipe->image . '">';
                             $html  .= '<br/>';
                             }
                             $open_link = JUri::root() . 'index.php/contact/nutrition-database#!/nutrition_database/nutrition_recipe/' . $recipe->id;
@@ -115,9 +115,8 @@
                             $html .= '<th width="50">';
                             $html .= 'Quantity';
                             $html .= '</th>';
-                            
+                            $html .= '</tr>';
                             foreach ($recipe->ingredients as $ingredient) {
-                                $html .= '</tr>';
                                 $html .= '<tr>';
                                 $html .= '<td>';
                                 $html .= $ingredient->meal_name;

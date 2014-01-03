@@ -8,7 +8,7 @@
     position: relative;
     width: 800px;">
     <a href="//<?php echo $data->business_profile->website_url ?>">
-        <img style="float: left; width:265px; height: 70px; background-size: 265px auto;" src="<?php echo $data->business_profile->header_image  ?>">
+        <img style="float: left; width:265px; height: 70px; background-size: 265px auto;" src="<?php echo $data->header_image ?>">
     </a>
     <div style="font-size: 11px;float: right; position: inherit; right: 20px; text-align: right; top: 3px;">
         <span><?php echo $data->business_profile->website_url ?></span><br/>

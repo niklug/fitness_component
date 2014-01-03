@@ -122,7 +122,6 @@ class FitnessEmail extends FitnessHelper
         $this->generate_contents();
 
         $this->get_recipients_ids();
-        
                
         $data = $this->send_mass_email();
         
@@ -380,17 +379,17 @@ class NutritionPlanEmail extends FitnessEmail {
                 
                 break;
             case 'email_pdf_nutrition_plan_macros':
-                $subject = 'Nutrition Plan Macros Details';
+                $subject = 'Nutrition Plan: Allowed Macronutrients';
                 $layout = 'email_pdf_nutrition_plan_macros';
                 $this->client_id = JFactory::getUser()->id;
                 break;
             case 'email_pdf_nutrition_plan_supplements':
-                $subject = 'Nutrition Plan Supplementation';
+                $subject = 'Nutrition Plan: Supplement Protocols';
                 $layout = 'email_pdf_nutrition_plan_supplements';
                 $this->client_id = JFactory::getUser()->id;
                 break;
             case 'email_pdf_nutrition_guide':
-                $subject = 'DAILY MENU & NUTRITION GUIDE';
+                $subject = 'Nutrition Plan: Daily Nutrition Guide';
                 $layout = 'email_pdf_nutrition_guide';
                 $this->client_id = JFactory::getUser()->id;
                 break;
