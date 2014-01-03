@@ -904,16 +904,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     }
 
                     $data = FitnessHelper::customQuery($query, 1);
-                    /*
-                    $i = 0;
-                    foreach ($data as $recipe) {
-                        if(!empty($recipe->recipe_type)) {
-                            $recipe_types_names = $helper->getRecipeNames($recipe->recipe_type);
-                            $data[$i]->recipe_types_names = $recipe_types_names;
-                            $i++;
-                        }
-                    }
-                    */
+
                     return $data;
                     break;
                 case 'PUT': 

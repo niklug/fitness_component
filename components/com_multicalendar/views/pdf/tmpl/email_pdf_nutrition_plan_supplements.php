@@ -49,6 +49,9 @@
                                             <?php echo $data->trainer_name; ?>
                                         </td>
                                     </tr>
+                                    <tr>  <td colspan="2" </td></tr>
+                                    <tr>  <td colspan="2" </td></tr>
+                                    <tr>  <td colspan="2" </td></tr>
                                     <tr>
                                         <td>
                                             Primary Goal
@@ -147,20 +150,22 @@
                     $html .= $supplement->name;
                     $html .= '</td>';
                     $html .= '</tr>';
+                    $html .= '<tr>  <td colspan="2" </td></tr><tr>  <td colspan="2" </td></tr><tr>  <td colspan="2" </td></tr>';
                     $html .= '<tr>';
-                    $html .= '<td>';
+                    $html .= '<td style="vertical-align:top;">';
                     $html .= 'Supplement Description';
                     $html .= '</td>';
                     $html .= '<td>';
-                    $html .= $supplement->description ? $supplement->description : '';
+                    $html .= $supplement->description ? $supplement->description : '-';
                     $html .= '</td>';
                     $html .= '</tr>';
+                    $html .= '<tr>  <td colspan="2" </td></tr><tr>  <td colspan="2" </td></tr><tr>  <td colspan="2" </td></tr>';
                     $html .= '<tr>';
-                    $html .= '<td>';
+                    $html .= '<td style="vertical-align:top;">';
                     $html .= 'Recommended Usage ';
                     $html .= '</td>';
                     $html .= '<td>';
-                    $html .= $supplement->comments ? $supplement->comments : '';
+                    $html .= $supplement->comments ? $supplement->comments : '-';
                     $html .= '</td>';
                     $html .= '</tr>';
                     $html .= '</table>';
@@ -182,9 +187,7 @@
             }
             echo $html;
         ?>
-            
-            
-        </div>
+
     </body>
 </html>
 

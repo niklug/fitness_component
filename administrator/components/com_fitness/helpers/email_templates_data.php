@@ -45,6 +45,9 @@ class EmailTemplateData extends FitnessHelper
             case 'EmailPdfNutritionPlanSupplements' : 
                 return new EmailPdfNutritionPlanSupplements($params);
                 break;
+            case 'EmailPdfNutritionGuide' : 
+                return new EmailPdfNutritionGuide($params);
+                break;
             
             
             
@@ -429,10 +432,6 @@ class EmailPdfWorkoutTemplateData extends EmailTemplateData  {
         
         $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
 
-        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=' . $this->layout . '&event_id=' .  $this->id  . '&client_id=' . $this->client_id;
-        
-        $data->open_link = JUri::root() . '';
-        
         $data->header_image  = JUri::root() . $data->business_profile->header_image;
         
         $user = &JFactory::getUser($this->client_id);
@@ -490,8 +489,6 @@ class EmailPdfNutritionPlanMacros extends EmailTemplateData  {
         
         $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
 
-        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=' . $this->layout . '&id=' .  $this->id  . '&client_id=' . $this->client_id;
-        
         $user = &JFactory::getUser($this->item->client_id );
         $data->client_name = $user->name;
 
@@ -524,6 +521,44 @@ class EmailPdfNutritionPlanSupplements extends EmailPdfNutritionPlanMacros  {
         $this->item->protocols = $this->getPlanProtocols($this->id);
 
         $this->business_profile_user = $this->item->client_id;
+    }
+
+}
+
+
+class EmailPdfNutritionGuide extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->client_id = $params['client_id'];
+        $this->layout = $params['layout'];
+
+    }
+    
+    protected function getItemData() {
+        $example_days = 7;
+        for($i = 1; $i <= $example_days; $i++) {
+            $data[$i] = $this->getExampleDayMeals($this->id, $i);
+        }
+        
+        $this->item = $data;
+        
+        $this->business_profile_user = $this->item->client_id;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        
+        
+        return $data;
     }
 
 }

@@ -457,9 +457,18 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     <!-- NUTRITION GUIDE -->
     
     <div id="nutrition_guide_wrapper" class="block">
-        <div>
-            <h3 style="color:#FFFFFF !important;">DAILY MENU & NUTRITION GUIDE</h3>
-        </div>
+        <table width="100%">
+            <tr>
+                <td  class="left">
+                    <h3 style="color:#FFFFFF !important;">DAILY MENU & NUTRITION GUIDE</h3>
+                </td>
+                <td>
+                    <a data-id="<?php echo $nutrition_plan_id; ?>" style="float:right;" id="pdf_button_nutrition_guide"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
+                    <a data-id="<?php echo $nutrition_plan_id; ?>"  style="float:right;" id="email_button_nutrition_guide" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
+                </td>
+            </tr>
+        </table>
+
         <div id="nutrition_guide_container" class="fitness_block_wrapper"></div>
         
     </div>
@@ -575,6 +584,10 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             
             'item_id' : '<?php echo  $nutrition_plan_id?>'
         };
+        
+        if(!options.item_id) {
+            alert('Please contact your trainer immediately regarding your current Nutrition Plan!');
+        }
         
         
         
@@ -1032,6 +1045,25 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             data.id = <?php echo  $nutrition_plan_id?>;
             data.view = 'NutritionPlan';
             data.method = 'email_pdf_nutrition_plan_supplements';
+            window.fitness_helper.sendEmail(data);
+        });
+        
+        //Nutrition guide
+        $("#pdf_button_nutrition_guide").on('click', function() {
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_guide&id=<?php echo  $nutrition_plan_id?>&client_id=<?php echo JFactory::getUser()->id;?>';
+            window.fitness_helper.printPage(htmlPage);
+        });
+        
+        $("#email_button_nutrition_guide").on('click', function() {
+            var data = {};
+            data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
+
+            data.id = <?php echo  $nutrition_plan_id?>;
+            data.view = 'NutritionPlan';
+            data.method = 'email_pdf_nutrition_guide';
             window.fitness_helper.sendEmail(data);
         });
         //

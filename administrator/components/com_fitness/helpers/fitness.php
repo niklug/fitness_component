@@ -1342,5 +1342,71 @@ class FitnessHelper extends FitnessFactory
         $protocols = self::customQuery($query, 1);
         return $protocols;
     }
+    
+    public function getExampleDayMeals($id, $example_day_id) {
+        $query = "SELECT * FROM #__fitness_nutrition_plan_example_day_meals WHERE nutrition_plan_id='$id' AND example_day_id='$example_day_id'";
+        $data = self::customQuery($query, 1);
+        
+        $i = 0;
+        foreach ($data as $meal) {
+            if(!empty($meal->id)) {
+                $recipes = $this->getExampleDayMealRecipes($meal->id);
+                $data[$i]->recipes = $recipes;
+                $i++;
+            }
+        }
+      
+        return $data;
+    }
+    
+    public function getExampleDayMealRecipes($meal_id) {
+        $query = "SELECT r.*, a.*, r.number_serves AS number_serves, r.id AS id,";
+                    
+        $query .= " (SELECT name FROM #__users WHERE id=a.created_by) author,";
+        $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer ";
+        
+        $query .= "  FROM #__fitness_nutrition_plan_example_day_meal_recipes AS r ";
+        $query .= " LEFT JOIN  #__fitness_nutrition_recipes AS a ON a.id=r.original_recipe_id";
+        $query .= " WHERE r.meal_id='$meal_id'";
+        
+        $data = self::customQuery($query, 1);
+        
+        //recipe types
+        $i = 0;
+        foreach ($data as $recipe) {
+            if(!empty($recipe->recipe_type)) {
+                $recipe_types_names = $this->getRecipeNames($recipe->recipe_type);
+                $data[$i]->recipe_types_names = $recipe_types_names;
+                $i++;
+            }
+        }
+        
+        //recipe variation
+        $i = 0;
+        foreach ($data as $recipe) {
+            if(!empty($recipe->recipe_variation)) {
+                $recipe_variations_names = $this->getRecipeVariationNames($recipe->recipe_variation);
+                $data[$i]->recipe_variations_names = $recipe_variations_names;
+                $i++;
+            }
+        }
+
+        $i = 0;
+        foreach ($data as $recipe) {
+            if(!empty($recipe->id)) {
+                $ingredients= $this->getExampleDayMealRecipeIngredients($recipe->id);
+                $data[$i]->ingredients = $ingredients;
+                $i++;
+            }
+        }
+
+        return $data;
+    }
+    
+    public function getExampleDayMealRecipeIngredients($recipe_id) {
+        $query = "SELECT * FROM #__fitness_nutrition_plan_example_day_ingredients WHERE recipe_id='$recipe_id'";
+        $data = self::customQuery($query, 1);
+        return $data;
+    }
 }
 
