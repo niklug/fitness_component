@@ -393,6 +393,11 @@ class NutritionPlanEmail extends FitnessEmail {
                 $layout = 'email_pdf_nutrition_guide';
                 $this->client_id = JFactory::getUser()->id;
                 break;
+            case 'email_pdf_recipe':
+                $subject = 'Nutrition Recipe Details';
+                $layout = 'email_pdf_recipe';
+                $this->client_id = JFactory::getUser()->id;
+                break;
  
             default:
                 break;
@@ -416,7 +421,11 @@ class NutritionPlanEmail extends FitnessEmail {
             $client_id = $this->getClientIdByNutritionPlanId($this->data->id);
         }
         
-        if($this->data->method == 'email_pdf_nutrition_plan_macros' OR $this->data->method == 'email_pdf_nutrition_plan_supplements' OR $this->data->method == 'email_pdf_nutrition_guide') {
+        if($this->data->method == 'email_pdf_nutrition_plan_macros'
+                OR $this->data->method == 'email_pdf_nutrition_plan_supplements' 
+                OR $this->data->method == 'email_pdf_nutrition_guide'
+                OR $this->data->method == 'email_pdf_recipe'
+        ) {
             $client_id = $this->client_id;
         }
 

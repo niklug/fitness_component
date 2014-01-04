@@ -49,7 +49,9 @@ class EmailTemplateData extends FitnessHelper
                 return new EmailPdfNutritionGuide($params);
                 break;
             
-            
+            case 'EmailPdfRecipe' : 
+                return new EmailPdfRecipe($params);
+                break;
             
 
             default:
@@ -565,4 +567,93 @@ class EmailPdfNutritionGuide extends EmailTemplateData  {
         return $data;
     }
 
+}
+
+class EmailPdfRecipe extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        
+    }
+    
+    protected function getItemData() {
+        require_once  JPATH_BASE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'recipe_database.php';
+        
+        $recipe_database_model = new FitnessModelrecipe_database();
+        
+        $table = '#__fitness_nutrition_recipes';
+        
+        $data = new stdClass();
+        
+        $data->id = $this->id;
+        
+        $data->status = 1;
+        
+        $data_encoded = json_encode($data);
+        
+        $recipe = $recipe_database_model->getRecipe($table, $data_encoded);
+                
+        $this->item = $recipe['data'];
+        
+        if($this->item->recipe_type) {
+            $recipe_types_names = $this->getRecipeNames($this->item->recipe_type);
+            
+            foreach ($recipe_types_names as $recipe_types_name) {
+                $recipe_types_names_html .= $recipe_types_name . "<br/>";
+
+            }
+        }
+        $this->item->recipe_types_names = $recipe_types_names_html;
+
+        if($this->item->recipe_variation) {
+            $recipe_variation_names = $this->getRecipeVariationNames($this->item->recipe_variation);
+            foreach ($recipe_variation_names as $recipe_variation_name) {
+                $recipe_variation_names_html .= $recipe_variation_name . "<br/>";
+
+            }
+        }
+        $this->item->recipe_variation_names = $recipe_variation_names_html;
+        
+        $this->business_profile_user = $this->item->created_by;
+        
+        require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_recipes.php';
+        
+        $nutrition_recipes_model = new FitnessModelnutrition_recipes();
+        
+        $this->item->status_html = $nutrition_recipes_model->status_html($this->item->id, $this->item->status, 'status_button');
+        
+    }
+    
+        
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+        
+        $layout = &JRequest::getVar('layout');
+        
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&recipe_id=' . $this->id . '&comment_id=' . $this->comment_id;
+        
+        $data->open_link = JUri::root() . 'index.php/contact/nutrition-database#!/nutrition_database/nutrition_recipe/' . $this->id;
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $date = JFactory::getDate($this->item->created);
+        
+        $data->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
+
+        $data->user_name = JFactory::getUser($this->item->created_by)->name;
+        
+        $data->assessed_by = JFactory::getUser($this->item->assessed_by)->name;
+        
+        $data->created_by = JFactory::getUser($this->item->created_by)->name;
+
+        return $data;
+    }
+
+    
 }

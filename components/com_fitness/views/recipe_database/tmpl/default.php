@@ -61,6 +61,13 @@ defined('_JEXEC') or die;
             'add_diary_options' : add_diary_options
         };
         
+        // connect helper class
+        var helper_options = {
+            'ajax_call_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'base_url' : '<?php echo JURI::root();?>',
+        }
+        window.fitness_helper = $.fitness_helper(helper_options);
+        
         // MODELS 
         window.app.Recipe_database_model = Backbone.Model.extend({
 
@@ -292,8 +299,13 @@ defined('_JEXEC') or die;
                     'comment_method' : 'RecipeComment'
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 0);
-                var recipe_item = new window.app.Recipe_view({ el: $("#recipe_main_container"), model : this, 'comments' : comments});
-                recipe_item.render(recipe);
+                
+                this.recipe_item = new window.app.Recipe_view({model : this, 'comments' : comments});
+   
+                $("#recipe_main_container").html( this.recipe_item.render(recipe).el );
+                
+                this.recipe_item.loadComments();
+                this.recipe_item.loadVideoPlayer();
             },
             
             copy_recipe : function(recipe_id){
@@ -1207,14 +1219,40 @@ defined('_JEXEC') or die;
         
         // on open recipe
         window.app.Recipe_view = Backbone.View.extend({
+            
              render : function(data){
                 var data = data;
-                console.log(data);
+                //console.log(data);
                 data.model = this.model;
                 var template = _.template($("#recipe_database_view_recipe_template").html(), data);
                 this.$el.html(template);
-                this.loadComments();
-                this.loadVideoPlayer();
+                return this;
+            },
+            
+            events: {
+                "click #pdf_button_recipe" : "onClickPdf",
+                "click #email_button_recipe" : "onClickEmail",
+            },
+            
+            onClickPdf : function(event) {
+                var recipe_id = $(event.target).attr('data-id');
+                var user_id = this.model.get('user_id');
+                var htmlPage = window.fitness_helper.get('base_url') + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_recipe&id=' + recipe_id + '&client_id=' + user_id;
+                window.fitness_helper.printPage(htmlPage);
+            },
+            
+            onClickEmail : function(event) {
+                var recipe_id = $(event.target).attr('data-id');
+                var data = {};
+                data.url = this.model.get('fitness_frontend_url');
+                data.view = '';
+                data.task = 'ajax_email';
+                data.table = '';
+
+                data.id = recipe_id;
+                data.view = 'NutritionPlan';
+                data.method = 'email_pdf_recipe';
+                window.fitness_helper.sendEmail(data);
             },
                         
             loadComments : function(){
@@ -1228,15 +1266,11 @@ defined('_JEXEC') or die;
                 var no_video_image_big = this.model.get('no_video_image_big');
                 
                 var video_path = recipe.video;
-                
-                
-                
+
                 var base_url = this.model.get('base_url');
 
-                
                 var imageType = /no_video_image.*/;  
 
-  
 		if (!video_path.match(imageType) && video_path) {  
             
                     jwplayer("recipe_video").setup({
