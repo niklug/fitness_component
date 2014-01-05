@@ -22,9 +22,9 @@
                 }
                 handleData(response.data);
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
+            error: function(response)
             {
-                alert( task + " error");
+               alert(response.responseText);
             }
         }); 
     }

@@ -143,7 +143,7 @@ class FitnessModelgoals_periods extends JModelList {
 
         $user = &JFactory::getUser();
         $obj = json_decode($data_encoded);
-        
+
         if(!$obj->primary_goal_id){
             $obj->user_id = $user->id;
         }
@@ -160,10 +160,17 @@ class FitnessModelgoals_periods extends JModelList {
         }
         
         $inserted_id = $db->insertid();
+
         if(!$inserted_id) {
             $inserted_id = $obj->id;
         }
- 
+        
+        //if goal is minigoal - create nutrition plan
+        if($obj->primary_goal_id) {
+            $helper = new FitnessHelper();
+            $plan_data = $helper->goalToPlanDecorator($obj);
+            $helper->addNutritionPlan($plan_data);
+        }
 
         $result = array('status' => $ret, 'data' => $obj);
 

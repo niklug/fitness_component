@@ -140,7 +140,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return json_encode($result);
         }
         
-        public function getGoalData($id) {
+        public function getGoalData($id, $nutrition_plan_id) {
             $db = & JFactory::getDBO();
             $query = "SELECT g.*
                 FROM #__fitness_goals as g
@@ -153,24 +153,37 @@ class FitnessModelnutrition_plan extends JModelAdmin
             }
             $data = $db->loadObject();
             
-            $data->minigoals = $this->getMiniGoals($data->id);
+            try {
+                $data->minigoals = $this->getMiniGoals($data->id, $data->user_id, $nutrition_plan_id);
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
+            
             
             $result = array('status' => $status, 'data' => $data);
             return json_encode($result); 
         }
         
-        public function getMiniGoals($id) {
+        public function getMiniGoals($primary_goal_id, $client_id, $nutrition_plan_id) {
             $db = & JFactory::getDBO();
             $query = "SELECT mg.*, c.name AS minigoal_name, tp.name AS training_period_name FROM #__fitness_mini_goals AS mg
                 LEFT JOIN #__fitness_mini_goal_categories AS c ON mg.mini_goal_category_id=c.id
                 LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
-                WHERE mg.primary_goal_id='$id'
+                WHERE mg.primary_goal_id='$primary_goal_id'
                 AND mg.state='1'";
+            /*
+            
+                . " AND c.id NOT IN (SELECT mini_goal_category_id FROM #__fitness_mini_goals "
+                . " WHERE id IN (SELECT DISTINCT mini_goal FROM #__fitness_nutrition_plan WHERE state='1' AND client_id='$client_id' AND id NOT IN ('$nutrition_plan_id'))"
+                . " AND  state='1')";
+             * 
+             */
+
             $db->setQuery($query);
-            $status['success'] = 1;
             if (!$db->query()) {
-                $status['success'] = 0;
-                $status['message'] = $db->stderr();
+                throw new Exception($db->stderr());
             }
             return $db->loadObjectList();
         }

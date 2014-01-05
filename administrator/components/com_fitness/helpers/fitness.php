@@ -400,8 +400,6 @@ class FitnessHelper extends FitnessFactory
     function  getClientTrainers($client_id, $type) {
         $status['success'] = 1;
         $db = & JFactory::getDBO();
-        $user = &JFactory::getUser();
-
         $query = "SELECT primary_trainer, other_trainers FROM #__fitness_clients WHERE user_id='$client_id' AND state='1'";
         $db->setQuery($query);
         
@@ -1196,6 +1194,12 @@ class FitnessHelper extends FitnessFactory
        return self::customQuery($query, 2);
     }
     
+    public function getClientsNutritionPlanByMinigoal($mini_goal, $client_id) {
+       $query = "SELECT * FROM #__fitness_nutrition_plan 
+        WHERE mini_goal='$mini_goal' AND client_id='$client_id' AND state='1'";
+       return self::customQuery($query, 2);
+    }
+    
     function getPlanData($id) {
         $query = "SELECT a.*, gc.id AS primary_goal_id, gc.name AS primary_goal_name,
             g.start_date AS primary_goal_start_date, g.deadline AS primary_goal_deadline,
@@ -1407,6 +1411,50 @@ class FitnessHelper extends FitnessFactory
         $query = "SELECT * FROM #__fitness_nutrition_plan_example_day_ingredients WHERE recipe_id='$recipe_id'";
         $data = self::customQuery($query, 1);
         return $data;
+    }
+    
+    
+    public function addNutritionPlan($obj) {
+        $db = JFactory::getDbo();
+        
+        $table = '#__fitness_nutrition_plan';
+
+        $plan = $this->getClientsNutritionPlanByMinigoal($obj->mini_goal, $obj->client_id);
+
+        if($plan->id) {
+            $obj->id = $plan->id;
+            $insert = $db->updateObject($table, $obj, 'id');
+        } else {
+            $insert = $db->insertObject($table, $obj, 'id');
+        }
+
+        if (!$insert) {
+            throw new Exception($db->stderr());
+        }
+        
+        $inserted_id = $db->insertid();
+        if(!$inserted_id) {
+            $inserted_id = $obj->id;
+        }
+    }
+    
+    public function goalToPlanDecorator($goal) {
+        
+        $plan = new stdClass();
+        
+        $plan->client_id = $this->getGoalData($goal->primary_goal_id, '1')->user_id;
+        $primary_trainer = $this->getClientTrainers($plan->client_id, 'primary');
+        
+        
+        $plan->trainer_id = $primary_trainer['data'][0];
+        $plan->primary_goal = $goal->primary_goal_id;
+        $plan->mini_goal = $goal->id;
+        $plan->active_start = $goal->start_date;
+        $plan->active_finish = $goal->deadline;
+        $plan->created = $this->getTimeCreated();
+        $plan->state = 1;
+        
+        return $plan;
     }
 }
 

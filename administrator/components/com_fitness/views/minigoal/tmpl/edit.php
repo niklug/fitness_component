@@ -76,6 +76,7 @@ $primary_goal = $this->backend_list_model->getGoal($primary_goal_id);
 
     
 
+    <input type="hidden" name="jform_id" value="<?php echo $this->item->id;?>" />
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>

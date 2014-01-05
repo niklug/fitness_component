@@ -449,6 +449,7 @@ class FitnessModelgoals extends JModelList {
      * @return type
      */
     function getGraphData($client_id, $data_encoded) {
+
         $data = json_decode($data_encoded);
         // primary goals
         $primary_goals = $this->getPrimaryGoalsGraphData($client_id, $data);

@@ -353,6 +353,7 @@ $helper = new FitnessHelper();
 
         /*  OPTIONS  */
         var nutrition_plan_options = {
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
             'business_profile_select' : $("#business_profile_id"),
             'trainer_select' : $("#jform_trainer_id"),
             'client_select' : $("#jform_client_id"),
@@ -453,7 +454,11 @@ $helper = new FitnessHelper();
 
 
         //bottom comments
-        var plan_comments = $.comments(nutrition_bottom_comment_options, nutrition_comment_options.item_id, 0);
+        if(nutrition_comment_options.item_id) {
+            var plan_comments = $.comments(nutrition_bottom_comment_options, nutrition_comment_options.item_id, 0);
+            var plan_comments_html = plan_comments.run();
+            $("#plan_comments_wrapper").html(plan_comments_html);
+        }
 
         var calculateSummary =  $.calculateSummary(calculate_summary_options);
 
@@ -466,8 +471,7 @@ $helper = new FitnessHelper();
 
         nutrition_meal.run();
 
-        var plan_comments_html = plan_comments.run();
-        $("#plan_comments_wrapper").html(plan_comments_html);
+        
 
         calculateSummary.run();
         

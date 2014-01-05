@@ -6,12 +6,15 @@
         this.options = options;
         this.item_id = item_id;
         if(typeof item_id === 'undefined' || ! item_id) {
-            alert('Comment class error: No item_id');
+            console.log('Comment class error: No item_id');
         }
         this.sub_item_id = sub_item_id;
     }
 
     Comments.prototype.run = function() {
+        if(typeof this.item_id  === 'undefined' || ! this.item_id ) {
+            return;
+        }
         var comments_wrapper = this.generateHtml();
         this.setEventListeners();
         return comments_wrapper;

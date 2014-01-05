@@ -97,7 +97,7 @@
                     <br/>
                     <table style="font-size: 11px; border-collapse: collapse;" width="100%">
                         <thead  style="text-align: left;">
-                            <th>MEAL ITEM/DESCRIPTION</th>
+                            <th width="300">MEAL ITEM/DESCRIPTION</th>
                             <th>QUANTITY</th>
                             <th>Protein</th>
                             <th>Fat</th>

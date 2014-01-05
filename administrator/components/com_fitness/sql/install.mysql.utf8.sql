@@ -871,7 +871,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan` (
   `force_active` tinyint(1) NOT NULL,
   `override_dates` tinyint(1) NOT NULL DEFAULT '0',
   `primary_goal` int(11) NOT NULL,
-  `mini_goal` int(11) NOT NULL,
+  `mini_goal` int(11) unsigned NOT NULL,
   `nutrition_focus` int(11) NOT NULL,
   `trainer_comments` text NOT NULL,
   `information` text NOT NULL,
@@ -886,8 +886,10 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan` (
 PRIMARY KEY (`id`),
 KEY `client_id` (`client_id`),
 KEY `trainer_id` (`trainer_id`),
+KEY `mini_goal` (`mini_goal`),
 FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE,
-FOREIGN KEY (trainer_id) REFERENCES #__users(id) ON DELETE CASCADE
+FOREIGN KEY (trainer_id) REFERENCES #__users(id) ON DELETE CASCADE,
+FOREIGN KEY (mini_goal) REFERENCES #__fitness_mini_goals(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_targets` (

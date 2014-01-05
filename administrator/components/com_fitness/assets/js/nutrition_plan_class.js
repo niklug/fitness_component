@@ -243,7 +243,7 @@
                     alert(response.status.message);
                     return;
                 }
-                //console.log(response.data);
+                console.log(response.data);
                 handleData(response.data);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
@@ -257,6 +257,7 @@
         var id = e.find(":selected").val();
         if(!id) return;
         var url = this.options.fitness_administration_url;
+        var nutrition_plan_id = this.options.fitness_administration_url;
         $.ajax({
             type : "POST",
             url : url,
@@ -264,7 +265,8 @@
                view : 'nutrition_plan',
                format : 'text',
                task : 'getGoalData',
-               id : id
+               id : id,
+               nutrition_plan_id : nutrition_plan_id
             },
             dataType : 'json',
             success : function(response) {

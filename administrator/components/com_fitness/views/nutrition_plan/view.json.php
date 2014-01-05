@@ -25,8 +25,9 @@ class FitnessViewNutrition_plan extends JView {
     
     function getGoalData() {
         $id = JRequest::getVar('id');
+        $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
         $model = $this -> getModel("nutrition_plan");
-        echo $model->getGoalData($id);
+        echo $model->getGoalData($id, $nutrition_plan_id);
     }
     
     function resetAllForceActive() {

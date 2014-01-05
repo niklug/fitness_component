@@ -119,5 +119,85 @@ class FitnessModelminigoal extends JModelAdmin
 
 		}
 	}
+        
+        
+        
+    public function save($data)	{
+       
+	$id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('minigoal.id');
+        $state = (!empty($data['state'])) ? 1 : 0;
+        $user = JFactory::getUser();
+
+        if($id) {
+            //Check the user can edit this item
+            $authorised = $user->authorise('core.edit', 'com_fitness') || $authorised = $user->authorise('core.edit.own', 'com_fitness');
+            if($user->authorise('core.edit.state', 'com_fitness') !== true && $state == 1){ //The user cannot edit the state of the item.
+                $data['state'] = 0;
+            }
+        } else {
+            //Check the user can create new items in this section
+            $authorised = $user->authorise('core.create', 'com_fitness');
+            if($user->authorise('core.edit.state', 'com_fitness') !== true && $state == 1){ //The user cannot edit the state of the item.
+                $data['state'] = 0;
+            }
+        }
+
+        if ($authorised !== true) {
+            JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+            return false;
+        }
+        
+        $db = JFactory::getDbo();
+
+        $table = '#__fitness_mini_goals';
+        
+        $object = new stdClass();
+
+        foreach ($data as $key => $value)
+        {
+            $object->$key = $value;
+        }
+
+        if($object->id) {
+            $insert = $db->updateObject($table, $object, 'id');
+        } else {
+            $insert = $db->insertObject($table, $object, 'id');
+        }
+        
+        if (!$insert) {
+            JError::raiseError($db->getErrorMsg());
+        }
+        
+        $inserted_id = $db->insertid();
+        
+        if(!$inserted_id) {
+            $inserted_id = $data['id'];
+        }
+        
+        $object->id = $inserted_id;
+
+
+            if ($inserted_id) {
+                return $object;
+            } else {
+                return false;
+            }
+   
+	}
+    
+    public function addPlan($goal) {
+        require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+        $helper = new FitnessHelper();
+       
+        $obj = new stdClass();
+        $obj->id = $goal->id;
+        $obj->primary_goal_id = $goal->primary_goal_id;
+        $obj->start_date = $goal->start_date;
+        $obj->deadline = $goal->deadline;
+
+        $plan_data = $helper->goalToPlanDecorator($obj);
+        $helper->addNutritionPlan($plan_data);
+        
+    }
 
 }
