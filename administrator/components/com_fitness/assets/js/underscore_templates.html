@@ -449,7 +449,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="vertical-align:top;">
                                         Secondary Trainers
                                     </td>
                                     <td>
@@ -610,7 +610,6 @@
         <li><a onclick="javascript:void(0)"  id="targets_link" class="plan_menu_link"  href="javascript:void(0)">TARGETS</a></li>
         <li><a onclick="javascript:void(0)"  id="macronutrients_link" class="plan_menu_link"  href="javascript:void(0)">MACROS</a></li>
         <li><a onclick="javascript:void(0)"  id="supplements_link" class="plan_menu_link"  href="javascript:void(0)">SUPPLEMENTS</a></li>
-        <li><a onclick="javascript:void(0)"  id="diary_guide_link" class="plan_menu_link"  href="javascript:void(0)">DIARY GUIDE</a></li>
         <li><a onclick="javascript:void(0)"  id="nutrition_guide_link" class="plan_menu_link"  href="javascript:void(0)">NUTRITION GUIDE</a></li>
         <li><a onclick="javascript:void(0)"  id="information_link" class="plan_menu_link"  href="javascript:void(0)">INFO</a></li>
         <li><a onclick="javascript:void(0)"  id="archive_focus_link" class="plan_menu_link"  href="javascript:void(0)">ARCHIVE</a></li>
@@ -2217,7 +2216,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="vertical-align:top;">
                                         Secondary Trainers
                                     </td>
                                     <td>
@@ -3054,7 +3053,13 @@
                     <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">PROTOCOL NAME</div>
                 </td>
                 <td >
-                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;" ><%= name.toUpperCase() %></div>
+                    <%
+                    var name_cap = '';
+                    if(name !== null) {
+                        name_cap = name.toUpperCase();
+                    }
+                    %>
+                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;" ><%= name_cap %></div>
                 </td>
                 <td>
                 </td>
@@ -3191,10 +3196,17 @@
                 <tr>
                     <td width="650">
                         <label>MEAL DESCRIPTION</label>
-                        <input  size="71" type="text"  class="meal_description" name="description" value="<%= description.toUpperCase() %>">
+                        <% 
+                        var description_cap = '';
+                        if(description !== null) {
+                            description_cap = description.toUpperCase();
+                        }
+                        %>
+                        <input  size="71" type="text"  class="meal_description" name="description" value="<%= description_cap %>">
                     </td>
                     <td width="250">
                         <label>MEAL TIME</label>
+                
                         <input style="width:61px;"  size="5" type="text" name="meal_time"  class="meal_time"  value="<%= meal_time %>">
                     </td>
                     <td>
@@ -3232,7 +3244,13 @@
                     <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">MEAL DESCRIPTION</div>
                 </td>
                 <td width="450">
-                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;"><%= description.toUpperCase() %></div>
+                    <%
+                    var description_cap = '';
+                    if(description !== null) {
+                        description_cap = description.toUpperCase();
+                    }
+                    %>
+                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;"><%= description_cap %></div>
                 </td>
                 <td width="200" style="text-align:right;">
                     <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">MEAL TIME</div>

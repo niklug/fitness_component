@@ -34,7 +34,6 @@ class FitnessTablenutrition_plan extends JTable {
      */
     public function bind($array, $ignore = '') {
 
-        
 		$input = JFactory::getApplication()->input;
 		$task = $input->getString('task', '');
 		if(($task == 'save' || $task == 'apply') && (!JFactory::getUser()->authorise('core.edit.state','com_fitness') && $array['state'] == 1)){

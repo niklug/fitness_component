@@ -45,14 +45,14 @@ $helper = new FitnessHelper();
                                 <li><?php echo $this->form->getLabel('business_profile_id'); 
                                     $business_profile_id = $helper->getBubinessIdByClientId($this->item->client_id);
 
-                                    echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $business_profile_id , '', true, "required required"); ?>
+                                    echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $business_profile_id , '', true, "required", true); ?>
                                 </li>
 
                                 <li><?php echo $this->form->getLabel('trainer_id'); ?>
-                                    <?php echo $helper->generateSelect(array(), 'jform[trainer_id]', 'jform_trainer_id', $this->item->trainer_id, '' ,true, 'required'); ?>
+                                    <?php echo $helper->generateSelect(array(), 'jform[trainer_id]', 'jform_trainer_id', $this->item->trainer_id, '' ,true, 'required', true); ?>
                                 </li>
                                 <li><?php echo $this->form->getLabel('client_id'); ?>
-                                    <select id="jform_client_id" class="inputbox required" name="jform[client_id]">
+                                    <select style="pointer-events: none; cursor: default;"  id="jform_client_id" class="inputbox required" name="jform[client_id]">
                                         <?php
                                         if($this->item->client_id) {
                                             echo '<option value="' . $this->item->client_id . '">'. JFactory::getUser($this->item->client_id)->name .'</option>';
@@ -77,7 +77,7 @@ $helper = new FitnessHelper();
                                 <tr>
                                     <td>
                                         <?php echo $this->form->getLabel('primary_goal'); ?>
-                                        <select id="jform_primary_goal" class="inputbox required" name="jform[primary_goal]">
+                                        <select style="pointer-events: none; cursor: default;"  id="jform_primary_goal" class="inputbox required" name="jform[primary_goal]">
                                             <?php
                                             if($this->item->primary_goal) {
                                                 echo '<option value="' . $this->item->primary_goal. '">'. $this->getPrimaryGoalName($this->item->primary_goal) .'</option>';
@@ -132,7 +132,7 @@ $helper = new FitnessHelper();
                                     <td>
                                         <?php
                                             $active_plan_id = $this->backend_list_model->getUserActivePlanId($this->item->client_id);
-                                            echo $this->showActiveStatus($item->id, $active_plan_id);
+                                            echo $this->showActiveStatus($this->item->id, $active_plan_id);
                                         ?>
                                     </td>
                                     <td></td>
@@ -1427,7 +1427,7 @@ $helper = new FitnessHelper();
                             macronutrient_targets_light.saveTargetsData(function(output) {
                                 macronutrient_targets_rest.saveTargetsData(function(output) {
                                     //reset force active fields in database by ajax
-                                    var force_active = $("#jform_override_dates0").is(":checked");
+                                    var force_active = $("#jform_force_active0").is(":checked");
                                     if(force_active) {
                                         nutrition_plan.resetAllForceActive(function() {
                                             Joomla.submitform(task, document.getElementById('nutrition_plan-form'));

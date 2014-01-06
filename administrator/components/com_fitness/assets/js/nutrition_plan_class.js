@@ -70,8 +70,7 @@
         $( "#jform_active_start, #jform_active_finish" ).datepicker({ dateFormat: "yy-mm-dd"});
         $("#jform_no_end_date-lbl, #jform_no_end_date").show();
         $("#jform_active_finish").attr('readonly', false);
-        $("#jform_override_dates0").val('1');
-        $("#jform_override_dates1").val('0');
+
         
         $("#jform_active_start, #jform_active_finish, .override_dates_block").show();
     }
@@ -80,9 +79,11 @@
         $( "#jform_active_start, #jform_active_finish" ).datepicker( "destroy" );
         $("#jform_no_end_date-lbl, #jform_no_end_date").hide();
         $("#jform_active_finish").attr('readonly', true);
-        $("#jform_override_dates0").val('0');
-        $("#jform_override_dates1").val('1');
+
         $("#jform_active_start, #jform_active_finish, .override_dates_block").hide();
+        
+        $("#jform_active_start").val($("#mini_goal_start_date").text());
+        $("#jform_active_finish").val($("#mini_goal_deadline").text());
     }
 
 
@@ -95,6 +96,7 @@
     NutritionPlan.prototype.forceNoEndDateNo = function() {
         $("#jform_no_end_date0").val('1');
         $("#jform_no_end_date1").val('0');
+        $("#jform_active_finish").val($("#mini_goal_deadline").text());
     }
 
 
@@ -409,7 +411,7 @@
         html += '<label class="hasTip required">Mini Goal <span class="star"> *</span></label>';
         html += '</td>';
         html += '<td>';
-        html += '<select id="minigoals_select" class="inputbox required " >';
+        html += '<select style="pointer-events: none; cursor: default;"  id="minigoals_select" class="inputbox required " >';
         html += '<option value="">-Select-</option>';
         $.each(minigoals, function(index,item) {
             html += '<option value="' + item.id + '">' + item.minigoal_name + '</option>';
@@ -440,7 +442,7 @@
         html += '<td>';
         html += '<label>Start Date / Active From</label>';
         html += '</td>';
-        html += '<td>';
+        html += '<td id="mini_goal_start_date">';
         html += minigoal.start_date;
         html += '</td>';
 
@@ -449,7 +451,7 @@
         html += '<td>';
         html += '<label>Achieve By / Active To</label>';
         html += '</td>';
-        html += '<td>';
+        html += '<td id="mini_goal_deadline">';
         html += minigoal.deadline;
         html += '</td>';
                 
@@ -463,19 +465,19 @@
         var override_dates = this.options.override_dates;
 
         var override_dates_0_checked = '';
-        var override_dates_1_checked = 'checked';
+        var override_dates_1_checked = ' checked="checked" ';
    
         if(override_dates == '1') {
             override_dates = '1';
-            override_dates_0_checked = 'checked';
+            override_dates_0_checked = ' checked="checked"  ';
             override_dates_1_checked = '';
         }
 
         html += '<td>';
         html += '<fieldset id="jform_override_dates" class="radio">';
-        html += '<input id="jform_override_dates0" ' + override_dates_0_checked + ' class="" type="radio" value="' + override_dates + '" name="jform[override_dates]" >';
+        html += '<input id="jform_override_dates0" ' + override_dates_0_checked +  ' class="" type="radio" value="1" name="jform[override_dates]" >';
         html += '<label class="" for="jform_override_dates0" aria-invalid="false">Yes</label>';
-        html += '<input id="jform_override_dates1" ' + override_dates_1_checked + '  type="radio"  value="' + override_dates + '" name="jform[override_dates]">';
+        html += '<input id="jform_override_dates1" ' + override_dates_1_checked + ' type="radio"  value="0" name="jform[override_dates]">';
         html += '<label for="jform_override_dates1">No (Cancel & Clear)</label>';
         html += '</fieldset>';
         html += '</td>';

@@ -281,18 +281,7 @@ class FitnessModelgoals_periods extends JModelList {
 
         $client_id = $plan_data->client_id;
         
-        require_once JPATH_COMPONENT_SITE .  '/models/nutrition_diaryform.php';
-        $nutrition_diaryform_model  = new FitnessModelNutrition_diaryForm();
-        
-        $client_trainers = $nutrition_diaryform_model->get_client_trainers($client_id);
-        
-        if(!$client_trainers['status']) {
-            $status['success'] = 0;
-            $status['message'] = $client_trainers['message'];
-            $result = array('status' => $status);
-            return $result;
-        }
-        $client_trainers = $client_trainers['data'];
+        $client_trainers = $helper->get_client_trainers_names($client_id);
         
         $plan_data->secondary_trainers = $client_trainers;
 

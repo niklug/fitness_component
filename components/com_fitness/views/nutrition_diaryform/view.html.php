@@ -141,10 +141,12 @@ class FitnessViewNutrition_diaryform extends JView {
                 $model = $this->getModel();
                 
                 $user = &JFactory::getUser();
-                $secondary_trainers = $model->get_client_trainers($user->id);
-                if(!$secondary_trainers['status']) {
-                    JError::raiseError($secondary_trainers['message']);
-                }
+                require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+                
+                $helper = new FitnessHelper();
+                
+                
+                $secondary_trainers = $helper->get_client_trainers_names($user->id, 'secondary');
                 
                 $active_plan_data = $model->getActivePlanData();
                 

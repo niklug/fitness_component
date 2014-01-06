@@ -125,10 +125,9 @@ class FitnessViewNutrition_plan extends JView
         }
         public function showActiveStatus($id, $active_id) {
             $html = '<span style="color:red;">INACTIVE</span>';
-            if((int)$id == (int)$active_id) {
+            if($id == $active_id) {
                 $html = '<span style="color:green;">ACTIVE</span>';
             } 
-            $html = '<span style="color:red;">INACTIVE</span>';
             return $html; 
         }
 }

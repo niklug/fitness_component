@@ -773,8 +773,8 @@ class FitnessHelper extends FitnessFactory
      * @param type $class - select tag class
      * @return string
      */
-    public function generateSelect($items, $name, $id, $selected, $select, $required, $class) {
-        $html = '<select ';
+    public function generateSelect($items, $name, $id, $selected, $select, $required, $class, $disabled) {
+        $html = '<select  ';
         
         $html .= ' name="' . $name . '" ';
         
@@ -784,6 +784,10 @@ class FitnessHelper extends FitnessFactory
         
         if($required) {
             $html .= 'required="required"';
+        }
+        
+        if($disabled) {
+            $html .= ' style="pointer-events: none; cursor: default;"  ';
         }
         
         $html .=  '>';

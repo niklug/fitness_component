@@ -21,6 +21,7 @@
         die();
     }
     
+   
     include __DIR__ . DS . 'email_pdf_header.php';
 ?>
             <div style="width: 800px;">

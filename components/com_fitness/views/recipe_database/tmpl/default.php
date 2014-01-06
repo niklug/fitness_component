@@ -1786,6 +1786,7 @@ defined('_JEXEC') or die;
             },
             
             initialize: function(){
+                window.app.recipe_items_model.set({current_page : 'recipe_database'});
                 // history
                 this.routesHit = 0;
                 Backbone.history.on('route', function() { this.routesHit++; }, this);
@@ -1898,10 +1899,6 @@ defined('_JEXEC') or die;
                 this.load_mainmenu();
                 
                 window.app.Views.recipes_container.render();
-                
-                
-
-
             },
             
             trash_list : function() {
@@ -1939,14 +1936,12 @@ defined('_JEXEC') or die;
             },
 
             nutrition_recipe : function(id) {
-                
                 var current_page = window.app.recipe_items_model.get('current_page');
              
                 this.clear_main_ontainer();
                 this.load_submenu();
                 
                 window.app.recipe_items_model.getRecipe(id);
-
            },
            
            nutrition_database_recipe : function(id) {

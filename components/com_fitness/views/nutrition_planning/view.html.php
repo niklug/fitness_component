@@ -73,16 +73,20 @@ class FitnessViewNutrition_planning extends JView
                 $active_plan_data = $nutrition_diaryform_model->getActivePlanData();
                 
                 $user = &JFactory::getUser();
-                $secondary_trainers = $nutrition_diaryform_model->get_client_trainers($user->id);
-                if(!$secondary_trainers['status']) {
-                    echo $secondary_trainers['message'];
-                }
+             
+                require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+                
+                $helper = new FitnessHelper();
+                
+                
+                $secondary_trainers = $helper->get_client_trainers_names($user->id, 'secondary');
+
        
                 $this->assign('nutrition_diaryform_model', $nutrition_diaryform_model);
 
                 $this->assign('active_plan_data', $active_plan_data);
                 
-                $this->assign('secondary_trainers', $secondary_trainers['data']);
+                $this->assign('secondary_trainers', $secondary_trainers);
                 
                 $this->assign('goals_periods_model', $goals_periods_model);
                 

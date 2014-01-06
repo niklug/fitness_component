@@ -181,20 +181,7 @@ $helper = new FitnessHelper();
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_NUTRITION_FOCUS', 'a.nutrition_focus_name', $listDirn, $listOrder); ?>
 				</th>
                                 
-                                <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_CALORIES', 'a.calories', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Proteins (%)', 'a.protein', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Fats (%)', 'a.fats', $listDirn, $listOrder); ?>
-				</th>
-        			<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Carbs (%)', 'a.carbs', $listDirn, $listOrder); ?>
-				</th>
-                                
-                                
+                               
                                 <th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_RECIPES_CREATED', 'a.created', $listDirn, $listOrder); ?>
 				</th>
@@ -283,21 +270,7 @@ $helper = new FitnessHelper();
 				<td>
 					<?php echo $item->nutrition_focus_name; ?>
 				</td>
-                                
-                                <td>
-                                        <?php echo $item->calories; ?>
-                                </td>
-                                <td>
-                                        <?php echo $item->protein; ?>
-                                </td>
-                                <td>
-                                        <?php echo $item->fats; ?>
-                                </td>
-                                <td>
-                                        <?php echo $item->carbs; ?>
-                                </td>
-                                
-                                
+                                    
                                 <td>
 					<?php echo $item->created; ?>
 				</td>

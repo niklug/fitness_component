@@ -80,10 +80,6 @@ class FitnessViewNutrition_plans extends JView
         $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/nutrition_plan';
         if (file_exists($formPath)) {
 
-            if ($canDo->get('core.create')) {
-			    JToolBarHelper::addNew('nutrition_plan.add','JTOOLBAR_NEW');
-		    }
-
 		    if ($canDo->get('core.edit') && isset($this->items[0])) {
 			    JToolBarHelper::editList('nutrition_plan.edit','JTOOLBAR_EDIT');
 		    }

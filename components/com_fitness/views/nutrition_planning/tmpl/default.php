@@ -11,6 +11,7 @@ $light_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_
 
 $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_plan_id, 'rest');
 
+
 ?>
 
 <div style="opacity: 1;" class="fitness_wrapper">
@@ -51,10 +52,10 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="vertical-align: top;">
                                         Secondary Trainers
                                     </td>
-                                    <td>
+                                    <td >
                                         <span class="grey_title">
                                             <?php
                                             foreach ($this->secondary_trainers as $trainer) {
@@ -584,12 +585,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             
             'item_id' : '<?php echo  $nutrition_plan_id?>'
         };
-        
-        if(!options.item_id) {
-            alert('Please contact your trainer immediately regarding your current Nutrition Plan!');
-        }
-        
-        
+
         
         //TARGETS
         var heavy_target = <?php echo $heavy_target;?>;
@@ -648,6 +644,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 var task = 'populatePlan';
                 var table = '';
                 data.id = id;
+                console.log(data);
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     //console.log(output);
@@ -788,7 +785,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         $(".preview").on('click', function() {
             var id = $(this).attr('data-id');
             $("#close_tab").show();
-            controller.navigate("close", true);
+            window.app.controller.navigate("close", true);
             $(".block").hide();
             $("#close_wrapper").show();
             $(".plan_menu_link").removeClass("active_link");
@@ -1012,7 +1009,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         //EMAIL_PDF
         //MACROS
         $("#pdf_button_macros").on('click', function() {
-            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_macros&id=<?php echo  $nutrition_plan_id?>&client_id=<?php echo JFactory::getUser()->id;?>';
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_macros&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
             window.fitness_helper.printPage(htmlPage);
         });
         
@@ -1023,7 +1020,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             data.task = 'ajax_email';
             data.table = '';
 
-            data.id = <?php echo  $nutrition_plan_id?>;
+            data.id = options.item_id;
             data.view = 'NutritionPlan';
             data.method = 'email_pdf_nutrition_plan_macros';
             window.fitness_helper.sendEmail(data);
@@ -1031,7 +1028,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         
         //Supplements
         $("#pdf_button_supplements").on('click', function() {
-            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_supplements&id=<?php echo  $nutrition_plan_id?>&client_id=<?php echo JFactory::getUser()->id;?>';
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_supplements&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
             window.fitness_helper.printPage(htmlPage);
         });
         
@@ -1042,7 +1039,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             data.task = 'ajax_email';
             data.table = '';
 
-            data.id = <?php echo  $nutrition_plan_id?>;
+            data.id = options.item_id;
             data.view = 'NutritionPlan';
             data.method = 'email_pdf_nutrition_plan_supplements';
             window.fitness_helper.sendEmail(data);
@@ -1050,7 +1047,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         
         //Nutrition guide
         $("#pdf_button_nutrition_guide").on('click', function() {
-            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_guide&id=<?php echo  $nutrition_plan_id?>&client_id=<?php echo JFactory::getUser()->id;?>';
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_guide&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
             window.fitness_helper.printPage(htmlPage);
         });
         
@@ -1061,7 +1058,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             data.task = 'ajax_email';
             data.table = '';
 
-            data.id = <?php echo  $nutrition_plan_id?>;
+            data.id = options.item_id;
             data.view = 'NutritionPlan';
             data.method = 'email_pdf_nutrition_guide';
             window.fitness_helper.sendEmail(data);
@@ -1188,7 +1185,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
             
             onClickViewRecipe : function(event) {
-                var url = helper_options.base_url + 'index.php?option=com_fitness&view=recipe_database&Itemid=1002#!/nutrition_recipe/' + this.model.get('original_recipe_id');
+                var url = helper_options.base_url + 'index.php?option=com_fitness&view=recipe_database&Itemid=1002#!/nutrition_database/nutrition_recipe/' + this.model.get('original_recipe_id');
                 window.open(url);
             }, 
             
@@ -1243,6 +1240,8 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             overview: function () {
+                 this.no_active_plan_action();
+
                  this.common_actions();
                  $("#overview_wrapper").show();
                  $("#overview_link").addClass("active_link");
@@ -1252,6 +1251,8 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             targets: function () {
+                 this.no_active_plan_action();
+
                  this.common_actions();
                  $("#targets_wrapper").show();
                  $("#targets_link").addClass("active_link");
@@ -1266,6 +1267,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
 
             macronutrients: function () {
+                 this.no_active_plan_action();
                  this.common_actions();
                  $("#macronutrients_wrapper").show();
                  $("#macronutrients_link").addClass("active_link");
@@ -1273,6 +1275,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
             
             supplements: function () {
+                 this.no_active_plan_action();
                  this.common_actions();
                  $("#supplements_wrapper").show();
                  $("#supplements_link").addClass("active_link");
@@ -1288,6 +1291,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
                     
             nutrition_guide: function () {
+                 this.no_active_plan_action();
                  this.common_actions();
                  $("#nutrition_guide_wrapper").show();
                  $("#nutrition_guide_link").addClass("active_link");
@@ -1318,6 +1322,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             },
                     
             information: function () {
+                 this.no_active_plan_action();
                  this.common_actions();
                  $("#information_wrapper").show();
                  $("#information_link").addClass("active_link");
@@ -1337,6 +1342,13 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             common_actions : function() {
                 $(".block, #close_tab").hide();
                 $(".plan_menu_link").removeClass("active_link")
+            },
+            
+            no_active_plan_action : function() {
+                if(!options.item_id) {
+                    alert('Please contact your trainer immediately regarding your current Nutrition Plan!');
+                    return false;
+                }
             }
                     
             
