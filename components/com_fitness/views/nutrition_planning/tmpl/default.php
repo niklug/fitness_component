@@ -357,6 +357,10 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     </div>
     
     
+    
+    
+    
+    
     <!-- MACRONUTRIENTS -->
     <div id="macronutrients_wrapper" class="block">
         <table width="100%">
@@ -585,6 +589,105 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             
             'item_id' : '<?php echo  $nutrition_plan_id?>'
         };
+        
+        //SUPPLEMENTS options
+        window.app.protocol_options = {
+
+            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            
+            'nutrition_plan_id' : '<?php echo  $nutrition_plan_id ?>',
+    
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+                   
+            'protocol_comments_db_table' : '#__fitness_nutrition_plan_supplements_comments'
+        };
+        $.NutritionPlanSupplements();
+        
+        // END SUPPLEMENTS options
+        
+        // NUTRITION GUIDE options
+        // connect helper class
+        var helper_options = {
+            'ajax_call_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'base_url' : '<?php echo JURI::root();?>',
+        }
+        window.fitness_helper = $.fitness_helper(helper_options);
+        
+        window.app.example_day_options = {
+
+            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            
+            'nutrition_plan_id' : '<?php echo  $nutrition_plan_id ?>',
+    
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+                   
+            'example_day_meal_comments_db_table' : '#__fitness_nutrition_plan_example_day_meal_comments'
+        };
+        
+        $.NutritionGuide();
+   
+        // END NUTRITION GUIDE options
+        
+        //EMAIL_PDF
+        //MACROS
+        $("#pdf_button_macros").on('click', function() {
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_macros&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
+            window.fitness_helper.printPage(htmlPage);
+        });
+        
+        $("#email_button_macros").on('click', function() {
+            var data = {};
+            data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
+
+            data.id = options.item_id;
+            data.view = 'NutritionPlan';
+            data.method = 'email_pdf_nutrition_plan_macros';
+            window.fitness_helper.sendEmail(data);
+        });
+        
+        //Supplements
+        $("#pdf_button_supplements").on('click', function() {
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_supplements&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
+            window.fitness_helper.printPage(htmlPage);
+        });
+        
+        $("#email_button_supplements").on('click', function() {
+            var data = {};
+            data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
+
+            data.id = options.item_id;
+            data.view = 'NutritionPlan';
+            data.method = 'email_pdf_nutrition_plan_supplements';
+            window.fitness_helper.sendEmail(data);
+        });
+        
+        //Nutrition guide
+        $("#pdf_button_nutrition_guide").on('click', function() {
+            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_guide&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
+            window.fitness_helper.printPage(htmlPage);
+        });
+        
+        $("#email_button_nutrition_guide").on('click', function() {
+            var data = {};
+            data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
+
+            data.id = options.item_id;
+            data.view = 'NutritionPlan';
+            data.method = 'email_pdf_nutrition_guide';
+            window.fitness_helper.sendEmail(data);
+        });
+        //
+        
+        
 
         
         //TARGETS
@@ -625,13 +728,6 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         
        
         window.app.Nutrition_plan_model = Backbone.Model.extend({
-            defaults: {
-
-            },
-
-            initialize: function(){
-                
-            },
 
             ajaxCall : function(data, url, view, task, table, handleData) {
                 return $.AjaxCall(data, url, view, task, table, handleData);
@@ -644,7 +740,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 var task = 'populatePlan';
                 var table = '';
                 data.id = id;
-                console.log(data);
+                //console.log(data);
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
                     //console.log(output);
@@ -695,10 +791,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 this.model.populatePlan(nutrition_plan_id);
                 this.listenToOnce(this.model, "change:plan_data", this.onPopulatePlan);
             },
-                    
-            events: {
-                
-            },
+
             loadTemplate : function(variables, target) {
                 var template = _.template( $("#" +target).html(), variables );
                 this.$el.html(template);
@@ -797,430 +890,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         
         //INIT
         window.app.nutrition_plan_model = new window.app.Nutrition_plan_model(options);
-        
-        
-        //SUPPLEMENTS
-        window.app.protocol_options = {
 
-            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            
-            'nutrition_plan_id' : '<?php echo  $nutrition_plan_id ?>',
-    
-            'user_name' : '<?php echo JFactory::getUser()->name;?>',
-                   
-            'protocol_comments_db_table' : '#__fitness_nutrition_plan_supplements_comments'
-        };
-        
-        //VIEWS
-        window.app.Nutrition_plan_protocols_view = Backbone.View.extend({
-            
-            initialize: function(){
-                
-                var self = this;
-                
-		this.protocolListItemViews = {};
-
-		this.collection.on("add", function(protocol) {
-                    var comment_options = {
-                        'item_id' : window.app.protocol_options.nutrition_plan_id,
-                        'fitness_administration_url' : window.app.protocol_options.fitness_frontend_url,
-                        'comment_obj' : {'user_name' : window.app.protocol_options.user_name, 'created' : "", 'comment' : ""},
-                        'db_table' : window.app.protocol_options.protocol_comments_db_table,
-                        'read_only' : true,
-                    }
-                    var comments = $.comments(comment_options, comment_options.item_id, protocol.id);
-
-                    window.app.nutrition_plan_protocol_view = new window.app.Nutrition_plan_protocol_view({collection : this,  model : protocol, 'comments' : comments}); 
-                    $(self.el).append( window.app.nutrition_plan_protocol_view.render().el );
-                    self.protocolListItemViews[ protocol.cid ] = window.app.nutrition_plan_protocol_view;
-		});
-		
-		this.collection.on("remove", function(protocol, options) {
-                    self.protocolListItemViews[ protocol.cid ].close();
-                    delete self.protocolListItemViews[ protocol.cid ];
-		});
-            },
-            
-   
-            events: {
-                
-            },
-
-        });
-        
-        
-        window.app.Nutrition_plan_protocol_view = Backbone.View.extend({
-           
-            initialize: function(){
-                _.bindAll(this,'close', 'render');
-                this.model.on("destroy", this.close, this);
-            },
-            
-            render: function(){
-                var template = _.template( $("#nutrition_plan_frontend_protocol_item_template").html(), this.model.toJSON());
-                this.$el.html(template);
-                
-                this.connectComments(this.$el);
-
-                this.supplements_list_el = this.$el.find(".supplements_list");
-                
-                this.supplement_collection = new  window.app.Supplements_collection();
-  
-                this.protocol_id = this.model.get('id');
-                
-                if(this.protocol_id ){ 
-  
-                    this.supplement_collection.fetch({data: {nutrition_plan_id : window.app.protocol_options.nutrition_plan_id, protocol_id : this.protocol_id}});
-                }
-                
-                
-                var self = this;
-                
-		this.supplementListItemViews = {};
-
-		this.supplement_collection.on("add", function(supplement) {
-                    window.app.nutrition_plan_supplement_view = new window.app.Nutrition_plan_supplement_view({collection : self.supplement_collection, model : supplement}); 
-                    self.supplements_list_el.append( window.app.nutrition_plan_supplement_view.render().el );
-                    self.supplementListItemViews[ supplement.cid ] = window.app.nutrition_plan_supplement_view;
-		});
-		
-		this.supplement_collection.on("remove", function(supplement, options) {
-                    self.supplementListItemViews[ supplement.cid ].close();
-                    delete self.supplementListItemViews[ supplement.cid ];
-		});
-                
-                return this;
-            },
-            
-            connectComments : function() {
-                if(typeof this.options.comments !== 'undefined') {
-                    var comments = this.options.comments.run();
-                    this.$el.find(".comments_wrapper").html(comments);
-                }
-            },
-                    
-            events: {
-
-            },
-
-            close :function() {
-                $(this.el).unbind();
-		$(this.el).remove();
-            },
-
-        });
-        
-        window.app.Nutrition_plan_supplement_view = Backbone.View.extend({
-           
-            initialize: function(){
-     
-            },
-            
-            render: function(){
-                var template = _.template( $("#nutrition_plan_frontend_supplement_template").html(), this.model.toJSON());
-                this.$el.html(template);
-                return this;
-            },
-                    
-            events: {
-                "click .view_product": "onClickViewProduct"
-            },
-
-            onClickViewProduct : function(event) {
-                var url = $(event.target).attr('data-url');
-                window.open(url);
-            },
-            
-            close :function() {
-                $(this.el).unbind();
-                $(this.el).remove();
-            },
-            
-        });
-        
-         //MODELS
-        
-        window.app.Protocol_model = Backbone.Model.extend({
-            urlRoot : window.app.protocol_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_protocol&',
-            
-            defaults : {
-                id : null,
-                nutrition_plan_id : window.app.protocol_options.nutrition_plan_id,
-                name : null,
-            },
-            
-            validate: function(attrs, options) {
-                if (!attrs.name) {
-                  return 'Protocol Name is empty';
-                }
-            }
-        });
-        
-        window.app.Supplement_model = Backbone.Model.extend({
-            urlRoot : window.app.protocol_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_supplement&',
-            
-            defaults : {
-                id : null,
-                nutrition_plan_id : window.app.protocol_options.nutrition_plan_id,
-                protocol_id : null,
-                name : null,
-                description : null,
-                comments : null,
-                url : null,
-            },
-
-        });
-        
-        // COLLECTIONS
-        window.app.Protocols_collection = Backbone.Collection.extend({
-            url : window.app.protocol_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_protocol&',
-            model: window.app.Protocol_model
-        });
-
-        
-        
-        window.app.Supplements_collection = Backbone.Collection.extend({
-            url : window.app.protocol_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_supplement&',
-            model: window.app.Supplement_model
-        });
-        // END SUPPLEMENTS
-        
-        
-        // NUTRITION GUIDE
-        // connect helper class
-        var helper_options = {
-            'ajax_call_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'base_url' : '<?php echo JURI::root();?>',
-        }
-        window.fitness_helper = $.fitness_helper(helper_options);
-        
-        window.app.example_day_options = {
-
-            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            
-            'nutrition_plan_id' : '<?php echo  $nutrition_plan_id ?>',
-    
-            'user_name' : '<?php echo JFactory::getUser()->name;?>',
-                   
-            'example_day_meal_comments_db_table' : '#__fitness_nutrition_plan_example_day_meal_comments'
-        };
-        
-        
-        //EMAIL_PDF
-        //MACROS
-        $("#pdf_button_macros").on('click', function() {
-            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_macros&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
-            window.fitness_helper.printPage(htmlPage);
-        });
-        
-        $("#email_button_macros").on('click', function() {
-            var data = {};
-            data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
-            data.view = '';
-            data.task = 'ajax_email';
-            data.table = '';
-
-            data.id = options.item_id;
-            data.view = 'NutritionPlan';
-            data.method = 'email_pdf_nutrition_plan_macros';
-            window.fitness_helper.sendEmail(data);
-        });
-        
-        //Supplements
-        $("#pdf_button_supplements").on('click', function() {
-            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_plan_supplements&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
-            window.fitness_helper.printPage(htmlPage);
-        });
-        
-        $("#email_button_supplements").on('click', function() {
-            var data = {};
-            data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
-            data.view = '';
-            data.task = 'ajax_email';
-            data.table = '';
-
-            data.id = options.item_id;
-            data.view = 'NutritionPlan';
-            data.method = 'email_pdf_nutrition_plan_supplements';
-            window.fitness_helper.sendEmail(data);
-        });
-        
-        //Nutrition guide
-        $("#pdf_button_nutrition_guide").on('click', function() {
-            var htmlPage = '<?php echo JURI::base() ?>index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_nutrition_guide&id=' + options.item_id + '&client_id=<?php echo JFactory::getUser()->id;?>';
-            window.fitness_helper.printPage(htmlPage);
-        });
-        
-        $("#email_button_nutrition_guide").on('click', function() {
-            var data = {};
-            data.url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
-            data.view = '';
-            data.task = 'ajax_email';
-            data.table = '';
-
-            data.id = options.item_id;
-            data.view = 'NutritionPlan';
-            data.method = 'email_pdf_nutrition_guide';
-            window.fitness_helper.sendEmail(data);
-        });
-        //
-        
-        
-        
-        window.app.Nutrition_guide_menu = Backbone.View.extend({
-            el : $("#nutrition_guide_container"),
-
-            template : _.template($('#nutrition_guide_menu_frontend_template').html()),
-
-            initialize:function () {
-                this.render();
-            },
-
-            render:function () {
-                $(this.el).html(this.template());
-                return this;
-            },
-
-            events:{
-                "click .example_day_link": "onChooseDay"
-            },
-
-            onChooseDay:function (event) {
-                $(".example_day_link").removeClass("active");
-                var day = $(event.target).attr('data-id');
-                $(event.target).addClass("active");
-                window.app.controller.navigate("!/example_day/" + day, true);
-            }
-
-        });
-        
-        window.app.Example_day_view = Backbone.View.extend({
-            render: function(){
-                var template = _.template( $("#nutrition_plan_example_day_frontend_template").html());
-                this.$el.html(template);
-                
-                var self = this;
-                
-		this.mealListItemViews = {};
-
-		this.collection.on("add", function(meal) {
-                    window.app.nutrition_plan_example_day_meal_view = new window.app.Nutrition_plan_example_day_meal_view({collection : this,  model : meal}); 
-                    self.$el.find("#example_day_meal_list").append( window.app.nutrition_plan_example_day_meal_view.render().el );
-		});
-               
-                return this;
-            },
-        });
-        
-        window.app.Nutrition_plan_example_day_meal_view = Backbone.View.extend({
-           
-            initialize: function(){
-                _.bindAll(this,'close', 'render');
-                this.model.on("destroy", this.close, this);
-                
-                this.recipes_collection = new window.app.Nutrition_guide_recipes_collection();
-                
-                this.recipes_collection.bind("add", this.addRecipe, this);
-                
-                var self = this;
-                this.recipes_collection.fetch({
-                    data: {
-                        meal_id : self.model.get('id')
-                    },
-                    wait : true,
-                    success : function(collection, response) {
-                        //console.log(collection);
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                });
-               
-            },
-            
-            render: function(){
-                var template = _.template( $("#nutrition_plan_example_day_item_frontend_template").html(), this.model.toJSON());
-                this.$el.html(template);
-               
-                this.connectComments();
-                
-                return this;
-            },
-            
-            addRecipe : function(model) {
-                this.item_view = new window.app.Nutrition_guide_recipe_view({collection : this.recipes_collection, model : model}); 
-                this.$el.find(".meal_recipes").append( this.item_view.render().el );
-            },
-            
-            connectComments : function() {
-                var meal_id = this.model.get('id');
-                var comment_options = {
-                    'item_id' : window.app.example_day_options.nutrition_plan_id,
-                    'fitness_administration_url' : window.app.example_day_options.fitness_backend_url,
-                    'comment_obj' : {'user_name' : window.app.example_day_options.user_name, 'created' : "", 'comment' : ""},
-                    'db_table' : window.app.example_day_options.example_day_meal_comments_db_table,
-                    'read_only' : true,
-                }
-                var comments = $.comments(comment_options, comment_options.item_id, meal_id).run();
-                this.$el.find(".comments_wrapper").html(comments);
-            },
-           
-            close :function() {
-                $(this.el).unbind();
-		$(this.el).remove();
-            },
- 
-        });
-        
-        
-        window.app.Nutrition_guide_recipe_view = Backbone.View.extend({
-            render:function () {
-                var template = _.template( $("#nutrition_guide_recipe_frontend_template").html(), this.model.toJSON());
-                this.$el.html(template);
-                return this;
-            },
-            
-            events: {
-                "click .view_recipe" : "onClickViewRecipe",
-            },
-            
-            onClickViewRecipe : function(event) {
-                var url = helper_options.base_url + 'index.php?option=com_fitness&view=recipe_database&Itemid=1002#!/nutrition_database/nutrition_recipe/' + this.model.get('original_recipe_id');
-                window.open(url);
-            }, 
-            
-        });
-        
-        
-        //MODELS
-        window.app.Example_day_meal_model = Backbone.Model.extend({
-            urlRoot : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&',
-            
-            defaults : {
-                id : null,
-                description : null,
-                nutrition_plan_id : window.app.example_day_options.nutrition_plan_id,
-                example_day_id : null,
-                meal_time : null,
-            },
-        });
-        
-        
-         // COLLECTIONS
-        window.app.Example_day_meals_collection = Backbone.Collection.extend({
-            url : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&',
-            model: window.app.Example_day_meal_model
-        });
-        
-        window.app.Nutrition_guide_recipes_collection = Backbone.Collection.extend({
-            url : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_guide_recipes&'
-        });
-        
-        
-        // END NUTRITION GUIDE
-        
-        
-        
         
         //CONTROLLER
         
@@ -1252,17 +922,19 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
 
             targets: function () {
                  this.no_active_plan_action();
-
                  this.common_actions();
                  $("#targets_wrapper").show();
                  $("#targets_link").addClass("active_link");
-                  
+                 
+                 
+                 
                  //draw targets
                  setTargetData(1);
                  setTargetData(2);
                  setTargetData(3);
                  
                  window.app.nutrition_plan_model.connect_targets_comments();
+                 
                  
             },
 

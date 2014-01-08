@@ -1192,11 +1192,6 @@ defined('_JEXEC') or die;
 
         Backbone.history.start();  
         
-        window.fuckAlert = function() {
-            alert('fuck');
-        }
-        
-        
     })($js);
     
 </script>
