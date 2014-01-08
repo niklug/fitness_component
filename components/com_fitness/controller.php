@@ -77,7 +77,13 @@ class FitnessController extends JController {
         $data_encoded = JRequest::getVar('data_encoded');
         echo $this->admin_nutrition_plan_model->getTargetsData($data_encoded);
     }
-
+    
+    function nutrition_targets() {
+        $view = $this -> getView('nutrition_planning', 'json');
+        $view->setModel($this->getModel('goals_periods'));
+        $view -> nutrition_targets(); 
+    }
+    
     function saveIngredient() {
         $table = JRequest::getVar('table');
         $ingredient_encoded = JRequest::getVar('ingredient_encoded');
@@ -203,10 +209,10 @@ class FitnessController extends JController {
 	}
     
     // nutrition plan
-    function populatePlan() {
+    function nutrition_plan() {
         $view = $this -> getView('nutrition_planning', 'json');
         $view->setModel($this->getModel('goals_periods'));
-        $view -> populatePlan(); 
+        $view -> nutrition_plan(); 
     }
     
     // recipe database
@@ -461,7 +467,7 @@ class FitnessController extends JController {
         $view -> getNutritionTarget(); 
     }
     
-    
+
     function updateDiaryItem() {
         $view = $this -> getView('nutrition_diaries', 'json');
         $view->setModel($this->getModel('nutrition_diaries'));

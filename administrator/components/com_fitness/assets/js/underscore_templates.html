@@ -417,9 +417,6 @@
 
 
 <script type="text/template" id="nutrition_plan_template">
-    <%
-        var plan_data = model.attributes.plan_data;
-    %>
     <table width="100%">
             <tr>
                 <td width="40%">
@@ -434,7 +431,7 @@
                                     </td>
                                     <td>
                                         <span class="grey_title">
-                                            <%= plan_data.client_name %>
+                                            <%= client_name %>
                                         </span>
                                     </td>
                                 </tr>
@@ -444,7 +441,7 @@
                                     </td>
                                     <td>
                                         <span class="grey_title">
-                                            <%= plan_data.trainer_name %>
+                                            <%= trainer_name %>
                                         </span>
                                     </td>
                                 </tr>
@@ -455,7 +452,7 @@
                                     <td>
                                         <span class="grey_title">
                                             <%
-                                            var secondary_trainers = plan_data.secondary_trainers;
+                                            var secondary_trainers = secondary_trainers;
                                             _.each(secondary_trainers, function(item, key){ %>
                                                 <%=  item + " <br/>" %>
                                             <%
@@ -481,7 +478,7 @@
                                     </td>
                                     <td>
                                         <span class="grey_title">
-                                            <%= plan_data.primary_goal_name %>
+                                            <%= primary_goal_name %>
                                         </span>
                                     </td>
                                 </tr>
@@ -492,7 +489,7 @@
                                     <td>
                                         <span class="grey_title">
                                             <%
-                                            var d1 = new Date(Date.parse(plan_data.primary_goal_start_date));            
+                                            var d1 = new Date(Date.parse(primary_goal_start_date));            
                                             var primary_goal_start_date = moment(d1).format("dddd D MMMM  YYYY");      
                                             %>
                                             <%= primary_goal_start_date %>
@@ -506,7 +503,7 @@
                                     <td>
                                         <span class="grey_title">
                                             <%
-                                            var d2 = new Date(Date.parse(plan_data.primary_goal_deadline));            
+                                            var d2 = new Date(Date.parse(primary_goal_deadline));            
                                             var primary_goal_deadline = moment(d2).format("dddd D MMMM  YYYY");      
                                             %>
                                             <%= primary_goal_deadline %>
@@ -524,7 +521,7 @@
                                     </td>
                                     <td>
                                         <span class="grey_title">
-                                            <%= plan_data.mini_goal_name %>
+                                            <%= mini_goal_name %>
                                         </span>
                                     </td>
                                 </tr>
@@ -534,7 +531,7 @@
                                     </td>
                                     <td>
                                         <span class="grey_title">
-                                            <%= plan_data.training_period_name %>
+                                            <%= training_period_name %>
                                         </span>
                                     </td>
                                 </tr>
@@ -545,7 +542,7 @@
                                     <td>
                                         <span class="grey_title">
                                             <%
-                                            var d3 = new Date(Date.parse(plan_data.active_start));            
+                                            var d3 = new Date(Date.parse(active_start));            
                                             var active_start = moment(d3).format("dddd D MMMM  YYYY");      
                                             %>
                                             <%= active_start %>
@@ -559,7 +556,7 @@
                                     <td>
                                         <span class="grey_title">
                                             <%
-                                            var d4 = new Date(Date.parse(plan_data.active_finish));            
+                                            var d4 = new Date(Date.parse(active_finish));            
                                             var active_finish = moment(d4).format("dddd D MMMM  YYYY");      
                                             %>
                                             <%= active_finish %>
@@ -586,14 +583,14 @@
                         </td>
                         <td>
                             <span class="grey_title">
-                                 <%= plan_data.nutrition_focus_name %>
+                                 <%= nutrition_focus_name %>
                             </span>
                         </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
-                            <%= plan_data.trainer_comments %>
+                            <%= trainer_comments %>
                         </td>
                     </tr>
                 </table> 
@@ -613,7 +610,7 @@
         <li><a onclick="javascript:void(0)"  id="nutrition_guide_link" class="plan_menu_link"  href="javascript:void(0)">NUTRITION GUIDE</a></li>
         <li><a onclick="javascript:void(0)"  id="information_link" class="plan_menu_link"  href="javascript:void(0)">INFO</a></li>
         <li><a onclick="javascript:void(0)"  id="archive_focus_link" class="plan_menu_link"  href="javascript:void(0)">ARCHIVE</a></li>
-        <li style="display:none;" id="close_tab" ><a onclick="javascript:void(0)"  id="close_link" class="plan_menu_link"  href="javascript:void(0)">CLOSE</a></li>
+        <li style="display:none;" id="close_tab" ><a onclick="javascript:void(0)"  id="close_link" class="plan_menu_link"  href="javascript:void(0)">ACTIVE PLAN</a></li>
     </ul>
 </script>
 
@@ -3795,33 +3792,95 @@
 </script>
 
 
+<script type="text/template" id="nutrition_plan_history_template">
+    <div class="fitness_block_wrapper" style="min-height: 100px;">
+        <h3>NUTRITION PLAN HISTORY</h3>
+        <hr class="orange_line">
+        <div class="internal_wrapper">
+            <table width="100%">
+                <thead>
+                    <th>
+                        START DATE  
+                    </th>
+                    <th>
+                        END DATE 
+                    </th>
+                    <th>
+                        MINI GOAL 
+                    </th>
+                    <th>
+                        NUTRITION FOCUS 
+                    </th>
+                    <th>
+                        CALS
+                    </th>
+                    <th>
+                       PRO %
+                    </th>
+                    <th>
+                        FAT %
+                    </th>
+                    <th>
+                        CARBS %
+                    </th>
+                    <th>
+                        TRAINER
+                    </th>
+                    <th>
+                        VIEW
+                    </th>
+                </thead>
+                <tbody>
+                <% _.each(items, function(item){ %>
+                       
+                        <tr>
+                            <td><%= item.active_start %></td>
+                            <td><%= item.active_finish %></td>
+                            <td><%= item.mini_goal_name %></td>
+                            <td><%= item.nutrition_focus_name %></td>
+                            <td><%= item.calories %></td>
+                            <td><%= item.protein %></td>
+                            <td><%= item.fats %></td>
+                            <td><%= item.carbs %></td>
+                            <td><%= item.trainer_id %></td>
+                            <td><a  href="javascript:void(0)"><span data-id="<%= item.id %>"close_tab class="preview"></span></a></td>
+                        </tr>
+                   <% }); %>
+
+                </tbody>
+            </table> 
+        </div>
+    </div>
+</script>
+
+
+
 <script type="text/template" id="target_block_template">
-    <div class="internal_wrapper" style="height:240px;">
+    <div class="internal_wrapper" style="height:300px;">
         <table width="100%">
             <tr>
                 <td  class="center" width="300px">
                     <h6>ACTIVITY LEVEL</h6>
-                    <span style="line-height: 69px;font-size:28px; color:#AD0C0C;font-weight:bold;">
-                        Heavy Training Day
-                    </span>
+                    <span class="title" style="line-height: 69px;font-size:28px;font-weight:bold;"> </span>
                 </td>
                 <td  class="center">
-                    <div class="pie-container">
+                    <div  class="pie-container">
                         <h6 style="margin-top:10px;margin-bottom: 5px">MACRONUTRIENT RATIOS</h6>
-                        <div id="placeholder_targets_1" class="placeholder_pie"></div>
+                        <div style="width:220px;height:220px;font-size: 14px; line-height: 1.2em;" class="placeholder_pie"></div>
                     </div>
                 </td>
                 <td class="center">
                     <h6 style="margin-top:50px;">TARGET CALORIE INTAKE</h6> 
-                    <div id="calories_value_1" style="line-height: 80px;font-size: 48px; color:#00983A; font-weight: bold;"></div>
+                    <div style="line-height: 80px;font-size: 48px; color:#00983A; font-weight: bold;"><%= calories %></div>
                     <div  style="font-size: 22px; color:#00983A;font-weight: bold; height: 40px;"> calories</div>
                 </td>
                 <td class="center">
                     <h6 style="margin-top:50px;">TARGET WATER INTAKE</h6>
-                    <div id="water_value_1" style="line-height: 80px;font-size:48px; color:#3F9EEB; font-weight: bold;"></div>
+                    <div style="line-height: 80px;font-size:48px; color:#3F9EEB; font-weight: bold;"><%= water %></div>
                     <div style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">millilitres</div>
                 </td>
             </tr>
         </table> 
     </div>
+    <hr>
 </script>

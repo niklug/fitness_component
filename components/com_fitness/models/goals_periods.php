@@ -230,7 +230,7 @@ class FitnessModelgoals_periods extends JModelList {
     
     public function getUserPans($client_id, $nutrition_plan_id) {
         $db = JFactory::getDbo();
-        $sql = "SELECT a.*, 
+        $query = "SELECT a.*, 
              (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
              mgn.name AS mini_goal_name,
              nf.name AS nutrition_focus_name,
@@ -256,37 +256,54 @@ class FitnessModelgoals_periods extends JModelList {
             $sql .= " AND a.id <> '$nutrition_plan_id'";
         }
         
-        $db->setQuery($sql);
-        if(!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $result = $db->loadObjectList();
-        return $result;
+        return  FitnessFactory::customQuery($query, 1);
     }
     
-    public function populatePlan($data_encoded) {
-        $status['success'] = 1;
-        $data = json_decode($data_encoded);
-        $id = $data->id;
 
-        $helper = new FitnessHelper();
-       
-        try {
-            $plan_data = $helper->getPlanData($id);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
+    public function nutrition_plan() {
+
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
         }
 
-        $client_id = $plan_data->client_id;
-        
-        $client_trainers = $helper->get_client_trainers_names($client_id);
-        
-        $plan_data->secondary_trainers = $client_trainers;
+        $model = json_decode(JRequest::getVar('model'));
 
-        $result = array('status' => $status, 'data' => $plan_data);
-        return $result;
+        $table = '#__fitness_nutrition_plan';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $id = JRequest::getVar('id');
+
+                $client_id = JRequest::getVar('client_id');
+
+                if($client_id) {
+                    $plans = $this->getUserPans($client_id, $id);
+                    return $plans;
+                } 
+
+                $plan_data = $helper->getPlanData($id);
+
+                $client_id = $plan_data->client_id;
+
+                $client_trainers = $helper->get_client_trainers_names($client_id);
+
+                $plan_data->secondary_trainers = $client_trainers;
+
+                return $plan_data;
+
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
     }
     
     
@@ -316,7 +333,38 @@ class FitnessModelgoals_periods extends JModelList {
         
     }
     
+    function getNutritionTargets($nutrition_plan_id) {
+        $query = "SELECT * FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id='$nutrition_plan_id'";
+        return FitnessHelper::customQuery($query, 1);
+    }
+
     
+    public function nutrition_targets($nutrition_plan_id) {
 
+        $method = JRequest::getVar('_method');
 
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+
+        $table = '#__fitness_nutrition_plan';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                return $this->getNutritionTargets($nutrition_plan_id);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
+    
 }

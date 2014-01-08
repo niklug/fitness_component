@@ -23,191 +23,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     
     <!-- OVERVIEW -->
     <div id="overview_wrapper" class="block">
-        <table width="100%">
-            <tr>
-                <td width="40%">
-                    <div class="fitness_block_wrapper" style="min-height:224px;">
-                        <h3>MY TRAINERS</h3>
-                        <hr class="orange_line">
-                        <div class="internal_wrapper">
-                            <table width="100%">
-                                <tr>
-                                    <td>
-                                        Client Name
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php echo $user->name; ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Primary Trainer
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php echo JFactory::getUser($trainer_id)->name ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: top;">
-                                        Secondary Trainers
-                                    </td>
-                                    <td >
-                                        <span class="grey_title">
-                                            <?php
-                                            foreach ($this->secondary_trainers as $trainer) {
-                                                echo $trainer . "<br/>";
-                                            };
-                                            ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="fitness_block_wrapper" style="min-height:224px;">
-                        <h3>NUTRITION PLAN & TRAINING PERIOD</h3>
-                        <hr class="orange_line">
-                        <div class="internal_wrapper">
-                            <table width="100%">
-                                <tr>
-                                    <td>
-                                        Primary Goal 
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php
-                                            echo $this->active_plan_data->primary_goal_name;
-                                            ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Start Date
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php
-                                                $jdate = new JDate($this->active_plan_data->primary_goal_start_date);
-                                                echo $jdate->toFormat('%A %d %B %Y');
-                                            ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Achieve By 
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php
-                                                $jdate = new JDate($this->active_plan_data->primary_goal_deadline);
-                                                echo $jdate->toFormat('%A %d %B %Y');
-                                            ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <hr>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Mini Goal 
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php
-                                            echo $this->active_plan_data->mini_goal_name;
-                                            ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Training Period 
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php
-                                            echo $this->active_plan_data->training_period_name;
-                                            ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Start Date
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php
-                                                $jdate = new JDate($this->active_plan_data->active_start);
-                                                echo $jdate->toFormat('%A %d %B %Y');
-                                            ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Achieve By 
-                                    </td>
-                                    <td>
-                                        <span class="grey_title">
-                                            <?php
-                                                $jdate = new JDate($this->active_plan_data->active_finish);
-                                                echo $jdate->toFormat('%A %d %B %Y');
-                                            ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            
-        </table>
-   
-    
-        <br/>
-
-        <div class="fitness_block_wrapper" style="min-height:150px;margin: 2px;">
-            <h3>MY NUTRITION FOCUS</h3>
-            <hr class="orange_line">
-            <div class="internal_wrapper">
-                <table width="100%">
-                    <tr>
-                        <td width="20%">
-                            Nutrition Focus
-                        </td>
-                        <td>
-                            <span class="grey_title">
-                                 <?php echo $this->active_plan_data->nutrition_focus_name; ?>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <?php echo $this->active_plan_data->trainer_comments ?>
-                        </td>
-                    </tr>
-                </table> 
-
-
-            </div>
-        </div>
-        
-        <br/>
-
+        <div id="nutrition_focus_wrapper"></div>
         <div class="fitness_block_wrapper" style="min-height:150px;margin: 2px;">
             <div  style="width:400px; float: left;">
                 <h3>MY GOALS & TRAINING PERIODS</h3>
@@ -246,106 +62,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     
     <!-- TARGETS -->
     <div id="targets_wrapper" class="block">
-        <div class="fitness_block_wrapper" style="min-height: 300px;">
-            <h3>DAILY MACRONUTRIENT & CALORIE TARGETS</h3>
-            <hr class="orange_line">
-            <div class="internal_wrapper" style="height:240px;">
-                <table width="100%">
-                    <tr>
-                        <td  class="center" width="300px">
-                            <h6>ACTIVITY LEVEL</h6>
-                            
-                            <span style="line-height: 69px;font-size:28px; color:#AD0C0C;font-weight:bold;">
-                                Heavy Training Day
-                            </span>
-                        </td>
-                        <td  class="center">
-                            <div class="pie-container">
-                                <h6 style="margin-top:10px;margin-bottom: 5px">MACRONUTRIENT RATIOS</h6>
-                                <div id="placeholder_targets_1" class="placeholder_pie"></div>
-                            </div>
-                        </td>
-                        <td class="center">
-                            <h6 style="margin-top:50px;">TARGET CALORIE INTAKE</h6> 
-                            <div id="calories_value_1" style="line-height: 80px;font-size: 48px; color:#00983A; font-weight: bold;"></div>
-                            <div  style="font-size: 22px; color:#00983A;font-weight: bold; height: 40px;"> calories</div>
-                        </td>
-                        <td class="center">
-                            <h6 style="margin-top:50px;">TARGET WATER INTAKE</h6>
-                            <div id="water_value_1" style="line-height: 80px;font-size:48px; color:#3F9EEB; font-weight: bold;"></div>
-                            <div style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">millilitres</div>
-                            
-                        </td>
-                    </tr>
-                </table> 
-            </div>
-            <br/>
-            <hr>
-            <br/>
-            <div class="internal_wrapper" style="height:225px;">
-                <table width="100%">
-                    <tr>
-                        <td  class="center" width="300px">
-                            <h6>ACTIVITY LEVEL</h6>
-                            
-                            <span style="line-height: 69px;font-size:28px; color:#0D7F22;font-weight:bold;">
-                                Light Training Day
-                            </span>
-                        </td>
-                        <td  class="center">
-                            <div class="pie-container">
-                                <h6 style="padding-bottom:5px;margin-top: -6px;" >MACRONUTRIENT RATIOS</h6>
-                                <div id="placeholder_targets_2" class="placeholder_pie"></div>
-                            </div>
-                        </td>
-                        <td class="center">
-                            <h6 style="margin-top:50px;">TARGET CALORIE INTAKE</h6> 
-                            <div id="calories_value_2" style="line-height: 80px;font-size: 48px; color:#00983A; font-weight: bold;"></div>
-                            <div  style="font-size: 22px; color:#00983A;font-weight: bold; height: 40px;"> calories</div>
-                        </td>
-                        <td class="center">
-                            <h6 style="margin-top:50px;">TARGET WATER INTAKE</h6>
-                            <div id="water_value_2" style="line-height: 80px;font-size:48px; color:#3F9EEB; font-weight: bold;"></div>
-                            <div style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">millilitres</div>
-                            
-                        </td>
-                    </tr>
-                </table> 
-            </div>
-            
-            <br/>
-            <hr>
-            <br/>
-            <div class="internal_wrapper" style="height:245px;">
-                <table width="100%">
-                    <tr>
-                        <td  class="center" width="300px">
-                            <h6>ACTIVITY LEVEL</h6>
-                            
-                            <span style="line-height: 69px;font-size:28px; color:#223FAA; font-weight:bold;">
-                                Recovery / Rest Day
-                            </span>
-                        </td>
-                        <td  class="center">
-                            <div class="pie-container">
-                                <h6 style="padding-bottom:5px;margin-top: -6px;">MACRONUTRIENT RATIOS</h6>
-                                <div id="placeholder_targets_3" class="placeholder_pie"></div>
-                            </div>
-                        </td>
-                        <td class="center">
-                            <h6 style="margin-top:50px;">TARGET CALORIE INTAKE</h6> 
-                            <div id="calories_value_3" style="line-height: 80px;font-size: 48px; color:#00983A; font-weight: bold;"></div>
-                            <div  style="font-size: 22px; color:#00983A;font-weight: bold; height: 40px;"> calories</div>
-                        </td>
-                        <td class="center">
-                            <h6 style="margin-top:50px;">TARGET WATER INTAKE</h6>
-                            <div id="water_value_3" style="line-height: 80px;font-size:48px; color:#3F9EEB; font-weight: bold;"></div>
-                            <div style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">millilitres</div>
-                            
-                        </td>
-                    </tr>
-                </table> 
-            </div>
+        <div id="targets_container" class="fitness_block_wrapper" style="min-height: 300px;">
         </div>
         <div class="clr"></div>
         <br/>
@@ -494,66 +211,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
     
     <!-- ARCHIVE -->
     <div id="archive_wrapper" class="block">
-        <div class="fitness_block_wrapper" style="min-height: 100px;">
-            <h3>NUTRITION PLAN HISTORY</h3>
-            <hr class="orange_line">
-            <div class="internal_wrapper">
-                <table width="100%">
-                    <thead>
-                        <th>
-                            START DATE  
-                        </th>
-                        <th>
-                            END DATE 
-                        </th>
-                        <th>
-                            MINI GOAL 
-                        </th>
-                        <th>
-                            NUTRITION FOCUS 
-                        </th>
-                        <th>
-                            CALS
-                        </th>
-                        <th>
-                           PRO %
-                        </th>
-                        <th>
-                            FAT %
-                        </th>
-                        <th>
-                            CARBS %
-                        </th>
-                        <th>
-                            TRAINER
-                        </th>
-                        <th>
-                            VIEW
-                        </th>
-                    </thead>
-                    <tbody>
-                        <?php
-                           $plans = $this->goals_periods_model->getUserPans($user->id, $nutrition_plan_id);
-                           foreach ($plans as $item) {
-                                echo "<tr>";
-                                echo "<td>" . $item->active_start . "</td>";
-                                echo "<td>" . $item->active_finish . "</td>";
-                                echo "<td>" . $item->mini_goal_name . "</td>";
-                                echo "<td>" . $item->nutrition_focus_name . "</td>";
-                                echo "<td>" . $item->calories . "</td>";
-                                echo "<td>" . $item->protein . "</td>";
-                                echo "<td>" . $item->fats . "</td>";
-                                echo "<td>" . $item->carbs . "</td>";
-                                echo "<td>" . JFactory::getUser($item->trainer_id)->name . "</td>";
-                                echo '<td><a href="javascript:void(0)"><span data-id="' . $item->id . '" class="preview"></span></a></td>';
-                                echo '</tr>';
-                           }
-                        ?>
-                    </tbody>
-                </table> 
-            </div>
-        </div>
-        
+
     </div>
     
     
@@ -584,6 +242,8 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             'minigoals_comments_db_table' : '#__fitness_mini_goal_comments',
             'nutrition_plan_targets_comments_db_table' : '#__fitness_nutrition_plan_targets_comments',
             'nutrition_plan_macronutrients_comments_db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
+            
+            'client_id' : '<?php echo JFactory::getUser()->id;?>',
             
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
             
@@ -689,44 +349,6 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         
         
 
-        
-        //TARGETS
-        var heavy_target = <?php echo $heavy_target;?>;
-        var light_target = <?php echo $light_target;?>;
-        var rest_target = <?php echo $rest_target;?>;
-
-        
-        function setTargetData(activity_level) {
-            var activity_data;
-            if(activity_level == '1') activity_data = heavy_target;
-            if(activity_level == '2') activity_data = light_target;
-            if(activity_level == '3') activity_data = rest_target;
-
-
-            var calories = activity_data.calories;
-            var water = activity_data.water;
-            
-            $("#calories_value_" + activity_level).html(calories);
-            $("#water_value_" + activity_level).html(water);
-              
-            //console.log(activity_data);
-            var data = [
-                {label: "Protein:", data: [[1, activity_data.protein]]},
-                {label: "Carbs:", data: [[1, activity_data.carbs]]},
-                {label: "Fat:", data: [[1, activity_data.fats]]}
-            ];
-
-            var container = $("#placeholder_targets_" + activity_level);
-
-            var targets_pie = $.drawPie(data, container, {'no_percent_label' : false});
-
-            targets_pie.draw(); 
-        }
-        
-        
-        
-        
-       
         window.app.Nutrition_plan_model = Backbone.Model.extend({
 
             ajaxCall : function(data, url, view, task, table, handleData) {
@@ -743,7 +365,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                 //console.log(data);
                 var self = this;
                 this.ajaxCall(data, url, view, task, table, function(output) {
-                    //console.log(output);
+                    console.log(output);
                     self.set("plan_data", output);
                 });
             },
@@ -780,33 +402,113 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             
         });
         
+        //MODELS
+        window.app.Nutrition_plan_overview_model = Backbone.Model.extend({
+            urlRoot : options.fitness_frontend_url + '&format=text&view=goals_periods&task=nutrition_plan&',
+            defaults : {
+                id : options.item_id,
+                client_id : options.client_id
+            },
+            
+        });
         
+        window.app.Nutrition_plan_target_model = Backbone.Model.extend({
+            defaults : {
+                id : options.item_id,
+            },
+            
+        });
+        
+        // COLLECTIONS
+        window.app.Nutrition_plans_collection = Backbone.Collection.extend({
+            url : options.fitness_frontend_url + '&format=text&view=goals_periods&task=nutrition_plan&',
+            model: window.app.Nutrition_plan_overview_model 
+        });
+        
+        window.app.Nutrition_plan_target_collection = Backbone.Collection.extend({
+            url : options.fitness_frontend_url + '&format=text&view=goals_periods&task=nutrition_targets&',
+            model: window.app.Nutrition_plan_target_model 
+        });
         ////
         window.app.Nutrition_focus_view = Backbone.View.extend({
-            initialize: function(){
-                this.render();
-            },
             render: function(){
-                var nutrition_plan_id = this.options.nutrition_plan_id;
-                this.model.populatePlan(nutrition_plan_id);
-                this.listenToOnce(this.model, "change:plan_data", this.onPopulatePlan);
-            },
-
-            loadTemplate : function(variables, target) {
-                var template = _.template( $("#" +target).html(), variables );
+                var template = _.template( $("#nutrition_plan_template").html(), this.model.toJSON());
                 this.$el.html(template);
+                return this;
             },
-            onPopulatePlan : function() {
-                if (this.model.has("plan_data")){
-                    var model = this.model;
-                    var variables = {
-                        'model' : model,
-                    }
-                    this.loadTemplate(variables, this.options.template);
-                };  
-            },
-           
+            
+        });
+        
+        window.app.Archive_list_view = Backbone.View.extend({
 
+            render: function(){
+                var template = _.template( $("#nutrition_plan_history_template").html(), {'items' : this.collection.toJSON()});
+                this.$el.html(template);
+                return this;
+            },
+            
+            events: {
+                "click .preview" : "viewPlan",
+            },
+            
+            viewPlan : function(event) {
+                var id = $(event.target).attr('data-id');
+                window.app.nutrition_plan_overview_model.set({id : id});
+                $("#close_tab").show();
+                window.app.controller.navigate("!/overview", true);
+            },
+        });
+        
+        window.app.Target_block_view = Backbone.View.extend({
+            initialize: function(){
+                _.bindAll(this, 'setTargetData', 'render');
+                this.model.on("destroy", this.close, this);
+            },
+            
+            render: function(){
+                var template = _.template( $("#target_block_template").html(), this.model.toJSON());
+                this.$el.html(template);
+   
+                setTimeout(this.setTargetData,100);
+                
+                return this;
+            },
+            
+            setTargetData : function() {
+                var model = this.model;
+                var activity_level;
+                var type = model.get('type');
+                
+                var tite_container = this.$el.find(".title");
+                
+                if(type == 'heavy') {
+                    activity_level = '1';
+                    tite_container.text('Heavy Training Day');
+                    tite_container.css('color', '#AD0C0C');
+                }
+                if(type == 'light') {
+                    activity_level = '2';
+                    tite_container.text('Light Training Day');
+                    tite_container.css('color', '#0D7F22');
+                }
+                if(type == 'rest') {
+                    activity_level = '3';
+                    tite_container.text('Recovery / Rest Day');
+                    tite_container.css('color', '#223FAA');
+                }
+
+                var data = [
+                    {label: "Protein:", data: [[1, model.get('protein')]]},
+                    {label: "Carbs:", data: [[1, model.get('carbs')]]},
+                    {label: "Fat:", data: [[1, model.get('fats')]]}
+                ];
+
+                var container = this.$el.find(".placeholder_pie");
+      
+                var targets_pie = $.drawPie(data, container, {'no_percent_label' : false});
+
+                targets_pie.draw(); 
+            }
         });
         
         window.app.Nutrition_plan_menu_view = Backbone.View.extend({
@@ -875,19 +577,6 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         window.app.nutrition_plan_menu_view = new window.app.Nutrition_plan_menu_view();            
 
         
-        $(".preview").on('click', function() {
-            var id = $(this).attr('data-id');
-            $("#close_tab").show();
-            window.app.controller.navigate("close", true);
-            $(".block").hide();
-            $("#close_wrapper").show();
-            $(".plan_menu_link").removeClass("active_link");
-            $("#close_link").addClass("active_link");
-            
-            new window.app.Nutrition_focus_view({ el: $("#close_wrapper"), model : window.app.nutrition_plan_model, 'nutrition_plan_id' : id, 'template' : 'nutrition_plan_template'});
-        });
-        
-        
         //INIT
         window.app.nutrition_plan_model = new window.app.Nutrition_plan_model(options);
 
@@ -895,6 +584,15 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         //CONTROLLER
         
         var Controller = Backbone.Router.extend({
+        
+            initialize: function(){
+                window.app.nutrition_plan_overview_model = new window.app.Nutrition_plan_overview_model({'id' : options.item_id});
+                
+                window.app.nutrition_plans_collection = new window.app.Nutrition_plans_collection();
+                
+                window.app.nutrition_plan_target_collection = new window.app.Nutrition_plan_target_collection({'id' : options.item_id});
+            },
+        
             routes: {
                 "": "overview", 
                 "!/": "overview", 
@@ -911,12 +609,24 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
 
             overview: function () {
                  this.no_active_plan_action();
-
                  this.common_actions();
                  $("#overview_wrapper").show();
                  $("#overview_link").addClass("active_link");
                  // connect Graph from Goals frontend logic
                  $.goals_frontend(options);
+                 var id = window.app.nutrition_plan_overview_model.get('id');
+                 window.app.nutrition_plan_overview_model.fetch({
+                    data: {id : id},
+                    wait : true,
+                    success : function(model, response) {
+                        window.app.nutrition_focus_view = new window.app.Nutrition_focus_view({model : model});
+                        
+                        $("#nutrition_focus_wrapper").html(window.app.nutrition_focus_view.render().el);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
                  
             },
 
@@ -925,15 +635,27 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                  this.common_actions();
                  $("#targets_wrapper").show();
                  $("#targets_link").addClass("active_link");
-                 
-                 
-                 
-                 //draw targets
-                 setTargetData(1);
-                 setTargetData(2);
-                 setTargetData(3);
-                 
+
                  window.app.nutrition_plan_model.connect_targets_comments();
+                 var id = window.app.nutrition_plan_overview_model.get('id');
+                 window.app.nutrition_plan_target_collection.fetch({
+                    data: {id : id, client_id : options.client_id},
+                    wait : true,
+                    success : function(collection, response) {
+                        $("#targets_container").empty();
+      
+                        _.each(collection.models, function(model) {
+                            window.app.target_block_view = new window.app.Target_block_view({model : model});
+                            $("#targets_container").append(window.app.target_block_view.render().el);
+                        });
+
+                      
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
+                 
                  
                  
             },
@@ -956,7 +678,12 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                  
                  window.app.protocols = new window.app.Protocols_collection(); 
                  
-                 window.app.protocols.fetch({data: {nutrition_plan_id : window.app.protocol_options.nutrition_plan_id}});
+                 window.app.protocols.fetch({
+                    data: {nutrition_plan_id : window.app.protocol_options.nutrition_plan_id},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
                  
                  window.app.nutrition_plan_protocols_view = new window.app.Nutrition_plan_protocols_view({el : $("#protocols_wrapper"), collection : window.app.protocols}); 
 
@@ -982,9 +709,6 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                         nutrition_plan_id : window.app.example_day_options.nutrition_plan_id,
                         example_day_id : example_day_id
                     },
-                    success : function (collection, response) {
-                        //console.log(response);
-                    },
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
@@ -1004,15 +728,31 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
                  this.common_actions();
                  $("#archive_wrapper").show();
                  $("#archive_focus_link").addClass("active_link");
+
+                 window.app.nutrition_plans_collection.fetch({
+                    data: {id : options.item_id, client_id : options.client_id},
+                    wait : true,
+                    success : function(collection, response) {
+                        window.app.archive_list_view = new window.app.Archive_list_view({collection : collection});
+                        
+                        $("#archive_wrapper").html(window.app.archive_list_view.render().el);
+                        
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
             },
                     
             close: function() {
+                 this.no_active_plan_action();
                  $("#close_tab").hide();
-                 this.archive();
+                 window.app.nutrition_plan_overview_model.set({id : options.item_id});
+                 this.overview();
             },
             
             common_actions : function() {
-                $(".block, #close_tab").hide();
+                $(".block").hide();
                 $(".plan_menu_link").removeClass("active_link")
             },
             

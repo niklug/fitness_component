@@ -355,8 +355,6 @@ class FitnessModelNutrition_diaries extends JModelList {
         return $result;
     }
     
-
-    
     public function updateDiaryItem($table, $data_encoded) {
         $status['success'] = 1;
 
