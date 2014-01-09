@@ -3081,6 +3081,21 @@
     </div>
 </script>
 
+<script type="text/template" id="nutrition_plan_frontend_supplements_template">
+    <table width="100%">
+        <tr>
+            <td  class="left">
+                <h3 style="color:#FFFFFF !important;">SUPPLEMENTS & SUPPLEMENT PROTOCOLS</h3>
+            </td>
+            <td>
+                <a data-id="<%= id %>" style="float:right;" id="pdf_button_supplements"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
+                <a data-id="<%= id %>"  style="float:right;" id="email_button_supplements" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
+            </td>
+        </tr>
+    </table>
+    <div class="protocols_wrapper"> </div>
+</script>
+
 <script type="text/template" id="nutrition_plan_frontend_supplement_template">
     <div style="margin-top:10px;">
         <table width="100%">
@@ -3118,9 +3133,9 @@
                         </tr>
                     </table>
                 </td>
-                
+
                 <td style="vertical-align:top;" width="200">
-                    
+
                     <% if(image) {
                         var background_image = 'url(' + "'" + image  + "')" ;
                     %>
@@ -3129,7 +3144,7 @@
                     <% } %>
                     <a style="float:right;margin-top:5px;" class="view_product" data-url="<%= url %>"  href="javascript:void(0)">[VIEW PRODUCT]</a> 
                 </td>
-                
+
             </tr>
         </table>
         <div class="clr"></div>
@@ -3883,4 +3898,92 @@
         </table> 
     </div>
     <hr>
+</script>
+
+<script type="text/template" id="macronutrients_template">
+    <table width="100%">
+            <tr>
+                <td  class="left">
+                    <h3 style="color:#FFFFFF !important;">ALLOWED MACRONUTRIENTS</h3>
+                </td>
+                <td>
+                    <a data-id="<%= id %>" style="float:right;" id="pdf_button_macros"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
+                    <a data-id="<%= id %>"  style="float:right;" id="email_button_macros" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
+                </td>
+            </tr>
+        </table>
+
+        <div class="fitness_block_wrapper" style="min-height: 100px;">
+            <h3>ALLOWED PROTEINS</h3>
+            <hr class="orange_line">
+            <div class="internal_wrapper">
+                <%= allowed_proteins %>
+            </div>
+        </div>
+        
+        <br/>
+        
+        <div class="fitness_block_wrapper" style="min-height: 100px;">
+            <h3>ALLOWED FATS</h3>
+            <hr class="orange_line">
+            <div class="internal_wrapper">
+                <%= allowed_fats %>
+            </div>
+        </div>
+        
+        <br/>
+        
+        <div class="fitness_block_wrapper" style="min-height: 100px;">
+            <h3>ALLOWED CARBOHYDRATES</h3>
+            <hr class="orange_line">
+            <div class="internal_wrapper">
+                <%= allowed_carbs %>
+            </div>
+        </div>
+        
+        <br/>
+        
+        <div class="fitness_block_wrapper" style="min-height: 100px;">
+            <h3>ALLOWED LIQUIDS</h3>
+            <hr class="orange_line">
+            <div class="internal_wrapper">
+                <%= allowed_liquids %>
+            </div>
+        </div>
+
+        <br/>
+        
+        <div class="fitness_block_wrapper" style="min-height: 100px;">
+            <h3>OTHER RECOMMENDATIONS / INSTRUCTIONS</h3>
+            <hr class="orange_line">
+            <div class="internal_wrapper">
+                <%= other_recommendations %>
+            </div>
+        </div>
+</script>
+
+<script type="text/template" id="nutrition_plan_information_template">
+    <div>
+        <h3 style="color:#FFFFFF !important;">NUTRITION INFORMATION</h3>
+    </div>
+    <div class="fitness_block_wrapper" style="min-height: 100px;">
+        <div class="internal_wrapper">
+            <%= information %>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="email_pdf_header_template">
+    <table width="100%">
+        <tr>
+            <td  class="left">
+                <h3 style="color:#FFFFFF !important;">DAILY MENU & NUTRITION GUIDE</h3>
+            </td>
+            <td>
+                <a data-id="<%= id %>" style="float:right;"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
+                <a data-id="<%= id %>"  style="float:right;" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
+            </td>
+        </tr>
+    </table>
+    
 </script>

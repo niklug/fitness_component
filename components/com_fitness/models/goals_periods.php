@@ -253,7 +253,7 @@ class FitnessModelgoals_periods extends JModelList {
             WHERE a.client_id='$client_id' AND  a.state='1'";
         
         if($nutrition_plan_id) {
-            $sql .= " AND a.id <> '$nutrition_plan_id'";
+            $query .= " AND a.id <> '$nutrition_plan_id'";
         }
         
         return  FitnessFactory::customQuery($query, 1);
