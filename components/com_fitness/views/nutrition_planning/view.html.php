@@ -34,7 +34,17 @@ class FitnessViewNutrition_planning extends JView
 		if (count($errors = $this->get('Errors'))) {
 			throw new Exception(implode("\n", $errors));
 		}
+
+                
                 $document = &JFactory::getDocument();
+                
+                $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
+                $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/main.js');
+                
+                
+                
+                
+                
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery-ui.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.validate.min.js');

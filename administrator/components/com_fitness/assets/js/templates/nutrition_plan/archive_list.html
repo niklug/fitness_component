@@ -1,0 +1,57 @@
+<div class="fitness_block_wrapper" style="min-height: 100px;">
+    <h3>NUTRITION PLAN HISTORY</h3>
+    <hr class="orange_line">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <thead>
+                <th>
+                    START DATE  
+                </th>
+                <th>
+                    END DATE 
+                </th>
+                <th>
+                    MINI GOAL 
+                </th>
+                <th>
+                    NUTRITION FOCUS 
+                </th>
+                <th>
+                    CALS
+                </th>
+                <th>
+                   PRO %
+                </th>
+                <th>
+                    FAT %
+                </th>
+                <th>
+                    CARBS %
+                </th>
+                <th>
+                    TRAINER
+                </th>
+                <th>
+                    VIEW
+                </th>
+            </thead>
+            <tbody>
+            <% _.each(items, function(item){ %>
+                    <tr>
+                        <td><%= item.active_start %></td>
+                        <td><%= item.active_finish %></td>
+                        <td><%= item.mini_goal_name %></td>
+                        <td><%= item.nutrition_focus_name %></td>
+                        <td><%= item.calories %></td>
+                        <td><%= item.protein %></td>
+                        <td><%= item.fats %></td>
+                        <td><%= item.carbs %></td>
+                        <td><%= item.trainer_id %></td>
+                        <td><a  href="javascript:void(0)"><span data-id="<%= item.id %>"close_tab class="preview"></span></a></td>
+                    </tr>
+               <% }); %>
+
+            </tbody>
+        </table> 
+    </div>
+</div>

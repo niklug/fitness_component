@@ -5,13 +5,6 @@ $trainer_id =  $this->active_plan_data->trainer_id;
 
 $nutrition_plan_id = $this->active_plan_data->id;
 
-$heavy_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_plan_id, 'heavy');
-
-$light_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_plan_id, 'light');
-
-$rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_plan_id, 'rest');
-
-
 ?>
 
 <div style="opacity: 1;" class="fitness_wrapper">
@@ -56,8 +49,6 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             </div>
 
         </div>
-
-    
      </div>
     
     <!-- TARGETS -->
@@ -72,12 +63,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         <input id="add_comment_0" class="" type="button" value="Add Comment" >
         <div class="clr"></div>
     </div>
-    
-    
-    
-    
-    
-    
+
     <!-- MACRONUTRIENTS -->
     <div id="macronutrients_wrapper" class="block">
         <div id="macronutrients_container"></div>
@@ -136,6 +122,7 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
         var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
+            'base_url' : '<?php echo JURI::root();?>',
             'pending_review_text' : 'Pending Review',
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
             'user_id' : '<?php echo JFactory::getUser()->id;?>',
@@ -177,6 +164,20 @@ $rest_target = $this->nutrition_diaryform_model->getNutritionTarget($nutrition_p
             'client_id' : '<?php echo JFactory::getUser()->id;?>',
         }
         window.fitness_helper = $.fitness_helper(helper_options);
+        
+        
+        //requireJS options
+
+        require.config({
+            baseUrl: '<?php echo JURI::root();?>administrator/components/com_fitness/assets/js',
+        });
+
+
+        require(['app'], function(app) {
+                app.options = options;
+        });
+        //
+        
         
         window.app.example_day_options = {
 
