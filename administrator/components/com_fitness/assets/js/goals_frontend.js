@@ -733,6 +733,10 @@
 
         return constr;
     };
+    
+    if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
+        define( "goals_frontend", [], function () { return $.goals_frontend; } );
+    }
 
 
 })(jQuery);

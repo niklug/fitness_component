@@ -2,13 +2,15 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'models/nutrition_plan/target',
 	'text!templates/nutrition_plan/information.html'
-], function ( $, _, Backbone, app, model, template ) {
+], function ( $, _, Backbone, template ) {
 
     var view = Backbone.View.extend({
+        
+        template:_.template(template),
+        
         render: function(){
-            var template = _.template(template, model.toJSON());
+            var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
             return this;
         },

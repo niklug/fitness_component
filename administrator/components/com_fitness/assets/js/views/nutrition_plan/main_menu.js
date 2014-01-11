@@ -2,20 +2,25 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-        'routers/nutrition_plan/router',
+        'app',
 	'text!templates/nutrition_plan/main_menu.html'
-], function ( $, _, Backbone, app, controller, template ) {
+], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
+        
+        template:_.template(template),
             
         el: $("#plan_menu"), 
 
         initialize: function(){
             this.render();
+            this.controller = app.routers.nutrition_plan;
         },
 
         render: function(){
-            this.loadTemplate();
+            var template = _.template(this.template());
+            this.$el.html(template);
+            return this;
         },
 
         events: {
@@ -29,41 +34,36 @@ define([
             "click #close_tab" : "onClickClose",
         },
 
-        loadTemplate : function(variables, target) {
-            var template = _.template( template, variables );
-            this.$el.html(template);
-        },
-
         onClickOverview : function() {
-            controller.navigate("!/overview", true);
+            this.controller.navigate("!/overview", true);
         },
 
         onClickTargets : function() {
-            controller.navigate("!/targets", true);
+            this.controller.navigate("!/targets", true);
         },
 
         onClickMacronutrients : function() {
-            controller.navigate("!/macronutrients", true);
+            this.controller.navigate("!/macronutrients", true);
         },
 
         onClickSupplements : function() {
-            controller.navigate("!/supplements", true);
+            this.controller.navigate("!/supplements", true);
         },
 
         onClickNutrition_guide : function() {
-            controller.navigate("!/nutrition_guide", true);
+            this.controller.navigate("!/nutrition_guide", true);
         },
 
         onClickInformation : function() {
-            controller.navigate("!/information", true);
+            this.controller.navigate("!/information", true);
         },
 
         onClickArchive_focus : function() {
-            controller.navigate("!/archive", true);
+            this.controller.navigate("!/archive", true);
         },
 
         onClickClose : function() {
-            controller.navigate("!/close", true);
+            this.controller.navigate("!/close", true);
         }
 
     });

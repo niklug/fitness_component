@@ -36,6 +36,10 @@
 
         return constr;
     };
+    
+    if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
+        define( "AjaxCall", [], function () { return $.AjaxCall; } );
+    }
         
 })(jQuery);
 

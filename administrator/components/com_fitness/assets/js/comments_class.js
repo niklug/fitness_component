@@ -1,6 +1,8 @@
 /*
  * class provide comments system
  */
+
+
 (function($) {
     function Comments(options, item_id, sub_item_id) {
         this.options = options;
@@ -304,7 +306,6 @@
         
         
         $.AjaxCall(data, url, view, task, table, function(output){
-            console.log(output);
             var emails = output.split(',');
             var message = 'Emails were sent to: ' +  "</br>";
             $.each(emails, function(index, email) { 
@@ -324,4 +325,6 @@
         return constr;
     };
 
+
 })(jQuery);
+

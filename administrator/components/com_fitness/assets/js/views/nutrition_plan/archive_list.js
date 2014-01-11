@@ -4,15 +4,15 @@ define([
 	'backbone',
         'app',
         'routers/nutrition_plan/router',
-        'collections/nutrition_plan/nutrition_plans',
-	'models/nutrition_plan/overview',
 	'text!templates/nutrition_plan/archive_list.html'
-], function ( $, _, Backbone, app, controller, collection, model, template ) {
+], function ( $, _, Backbone, app, controller, template ) {
 
     var view = Backbone.View.extend({
 
+        template:_.template(template),
+        
         render: function(){
-            var template = _.template(template, {'items' : collection.toJSON()});
+            var template = _.template(this.template({'items' : this.collection.toJSON()}));
             this.$el.html(template);
             return this;
         },
@@ -23,9 +23,10 @@ define([
 
         viewPlan : function(event) {
             var id = $(event.target).attr('data-id');
-            model.set({id : id});
+            this.model.set({id : id});
             $("#close_tab").show();
-            controller.navigate("!/overview", true);
+            console.log(app.routers.nutrition_plan);
+            app.routers.nutrition_plan.navigate("!/overview", true);
         },
     });
             

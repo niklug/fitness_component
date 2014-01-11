@@ -112,14 +112,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
 
 
 <script type="text/javascript">
-    
-    (function($) {
-        
-        window.app = {};
-        Backbone.emulateHTTP = true ;
-        Backbone.emulateJSON = true;
-        
-        var options = {
+    var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'base_url' : '<?php echo JURI::root();?>',
@@ -139,6 +132,30 @@ $nutrition_plan_id = $this->active_plan_data->id;
             
             'item_id' : '<?php echo  $nutrition_plan_id?>'
         };
+        
+        
+        //requireJS options
+
+        require.config({
+            baseUrl: '<?php echo JURI::root();?>administrator/components/com_fitness/assets/js',
+        });
+
+
+        require(['app'], function(app) {
+                app.options = options;
+        });
+
+</script>
+
+<script src="<?php echo JURI::root();?>administrator/components/com_fitness/assets/js/main.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    
+    (function($) {
+        
+        window.app = {};
+        Backbone.emulateHTTP = true ;
+        Backbone.emulateJSON = true;
         
         //SUPPLEMENTS options
         window.app.protocol_options = {
@@ -166,16 +183,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
         window.fitness_helper = $.fitness_helper(helper_options);
         
         
-        //requireJS options
-
-        require.config({
-            baseUrl: '<?php echo JURI::root();?>administrator/components/com_fitness/assets/js',
-        });
-
-
-        require(['app'], function(app) {
-                app.options = options;
-        });
+    
         //
         
         
@@ -417,7 +425,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
         });
         
         
-        window.app.nutrition_plan_menu_view = new window.app.Nutrition_plan_menu_view();            
+        //window.app.nutrition_plan_menu_view = new window.app.Nutrition_plan_menu_view();            
         
         //CONTROLLER
         
@@ -650,11 +658,11 @@ $nutrition_plan_id = $this->active_plan_data->id;
             }
 
         });
-
+/*
         window.app.controller = new Controller(); 
 
         Backbone.history.start();  
-       
+   */    
 
     })($js);
     
