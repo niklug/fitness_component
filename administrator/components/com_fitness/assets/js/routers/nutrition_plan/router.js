@@ -5,11 +5,13 @@ define([
         'app',
         'collections/nutrition_plan/nutrition_plans',
         'collections/nutrition_plan/targets',
+        'collections/nutrition_plan/supplements/protocols',
 	'models/nutrition_plan/nutrition_plan',
         'models/nutrition_plan/target',
         'views/nutrition_plan/overview',
         'views/nutrition_plan/target_block',
         'views/nutrition_plan/macronutrients',
+        'views/nutrition_plan/supplements/frontend/protocols',
         'views/nutrition_plan/information',
         'views/nutrition_plan/archive_list'
 ], function (
@@ -19,11 +21,13 @@ define([
         app, 
         Nutrition_plans_collection,
         Targets_collection,
+        Protocols_collection,
         Nutrition_plan_model,
         Target_model,
         Overview_view,
         Target_block_view,
         Macronutrients_view,
+        Protocols_view,
         Information_view,
         Archive_list_view
     ) {
@@ -46,6 +50,7 @@ define([
                 "!/overview": "overview", 
                 "!/targets": "targets", 
                 "!/macronutrients": "macronutrients", 
+                "!/supplements": "supplements", 
                 "!/information": "information", 
                 "!/archive": "archive", 
                 "!/close": "close", 
@@ -144,6 +149,25 @@ define([
 
                 var comments_html = comments.run();
                 $("#macronutrients_comments_wrapper").html(comments_html);
+            },
+            
+            supplements: function () {
+                 this.no_active_plan_action();
+                 this.common_actions();
+                 $("#supplements_wrapper").show();
+                 $("#supplements_link").addClass("active_link");
+
+                 app.collections.protocols = new Protocols_collection(); 
+                 var id = app.models.nutrition_plan.get('id');
+                 app.collections.protocols.fetch({
+                    data: {nutrition_plan_id : id},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
+                 
+                 app.views.protocols = new Protocols_view({model : app.models.nutrition_plan, collection : app.collections.protocols}); 
+                 $("#supplements_wrapper").html(app.views.protocols.render().el);
             },
      
             information: function () {

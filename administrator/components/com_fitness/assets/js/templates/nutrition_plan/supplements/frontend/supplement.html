@@ -1,0 +1,53 @@
+<div style="margin-top:10px;">
+    <table width="100%">
+        <tr>
+            <td>
+                <table width="100%">
+                    <tr>
+                        <td width="180">
+                            <div style="color: #BC4A26 !important;font-weight: bold; padding: 2px;">SUPPLEMENT NAME</div>
+                        </td>
+                        <td>
+                            <div style="color: #fff !important;padding: 2px;" ><%= name %></div>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="vertical-align:top;">
+                            <div  style="color: #BC4A26 !important;font-weight: bold; padding: 2px;">DESCRIPTION</div>
+                        </td>
+                        <td>
+                            <div style="color: #fff !important;padding: 2px;" ><%= description %></div>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="vertical-align:top;">
+                            <div style="color: #BC4A26 !important;font-weight: bold; padding: 2px;">RECOMMENDED USAGE</div>
+                        </td>
+                        <td>
+                            <div style="color: #fff !important; padding: 2px;" ><%= comments %></div>
+                        </td>
+
+                    </tr>
+                </table>
+            </td>
+
+            <td style="vertical-align:top;" width="200">
+
+                <% if(image) {
+                    var background_image = 'url(' + "'" + image  + "')" ;
+                %>
+                    <div class="recipe_database_image" style="border: none;background-image:<%= background_image %>"></div>
+                    <div class="clr"></div>
+                <% } %>
+                <a style="float:right;margin-top:5px;" class="view_product" data-url="<%= url %>"  href="javascript:void(0)">[VIEW PRODUCT]</a> 
+            </td>
+
+        </tr>
+    </table>
+    <div class="clr"></div>
+    <hr>
+</div>

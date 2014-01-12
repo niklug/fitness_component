@@ -11,11 +11,7 @@
         
        //VIEWS
         window.app.Nutrition_plan_protocols_view = Backbone.View.extend({
-            
-            initialize: function(){
-                
-            },
-            
+           
             render: function(){
                 this.nutrition_plan_id = this.model.get('id');
                 var template = _.template( $("#nutrition_plan_frontend_supplements_template").html(), {'id' : this.nutrition_plan_id});

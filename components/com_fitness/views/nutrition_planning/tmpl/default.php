@@ -116,6 +116,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'base_url' : '<?php echo JURI::root();?>',
+            'ajax_call_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'pending_review_text' : 'Pending Review',
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
             'user_id' : '<?php echo JFactory::getUser()->id;?>',
@@ -125,6 +126,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
             'minigoals_comments_db_table' : '#__fitness_mini_goal_comments',
             'nutrition_plan_targets_comments_db_table' : '#__fitness_nutrition_plan_targets_comments',
             'nutrition_plan_macronutrients_comments_db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
+            'protocol_comments_db_table' : '#__fitness_nutrition_plan_supplements_comments',
             
             'client_id' : '<?php echo JFactory::getUser()->id;?>',
             

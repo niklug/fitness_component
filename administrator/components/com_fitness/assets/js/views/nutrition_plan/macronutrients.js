@@ -11,7 +11,7 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template( this.template(this.model.toJSON()));
+            var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
             return this;
         },
@@ -29,7 +29,7 @@ define([
 
         onClickEmail : function(event) {
             var data = {};
-            data.url = app.options.fitness_frontend_url;
+            data.url = app.options.ajax_call_url;
             data.view = '';
             data.task = 'ajax_email';
             data.table = '';
