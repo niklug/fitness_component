@@ -46,7 +46,7 @@ define([
                 'item_id' : this.model.get('nutrition_plan_id'),
                 'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : app.options.protocol_comments_db_table,
+                'db_table' : '#__fitness_nutrition_plan_supplements_comments',
                 'read_only' : true,
             };
 
@@ -54,15 +54,8 @@ define([
             
             var comments_html = comments.run();
 
-
             this.$el.find(".comments_wrapper").html(comments_html);
         },
-
-        close :function() {
-            $(this.el).unbind();
-            $(this.el).remove();
-        },
-
     });
             
     return view;

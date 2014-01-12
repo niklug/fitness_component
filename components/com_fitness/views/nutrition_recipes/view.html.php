@@ -35,7 +35,7 @@ class FitnessViewNutrition_recipes extends JView
 			throw new Exception(implode("\n", $errors));
 		}
                 $document = &JFactory::getDocument();
-                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
                 $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/fitness.css');
                 $document->addStyleSheet(JUri::root() . 'administrator/templates/system/css/system.css');
                 $document->addStyleSheet(JUri::root() . 'administrator/templates/bluestork/css/template.css');

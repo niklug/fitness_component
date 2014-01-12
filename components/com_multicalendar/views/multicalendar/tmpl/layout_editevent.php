@@ -88,10 +88,10 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/css/".$_GET["css
                 <script type="text/javascript" src="<?php echo $path; ?>js/jquery.tablednd.js"></script>
 		<script src="<?php echo $path; ?>src/Plugins/Common.js" type="text/javascript"></script>
                 
-                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'underscore-min.js'?>"></script>
-                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'backbone-min.js'?>"></script>
-                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'ajax_call_function.js'?>"></script>
-                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'fitness_helper.js'?>"></script>
+                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'underscore-min.js'?>"></script>
+                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'backbone-min.js'?>"></script>
+                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'ajax_call_function.js'?>"></script>
+                <script type="text/javascript" src="<?php echo JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'fitness_helper.js'?>"></script>
 
 
 

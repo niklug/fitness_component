@@ -39,7 +39,7 @@ class FitnessViewNutrition_recipe extends JView
 		}
                 
                 $document = &JFactory::getDocument();
-                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquery.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
 
 
 		parent::display($tpl);

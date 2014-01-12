@@ -109,7 +109,8 @@ var func = function($) {
                 }
                 html += self.createCommentTemplate(comment_obj);
             });
-            $("#comments_wrapper_" + self.sub_item_id).append(html);
+
+            $(".comments_wrapper_" + self.sub_item_id).append(html);
 
         });
 
@@ -119,7 +120,7 @@ var func = function($) {
     Comments.prototype.generateHtml = function() {
         var html = '<h5>QUESTIONS / COMMENTS / INSTRUCTIONS</h5>';
         html += '<br/>';
-        html += '<div style="position:relative;" id="comments_wrapper_' + this.sub_item_id + '">';
+        html += '<div style="position:relative;" class="comments_wrapper_' + this.sub_item_id + '">';
         html += '</div>';
         return html;
     }
@@ -325,15 +326,14 @@ var func = function($) {
         return constr;
     };
 
-};
+}
 
+func(jQuery);
 
 if (typeof define === "function") {
     define(['jquery'], function(jQuery){
         func(jQuery);
     });
-} else {
-    func(jQuery);
 }
 
 

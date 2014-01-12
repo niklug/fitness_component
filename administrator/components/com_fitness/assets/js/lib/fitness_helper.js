@@ -161,10 +161,10 @@ var func = function($) {
 
 }
 
+func(jQuery);
+
 if (typeof define === "function") {
     define(['jquery'], function(jQuery){
         func(jQuery);
     });
-} else {
-    func(jQuery);
 }
