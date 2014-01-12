@@ -1,6 +1,4 @@
-define(['jquery'], function(jQuery){
-    (function($) {
-
+var func = function($) {
         function FitnessHelper(options) {
              //// Helper Model
             Helper_model = Backbone.Model.extend({
@@ -161,7 +159,12 @@ define(['jquery'], function(jQuery){
             return constr;
         };
 
+}
 
-    })(jQuery);
-    
-});
+if (typeof define === "function") {
+    define(['jquery'], function(jQuery){
+        func(jQuery);
+    });
+} else {
+    func(jQuery);
+}

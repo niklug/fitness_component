@@ -144,6 +144,8 @@ $nutrition_plan_id = $this->active_plan_data->id;
         require(['app'], function(app) {
                 app.options = options;
         });
+        
+        
 
 </script>
 
@@ -152,7 +154,6 @@ $nutrition_plan_id = $this->active_plan_data->id;
 <script type="text/javascript">
     
     (function($) {
-        
         window.app = {};
         Backbone.emulateHTTP = true ;
         Backbone.emulateJSON = true;

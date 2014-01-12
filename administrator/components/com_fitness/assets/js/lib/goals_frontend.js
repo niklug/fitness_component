@@ -1,5 +1,4 @@
-define(['jquery'], function(jQuery){
-    (function($) {
+var func = function($) {
         function Goals_frontend(options) {
 
             //// Goal Model
@@ -734,5 +733,17 @@ define(['jquery'], function(jQuery){
             return constr;
         };
 
-    })(jQuery);
- });
+}
+
+if (typeof define === "function") {
+    define(['jquery'], function(jQuery){
+        func(jQuery);
+    });
+} else {
+    func(jQuery);
+}
+
+
+
+
+

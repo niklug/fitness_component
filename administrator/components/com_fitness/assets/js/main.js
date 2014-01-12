@@ -55,7 +55,7 @@ require([
     'jquery.fitness_helper'
 
 ], function($, _, Backbone, app, Controller, Main_menu_view) {
-    console.log(app);
+    //console.log(app);
     $.fitness_helper = $.fitness_helper(app.options);
     Backbone.emulateHTTP = true ;
     Backbone.emulateJSON = true;

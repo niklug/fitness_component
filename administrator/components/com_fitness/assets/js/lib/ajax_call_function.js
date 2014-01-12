@@ -1,8 +1,7 @@
 /*
  * Basic Ajax Call with callback response
  */
-define(['jquery'], function(jQuery){
-    (function($) {
+var func = function($) {
         function AjaxCall(data, url, view, task, table, handleData) {
             var data_encoded = JSON.stringify(data);
             $.ajax({
@@ -38,7 +37,13 @@ define(['jquery'], function(jQuery){
             return constr;
         };
 
-    })(jQuery);
+}
 
- });
+if (typeof define === "function") {
+    define(['jquery'], function(jQuery){
+        func(jQuery);
+    });
+} else {
+    func(jQuery);
+}
 
