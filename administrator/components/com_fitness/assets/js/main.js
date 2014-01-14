@@ -12,6 +12,11 @@ require.config({
             exports: 'Backbone'
         },
         
+        'backbone.syphon': {
+            deps: ['jquery', 'backbone'],
+
+        },
+
         'jquery.flot': {
             deps: ['jquery'],
             exports: 'jquery.flot'
@@ -33,9 +38,10 @@ require.config({
     },
     paths: {
         jquery: 'lib/jquery',
-        'jquery-ui': 'lib/jquery-ui',
+        'jqueryui': 'lib/jquery-ui',
         underscore: 'lib/underscore-min',
         backbone: 'lib/backbone-min',
+        'backbone.syphon': 'lib/backbone.syphon.min',
         'jquery.AjaxCall': 'lib/ajax_call_function',
         'jquery.comments': 'lib/comments_class',
         'jquery.goals_frontend': 'lib/goals_frontend',
@@ -68,6 +74,8 @@ require([
     'jquery.flot.time',
     'jquery.flot.pie',
     'jquery.drawPie',
+    'jqueryui',
+    'backbone.syphon'
     
 
 ], function($, _, Backbone, moment, app, Controller, Main_menu_view) {
@@ -75,7 +83,6 @@ require([
     $.fitness_helper = $.fitness_helper(app.options);
     Backbone.emulateHTTP = true ;
     Backbone.emulateJSON = true;
-
 
     app.routers.nutrition_plan = new Controller();
   

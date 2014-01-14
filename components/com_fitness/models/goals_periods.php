@@ -228,7 +228,7 @@ class FitnessModelgoals_periods extends JModelList {
     }
     
     
-    public function getUserPans($client_id, $nutrition_plan_id) {
+    public function getUserPans($client_id, $nutrition_plan_id, $type) {
         $db = JFactory::getDbo();
         $query = "SELECT a.*, 
              (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
@@ -254,6 +254,10 @@ class FitnessModelgoals_periods extends JModelList {
         
         if($nutrition_plan_id) {
             $query .= " AND a.id <> '$nutrition_plan_id'";
+        }
+        $helper = new FitnessHelper();
+        if($type == 'old') {
+            $query .= " AND a.active_start  <= " . $db->quote($helper->getTimeCreated());
         }
         
         return  FitnessFactory::customQuery($query, 1);
@@ -281,7 +285,7 @@ class FitnessModelgoals_periods extends JModelList {
                 $client_id = JRequest::getVar('client_id');
 
                 if($client_id) {
-                    $plans = $this->getUserPans($client_id, $id);
+                    $plans = $this->getUserPans($client_id, $id, 'old');
                     return $plans;
                 } 
 

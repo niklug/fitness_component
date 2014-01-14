@@ -127,6 +127,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
             'nutrition_plan_targets_comments_db_table' : '#__fitness_nutrition_plan_targets_comments',
             'nutrition_plan_macronutrients_comments_db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
             'protocol_comments_db_table' : '#__fitness_nutrition_plan_supplements_comments',
+            'example_day_meal_comments_db_table' : '#__fitness_nutrition_plan_example_day_meal_comments',
             
             'client_id' : '<?php echo JFactory::getUser()->id;?>',
             

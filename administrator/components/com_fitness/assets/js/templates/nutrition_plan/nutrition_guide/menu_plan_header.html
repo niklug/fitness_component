@@ -1,0 +1,27 @@
+<div class="fitness_block_wrapper" style="">
+    <div class="internal_wrapper">
+        <form>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <span class="orange_text">MENU NAME:</span>
+                    </td>
+                    <td>
+                        <input class="required dark_input_style" type="text"  name="name"  id="menu_name" value="<%= name %>" style="width:300px;">
+                    </td>
+                    <td>
+                        <span class="orange_text">DATE:</span>
+                    </td>
+                    <td>
+                        <input style="width:70px;" readonly type="text" name="start_date" id="start_date" value="<%= start_date %>"  class="required dark_input_style"/>
+                    </td>
+                    <td style="text-align: right;">
+                        <a style="cursor: pointer;float:right;margin-right:10px;" id="delete_menu_plan" onclick="javascript:void(0)">[DELETE]</a>
+
+                        <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[SAVE]</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>

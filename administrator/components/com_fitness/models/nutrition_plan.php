@@ -1007,6 +1007,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                             . " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name,"
                             . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name"
                             . " FROM $table AS a WHERE 1";
+                            
                     
                     if($id) {
                         $query .= " AND id='$id'";
@@ -1014,6 +1015,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     if($nutrition_plan_id) {
                         $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
                     }
+                    
+                    $query .= " ORDER BY a.start_date DESC";
                     
                     $items = FitnessHelper::customQuery($query, 1);
                     return $items;
@@ -1025,7 +1028,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'DELETE': // Delete Item
-                    $id = str_replace('/', '', end(array_keys($_GET)));
+                    $id = str_replace('/', '', $_GET['id']);
+
                     $id = $helper->deleteRow($id, $table);
                     break;
 

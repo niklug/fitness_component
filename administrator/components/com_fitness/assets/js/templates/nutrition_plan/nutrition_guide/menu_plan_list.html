@@ -32,9 +32,13 @@
                         <%= item.assessed_by_name || '-' %>
                     </td>
                     <td>
+                        <%
+                        if(item.id != '5') { 
+                        %>
                         <a class="view " onclick="javascript:void(0)" style="cursor: pointer;">
                             <span class="preview" data-id="<%= item.id %>"></span>
-                        </a>           
+                        </a>    
+                        <% } %>
                     </td>
                 </tr>
             <% 

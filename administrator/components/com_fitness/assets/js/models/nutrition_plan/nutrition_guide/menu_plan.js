@@ -4,7 +4,7 @@ define([
     'app'
 ], function ( _, Backbone, app) {
     var model = Backbone.Model.extend({
-            urlRoot : app.options.ajax_call_url + '&format=text&view=nutrition_plan&task=nutrition_plan_menu&',
+            urlRoot : app.options.ajax_call_url + '&format=text&view=nutrition_plan&task=nutrition_plan_menu&id=',
             
             defaults : {
                 id : null,
@@ -17,8 +17,17 @@ define([
             },
             
             validate: function(attrs, options) {
+                if (!attrs.nutrition_plan_id) {
+                  return 'Nurtition Plan Id is not valid';
+                }
                 if (!attrs.name) {
-                  return 'Menu Plan Name is empty';
+                  return 'menu_name';
+                }
+                if (!attrs.start_date) {
+                  return 'start_date';
+                }
+                if (!attrs.created_by) {
+                  return 'Created By value is empty!';
                 }
             }
         });
