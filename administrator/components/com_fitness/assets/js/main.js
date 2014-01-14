@@ -29,27 +29,7 @@ require.config({
         moment: {
             exports: 'moment'
         },
-        
-        
-        
-        
-        
-        
-        'jquery.AjaxCall': {
-            deps: ['jquery']
-        },
 
-        'jquery.comments': {
-            deps: ['jquery']
-        },
-        
-        'jquery.goals_frontend': {
-            deps: ['jquery']
-        },
-        
-        'jquery.fitness_helper': {
-            deps: ['jquery']
-        },
     },
     paths: {
         jquery: 'lib/jquery',
@@ -66,6 +46,7 @@ require.config({
         'jquery.flot.pie': 'lib/jquery.flot.pie',
         'jquery.drawPie': 'lib/flot_pie_class',
         'moment': 'lib/moment.min',
+        'jquery.jqueryPlugin': 'jqueryPlugin',
     },
     waitSeconds: 5
 });
@@ -90,7 +71,7 @@ require([
     
 
 ], function($, _, Backbone, moment, app, Controller, Main_menu_view) {
-    console.log(moment);
+
     $.fitness_helper = $.fitness_helper(app.options);
     Backbone.emulateHTTP = true ;
     Backbone.emulateJSON = true;

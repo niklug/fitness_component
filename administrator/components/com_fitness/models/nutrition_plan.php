@@ -982,4 +982,60 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return $helper->getRemoteImages($url);
         }
         
+        
+        public function nutrition_plan_menu() {
+
+            $method = JRequest::getVar('_method');
+            
+            if(!$method) {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+            
+            $model = json_decode(JRequest::getVar('model'));
+            
+            $table = '#__fitness_nutrition_plan_menus';
+            
+            $helper = new FitnessHelper();
+            
+            switch ($method) {
+                case 'GET': // Get Item(s)
+                    
+                    $id = JRequest::getVar('id');
+                    $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
+                    
+                    $query = "SELECT a.*, "
+                            . " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name,"
+                            . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name"
+                            . " FROM $table AS a WHERE 1";
+                    
+                    if($id) {
+                        $query .= " AND id='$id'";
+                    }
+                    if($nutrition_plan_id) {
+                        $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+                    }
+                    
+                    $items = FitnessHelper::customQuery($query, 1);
+                    return $items;
+                    break;
+                case 'PUT': // Update
+                    $id = $helper->insertUpdateObj($model, $table);
+                    break;
+                case 'POST': // Create
+                    $id = $helper->insertUpdateObj($model, $table);
+                    break;
+                case 'DELETE': // Delete Item
+                    $id = str_replace('/', '', end(array_keys($_GET)));
+                    $id = $helper->deleteRow($id, $table);
+                    break;
+
+                default:
+                    break;
+            }
+   
+            $model->id = $id;
+            
+            return $model;
+        }
+        
 }

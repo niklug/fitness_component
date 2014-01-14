@@ -6,6 +6,7 @@ define([
         'collections/nutrition_plan/nutrition_plans',
         'collections/nutrition_plan/targets',
         'collections/nutrition_plan/supplements/protocols',
+        'collections/nutrition_plan/nutrition_guide/menu_plans',
 	'models/nutrition_plan/nutrition_plan',
         'models/nutrition_plan/target',
         'views/nutrition_plan/overview',
@@ -13,7 +14,9 @@ define([
         'views/nutrition_plan/macronutrients',
         'views/nutrition_plan/supplements/frontend/protocols',
         'views/nutrition_plan/information',
-        'views/nutrition_plan/archive_list'
+        'views/nutrition_plan/archive_list',
+        'views/nutrition_plan/nutrition_guide/menu_plan_list_menu',
+        'views/nutrition_plan/nutrition_guide/menu_plan_list'
 ], function (
         $,
         _,
@@ -22,6 +25,7 @@ define([
         Nutrition_plans_collection,
         Targets_collection,
         Protocols_collection,
+        Menu_plans_collection,
         Nutrition_plan_model,
         Target_model,
         Overview_view,
@@ -29,7 +33,9 @@ define([
         Macronutrients_view,
         Protocols_view,
         Information_view,
-        Archive_list_view
+        Archive_list_view,
+        Menu_plan_list_menu_view,
+        Menu_plan_list_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -51,6 +57,8 @@ define([
                 "!/targets": "targets", 
                 "!/macronutrients": "macronutrients", 
                 "!/supplements": "supplements", 
+                "!/nutrition_guide": "nutrition_guide", 
+                "!/menu_plan/:id": "menu_plan", 
                 "!/information": "information", 
                 "!/archive": "archive", 
                 "!/close": "close", 
@@ -168,6 +176,36 @@ define([
                  
                  app.views.protocols = new Protocols_view({model : app.models.nutrition_plan, collection : app.collections.protocols}); 
                  $("#supplements_wrapper").html(app.views.protocols.render().el);
+            },
+            
+            nutrition_guide: function () {
+                this.no_active_plan_action();
+                this.common_actions();
+                $("#nutrition_guide_wrapper").show();
+                $("#nutrition_guide_link").addClass("active_link");
+                
+                app.collections.menu_plans = new Menu_plans_collection(); 
+                 var id = app.models.nutrition_plan.get('id');
+                 app.collections.menu_plans.fetch({
+                    data: {nutrition_plan_id : id},
+                    
+                    success: function (collection, response) {
+                        app.views.menu_plan_list = new Menu_plan_list_view({collection : collection});
+                        $("#nutrition_guide_container").html(app.views.menu_plan_list.render().el);
+                    },
+                    
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
+                 
+                 app.views.menu_plan_list_menu = new Menu_plan_list_menu_view();
+                 
+                 $("#nutrition_guide_header").html(app.views.menu_plan_list_menu.render().el);
+            },
+            
+            menu_plan: function (id) {
+                console.log('menu plan..');
             },
      
             information: function () {

@@ -125,6 +125,44 @@ var func = function($) {
                     var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
                     return html;
                 },
+                
+                setMenuPlanStatus : function(status) {
+                    var style_class;
+                    var text;
+                    switch(status) {
+                        case '1' :
+                            style_class = 'recipe_status_pending';
+                            text = 'PENDING';
+                            break;
+                        case '2' :
+                            style_class = 'recipe_status_approved';
+                            text = 'APPROVED';
+                            break;
+                        case '3' :
+                            style_class = 'recipe_status_notapproved';
+                            text = 'NOT APPROVED';
+                            break;
+                        case '4' :
+                            style_class = 'status_inprogress';
+                            text = 'IN PROGRESS';
+                            break;
+                        case '5' :
+                            style_class = 'status_submitted';
+                            text = 'SUBMITTED';
+                            break;
+                        case '6' :
+                            style_class = 'status_fail';
+                            text = 'RESUBMIT';
+                            break;
+
+                        default :
+                            style_class = 'recipe_status_pending';
+                            text = 'PENDING';
+                            break;
+                    }
+                    var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                    return html;
+                },
 
                 printPage : function(htmlPage) {
                     var w = window.open(htmlPage);

@@ -85,11 +85,11 @@ $nutrition_plan_id = $this->active_plan_data->id;
 
     <!-- NUTRITION GUIDE -->
     
-    <div id="nutrition_guide_wrapper" class="block">
+    <div id="nutrition_guide_wrapper" class="block ">
 
         <div id="nutrition_guide_header" ></div>
 
-        <div id="nutrition_guide_container" class="fitness_block_wrapper"></div>
+        <div id="nutrition_guide_container" class=""></div>
         
     </div>
     
