@@ -52,8 +52,9 @@ require.config({
         'jquery.flot.pie': 'lib/jquery.flot.pie',
         'jquery.drawPie': 'lib/flot_pie_class',
         'moment': 'lib/moment.min',
-        'jquery.jqueryPlugin': 'jqueryPlugin',
+        'jquery.timepicker': 'lib/jquery.timepicker.min'
     },
+
     waitSeconds: 5
 });
 

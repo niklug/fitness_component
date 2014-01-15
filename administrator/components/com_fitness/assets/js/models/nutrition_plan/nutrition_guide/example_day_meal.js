@@ -4,7 +4,7 @@ define([
     'app'
 ], function ( _, Backbone, app) {
     var model = Backbone.Model.extend({
-        urlRoot : app.options.ajax_call_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&id=',
+        urlRoot : app.options.ajax_call_url + '&format=text&view=nutrition_plan&task=nutrition_plan_example_day_meal&id=',
 
         defaults : {
             id : null,

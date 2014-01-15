@@ -1,0 +1,122 @@
+<div  class="recipe_database_item_wrapper" style="margin-top: 10px; border:1px dashed #ccc;padding:5px;">
+    <table width="100%">
+        <tr>
+            <td width="50%">
+                <table  width="100%">
+                    <tr>
+                        <td width="40%" class="orange_label">RECIPE NAME</td>
+                        <td width="60%">
+                              <%= recipe_name %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="orange_label">AUTHOR</td>
+                        <td>
+                             <%= author %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="orange_label">SERVES</td>
+                        <td>
+                             <%= number_serves %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="orange_label">STATUS</td>
+                        <td>
+                            <%= $.fitness_helper.setRecipeStatus(status) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="orange_label">APPROVED BY</td>
+                        <td>
+                             <%= trainer || '-' %>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="30%">
+                <table width="100%">
+                    <tr>
+                        <td class="orange_label">
+                            CALORIES
+                        </td>
+                        <td>
+                            <%= calories || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="orange_label">
+                            ENERGY
+                        </td>
+                        <td>
+                            <%= energy || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="orange_label">
+                            PROTEIN
+                        </td>
+                        <td>
+                            <%= protein || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="orange_label">
+                            FAT
+                        </td>
+                        <td>
+                            <%= fats || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="orange_label">
+                            CARB
+                        </td>
+                        <td>
+                            <%= carbs || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="orange_label">
+                            SUGAR
+                        </td>
+                        <td>
+                            <%= total_sugars || '0.00' %>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <%
+                if(!image || image == 'images/Recipe_Images/'){
+                    image = $.fitness_helper.get('default_recipe_image');
+                }
+                image =  $.fitness_helper.get('base_url') + image;
+                %>
+                <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+            </td>
+        </tr>
+    </table>
+    <div class="clr"></div>
+    <table width="100%">
+        <tr>
+            <td>
+                COMMENTS
+            </td>
+            <td>
+                <textarea  style="width:500px;" class="recipe_comments" rows="4"class="required"><%= description %></textarea> 
+            </td>
+            <td style="text-align:right;">
+                <a style="float:right;margin-right: 5px;" href="javascript:void(0)" class="view_recipe">[VIEW RECIPE] </a>
+                <a style="float:right;margin-right: 5px;" class="delete_recipe" href="javascript:void(0)" title="">[DELETE]</a>
+                <a style="float:right;margin-right: 5px;"  class="save_recipe" href="javascript:void(0)" title="">[SAVE]</a>
+             </td>
+        </tr>
+    </table>
+    <div class="clr"></div>
+</div>

@@ -166,7 +166,7 @@
         
         //MODELS
         window.app.Example_day_meal_model = Backbone.Model.extend({
-            urlRoot : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&',
+            urlRoot : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_example_day_meal&',
             
             defaults : {
                 id : null,
@@ -180,7 +180,7 @@
         
          // COLLECTIONS
         window.app.Example_day_meals_collection = Backbone.Collection.extend({
-            url : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_exercie_day_meal&',
+            url : window.app.example_day_options.fitness_frontend_url + '&format=text&view=nutrition_plan&task=nutrition_plan_example_day_meal&',
             model: window.app.Example_day_meal_model
         });
         

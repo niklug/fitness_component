@@ -4,8 +4,10 @@ define([
 	'backbone',
         'app',
         'collections/nutrition_plan/nutrition_guide/meal_recipes',
-	'text!templates/nutrition_plan/nutrition_guide/example_day_meal.html'
-], function ( $, _, Backbone, app, Meal_recipes_collection, template ) {
+        'views/nutrition_plan/nutrition_guide/meal_recipe',
+	'text!templates/nutrition_plan/nutrition_guide/example_day_meal.html',
+        'jquery.timepicker'
+], function ( $, _, Backbone, app, Meal_recipes_collection, Meal_recipe_view, template ) {
 
     var view = Backbone.View.extend({
         
@@ -18,12 +20,12 @@ define([
             
             this.model.on("destroy", this.close, this);
 
-            this.recipes_collection = new Meal_recipes_collection();
+            app.collections.meal_recipes = new Meal_recipes_collection();
 
-            this.recipes_collection.bind("add", this.addRecipe, this);
+            app.collections.meal_recipes.bind("add", this.addRecipe, this);
 
             var self = this;
-            this.recipes_collection.fetch({
+            app.collections.meal_recipes.fetch({
                 data: {
                     meal_id : self.model.get('id')
                 },
@@ -40,8 +42,8 @@ define([
 
         render: function(){
             $(this.el).html(this.template(this.model.toJSON()));
-            //this.$el.find('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
 
+            $(this.$el.find('.meal_time')).timepicker({ 'timeFormat': 'H:i', 'step': 15 });
             //this.connectComments();
 
             return this;
@@ -61,8 +63,9 @@ define([
         },
 
         addRecipe : function(model) {
-            this.item_view = new window.app.Nutrition_guide_recipe_view({collection : this.recipes_collection, model : model}); 
-            this.$el.find(".meal_recipes").append( this.item_view.render().el );
+            app.views.meal_recipe = new Meal_recipe_view({collection : app.collections.meal_recipes, model : model}); 
+
+            this.$el.find(".meal_recipes").append( app.views.meal_recipe.render().el );
         },
 
         events: {

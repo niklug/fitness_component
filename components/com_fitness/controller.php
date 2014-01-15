@@ -496,8 +496,8 @@ class FitnessController extends JController {
         echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_supplement());
     }
     
-    public function nutrition_plan_exercie_day_meal(){
-        echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_exercie_day_meal());
+    public function nutrition_plan_example_day_meal(){
+        echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_example_day_meal());
     }
     
     public function nutrition_guide_recipes(){
@@ -507,5 +507,11 @@ class FitnessController extends JController {
     public function nutrition_plan_menu(){
         echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_menu());
     }
+    
+    public function nutrition_guide_add_recipe_list(){
+        echo json_encode($this->admin_nutrition_plan_model->nutrition_guide_add_recipe_list());
+    }
+    
+    
         
 }

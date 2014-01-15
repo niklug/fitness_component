@@ -4,7 +4,15 @@
  * http://people.iola.dk/olau/flot/examples/pie.html
  */
 // Constructor
-var func = function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     function DrawPie(data, container, options) {
         this.data = data;
         this.container = container;
@@ -57,13 +65,7 @@ var func = function($) {
 
         return constr;
     };
-}
-func(jQuery);
+}));
 
-if (typeof define === "function") {
-    define(['jquery'], function(jQuery){
-        func(jQuery);
-    });
-}
 
 

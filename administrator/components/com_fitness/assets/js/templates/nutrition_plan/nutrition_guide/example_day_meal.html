@@ -3,33 +3,28 @@
      <form>
         <table width="100%">
             <tr>
-                <td width="180">
+                <td width="220">
                     <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">MEAL DESCRIPTION</div>
                 </td>
                 <td width="450">
-                    <%
-                    var description_cap = '';
-                    if(description !== null) {
-                        description_cap = description.toUpperCase();
-                    }
-                    %>
-                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;"><%= description_cap %></div>
+                    <input  size="71" type="text"  class="meal_description required dark_input_style" name="description" value="<%= description %>">
                 </td>
                 <td width="200" style="text-align:right;">
                     <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">MEAL TIME</div>
                 </td>
                 <td style="text-align:right;">
-                    <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;"><%= meal_time %></div>
+                    <input style="width:55px;"  size="5" type="text" name="meal_time"  class="meal_time required dark_input_style"  value="<%= meal_time %>">
                 </td>
-                <td>
-                    <input style="float:right;"  class="delete_example_day_meal" type="button" value="Delete" >
-                    <input style="float:right;"  class="save_example_day_meal" type="submit" value="Save" >
+                <td width="200">
+                    <a style="float:right;" class="delete_example_day_meal" href="javascript:void(0)" title="">[DELETE]</a>
+                    <a style="float:right;margin-right: 10px;"  class="save_example_day_meal" href="javascript:void(0)" title="">[SAVE]</a>
+                    
                 </td>
             </tr>
         </table>
     </form>
     <hr class="orange_line">
-    <div style="width:700px;"  class="meal_recipes"></div>
+    <div style="width:100%"  class="meal_recipes"></div>
     <% if(id) { %>
         <input style="float:left;"  class="add_meal_recipe" type="button" value="ADD RECIPE" >
     <% } %>

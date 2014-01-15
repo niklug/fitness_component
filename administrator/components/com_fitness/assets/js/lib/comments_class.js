@@ -1,9 +1,15 @@
 /*
  * class provide comments system
  */
-
-
-var func = function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     function Comments(options, item_id, sub_item_id) {
         this.options = options;
         this.item_id = item_id;
@@ -326,14 +332,4 @@ var func = function($) {
         return constr;
     };
 
-}
-
-func(jQuery);
-
-if (typeof define === "function") {
-    define(['jquery'], function(jQuery){
-        func(jQuery);
-    });
-}
-
-
+}));

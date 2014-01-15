@@ -1,4 +1,12 @@
-var func = function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
         function Goals_frontend(options) {
 
             //// Goal Model
@@ -733,17 +741,7 @@ var func = function($) {
             return constr;
         };
 
-}
-
-func(jQuery);
-
-if (typeof define === "function") {
-    define(['jquery'], function(jQuery){
-        func(jQuery);
-    });
-}
-
-
+}));
 
 
 

@@ -736,7 +736,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         }
         
         
-        public function nutrition_plan_exercie_day_meal() {
+        public function nutrition_plan_example_day_meal() {
 
             $method = JRequest::getVar('_method');
             
@@ -781,7 +781,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'DELETE': // Delete Item
-                    $id = str_replace('/', '', end(array_keys($_GET)));
+                    $id = str_replace('/', '', $_GET['id']);
                     $id = $helper->deleteRow($id, $table);
                     break;
 
@@ -922,7 +922,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     break;
                 case 'PUT': 
                     //update
-                    $item_id = str_replace('/', '', end(array_keys($_GET)));
+                    $item_id = str_replace('/', '', $_GET['id']);
                         if($item_id) {
                             $obj = new stdClass();
                             $obj->id = $item_id;
@@ -956,7 +956,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     }
                     break;
                 case 'DELETE': // Delete Item
-                    $id = str_replace('/', '', end(array_keys($_GET)));
+                    $id = str_replace('/', '', $_GET['id']);
                     $id = $helper->deleteRow($id, $table);
                     break;
 

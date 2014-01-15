@@ -1,7 +1,15 @@
 /*
  * Basic Ajax Call with callback response
  */
-var func = function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
         function AjaxCall(data, url, view, task, table, handleData) {
             var data_encoded = JSON.stringify(data);
             $.ajax({
@@ -36,13 +44,6 @@ var func = function($) {
 
             return constr;
         };
+        
 
-}
-
-func(jQuery);
-
-if (typeof define === "function") {
-    define(['jquery'], function(jQuery){
-        func(jQuery);
-    });
-}
+}));

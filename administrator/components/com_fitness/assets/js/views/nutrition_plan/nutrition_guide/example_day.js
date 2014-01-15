@@ -4,7 +4,8 @@ define([
 	'backbone',
         'app',
         'views/nutrition_plan/nutrition_guide/example_day_meal',
-	'text!templates/nutrition_plan/nutrition_guide/example_day.html'
+	'text!templates/nutrition_plan/nutrition_guide/example_day.html',
+        'jquery.timepicker'
 ], function ( $, _, Backbone, app, Example_day_meal_view, template ) {
 
     var view = Backbone.View.extend({
@@ -25,6 +26,7 @@ define([
             this.collection.on("add", function(meal) {
                 app.views.example_day_meal = new Example_day_meal_view({collection : this,  model : meal}); 
                 self.$el.find("#example_day_meal_list").append( app.views.example_day_meal.render().el );
+
                 self.mealListItemViews[ meal.cid ] = app.views.example_day_meal;
             });
 

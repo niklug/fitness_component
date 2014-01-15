@@ -292,10 +292,10 @@ class FitnessController extends JController
         }
         
         
-        public function nutrition_plan_exercie_day_meal(){
+        public function nutrition_plan_example_day_meal(){
             $view = $this -> getView('nutrition_plan', 'json');
             $view->setModel($this->getModel('nutrition_plan'));
-            $view -> nutrition_plan_exercie_day_meal();
+            $view -> nutrition_plan_example_day_meal();
         }
         
         
