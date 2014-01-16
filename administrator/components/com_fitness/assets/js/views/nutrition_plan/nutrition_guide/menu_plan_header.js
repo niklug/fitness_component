@@ -63,7 +63,8 @@ define([
                 this.collection.create(this.model, {
                     wait: true,
                     success: function (model, response) {
-                        console.log(model);
+                        var id = model.get('id');
+                        app.routers.nutrition_plan.navigate("!/menu_plan/" + id, true);
                     },
                     error: function (model, response) {
                         alert(response.responseText);
@@ -72,7 +73,8 @@ define([
             } else {
                 this.model.save(null, {
                     success: function (model, response) {
-                        console.log(model);
+                        var id = model.get('id');
+                        app.routers.nutrition_plan.navigate("!/menu_plan/" + id, true);
                     },
                     error: function (model, response) {
                         alert(response.responseText);

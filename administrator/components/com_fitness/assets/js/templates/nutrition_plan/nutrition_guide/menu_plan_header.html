@@ -52,12 +52,21 @@
                         <a style="cursor: pointer;float:right;margin-right:10px;" id="close_menu_plan" onclick="javascript:void(0)">[CLOSE]</a>
                         
                         <%
-                          if(submitted == false) {
+                          if(parseInt(id) && submitted == false) {
                         %>
                             <a style="cursor: pointer;float:right;margin-right:10px;" id="delete_menu_plan" onclick="javascript:void(0)">[DELETE]</a>
-       
+                        <% } %>
+                        
+                        <%
+                          if(submitted == false) {
+                        %>
                             <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[SAVE]</a>
-     
+                        <% } %>
+                            
+                            
+                        <%
+                          if(parseInt(id) && submitted == false) {
+                        %>
                             <a style="cursor: pointer;float:right;margin-right:10px;" id="submit_menu_plan" onclick="javascript:void(0)">[SUBMIT]</a>
                         <% } %>
                     </td>

@@ -1209,5 +1209,5 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_menus` (
   `assessed_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nutrition_plan_id` (`nutrition_plan_id`),
-  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
