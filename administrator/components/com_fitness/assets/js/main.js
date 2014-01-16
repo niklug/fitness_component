@@ -52,7 +52,8 @@ require.config({
         'jquery.flot.pie': 'lib/jquery.flot.pie',
         'jquery.drawPie': 'lib/flot_pie_class',
         'moment': 'lib/moment.min',
-        'jquery.timepicker': 'lib/jquery.timepicker.min'
+        'jquery.timepicker': 'lib/jquery.timepicker.min',
+        'jquery.backbone_pagination': 'lib/backbone_pagination'
     },
 
     waitSeconds: 5
@@ -76,7 +77,8 @@ require([
     'jquery.flot.pie',
     'jquery.drawPie',
     'jqueryui',
-    'backbone.syphon'
+    'backbone.syphon',
+    'jquery.backbone_pagination'
     
 
 ], function($, _, Backbone, moment, app, Controller, Main_menu_view) {

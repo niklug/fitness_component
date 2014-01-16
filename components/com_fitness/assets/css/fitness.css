@@ -956,3 +956,8 @@ td.center, th.center, .center {
   margin-left: 10px;
   width: 40px;
 }
+
+.recipe_database_item_wrapper{
+    margin-bottom: 10px;
+    border:1px solid #ccc;
+}

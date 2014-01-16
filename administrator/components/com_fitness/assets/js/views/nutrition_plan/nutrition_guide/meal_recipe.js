@@ -13,6 +13,7 @@ define([
         render:function () {
             var data = this.model.toJSON();
             data.$ = $;
+            data.menu_plan = app.models.menu_plan.toJSON();
             $(this.el).html(this.template( data ));
             return this;
         },
@@ -27,7 +28,7 @@ define([
             var recipe_comments = this.$el.find('.recipe_comments').val();
             
             this.model.set({'description' : recipe_comments});
-            console.log(this.model.toJSON());
+
             this.model.save(null, {
                 error: function (model, response) {
                     alert(response.responseText);

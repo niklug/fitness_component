@@ -15,7 +15,9 @@ define([
         },
 
         render: function(){
-            var template = _.template(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            data.$ = $;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             return this;
         },
@@ -23,6 +25,8 @@ define([
         events: {
             "click #delete_menu_plan" : "onClickDelete",
             "click #save_menu_plan" : "onClickSave",
+            "click #close_menu_plan" : "onClickClose",
+            "click #submit_menu_plan" : "onClickSubmit",
         },
         
         onClickSave : function(event) {
@@ -89,6 +93,24 @@ define([
                 }
             });
         },
+        
+        onClickClose : function() {
+            app.routers.nutrition_plan.navigate("!/nutrition_guide", true);
+        },
+        
+        onClickSubmit : function() {
+            this.model.set({status : '5'});
+            this.model.unset('assessed_by_name');
+            this.model.unset('created_by_name');
+            this.model.save(null, {
+                success: function (model, response) {
+                    app.routers.nutrition_plan.navigate("!/nutrition_guide", true);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        }
     });
             
     return view;

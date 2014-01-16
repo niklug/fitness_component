@@ -30,7 +30,9 @@
 
     Comments.prototype.setEventListeners = function() {
         var self = this;
+        
         $("#add_comment_" + this.sub_item_id).die().live('click', function() {
+            
             var comment_obj = self.options.comment_obj;
             comment_obj.parent_id = 0;
 
@@ -38,7 +40,7 @@
 
             comment_template += self.createCommentTemplate(comment_obj);
 
-            $("#comments_wrapper_" + self.sub_item_id).append(comment_template);
+            $(".comments_wrapper_" + self.sub_item_id).append(comment_template);
 
         });
 
@@ -89,16 +91,16 @@
             comment_obj.parent_id = parent_id;
             var comment_template = self.createCommentTemplate(comment_obj);
 
-            var items = parseInt($("#comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-parent_id="' + parent_id + '"]').length);
+            var items = parseInt($(".comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-parent_id="' + parent_id + '"]').length);
 
             //  after last reply item
             if(parent_id && (items != 0)) {
-                $("#comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-parent_id="' + parent_id + '"]').last().after(comment_template);
+                $(".comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-parent_id="' + parent_id + '"]').last().after(comment_template);
             } 
 
             // if no reply items yet
             if (items == 0) {
-                $("#comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-id="' + parent_id + '"]').last().after(comment_template);
+                $(".comments_wrapper_" + self.sub_item_id + ' .comment_wrapper[data-id="' + parent_id + '"]').last().after(comment_template);
             }
 
 

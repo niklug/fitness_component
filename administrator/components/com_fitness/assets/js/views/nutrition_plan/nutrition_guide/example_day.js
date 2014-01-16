@@ -17,7 +17,9 @@ define([
         },
 
         render: function(){
-            $(this.el).html(this.template());
+            var menu_plan = app.models.menu_plan.toJSON();
+            
+            $(this.el).html(this.template({ menu_plan : menu_plan}));
             
             var self = this;
 

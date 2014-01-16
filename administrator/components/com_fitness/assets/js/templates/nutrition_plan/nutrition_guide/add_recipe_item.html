@@ -1,42 +1,42 @@
-<div  class="recipe_database_item_wrapper" style="margin-top: 10px; border:1px dashed #ccc;padding:5px;">
-    <%
-    var submitted = false;
-    if((menu_plan.status == 2) || (menu_plan.status == 3) || (menu_plan.status == 5)) {
-        submitted = true;
-    }
-    %>
+<div  class="recipe_database_item_wrapper">
     <table width="100%">
         <tr>
             <td width="50%">
                 <table  width="100%">
                     <tr>
-                        <td width="40%" class="orange_label">RECIPE NAME</td>
+                        <td width="40%">RECIPE NAME</td>
                         <td width="60%">
                               <%= recipe_name %>
                         </td>
                     </tr>
                     <tr>
-                        <td class="orange_label">AUTHOR</td>
+                        <td>AUTHOR</td>
                         <td>
                              <%= author %>
                         </td>
                     </tr>
                     <tr>
-                        <td class="orange_label">SERVES</td>
+                        <td>SERVES</td>
                         <td>
                              <%= number_serves %>
                         </td>
                     </tr>
                     <tr>
-                        <td class="orange_label">STATUS</td>
+                        <td>STATUS</td>
                         <td>
                             <%= $.fitness_helper.setRecipeStatus(status) %>
                         </td>
                     </tr>
                     <tr>
-                        <td class="orange_label">APPROVED BY</td>
+                        <td>APPROVED BY</td>
                         <td>
                              <%= trainer || '-' %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <br/>
+                            <a style="float:left;" class="view_add_recipe" href="javascript:void(0)" title="">[VIEW RECIPE]</a>
                         </td>
                     </tr>
                 </table>
@@ -44,7 +44,7 @@
             <td width="30%">
                 <table width="100%">
                     <tr>
-                        <td class="orange_label">
+                        <td>
                             CALORIES
                         </td>
                         <td>
@@ -53,7 +53,7 @@
                     </tr>
                     <tr>
 
-                        <td class="orange_label">
+                        <td>
                             ENERGY
                         </td>
                         <td>
@@ -62,7 +62,7 @@
                     </tr>
                     <tr>
 
-                        <td class="orange_label">
+                        <td>
                             PROTEIN
                         </td>
                         <td>
@@ -71,7 +71,7 @@
                     </tr>
                     <tr>
 
-                        <td class="orange_label">
+                        <td>
                             FAT
                         </td>
                         <td>
@@ -80,7 +80,7 @@
                     </tr>
                     <tr>
 
-                        <td class="orange_label">
+                        <td>
                             CARB
                         </td>
                         <td>
@@ -88,7 +88,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="orange_label">
+                        <td>
                             SUGAR
                         </td>
                         <td>
@@ -102,34 +102,21 @@
                 if(!image || image == 'images/Recipe_Images/'){
                     image = $.fitness_helper.get('default_recipe_image');
                 }
-                image =  $.fitness_helper.get('base_url') + image;
+                image = $.fitness_helper.get('base_url') + image;
                 %>
                 <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
             </td>
         </tr>
     </table>
     <div class="clr"></div>
-    <table width="100%">
-        <tr>
-            <td>
-                COMMENTS
-            </td>
-            <td> 
-                <% 
-                var readonly='';
-                if(submitted == true) {
-                    readonly='readonly';
-                } %>
-                <textarea <%= readonly %>  style="width:500px;" class="recipe_comments" rows="4"class="required"><%= description %></textarea> 
-            </td>
-            <td style="text-align:right;">
-                <a style="float:right;margin-right: 5px;" href="javascript:void(0)" class="view_recipe">[VIEW RECIPE] </a>
-                <% if(submitted == false) { %>
-                    <a style="float:right;margin-right: 5px;" class="delete_recipe" href="javascript:void(0)" title="">[DELETE]</a>
-                    <a style="float:right;margin-right: 5px;"  class="save_recipe" href="javascript:void(0)" title="">[SAVE]</a>
-                <% } %>
-             </td>
-        </tr>
-    </table>
+    <div class="internal_wrapper">
+        <div class="recipe_details"> </div>
+        <div class="clr"></div>
+        <div style="display:none;" class="number_serves_wrapper">
+            <label style="font-weight:bold;">Number of Serves to Add to Nutrition Guide</label>
+            <input maxlength="3" style="width:30px"  class="number_serves" type="text" >
+            <input class="enter_number_serves"  type="button" value="ENTER" >
+        </div>
+    </div>
     <div class="clr"></div>
 </div>

@@ -1,24 +1,65 @@
 <div class="fitness_block_wrapper" style="">
+    <%
+    var submitted = false;
+    if(parseInt(id) && ((status == 2) || (status == 3) || (status == 5))) {
+        submitted = true;
+    }
+    %>
     <div class="internal_wrapper">
         <form>
             <table width="100%">
                 <tr>
-                    <td>
+                    <td width="100">
                         <span class="orange_text">MENU NAME:</span>
                     </td>
                     <td>
-                        <input class="required dark_input_style" type="text"  name="name"  id="menu_name" value="<%= name %>" style="width:300px;">
+                        <%
+                          if(submitted == false) {
+                        %>
+                            <input class="required dark_input_style" type="text"  name="name"  id="menu_name" value="<%= name %>" style="width:300px;">
+                        <% } else { %>
+                        <b><%= name.toUpperCase() %></b>
+                        <% } %>
                     </td>
-                    <td>
+                    
+                    <%
+                      if(submitted == true) {
+                    %>
+                    <td width="70">
+                        <span class="orange_text">STATUS</span>
+                    </td>
+                    <td width="120">
+                        <%= $.fitness_helper.setMenuPlanStatus(status) %>
+                    </td>
+                    <% } %>
+                    
+                    
+                    <td width="50">
                         <span class="orange_text">DATE:</span>
                     </td>
                     <td>
-                        <input style="width:70px;" readonly type="text" name="start_date" id="start_date" value="<%= start_date %>"  class="required dark_input_style"/>
+                        <%
+                          if(submitted == false) {
+                        %>
+                            <input style="width:70px;" readonly type="text" name="start_date" id="start_date" value="<%= start_date %>"  class="required dark_input_style"/>
+                        <% } else { %>
+                            <%= moment(new Date(Date.parse(start_date))).format("ddd, D MMM  YY")  %>
+                        <% } %>
+                        
                     </td>
                     <td style="text-align: right;">
-                        <a style="cursor: pointer;float:right;margin-right:10px;" id="delete_menu_plan" onclick="javascript:void(0)">[DELETE]</a>
-
-                        <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[SAVE]</a>
+                        
+                        <a style="cursor: pointer;float:right;margin-right:10px;" id="close_menu_plan" onclick="javascript:void(0)">[CLOSE]</a>
+                        
+                        <%
+                          if(submitted == false) {
+                        %>
+                            <a style="cursor: pointer;float:right;margin-right:10px;" id="delete_menu_plan" onclick="javascript:void(0)">[DELETE]</a>
+       
+                            <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[SAVE]</a>
+     
+                            <a style="cursor: pointer;float:right;margin-right:10px;" id="submit_menu_plan" onclick="javascript:void(0)">[SUBMIT]</a>
+                        <% } %>
                     </td>
                 </tr>
             </table>

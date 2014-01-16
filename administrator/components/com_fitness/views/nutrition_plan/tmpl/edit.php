@@ -35,7 +35,7 @@ $helper = new FitnessHelper();
         <legend id="plan_menu"></legend>
         
         <!-- OVERVIEW -->
-        <div id="overview_wrapper" class="block">
+        <div id="overview_wrapper" class="block" style="display:none;">
             <table width="100%" style="height: 450px;">
                 <tr>
                     <td width="30%" style="vertical-align:top;height: 100%;">
@@ -186,7 +186,7 @@ $helper = new FitnessHelper();
         </div>
         
         <!-- TARGETS -->
-        <div id="targets_wrapper" class="block">
+        <div id="targets_wrapper" class="block" style="display:none;">
             <fieldset id="daily_micronutrient"  class="adminform">
                 <?php
                 if(!$this->item->id) {
@@ -205,7 +205,7 @@ $helper = new FitnessHelper();
         </div>
         
         <!-- MACRONUTRIENTS -->
-        <div id="macronutrients_wrapper" class="block">
+        <div id="macronutrients_wrapper" class="block" style="display:none;">
             <fieldset  class="adminform">
                 <legend>ALLOWED FOODS SHOPPING LIST</legend>
                 <div class="clr"></div>
@@ -240,7 +240,7 @@ $helper = new FitnessHelper();
         </div>
         
         <!-- SUPPLEMENTS -->
-        <div id="supplements_wrapper" class="block">
+        <div id="supplements_wrapper" class="block" style="display:none;">
             <fieldset  class="adminform">
                 <legend>SUPPLEMENTS & SUPPLEMENT PROTOCOLS</legend>
                 <div id="protocols_wrapper">
@@ -250,7 +250,7 @@ $helper = new FitnessHelper();
         </div>
         
         <!-- DIARY GUIDE -->
-        <div id="diary_guide_wrapper" class="block">
+        <div id="diary_guide_wrapper" class="block" style="display:none;">
             <fieldset id="diary_guide"  class="adminform">
                 <?php
                 if(!$this->item->id) {
@@ -297,7 +297,7 @@ $helper = new FitnessHelper();
         </div>
         
         <!-- NUTRITION GUIDE-->
-        <div id="nutrition_guide_wrapper" class="block">
+        <div id="nutrition_guide_wrapper" class="block" style="display:none;">
 
         </div>
         
@@ -1350,7 +1350,7 @@ $helper = new FitnessHelper();
                 
                 var meal_model = window.app.example_day_meal_collection.get({id : meal_id});
                 
-                $('#example_day_wrapper').html(new window.app.Example_day_add_recipe_view({collection : window.app.N, model : meal_model}).render().el);
+                $('#example_day_wrapper').html(new window.app.Example_day_add_recipe_view({collection : window.app.nutrition_guide_add_recipe_collection, model : meal_model}).render().el);
 
                 window.app.pagination_app_model = $.backbone_pagination({});
                 

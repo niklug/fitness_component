@@ -25,7 +25,8 @@ define([
         'views/nutrition_plan/nutrition_guide/menu_plan_header',
         'views/nutrition_plan/nutrition_guide/example_day_menu',
         'views/nutrition_plan/nutrition_guide/example_day',
-        'views/nutrition_plan/nutrition_guide/example_day_meal'
+        'views/nutrition_plan/nutrition_guide/example_day_meal',
+        'views/nutrition_plan/nutrition_guide/add_recipe'
 ], function (
         $,
         _,
@@ -53,7 +54,8 @@ define([
         Menu_plan_header_view,
         Example_day_menu_view,
         Example_day_view,
-        Example_day_meal_view
+        Example_day_meal_view,
+        Example_day_add_recipe_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -92,6 +94,7 @@ define([
             },
             
             get_database_recipes : function() {
+                app.collections.add_meal_recipes.reset();
                 app.collections.add_meal_recipes.fetch({
                     data : app.models.get_recipe_params.toJSON(),
                     error: function (model, response) {
@@ -259,15 +262,20 @@ define([
                     app.views.example_day_menu = new Example_day_menu_view();
                     $("#nutrition_guide_container").html(app.views.example_day_menu.render().el);
                 }
+                //on default
+                this.example_day(1);
+                $(".example_day_link").first().addClass("active");
 
             },
             
             example_day : function(example_day_id) {
                 app.collections.example_day_meals = new Example_day_meals_collection(); 
                 var id = app.models.nutrition_plan.get('id');
-                app.collections.example_day_meals.fetch({
+                var menu_id = app.models.menu_plan.get('id');
+                 app.collections.example_day_meals.fetch({
                     data: {
                         nutrition_plan_id : id,
+                        menu_id : menu_id,
                         example_day_id : example_day_id
                     },
                     success: function (collection, response) {
@@ -282,18 +290,27 @@ define([
             },
             
             add_example_day_meal : function(example_day_id) {
-                app.views.example_day_meal = new Example_day_meal_view({model : new 
-                    ({'example_day_id' : example_day_id}), collection : app.collections.example_day_meals}); 
+                var menu_id = app.models.menu_plan.get('id');
+                app.views.example_day_meal = new Example_day_meal_view({model : new Example_day_meal_model({'example_day_id' : example_day_id, 'menu_id' : menu_id}), collection : app.collections.example_day_meals}); 
                 $("#example_day_meal_list").append(app.views.example_day_meal.render().el );
             },
             
             add_meal_recipe : function(meal_id) {
                 this.get_database_recipes();
                 
-                //var meal_model = window.app.example_day_meal_collection.get({id : meal_id});
-                
-                //$('#example_day_wrapper').html(new window.app.Example_day_add_recipe_view({collection : window.app.nutrition_guide_add_recipe_collection, model : meal_model}).render().el);
+                var meal_model = app.collections.example_day_meals.get({id : meal_id});
 
+                $('#example_day_wrapper').html(new Example_day_add_recipe_view({collection : app.collections.add_meal_recipes, model : meal_model}).render().el);
+                
+                app.models.pagination = $.backbone_pagination({});
+                
+                app.models.pagination.bind("change:currentPage", this.set_recipes_model, this);
+                app.models.pagination.bind("change:items_number", this.set_recipes_model, this);
+            },
+            
+            set_recipes_model : function() {
+                app.collections.add_meal_recipes.reset();
+                app.models.get_recipe_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
             },
      
             information: function () {

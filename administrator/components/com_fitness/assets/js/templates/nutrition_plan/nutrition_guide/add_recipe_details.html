@@ -1,0 +1,88 @@
+<div  class="recipe_database_item_wrapper" style="margin-top: 10px; border:1px solid #000;">
+    <table style="border-collapse: collapse;" width="100%">
+        <thead>
+            <th>MEAL ITEM/DESCRIPTION</th>
+            <th>QUANTITY</th>
+            <th>Protein</th>
+            <th>Fat</th>
+            <th>Carbs</th>
+            <th>Cals</th>
+            <th>Energy</th>
+            <th>Fat, Sat</th>
+            <th>Sug</th>
+            <th>Sod</th>
+        </thead>
+        <tbody>
+        <% _.each(recipe_meals, function(item){ %>
+            <tr class="table_border_top_dark">
+                <td width="30%">
+                    <%= item.meal_name %>
+                </td>
+                <td>
+                    <%= item.quantity + ' ' + item.measurement %>
+                </td>
+                <td>
+                    <%= item.protein %>
+                </td>
+                <td>
+                    <%= item.fats %>
+                </td>
+                <td>
+                    <%= item.carbs %>
+                </td>
+                <td>
+                    <%= item.calories %>
+                </td>
+                <td>
+                    <%= item.energy %>
+                </td>
+                <td>
+                    <%= item.saturated_fat %>
+                </td>
+                <td>
+                    <%= item.total_sugars %>
+                </td>
+                <td>
+                    <%= item.sodium %>
+                </td>
+            </tr>
+        <% 
+        })  
+        %>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <b>TOTALS</b>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <%= protein %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <%= fats %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <%= carbs %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <%= calories %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <%= energy %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <%= saturated_fat %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <%= total_sugars %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <%= sodium %>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

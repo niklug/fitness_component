@@ -228,6 +228,7 @@ class FitnessController extends JController {
         $view -> getRecipe(); 
     }
     
+        
     
     function getRecipeTypes() {
         $view = $this -> getView('recipe_database', 'json');
@@ -512,6 +513,14 @@ class FitnessController extends JController {
         echo json_encode($this->admin_nutrition_plan_model->nutrition_guide_add_recipe_list());
     }
     
+    public function recipe_types(){
+        echo json_encode($this->admin_nutrition_plan_model->getRecipeTypes());
+    }
+    
+    public function get_recipe(){
+        echo json_encode($this->admin_nutrition_plan_model->getRecipe());
+    }
+
     
         
 }

@@ -950,3 +950,8 @@
   margin: 0;
   padding: 5px;
 }
+
+.recipe_database_item_wrapper{
+    margin-bottom: 10px;
+    border:1px solid #000;
+}

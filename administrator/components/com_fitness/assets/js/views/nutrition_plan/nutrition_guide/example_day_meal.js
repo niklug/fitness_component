@@ -41,10 +41,12 @@ define([
         },
 
         render: function(){
-            $(this.el).html(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            data.menu_plan = app.models.menu_plan.toJSON();
+            $(this.el).html(this.template(data));
 
             $(this.$el.find('.meal_time')).timepicker({ 'timeFormat': 'H:i', 'step': 15 });
-            //this.connectComments();
+            this.connectComments();
 
             return this;
         },
@@ -53,12 +55,14 @@ define([
             var meal_id = this.model.get('id');
             var comment_options = {
                 'item_id' : app.options.item_id,
-                'fitness_administration_url' : app.options.ajax_call_urll,
+                'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : app.options.example_day_meal_comments_db_table,
-                'read_only' : false,
+                'read_only' : true,
             }
+            
             var comments = $.comments(comment_options, comment_options.item_id, meal_id).run();
+      
             this.$el.find(".comments_wrapper").html(comments);
         },
 
@@ -140,7 +144,7 @@ define([
             this.controller.navigate("!/add_meal_recipe/" + this.model.get('id'), true);
         },
 
-         close :function() {
+        close :function() {
             $(this.el).unbind();
             $(this.el).remove();
         },

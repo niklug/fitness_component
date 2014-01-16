@@ -15,7 +15,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
     <br/>
     
     <!-- OVERVIEW -->
-    <div id="overview_wrapper" class="block">
+    <div id="overview_wrapper" class="block" style="display:none;">
         <div id="nutrition_focus_wrapper"></div>
         <div class="fitness_block_wrapper" style="min-height:150px;margin: 2px;">
             <div  style="width:400px; float: left;">
@@ -52,7 +52,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
      </div>
     
     <!-- TARGETS -->
-    <div id="targets_wrapper" class="block">
+    <div id="targets_wrapper" class="block" style="display:none;">
         <div id="targets_container" class="fitness_block_wrapper" style="min-height: 300px;">
         </div>
         <div class="clr"></div>
@@ -65,7 +65,7 @@ $nutrition_plan_id = $this->active_plan_data->id;
     </div>
 
     <!-- MACRONUTRIENTS -->
-    <div id="macronutrients_wrapper" class="block">
+    <div id="macronutrients_wrapper" class="block" style="display:none;">
         <div id="macronutrients_container"></div>
 
         <div class="clr"></div>
@@ -79,13 +79,13 @@ $nutrition_plan_id = $this->active_plan_data->id;
     </div>
     
     <!-- SUPPLEMENTS -->
-    <div id="supplements_wrapper" class="block">
+    <div id="supplements_wrapper" class="block" style="display:none;">
 
     </div>
 
     <!-- NUTRITION GUIDE -->
     
-    <div id="nutrition_guide_wrapper" class="block ">
+    <div id="nutrition_guide_wrapper" class="block " style="display:none;">
 
         <div id="nutrition_guide_header" ></div>
 
@@ -94,17 +94,17 @@ $nutrition_plan_id = $this->active_plan_data->id;
     </div>
     
     <!-- INFORMATION -->
-    <div id="information_wrapper" class="block">
+    <div id="information_wrapper" class="block" style="display:none;">
         
     </div>
     
     <!-- ARCHIVE -->
-    <div id="archive_wrapper" class="block">
+    <div id="archive_wrapper" class="block" style="display:none;">
 
     </div>
     
     
-    <div id="close_wrapper" class="block">
+    <div id="close_wrapper" class="block" style="display:none;">
         
     </div>
  

@@ -11,6 +11,7 @@ define([
             description : null,
             nutrition_plan_id : app.options.item_id,
             example_day_id : null,
+            menu_id : null,
             meal_time : null,
         },
 
@@ -23,6 +24,9 @@ define([
             }
             if (!attrs.example_day_id) {
               return 'error: No example_day_id';
+            }
+            if (!attrs.menu_id) {
+              return 'error: No menu_id';
             }
             var result = false, m;
             var re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
