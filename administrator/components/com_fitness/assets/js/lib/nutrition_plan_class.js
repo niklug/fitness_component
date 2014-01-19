@@ -3,10 +3,25 @@
  * fieldsets of the Nutrition Plan Form
  * 
  */
-(function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     // Constructor
     function NutritionPlan(options) {
         this.options = options;
+        this.options.secondary_trainers_wrapper = $(this.options.secondary_trainers_wrapper);
+        this.options.primary_goal_select = $(this.options.primary_goal_select);
+        this.options.business_profile_select = $(this.options.business_profile_select);
+        this.options.client_select = $(this.options.client_select);
+        this.options.trainer_select = $(this.options.trainer_select);
+        this.options.primary_goal_start_date = $(this.options.primary_goal_start_date);
+        this.options.primary_goal_deadline = $(this.options.primary_goal_deadline);
     }
 
     NutritionPlan.prototype.setEventListeners = function() {
@@ -58,6 +73,11 @@
             $("#jform_mini_goal").val(id);
             self.setMinigoal(id);
         });
+        
+        var business_profile_id = $("#business_profile_id").val();
+        if(business_profile_id) {
+            $.fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#jform_trainer_id', this.options.trainer_id);
+        }
 
     }
     
@@ -552,4 +572,4 @@
         return constr;
     };
 
-})(jQuery);
+}));

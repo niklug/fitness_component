@@ -53,7 +53,9 @@ require.config({
         'jquery.drawPie': 'lib/flot_pie_class',
         'moment': 'lib/moment.min',
         'jquery.timepicker': 'lib/jquery.timepicker.min',
-        'jquery.backbone_pagination': 'lib/backbone_pagination'
+        'jquery.backbone_pagination': 'lib/backbone_pagination',
+        'jquery.nutritionPlan': 'lib/nutrition_plan_class',
+        'jquery.macronutrientTargets': 'lib/dayly_targets_class'
     },
 
     waitSeconds: 5

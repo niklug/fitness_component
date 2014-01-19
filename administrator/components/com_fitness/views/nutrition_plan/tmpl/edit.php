@@ -317,9 +317,84 @@ $helper = new FitnessHelper();
 
 
 <script type="text/javascript">
+    var options = {
+        // main options
+            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
+            'base_url' : '<?php echo JURI::root();?>',
+            'ajax_call_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'pending_review_text' : 'Pending Review',
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+            'user_id' : '<?php echo JFactory::getUser()->id;?>',
+            'goals_db_table' : '#__fitness_goals',
+            'minigoals_db_table' : '#__fitness_mini_goals',
+            'goals_comments_db_table' : '#__fitness_goal_comments',
+            'minigoals_comments_db_table' : '#__fitness_mini_goal_comments',
+            'nutrition_plan_targets_comments_db_table' : '#__fitness_nutrition_plan_targets_comments',
+            'nutrition_plan_macronutrients_comments_db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
+            'protocol_comments_db_table' : '#__fitness_nutrition_plan_supplements_comments',
+            'example_day_meal_comments_db_table' : '#__fitness_nutrition_plan_example_day_meal_comments',
+            
+            'client_id' : '<?php echo JFactory::getUser()->id;?>',
+            'trainer_id' : '<?php echo $this->item->trainer_id;?>',
+            
+            'user_name' : '<?php echo JFactory::getUser()->name;?>',
+            
+            'item_id' : '<?php echo $this->item->id;?>',
+            
+            
+            //nutrition plan class options
+            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
+            'business_profile_select' : "#business_profile_id",
+            'trainer_select' : "#jform_trainer_id",
+            'client_select' : "#jform_client_id",
+            'secondary_trainers_wrapper' : "#secondary_trainers",
+            'primary_goal_select' : "#jform_primary_goal",
+            'client_selected' : '<?php echo $this->item->client_id;?>',
+            'primary_goal_selected' : '<?php echo $this->item->primary_goal;?>',
+            'mini_goal_selected' : '<?php echo $this->item->mini_goal;?>',
+            'active_finish_value' : '<?php echo $this->item->active_finish;?>',
+            'max_possible_date' : '9999-12-31',
+            'primary_goal_start_date' : "#primary_goal_start_date",
+            'primary_goal_deadline' : "#primary_goal_deadline",
+            'override_dates' : '<?php echo $this->item->override_dates;?>',
+            'active_start' : '<?php echo $this->item->active_start;?>',
+            'active_finish' : '<?php echo $this->item->active_finish;?>',
+            
+            //targets options
+            'targets_main_wrapper' : "#daily_micronutrient",
+            'protein_grams_coefficient' : 4,
+            'fats_grams_coefficient' : 9,
+            'carbs_grams_coefficient' : 4,
+            'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
+    
+    
+        };
+
+
+        //requireJS options
+
+        require.config({
+            baseUrl: '<?php echo JURI::root();?>administrator/components/com_fitness/assets/js',
+        });
+
+
+        require(['app'], function(app) {
+                app.options = options;
+        });
+        
+        
+
+</script>
+<script src="<?php echo JURI::root();?>administrator/components/com_fitness/assets/js/config.js" type="text/javascript"></script>
+<script src="<?php echo JURI::root();?>administrator/components/com_fitness/assets/js/main_nutrition_plan.js" type="text/javascript"></script>
+
+
+
+<script type="text/javascript">
     
 
-    
+    /*
     (function($) {
         
         // connect helper class
@@ -328,142 +403,10 @@ $helper = new FitnessHelper();
             'base_url' : '<?php echo JURI::root();?>',
         }
         window.fitness_helper = $.fitness_helper(helper_options);
-        
-        $("#business_profile_id").on('change', function() {
-            var business_profile_id = $(this).val();
-            window.fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#jform_trainer_id', '<?php echo $this->item->trainer_id; ?>');
+        // END  OPTIONS  
 
-        });
-        
-        var business_profile_id = $("#business_profile_id").val();
-        if(business_profile_id) {
-            window.fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#jform_trainer_id', '<?php echo $this->item->trainer_id; ?>');
-        }
-
-
-        /*  OPTIONS  */
-        var nutrition_plan_options = {
-            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'business_profile_select' : $("#business_profile_id"),
-            'trainer_select' : $("#jform_trainer_id"),
-            'client_select' : $("#jform_client_id"),
-            'secondary_trainers_wrapper' : $("#secondary_trainers"),
-            'primary_goal_select' : $("#jform_primary_goal"),
-            'calendar_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_multicalendar&task=load&calid=0',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'client_selected' : '<?php echo $this->item->client_id;?>',
-            'primary_goal_selected' : '<?php echo $this->item->primary_goal;?>',
-            'mini_goal_selected' : '<?php echo $this->item->mini_goal;?>',
-            'active_finish_value' : '<?php echo $this->item->active_finish;?>',
-            'max_possible_date' : '9999-12-31',
-            'primary_goal_start_date' : $("#primary_goal_start_date"),
-            'primary_goal_deadline' : $("#primary_goal_deadline"),
-            'override_dates' : '<?php echo $this->item->override_dates;?>',
-            'active_start' : '<?php echo $this->item->active_start;?>',
-            'active_finish' : '<?php echo $this->item->active_finish;?>',
-           
-        }
-
-
-
-        var macronutrient_targets_options = {
-            'main_wrapper' : $("#daily_micronutrient"),
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'protein_grams_coefficient' : 4,
-            'fats_grams_coefficient' : 9,
-            'carbs_grams_coefficient' : 4,
-            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""}
-        }
-
-        var item_description_options = {
-            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'logged_in_admin' : <?php echo JFactory::getApplication()->isAdmin();?>,
-            'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'main_wrapper' : $("#diary_guide"),
-            'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
-            'db_table' : '#__fitness_nutrition_plan_ingredients',
-            'parent_view' : 'nutrition_plan_backend',
-            'read_only' : false
-        }
-
-        var nutrition_meal_options = {
-            'main_wrapper' : $("#meals_wrapper"),
-            'nutrition_plan_id' : '<?php echo $this->item->id;?>',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'add_meal_button' : $("#add_plan_meal"),
-            'activity_level' : "input[name='jform[activity_level]']",
-            'meal_obj' : {id : "", 'nutrition_plan_id' : "", 'meal_time' : "", 'water' : "", 'previous_water' : ""},
-            'db_table' : '#__fitness_nutrition_plan_meals',
-            'read_only' : false,
-            'import_date' : false,
-            'import_date_source' : ''
-        }
-
-
-        var nutrition_comment_options = {
-            'item_id' : '<?php echo $this->item->id;?>',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_plan_comments',
-            'read_only' : false
-        }
-
-        var nutrition_bottom_comment_options = {
-            'item_id' : '<?php echo $this->item->id;?>',
-            'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'comment_obj' : {'user_name' : '<?php echo JFactory::getUser()->name;?>', 'created' : "", 'comment' : ""},
-            'db_table' : '#__fitness_nutrition_plan_comments',
-            'read_only' : false
-        }
-
-
-
-        var calculate_summary_options = {
-            'activity_level' : "input[name='jform[activity_level]']",
-            'draw_chart' : false
-
-        }
-        /* END  OPTIONS  */
-    
-    
-        // cteate main object
-        var nutrition_plan = $.nutritionPlan(nutrition_plan_options);
-
-        // append targets fieldsets
-        var macronutrient_targets_heavy = $.macronutrientTargets(macronutrient_targets_options, 'heavy', 'HEAVY TRAINING DAY');
-
-        var macronutrient_targets_light = $.macronutrientTargets(macronutrient_targets_options, 'light', 'LIGHT TRAINING DAY');
-
-        var macronutrient_targets_rest = $.macronutrientTargets(macronutrient_targets_options, 'rest', 'RECOVERY / REST DAY');
-
-
-        // meal blocks object
-        var nutrition_meal = $.nutritionMeal(nutrition_meal_options, item_description_options, nutrition_comment_options);
-
-
-        //bottom comments
-        if(nutrition_comment_options.item_id) {
-            var plan_comments = $.comments(nutrition_bottom_comment_options, nutrition_comment_options.item_id, 0);
-            var plan_comments_html = plan_comments.run();
-            $("#plan_comments_wrapper").html(plan_comments_html);
-        }
-
-        var calculateSummary =  $.calculateSummary(calculate_summary_options);
-
-
-        nutrition_plan.run();
-
-        macronutrient_targets_heavy.run();
-        macronutrient_targets_light.run();
-        macronutrient_targets_rest.run();
-
-        nutrition_meal.run();
 
         
-
-        calculateSummary.run();
         
         
         //BACKBONE MENU LOGIC
@@ -1450,7 +1393,7 @@ $helper = new FitnessHelper();
     
     })($js);
     
-    
+    */
     
     
     

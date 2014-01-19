@@ -108,26 +108,48 @@ define([
                  this.common_actions();
                  $("#overview_wrapper").show();
                  $("#overview_link").addClass("active_link");
-                 var nutrition_plan = $.nutritionPlan(app.options);
-                 nutrition_plan.run();
+                 // connect Graph from Goals frontend logic
+                 $.goals_frontend(app.options);
+                 var id = app.models.nutrition_plan.get('id');
+                 app.models.nutrition_plan.fetch({
+                    data: {id : id},
+                    wait : true,
+                    success : function(model, response) {
+                        var overview_view = new Overview_view({model : model});
+                        $("#nutrition_focus_wrapper").html(overview_view.render().el);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
+                 
             },
 
             targets: function () {
+                
                  this.no_active_plan_action();
                  this.common_actions();
                  $("#targets_wrapper").show();
                  $("#targets_link").addClass("active_link");
                  var id = app.models.nutrition_plan.get('id');
                  
-                 // append targets fieldsets
-                var macronutrient_targets_heavy = $.macronutrientTargets(app.options, 'heavy', 'HEAVY TRAINING DAY').run();
+                 app.collections.targets.fetch({
+                    data: {id : id, client_id : app.options.client_id},
+                    wait : true,
+                    success : function(collection, response) {
+                        $("#targets_container").empty();
+                        _.each(collection.models, function(model) {
+                            var target_block_view = new Target_block_view({model : model});
+                            $("#targets_container").append(target_block_view.render().el);
+                        });
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
 
-                var macronutrient_targets_light = $.macronutrientTargets(app.options, 'light', 'LIGHT TRAINING DAY').run();
-
-                var macronutrient_targets_rest = $.macronutrientTargets(app.options, 'rest', 'RECOVERY / REST DAY').run();
-
-                // connect comments
-                var comment_options = {
+                 // connect comments
+                 var comment_options = {
                     'item_id' :  id,
                     'fitness_administration_url' : app.options.fitness_frontend_url,
                     'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
@@ -149,6 +171,18 @@ define([
                  $("#macronutrients_link").addClass("active_link");
                
                  var id = app.models.nutrition_plan.get('id');
+                 app.models.nutrition_plan.fetch({
+                    data: {id : id},
+                    wait : true,
+                    success : function(model, response) {
+                        var macronutrients_view = new Macronutrients_view({model : model});
+                        
+                        $("#macronutrients_container").html(macronutrients_view.render().el);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                 });
                  // connect comments
                  var comment_options = {
                     'item_id' :  id,

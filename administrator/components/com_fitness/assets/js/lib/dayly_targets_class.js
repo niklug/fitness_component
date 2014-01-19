@@ -2,11 +2,20 @@
  * Class provide adding Daily Targed block
  */
 // Constructor
-(function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     function MacronutrientTargets(options, type, title) {
         this.options = options;
         this.type = type;
         this.title = title;
+        this.options.main_wrapper = $(this.options.targets_main_wrapper);
     }
 
     // Controller
@@ -424,5 +433,4 @@
 
         return constr;
     };
-
-})(jQuery);
+}));

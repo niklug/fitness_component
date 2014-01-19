@@ -35,6 +35,11 @@ class FitnessViewNutrition_plan extends JView
                     throw new Exception(implode("\n", $errors));
 		}
                 $document = &JFactory::getDocument();
+                
+                $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
+
+                
+                /*
                 $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'underscore-min.js');
@@ -53,7 +58,7 @@ class FitnessViewNutrition_plan extends JView
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'backbone.syphon.min.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'nutrition_plan_supplements.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'backbone_pagination.js');
-                
+                */
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                 $document->addStyleSheet( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
                 
@@ -95,13 +100,14 @@ class FitnessViewNutrition_plan extends JView
 			JToolBarHelper::apply('nutrition_plan.apply', 'JTOOLBAR_APPLY');
 			JToolBarHelper::save('nutrition_plan.save', 'JTOOLBAR_SAVE');
 		}
+                /*
 		if (!$checkedOut && ($canDo->get('core.create'))){
 			JToolBarHelper::custom('nutrition_plan.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 		}
 		// If an existing item, can save to a copy.
 		if (!$isNew && $canDo->get('core.create')) {
 			JToolBarHelper::custom('nutrition_plan.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-		}
+		}*/
 		if (empty($this->item->id)) {
 			JToolBarHelper::cancel('nutrition_plan.cancel', 'JTOOLBAR_CANCEL');
 		}

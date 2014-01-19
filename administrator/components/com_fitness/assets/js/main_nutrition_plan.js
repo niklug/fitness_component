@@ -16,7 +16,9 @@ require([
     'jquery.drawPie',
     'jqueryui',
     'backbone.syphon',
-    'jquery.backbone_pagination'
+    'jquery.backbone_pagination',
+    'jquery.nutritionPlan',
+    'jquery.macronutrientTargets'
     
 
 ], function($, _, Backbone, moment, app, Controller, Main_menu_view) {

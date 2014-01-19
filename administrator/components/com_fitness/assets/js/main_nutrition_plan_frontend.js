@@ -4,7 +4,7 @@ require([
     'backbone',
     'moment',
     'app',
-    'routers/nutrition_plan/router',
+    'routers/nutrition_plan/router_frontend',
     'views/nutrition_plan/main_menu',
     'jquery.AjaxCall',
     'jquery.goals_frontend',
