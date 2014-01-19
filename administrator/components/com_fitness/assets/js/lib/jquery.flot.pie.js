@@ -54,7 +54,15 @@ The plugin supports these options:
 More detail and specific examples can be found in the included HTML file.
 
 */
-define(['jquery'], function(jQuery){
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function (jQuery) {
 
     (function($) {
 
@@ -816,4 +824,5 @@ define(['jquery'], function(jQuery){
             });
 
     })(jQuery);
-});
+}));
+

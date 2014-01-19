@@ -12,7 +12,7 @@ define([
                 name : null,
                 start_date : null,
                 created_by : null,
-                status : 1,
+                status : 4,
                 assessed_by : null,
             },
             

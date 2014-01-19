@@ -44,7 +44,7 @@ class FitnessViewUser_groups extends JView
         $document = &JFactory::getDocument();
         $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 	$document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
-        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jquerynoconflict.js');
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
         
         $input = JFactory::getApplication()->input;
         $view = $input->getCmd('view', '');

@@ -1,7 +1,15 @@
 /*
  * 
  */
-(function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     function Status(options) {
         this.options = options;
     }
@@ -199,7 +207,7 @@
         return constr;
     };
         
-})(jQuery);
+}));
 
 
 

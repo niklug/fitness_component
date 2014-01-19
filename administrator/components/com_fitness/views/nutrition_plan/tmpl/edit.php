@@ -18,16 +18,6 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
 $helper = new FitnessHelper();
 
 ?>
-<style type="text/css">
-    /* Temporary fix for drifting editor fields */
-    .adminformlist li {
-        clear: both;
-    }
-    
-    #jform_allowed_proteins-lbl, #jform_allowed_fats-lbl, #jform_allowed_carbs-lbl, #jform_allowed_liquids-lbl, #jform_other_recommendations-lbl, #jform_trainer_comments-lbl, #jform_information-lbl{
-        float: none;
-    }
-</style>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="nutrition_plan-form" class="form-validate">
     <div class="width-100 fltlft">
