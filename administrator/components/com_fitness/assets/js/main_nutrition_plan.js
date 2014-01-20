@@ -31,6 +31,8 @@ require([
   
     app.views.main_menu = new Main_menu_view();
     
+    $("#archive_focus_link").parent().hide();
+    
     Backbone.history.start();
 
 });

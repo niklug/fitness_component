@@ -17,7 +17,7 @@ define([
         'views/nutrition_plan/overview',
         'views/nutrition_plan/target_block',
         'views/nutrition_plan/macronutrients',
-        'views/nutrition_plan/supplements/frontend/protocols',
+        'views/nutrition_plan/supplements/backend/protocols',
         'views/nutrition_plan/information',
         'views/nutrition_plan/archive_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_list_menu',
@@ -26,7 +26,8 @@ define([
         'views/nutrition_plan/nutrition_guide/example_day_menu',
         'views/nutrition_plan/nutrition_guide/example_day',
         'views/nutrition_plan/nutrition_guide/example_day_meal',
-        'views/nutrition_plan/nutrition_guide/add_recipe'
+        'views/nutrition_plan/nutrition_guide/add_recipe',
+        'views/nutrition_plan/supplements/backend/protocols_wrapper'
 ], function (
         $,
         _,
@@ -55,13 +56,13 @@ define([
         Example_day_menu_view,
         Example_day_view,
         Example_day_meal_view,
-        Example_day_add_recipe_view
+        Example_day_add_recipe_view,
+        Protocols_wrapper_view
     ) {
 
     var Controller = Backbone.Router.extend({
         
             initialize: function(){
-
                 app.models.nutrition_plan = new Nutrition_plan_model({'id' : app.options.item_id});
                 
                 app.collections.nutrition_plans = new Nutrition_plans_collection();
@@ -73,6 +74,7 @@ define([
                 app.collections.add_meal_recipes = new Add_meal_recipes_collection(); 
                 
                 app.models.get_recipe_params.bind("change", this.get_database_recipes, this);
+                
 
             },
         
@@ -89,7 +91,6 @@ define([
                 "!/add_example_day_meal/:id": "add_example_day_meal", 
                 "!/add_meal_recipe/:meal_id": "add_meal_recipe",
                 "!/information": "information", 
-                "!/archive": "archive", 
                 "!/close": "close", 
             },
             
@@ -165,11 +166,15 @@ define([
             },
             
             supplements: function () {
+
                  this.no_active_plan_action();
                  this.common_actions();
                  $("#supplements_wrapper").show();
                  $("#supplements_link").addClass("active_link");
-
+                 
+                 $('#protocols_wrapper').html(new Protocols_wrapper_view().render().el);
+                 
+                 
                  app.collections.protocols = new Protocols_collection(); 
                  var id = app.models.nutrition_plan.get('id');
                  app.collections.protocols.fetch({
@@ -180,7 +185,8 @@ define([
                  });
                  
                  app.views.protocols = new Protocols_view({model : app.models.nutrition_plan, collection : app.collections.protocols}); 
-                 $("#supplements_wrapper").html(app.views.protocols.render().el);
+                 $("#protocol_list").html(app.views.protocols.render().el);
+                 
             },
             
             nutrition_guide: function () {
@@ -284,40 +290,8 @@ define([
                  this.common_actions();
                  $("#information_wrapper").show();
                  $("#information_link").addClass("active_link");
-                 var id = app.models.nutrition_plan.get('id');
-                 app.models.nutrition_plan.fetch({
-                    data: {id : id},
-                    wait : true,
-                    success : function(model, response) {
-                        var information_view = new Information_view({model : model});
-                        
-                        $("#information_wrapper").html(information_view.render().el);
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                 });
             },
-                    
-            archive: function () {
-                 this.common_actions();
-                 $("#archive_wrapper").show();
-                 $("#archive_focus_link").addClass("active_link");
-
-                 app.collections.nutrition_plans.fetch({
-                    data: {id : app.options.item_id, client_id : app.options.client_id},
-                    wait : true,
-                    success : function(collection, response) {
-                        var archive_list_view = new Archive_list_view({model : app.models.nutrition_plan, collection : collection});
-                        
-                        $("#archive_wrapper").html(archive_list_view.render().el);
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                 });
-            },
-                    
+                   
             close: function() {
                  this.no_active_plan_action();
                  $("#close_tab").hide();
