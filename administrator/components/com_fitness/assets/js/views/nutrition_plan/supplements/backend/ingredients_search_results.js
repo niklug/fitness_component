@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/nutrition_plan/supplements/backend/ingredients_search_results.html'
+	'text!templates/nutrition_plan/supplements/backend/ingredients_seaarch_results.html'
 ], function ( $, _, Backbone, app, template ) {
 
      var view = Backbone.View.extend({

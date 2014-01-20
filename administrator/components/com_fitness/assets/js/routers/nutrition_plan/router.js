@@ -14,6 +14,7 @@ define([
         'models/nutrition_plan/nutrition_guide/menu_plan',
         'models/nutrition_plan/nutrition_guide/example_day_meal',
         'models/nutrition_plan/nutrition_guide/get_recipe_params',
+        'models/nutrition_plan/supplements/protocol',
         'views/nutrition_plan/overview',
         'views/nutrition_plan/target_block',
         'views/nutrition_plan/macronutrients',
@@ -27,7 +28,8 @@ define([
         'views/nutrition_plan/nutrition_guide/example_day',
         'views/nutrition_plan/nutrition_guide/example_day_meal',
         'views/nutrition_plan/nutrition_guide/add_recipe',
-        'views/nutrition_plan/supplements/backend/protocols_wrapper'
+        'views/nutrition_plan/supplements/backend/protocols_wrapper',
+        'views/nutrition_plan/supplements/backend/protocol'
 ], function (
         $,
         _,
@@ -44,6 +46,7 @@ define([
         Menu_plan_model,
         Example_day_meal_model,
         Get_recipe_params_model,
+        Protocol_model,
         Overview_view,
         Target_block_view,
         Macronutrients_view,
@@ -57,7 +60,8 @@ define([
         Example_day_view,
         Example_day_meal_view,
         Example_day_add_recipe_view,
-        Protocols_wrapper_view
+        Protocols_wrapper_view,
+        Protocol_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -85,6 +89,7 @@ define([
                 "!/targets": "targets", 
                 "!/macronutrients": "macronutrients", 
                 "!/supplements": "supplements", 
+                "!/add_supplement_protocol": "add_supplement_protocol",
                 "!/nutrition_guide": "nutrition_guide", 
                 "!/menu_plan/:id": "menu_plan", 
                 "!/example_day/:id": "example_day", 
@@ -176,17 +181,25 @@ define([
                  
                  
                  app.collections.protocols = new Protocols_collection(); 
-                 var id = app.models.nutrition_plan.get('id');
+
                  app.collections.protocols.fetch({
-                    data: {nutrition_plan_id : id},
+                    data: {nutrition_plan_id : app.options.nutrition_plan_id},
+                    success: function (collection) {
+                        //console.log(collection);
+                    },
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
                  });
                  
-                 app.views.protocols = new Protocols_view({model : app.models.nutrition_plan, collection : app.collections.protocols}); 
-                 $("#protocol_list").html(app.views.protocols.render().el);
+                 app.views.protocols = new Protocols_view({el : $("#protocol_list"), collection : app.collections.protocols}); 
+                 app.views.protocols.render();
                  
+            },
+            
+            add_supplement_protocol : function() {
+                app.views.protocol = new Protocol_view({model : new Protocol_model(), collection : app.collections.protocols}); 
+                $("#protocol_list").append(app.views.protocol.render().el );
             },
             
             nutrition_guide: function () {

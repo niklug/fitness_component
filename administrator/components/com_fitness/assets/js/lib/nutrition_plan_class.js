@@ -265,7 +265,6 @@
                     alert(response.status.message);
                     return;
                 }
-                console.log(response.data);
                 handleData(response.data);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)

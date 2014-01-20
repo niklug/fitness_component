@@ -26,8 +26,8 @@ define([
          
         initialize: function(){
             _.bindAll(this, 'onClickSaveSupplement', 'onInputSupplementName', 'onInputSupplementUrl', 'onGetRemoteImages', 'connectThumbnailSlide');
-            app.collections.remote_images = new Remote_images_collection();
-            app.collections.remote_images_filtered = new Remote_images_filtered_collection();
+            this.remote_images_collection = new Remote_images_collection();
+            this.remote_images_filtered_collection = new Remote_images_filtered_collection();
         },
 
         render: function(){
@@ -40,7 +40,7 @@ define([
         },
 
         connectThumbnailSlide : function() {
-            app.views.thumbnail_slide = new  Thumbnail_slide_view({collection : app.collections.remote_images_filtered});
+            app.views.thumbnail_slide = new  Thumbnail_slide_view({collection : this.remote_images_filtered_collection});
             this.$el.find(".shop_url_slider").append(app.views.thumbnail_slide.render().el);
         },
 
@@ -137,9 +137,9 @@ define([
                         self.getSearchIngredients(
                             search_text,
                             function(output) {
-                                self.ingredients_search_results_view.$el.find(".results_count").html('Search returned ' + output.count + ' results.');
-                                self.ingredients_search_results_view.$el.find(".supplement_name_results").html(output.html);
-                                self.ingredients_search_results_view.$el.find(".supplement_name_results").find(":odd").css("background-color", "#F0F0EE")
+                                app.views.ingredients_search_results.$el.find(".results_count").html('Search returned ' + output.count + ' results.');
+                                app.views.ingredients_search_results.$el.find(".supplement_name_results").html(output.html);
+                                app.views.ingredients_search_results.$el.find(".supplement_name_results").find(":odd").css("background-color", "#F0F0EE")
                             })
                     },
                     1000
