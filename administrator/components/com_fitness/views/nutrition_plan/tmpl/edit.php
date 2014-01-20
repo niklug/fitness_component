@@ -525,10 +525,6 @@ $helper = new FitnessHelper();
                 window.app.controller.navigate("!/macronutrients", true);
             },
             
-            onClickSupplements : function() {
-                window.app.controller.navigate("!/supplements", true);
-            },
-            
             onClickNutrition_guide_old : function() {
                 window.app.controller.navigate("!/diary_guide", true);
             },
