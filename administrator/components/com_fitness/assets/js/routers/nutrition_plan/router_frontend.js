@@ -21,7 +21,7 @@ define([
         'views/nutrition_plan/information',
         'views/nutrition_plan/archive_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_list_menu',
-        'views/nutrition_plan/nutrition_guide/menu_plan_list',
+        'views/nutrition_plan/nutrition_guide/frontend/menu_plan_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_header',
         'views/nutrition_plan/nutrition_guide/example_day_menu',
         'views/nutrition_plan/nutrition_guide/example_day',

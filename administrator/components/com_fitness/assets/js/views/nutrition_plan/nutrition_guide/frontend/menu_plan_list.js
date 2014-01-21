@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/nutrition_plan/nutrition_guide/menu_plan_list.html'
+	'text!templates/nutrition_plan/nutrition_guide/frontend/menu_plan_list.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({

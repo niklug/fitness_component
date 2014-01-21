@@ -440,7 +440,7 @@ $mini_goal = $helper->getGoalData($nutrition_plan->mini_goal, 2);
     (function($) {
         // targets
         var macronutrient_targets_options = {
-            'main_wrapper' : $("#daily_micronutrient"),
+            'targets_main_wrapper' : "#daily_micronutrient",
             'fitness_administration_url' : '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'protein_grams_coefficient' : 4,
             'fats_grams_coefficient' : 9,

@@ -189,4 +189,10 @@ class FitnessViewNutrition_plan extends JView {
         echo json_encode($model->getRemoteImages($url));
     }
     
+    
+    function nutrition_plan_menu() {
+        $model = $this -> getModel("nutrition_plan");
+        echo json_encode($model->nutrition_plan_menu());
+    }
+    
 }

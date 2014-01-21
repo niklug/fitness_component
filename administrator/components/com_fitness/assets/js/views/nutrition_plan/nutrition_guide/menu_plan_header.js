@@ -33,6 +33,11 @@ define([
             event.preventDefault();
             var data = Backbone.Syphon.serialize(this);
             data.created_by = app.options.client_id;
+            
+            if(typeof app.options.is_backend !== 'undefined' && app.options.is_backend == true) {
+                data.status = 1;
+            }
+            
             this.model.set(data);
             
             this.model.unset('assessed_by_name');

@@ -55,7 +55,8 @@ require.config({
         'jquery.timepicker': 'lib/jquery.timepicker.min',
         'jquery.backbone_pagination': 'lib/backbone_pagination',
         'jquery.nutritionPlan': 'lib/nutrition_plan_class',
-        'jquery.macronutrientTargets': 'lib/dayly_targets_class'
+        'jquery.macronutrientTargets': 'lib/dayly_targets_class',
+        'jquery.status': 'lib/status_class'
     },
 
     waitSeconds: 5

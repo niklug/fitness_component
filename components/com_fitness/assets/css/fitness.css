@@ -140,6 +140,11 @@ a:hover, a:active, a:focus {
     border: 2px solid #4C4C4C;
 }
 
+.menu_plan_status_pending {
+    background-color: #F9DEA4 !important;
+    border: 2px solid #C79700;
+}
+
 .status_button, .status_button_dialog, .status_button_mini, .status_button_dialog_mini {
     display: block;
     font-size: 10px !important;

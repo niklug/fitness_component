@@ -116,7 +116,13 @@
     NutritionPlan.prototype.forceNoEndDateNo = function() {
         $("#jform_no_end_date0").val('1');
         $("#jform_no_end_date1").val('0');
-        $("#jform_active_finish").val($("#mini_goal_deadline").text());
+        
+        var active_finish = $("#mini_goal_deadline").text();
+        if(this.options.active_finish) {
+            active_finish = this.options.active_finish;
+        }
+        
+        $("#jform_active_finish").val(active_finish);
     }
 
 
@@ -529,6 +535,7 @@
         if(this.options.active_finish) {
             active_finish = this.options.active_finish;
         }
+        
         
         html += '<input style="display:none" readonly id="jform_active_finish" class="required" type="text" value="' + active_finish + '" name="jform[active_finish]" title="" readonly="readonly" aria-required="true" required="required">';
         html += '</td>';

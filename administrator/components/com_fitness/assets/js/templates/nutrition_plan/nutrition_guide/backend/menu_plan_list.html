@@ -1,7 +1,7 @@
 <div class="fitness_block_wrapper" style="margin-top: 20px;">
     <div class="internal_wrapper">
         <table width="100%">
-            <thead>
+            <thead class="table_header">
                 <th>START DATE</th>
                 <th>MENU NAME</th>
                 <th>CREATED BY</th>
@@ -9,6 +9,7 @@
                 <th>SUBMIT DATE</th>
                 <th>ASSESSED BY</th>
                 <th>VIEW</th>
+                <th style="text-align: center;">DELETE</th>
             </thead>
             <tbody>
             <% _.each(items, function(item){ %>
@@ -22,23 +23,28 @@
                     <td>
                         <%= item.created_by_name %>
                     </td>
-                    <td>
-                        <%= $.fitness_helper.setMenuPlanStatus(item.status) %>
+                    <td id="status_button_place_<%= item.id %>">
+                        <%= $.fitness_helper.setMenuPlanStatus(item.status, item.id) %>
                     </td>
                     <td>
-                        <%= moment(new Date(Date.parse(item.submit_date))).format("ddd, D MMM  YY") || '-' %>
+                        <% if(item.submit_date != '0000-00-00') { %>
+                                <%= moment(new Date(Date.parse(item.submit_date))).format("ddd, D MMM  YY") %>
+                        <% } else { %>
+                                <%= '-' %>
+                        <% } %>
                     </td>
                     <td>
                         <%= item.assessed_by_name || '-' %>
                     </td>
                     <td>
-                        <%
-                        if(item.status != '5') { 
-                        %>
-                        <a class="view " onclick="javascript:void(0)" style="cursor: pointer;">
-                            <span class="preview" data-id="<%= item.id %>"></span>
+                        <a class="preview " data-id="<%= item.id %>" onclick="javascript:void(0)" style="cursor: pointer;">
+                            [VIEW]
                         </a>    
-                        <% } %>
+                    </td>
+                    <td style="text-align: center;">
+                        <a class="delete " data-id="<%= item.id %>" onclick="javascript:void(0)" style="cursor: pointer;">
+                            [X]
+                        </a>    
                     </td>
                 </tr>
             <% 

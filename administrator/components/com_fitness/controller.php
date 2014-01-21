@@ -336,6 +336,12 @@ class FitnessController extends JController
             $view->setModel($this->getModel('nutrition_plan'));
             $view -> remote_images(); 
         }
+        
+        public function nutrition_plan_menu(){
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> nutrition_plan_menu(); 
+        }
 
 
 }

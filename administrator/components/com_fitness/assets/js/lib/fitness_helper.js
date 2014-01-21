@@ -134,12 +134,12 @@
                     return html;
                 },
                 
-                setMenuPlanStatus : function(status) {
+                setMenuPlanStatus : function(status, id) {
                     var style_class;
                     var text;
                     switch(status) {
                         case '1' :
-                            style_class = 'recipe_status_pending';
+                            style_class = 'menu_plan_status_pending';
                             text = 'PENDING';
                             break;
                         case '2' :
@@ -168,7 +168,7 @@
                             text = 'PENDING';
                             break;
                     }
-                    var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                    var html = '<a  data-item_id="' + id + '" style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
                     return html;
                 },
 

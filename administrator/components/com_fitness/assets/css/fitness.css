@@ -289,7 +289,10 @@
     width: 90px;
 }
 
-
+.menu_plan_status_pending {
+    background-color: #E6CCF2 !important;
+    border: 2px solid #662D86;
+}
 
 .event_status_wrapper a{
     margin: 5px;
@@ -940,6 +943,7 @@
 
 .internal_wrapper {
     padding: 5px;
+    min-height: 19px;
 }
 
 .recipe_filter {
@@ -958,4 +962,91 @@
 
 #jform_allowed_proteins-lbl, #jform_allowed_fats-lbl, #jform_allowed_carbs-lbl, #jform_allowed_liquids-lbl, #jform_other_recommendations-lbl, #jform_trainer_comments-lbl, #jform_information-lbl{
     float: none;
+}
+
+
+.fitness_wrapper {
+    background: none;
+    background-color: #0E0704;
+    opacity: 0.85;
+    color: #000;
+    padding: 5px;
+    font-size: 14px;
+}
+
+
+.fitness_content_wrapper table th {
+    background: none !important;
+}
+
+.fitness_block_wrapper {
+    background: none;
+    color: #000;
+    padding: 0px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+}
+
+.fitness_wrapper h2, .fitness_block_wrapper h2 {
+    color:#000 !important;
+}
+
+.fitness_wrapper h5 {
+    line-height: 18px;
+    margin: 5px;
+    padding: 2px 0;
+}
+
+.fitness_wrapper  select {
+    margin-top: 3px;
+}
+
+.fitness_content_wrapper{
+    border: 1px solid #cccccc;
+    padding: 10px;
+}
+
+.orange_line {
+    color: #BC4A26;
+    background-color: #BC4A26;
+    border: 0;
+    height: 2px;
+    margin: 0;
+    padding: 0;
+}
+
+.orange_text {
+    color: #BC4A26;
+}
+
+.fitness_wrapper .pagination {
+
+    border: none !important;
+}
+
+.fitness_wrapper table td {
+    padding:2px;
+}
+
+
+.fitness_wrapper table, .fitness_wrapper table td, .fitness_wrapper table tr {
+    border:none;
+}
+
+.fitness_wrapper table thead{
+    background-color: #313031;
+    height: 25px;
+    text-align: left;
+}
+
+td.center, th.center, .center {
+    float: none;
+    text-align: center;
+}
+
+
+.fitness_wrapper h3 {
+    margin: 0px !important;
+    color: #BC4A26 !important;
+    padding: 5px;
 }

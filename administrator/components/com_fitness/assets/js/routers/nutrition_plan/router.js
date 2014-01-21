@@ -22,7 +22,7 @@ define([
         'views/nutrition_plan/information',
         'views/nutrition_plan/archive_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_list_menu',
-        'views/nutrition_plan/nutrition_guide/menu_plan_list',
+        'views/nutrition_plan/nutrition_guide/backend/menu_plan_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_header',
         'views/nutrition_plan/nutrition_guide/example_day_menu',
         'views/nutrition_plan/nutrition_guide/example_day',
@@ -79,6 +79,20 @@ define([
                 
                 app.models.get_recipe_params.bind("change", this.get_database_recipes, this);
                 
+                // append targets fieldsets
+                app.macronutrient_targets_heavy = $.macronutrientTargets(app.options, 'heavy', 'HEAVY TRAINING DAY');
+
+                app.macronutrient_targets_light = $.macronutrientTargets(app.options, 'light', 'LIGHT TRAINING DAY');
+
+                app.macronutrient_targets_rest = $.macronutrientTargets(app.options, 'rest', 'RECOVERY / REST DAY');
+                
+                app.macronutrient_targets_heavy.run();
+
+                app.macronutrient_targets_light.run();
+
+                app.macronutrient_targets_rest.run();
+                //
+                app.nutrition_plan = $.nutritionPlan(app.options);
 
             },
         
@@ -114,8 +128,7 @@ define([
                  this.common_actions();
                  $("#overview_wrapper").show();
                  $("#overview_link").addClass("active_link");
-                 var nutrition_plan = $.nutritionPlan(app.options);
-                 nutrition_plan.run();
+                 app.nutrition_plan.run();
             },
 
             targets: function () {
@@ -124,13 +137,6 @@ define([
                  $("#targets_wrapper").show();
                  $("#targets_link").addClass("active_link");
                  var id = app.models.nutrition_plan.get('id');
-                 
-                 // append targets fieldsets
-                var macronutrient_targets_heavy = $.macronutrientTargets(app.options, 'heavy', 'HEAVY TRAINING DAY').run();
-
-                var macronutrient_targets_light = $.macronutrientTargets(app.options, 'light', 'LIGHT TRAINING DAY').run();
-
-                var macronutrient_targets_rest = $.macronutrientTargets(app.options, 'rest', 'RECOVERY / REST DAY').run();
 
                 // connect comments
                 var comment_options = {

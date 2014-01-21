@@ -1018,7 +1018,7 @@ defined('_JEXEC') or die;
                 }
                 
                 var macronutrient_targets_options = {
-                    'main_wrapper' : $("#daily_micronutrient"),
+                    'targets_main_wrapper' : "#daily_micronutrient",
                     'fitness_administration_url' : this.model.attributes.fitness_administration_url,
                     'protein_grams_coefficient' : 4,
                     'fats_grams_coefficient' : 9,
