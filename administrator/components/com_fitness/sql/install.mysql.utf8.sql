@@ -1211,3 +1211,30 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_menus` (
   KEY `nutrition_plan_id` (`nutrition_plan_id`),
   FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_database_categories` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+
+
+INSERT INTO `#__fitness_database_categories` (`id`, `name`, `state`) VALUES
+(1, 'Additives and Food Ingredients', 1),
+(2, 'Beverages', 1),
+(3, 'Cereals & Cereal Products', 1),
+(4, 'Condiments', 1),
+(5, 'Dairy', 1),
+(6, 'Dairy & Meat Alternatives', 1),
+(7, 'Edible Fats & Oils ', 1),
+(8, 'Eggs', 1),
+(9, 'Fruit', 1),
+(10, 'Legumes', 1),
+(11, 'Meat & Meat Products', 1),
+(12, 'Nuts and Seeds', 1),
+(13, 'Seafood & Seafood Products', 1),
+(14, 'Sugar, Confectionary and Sweet Spreads', 1),
+(15, 'Vegetables', 1);

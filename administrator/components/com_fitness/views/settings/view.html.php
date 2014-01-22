@@ -53,6 +53,7 @@ class FitnessViewSettings extends JView {
         FitnessHelper::addSubmenu('Nutrition Focuses', 'nutrition_focuses');
         
         if(FitnessHelper::is_superuser()){
+            FitnessHelper::addSubmenu('Nutrition Database Categories', 'database_categories');
             FitnessHelper::addSubmenu('User Groups', 'user_groups');
             FitnessHelper::addSubmenu('Business Profiles', 'business_profiles');
         }

@@ -100,7 +100,15 @@
         filter="safehtml"
             label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_DESCRIPTION"
             description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_DESCRIPTION"  /> 
-
+        
+       <field name="category" type="sql"
+        query="SELECT id, name FROM #__fitness_database_categories WHERE state='1'"
+        key_field="id"
+        value_field="name"
+        class="inputbox"
+        filter="safehtml"        required="true"
+            label="Category"
+            description=""  /> 
        
        
        

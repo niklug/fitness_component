@@ -25,20 +25,16 @@ $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutritiondatabases'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_fitness&view=database_categories'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
-                <div class='filter-select fltrt'>
-                    <a class="active menu_link" href="index.php?option=com_fitness&view=nutrition_recipes">Nutrition Recipes</a>
-                </div>
-                <div class="filter-search fltlft">
+		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 		</div>
 		
-        </fieldset> 
-        <fieldset id="filter-bar"> 
+        
 		<div class='filter-select fltrt'>
 			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
@@ -58,40 +54,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</th>
 
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_INGREDIENT_NAME', 'a.ingredient_name', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_DATABASE_CATEGORIES_NAME', 'a.name', $listDirn, $listOrder); ?>
 				</th>
-                                <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Category', 'category_name', $listDirn, $listOrder); ?>
-				</th>
-                                <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_CALORIES', 'a.calories', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_ENERGY', 'a.energy', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_PROTEIN', 'a.protein', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_FATS', 'a.fats', $listDirn, $listOrder); ?>
-				</th>
-                                <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_SATURATED_FAT', 'a.saturated_fat', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_CARBS', 'a.carbs', $listDirn, $listOrder); ?>
-				</th>
-
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_TOTAL_SUGARS', 'a.total_sugars', $listDirn, $listOrder); ?>
-				</th>
-				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITIONDATABASES_SODIUM', 'a.sodium', $listDirn, $listOrder); ?>
-				</th>
-                                <th class='left'>
-				<?php echo JHtml::_('grid.sort',  'Specific Gravity', 'a.specific_gravity', $listDirn, $listOrder); ?>
-				</th>
-
 
 
                 <?php if (isset($this->items[0]->state)) { ?>
@@ -103,7 +67,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th width="10%">
 					<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
 					<?php if ($canOrder && $saveOrder) :?>
-						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'nutritiondatabases.saveorder'); ?>
+						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'database_categories.saveorder'); ?>
 					<?php endif; ?>
 				</th>
                 <?php } ?>
@@ -144,50 +108,20 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 				<td>
 				<?php if (isset($item->checked_out) && $item->checked_out) : ?>
-					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'nutritiondatabases.', $canCheckin); ?>
+					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'database_categories.', $canCheckin); ?>
 				<?php endif; ?>
 				<?php if ($canEdit) : ?>
-					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=nutritiondatabase.edit&id='.(int) $item->id); ?>">
-					<?php echo $this->escape($item->ingredient_name); ?></a>
+					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=database_category.edit&id='.(int) $item->id); ?>">
+					<?php echo $this->escape($item->name); ?></a>
 				<?php else : ?>
-					<?php echo $this->escape($item->ingredient_name); ?>
+					<?php echo $this->escape($item->name); ?>
 				<?php endif; ?>
 				</td>
-                                <td>
-					<?php echo $item->category_name; ?>
-				</td>
-				<td>
-					<?php echo $item->calories; ?>
-				</td>
-				<td>
-					<?php echo $item->energy; ?>
-				</td>
-				<td>
-					<?php echo $item->protein; ?>
-				</td>
-				<td>
-					<?php echo $item->fats; ?>
-				</td>
-                                <td>
-					<?php echo $item->saturated_fat; ?>
-				</td>
-				<td>
-					<?php echo $item->carbs; ?>
-				</td>
 
-				<td>
-					<?php echo $item->total_sugars; ?>
-				</td>
-				<td>
-					<?php echo $item->sodium; ?>
-				</td>
-                                <td>
-					<?php echo $item->specific_gravity; ?>
-				</td>
 
                 <?php if (isset($this->items[0]->state)) { ?>
 				    <td class="center">
-					    <?php echo JHtml::_('jgrid.published', $item->state, $i, 'nutritiondatabases.', $canChange, 'cb'); ?>
+					    <?php echo JHtml::_('jgrid.published', $item->state, $i, 'database_categories.', $canChange, 'cb'); ?>
 				    </td>
                 <?php } ?>
                 <?php if (isset($this->items[0]->ordering)) { ?>
@@ -195,11 +129,11 @@ $saveOrder	= $listOrder == 'a.ordering';
 					    <?php if ($canChange) : ?>
 						    <?php if ($saveOrder) :?>
 							    <?php if ($listDirn == 'asc') : ?>
-								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'nutritiondatabases.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'nutritiondatabases.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'database_categories.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'database_categories.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							    <?php elseif ($listDirn == 'desc') : ?>
-								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'nutritiondatabases.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'nutritiondatabases.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderUpIcon($i, true, 'database_categories.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								    <span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'database_categories.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							    <?php endif; ?>
 						    <?php endif; ?>
 						    <?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>

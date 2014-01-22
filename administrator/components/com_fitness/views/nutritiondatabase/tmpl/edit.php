@@ -41,6 +41,8 @@ $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
                 <li><?php echo $this->form->getLabel('ingredient_name'); ?>
                 <?php echo $this->form->getInput('ingredient_name'); ?></li>
+                <li><?php echo $this->form->getLabel('category'); ?>
+                <?php echo $this->form->getInput('category'); ?></li>
                 <li><?php echo $this->form->getLabel('description'); ?>
                 <?php echo $this->form->getInput('description'); ?></li>
                 <br/><br/><br/>

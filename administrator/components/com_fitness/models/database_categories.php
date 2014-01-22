@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Fitness records.
  */
-class FitnessModelnutritiondatabases extends JModelList {
+class FitnessModelDatabase_categories extends JModelList {
 
     /**
      * Constructor.
@@ -27,17 +27,7 @@ class FitnessModelnutritiondatabases extends JModelList {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
                                 'id', 'a.id',
-                'ingredient_name', 'a.ingredient_name',
-                'category_name', 'category_name',
-                'calories', 'a.calories',
-                'energy', 'a.energy',
-                'protein', 'a.protein',
-                'fats', 'a.fats',
-                'carbs', 'a.carbs',
-                'saturated_fat', 'a.saturated_fat',
-                'total_sugars', 'a.total_sugars',
-                'sodium', 'a.sodium',
-                'description', 'a.description',
+                'name', 'a.name',
                 'state', 'a.state',
 
             );
@@ -69,7 +59,7 @@ class FitnessModelnutritiondatabases extends JModelList {
         $this->setState('params', $params);
 
         // List state information.
-        parent::populateState('a.ingredient_name', 'asc');
+        parent::populateState('a.id', 'asc');
     }
 
     /**
@@ -105,11 +95,10 @@ class FitnessModelnutritiondatabases extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*, c.name AS category_name'
+                        'list.select', 'a.*'
                 )
         );
-        $query->from('`#__fitness_nutrition_database` AS a');
-        $query->leftJoin('#__fitness_database_categories AS c ON a.category=c.id');
+        $query->from('`#__fitness_database_categories` AS a');
 
         
 
@@ -130,7 +119,7 @@ class FitnessModelnutritiondatabases extends JModelList {
                 $query->where('a.id = ' . (int) substr($search, 3));
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('( a.ingredient_name LIKE '.$search.'  OR  a.state LIKE '.$search.' )');
+                
             }
         }
 
