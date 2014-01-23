@@ -342,6 +342,21 @@ class FitnessController extends JController
             $view->setModel($this->getModel('nutrition_plan'));
             $view -> nutrition_plan_menu(); 
         }
+        
+        public function nutrition_database_categories(){
+            require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+            $helper = new FitnessHelper();
+            echo json_encode($helper->nutrition_database_categories());
+        }
+        
+        
+        public function shopping_list_ingredients(){
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> shopping_list_ingredients(); 
+        }
+        
+        
 
 
 }

@@ -916,7 +916,7 @@ td.center, th.center, .center {
 #nutrition_guide_menu ul li {
   float: left;
   list-style: none outside none;
-  margin-right: 10px;
+  margin-right: 5px;
   padding: 0 5px;
   position: relative;
   text-align: center;

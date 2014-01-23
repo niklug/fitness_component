@@ -15,12 +15,13 @@ define([
         },
 
         render:function () {
-            $(this.el).html(this.template());
+            $(this.el).html(this.template(this.model.toJSON()));
             return this;
         },
 
         events:{
-            "click .example_day_link": "onChooseDay"
+            "click .example_day_link": "onChooseDay",
+            "click .shopping_list": "onChooseShoopingList"
         },
 
         onChooseDay:function (event) {
@@ -28,6 +29,12 @@ define([
             var day = $(event.target).attr('data-id');
             $(event.target).addClass("active");
             this.controller.navigate("!/example_day/" + day, true);
+        },
+        
+        onChooseShoopingList:function (event) {
+            $(".example_day_link").removeClass("active");
+            $(event.target).addClass("active");
+            this.controller.navigate("!/shopping_list", true);
         }
 
     });

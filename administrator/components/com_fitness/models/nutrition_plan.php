@@ -949,6 +949,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
 
                     if($id) {
                         $ingredient_obj = new stdClass();
+                        $ingredient_obj->nutrition_plan_id = $model->nutrition_plan_id;
                         $ingredient_obj->recipe_id = $model->original_recipe_id;
                         $ingredient_obj->recipe_id_created = $id;
                         $ingredient_obj->number_serves = $model->number_serves_new;
@@ -1022,6 +1023,60 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     
                     $query .= " ORDER BY a.start_date DESC";
                     
+                    $items = FitnessHelper::customQuery($query, 1);
+                    return $items;
+                    break;
+                case 'PUT': // Update
+                    $id = $helper->insertUpdateObj($model, $table);
+                    break;
+                case 'POST': // Create
+                    $id = $helper->insertUpdateObj($model, $table);
+                    break;
+                case 'DELETE': // Delete Item
+                    $id = str_replace('/', '', $_GET['id']);
+
+                    $id = $helper->deleteRow($id, $table);
+                    break;
+
+                default:
+                    break;
+            }
+   
+            $model->id = $id;
+            
+            return $model;
+        }
+        
+        
+        public function shopping_list_ingredients() {
+
+            $method = JRequest::getVar('_method');
+            
+            if(!$method) {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+            
+            $model = json_decode(JRequest::getVar('model'));
+            
+            $table = '#__fitness_nutrition_plan_example_day_ingredients';
+            
+            $helper = new FitnessHelper();
+            
+            switch ($method) {
+                case 'GET': // Get Item(s)
+
+                    $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
+                    
+                    $query = "SELECT a.*, SUM(a.quantity) AS  quantity_sum,"
+                            . " (SELECT category FROM #__fitness_nutrition_database WHERE id=a.ingredient_id) category"
+                            . " FROM $table AS a WHERE 1";
+
+                    if($nutrition_plan_id) {
+                        $query .= " AND a.nutrition_plan_id='$nutrition_plan_id'";
+                    }
+                    
+                    $query .= " GROUP BY a.ingredient_id";
+                       
                     $items = FitnessHelper::customQuery($query, 1);
                     return $items;
                     break;

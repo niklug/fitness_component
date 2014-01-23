@@ -520,7 +520,15 @@ class FitnessController extends JController {
     public function get_recipe(){
         echo json_encode($this->admin_nutrition_plan_model->getRecipe());
     }
-
     
+    public function nutrition_database_categories(){
+        require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+        $helper = new FitnessHelper();
+        echo json_encode($helper->nutrition_database_categories());
+    }
+    
+    public function shopping_list_ingredients(){
+        echo json_encode($this->admin_nutrition_plan_model->shopping_list_ingredients());
+    }
         
 }

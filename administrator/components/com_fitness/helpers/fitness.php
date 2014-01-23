@@ -1460,5 +1460,51 @@ class FitnessHelper extends FitnessFactory
         
         return $plan;
     }
+    
+    public function nutrition_database_categories() {
+
+            $method = JRequest::getVar('_method');
+            
+            if(!$method) {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+            
+            $model = json_decode(JRequest::getVar('model'));
+            
+            $table = '#__fitness_database_categories';
+            
+            $helper = new FitnessHelper();
+            
+            switch ($method) {
+                case 'GET': // Get Item(s)
+                     
+                    $query = "SELECT id, name "
+                           . " FROM $table WHERE state='1'";
+
+                    $query .= " ORDER BY name ASC";
+                    
+                    $items = FitnessHelper::customQuery($query, 1);
+                    return $items;
+                    break;
+                case 'PUT': // Update
+                    $id = $helper->insertUpdateObj($model, $table);
+                    break;
+                case 'POST': // Create
+                    $id = $helper->insertUpdateObj($model, $table);
+                    break;
+                case 'DELETE': // Delete Item
+                    $id = str_replace('/', '', $_GET['id']);
+
+                    $id = $helper->deleteRow($id, $table);
+                    break;
+
+                default:
+                    break;
+            }
+   
+            $model->id = $id;
+            
+            return $model;
+        }
 }
 
