@@ -6,9 +6,7 @@
        <% _.each(ingredients, function(model) {  %>
            <tr>
                <td>
-               <td>
-                   <input type="checkbox">
-               </td>
+                   <input type="checkbox" value="<%= model.get('id') %>">
                </td>
                <td width="350">
                    <%= model.get('meal_name') %>

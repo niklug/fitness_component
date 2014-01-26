@@ -1178,6 +1178,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_example_day_meal_recipes` 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_example_day_ingredients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nutrition_plan_id` int(11) unsigned NOT NULL,
+  `menu_id` int(11) unsigned NOT NULL,
   `recipe_id` int(11) unsigned NOT NULL,
   `type` varchar(255) NOT NULL,
   `ingredient_id` int(11) unsigned NOT NULL,
@@ -1193,7 +1194,11 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_example_day_ingredients` (
   `total_sugars` float NOT NULL,
   `sodium` float NOT NULL,
   PRIMARY KEY (`id`),
+  KEY `nutrition_plan_id` (`nutrition_plan_id`),
+  KEY `menu_id` (`menu_id`),
   KEY `recipe_id` (`recipe_id`),
+  FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
+  FOREIGN KEY (menu_id) REFERENCES #__fitness_nutrition_plan_menus(id) ON DELETE CASCADE,
   FOREIGN KEY (recipe_id) REFERENCES #__fitness_nutrition_plan_example_day_meal_recipes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

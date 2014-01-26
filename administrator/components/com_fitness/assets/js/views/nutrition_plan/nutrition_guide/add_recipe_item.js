@@ -71,6 +71,10 @@ define([
             app.models.original_recipe.set(this.model.toJSON());
             
             app.models.original_recipe.set({nutrition_plan_id : app.options.item_id});
+            
+            var menu_id = app.models.menu_plan.get('id');
+
+            app.models.original_recipe.set({menu_id : menu_id});
 
             var original_recipe_id = this.model.get('id');
 

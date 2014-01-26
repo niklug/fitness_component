@@ -303,6 +303,7 @@ define([
             },
             
             shopping_list : function() {
+                var menu_id = app.models.menu_plan.get('id');
                 app.collections.nutrition_database_categories = new Nutrition_database_categories_collection();
                 app.collections.shopping_list_ingredients = new Shopping_list_ingredients_collection();
                 var id = app.models.nutrition_plan.get('id');
@@ -324,7 +325,8 @@ define([
                 app.collections.shopping_list_ingredients.fetch({
                     wait : true,
                     data: {
-                        nutrition_plan_id : id
+                        nutrition_plan_id : id,
+                        menu_id : menu_id
                     },
                     success: function (collection, response) {
                         //console.log(response);
@@ -335,7 +337,11 @@ define([
                 })
                 
                 ).then(function() {
-                    $('#example_day_wrapper').html(new Shopping_list_view({categories_collection : app.collections.nutrition_database_categories, ingredients_collection : app.collections.shopping_list_ingredients}).render().el);
+                    $('#example_day_wrapper').html(new Shopping_list_view({
+                        categories_collection : app.collections.nutrition_database_categories, 
+                        ingredients_collection : app.collections.shopping_list_ingredients,
+                        model : app.models.menu_plan
+                    }).render().el);
                 });
             },
             

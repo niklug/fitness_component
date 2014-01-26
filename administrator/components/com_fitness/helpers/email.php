@@ -398,6 +398,14 @@ class NutritionPlanEmail extends FitnessEmail {
                 $layout = 'email_pdf_recipe';
                 $this->client_id = JFactory::getUser()->id;
                 break;
+            
+            case 'email_pdf_shopping_list':
+                $subject = 'Shopping List';
+                $layout = 'email_pdf_shopping_list';
+                $this->client_id = JFactory::getUser()->id;
+                break;
+            
+            
  
             default:
                 break;
@@ -407,6 +415,10 @@ class NutritionPlanEmail extends FitnessEmail {
         
         if($this->client_id) {
             $this->url .= '&client_id=' . $this->client_id;
+        }
+        
+        if($data->checked) {
+            $this->url .= '&checked=' . $data->checked;
         }
         
         $this->subject = $subject;
@@ -425,6 +437,7 @@ class NutritionPlanEmail extends FitnessEmail {
                 OR $this->data->method == 'email_pdf_nutrition_plan_supplements' 
                 OR $this->data->method == 'email_pdf_nutrition_guide'
                 OR $this->data->method == 'email_pdf_recipe'
+                OR $this->data->method == 'email_pdf_shopping_list'
         ) {
             $client_id = $this->client_id;
         }

@@ -520,7 +520,12 @@ class FitnessModelnutrition_plan extends JModelAdmin
 
             foreach ($ingredients as $ingredient) {
                 $data = new stdClass();
-                $data->nutrition_plan_id = $obj->nutrition_plan_id;
+                if($obj->nutrition_plan_id) {
+                    $data->nutrition_plan_id = $obj->nutrition_plan_id;
+                }
+                if($obj->menu_id) {
+                    $data->menu_id = $obj->menu_id;
+                }
                 if($obj->meal_id) {
                     $data->meal_id = $obj->meal_id;
                 }
@@ -950,6 +955,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     if($id) {
                         $ingredient_obj = new stdClass();
                         $ingredient_obj->nutrition_plan_id = $model->nutrition_plan_id;
+                        $ingredient_obj->menu_id = $model->menu_id;
                         $ingredient_obj->recipe_id = $model->original_recipe_id;
                         $ingredient_obj->recipe_id_created = $id;
                         $ingredient_obj->number_serves = $model->number_serves_new;
@@ -1066,19 +1072,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 case 'GET': // Get Item(s)
 
                     $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
-                    
-                    $query = "SELECT a.*, SUM(a.quantity) AS  quantity_sum,"
-                            . " (SELECT category FROM #__fitness_nutrition_database WHERE id=a.ingredient_id) category"
-                            . " FROM $table AS a WHERE 1";
-
-                    if($nutrition_plan_id) {
-                        $query .= " AND a.nutrition_plan_id='$nutrition_plan_id'";
-                    }
-                    
-                    $query .= " GROUP BY a.ingredient_id";
-                       
-                    $items = FitnessHelper::customQuery($query, 1);
-                    return $items;
+                    $menu_id = JRequest::getVar('menu_id');
+                    return $helper->getShoppingListIngredients($nutrition_plan_id, $menu_id);
                     break;
                 case 'PUT': // Update
                     $id = $helper->insertUpdateObj($model, $table);

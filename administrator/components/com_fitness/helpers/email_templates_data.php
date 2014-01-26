@@ -52,6 +52,9 @@ class EmailTemplateData extends FitnessHelper
             case 'EmailPdfRecipe' : 
                 return new EmailPdfRecipe($params);
                 break;
+            case 'EmailPdfShoppingList' : 
+                return new EmailPdfShoppingList($params);
+                break;
             
 
             default:
@@ -654,6 +657,43 @@ class EmailPdfRecipe extends EmailTemplateData  {
 
         return $data;
     }
+}
+    
+class EmailPdfShoppingList extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->client_id = $params['client_id'];
+        
+        $this->checked = explode(',', $params['checked']);
+    }
+    
+    protected function getItemData() {
+        $this->item = $this->getMenuPlanData($this->id);
+        $this->item->categories = $this->getNutritionDatabaseCategories();
+        $this->item->ingredients  = $this->getShoppingListIngredients($this->item->nutrition_plan_id, $this->item->id);
+        $this->business_profile_user = $this->client_id;
+    }
+    
+        
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+        
+        $data->checked = $this->checked;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $date = JFactory::getDate($this->item->start_date);
+        
+        $data->start_date =  $date->toFormat('%A, %d %b %Y');
 
+        return $data;
+    }
     
 }

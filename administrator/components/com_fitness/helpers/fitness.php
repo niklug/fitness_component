@@ -1473,18 +1473,9 @@ class FitnessHelper extends FitnessFactory
             
             $table = '#__fitness_database_categories';
             
-            $helper = new FitnessHelper();
-            
             switch ($method) {
                 case 'GET': // Get Item(s)
-                     
-                    $query = "SELECT id, name "
-                           . " FROM $table WHERE state='1'";
-
-                    $query .= " ORDER BY name ASC";
-                    
-                    $items = FitnessHelper::customQuery($query, 1);
-                    return $items;
+                    return $this->getNutritionDatabaseCategories();;
                     break;
                 case 'PUT': // Update
                     $id = $helper->insertUpdateObj($model, $table);
@@ -1506,5 +1497,40 @@ class FitnessHelper extends FitnessFactory
             
             return $model;
         }
+        
+        public function getMenuPlanData($id) {
+            $query = "SELECT * FROM #__fitness_nutrition_plan_menus";
+            return self::customQuery($query, 2);
+        }
+        
+        public function getNutritionDatabaseCategories() {
+            $query = "SELECT id, name "
+                   . " FROM #__fitness_database_categories WHERE state='1'";
+
+            $query .= " ORDER BY name ASC";
+
+            return self::customQuery($query, 1);
+        }
+        
+        public function getShoppingListIngredients($nutrition_plan_id, $menu_id) {
+
+            $query = "SELECT a.*, SUM(a.quantity) AS  quantity_sum,"
+                    . " (SELECT category FROM #__fitness_nutrition_database WHERE id=a.ingredient_id) category"
+                    . " FROM #__fitness_nutrition_plan_example_day_ingredients AS a WHERE 1";
+
+            if($nutrition_plan_id) {
+                $query .= " AND a.nutrition_plan_id='$nutrition_plan_id'";
+            }
+
+            if($menu_id) {
+                $query .= " AND a.menu_id='$menu_id'";
+            }
+
+            $query .= " GROUP BY a.ingredient_id";
+
+            return self::customQuery($query, 1);
+        }
+        
+        
 }
 

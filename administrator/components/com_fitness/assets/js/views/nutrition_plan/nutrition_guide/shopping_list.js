@@ -16,7 +16,7 @@ define([
         },
 
         render:function () {
-            $(this.el).html(this.template({}));
+            $(this.el).html(this.template(this.model.toJSON()));
             
             var container = this.$el.find("#shopping_list_container");
             
@@ -34,18 +34,38 @@ define([
                     count++;
                 }
             });
-            
-            //console.log(categories_collection);
-            //console.log(ingredients_collection);
-            
             return this;
         },
 
-        events:{
-           
+        events: {
+            "click .pdf_button" : "onClickPdf",
+            "click .email_button" : "onClickEmail",
         },
 
+        onClickPdf : function(event) {
+            
+            var checked = $('div#shopping_list_container input:checked').map(function() { return this.value}).get().join(',');
+            //console.log(checked);
+      
+            var id = $(event.target).attr('data-id');
+            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_shopping_list&id=' + id +'&client_id=' + app.options.client_id + '&checked=' + checked;
+            $.fitness_helper.printPage(htmlPage);
+          
+        },
 
+        onClickEmail : function(event) {
+            var data = {};
+            data.url = app.options.ajax_call_url;
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
+
+            data.id = $(event.target).attr('data-id');
+            data.checked = $('div#shopping_list_container input:checked').map(function() { return this.value}).get().join(',');
+            data.view = 'NutritionPlan';
+            data.method = 'email_pdf_shopping_list';
+            $.fitness_helper.sendEmail(data);
+        },
     });
             
     return view;
