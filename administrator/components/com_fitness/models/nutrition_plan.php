@@ -821,17 +821,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $data->recipe_variations_filter_options = JRequest::getVar('recipe_variations_filter_options'); 
             $data->current_page= JRequest::getVar('current_page'); 
             
-            $data_encoded= json_encode($data);
-            
-            $recipes = $recipe_database->getRecipes($table, $data_encoded);
-            
-            if(!$recipes['status']['success']) {
-                echo $recipes['status']['message'];
-                header("HTTP/1.0 404 Not Found");
-            }
-            
-            $recipes = $recipes['data'];
-                    
+            $recipes = $recipe_database->getRecipes($table, $data);
+                       
             return $recipes;
         }
         
@@ -974,9 +965,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 default:
                     break;
             }
-            
-            
-   
+
             $model->id = $id;
             
             return $model;

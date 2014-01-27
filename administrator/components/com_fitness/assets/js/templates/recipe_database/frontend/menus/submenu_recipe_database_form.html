@@ -1,0 +1,25 @@
+<div style="width:100%;">
+
+    <% if (is_favourite) {
+        var display_remove_favourite = 'inline';
+        var display_add_favourite = 'none';
+
+    } else {  
+        var display_add_favourite = 'inline';
+        var display_remove_favourite = 'none';
+    } %>
+        <a data-id="<%= recipe_id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
+
+        <a data-id="<%= recipe_id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
+
+
+    <a data-id="" style="cursor: pointer;left;" id="copy_recipe" onclick="javascript:void(0)">[COPY TO MY RECIPES]</a>
+
+    <% if(nutrition_plan_id) {%>
+     &#32;<a data-id="<%= recipe_id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
+    <% } %>
+
+
+    <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
+</div>
+<div class="clr"></div>

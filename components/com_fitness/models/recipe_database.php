@@ -46,13 +46,9 @@ class FitnessModelrecipe_database extends JModelList {
     /**********************************************************************/
     
     
-    public function getRecipes($table, $data_encoded) {
-        $status['success'] = 1;
-        
+    public function getRecipes($table, $data) {
         $helper = $this->helper;
-        
-        $data = json_decode($data_encoded);
-        
+ 
         $sort_by = $data->sort_by;
         $order_dirrection = $data->order_dirrection;
         
@@ -192,30 +188,17 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         
-                
         $query .= "  ORDER BY a." . $sort_by . " " . $order_dirrection 
                 . " LIMIT $start, $limit";
 
-                
-        try {
-            $data = FitnessHelper::customQuery($query, 1);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-        
+
+        $data = FitnessHelper::customQuery($query, 1);
+
         //recipe types
         $i = 0;
         foreach ($data as $recipe) {
             if(!empty($recipe->recipe_type)) {
-                try {
-                    $recipe_types_names = $helper->getRecipeNames($recipe->recipe_type);
-                } catch (Exception $e) {
-                    $status['success'] = 0;
-                    $status['message'] = '"' . $e->getMessage() . '"';
-                    return array( 'status' => $status);
-                }
+                $recipe_types_names = $helper->getRecipeNames($recipe->recipe_type);
                 $data[$i]->recipe_types_names = $recipe_types_names;
                 $i++;
             }
@@ -225,25 +208,14 @@ class FitnessModelrecipe_database extends JModelList {
         
         $i = 0;
         foreach ($data as $recipe) {
-
             if(!empty($recipe->recipe_variation)) {
-
-                try {
-                    $recipe_variations_names = $helper->getRecipeVariationNames($recipe->recipe_variation);
-                } catch (Exception $e) {
-                    $status['success'] = 0;
-                    $status['message'] = '"' . $e->getMessage() . '"';
-                    return array( 'status' => $status);
-                }
+                $recipe_variations_names = $helper->getRecipeVariationNames($recipe->recipe_variation);
                 $data[$i]->recipe_variations_names = $recipe_variations_names;
                 $i++;
             }
         }
-    
-    
-        $result = array( 'status' => $status, 'data' => $data);
-        
-        return $result;
+
+        return $data;
     }
     
     
@@ -618,6 +590,61 @@ class FitnessModelrecipe_database extends JModelList {
         $result = array( 'status' => $status, 'data' => $data->id);
         
         return $result;
+    }
+    
+    
+    public function recipes() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $data = new stdClass();
+            
+        $data->sort_by = JRequest::getVar('sort_by'); 
+        $data->order_dirrection = JRequest::getVar('order_dirrection'); 
+        $data->page = JRequest::getVar('page'); 
+        $data->limit = JRequest::getVar('limit'); 
+        $data->state = JRequest::getVar('state'); 
+        $data->filter_options = JRequest::getVar('filter_options'); 
+        $data->recipe_variations_filter_options = JRequest::getVar('recipe_variations_filter_options'); 
+        $data->current_page= JRequest::getVar('current_page'); 
+
+
+        $table = '#__fitness_nutrition_recipes';
+
+        $helper = new FitnessHelper();
+
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $item_id = str_replace('/', '', $_GET['id']);
+                $data = $this->getRecipes($table, $data);
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $item_id = str_replace('/', '', $_GET['id']);
+                break;
+            case 'POST': // Create
+
+                break;
+            case 'DELETE': // Delete Item
+                $id = str_replace('/', '', $_GET['id']);
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
     }
     
 }
