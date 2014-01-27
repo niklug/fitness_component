@@ -9,16 +9,15 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
-            this.render();
             this.controller = app.routers.recipe_database;
         },
 
         template:_.template(template),
         
-        render: function(data){
-            var data = data;
-            //console.log(data);
-            data.model = this.model;
+        render: function(){
+            var data = this.model.toJSON();
+            data.app = app;
+            data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);
             return this;

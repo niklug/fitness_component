@@ -5,7 +5,7 @@ define([
         'app',
         'collections/nutrition_plan/nutrition_guide/recipe_types',
         'collections/nutrition_plan/nutrition_guide/recipe_variations',
-        'views/nutrition_plan/nutrition_guide/add_recipe_item',
+        'views/recipe_database/frontend/recipe_database_list_item',
         'views/nutrition_plan/nutrition_guide/recipe_types_filter',
         'views/nutrition_plan/nutrition_guide/recipe_variations_filter',
 	'text!templates/recipe_database/frontend/recipe_database_list.html'
@@ -16,7 +16,7 @@ define([
         app,
         Recipe_types_collection,
         Recipe_variations_collection, 
-        Add_recipe_item_view,
+        Recipe_database_list_item_view,
         Recipe_types_filter_view,
         Recipe_variations_filter_view,
         template 
@@ -28,13 +28,13 @@ define([
 
         initialize : function() {
             this.controller = app.routers.nutrition_plan;
-            this.collection.bind("reset", this.clearRecipeItems, this);
             this.collection.bind("add", this.addRecipeItem, this);
+            this.collection.bind("reset", this.clearRecipeItems, this);
         },
 
         render:function () {
             $(this.el).html(this.template());
-            this.container_el = this.$el.find(".example_day_meal_recipes_list");
+            this.container_el = this.$el.find(".recipes_list");
 
             this.connectFilter();
 
@@ -42,14 +42,17 @@ define([
 
             return this;
         },
+        
+        addRecipeItem : function(model) {
+            this.recipe_database_list_item = new Recipe_database_list_item_view({model : model}); 
+            
+            this.container_el.append( this.recipe_database_list_item.render().el );
 
-
-        events:{
-            "click .cancel_add_recipe": "onCancelViewRecipe"
+            app.models.pagination.set({'items_total' : model.get('items_total')});
         },
 
-        onCancelViewRecipe :function (event) {
-            this.controller.navigate("!/example_day/" + this.model.get('example_day_id'), true);
+        clearRecipeItems : function() {
+            this.container_el.empty();
         },
 
         connectFilter : function() {

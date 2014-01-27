@@ -36,7 +36,7 @@ define([
         onFilterSelect : function(event){
             var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
             app.models.pagination.reset();
-            app.collections.add_meal_recipes.reset();
+            app.collections.recipes.reset();
             app.models.get_recipe_params.set({'recipe_variations_filter_options' : ids});
         }
     });

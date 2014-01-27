@@ -8,7 +8,7 @@ define([
         'collections/nutrition_plan/supplements/protocols',
         'collections/nutrition_plan/nutrition_guide/menu_plans',
         'collections/nutrition_plan/nutrition_guide/example_day_meals',
-        'collections/nutrition_plan/nutrition_guide/add_meal_recipes',
+        'collections/recipe_database/recipes',
         'collections/nutrition_plan/nutrition_guide/nutrition_database_categories',
         'collections/nutrition_plan/nutrition_guide/shopping_list_ingredients',
 	'models/nutrition_plan/nutrition_plan',

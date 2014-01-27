@@ -24,7 +24,7 @@ define([
             var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
             //console.log(ids);
             app.models.pagination.reset();
-            app.collections.add_meal_recipes.reset();
+            app.collections.recipes.reset();
             app.models.get_recipe_params.set({'filter_options' : ids});
         }
     });

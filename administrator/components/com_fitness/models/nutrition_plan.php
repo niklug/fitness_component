@@ -803,28 +803,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return $model;
         }
         
-        public function nutrition_guide_add_recipe_list() {
-            require_once  JPATH_COMPONENT_SITE  . DS .'models' . DS . 'recipe_database.php';
-            
-            $recipe_database = new FitnessModelrecipe_database();
-            
-            $table = '#__fitness_nutrition_recipes';
-            
-            $data = new stdClass();
-            
-            $data->sort_by = JRequest::getVar('sort_by'); 
-            $data->order_dirrection = JRequest::getVar('order_dirrection'); 
-            $data->page = JRequest::getVar('page'); 
-            $data->limit = JRequest::getVar('limit'); 
-            $data->state = JRequest::getVar('state'); 
-            $data->filter_options = JRequest::getVar('filter_options'); 
-            $data->recipe_variations_filter_options = JRequest::getVar('recipe_variations_filter_options'); 
-            $data->current_page= JRequest::getVar('current_page'); 
-            
-            $recipes = $recipe_database->getRecipes($table, $data);
-                       
-            return $recipes;
-        }
+
         
         public function getRecipeTypes() {
 

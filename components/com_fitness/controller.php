@@ -514,11 +514,7 @@ class FitnessController extends JController {
     public function nutrition_plan_menu(){
         echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_menu());
     }
-    
-    public function nutrition_guide_add_recipe_list(){
-        echo json_encode($this->admin_nutrition_plan_model->nutrition_guide_add_recipe_list());
-    }
-    
+
     public function recipe_types(){
         echo json_encode($this->admin_nutrition_plan_model->getRecipeTypes());
     }

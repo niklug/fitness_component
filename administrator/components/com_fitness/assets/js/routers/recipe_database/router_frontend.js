@@ -30,7 +30,7 @@ define([
             
             app.models.get_recipe_params.bind("change", this.get_database_recipes, this);
 
-
+            
         },
 
         routes: {
@@ -56,11 +56,22 @@ define([
                 }
             });  
         },
+        
+        set_recipes_model : function() {
+            app.collections.recipes.reset();
+            app.models.get_recipe_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
+        },
 
         my_recipes : function () {
             app.models.get_recipe_params.set({current_page : 'my_recipes', state : 1});
             $("#my_recipes_link").addClass("active_link");
             $("#recipe_main_container").html(new Recipe_database_list_view({collection : app.collections.recipes}).render().el);
+            
+            app.models.pagination = $.backbone_pagination({});
+
+            app.models.pagination.bind("change:currentPage", this.set_recipes_model, this);
+            
+            app.models.pagination.bind("change:items_number", this.set_recipes_model, this);
         },
         
         common_actions : function() {
