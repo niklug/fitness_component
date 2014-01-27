@@ -671,7 +671,7 @@ class EmailPdfShoppingList extends EmailTemplateData  {
     protected function getItemData() {
         $this->item = $this->getMenuPlanData($this->id);
         $this->item->categories = $this->getNutritionDatabaseCategories();
-        $this->item->ingredients  = $this->getShoppingListIngredients($this->item->nutrition_plan_id, $this->item->id);
+        $this->item->ingredients  = $this->getShoppingListIngredients($this->item->nutrition_plan_id, $this->id);
         $this->business_profile_user = $this->client_id;
     }
     
