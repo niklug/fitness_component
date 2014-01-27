@@ -328,7 +328,10 @@ define([
                 })
                 
                 ).then(function() {
-                    $('#example_day_wrapper').html(new Shopping_list_view({categories_collection : app.collections.nutrition_database_categories, ingredients_collection : app.collections.shopping_list_ingredients}).render().el);
+                    $('#example_day_wrapper').html(new Shopping_list_view({
+                        categories_collection : app.collections.nutrition_database_categories, 
+                        ingredients_collection : app.collections.shopping_list_ingredients
+                    }).render().el);
                 });
             },
             
