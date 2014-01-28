@@ -35,6 +35,13 @@ define([
         render:function () {
             $(this.el).html(this.template());
             this.container_el = this.$el.find(".recipes_list");
+            
+            var self = this;
+            if(this.collection.length) {
+                _.each(this.collection.models, function(model) {
+                    self.addRecipeItem(model);
+                });
+            }
 
             this.connectFilter();
 

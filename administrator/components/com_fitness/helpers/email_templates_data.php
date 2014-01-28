@@ -592,11 +592,9 @@ class EmailPdfRecipe extends EmailTemplateData  {
         
         $data->status = 1;
         
-        $data_encoded = json_encode($data);
-        
-        $recipe = $recipe_database_model->getRecipe($table, $data_encoded);
+        $recipe = $recipe_database_model->getRecipe($table, $data);
                 
-        $this->item = $recipe['data'];
+        $this->item = $recipe;
         
         if($this->item->recipe_type) {
             $recipe_types_names = $this->getRecipeNames($this->item->recipe_type);

@@ -3,16 +3,12 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/recipe_database/frontend/menus/submenu_my_recipes_form.html'
+	'text!templates/recipe_database/frontend/menus/submenu_my_recipe_item.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
         
         initialize : function() {
-            this.recipe_id = this.options.recipe_id;
-            this.is_favourite = this.options.is_favourite;
-            this.nutrition_plan_id = this.options.nutrition_plan_id;
-            this.render();
             this.controller = app.routers.recipe_database;
         },
         
@@ -21,8 +17,7 @@ define([
         template:_.template(template),
         
         render: function(){
-            var variables = {'recipe_id' : this.recipe_id, 'is_favourite' : this.is_favourite, 'nutrition_plan_id' : this.nutrition_plan_id };
-            var template = _.template(this.template(variables));
+            var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
             return this;
         },

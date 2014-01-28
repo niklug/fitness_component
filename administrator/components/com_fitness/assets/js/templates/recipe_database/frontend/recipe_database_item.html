@@ -1,15 +1,15 @@
 <%
 if(!image || image == 'images/Recipe_Images/'){
-    image = window.app.recipe_items_model.get('default_image');
+    image = app.options.default_image;
 } else {
-    image  = window.app.recipe_items_model.get('base_url') + image
+    image  = app.options.base_url + image
 }
 var background_image = 'url(' + "'" + image  + "')" ;
+var current_page = app.models.get_recipe_params.get('current_page');
 %>
 <div class="fitness_block_wrapper" style="margin-top: 20px;">
     <div class="internal_wrapper">
-        <% var current_page = window.app.recipe_items_model.get('current_page'); %>
-        <div class="recipe_database_item_wrapper" style="margin-top: 0px;">
+        <div class="" style="margin-top: 0px;">
             <table width="100%">
                 <tr>
                     <td width="40%">
@@ -74,7 +74,7 @@ var background_image = 'url(' + "'" + image  + "')" ;
                                 <td>STATUS</td>
                                 <td>
                                     <span class="grey_title">
-                                         <%= window.app.recipe_items_model.setStatus(status) %>
+                                         <%= $.fitness_helper.setRecipeStatus(status) %>
                                     </span>
                                 </td>
                             </tr>

@@ -818,32 +818,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $data = $recipeTypes['data'];
             return $data;
         }
-        
-        public function getRecipe() {
-            require_once  JPATH_COMPONENT_SITE  . DS .'models' . DS . 'recipe_database.php';
-            
-            $recipe_database = new FitnessModelrecipe_database();
-            
-            $table = '#__fitness_nutrition_recipes';
-            
-            $data = new stdClass();
-            
-            $data->id = JRequest::getVar('id'); 
-            $data->status = 1; 
-            
-            $data_encoded= json_encode($data);
-            
-            $recipes = $recipe_database->getRecipe($table, $data_encoded);
-            
-            if(!$recipes['status']['success']) {
-                echo $recipes['status']['message'];
-                header("HTTP/1.0 404 Not Found");
-            }
-            
-            $recipe = $recipes['data'];
-                    
-            return $recipe;
-        }
+
         
         public function nutrition_guide_recipes() {
             

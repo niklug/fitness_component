@@ -38,8 +38,7 @@ define([
 
         onClickViewRecipe : function(event) {
             var id = $(event.target).attr("data-id");
-
-            window.app.controller.navigate("!/nutrition_recipe/" + id, true);
+            this.controller.navigate("!/nutrition_recipe/" + id, true);
         },
 
         onClickCopyRecipe : function(event) {
@@ -75,7 +74,7 @@ define([
 
         onClickAddDiary : function(event) {
             var id = $(event.target).attr('data-id');
-            window.app.controller.navigate("!/add_diary/" + id, true);
+            this.controller.navigate("!/add_diary/" + id, true);
         },
         onClickShowRecipeVariations : function(event) {
             var id = $(event.target).attr('data-id');

@@ -247,68 +247,41 @@ class FitnessModelrecipe_database extends JModelList {
     }
     
     
-    public function getRecipe($table, $data_encoded) {
-        $status['success'] = 1;
-        
+    public function getRecipe($table, $data) {
+
         $helper = $this->helper;
-        
-        $data = json_decode($data_encoded);
         
         $id = $data->id;
         
         $state = $data->state;
         
         // get recipe 
-        try {
-            $data = $helper->getRecipe($id, $state);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-        
+        $data = $helper->getRecipe($id, $state);
+
         if(!$data->id){
-            return array( 'status' => $status, 'data' => null);
+            throw new Exception('error: no id');
         }
         
         // recipe types name
         if(!empty($data->recipe_type)) {
-            try {
-                $recipe_types_names = $helper->getRecipeNames($data->recipe_type);
-            } catch (Exception $e) {
-                $status['success'] = 0;
-                $status['message'] = '"' . $e->getMessage() . '"';
-                return array( 'status' => $status);
-            }
+            $recipe_types_names = $helper->getRecipeNames($data->recipe_type);
+
             $data->recipe_types_names = $recipe_types_names;
         }
         
         // recipe variations name
         if(!empty($data->recipe_variation)) {
-            try {
-                $recipe_variations_names = $helper->getRecipeVariationNames($data->recipe_variation);
-            } catch (Exception $e) {
-                $status['success'] = 0;
-                $status['message'] = '"' . $e->getMessage() . '"';
-                return array( 'status' => $status);
-            }
+            $recipe_variations_names = $helper->getRecipeVariationNames($data->recipe_variation);
+
             $data->recipe_variations_names = $recipe_variations_names;
         }
         // recipe meals
         
-        try {
-            $recipe_meals = $helper->getRecipeMeals($id);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
+        $recipe_meals = $helper->getRecipeMeals($id);
         
         $data->recipe_meals = $recipe_meals;
-        
-        $result = array( 'status' => $status, 'data' => $data);
-        
-        return $result;
+
+        return $data;
     }
     
     public function copyRecipe($table, $data_encoded) {
@@ -603,8 +576,10 @@ class FitnessModelrecipe_database extends JModelList {
 
         $model = json_decode(JRequest::getVar('model'));
         
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        
         $data = new stdClass();
-            
+        $data->id = $id;   
         $data->sort_by = JRequest::getVar('sort_by'); 
         $data->order_dirrection = JRequest::getVar('order_dirrection'); 
         $data->page = JRequest::getVar('page'); 
@@ -622,19 +597,20 @@ class FitnessModelrecipe_database extends JModelList {
 
         switch ($method) {
             case 'GET': // Get Item(s)
-                $item_id = str_replace('/', '', $_GET['id']);
+                if($id) {
+                    $data = $this->getRecipe($table, $data);
+                    return $data;
+                }
                 $data = $this->getRecipes($table, $data);
                 return $data;
                 break;
             case 'PUT': 
                 //update
-                $item_id = str_replace('/', '', $_GET['id']);
                 break;
             case 'POST': // Create
 
                 break;
             case 'DELETE': // Delete Item
-                $id = str_replace('/', '', $_GET['id']);
                 $id = $helper->deleteRow($id, $table);
                 break;
 
@@ -646,5 +622,6 @@ class FitnessModelrecipe_database extends JModelList {
 
         return $model;
     }
+    
     
 }

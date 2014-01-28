@@ -34,7 +34,12 @@ require.config({
         moment: {
             exports: 'moment'
         },
-
+        jwplayer: {
+            exports: 'jwplayer'
+        },
+        jwplayer_key: {
+            deps: ['jwplayer']
+         }
     },
     paths: {
         jquery: 'lib/jquery',
@@ -56,7 +61,9 @@ require.config({
         'jquery.backbone_pagination': 'lib/backbone_pagination',
         'jquery.nutritionPlan': 'lib/nutrition_plan_class',
         'jquery.macronutrientTargets': 'lib/dayly_targets_class',
-        'jquery.status': 'lib/status_class'
+        'jquery.status': 'lib/status_class',
+        jwplayer : 'lib/jwplayer/jwplayer',
+        jwplayer_key : 'lib/jwplayer/jwplayer_key'
     },
 
     waitSeconds: 5

@@ -3,13 +3,12 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/recipe_database/frontend/menus/submenu_trash_form.html'
+	'text!templates/recipe_database/frontend/menus/submenu_trash_list.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
         
         initialize : function() {
-            this.render();
             this.controller = app.routers.recipe_database;
         },
 
