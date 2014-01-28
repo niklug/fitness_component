@@ -254,10 +254,10 @@ class FitnessController extends JController {
         $view -> copyRecipe(); 
     }
     
-    function addFavourite() {
+    function favourite_recipe() {
         $view = $this -> getView('recipe_database', 'json');
         $view->setModel($this->getModel('recipe_database'));
-        $view -> addFavourite(); 
+        $view -> favourite_recipe(); 
     }
     
     function removeFavourite() {

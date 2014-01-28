@@ -52,6 +52,7 @@ define([
             //
             app.models.recipe = new Recipe_model();
             
+           
         },
 
         routes: {

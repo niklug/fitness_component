@@ -55,11 +55,9 @@ class FitnessViewRecipe_database extends JView {
         echo json_encode($model->copyRecipe($table, $data_encoded));
     }
     
-    function addFavourite() {
-        $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST');
+    function favourite_recipe() {
         $model = $this -> getModel("recipe_database");
-        echo json_encode($model->addFavourite($table, $data_encoded));
+        echo json_encode($model->favourite_recipe());
     }
     
     function removeFavourite() {

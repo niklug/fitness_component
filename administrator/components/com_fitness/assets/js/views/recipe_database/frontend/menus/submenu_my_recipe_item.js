@@ -3,8 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'models/recipe_database/favourite_recipe',
 	'text!templates/recipe_database/frontend/menus/submenu_my_recipe_item.html'
-], function ( $, _, Backbone, app, template ) {
+], function ( $, _, Backbone, app, Favourite_recipe_model, template ) {
 
     var view = Backbone.View.extend({
         
@@ -18,6 +19,7 @@ define([
         
         render: function(){
             var template = _.template(this.template(this.model.toJSON()));
+            this.favourite_recipe_model = new Favourite_recipe_model({id : this.model.get('id')})
             this.$el.html(template);
             return this;
         },
@@ -37,13 +39,26 @@ define([
         },
 
         onClickAddFavourite : function(event) {
-            var recipe_id = $(event.target).attr('data-id');
-            window.app.recipe_items_model.add_favourite(recipe_id);
+            this.favourite_recipe_model.save(null, {
+                success: function (model) {
+                    model.trigger('save');
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+
         },
 
         onClickRemoveFavourites : function(event) {
-            var recipe_id = $(event.target).attr('data-id');
-            window.app.recipe_items_model.remove_favourite(recipe_id);
+            this.favourite_recipe_model.destroy({
+                success: function (model) {
+                    model.trigger('detroy');
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
 
         onClickTrashRecipe : function(event) {

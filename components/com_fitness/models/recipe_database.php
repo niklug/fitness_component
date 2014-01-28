@@ -354,75 +354,66 @@ class FitnessModelrecipe_database extends JModelList {
     }
     
 
-    public function addFavourite($table, $data_encoded) {
-        $status['success'] = 1;
-        
-        $helper = $this->helper;
-        
-        $data = json_decode($data_encoded);
-        
-        $user = &JFactory::getUser();
-          
-        $recipe->client_id = $user->id;
-        $recipe->recipe_id = $data->recipe_id;
-        
-        //check if exists
-        $query = "SELECT id FROM $table WHERE client_id='$recipe->client_id' AND recipe_id='$recipe->recipe_id'";
-
-        try {
-            $exists = FitnessHelper::customQuery($query, 0);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-        
-        if($exists) {
-            $status['success'] = 0;
-            $status['message'] =  "This recipe has already been added to your Favourites";
-            return array( 'status' => $status);
-        }
-        //
-        
-        try {
-            $inserted_id = $helper->insertUpdateObj($recipe, $table);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-        
-        $result = array( 'status' => $status, 'data' => $inserted_id);
-        
-        return $result;
-    }
     
     
-    public function removeFavourite($table, $data_encoded) {
-        $status['success'] = 1;
-        
-        $data = json_decode($data_encoded);
-        
-        $user = &JFactory::getUser();
+    public function favourite_recipe() {
             
-        $recipe->client_id = $user->id;
-        $recipe->recipe_id = $data->recipe_id;
-        
-        $db = JFactory::getDBO();
-        
-        $query = "DELETE FROM $table WHERE client_id='$recipe->client_id' AND recipe_id='$recipe->recipe_id'";
-        
-        $db->setQuery($query);
-        
-        if (!$db->query()) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
         }
 
-        $result = array( 'status' => $status, 'data' => $data->recipe_id);
+        $model = json_decode(JRequest::getVar('model'));
         
-        return $result;
+        $user = &JFactory::getUser();
+
+        
+        $data = new stdClass();
+
+        
+        $data->recipe_id = $model->id;   
+        
+        $data->client_id = $user->id;
+
+
+        $table = '#__fitness_nutrition_recipes_favourites';
+
+        $helper = new FitnessHelper();
+
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+
+                break;
+            case 'PUT': 
+                //update
+                $query = "SELECT id FROM $table WHERE client_id='$data->client_id' AND recipe_id='$data->recipe_id'";
+                $exists = FitnessHelper::customQuery($query, 0);
+                if($exists) return;
+                
+                $inserted_id = $helper->insertUpdateObj($data, $table);
+                return $inserted_id;
+                break;
+            case 'POST': // Create
+                
+                break;
+            case 'DELETE': // Delete Item
+                $db = JFactory::getDBO();
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $query = "DELETE FROM $table WHERE client_id='$data->client_id' AND recipe_id='$id'";
+                $db->setQuery($query);
+                if (!$db->query()) {
+                    throw new Exception($e->getMessage());
+                }
+                break;
+
+            default:
+                break;
+        }
+        return $model;
     }
+    
     
     public function deleteRecipe($table, $data_encoded) {
         $status['success'] = 1;
