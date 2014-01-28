@@ -5,7 +5,9 @@ define([
         'app',
         'collections/recipe_database/recipes',
         'models/nutrition_plan/nutrition_guide/get_recipe_params',
-        'views/recipe_database/frontend/recipe_database_list'
+        'views/recipe_database/frontend/menus/submenu_my_recipes',
+        'views/recipe_database/frontend/recipe_database_list',
+        'views/recipe_database/frontend/latest_recipes/list'
 ], function (
         $,
         _,
@@ -13,7 +15,9 @@ define([
         app,
         Recipes_collection,
         Get_recipe_params_model,
-        Recipe_database_list_view
+        Submenu_my_recipes_view,
+        Recipe_database_list_view,
+        Latest_recipes_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -29,7 +33,11 @@ define([
             app.models.get_recipe_params = new Get_recipe_params_model();
             
             app.models.get_recipe_params.bind("change", this.get_database_recipes, this);
-
+            
+            //latest recipes
+            app.collections.recipes_latest = new Recipes_collection();
+            app.models.get_recipe_params_latest = new Get_recipe_params_model();
+            //
             
         },
 
@@ -37,6 +45,7 @@ define([
             "": "my_recipes", 
             "!/": "my_recipes", 
             "!/my_recipes": "my_recipes",
+            "!/recipe_database": "recipe_database",
         },
         
         back: function() {
@@ -51,7 +60,21 @@ define([
             app.collections.recipes.reset();
             app.collections.recipes.fetch({
                 data : app.models.get_recipe_params.toJSON(),
-                error: function (model, response) {
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            });  
+        },
+        
+        get_recipes_latest : function() {
+            app.models.get_recipe_params_latest.set({sort_by : 'created', order_dirrection : 'DESC', limit : 15});
+            app.collections.recipes_latest.reset();
+            app.collections.recipes_latest.fetch({
+                data : app.models.get_recipe_params_latest.toJSON(),
+                success: function (collection, response) {
+                    $("#recipes_latest_wrapper").html(new Latest_recipes_view({collection : collection}).render().el);
+                },
+                error: function (collection, response) {
                     alert(response.responseText);
                 }
             });  
@@ -63,7 +86,11 @@ define([
         },
 
         my_recipes : function () {
-            app.models.get_recipe_params.set({current_page : 'my_recipes', state : 1});
+            this.common_actions();
+            $("#recipe_submenu").html(new Submenu_my_recipes_view().render().el);
+            
+            app.models.get_recipe_params.set({page : 1, current_page : 'my_recipes', state : 1});
+            
             $("#my_recipes_link").addClass("active_link");
             $("#recipe_main_container").html(new Recipe_database_list_view({collection : app.collections.recipes}).render().el);
             
@@ -72,9 +99,28 @@ define([
             app.models.pagination.bind("change:currentPage", this.set_recipes_model, this);
             
             app.models.pagination.bind("change:items_number", this.set_recipes_model, this);
+            
+            this.get_recipes_latest();
+        },
+        
+        recipe_database : function () {
+            this.common_actions();
+            app.models.get_recipe_params.set({page : 1,current_page : 'recipe_database', state : 1});
+            $("#recipe_database_link").addClass("active_link");
+            
+            $("#recipe_main_container").html(new Recipe_database_list_view({collection : app.collections.recipes}).render().el);
+
+            app.models.pagination = $.backbone_pagination({});
+
+            app.models.pagination.bind("change:currentPage", this.set_recipes_model, this);
+
+            app.models.pagination.bind("change:items_number", this.set_recipes_model, this);
+            
+            this.get_recipes_latest();
         },
         
         common_actions : function() {
+            $("#recipe_submenu").empty();
             $(".block").hide();
             $(".plan_menu_link").removeClass("active_link");
         },

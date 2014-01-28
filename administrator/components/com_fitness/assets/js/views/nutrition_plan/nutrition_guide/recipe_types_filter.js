@@ -13,6 +13,7 @@ define([
         render : function(){
             var data = {'items' : this.model}
             $(this.el).html(this.template(data));
+            this.$el.find("#categories_filter option[value=0]").attr('selected', true);
             return this;
         },
 
@@ -24,7 +25,6 @@ define([
             var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
             //console.log(ids);
             app.models.pagination.reset();
-            app.collections.recipes.reset();
             app.models.get_recipe_params.set({'filter_options' : ids});
         }
     });

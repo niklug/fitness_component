@@ -11,7 +11,6 @@ define([
         template:_.template(template),
 
         initialize: function(){
-            this.render();
             this.controller = app.routers.recipe_database;
         },
         

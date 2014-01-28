@@ -13,6 +13,7 @@ define([
         render : function(){
             $(this.el).html(this.template());
             this.populateSelect();
+            this.$el.find("#recipe_variations_filter option[value=0]").attr('selected', true);
             return this;
         },
 
@@ -36,7 +37,6 @@ define([
         onFilterSelect : function(event){
             var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
             app.models.pagination.reset();
-            app.collections.recipes.reset();
             app.models.get_recipe_params.set({'recipe_variations_filter_options' : ids});
         }
     });

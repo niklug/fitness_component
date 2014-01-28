@@ -23,6 +23,7 @@
             },
             
             initialize: function(){
+                this.reset();
                 this.bind("change:items_total", this.onChangeItemsTotal, this);
                 this.bind("change:currentPage", this.onChangeCurrentPage, this);
                 this.bind("change:items_number", this.onChangeItemsNumber, this);
