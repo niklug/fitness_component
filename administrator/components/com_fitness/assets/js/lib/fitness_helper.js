@@ -194,6 +194,22 @@
                         $("#emais_sended").append(message);
                     });
                 },
+                
+                copy_recipe : function(recipe_id){
+                    var data = {};
+                    var url = this.get('ajax_call_url');
+                    var view = 'recipe_database';
+                    var task = 'copyRecipe';
+                    var table = this.get('recipes_db_table');
+
+                    data.id = recipe_id;
+
+                    var self = this;
+                    this.ajaxCall(data, url, view, task, table, function(output) {
+                        self.set("recipe_copied", output);
+                        //console.log(output);
+                    });
+                },
             });
 
             return new Helper_model(options);

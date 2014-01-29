@@ -63,7 +63,8 @@ require.config({
         'jquery.macronutrientTargets': 'lib/dayly_targets_class',
         'jquery.status': 'lib/status_class',
         jwplayer : 'lib/jwplayer/jwplayer',
-        jwplayer_key : 'lib/jwplayer/jwplayer_key'
+        jwplayer_key : 'lib/jwplayer/jwplayer_key',
+        'jquery.itemDescription': 'lib/meal_description_class',
     },
 
     waitSeconds: 5

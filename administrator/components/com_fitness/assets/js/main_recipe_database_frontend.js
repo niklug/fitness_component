@@ -23,6 +23,8 @@ require([
     app.routers.recipe_database = new Controller();
     
     app.views.main_menu = new Main_menu_view();
+    
+    app.views.main_menu.render();
       
     Backbone.history.start();
 

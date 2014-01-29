@@ -295,14 +295,7 @@ class FitnessModelrecipe_database extends JModelList {
         
         $user = &JFactory::getUser();
 
-        // get recipe 
-        try {
-            $recipe = $helper->getRecipeOriginalData($id);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
+        $recipe = $helper->getRecipeOriginalData($id);
 
         // save recipe 
         $created = FitnessHelper::getTimeCreated();
@@ -313,39 +306,16 @@ class FitnessModelrecipe_database extends JModelList {
         $recipe->created = $created;
         $recipe->assessed_by = null;
         
-        try {
-            $new_recipe_id = $helper->insertUpdateObj($recipe, '#__fitness_nutrition_recipes');
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-
+        $new_recipe_id = $helper->insertUpdateObj($recipe, '#__fitness_nutrition_recipes');
         
         // get recipe meals
-        try {
-            $recipe_meals = $helper->getRecipeMeals($id);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-  
-        
-        
-        
-        // save recipe meals
+        $recipe_meals = $helper->getRecipeMeals($id);
 
+        // save recipe meals
         foreach ($recipe_meals as $meal) {
-            try {
-                $meal->id = null;
-                $meal->recipe_id = $new_recipe_id;
-                $inserted_id = $helper->insertUpdateObj($meal, '#__fitness_nutrition_recipes_meals');
-            } catch (Exception $e) {
-                $status['success'] = 0;
-                $status['message'] = '"' . $e->getMessage() . '"';
-                return array( 'status' => $status);
-            }
+            $meal->id = null;
+            $meal->recipe_id = $new_recipe_id;
+            $inserted_id = $helper->insertUpdateObj($meal, '#__fitness_nutrition_recipes_meals');
         }
         
         $result = array( 'status' => $status, 'data' => $recipe);
@@ -597,11 +567,13 @@ class FitnessModelrecipe_database extends JModelList {
                 break;
             case 'PUT': 
                 //update
+                $id = $helper->insertUpdateObj($model, $table);
                 break;
             case 'POST': // Create
-
+                $id = $helper->insertUpdateObj($model, $table);
                 break;
             case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
                 $id = $helper->deleteRow($id, $table);
                 break;
 

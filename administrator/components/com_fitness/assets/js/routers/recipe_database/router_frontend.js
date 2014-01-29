@@ -11,9 +11,14 @@ define([
         'views/recipe_database/frontend/menus/submenu_my_recipes',
         'views/recipe_database/frontend/menus/submenu_trash_list',
         'views/recipe_database/frontend/menus/submenu_my_recipe_item',
+        'views/recipe_database/frontend/menus/submenu_recipe_database_item',
+        'views/recipe_database/frontend/menus/submenu_my_favoirites_item',
+        'views/recipe_database/frontend/menus/submenu_trash_item',
+        'views/recipe_database/frontend/menus/submenu_recipe_database_form',
         'views/recipe_database/frontend/recipe_database_list',
         'views/recipe_database/frontend/latest_recipes/list',
-        'views/recipe_database/frontend/recipe_database_item'
+        'views/recipe_database/frontend/recipe_database_item',
+        'views/recipe_database/frontend/recipe_database_form'
 ], function (
         $,
         _,
@@ -27,9 +32,14 @@ define([
         Submenu_my_recipes_view,
         Submenu_trash_list_view,
         Submenu_my_recipe_item_view,
+        Submenu_recipe_database_item_view,
+        Submenu_my_favourites_view,
+        Submenu_trash_item_view,
+        Submenu_edit_recipe_view,
         Recipe_database_list_view,
         Latest_recipes_view,
-        Recipe_item_view
+        Recipe_item_view,
+        EditRecipeContainer_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -38,6 +48,12 @@ define([
             // history
             this.routesHit = 0;
             Backbone.history.on('route', function() { this.routesHit++; }, this);
+            //
+            
+            //unique id
+            app.getUniqueId = function() {
+                return new Date().getUTCMilliseconds();
+            }
             //
             
             app.collections.recipes = new Recipes_collection();
@@ -52,7 +68,7 @@ define([
             //
             app.models.recipe = new Recipe_model();
             
-           
+            
         },
 
         routes: {
@@ -64,6 +80,7 @@ define([
             "!/trash_list" : "trash_list",
             "!/nutrition_recipe/:id" : "nutrition_recipe",
             "!/nutrition_database/nutrition_recipe/:id" : "nutrition_database_recipe",
+            "!/edit_recipe/:id" : "edit_recipe",
         },
         
         back: function() {
@@ -100,7 +117,7 @@ define([
         
         set_recipes_model : function() {
             app.collections.recipes.reset();
-            app.models.get_recipe_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
+            app.models.get_recipe_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
         },
         
         my_favourites : function () {
@@ -108,7 +125,7 @@ define([
             
             $("#my_favourites_link").addClass("active_link");
 
-            app.models.get_recipe_params.set({page : 1, current_page : 'my_favourites', state : 1});
+            app.models.get_recipe_params.set({page : 1, current_page : 'my_favourites', state : 1, uid : app.getUniqueId()});
          },
 
         my_recipes : function () {
@@ -116,7 +133,7 @@ define([
             
             $("#recipe_submenu").html(new Submenu_my_recipes_view().render().el);
             
-            app.models.get_recipe_params.set({page : 1, current_page : 'my_recipes', state : 1});
+            app.models.get_recipe_params.set({page : 1, current_page : 'my_recipes', state : 1, uid : app.getUniqueId()});
             
             $("#my_recipes_link").addClass("active_link");
         },
@@ -124,7 +141,7 @@ define([
         recipe_database : function () {
             this.recipe_pages_actions();
             
-            app.models.get_recipe_params.set({page : 1,current_page : 'recipe_database', state : 1});
+            app.models.get_recipe_params.set({page : 1,current_page : 'recipe_database', state : 1, uid : app.getUniqueId()});
             
             $("#recipe_database_link").addClass("active_link");
         },
@@ -134,7 +151,7 @@ define([
             
             $("#recipe_submenu").html(new Submenu_trash_list_view().render().el);
             
-            app.models.get_recipe_params.set({page : 1, current_page : 'trash_list', state : '-2'});
+            app.models.get_recipe_params.set({page : 1, current_page : 'trash_list', state : '-2', uid : app.getUniqueId()});
             
             $("#my_recipes_link").addClass("active_link");
         },
@@ -173,7 +190,13 @@ define([
             var current_page = app.models.get_recipe_params.get('current_page');
             if(current_page == 'my_recipes') {
                 $("#recipe_submenu").html(new Submenu_my_recipe_item_view({model : app.models.recipe}).render().el);
-            }
+            } else if(current_page == 'recipe_database') {
+                $("#recipe_submenu").html(new Submenu_recipe_database_item_view({model : app.models.recipe}).render().el);
+            } else if (current_page == 'my_favourites') {
+                $("#recipe_submenu").html(new Submenu_my_favourites_view({model : app.models.recipe}).render().el);
+            } else if (current_page == 'trash_list') {
+                $("#recipe_submenu").html(new Submenu_trash_item_view({model : app.models.recipe}).render().el);
+            } 
         },
         
         loadVideoPlayer : function() {
@@ -213,10 +236,33 @@ define([
         
        
         common_actions : function() {
+            app.views.main_menu.show();
             $("#recipe_submenu").empty();
             $(".block").hide();
             $(".plan_menu_link").removeClass("active_link");
-        }
+        },
+        
+        edit_recipe : function(id) {
+            $("#recipe_submenu").html(new Submenu_edit_recipe_view({model : app.models.recipe}).render().el);
+            
+            if(!parseInt(id)) {
+                new EditRecipeContainer_view({el : $("#recipe_main_container"), model : new Recipe_model()});
+                return;
+            }
+            
+            var self = this;
+            app.models.recipe.fetch({
+                wait : true,
+                data : {id : id},
+                success: function (model, response) {
+                    new EditRecipeContainer_view({el : $("#recipe_main_container"), model : model});
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            }); 
+        },
+           
     
     });
 

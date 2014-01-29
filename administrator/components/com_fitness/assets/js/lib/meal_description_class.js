@@ -1,7 +1,15 @@
 /*
  * Provides search ingredients in database and calculations
  */
-(function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     function ItemDescription(options, type, title, meal_id) {
         this.options = options;
         this._type = type;
@@ -911,4 +919,4 @@
         return constr;
     };
 
-})(jQuery);
+}));

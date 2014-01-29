@@ -10,7 +10,6 @@ define([
         
         initialize : function() {
             this.controller = app.routers.recipe_database;
-            this.render();
         },
         
         el: $("#recipe_mainmenu"), 
@@ -48,6 +47,14 @@ define([
         onClickNutrition_database : function() {
             this.controller.navigate("!/nutrition_database", true);
             return false;
+        },
+        
+        hide : function() {
+            this.$el.hide();
+        },
+        
+        show : function() {
+            this.$el.show();
         }
     });
             

@@ -11,9 +11,8 @@ define([
         
         initialize : function() {
             this.controller = app.routers.recipe_database;
+            app.views.main_menu.hide();
         },
-        
-        el: $("#recipe_mainmenu"), 
 
         template:_.template(template),
         
@@ -61,9 +60,16 @@ define([
             });
         },
 
-        onClickTrashRecipe : function(event) {
-            var recipe_id = $(event.target).attr('data-id');
-            window.app.recipe_items_model.trash_recipe(recipe_id);
+        onClickTrashRecipe : function() {
+            var self = this;
+            this.model.save({state : '-2'}, {
+                success: function (model) {
+                    self.controller.navigate("!/my_recipes", true);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
 
         onClickEditRecipe : function(event) {

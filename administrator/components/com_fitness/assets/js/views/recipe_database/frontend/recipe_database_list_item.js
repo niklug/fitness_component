@@ -3,8 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'models/recipe_database/favourite_recipe',
 	'text!templates/recipe_database/frontend/recipe_database_list_item.html'
-], function ( $, _, Backbone, app, template ) {
+], function ( $, _, Backbone, app, Favourite_recipe_model, template ) {
 
     var view = Backbone.View.extend({
         
@@ -20,6 +21,7 @@ define([
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);
+            this.favourite_recipe_model = new Favourite_recipe_model({id : this.model.get('id')})
             return this;
         },
 
@@ -43,33 +45,70 @@ define([
 
         onClickCopyRecipe : function(event) {
             var recipe_id = $(event.target).attr('data-id');
-            this.model.copy_recipe(recipe_id);
+            $.fitness_helper.copy_recipe(recipe_id);
         },
 
         onClickAddFavourite : function(event) {
-            var recipe_id = $(event.target).attr('data-id');
-            this.model.add_favourite(recipe_id);
+            this.favourite_recipe_model.save(null, {
+                success: function (model) {
+                    model.trigger('save');
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
-
 
         onClickRemoveFavourites : function(event) {
-            var recipe_id = $(event.target).attr('data-id');
-            this.model.remove_favourite(recipe_id);
+            var self = this;
+            this.favourite_recipe_model.destroy({
+                success: function (model) {
+                    model.trigger('detroy');
+                    var current_page = app.models.get_recipe_params.get('current_page');
+                    if(current_page == 'my_favourites') {
+                        self.close();
+                    }
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
 
-        onClickTrashRecipe : function(event) {
-            var recipe_id = $(event.target).attr('data-id');
-            window.app.recipe_items_model.trash_recipe(recipe_id);
+        onClickTrashRecipe : function() {
+            var self = this;
+            this.model.save({state : '-2'}, {
+                success: function (model) {
+                    self.close();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
 
-        onClickDeleteRecipe : function(event) {
-            var recipe_id = $(event.target).attr('data-id');
-            window.app.recipe_items_model.delete_recipe(recipe_id);
+        onClickDeleteRecipe : function() {
+            var self = this;
+            this.model.destroy({
+                success: function (model) {
+                    self.close();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
 
-        onClickRestoreRecipe : function(event) {
-            var recipe_id = $(event.target).attr('data-id');
-            window.app.recipe_items_model.restore_recipe(recipe_id);
+        onClickRestoreRecipe : function() {
+            var self = this;
+            this.model.save({state : 1}, {
+                success: function (model) {
+                    self.close();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
 
         onClickAddDiary : function(event) {
@@ -78,9 +117,12 @@ define([
         },
         onClickShowRecipeVariations : function(event) {
             var id = $(event.target).attr('data-id');
-
             $('.show_recipe_variations[data-id="' + id + '"]').hide();
             $('.recipe_variations[data-id="' + id + '"]').show();
+        },
+        
+        close : function() {
+            this.$el.fadeOut();
         }
     });
             

@@ -1,125 +1,125 @@
-<%
-var recipe = recipe || {}; 
-%>
 <div class="fitness_block_wrapper" style="margin-top: 20px;">
-    <div class="internal_wrapper">
-        <table width="100%">
-            <tr>
-                <td width="50%">
-                    <table width="100%">
-                        <tr>
-                            <td >
-                                RECIPE NAME
-                            </td>
-                            <td>
+    <form id="recipe_edit_form">
+        <div class="internal_wrapper">
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+                        <table width="100%">
+                            <tr>
+                                <td width="200">
+                                    RECIPE NAME
+                                </td>
+                                <td>
 
-                                <input class="dark_input_style" value="<%= recipe.recipe_name || '' %>" style="width:300px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                RECIPE TYPE
-                            </td>
-                            <td>
-                            <%
-                            var selected_types = [];
-                            if(typeof (recipe.recipe_type) !== 'undefined') {
-                                selected_types = (recipe.recipe_type).split(","); 
-                            }
-                            %>
-                                <select multiple size="10" id="recipe_type" name="recipe_type[]" class="dark_input_style" style="width:200px;">
-                                    <% if (typeof recipe_types !== "undefined") { %>
-                                        <% _.each(recipe_types, function(item, key){
+                                    <input class="dark_input_style" value="<%= recipe_name || '' %>" style="width:300px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    RECIPE TYPE
+                                </td>
+                                <td>
+                                <%
+                                var selected_types = [];
+                                if(recipe_type) {
+                                    selected_types = (recipe_type).split(","); 
+                                }
+                                %>
+                                    <select multiple size="10" id="recipe_type" name="recipe_type[]" class="dark_input_style" style="width:200px;">
+                                        
+                                          <% _.each(app.collections.recipe_types.models, function(model){
+                                            var id = model.get('id');
+                                            var name = model.get('name');
                                             var selected = '';
-                                            if(selected_types.indexOf(item.id) != -1) {
+                                            if(selected_types.indexOf(id) != -1) {
                                                 selected = 'selected';
                                             }
                                          %>
-                                              <option <%= selected %> value="<%= item.id %>"><%= item.name %></option>
+                                              <option <%= selected %> value="<%= id %>"><%= name %></option>
                                         <% }) %>
-                                    <% } %>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td >
-                                RECIPE VARIATION
-                            </td>
-                            <td>
-                            <%
-                            var selected_variation = [];
-                            if(typeof (recipe.recipe_variation) !== 'undefined') {
-                                selected_variation = (recipe.recipe_variation).split(","); 
-                            }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    RECIPE VARIATION
+                                </td>
+                                <td>
+                                <%
+                                var selected_variation = [];
+                                if(recipe_variation) {
+                                    selected_variation = (recipe_variation).split(","); 
+                                }
 
-                            %>
-                                <select multiple size="10" id="recipe_variation" name="recipe_variation[]" class="dark_input_style" style="width:200px;">
-                                    <% if (typeof recipe_variations !== "undefined") { %>
-                                        <% _.each(recipe_variations, function(item, key){
+                                %>
+                                    <select multiple size="10" id="recipe_variation" name="recipe_variation[]" class="dark_input_style" style="width:200px;">
+                                        <% _.each(app.collections.recipe_types.models, function(model){
+                                            var id = model.get('id');
+                                            var name = model.get('name');
                                             var selected = '';
-                                            if(selected_variation.indexOf(item.id) != -1) {
+                                            if(selected_variation.indexOf(id) != -1) {
                                                 selected = 'selected';
                                             }
                                          %>
-                                              <option <%= selected %> value="<%= item.id %>"><%= item.name %></option>
+                                              <option <%= selected %> value="<%= id %>"><%= name %></option>
                                         <% }) %>
-                                    <% } %>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                SERVES
-                            </td>
-                            <td>
-                                <input class="dark_input_style" value="<%= recipe.number_serves || '-' %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                AUTHOR
-                            </td>
-                            <td>
-                                <span class="grey_title">
-                                    <%= recipe.author || '-' %>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                STATUS
-                            </td>
-                            <td>
-                                <%= recipe_items_model.setStatus(recipe.status) %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                ASSESSED BY
-                            </td>
-                            <td>
-                                <%= recipe.trainer || '-' %>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <% if(recipe.id) { %>
-                <td style="text-align: right;">
-                    <div id="image_upload_content"></div>
-                </td>
-                <td style="text-align: right;">
-                    <div id="video_upload_content"></div>
-                </td>
-                <% } %>
-            </tr>
-        </table>
-        <br/>
-        <div id="item_descriptions"></div>
-        <br/>
-        <h5>COOKING INSTRUCTIONS / METHOD</h5>
-
-        <div id="instructions" style="min-height:200px;background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);padding:5px;" contenteditable="true"><%= recipe.instructions || '' %></div>
-        <% if(recipe.id) { %>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    SERVES
+                                </td>
+                                <td>
+                                    <input class="dark_input_style" value="<%= number_serves %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    AUTHOR
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%= author || '-' %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    STATUS
+                                </td>
+                                <td>
+                                    <%= $.fitness_helper.setRecipeStatus(status) %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ASSESSED BY
+                                </td>
+                                <td>
+                                    <%= trainer || '-' %>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <% if(id) { %>
+                    <td style="text-align: right;">
+                        <div id="image_upload_content"></div>
+                    </td>
+                    <td style="text-align: right;">
+                        <div id="video_upload_content"></div>
+                    </td>
+                    <% } %>
+                </tr>
+            </table>
+            <br/>
+            <div id="item_descriptions"></div>
+            <br/>
+            <h5>COOKING INSTRUCTIONS / METHOD</h5>
+            <textarea id="instructions" style="min-height:200px;width:98%;background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);padding:5px;;" name="instructions" cols="50" rows="4"><%= instructions %></textarea>
+            
+        </form>
+        <% if(id) { %>
             <br>
             <div id="comments_wrapper" style="width:99%"></div>
             <div class="clr"></div>
@@ -128,4 +128,5 @@ var recipe = recipe || {};
             <div class="clr"></div>
         <% } %>
     </div>
+    
 </div>

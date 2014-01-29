@@ -1123,9 +1123,25 @@ class FitnessHelper extends FitnessFactory
         return $ret;
     }
     
-    public function insertUpdateObj($obj, $table) {
+    public function insertUpdateObj($data, $table) {
         $db = JFactory::getDbo();
 
+        //get all existing table fields
+        $query = "DESCRIBE $table";
+        $db->setQuery($query);
+        $db->query();
+        $fields = $db->loadResultArray();
+        //
+        
+        // filter incomming data
+        $obj = new stdClass();
+        foreach ($data as $key => $value) {
+            if(in_array($key, $fields)){
+                $obj->$key = $value;
+            }
+        }
+        //
+           
         if($obj->id) {
             $insert = $db->updateObject($table, $obj, 'id');
         } else {

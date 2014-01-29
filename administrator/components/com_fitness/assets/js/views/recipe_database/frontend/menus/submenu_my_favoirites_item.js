@@ -3,24 +3,21 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/recipe_database/frontend/menus/submenu_my_favourites_form.html'
-], function ( $, _, Backbone, app, template ) {
+        'models/recipe_database/favourite_recipe',
+	'text!templates/recipe_database/frontend/menus/submenu_my_favoirites_item.html'
+], function ( $, _, Backbone, app, Favourite_recipe_model, template ) {
 
     var view = Backbone.View.extend({
         
         initialize : function() {
-            this.listenToOnce(window.app.recipe_items_model, "change:favourite_removed", this.redirectToFavourites);
-            this.recipe_id = this.options.recipe_id;
-            this.nutrition_plan_id = this.options.nutrition_plan_id;
-            this.render();
             this.controller = app.routers.recipe_database;
         },
 
         template:_.template(template),
         
         render: function(){
-            var variables = {'recipe_id' : this.recipe_id, 'nutrition_plan_id' : this.nutrition_plan_id};
-            var template = _.template(this.template(variables));
+            var template = _.template(this.template(this.model.toJSON()));
+            this.favourite_recipe_model = new Favourite_recipe_model({id : this.model.get('id')})
             this.$el.html(template);
             return this;
         },
@@ -36,13 +33,15 @@ define([
         },
         
         onClickRemoveFavourites : function(event) {
-
-            var recipe_id = $(event.target).attr('data-id');
-            window.app.recipe_items_model.remove_favourite(recipe_id);
-        },
-        
-        redirectToFavourites : function(){
-            this.controller.navigate("!/my_favourites", true);
+            var self = this;
+            this.favourite_recipe_model.destroy({
+                success: function (model) {
+                    self.controller.navigate("!/my_favourites", true);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
 
         onClickAddDiary : function(event) {

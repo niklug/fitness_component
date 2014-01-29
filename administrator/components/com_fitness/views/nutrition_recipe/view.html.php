@@ -46,8 +46,8 @@ class FitnessViewNutrition_recipe extends JView
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'backbone-min.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'backbone_image_upload.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'backbone_video_upload.js');
-                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jwplayer' . DS . 'jwplayer.js');
-                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'jwplayer' . DS . 'jwplayer_key.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js' . DS . 'lib' . DS . 'jwplayer' . DS . 'jwplayer.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js' . DS . 'lib' . DS . 'jwplayer' . DS . 'jwplayer_key.js');
                 
                 $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 		$this->addToolbar();

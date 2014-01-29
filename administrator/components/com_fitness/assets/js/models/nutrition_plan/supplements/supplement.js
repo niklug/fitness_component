@@ -15,6 +15,18 @@ define([
                 comments : null,
                 url : null,
             },
+            
+            validate: function(attrs, options) {
+                if (!attrs.name) {
+                  return 'name';
+                }
+                if (!attrs.nutrition_plan_id) {
+                  return 'Nurtition Plan Id is not valid';
+                }
+                if (!attrs.protocol_id) {
+                  return 'error: No Protocol Id';
+                }
+            }
         });
     return model;
 });
