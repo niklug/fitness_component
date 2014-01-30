@@ -30,7 +30,6 @@ require.config({
         'jquery.drawPie': {
             deps: ['jquery', 'jquery.flot', 'jquery.flot.time', 'jquery.flot.pie'],
         },
-        
         moment: {
             exports: 'moment'
         },
@@ -44,6 +43,7 @@ require.config({
     paths: {
         jquery: 'lib/jquery',
         'jqueryui': 'lib/jquery-ui',
+        'jquery.validate' : 'lib/jquery.validate.min',
         underscore: 'lib/underscore-min',
         backbone: 'lib/backbone-min',
         'backbone.syphon': 'lib/backbone.syphon.min',
@@ -65,6 +65,9 @@ require.config({
         jwplayer : 'lib/jwplayer/jwplayer',
         jwplayer_key : 'lib/jwplayer/jwplayer_key',
         'jquery.itemDescription': 'lib/meal_description_class',
+        'jquery.backbone_image_upload' : 'lib/backbone_image_upload',
+        'jquery.backbone_video_upload' : 'lib/backbone_video_upload',
+        'jquery.recipe_database' : 'lib/recipe_database_class',
     },
 
     waitSeconds: 5

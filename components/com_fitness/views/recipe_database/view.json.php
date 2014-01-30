@@ -67,33 +67,10 @@ class FitnessViewRecipe_database extends JView {
         echo json_encode($model->removeFavourite($table, $data_encoded));
     }
     
-    function deleteRecipe() {
-        $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST');
+
+    function ingredients() {
         $model = $this -> getModel("recipe_database");
-        echo json_encode($model->deleteRecipe($table, $data_encoded));
-    }
-    
-    function updateRecipe() {
-        $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
-        $model = $this -> getModel("recipe_database");
-        echo json_encode($model->updateRecipe($table, $data_encoded));
-    }
-    
-    
-    function getIngredients() {
-        $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST');
-        $model = $this -> getModel("recipe_database");
-        echo json_encode($model->getIngredients($table, $data_encoded));
-    }
-    
-    function updateIngredient() {
-        $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
-        $model = $this -> getModel("recipe_database");
-        echo json_encode($model->updateIngredient($table, $data_encoded));
+        echo json_encode($model->ingredients());
     }
     
 

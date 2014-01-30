@@ -265,18 +265,7 @@ class FitnessController extends JController {
         $view->setModel($this->getModel('recipe_database'));
         $view -> removeFavourite(); 
     }
-    
-    function deleteRecipe() {
-        $view = $this -> getView('recipe_database', 'json');
-        $view->setModel($this->getModel('recipe_database'));
-        $view -> deleteRecipe(); 
-    }
-    
-    function updateRecipe() {
-        $view = $this -> getView('recipe_database', 'json');
-        $view->setModel($this->getModel('recipe_database'));
-        $view -> updateRecipe(); 
-    }
+
     
     function uploadImage() {
         $filename = $_FILES['file']['name'];
@@ -418,12 +407,10 @@ class FitnessController extends JController {
         }
     }
     
-    
-    
-    function getIngredients() {
+    function ingredients() {
         $view = $this -> getView('recipe_database', 'json');
         $view->setModel($this->getModel('recipe_database'));
-        $view -> getIngredients(); 
+        $view -> ingredients(); 
     }
     
     function updateIngredient() {

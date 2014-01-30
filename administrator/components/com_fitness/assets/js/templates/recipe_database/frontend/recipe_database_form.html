@@ -10,8 +10,7 @@
                                     RECIPE NAME
                                 </td>
                                 <td>
-
-                                    <input class="dark_input_style" value="<%= recipe_name || '' %>" style="width:300px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
+                                    <input class="dark_input_style" value="<%= recipe_name || '' %>" style="width:250px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
                                 </td>
                             </tr>
                             <tr>
@@ -103,10 +102,10 @@
                         </table>
                     </td>
                     <% if(id) { %>
-                    <td style="text-align: right;">
+                    <td width="200" >
                         <div id="image_upload_content"></div>
                     </td>
-                    <td style="text-align: right;">
+                    <td width="200">
                         <div id="video_upload_content"></div>
                     </td>
                     <% } %>

@@ -3,23 +3,16 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/recipe_database/frontend/nutrition_database/list_items.html'
+	'text!templates/recipe_database/frontend/nutrition_database/list_item.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
         
-        initialize: function(){
-            this.render();
-        },
-        
         template:_.template(template),
 
         render : function(){
-            var ingredients = this.options.ingredients;
-            //console.log(ingredients);
-            var template = _.template(this.template(ingredients));
-            this.$el.html(template);
-            return this;
+            var template = _.template(this.template(this.model.toJSON()));
+            this.$el.append(template);
         },
 
         events: {
@@ -35,3 +28,4 @@ define([
             
     return view;
 });
+

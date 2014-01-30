@@ -1,7 +1,15 @@
 /* html5 video upload backbone class
  * 
  */
-(function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     
     function BackboneVideoUpload(options) {
     
@@ -207,5 +215,5 @@
         return constr;
     };
 
-})($js);
+}));
 

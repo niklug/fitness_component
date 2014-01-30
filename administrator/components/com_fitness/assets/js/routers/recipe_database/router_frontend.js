@@ -6,8 +6,11 @@ define([
         'jwplayer', 
         'jwplayer_key',
         'collections/recipe_database/recipes',
+        'collections/recipe_database/ingredients',
         'models/nutrition_plan/nutrition_guide/get_recipe_params',
+        'models/recipe_database/request_params_ingredients',
         'models/recipe_database/recipe',
+        'models/recipe_database/ingredient',
         'views/recipe_database/frontend/menus/submenu_my_recipes',
         'views/recipe_database/frontend/menus/submenu_trash_list',
         'views/recipe_database/frontend/menus/submenu_my_recipe_item',
@@ -15,10 +18,17 @@ define([
         'views/recipe_database/frontend/menus/submenu_my_favoirites_item',
         'views/recipe_database/frontend/menus/submenu_trash_item',
         'views/recipe_database/frontend/menus/submenu_recipe_database_form',
+        'views/recipe_database/frontend/menus/submenu_nutrition_database_list',
+        'views/recipe_database/frontend/menus/submenu_nutrition_database_form',
         'views/recipe_database/frontend/recipe_database_list',
         'views/recipe_database/frontend/latest_recipes/list',
         'views/recipe_database/frontend/recipe_database_item',
-        'views/recipe_database/frontend/recipe_database_form'
+        'views/recipe_database/frontend/recipe_database_form',
+        'views/recipe_database/frontend/nutrition_database/list',
+        'views/recipe_database/frontend/nutrition_database/form',
+        
+        'jquery.validate'
+  
 ], function (
         $,
         _,
@@ -27,8 +37,11 @@ define([
         jwplayer,
         jwplayer_key,
         Recipes_collection,
-        Get_recipe_params_model,
+        Ingredients_collection,
+        Request_params_recipes_model,
+        Request_params_ingredients_model,
         Recipe_model,
+        Ingredient_model,
         Submenu_my_recipes_view,
         Submenu_trash_list_view,
         Submenu_my_recipe_item_view,
@@ -36,10 +49,14 @@ define([
         Submenu_my_favourites_view,
         Submenu_trash_item_view,
         Submenu_edit_recipe_view,
+        Submenu_nutrition_database_list_view,
+        Submenu_nutrition_database_form_view,
         Recipe_database_list_view,
         Latest_recipes_view,
         Recipe_item_view,
-        EditRecipeContainer_view
+        EditRecipeContainer_view,
+        Nutrition_database_list_view,
+        Nutrition_database_form_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -58,17 +75,20 @@ define([
             
             app.collections.recipes = new Recipes_collection();
             
-            app.models.get_recipe_params = new Get_recipe_params_model();
+            app.models.get_recipe_params = new Request_params_recipes_model();
             
             app.models.get_recipe_params.bind("change", this.get_database_recipes, this);
             
             //latest recipes
             app.collections.recipes_latest = new Recipes_collection();
-            app.models.get_recipe_params_latest = new Get_recipe_params_model();
+            app.models.get_recipe_params_latest = new Request_params_recipes_model();
             //
             app.models.recipe = new Recipe_model();
             
-            
+            //ingredients
+            app.collections.ingredients = new Ingredients_collection();
+            app.models.request_params_ingredients = new Request_params_ingredients_model();
+            app.models.request_params_ingredients.bind("change", this.get_ingredients, this);
         },
 
         routes: {
@@ -81,6 +101,8 @@ define([
             "!/nutrition_recipe/:id" : "nutrition_recipe",
             "!/nutrition_database/nutrition_recipe/:id" : "nutrition_database_recipe",
             "!/edit_recipe/:id" : "edit_recipe",
+            "!/nutrition_database": "nutrition_database", 
+            "!/add_ingredient" : "add_ingredient",
         },
         
         back: function() {
@@ -108,6 +130,19 @@ define([
                 data : app.models.get_recipe_params_latest.toJSON(),
                 success: function (collection, response) {
                     $("#recipes_latest_wrapper").html(new Latest_recipes_view({collection : collection}).render().el);
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            });  
+        },
+        
+        get_ingredients : function() {
+            app.collections.ingredients.reset();
+            app.collections.ingredients.fetch({
+                data : app.models.request_params_ingredients.toJSON(),
+                success: function (collection, response) {
+                    console.log(collection);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -262,7 +297,39 @@ define([
                 }
             }); 
         },
-           
+        
+        nutrition_database : function () {
+            this.common_actions();
+
+            $("#recipe_submenu").html(new Submenu_nutrition_database_list_view().render().el);
+   
+            $("#nutrition_database_link").addClass("active_link");
+            
+            $("#recipe_main_container").html(new Nutrition_database_list_view({collection : app.collections.ingredients}).render().el);
+            
+            app.models.request_params_ingredients.set({page : 1, search : '', state : 1, uid : app.getUniqueId()});
+            
+            app.models.pagination = $.backbone_pagination({});
+
+            app.models.pagination.bind("change:currentPage", this.set_ingredients_model, this);
+
+            app.models.pagination.bind("change:items_number", this.set_ingredients_model, this);
+        },
+        
+        set_ingredients_model : function() {
+            app.collections.ingredients.reset();
+            app.models.request_params_ingredients.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
+        },
+        
+        add_ingredient : function () {
+            app.models.ingredient = new Ingredient_model();
+  
+            $("#recipe_submenu").html(new Submenu_nutrition_database_form_view({model : app.models.ingredient}).render().el);
+            
+            $("#recipe_main_container").html(new Nutrition_database_form_view({model : app.models.ingredient}).render().el);
+
+            $("#add_ingredient_form").validate();
+        },
     
     });
 

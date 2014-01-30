@@ -384,29 +384,7 @@ class FitnessModelrecipe_database extends JModelList {
         return $model;
     }
     
-    
-    public function deleteRecipe($table, $data_encoded) {
-        $status['success'] = 1;
 
-        $data = json_decode($data_encoded);
-
-        $db = JFactory::getDBO();
-        
-        $query = "DELETE FROM $table WHERE id='$data->id'";
-        
-        $db->setQuery($query);
-        
-        if (!$db->query()) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-        }
-        
-        $this->deleteRecipeMedia($data->id);
-        
-        $result = array( 'status' => $status, 'data' => $data->id);
-        
-        return $result;
-    }
     
     private function deleteRecipeMedia($id) {
         $image_upload_folder = JPATH_ROOT . DS . 'images' . DS . 'Recipe_Images' . DS;   
@@ -417,115 +395,7 @@ class FitnessModelrecipe_database extends JModelList {
         array_map('unlink', glob($video_upload_folder . $id . ".*"));
         
     }
-    
-    public function updateRecipe($table, $data_encoded) {
-        $status['success'] = 1;
 
-        $helper = $this->helper;
-        
-        $data = json_decode($data_encoded);
-        
-        $data->instructions = html_entity_decode(urldecode($data->instructions), ENT_COMPAT, "UTF-8");
-        
-        $db = JFactory::getDBO();
-        
-        try {
-            $helper->insertUpdateObj($data, $table);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-        
-        $result = array( 'status' => $status, 'data' => $data->id);
-        
-        return $result;
-    }
-    
-   
-
-    public function getIngredients($table, $data_encoded) {
-        $status['success'] = 1;
-
-        $helper = $this->helper;
-        
-        $data = json_decode($data_encoded);
-        
-        $page = $data->page;
-        $limit = $data->limit;
-        
-        $start = ($page - 1) * $limit;
-        
-        $db = JFactory::getDBO();
-        
-        if($data->search) {
-
-            $search = $db->Quote('%' . $db->escape($data->search, true) . '%');
-
-            $query .= "SELECT a.*";
-
-            $query .= " FROM $table AS a "
-                    . " WHERE a.ingredient_name LIKE $search"
-                    . " AND a.state='1'"
-                    . "  ORDER BY a.ingredient_name" 
-                    . " LIMIT $start, $limit";
-
-
-            try {
-                $ingredients = FitnessHelper::customQuery($query, 1);
-            } catch (Exception $e) {
-                $status['success'] = 0;
-                $status['message'] = '"' . $e->getMessage() . '"';
-                return array( 'status' => $status);
-            }
-            
-        
-            $query = "SELECT COUNT(id) ";
-
-            $query .= " FROM $table  WHERE ingredient_name LIKE $search AND state='1'";
-
-            try {
-                $items_total = FitnessHelper::customQuery($query, 0);
-            } catch (Exception $e) {
-                $status['success'] = 0;
-                $status['message'] = '"' . $e->getMessage() . '"';
-                return array( 'status' => $status);
-            }
-        }
-        
-        //$items_total = 100;
-        
-        $data = array('ingredients' => $ingredients, 'items_total' => $items_total);
-
-        $result = array( 'status' => $status, 'data' => $data);
-        
-        return $result;
-    }
-    
-     public function updateIngredient($table, $data_encoded) {
-        $status['success'] = 1;
-
-        $helper = $this->helper;
-        
-        $data = json_decode($data_encoded);
-        
-        $data->description = html_entity_decode(urldecode($data->description), ENT_COMPAT, "UTF-8");
-        
-        $db = JFactory::getDBO();
-        
-        try {
-            $helper->insertUpdateObj($data, $table);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-        
-        $result = array( 'status' => $status, 'data' => $data->id);
-        
-        return $result;
-    }
-    
     
     public function recipes() {
             
@@ -538,26 +408,24 @@ class FitnessModelrecipe_database extends JModelList {
         $model = json_decode(JRequest::getVar('model'));
         
         $id = JRequest::getVar('id', 0, '', 'INT');
-        
-        $data = new stdClass();
-        $data->id = $id;   
-        $data->sort_by = JRequest::getVar('sort_by'); 
-        $data->order_dirrection = JRequest::getVar('order_dirrection'); 
-        $data->page = JRequest::getVar('page'); 
-        $data->limit = JRequest::getVar('limit'); 
-        $data->state = JRequest::getVar('state'); 
-        $data->filter_options = JRequest::getVar('filter_options'); 
-        $data->recipe_variations_filter_options = JRequest::getVar('recipe_variations_filter_options'); 
-        $data->current_page= JRequest::getVar('current_page'); 
-
 
         $table = '#__fitness_nutrition_recipes';
 
         $helper = new FitnessHelper();
 
-
         switch ($method) {
             case 'GET': // Get Item(s)
+                $data = new stdClass();
+                $data->id = $id;   
+                $data->sort_by = JRequest::getVar('sort_by'); 
+                $data->order_dirrection = JRequest::getVar('order_dirrection'); 
+                $data->page = JRequest::getVar('page'); 
+                $data->limit = JRequest::getVar('limit'); 
+                $data->state = JRequest::getVar('state'); 
+                $data->filter_options = JRequest::getVar('filter_options'); 
+                $data->recipe_variations_filter_options = JRequest::getVar('recipe_variations_filter_options'); 
+                $data->current_page= JRequest::getVar('current_page'); 
+
                 if($id) {
                     $data = $this->getRecipe($table, $data);
                     return $data;
@@ -586,5 +454,70 @@ class FitnessModelrecipe_database extends JModelList {
         return $model;
     }
     
+    
+    public function ingredients() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        
+        $table = '#__fitness_nutrition_database';
+
+        $helper = new FitnessHelper();
+
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $search = JRequest::getVar('search'); 
+                
+                $page = JRequest::getVar('page'); 
+                $limit = JRequest::getVar('limit'); 
+                $start = ($page - 1) * $limit;
+
+                if(!$search) return;
+                
+                $db = JFactory::getDBO();
+
+                $search = $db->Quote('%' . $db->escape($search, true) . '%');
+
+                $query .= "SELECT a.*, "
+                        . " (SELECT COUNT(id) FROM $table  WHERE ingredient_name LIKE $search AND state='1') items_total";
+
+                $query .= " FROM $table AS a "
+                        . " WHERE a.ingredient_name LIKE $search"
+                        . " AND a.state='1'"
+                        . "  ORDER BY a.ingredient_name" 
+                        . " LIMIT $start, $limit";
+
+                $data = FitnessHelper::customQuery($query, 1);
+                
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
+    
+  
     
 }
