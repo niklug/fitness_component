@@ -7,7 +7,6 @@ define([
     var model = Backbone.Model.extend({
         
         initialize: function(){
-            
             this.bind("save", this.onAddFavourites, this);
             this.bind("detroy", this.onRemoveFavourites, this);
         },

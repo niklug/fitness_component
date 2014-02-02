@@ -171,6 +171,101 @@
                     var html = '<a  data-item_id="' + id + '" style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
                     return html;
                 },
+                
+                setDiaryStatus : function(status) {
+                    var style_class;
+                    var text;
+                    switch(status) {
+                        case '1' :
+                            style_class = 'status_inprogress';
+                            text = 'IN PROGRESS';
+                            break;
+                        case '2' :
+                            style_class = 'status_pass';
+                            text = 'PASS';
+                            break;
+                        case '3' :
+                            style_class = 'status_fail';
+                            text = 'FAIL';
+                            break;
+                        case '4' :
+                            style_class = 'status_distinction';
+                            text = 'DISTINCTION';
+                            break;
+                        case '5' :
+                            style_class = 'status_submitted';
+                            text = 'SUBMITTED';
+                            break;
+                        default :
+                            style_class = 'status_inprogress';
+                            text = 'IN PROGRESS';
+                            break;
+                    }
+                    var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                    return html;
+                },
+                
+                setGoalStatus : function(status) {
+                    var style_class;
+                    var text;
+                    switch(status) {
+                        case '1' :
+                            style_class = 'goal_status_pending';
+                            text = 'PENDING';
+                            break;
+                        case '2' :
+                            style_class = 'goal_status_complete';
+                            text = 'COMPLETE';
+                            break;
+                        case '3' :
+                            style_class = 'goal_status_incomplete';
+                            text = 'INCOMPLETE';
+                            break;
+                        case '4' :
+                            style_class = 'goal_status_evaluating';
+                            text = 'EVALUATING';
+                            break;
+                        case '5' :
+                            style_class = 'goal_status_inprogress';
+                            text = 'IN PROGRESS';
+                            break;
+                        case '6' :
+                            style_class = 'goal_status_assessing';
+                            text = 'ASSESSING';
+                            break;
+                        default :
+                            style_class = 'goal_status_evaluating';
+                            text = 'EVALUATING';
+                            break;
+                    }
+                    var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                    return html;
+                },
+
+                status_html_stamp : function(status) {
+                    var class_name, text;
+                    switch(status) {
+                        case '2' :
+                            class_name = 'status_pass_stamp';
+                            break;
+                        case '3' :
+                            class_name = 'status_fail_stamp';
+
+                            break;
+                        case '4' :
+                            class_name = 'status_distinction_stamp';
+                            break;
+                        case '5' :
+                            class_name = 'status_submitted_stamp';
+                            break;
+                        default :
+                            break;
+                    }
+
+                    var html = '<div class=" status_button_stamp ' + class_name + '"></div>';
+
+                    return html;
+                },
 
                 printPage : function(htmlPage) {
                     var w = window.open(htmlPage);

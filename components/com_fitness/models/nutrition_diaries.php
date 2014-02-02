@@ -154,57 +154,6 @@ class FitnessModelNutrition_diaries extends JModelList {
     }
     
     
-    public function getDiaries($table, $data_encoded) {
-        $status['success'] = 1;
-        
-        $helper = $this->helper;
-        
-        $data = json_decode($data_encoded);
-        
-        $sort_by = $data->sort_by;
-        
-        $order_dirrection = $data->order_dirrection;
-        
-        $page = $data->page;
-        $limit = $data->limit;
-        
-        $start = ($page - 1) * $limit;
-        
-        $state = $data->state;
-                
-        $user = &JFactory::getUser();
-        $user_id = $user->id;
-        
-  
-                
-        $query .= " SELECT a.*, u.name AS assessed_by_name,";
-        //get total number
-        $query .= " (SELECT COUNT(*) FROM $table AS a ";
-        $query .= " WHERE a.client_id='$user_id'";
-        $query .= " AND a.state='$state'";
-        $query .= " ) items_total ";
-        //
-        $query .= " FROM $table AS a";
-        $query .= " LEFT JOIN #__users AS u ON u.id=a.assessed_by";
-        $query .= " WHERE a.client_id='$user_id'";
-        $query .= " AND a.state='$state'";
-        $query .= " ORDER BY " . $sort_by . " " . $order_dirrection;
-        $query .= " LIMIT $start, $limit";
-
-                
-        try {
-            $data = FitnessHelper::customQuery($query, 1);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
- 
-        $result = array( 'status' => $status, 'data' => $data);
-        
-        return $result;
-    }
-
     public function updateDiary($table, $data_encoded) {
         $status['success'] = 1;
 
@@ -489,5 +438,74 @@ class FitnessModelNutrition_diaries extends JModelList {
         $result = array( 'status' => $status, 'data' => $recipe);
         
         return $result;
+    }
+    
+    public function diaries() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $id = JRequest::getVar('id', 0, '', 'INT');
+
+        $table = '#__fitness_nutrition_diary';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $sort_by = JRequest::getVar('sort_by'); 
+                $order_dirrection = JRequest::getVar('order_dirrection'); 
+                $page = JRequest::getVar('page'); 
+                $limit = JRequest::getVar('limit'); 
+                $state = JRequest::getVar('state'); 
+
+                $start = ($page - 1) * $limit;
+
+
+                $user = &JFactory::getUser();
+                $user_id = $user->id;
+
+                $query .= " SELECT a.*, u.name AS assessed_by_name,";
+                //get total number
+                $query .= " (SELECT COUNT(*) FROM $table AS a ";
+                $query .= " WHERE a.client_id='$user_id'";
+                $query .= " AND a.state='$state'";
+                $query .= " ) items_total ";
+                //
+                $query .= " FROM $table AS a";
+                $query .= " LEFT JOIN #__users AS u ON u.id=a.assessed_by";
+                $query .= " WHERE a.client_id='$user_id'";
+                $query .= " AND a.state='$state'";
+                $query .= " ORDER BY " . $sort_by . " " . $order_dirrection;
+                $query .= " LIMIT $start, $limit";
+
+
+                $data = FitnessHelper::customQuery($query, 1);
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
     }
 }

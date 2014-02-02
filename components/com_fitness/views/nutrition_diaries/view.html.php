@@ -20,7 +20,7 @@ class FitnessViewNutrition_diaries extends JView
 	protected $items;
 	protected $pagination;
 	protected $state;
-    protected $params;
+        protected $params;
 
 	/**
 	 * Display the view
@@ -39,6 +39,15 @@ class FitnessViewNutrition_diaries extends JView
             throw new Exception(implode("\n", $errors));
         }
         
+        $document = &JFactory::getDocument();
+                
+        $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
+
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'underscore-min.js');
+        
+        include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
+                
+        /*
         $document = JFactory::getDocument();
         $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
@@ -81,7 +90,8 @@ class FitnessViewNutrition_diaries extends JView
 
         
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'gredient_graph.js');
-
+        */
+        
         $document->addStyleSheet(JUri::root() . 'components/com_fitness/assets/css/fitness.css');
         $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
         $document->addStyleSheet( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');

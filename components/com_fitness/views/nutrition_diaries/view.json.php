@@ -17,11 +17,9 @@ if(!JSession::checkToken('get')) {
 //======================================================
 class FitnessViewNutrition_diaries extends JView {
     
-    function getDiaries() {
-        $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST');
+    function diaries() {
         $model = $this -> getModel("nutrition_diaries");
-        echo json_encode($model->getDiaries($table, $data_encoded));
+        echo json_encode($model->diaries());
     }
     
     function updateDiary() {
