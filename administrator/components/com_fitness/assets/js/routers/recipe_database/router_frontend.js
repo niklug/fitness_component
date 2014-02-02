@@ -168,7 +168,7 @@ define([
             
             $("#recipe_submenu").html(new Submenu_my_recipes_view().render().el);
             
-            app.models.get_recipe_params.set({page : 1, current_page : 'my_recipes', state : 1, uid : app.getUniqueId()});
+            app.models.get_recipe_params.set({page : 1, current_page : 'my_recipes', filter_options : '',  recipe_variations_filter_options : '', state : 1, uid : app.getUniqueId()});
             
             $("#my_recipes_link").addClass("active_link");
         },
@@ -176,7 +176,7 @@ define([
         recipe_database : function () {
             this.recipe_pages_actions();
             
-            app.models.get_recipe_params.set({page : 1,current_page : 'recipe_database', state : 1, uid : app.getUniqueId()});
+            app.models.get_recipe_params.set({page : 1,current_page : 'recipe_database', state : 1, filter_options : '',  recipe_variations_filter_options : '', uid : app.getUniqueId()});
             
             $("#recipe_database_link").addClass("active_link");
         },
@@ -186,7 +186,7 @@ define([
             
             $("#recipe_submenu").html(new Submenu_trash_list_view().render().el);
             
-            app.models.get_recipe_params.set({page : 1, current_page : 'trash_list', state : '-2', uid : app.getUniqueId()});
+            app.models.get_recipe_params.set({page : 1, current_page : 'trash_list', state : '-2', filter_options : '',  recipe_variations_filter_options : '', uid : app.getUniqueId()});
             
             $("#my_recipes_link").addClass("active_link");
         },
@@ -221,6 +221,21 @@ define([
             }); 
         },
         
+        nutrition_database_recipe : function(id) {
+            var self = this;
+            app.models.recipe.fetch({
+                wait : true,
+                data : {id : id},
+                success: function (model, response) {
+                    $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
+                    self.loadVideoPlayer();
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            }); 
+       },
+
         load_recipe_submenu : function() {
             var current_page = app.models.get_recipe_params.get('current_page');
             if(current_page == 'my_recipes') {
