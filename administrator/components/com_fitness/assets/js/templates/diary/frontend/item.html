@@ -1,21 +1,13 @@
 <%
-var item = model.get('item');
-
-
 var submitted = false;
-if (item.submit_date && (item.submit_date != '0000-00-00 00:00:00')) {
+if (submit_date && (submit_date != '0000-00-00 00:00:00')) {
     submitted = true;
 }
 var scored = false;
-if(_.contains(['2', '3', '4'], item.status)) {
+if(_.contains(['2', '3', '4'], status)) {
     scored = true;
 }
 
-
-var active_plan_data = model.get('active_plan_data');
-var heavy_target = model.get('heavy_target');
-var light_target = model.get('light_target');
-var rest_target = model.get('rest_target');
 
 %>
 <div style="margin-top: 20px; min-height:350px; border:none;">
@@ -38,7 +30,7 @@ var rest_target = model.get('rest_target');
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <%= item.client_name %>
+                                        <%= client_name %>
                                     </span>
                                 </td>
                             </tr>
@@ -48,7 +40,7 @@ var rest_target = model.get('rest_target');
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <%= item.trainer_name %>
+                                        <%= trainer_name %>
                                     </span>
                                 </td>
                             </tr>
@@ -59,15 +51,13 @@ var rest_target = model.get('rest_target');
                                 <td>
                                     <br/>
                                     <span class="grey_title">
-                                         <%
+                                        <%
+                                        _.each(secondary_trainers, function(item, key){ %>
+                                            <%=  item + " <br/>" %>
+                                        <%
+                                        })
 
-                                            var secondary_trainers = item.secondary_trainers;
-                                            _.each(secondary_trainers, function(item, key){ %>
-                                                <%=  item + " <br/>" %>
-                                            <%
-                                            })
-
-                                            %>
+                                        %>
                                     </span>
                                 </td>
                             </tr>
@@ -88,15 +78,15 @@ var rest_target = model.get('rest_target');
                                 <td>
                                     <span class="grey_title">
                                     <% //if(submitted) {
-                                            var d1 = new Date(Date.parse(item.entry_date));            
+                                            var d1 = new Date(Date.parse(entry_date));            
                                             var entry_date = moment(d1).format("ddd, D MMM  YYYY"); 
                                     %>
                                             <%= entry_date%> 
-                                             <input value="<%= item.entry_date %>" style="width:70px;" readonly type="hidden" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
+                                             <input value="<%= entry_date %>" style="width:70px;" readonly type="hidden" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
                                     <%
                                        /* } else {
                                     %>
-                                        <input value="<%= item.entry_date %>" style="width:70px;" readonly type="text" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
+                                        <input value="<%= entry_date %>" style="width:70px;" readonly type="text" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
                                     <%
                                         }
                                     */%>
@@ -110,7 +100,7 @@ var rest_target = model.get('rest_target');
                                 <td>
                                     <span class="grey_title">
                                     <%
-                                        var d2 = new Date(Date.parse(item.created));            
+                                        var d2 = new Date(Date.parse(created));            
                                         var created = moment(d2).format("ddd, D MMM  YYYY HH:mm");    
                                     %>
                                     <%= created || '-' %>
@@ -125,11 +115,13 @@ var rest_target = model.get('rest_target');
                                     <span class="grey_title">
                                     <%
                                         if (submitted) {
-                                            var d3 = new Date(Date.parse(item.submit_date));    
+                                            var d3 = new Date(Date.parse(submit_date));    
                                             var submit_date = moment(d3).format("ddd, D MMM  YYYY HH:mm");    
+                                        } else {
+                                            submit_date = '-';
                                         }
                                     %>
-                                    <%= submit_date || '-' %>
+                                    <%= submit_date %>
                                     </span>
                                 </td>
                             </tr>
@@ -140,7 +132,7 @@ var rest_target = model.get('rest_target');
                                 <td>
                                     <span class="grey_title">
                                     <%=
-                                        item.assessed_by_name || '-'
+                                        assessed_by_name || '-'
                                     %>
                                     </span>
                                 </td>
@@ -199,7 +191,7 @@ var rest_target = model.get('rest_target');
                                             </td>
                                             <td>
                                                 <span class="grey_title">
-                                                    <%=  model.setStatusGoal(active_plan_data.primary_goal_status)  %>
+                                                    <%=  $.fitness_helper.setGoalStatus(active_plan_data.primary_goal_status)  %>
                                                 </span>
                                             </td>
                                         </tr>
@@ -264,7 +256,7 @@ var rest_target = model.get('rest_target');
                                             </td>
                                             <td>
                                                 <span class="grey_title">
-                                                    <%=  model.setStatusGoal(active_plan_data.mini_goal_status)  %>
+                                                    <%=  $.fitness_helper.setGoalStatus(active_plan_data.mini_goal_status)  %>
                                                 </span>
                                             </td>
                                         </tr>
@@ -306,7 +298,7 @@ var rest_target = model.get('rest_target');
                                             </td>
                                             <td>
                                                 <span class="grey_title">
-                                                    <%= item.nutrition_focus_name %>
+                                                    <%= nutrition_focus_name %>
                                                 </span>
                                             </td>
                                         </tr>
@@ -323,7 +315,7 @@ var rest_target = model.get('rest_target');
                                         <tr>
                                             <td>
                                                 <%
-                                                if(item.trainer_comments) {
+                                                if(trainer_comments) {
                                                 %>
                                                    'Trainer Comments'
                                                 <%
@@ -332,7 +324,7 @@ var rest_target = model.get('rest_target');
 
                                             </td>
                                             <td>
-                                                <%= item.trainer_comments %>
+                                                <%= trainer_comments %>
                                             </td>
                                         </tr>
                                     </table>
@@ -748,7 +740,7 @@ var rest_target = model.get('rest_target');
                                     <td  style="text-align: center;">
                                         <div style="display: inline-block;" id="status_button_place">
                                             <%=
-                                               model.status_html_stamp(item.status)
+                                               $.fitness_helper.status_html_stamp(status)
                                             %>
                                         </div>
                                     </td>

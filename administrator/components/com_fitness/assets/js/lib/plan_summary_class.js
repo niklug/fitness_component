@@ -1,7 +1,15 @@
 /*
  * 
  */
-(function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     function CalculateSummary(options) {
         this.options = options;
         this._activity_level = this.options.activity_level;
@@ -589,7 +597,7 @@
         return constr;
     };
 
-})(jQuery);
+}));
 
 
 

@@ -45,10 +45,8 @@ class FitnessViewNutrition_diaries extends JView {
     
     
     function getActivePlanData() {
-        $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST');
         $model = $this -> getModel("nutrition_diaries");
-        echo json_encode($model->getActivePlanData($table, $data_encoded));
+        echo json_encode($model->getActivePlanData());
     }
     
     function getNutritionTarget() {

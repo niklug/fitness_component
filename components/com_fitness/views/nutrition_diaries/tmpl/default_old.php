@@ -578,7 +578,7 @@ defined('_JEXEC') or die;
         
         window.app.Submenu_item_view = Backbone.View.extend({
             initialize: function(){
-                _.bindAll(this, 'render', 'onClickSave', 'prepareSaveData', 'onClickDelete');
+                _.bindAll(this, 'render',  'prepareSaveData', 'onClickDelete');
             },
             
             events: {
@@ -596,24 +596,7 @@ defined('_JEXEC') or die;
                 this.$el.html(template);
             },
             
-            onClickSave : function(event) {
-                var id =  $(event.target).attr('data-id');
-                var data = this.prepareSaveData(id);
-                
-                this.model.set({'item_saved' : null});
-                this.listenToOnce(this.model, "change:item_saved", this.redirectToItem);
-                this.model.save_item(data);
-      
-            },
-            
-            onClickSaveClose : function(event) {
-                var id =  $(event.target).attr('data-id');
-                var data = this.prepareSaveData(id);
-                
-                this.model.set({'item_saved' : null});
-                this.listenToOnce(this.model, "change:item_saved", this.redirectToList);
-                this.model.save_item(data);
-            },
+
             
             onClickSubmit : function(event) {
                 var id =  $(event.target).attr('data-id');

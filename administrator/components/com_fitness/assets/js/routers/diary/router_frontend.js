@@ -4,10 +4,19 @@ define([
 	'backbone',
         'app',
         'collections/diary/diaries',
+        'collections/nutrition_plan/targets',
         'models/diary/request_params_diaries',
+        'models/diary/diary',
+        'models/diary/active_plan_data',
+        'models/diary/diary_days',
         'views/diary/frontend/menus/submenu_list',
         'views/diary/frontend/menus/submenu_trash_list',
-        'views/diary/frontend/list'
+        'views/diary/frontend/menus/submenu_form',
+        'views/diary/frontend/menus/submenu_item',
+        'views/diary/frontend/list',
+        'views/diary/frontend/form',
+        'views/diary/frontend/item'
+
   
 ], function (
         $,
@@ -15,10 +24,18 @@ define([
         Backbone,
         app,
         Diaries_collection,
+        Targets_collection,
         Request_params_diaries_model,
+        Diary_model,
+        Active_plan_data_model,
+        Diary_days_model,
         Submenu_list_view,
         Submenu_trash_list_view,
-        List_view
+        Submenu_form_view,
+        Submenu_item_view,
+        List_view,
+        Form_view,
+        Item_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -37,6 +54,11 @@ define([
             app.collections.diaries = new Diaries_collection();
             app.models.request_params_diaries = new Request_params_diaries_model();
             app.models.request_params_diaries.bind("change", this.get_diaries, this);
+            //
+            app.collections.targets = new Targets_collection();
+            
+            app.models.active_plan_data = new Active_plan_data_model();
+            app.models.diary_days = new Diary_days_model();
         },
 
         routes: {
@@ -98,7 +120,84 @@ define([
             app.models.pagination.bind("change:currentPage", this.set_diaries_model, this);
 
             app.models.pagination.bind("change:items_number", this.set_diaries_model, this);
-        }
+        },
+        
+        create_item : function() {
+            $.when (
+                app.models.active_plan_data.fetch({
+                    data: {client_id : app.options.client_id},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }),
+                
+                app.models.diary_days.fetch({
+                    data: {client_id : app.options.client_id},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                })
+                    
+            ).then (function() {
+                var id = app.models.active_plan_data.get('id');
+                app.collections.targets.fetch({
+                    data: {id : id, client_id : app.options.client_id},
+                    success : function(collection, response) {
+                        $("#submenu_container").html(new Submenu_form_view({model : new Diary_model(), collection : collection}).render().el);
+                        new Form_view({el : $("#main_container"), collection : collection}).render();
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            })
+        },
+        
+        item_view : function(id) {
+            app.models.diary = new Diary_model({id : id});
+            
+            $.when (
+                app.models.active_plan_data.fetch({
+                    data: {client_id : app.options.client_id},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }),
+                
+                app.models.diary_days.fetch({
+                    data: {client_id : app.options.client_id},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }),
+                
+                app.models.diary.fetch({
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                })
+                    
+            ).then (function() {
+                var id = app.models.active_plan_data.get('id');
+                app.collections.targets.fetch({
+                    data: {id : id, client_id : app.options.client_id},
+                    success : function(collection, response) {
+                        app.views.diary = new Item_view({el : $("#main_container"), model : app.models.diary, collection : collection}).render();
+                        $("#submenu_container").html(new Submenu_item_view({model : app.models.diary}).render().el);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            })
+
+
+            /*
+
+            window.app.item_view = new window.app.Item_view({model : window.app.item_model, 'item_id' : id});
+            */
+
+        },
             
     
     });

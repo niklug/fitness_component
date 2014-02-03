@@ -133,7 +133,6 @@ define([
             },
 
             targets: function () {
-                
                  this.no_active_plan_action();
                  this.common_actions();
                  $("#targets_wrapper").show();

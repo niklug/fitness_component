@@ -68,6 +68,9 @@ require.config({
         'jquery.backbone_image_upload' : 'lib/backbone_image_upload',
         'jquery.backbone_video_upload' : 'lib/backbone_video_upload',
         'jquery.recipe_database' : 'lib/recipe_database_class',
+        'jquery.nutritionMeal' : 'lib/nutrition_meal_class',
+        'jquery.calculateSummary' : 'lib/plan_summary_class',
+        'jquery.gredient_graph' : 'lib/gredient_graph'
     },
 
     waitSeconds: 5

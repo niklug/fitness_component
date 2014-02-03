@@ -1,7 +1,15 @@
 /*
  * generate meals blocks
  */
-(function($) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     function NutritionMeal(options, item_description_options, nutrition_comment_options) {
         this.options = options;
         this.item_description_options = item_description_options;
@@ -416,4 +424,4 @@
         return constr;
     };
 
-})(jQuery);
+}));

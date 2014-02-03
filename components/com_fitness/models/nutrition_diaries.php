@@ -207,74 +207,62 @@ class FitnessModelNutrition_diaries extends JModelList {
         return $result;
     }
     
-    public function getDiaryDays($table, $data_encoded) {
-        $status['success'] = 1;
-        
+    public function getDiaryDays() {
+
         $helper = $this->helper;
         
         $user = &JFactory::getUser();
+ 
         $user_id = $user->id;
         
-        $query = "SELECT entry_date FROM $table WHERE client_id='$user_id' AND state='1'";
+        $client_id = JRequest::getVar('client_id');
         
-        try {
-            $data = FitnessHelper::customQuery($query, 3);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
+        if(!$client_id) {
+            $client_id = $user_id;
         }
         
-        $result = array( 'status' => $status, 'data' => $data);
+        if(!$client_id) {
+            throw new Exception('No client_id'); 
+        }
         
-        return $result;
+        $query = "SELECT entry_date FROM #__fitness_nutrition_diary WHERE client_id='$client_id' AND state='1'";
+        
+        $data = FitnessHelper::customQuery($query, 3);
+        
+        return $data;
     }
     
     
-    public function getActivePlanData($table, $data_encoded) {
-        $status['success'] = 1;
+    public function getActivePlanData() {
         $user = &JFactory::getUser();
  
         $user_id = $user->id;
-        if(!$user_id) {
-            $status['success'] = 0;
-            $status['message'] = 'No user_id';
-            return array( 'status' => $status);   
+        
+        $client_id = JRequest::getVar('client_id');
+        
+        if(!$client_id) {
+            $client_id = $user_id;
+        }
+        
+        if(!$client_id) {
+            throw new Exception('No client_id'); 
         }
         
         require_once JPATH_COMPONENT_ADMINISTRATOR .  '/models/nutrition_plans.php';
         $nutrition_plans_model  = new FitnessModelnutrition_plans();
         
-                
-        try {
-            $active_plan_id = $nutrition_plans_model->getUserActivePlanId($user_id);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
-        }
-        
-        
+        $active_plan_id = $nutrition_plans_model->getUserActivePlanId($user_id);
+
         
         if(!$active_plan_id) {
-            $status['success'] = 0;
-            $status['message'] = 'No Active Plan';
-            return array( 'status' => $status);
-            
-        }
-         
-        try {
-            $helper = $this->helper;
-            $active_plan_data = $helper->getPlanData($active_plan_id);
-        } catch (Exception $e) {
-            $status['success'] = 0;
-            $status['message'] = '"' . $e->getMessage() . '"';
-            return array( 'status' => $status);
+            throw new Exception('No Active Plan'); 
         }
 
-        $result = array( 'status' => $status, 'data' => $active_plan_data);
+        $helper = $this->helper;
         
-        return $result;
+        $active_plan_data = $helper->getPlanData($active_plan_id);
+
+        return $active_plan_data;
     }
     
     
@@ -470,22 +458,58 @@ class FitnessModelNutrition_diaries extends JModelList {
                 $user = &JFactory::getUser();
                 $user_id = $user->id;
 
-                $query .= " SELECT a.*, u.name AS assessed_by_name,";
+                $query .= " SELECT a.*, u.name AS assessed_by_name,"
+         
+                . " (SELECT name FROM #__users WHERE id=a.client_id) client_name,"
+                . " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name,"
+                . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name,"
+                . " (SELECT name FROM #__fitness_nutrition_focus WHERE id=a.nutrition_focus) nutrition_focus_name, ";
+                
                 //get total number
                 $query .= " (SELECT COUNT(*) FROM $table AS a ";
-                $query .= " WHERE a.client_id='$user_id'";
-                $query .= " AND a.state='$state'";
+                $query .= " WHERE a.client_id='$user_id' ";
+        
+                if($state) {
+                    $query .= " AND a.state='$state'";
+                }
                 $query .= " ) items_total ";
                 //
                 $query .= " FROM $table AS a";
                 $query .= " LEFT JOIN #__users AS u ON u.id=a.assessed_by";
-                $query .= " WHERE a.client_id='$user_id'";
-                $query .= " AND a.state='$state'";
-                $query .= " ORDER BY " . $sort_by . " " . $order_dirrection;
-                $query .= " LIMIT $start, $limit";
+                $query .= " WHERE a.client_id='$user_id' ";
+                
+                if($id) {
+                    $query .= " AND a.id='$id' ";
+                }
+                
+                if($state) {
+                    $query .= " AND a.state='$state' ";
+                }
+                
+                if($sort_by) {
+                    $query .= " ORDER BY " . $sort_by;
+                }
+                
+                if($order_dirrection) {
+                    $query .=  " " . $order_dirrection;
+                }
+                
+                if($start AND $limit) {
+                    $query .= " LIMIT $start, $limit";
+                }
 
+                $query_method = 1;
+                
+                if($id) {
+                    $query_method = 2;
+                }
+                
+                $data = FitnessHelper::customQuery($query, $query_method);
+                
+                if($id) {
+                    $data->secondary_trainers = $helper->get_client_trainers_names($data->client_id, 'secondary');
+                }
 
-                $data = FitnessHelper::customQuery($query, 1);
                 return $data;
                 break;
             case 'PUT': 

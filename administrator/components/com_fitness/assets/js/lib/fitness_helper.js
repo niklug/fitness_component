@@ -305,6 +305,24 @@
                         //console.log(output);
                     });
                 },
+                
+                //diary
+                sendSubmitEmail : function(id){
+                    var data = {};
+                    var url = this.get('fitness_frontend_url');
+                    var view = '';
+                    var task = 'ajax_email';
+                    var table = '';
+
+                    data.id = id;
+                    data.view = 'NutritionDiary';
+                    data.method = 'DiarySubmitted';
+
+                    var self = this;
+                    this.ajaxCall(data, url, view, task, table, function(output) {
+                        console.log(output);
+                    });
+                }
             });
 
             return new Helper_model(options);

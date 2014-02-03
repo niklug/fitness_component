@@ -1,20 +1,19 @@
 <div class="fitness_block_wrapper" style="height:30px;margin-top: 20px;">
     <div class="internal_wrapper">
         <div style="width:100%;">
-            <% 
-            var item = model.get('item');
+          <% 
             var submitted = false;
-            if (item.submit_date && (item.submit_date != '0000-00-00 00:00:00')) {
+            if (submit_date && (submit_date != '0000-00-00 00:00:00')) {
             submitted = true;
             }
           %>
             <% if (!submitted) { %>
-            <a data-id="<%= item_id %>" style="cursor: pointer;float:left;" id="submit" onclick="javascript:void(0)">[SUBMIT]</a>
+            <a data-id="<%= id %>" style="cursor: pointer;float:left;" id="submit" onclick="javascript:void(0)">[SUBMIT]</a>
             <% } %>
 
-            <a data-id="<%= item_id %>" style="cursor: pointer;float:left;margin-right:10px; float:right;" id="close" onclick="javascript:void(0)">[CLOSE]</a>
+            <a data-id="<%= id %>" style="cursor: pointer;float:left;margin-right:10px; float:right;" id="close" onclick="javascript:void(0)">[CLOSE]</a>
             <% if (!submitted) { %>
-            <a data-id="<%= item_id %>" style="cursor: pointer;float:left;margin-right:10px; float:right;" id="delete" onclick="javascript:void(0)">[DELETE]</a>
+            <a data-id="<%= id %>" style="cursor: pointer;float:left;margin-right:10px; float:right;" id="delete" onclick="javascript:void(0)">[DELETE]</a>
             <% } %>
         </div>
         <div class="clr"></div>
