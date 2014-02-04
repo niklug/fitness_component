@@ -1257,3 +1257,66 @@ INSERT INTO `#__fitness_database_categories` (`id`, `name`, `state`) VALUES
 (13, 'Seafood & Seafood Products', 1),
 (14, 'Sugar, Confectionary and Sweet Spreads', 1),
 (15, 'Vegetables', 1);
+
+CREATE TABLE IF NOT EXISTS `#__fitness_settings_exercise_type` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_settings_force_type` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_settings_body_part` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_settings_target_muscles` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_settings_equipment` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_settings_difficulty` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_settings_mechanics_type` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(255)  NOT NULL ,
+`state` TINYINT(1)  NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
+
