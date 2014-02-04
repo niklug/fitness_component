@@ -144,7 +144,7 @@ class FitnessFactory {
     }
     
     
-    public function getAdministratorId($administrator_type, $user_id) {
+    public static function getAdministratorId($administrator_type, $user_id) {
         
         $group_id = self::getCurrentGroupId($user_id);
         $query = "SELECT $administrator_type FROM #__fitness_business_profiles WHERE group_id='$group_id'  AND state='1'";
@@ -201,10 +201,6 @@ class FitnessFactory {
       
     
     public static function isChildGroup($group_id, $parent_group_id) {
-        if(!$user_id) {
-            $user_id = &JFactory::getUser()->id;
-        }
-
         $query = "SELECT id FROM #__usergroups WHERE (id='$group_id'  AND parent_id='$parent_group_id') OR (id='$group_id'  AND id='$parent_group_id')";
 
         $group_id = self::customQuery($query, 0);
@@ -214,7 +210,7 @@ class FitnessFactory {
     
     
     public static function customQuery($query, $type) {
-	$db = & JFactory::getDBO();
+	$db = JFactory::getDBO();
         $db->setQuery($query);
 
         if (!$db->query()) {
@@ -716,7 +712,7 @@ class FitnessHelper extends FitnessFactory
     }
     
     
-    public function getTrainersByUsergroup($trainers_group_id) {
+    public function getTrainersByUsergroup() {
         
         if(!$trainers_group_id) {
             $trainers_group_id = self::getTrainersGroupId();

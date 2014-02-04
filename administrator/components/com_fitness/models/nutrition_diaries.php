@@ -173,16 +173,18 @@ class FitnessModelnutrition_diaries extends JModelList {
         
         $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = c.business_profile_id');
         
-
-        if(FitnessHelper::is_primary_administrator() || FitnessHelper::is_secondary_administrator()) {
+        
+        $user = JFactory::getUser();
+        
+        if(FitnessHelper::is_primary_administrator($user->id) || FitnessHelper::is_secondary_administrator($user->id)) {
             $trainers_group_id = FitnessHelper::getTrainersGroupId();
             $query->where('bp.group_id = '.(int) $trainers_group_id);
         }
         
         // 
-        $user = &JFactory::getUser();
         
-        if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
+        
+        if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
             $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
             $query->where('(c.primary_trainer = ' . (int) $user->id . ' OR c.other_trainers LIKE ' . $other_trainers . ' )');
         }

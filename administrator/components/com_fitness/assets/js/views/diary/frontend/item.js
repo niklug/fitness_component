@@ -180,6 +180,10 @@ define([
             
             window.nutrition_meal = this.nutrition_meal;
             
+            window.resetBody = function() {
+                $("body").css('overflow', 'auto');
+            }
+            
 
             this.calculateSummary.run();
 
@@ -209,4 +213,5 @@ define([
     });
             
     return view;
+
 });

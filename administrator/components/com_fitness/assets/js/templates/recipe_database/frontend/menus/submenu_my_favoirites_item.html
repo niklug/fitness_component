@@ -2,7 +2,7 @@
     <div class="internal_wrapper">
         <div style="width:100%;">
             <a data-id="<%= id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
-            <% if(typeof nutrition_plan_id !== 'undefined') {%>
+            <% if(app.options.add_diary_options.nutrition_plan_id) {%>
              &#32;<a data-id="<%= id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
             <% } %>
 

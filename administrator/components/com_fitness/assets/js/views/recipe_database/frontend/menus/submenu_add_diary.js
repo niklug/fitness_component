@@ -16,8 +16,7 @@ define([
         template:_.template(template),
         
         render: function(){
-            var variables = {'recipe_id' : this.options.recipe_id, 'nutrition_plan_id' : this.options.nutrition_plan_id};
-            var template = _.template(this.template(variables));
+            var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
             return this;
         },
@@ -27,8 +26,7 @@ define([
             "click #cancel" : "onClickCancel",
         },
 
-        onClickAddDiary : function(event) {
-            var recipe_id = $(event.target).attr("data-recipe_id");
+        onClickAddDiary : function() {
             var number_serves = parseInt($("#number_serves").val());
 
             if(!number_serves) {
@@ -37,12 +35,12 @@ define([
             }
 
             var data = {};
-            data.recipe_id = recipe_id;
+            data.recipe_id = this.model.get('id');
             data.number_serves = number_serves;
 
-            data.number_serves_recipe = this.options.number_serves_recipe;
+            data.number_serves_recipe = this.model.get('number_serves');
 
-            window.app.recipe_items_model.add_diary(data);
+            $.fitness_helper.add_diary(data, app);
 
         },
 

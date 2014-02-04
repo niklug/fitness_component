@@ -51,7 +51,7 @@ class FitnessViewNutrition_diaries extends JView
             FitnessHelper::addSubmenu('Recipe Database', 'nutrition_recipes');
             FitnessHelper::addSubmenu('Settings', 'settings');
             
-            $document = &JFactory::getDocument();
+            $document = JFactory::getDocument();
             $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
             $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
             $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'underscore-min.js');

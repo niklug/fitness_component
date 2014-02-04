@@ -16,7 +16,7 @@
 
             <a data-id="" style="cursor: pointer;left;" id="copy_recipe" onclick="javascript:void(0)">[COPY TO MY RECIPES]</a>
 
-            <% if(typeof nutrition_plan_id !== 'undefined') {%>
+            <% if(app.options.add_diary_options.nutrition_plan_id) {%>
              &#32;<a data-id="<%= id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
             <% } %>
 

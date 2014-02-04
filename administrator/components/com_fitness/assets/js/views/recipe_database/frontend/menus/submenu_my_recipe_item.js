@@ -17,7 +17,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template(this.model.toJSON()));
+            var data  = this.model.toJSON();
+            data.app = app;
+            var template = _.template(this.template(data));
             this.favourite_recipe_model = new Favourite_recipe_model({id : this.model.get('id')})
             this.$el.html(template);
             return this;

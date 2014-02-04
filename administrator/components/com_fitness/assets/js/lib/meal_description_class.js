@@ -55,7 +55,7 @@
             $("#add_recipe"+ self._description_id).die().live('click', function() {
                 var recipesListHtml = self.recipesListHtml();
                 $("body").append(recipesListHtml);
-                $("body").css('overflow', 'hidden')
+                $("body").css('overflow', 'hidden');
             });
             
             $("#save_as_recipe"+ self._description_id).die().live('click', function() {
@@ -127,7 +127,7 @@
 
             $("#close_recipe_list").die().live('click', function() {
                 $("#recipes_list_wrapper").remove();
-                $("body").css('overflow', 'auto')
+                $("body").css('overflow', 'auto');
             });
 
 

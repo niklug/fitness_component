@@ -20,6 +20,7 @@ define([
         'views/recipe_database/frontend/menus/submenu_recipe_database_form',
         'views/recipe_database/frontend/menus/submenu_nutrition_database_list',
         'views/recipe_database/frontend/menus/submenu_nutrition_database_form',
+        'views/recipe_database/frontend/menus/submenu_add_diary',
         'views/recipe_database/frontend/recipe_database_list',
         'views/recipe_database/frontend/latest_recipes/list',
         'views/recipe_database/frontend/recipe_database_item',
@@ -51,6 +52,7 @@ define([
         Submenu_edit_recipe_view,
         Submenu_nutrition_database_list_view,
         Submenu_nutrition_database_form_view,
+        Submenu_add_diary_view,
         Recipe_database_list_view,
         Latest_recipes_view,
         Recipe_item_view,
@@ -103,6 +105,7 @@ define([
             "!/edit_recipe/:id" : "edit_recipe",
             "!/nutrition_database": "nutrition_database", 
             "!/add_ingredient" : "add_ingredient",
+            "!/add_diary/:id" : "add_diary",
         },
         
         back: function() {
@@ -246,6 +249,8 @@ define([
                 $("#recipe_submenu").html(new Submenu_my_favourites_view({model : app.models.recipe}).render().el);
             } else if (current_page == 'trash_list') {
                 $("#recipe_submenu").html(new Submenu_trash_item_view({model : app.models.recipe}).render().el);
+            } else if (current_page == 'add_diary') {
+                $("#recipe_submenu").html(new Submenu_add_diary_view({model : app.models.recipe}).render().el);
             } 
         },
         
@@ -345,6 +350,24 @@ define([
 
             $("#add_ingredient_form").validate();
         },
+        
+        add_diary : function(id) {
+
+           app.models.get_recipe_params.set({current_page : 'add_diary'});
+  
+           var self = this;
+            app.models.recipe.fetch({
+                data : {id : id},
+                success: function (model, response) {
+                    $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
+                    self.load_recipe_submenu();
+                    self.loadVideoPlayer();
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            }); 
+       }
     
     });
 
