@@ -343,6 +343,12 @@ class FitnessController extends JController
             $view -> shopping_list_ingredients(); 
         }
         
+        function recipes() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'recipe_database.php';
+            $recipe_database_model = new FitnessModelrecipe_database();
+            echo json_encode($recipe_database_model->recipes());
+        }
+        
         
 
 

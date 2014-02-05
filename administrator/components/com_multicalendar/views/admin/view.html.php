@@ -47,7 +47,7 @@ class multicalendarViewadmin extends JView
                             <li><a class="active" href="index.php?option=com_fitness&view=goals">Client Planning</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=assessments">Assessments</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=programs">Programs</a></li>
-                            <li><a class="active" href="#">Exercise Library</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=exercise_library">Exercise Library</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_plans">Nutrition Plans</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_diaries">Nutrition Diary</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_recipes">Recipe Database</a></li>

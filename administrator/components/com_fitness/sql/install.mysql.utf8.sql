@@ -1320,3 +1320,25 @@ CREATE TABLE IF NOT EXISTS `#__fitness_settings_mechanics_type` (
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
+
+CREATE TABLE IF NOT EXISTS `#__fitness_exercise_library` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `exercise_name` varchar(255) NOT NULL,
+  `exercise_type` varchar(25) NOT NULL,
+  `force_type` varchar(255) NOT NULL,
+  `mechanics_type` varchar(255) NOT NULL,
+  `body_part` varchar(255) NOT NULL,
+  `target_muscles` varchar(255) NOT NULL,
+  `equipment` varchar(255) NOT NULL,
+  `difficulty` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `status` int(1) NOT NULL,
+  `global_business_permission` varchar(255) NOT NULL,
+  `user_view_permission` varchar(255) NOT NULL,
+  `my_exercise_list` varchar(11) NOT NULL,
+  `video` varchar(255) NOT NULL,
+  `assessed_by` int(11) NOT NULL,
+  `state` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
