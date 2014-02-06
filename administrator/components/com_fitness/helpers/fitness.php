@@ -1543,6 +1543,6 @@ class FitnessHelper extends FitnessFactory
             return self::customQuery($query, 1);
         }
         
-        
+       
 }
 

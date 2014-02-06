@@ -2,12 +2,18 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-        'app'
+        'app',
+        'models/exercise_library/exercise_library_item',
+        'views/exercise_library/select_filter_block',
+        'views/exercise_library/backend/menus/main_menu',
 ], function (
         $,
         _,
         Backbone,
-        app
+        app,
+        Exercise_library_item_model,
+        Select_filter_block_view,
+        Main_menu_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -22,7 +28,8 @@ define([
             app.getUniqueId = function() {
                 return new Date().getUTCMilliseconds();
             }
-            //
+                        
+            app.models.exercise_library_item = new Exercise_library_item_model();
         },
 
         routes: {
@@ -37,9 +44,18 @@ define([
               this.navigate('', {trigger:true, replace:true});
             }
         },
-          
+
         form_view : function() {
-            console.log('form..');
+            app.models.exercise_library_item.fetch({
+                data : {},
+                success: function (model, response) {
+                    $("#main_menu").html(new Main_menu_view({model : app.models.exercise_library_item}).render().el);
+                    $("#select_filter_wrapper").html(new Select_filter_block_view({model : app.models.exercise_library_item}).render().el);
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            })
         }
     });
 

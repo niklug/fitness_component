@@ -349,7 +349,17 @@ class FitnessController extends JController
             echo json_encode($recipe_database_model->recipes());
         }
         
+        function select_filter() {
+            $view = $this -> getView('exercise_library', 'json');
+            $view->setModel($this->getModel('exercise_library'));
+            $view -> select_filter(); 
+        }
         
-
+        function exercise_library() {
+            $view = $this -> getView('exercise_library', 'json');
+            $view->setModel($this->getModel('exercise_library'));
+            $view -> exercise_library(); 
+        }
+        
 
 }

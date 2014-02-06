@@ -15,8 +15,20 @@ define([
         template:_.template(template),
         
         render : function(){
-            $(this.el).html(this.template());
-            this.$el.find(".filter_select option[value=0]").attr('selected', true);
+            var data = {
+                title : this.options.title,
+                first_option_title : this.options.first_option_title,
+                class_name : this.options.class_name,
+                id_name : this.options.id_name,
+                select_size : this.options.select_size
+            };
+            $(this.el).html(this.template(data));
+            
+            if(typeof this.options.selected_items !== 'undefined') {
+                if(this.options.selected_items.length == 0) {
+                    this.$el.find(".filter_select option[value=0]").attr('selected', true);
+                }
+            }
             
             var self = this;
             _.each(this.collection.models, function (model) { 
@@ -27,7 +39,15 @@ define([
         },
 
         addItem : function(model) {
-            this.$el.find(".filter_select").append('<option value="' + model.get('id') + '">' + model.get('name') + '</option>');
+            var id = model.get('id');
+            var selected = '';
+            if(typeof this.options.selected_items !== 'undefined') {
+                if(_.contains(this.options.selected_items, id)) {
+                    selected = 'selected ="selected"';
+                }
+            }
+    
+            this.$el.find(".filter_select").append('<option ' + selected + ' value="' + model.get('id') + '">' + model.get('name') + '</option>');
         },
 
         events: {
@@ -37,7 +57,10 @@ define([
 
         onFilterSelect : function(event){
             var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
-            this.models.set({'filter_select_options' : ids});
+            var model_field = this.options.model_field;
+            var option = {};
+            option[model_field] = ids;
+            this.model.set(option);
         }
     });
             
