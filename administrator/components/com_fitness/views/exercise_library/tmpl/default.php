@@ -6,32 +6,29 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Nikolay Korban <niklug@ukr.net> - http://
  */
-
-
 // no direct access
 defined('_JEXEC') or die;
 ?>
 <div id="main_menu" style="float: right;"></div>
-<div class="width-100 fltlft">
-    
-    <fieldset class="adminform">
-        <legend>Exercise Details</legend>
-        <div id="exercise_details_wrapper">
-            <table width="100%">
-                <tr>
-                    <td width="100">
-                        <label>Exercise Name</label>
-                    </td>
-                    <td id="exercise_name_wrapper" >
-                        <input id="exercise_name" size="50" type="text" title="" value="" name="exercise_name">
-                    </td>
-                </tr>
-            </table>
-            
-            <div id="select_filter_wrapper"></div>
+<div class="clr"></div>
 
-        </div>
-    </fieldset>
+<div class="width-100 fltlft">
+    <table width="100%" style="height: 280px;">
+        <tr>
+            <td style="vertical-align: top;height: 100%;">
+                <fieldset class="adminform" style="height: 100%;padding-bottom: 0;margin-bottom: 0;">
+                    <legend>Exercise Details</legend>
+                    <div id="exercise_details_wrapper"></div>
+                </fieldset>
+            </td>
+            <td style="vertical-align: top;height: 100%;">
+                <fieldset class="adminform" style="height: 100%;padding-bottom: 0;margin-bottom: 0;">
+                    <legend>Exercise Options</legend>
+                    <div id="select_filter_wrapper"></div>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
 </div>
 
 
@@ -39,37 +36,69 @@ defined('_JEXEC') or die;
 
 
 
-<script type="text/javascript">
-       
-    var options = {
-        'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
-        'base_url' : '<?php echo JURI::root();?>',
-        'ajax_call_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'user_name' : '<?php echo JFactory::getUser()->name;?>',
-        'user_id' : '<?php echo JFactory::getUser()->id;?>',
-        'client_id' : '<?php echo JFactory::getUser()->id;?>',
-        'db_table_exercise_type' : '#__fitness_settings_exercise_type',
-        'db_table_body_part' : '#__fitness_settings_body_part',
-        'db_table_difficulty' : '#__fitness_settings_difficulty',
-        'db_table_equipment' : '#__fitness_settings_equipment',
-        'db_table_force_type' : '#__fitness_settings_force_type',
-        'db_table_mechanics_type' : '#__fitness_settings_mechanics_type',
-        'db_table_target_muscles' : '#__fitness_settings_target_muscles'
-    };
 
-        
+
+<script type="text/javascript">
+
+    var options = {
+        'fitness_frontend_url': '<?php echo JURI::root(); ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'calendar_frontend_url': '<?php echo JURI::root() ?>index.php?option=com_multicalendar&task=load&calid=0',
+        'base_url': '<?php echo JURI::root(); ?>',
+        'ajax_call_url': '<?php echo JURI::root(); ?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'user_name': '<?php echo JFactory::getUser()->name; ?>',
+        'user_id': '<?php echo JFactory::getUser()->id; ?>',
+        'client_id': '<?php echo JFactory::getUser()->id; ?>',
+        'db_table_exercise_type': '#__fitness_settings_exercise_type',
+        'db_table_body_part': '#__fitness_settings_body_part',
+        'db_table_difficulty': '#__fitness_settings_difficulty',
+        'db_table_equipment': '#__fitness_settings_equipment',
+        'db_table_force_type': '#__fitness_settings_force_type',
+        'db_table_mechanics_type': '#__fitness_settings_mechanics_type',
+        'db_table_target_muscles': '#__fitness_settings_target_muscles'
+    };
+    
+    //status class
+    var status_options = {
+        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
+        'db_table' : '#__fitness_exercise_library',
+        'status_button' : 'status_button',
+        'status_button_dialog' : 'status_button_dialog',
+        'dialog_status_wrapper' : 'dialog_status_wrapper',
+        'dialog_status_template' : '#dialog_status_template',
+        'status_button_template' : '#status_button_template',
+        'status_button_place' : '#status_button_place_',
+        'statuses' : {
+            '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : ''}, 
+            '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : ''},
+            '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : ''}
+        },
+        'statuses2' : {},
+        'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
+        'hide_image_class' : 'hideimage',
+        'show_send_email' : false,
+        setStatuses : function(item_id) {
+            return this.statuses;
+        },
+        'view' : 'ExerciseLibrary',
+        'set_updater' : true,
+        'user_id' : options.user_id 
+    }
+
+    options.status_options = status_options;
+
+
     //requireJS options
 
     require.config({
-        baseUrl: '<?php echo JURI::root();?>administrator/components/com_fitness/assets/js',
+        baseUrl: '<?php echo JURI::root(); ?>administrator/components/com_fitness/assets/js',
     });
 
 
     require(['app'], function(app) {
-            app.options = options;
+        app.options = options;
     });
 </script>
 
-<script src="<?php echo JURI::root();?>administrator/components/com_fitness/assets/js/config.js" type="text/javascript"></script>
-<script src="<?php echo JURI::root();?>administrator/components/com_fitness/assets/js/main_exercise_library.js" type="text/javascript"></script>
+<script src="<?php echo JURI::root(); ?>administrator/components/com_fitness/assets/js/config.js" type="text/javascript"></script>
+<script src="<?php echo JURI::root(); ?>administrator/components/com_fitness/assets/js/main_exercise_library.js" type="text/javascript"></script>

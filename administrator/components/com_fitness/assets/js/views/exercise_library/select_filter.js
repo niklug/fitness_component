@@ -10,6 +10,12 @@ define([
         
         initialize : function() {
             this.collection.bind("add", this.addItem, this);
+            var selected_items = this.model.get(this.options.model_field);
+            
+            if(typeof selected_items !== 'undefined') {
+                this.selected_items = selected_items.split(',');
+            }
+            
         },
         
         template:_.template(template),
@@ -24,10 +30,9 @@ define([
             };
             $(this.el).html(this.template(data));
             
-            if(typeof this.options.selected_items !== 'undefined') {
-                if(this.options.selected_items.length == 0) {
-                    this.$el.find(".filter_select option[value=0]").attr('selected', true);
-                }
+            
+            if(typeof this.selected_items === 'undefined') {
+                this.$el.find(".filter_select option[value=0]").attr('selected', true);
             }
             
             var self = this;
@@ -41,8 +46,9 @@ define([
         addItem : function(model) {
             var id = model.get('id');
             var selected = '';
-            if(typeof this.options.selected_items !== 'undefined') {
-                if(_.contains(this.options.selected_items, id)) {
+
+            if(typeof this.selected_items !== 'undefined') {
+                if(_.contains(this.selected_items, id)) {
                     selected = 'selected ="selected"';
                 }
             }

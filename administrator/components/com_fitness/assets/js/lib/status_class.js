@@ -63,6 +63,7 @@
             var status_button_html = self.statusButtonHtml(item_id, status);
             $(self.options.status_button_place + '' + item_id).html(status_button_html);
             self.closeDialog();
+            
             if((self.options.set_updater !== 'undefined') && (self.options.set_updater == true)) {
                 self.setUpdaterId(item_id);
             }

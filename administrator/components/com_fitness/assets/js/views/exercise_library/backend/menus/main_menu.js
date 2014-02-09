@@ -48,19 +48,38 @@ define([
         
         
         saveItem : function() {
-            
-            console.log(this.save_method);
-                        
             var data = {};
+            
+            var exercise_name_field = $('#exercise_name');
+            
+            data.exercise_name = exercise_name_field.val();
+            
+            var created = this.model.get('created');
+            
+            var id = this.model.get('id');
+
+            if(!id) {
+                data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
+                data.created_by = app.options.user_id; 
+            }
 
             this.model.set(data);
+            
+            console.log(this.model.toJSON());
+            
+            exercise_name_field.removeClass("red_style_border");
             
                        
             if (!this.model.isValid()) {
                 var validate_error = this.model.validationError;
-
-                alert(this.model.validationError);
-                return false;
+                
+                if(validate_error == 'exercise_name') {
+                    exercise_name_field.addClass("red_style_border");
+                    return false;
+                } else {
+                    alert(this.model.validationError);
+                    return false;
+                }
             }
             
             var self = this;

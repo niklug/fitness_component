@@ -2,9 +2,15 @@
     <h5><%= title %></h5>
     <div class="clr"></div>
     <hr class="orange_line">
-    <div class="internal_wrapper">
-        <select class="<%= class_name %> filter_select" multiple size="<%= select_size %>" id="<%= id_name %>" name="<%= id_name + '[]' %>"  style="width:100%;">
-            <option value="0"><%= first_option_title %></option>
+    <div class="internal_wrapper" style="padding: 0;">
+        <select 
+            class="<%= class_name %> filter_select" 
+            multiple size="<%= select_size %>"
+            id="<%= id_name %>" 
+            name="<%= id_name + '[]' %>"  
+            style="width:100%;margin: 0;font-size: 12px;">
+            
+            <option  value="0"><%= first_option_title %></option>
 
         </select>
     </div>

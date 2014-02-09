@@ -6,6 +6,7 @@ define([
         'models/exercise_library/exercise_library_item',
         'views/exercise_library/select_filter_block',
         'views/exercise_library/backend/menus/main_menu',
+        'views/exercise_library/backend/exercise_details',
 ], function (
         $,
         _,
@@ -13,7 +14,8 @@ define([
         app,
         Exercise_library_item_model,
         Select_filter_block_view,
-        Main_menu_view
+        Main_menu_view,
+        Exercise_details_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -50,7 +52,8 @@ define([
                 data : {},
                 success: function (model, response) {
                     $("#main_menu").html(new Main_menu_view({model : app.models.exercise_library_item}).render().el);
-                    $("#select_filter_wrapper").html(new Select_filter_block_view({model : app.models.exercise_library_item}).render().el);
+                    $("#exercise_details_wrapper").html(new Exercise_details_view({model : app.models.exercise_library_item}).render().el);
+                    $("#select_filter_wrapper").html(new Select_filter_block_view({model : app.models.exercise_library_item, block_width : '140px'}).render().el);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);

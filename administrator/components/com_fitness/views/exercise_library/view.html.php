@@ -58,6 +58,7 @@ class FitnessViewExercise_library extends JView
         
         include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
 
+        $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         
 		parent::display($tpl);
 	}

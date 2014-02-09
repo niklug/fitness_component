@@ -1329,7 +1329,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_exercise_library` (
   `mechanics_type` varchar(255) NOT NULL,
   `body_part` varchar(255) NOT NULL,
   `target_muscles` varchar(255) NOT NULL,
-  `equipment` varchar(255) NOT NULL,
+  `equipment_type` varchar(255) NOT NULL,
   `difficulty` varchar(255) NOT NULL,
   `created` datetime NOT NULL,
   `created_by` int(11) NOT NULL,

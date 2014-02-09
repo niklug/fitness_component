@@ -14,7 +14,7 @@ define([
             mechanics_type : null,
             body_part : null,
             target_muscles : null, 
-            equipment : null,
+            equipment_type : null,
             difficulty : null,
             created : null,
             created_by : null,

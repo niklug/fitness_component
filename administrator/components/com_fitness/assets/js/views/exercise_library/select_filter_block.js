@@ -25,7 +25,7 @@ define([
             app.collections.difficulty = new Select_filter_collection();
             app.collections.mechanics_type = new Select_filter_collection();
             app.collections.body_part = new Select_filter_collection();
-            app.collections.target_muscle = new Select_filter_collection();
+            app.collections.target_muscles = new Select_filter_collection();
             app.collections.equipment_type = new Select_filter_collection();
                        
             var self = this;
@@ -65,7 +65,7 @@ define([
                     }
                 }),
                 
-                app.collections.target_muscle.fetch({
+                app.collections.target_muscles.fetch({
                     data : {table : app.options.db_table_target_muscles},
                     error: function (collection, response) {
                         alert(response.responseText);
@@ -87,7 +87,7 @@ define([
         template:_.template(template),
         
         render : function(){
-            $(this.el).html(this.template());
+            $(this.el).html(this.template({block_width : this.options.block_width}));
             return this;
         },
         
@@ -111,7 +111,7 @@ define([
                 title : 'Force Type',
                 first_option_title : 'Not Applicable',
                 class_name : '',
-                id_name : 'exercise_type_select',
+                id_name : 'force_type_select',
                 select_size : 12,
                 model_field : 'force_type'
             }).render();
@@ -123,7 +123,7 @@ define([
                 title : 'Difficulty',
                 first_option_title : 'None',
                 class_name : '',
-                id_name : 'exercise_type_select',
+                id_name : 'difficulty_select',
                 select_size : 12,
                 model_field : 'difficulty'
             }).render();
@@ -135,7 +135,7 @@ define([
                 title : 'Mechanics Type',
                 first_option_title : 'Not Applicable',
                 class_name : '',
-                id_name : 'exercise_type_select',
+                id_name : 'mechanics_type_select',
                 select_size : 12,
                 model_field : 'mechanics_type'
             }).render();
@@ -147,31 +147,31 @@ define([
                 title : 'Body Part(s)',
                 first_option_title : 'None',
                 class_name : '',
-                id_name : 'exercise_type_select',
+                id_name : 'body_part_select',
                 select_size : 12,
                 model_field : 'body_part'
             }).render();
 
             new Select_filter_fiew({
                 model : this.model,
-                el : $("#target_mucle_filter_wrapper"),
-                collection : app.collections.target_muscle,
+                el : $("#target_mucles_filter_wrapper"),
+                collection : app.collections.target_muscles,
                 title : 'Target Muscle(s)',
                 first_option_title : 'None',
                 class_name : '',
-                id_name : 'exercise_type_select',
+                id_name : 'target_muscles_select',
                 select_size : 12,
-                model_field : 'target_muscle'
+                model_field : 'target_muscles'
             }).render();
 
             new Select_filter_fiew({
                 model : this.model,
-                el : $("#equipment_filter_wrapper"),
+                el : $("#equipment_type_filter_wrapper"),
                 collection : app.collections.equipment_type,
                 title : 'Equipment Type',
                 first_option_title : 'None',
                 class_name : '',
-                id_name : 'exercise_type_select',
+                id_name : 'equipment_type_select',
                 select_size : 12,
                 model_field : 'equipment_type'
             }).render();

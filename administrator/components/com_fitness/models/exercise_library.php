@@ -170,9 +170,14 @@ class FitnessModelExercise_library extends JModelList {
         switch ($method) {
             case 'GET': // Get Item(s)
                
-                $query .= " SELECT a.* ";
+                $query .= " SELECT a.*, ";
+                $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name, ";
+                $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name, ";
+                $query .= " (SELECT title FROM #__usergroups WHERE id=ugm.group_id) user_group_name ";
 
-                $query .= " FROM $table AS a";
+                $query .= " FROM $table AS a ";
+                
+                $query .= " LEFT JOIN #__user_usergroup_map AS ugm ON a.created_by=ugm.user_id";
                 
                 $query .= " WHERE 1 ";
                 

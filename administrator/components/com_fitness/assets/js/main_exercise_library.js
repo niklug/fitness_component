@@ -10,7 +10,8 @@ require([
     'jquery.fitness_helper',
     'jqueryui',
     'backbone.syphon',
-    'jquery.backbone_pagination'
+    'jquery.backbone_pagination',
+    'jquery.status'
     
 
 ], function($, _, Backbone, moment, app, Controller) {
