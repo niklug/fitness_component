@@ -878,6 +878,15 @@ class FitnessHelper extends FitnessFactory
         return $result;
     }
     
+    public function getBusinessProfiles() {
+    
+        $query = "SELECT * FROM #__fitness_business_profiles WHERE state='1' ";
+
+        $query .= "  ORDER BY name";
+        
+        return self::customQuery($query, 1);
+    }
+    
     public function getBusinessProfile($id) {
         $ret['success'] = 1;
         $db = JFactory::getDbo();
@@ -1059,9 +1068,10 @@ class FitnessHelper extends FitnessFactory
         if(self::is_trainer_administrator($user_id)) {
             $group_id = $this->getTrainersGroupIdByUser($user_id);
         }
-
+        
         // if simple trainer
         if(self::is_simple_trainer($user_id)) {
+            
             $user = &JFactory::getUser($user_id);
             $groups = $user->get('groups');
             $group_id = array_shift(array_values($groups));
@@ -1543,6 +1553,12 @@ class FitnessHelper extends FitnessFactory
             return self::customQuery($query, 1);
         }
         
+        public function getAllClients() {
+            $query = "SELECT a.*, u.name as name FROM #__fitness_clients AS a";
+            $query .= " LEFT JOIN #__users AS u ON a.user_id=u.id";
+            $query .= " WHERE a.state='1'";
+            return self::customQuery($query, 1);
+        }
        
 }
 

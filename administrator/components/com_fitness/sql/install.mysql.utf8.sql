@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_goals` (
 
 
 
-CREATE TABLE IF NOT EXISTS `#__fitness_categories` (
+CREATE TABLEglobal_business_permission IF NOT EXISTS `#__fitness_categories` (
 `id` int(11)  NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(255)  NOT NULL ,
 `color` VARCHAR(20)  NOT NULL ,
@@ -1334,11 +1334,13 @@ CREATE TABLE IF NOT EXISTS `#__fitness_exercise_library` (
   `created` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `status` int(1) NOT NULL,
-  `global_business_permission` varchar(255) NOT NULL,
-  `user_view_permission` varchar(255) NOT NULL,
-  `my_exercise_list` varchar(11) NOT NULL,
+  `global_business_permissions` tinyint(1) NOT NULL,
+  `user_view_permission` text NOT NULL,
+  `show_my_exercise` text NOT NULL,
+  `my_exercise_clients` text NOT NULL,
+  `business_profiles` text NOT NULL,
   `video` varchar(255) NOT NULL,
   `assessed_by` int(11) NOT NULL,
   `state` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;

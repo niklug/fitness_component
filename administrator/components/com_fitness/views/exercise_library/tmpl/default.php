@@ -13,19 +13,23 @@ defined('_JEXEC') or die;
 <div class="clr"></div>
 
 <div class="width-100 fltlft">
-    <table width="100%" style="height: 280px;">
+    <table width="100%">
         <tr>
-            <td style="vertical-align: top;height: 100%;">
-                <fieldset class="adminform" style="height: 100%;padding-bottom: 0;margin-bottom: 0;">
+            <td style="vertical-align: top;">
+                <fieldset class="adminform">
                     <legend>Exercise Details</legend>
                     <div id="exercise_details_wrapper"></div>
                 </fieldset>
+                
+                <div id="exercise_video_wrapper" style="vertical-align: top;height: 100%;"></div>
             </td>
-            <td style="vertical-align: top;height: 100%;">
-                <fieldset class="adminform" style="height: 100%;padding-bottom: 0;margin-bottom: 0;">
+            <td style="vertical-align: top;">
+                <fieldset class="adminform">
                     <legend>Exercise Options</legend>
                     <div id="select_filter_wrapper"></div>
                 </fieldset>
+                
+                <div id="permissions_wrapper"></div>
             </td>
         </tr>
     </table>
@@ -33,7 +37,17 @@ defined('_JEXEC') or die;
 
 
 
+<?php
 
+$user_id = JFactory::getUser()->id;
+
+$helper = new FitnessHelper();
+
+$business_profile_id = $helper->getBusinessProfileId($user_id);
+
+$business_profile_id = $business_profile_id['data'];
+
+?>
 
 
 
@@ -54,7 +68,16 @@ defined('_JEXEC') or die;
         'db_table_equipment': '#__fitness_settings_equipment',
         'db_table_force_type': '#__fitness_settings_force_type',
         'db_table_mechanics_type': '#__fitness_settings_mechanics_type',
-        'db_table_target_muscles': '#__fitness_settings_target_muscles'
+        'db_table_target_muscles': '#__fitness_settings_target_muscles',
+        
+
+        'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
+        'no_video_image_big' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_big.png',
+        'video_upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Exercise_Library_Videos' . DS  ?>',
+        'video_path' : 'images/Exercise_Library_Videos',
+        
+        'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
+        'business_profile_id' : '<?php echo $business_profile_id; ?>'
     };
     
     //status class

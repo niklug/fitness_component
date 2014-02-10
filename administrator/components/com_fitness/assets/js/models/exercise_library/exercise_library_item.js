@@ -19,9 +19,9 @@ define([
             created : null,
             created_by : null,
             status : null,
-            global_business_permission : null,
+            global_business_permissions : null,
             user_view_permission : null,
-            my_exercise_list : null, 
+            my_exercise_clients : null, 
             video : null,
             assessed_by : null,
             state : null

@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/exercise_library/backend/exercise_details.html'
+	'text!templates/exercise_library/backend/business_client_item.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
@@ -15,18 +15,21 @@ define([
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);
-            this.connectStatus();
+            
+            this.setMyExerciseClients();
+
             return this;
         },
         
-        connectStatus : function() {
-            var id = this.model.get('id');
-            if(id) {
-                var status = $.status(app.options.status_options);
-                status.run();
+        setMyExerciseClients : function() {
+            var client_id = this.model.get('user_id');
+            
+            var my_exercise_clients = this.options.item_model.get('my_exercise_clients').split(",");
+
+            if(_.include(my_exercise_clients, client_id)) {
+                this.$el.find(".bisiness_client").attr('checked', true);
             }
         }
-
     });
             
     return view;

@@ -62,6 +62,18 @@ define([
                 data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
                 data.created_by = app.options.user_id; 
             }
+            
+            data.video = $("#preview_video").attr('data-videopath');
+            
+            data.global_business_permissions = $("#global_view_access").val();
+
+            data.user_view_permission = this.getUserViewPermission();
+            
+            data.show_my_exercise = this.getShowMyExercise();
+            
+            data.my_exercise_clients = this.getMyExerciseList();
+            
+            data.business_profiles = this.getBusinessProfiles();
 
             this.model.set(data);
             
@@ -99,6 +111,44 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        getUserViewPermission : function() {
+            var show_public_database_list = $(".show_public_database").map(function(){ return this.value }).get();
+            
+            var business_profile_list = $(".show_public_database").map(function(){ return this.getAttribute("data-business_profile_id") }).get();
+
+            var obj;
+            
+            _.zip(business_profile_list, show_public_database_list).map(function(v){this[v[0]]=v[1];}, obj = {});
+            
+            var serialised = JSON.stringify(obj);
+            
+            return serialised;
+        },
+        
+        getShowMyExercise : function(){
+            var show_my_exercise_list = $(".show_my_exercise").map(function(){ return this.value }).get();
+            
+            var business_profile_list = $(".show_my_exercise").map(function(){ return this.getAttribute("data-business_profile_id") }).get();
+
+            var obj;
+            
+            _.zip(business_profile_list, show_my_exercise_list).map(function(v){this[v[0]]=v[1];}, obj = {});
+            
+            var serialised = JSON.stringify(obj);
+            
+            return serialised;
+        },
+        
+        getMyExerciseList : function(){
+            var client_ids = $(".bisiness_client:checked").map(function(){ return this.getAttribute("data-client_id") }).get().join(",");
+            return client_ids;
+        },
+        
+        getBusinessProfiles : function() {
+            var ids = $(".bisiness_profile_item:checked").map(function(){ return this.getAttribute("data-business_profile_id") }).get().join(",");
+            return ids;
         }
     });
             
