@@ -73,6 +73,6 @@ require.config({
         'jquery.gredient_graph' : 'lib/gredient_graph'
     },
 
-    waitSeconds: 5
+    waitSeconds: 10
 });
 

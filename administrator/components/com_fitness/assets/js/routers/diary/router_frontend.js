@@ -190,13 +190,6 @@ define([
                     }
                 });
             })
-
-
-            /*
-
-            window.app.item_view = new window.app.Item_view({model : window.app.item_model, 'item_id' : id});
-            */
-
         },
             
     

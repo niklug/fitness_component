@@ -9,33 +9,9 @@
 // no direct access
 defined('_JEXEC') or die;
 ?>
-<div id="main_menu" style="float: right;"></div>
+<div id="header_wrapper"></div>
 <div class="clr"></div>
-
-<div class="width-100 fltlft">
-    <table width="100%">
-        <tr>
-            <td style="vertical-align: top;">
-                <fieldset class="adminform">
-                    <legend>Exercise Details</legend>
-                    <div id="exercise_details_wrapper"></div>
-                </fieldset>
-                
-                <div id="exercise_video_wrapper" style="vertical-align: top;height: 100%;"></div>
-            </td>
-            <td style="vertical-align: top;">
-                <fieldset class="adminform">
-                    <legend>Exercise Options</legend>
-                    <div id="select_filter_wrapper"></div>
-                </fieldset>
-                
-                <div id="permissions_wrapper"></div>
-            </td>
-        </tr>
-    </table>
-</div>
-
-
+<div id="main_container"></div>
 
 <?php
 

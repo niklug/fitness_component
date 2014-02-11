@@ -3,13 +3,16 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'collections/exercise_library/exercise_library',
         'models/exercise_library/exercise_library_item',
+        'models/exercise_library/request_params_items',
+        'views/exercise_library/backend/form_container',
         'views/exercise_library/select_filter_block',
         'views/exercise_library/backend/menus/main_menu',
         'views/exercise_library/backend/exercise_details',
         'views/exercise_library/backend/exercise_video',
         'views/exercise_library/backend/business_permissions',
-        
+        'views/exercise_library/backend/list',
         'jwplayer', 
         'jwplayer_key',
 ], function (
@@ -17,12 +20,16 @@ define([
         _,
         Backbone,
         app,
+        Exercise_library_collection,
         Exercise_library_item_model,
+        Request_params_items_model,
+        Form_container_view,
         Select_filter_block_view,
         Main_menu_view,
         Exercise_details_view,
         Exercise_video_view,
-        Business_permissions_view
+        Business_permissions_view,
+        List_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -39,11 +46,17 @@ define([
             }
                         
             app.models.exercise_library_item = new Exercise_library_item_model();
+            
+            app.collections.items = new Exercise_library_collection();
+            
+            app.models.request_params = new Request_params_items_model();
+            app.models.request_params.bind("change", this.get_items, this);
         },
 
         routes: {
-            "": "form_view", 
+            "": "list_view", 
             "!/form_view": "form_view", 
+            "!/list_view": "list_view", 
         },
         
         back: function() {
@@ -55,11 +68,12 @@ define([
         },
 
         form_view : function() {
+            $("#main_container").html(new Form_container_view().render().el);
             var self = this;
             app.models.exercise_library_item.fetch({
                 data : {},
                 success: function (model, response) {
-                    $("#main_menu").html(new Main_menu_view({model : app.models.exercise_library_item}).render().el);
+                    $("#header_wrapper").html(new Main_menu_view({model : app.models.exercise_library_item}).render().el);
                     
                     $("#exercise_details_wrapper").html(new Exercise_details_view({model : app.models.exercise_library_item}).render().el);
                     
@@ -111,6 +125,40 @@ define([
             } else {
                 $("#exercise_video").css('background-image', 'url(' +  no_video_image_big + ')');
             }
+        },
+        
+        get_items : function() {
+            app.collections.items.reset();
+            app.collections.items.fetch({
+                data : app.models.request_params.toJSON(),
+                success: function (collection, response) {
+                    console.log(collection.toJSON());
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            });  
+        },
+        
+        list_view : function() {
+            app.models.request_params.set({page : 1, current_page : 'list',  state : 1, uid : app.getUniqueId()});
+            
+            this.list_actions();
+        },
+        
+        list_actions : function () {
+            $("#main_container").html(new List_view({collection : app.collections.items}).render().el);
+            
+            app.models.pagination = $.backbone_pagination({});
+
+            app.models.pagination.bind("change:currentPage", this.set_params_model, this);
+
+            app.models.pagination.bind("change:items_number", this.set_params_model, this);
+        },
+        
+        set_params_model : function() {
+            app.collections.items.reset();
+            app.models.request_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
         },
     });
 
