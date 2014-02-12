@@ -33,10 +33,9 @@ define([
                 selected.push($(this).attr('data-id'));
             });
 
-            var items = selected.join(",");
             var self = this;
-            if(items) {
-                _.each(items, function(item, key){ 
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
                     self.deleteItem(item);
                 });
             }

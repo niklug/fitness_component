@@ -6,7 +6,7 @@ var sort_title = 'Click to sort by this column';
         <table width="100%">
             <thead class="table_header" style="font-size: 12px;">
                 <tr>
-                    <th><a title="<%= sort_title %>" style="cursor: pointer;" data-id="exercise_name" onclick="javascript:void(0)">Exercise Name</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_exercise_name" onclick="javascript:void(0)">Exercise Name</a></th>
                     <th>Exercise Type</th>
                     <th>Force Type</th>
                     <th>Mechanics Type</th>
@@ -14,12 +14,10 @@ var sort_title = 'Click to sort by this column';
                     <th>Target Muscles</th>
                     <th>Equipment</th>
                     <th>Difficulty</th>
-                    <th><a title="<%= sort_title %>" style="cursor: pointer;" data-id="created" onclick="javascript:void(0)">Created</a></th>
-                    <th><a title="<%= sort_title %>" style="cursor: pointer;" data-id="created_by" onclick="javascript:void(0)">Author</a></th>
-                    <th><a title="<%= sort_title %>" style="cursor: pointer;" data-id="status" onclick="javascript:void(0)">Status</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_created" onclick="javascript:void(0)">Created</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_created_by" onclick="javascript:void(0)">Author</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_status" onclick="javascript:void(0)">Status</a></th>
                     <th>Global Business Permission</th>
-                    <th>User View Permission</th>
-                    <th>My Exercise List</th>
                     <th>        
                     </th>
                     <th>

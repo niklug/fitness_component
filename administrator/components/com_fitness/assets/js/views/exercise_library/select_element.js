@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/exercise_library/select_filter.html',
+	'text!templates/exercise_library/select_element.html',
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
@@ -52,15 +52,15 @@ define([
                 }
             }
     
-            this.$el.find(".filter_select").append('<option ' + selected + ' value="' + model.get('id') + '">' + model.get('name') + '</option>');
+            this.$el.find("select").append('<option ' + selected + ' value="' + model.get('id') + '">' + model.get('name') + '</option>');
         },
 
         events: {
-            "change .filter_select" : "onFilterSelect",
+            "change .select_element" : "onChange",
         },
 
 
-        onFilterSelect : function(event){
+        onChange : function(event){
             var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
             var model_field = this.options.model_field;
             var option = {};

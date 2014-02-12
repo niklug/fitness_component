@@ -26,7 +26,8 @@ define([
                 var status = $.status(app.options.status_options);
                 status.run();
             }
-        }
+        },
+
     });
             
     return view;

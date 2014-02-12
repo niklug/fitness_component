@@ -47,14 +47,20 @@ define([
 
         setShowPublicDatabase : function(){
             var user_view_permission = JSON.parse(this.options.item_model.get('user_view_permission'));
-            var show_public_database = user_view_permission[this.business_profile_id];
-            this.$el.find(".show_public_database").val(show_public_database);
+            
+            if(user_view_permission && this.business_profile_id) {
+                var show_public_database = user_view_permission[this.business_profile_id];
+                this.$el.find(".show_public_database").val(show_public_database);
+            }
         },
         
         setMyExerciseList : function() {
             var show_my_exercise_items = JSON.parse(this.options.item_model.get('show_my_exercise'));
-            var show_my_exercise = show_my_exercise_items[this.business_profile_id];
-            this.$el.find(".show_my_exercise").val(show_my_exercise);
+            
+            if(show_my_exercise_items && this.business_profile_id) {
+                var show_my_exercise = show_my_exercise_items[this.business_profile_id];
+                this.$el.find(".show_my_exercise").val(show_my_exercise);
+            }
         },
         
         onChangeShowMyExercise : function(event) {
@@ -78,11 +84,13 @@ define([
         },
         
         setBusinessProfiles : function() {
-            var business_profiles = this.options.item_model.get('business_profiles').split(",");
+            var business_profiles = this.options.item_model.get('business_profiles');
             
-            
+            if((typeof business_profiles === 'undefined') || business_profiles == null) {
+                return;
+            }
 
-            if(_.include(business_profiles, this.business_profile_id)) {
+            if(_.include(business_profiles.split(","), this.business_profile_id)) {
                 this.$el.find(".bisiness_profile_item").attr('checked', true);
             }
         }

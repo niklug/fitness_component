@@ -73,8 +73,6 @@
             } 
         }%>
     </td>
-    <td></td>
-    <td></td>
     <td>
         <% if(state == '1') { %>
             <a style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span title="View Details" data-id="<%= id %>"  class="preview"></span></a>
@@ -84,9 +82,9 @@
     </td>
     <td class="center"> 
         <% if(state == '1') { %>
-            <a class="jgrid" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="state publish"></span></a>
+            <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
         <% } else { %>
-            <a class="jgrid" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+            <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
         <% } %>
     </td>
     <td class="center"><input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/></td>

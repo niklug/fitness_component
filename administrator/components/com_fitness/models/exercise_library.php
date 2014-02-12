@@ -170,7 +170,8 @@ class FitnessModelExercise_library extends JModelList {
         switch ($method) {
             case 'GET': // Get Item(s)
                 $data = new stdClass();
-                $data->id = $id;   
+                $data->id = $id;  
+                $data->exercise_name = JRequest::getVar('exercise_name'); 
                 $data->sort_by = JRequest::getVar('sort_by'); 
                 $data->order_dirrection = JRequest::getVar('order_dirrection'); 
                 $data->page = JRequest::getVar('page'); 
@@ -183,6 +184,7 @@ class FitnessModelExercise_library extends JModelList {
                 $data->target_muscles = JRequest::getVar('target_muscles', '0'); 
                 $data->equipment_type = JRequest::getVar('equipment_type', '0'); 
                 $data->difficulty = JRequest::getVar('difficulty', '0'); 
+                $data->business_profiles = JRequest::getVar('business_profiles'); 
 
                 $data = $this->getExerciseVideos($table, $data);
                 
@@ -220,6 +222,8 @@ class FitnessModelExercise_library extends JModelList {
         
         $start = ($page - 1) * $limit;
         
+        $search = $data->exercise_name;
+        
         //get rid of empty element
         $exercise_type = array_filter(explode(",", $data->exercise_type));
         $force_type = array_filter(explode(",", $data->force_type));
@@ -228,6 +232,8 @@ class FitnessModelExercise_library extends JModelList {
         $target_muscles = array_filter(explode(",", $data->target_muscles));
         $equipment_type = array_filter(explode(",", $data->equipment_type));
         $difficulty = array_filter(explode(",", $data->difficulty));
+        
+        $business_profiles = array_filter(explode(",", $data->business_profiles));
         //
         
         $state = $data->state;
@@ -236,6 +242,14 @@ class FitnessModelExercise_library extends JModelList {
         
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
+        
+        $query .= " WHERE a.state='$state' ";
+        
+
+        if (!empty($search)) {
+            $query .= " AND a.exercise_name LIKE '%$search%' ";
+        }
+         
         //1
         if($exercise_type) {
             $query .= " AND ( FIND_IN_SET('$exercise_type[0]', a.exercise_type) ";
@@ -299,6 +313,16 @@ class FitnessModelExercise_library extends JModelList {
             }
             $query .= ")";
         }
+        
+        //by business
+        if($business_profiles) {
+            $query .= " AND ( FIND_IN_SET('$business_profiles[0]', a.business_profiles) ";
+            
+            foreach ($business_profiles as $filter_option) {
+                $query .= " OR FIND_IN_SET('$filter_option', a.business_profiles)";
+            }
+            $query .= ")";
+        }
 
         $query .= " ) items_total, ";
         //end get total number
@@ -340,6 +364,10 @@ class FitnessModelExercise_library extends JModelList {
         $query .= " LEFT JOIN #__user_usergroup_map AS ugm ON a.created_by=ugm.user_id";
 
         $query .= " WHERE a.state='$state'";
+        
+        if (!empty($search)) {
+            $query .= " AND a.exercise_name LIKE '%$search%' ";
+        }
         
         //filters
         //1
@@ -405,10 +433,31 @@ class FitnessModelExercise_library extends JModelList {
             }
             $query .= ")";
         }
+        
+        //by business
+        if($business_profiles) {
+            $query .= " AND ( FIND_IN_SET('$business_profiles[0]', a.business_profiles) ";
+            
+            foreach ($business_profiles as $filter_option) {
+                $query .= " OR FIND_IN_SET('$filter_option', a.business_profiles)";
+            }
+            $query .= ")";
+        }
         //end filters
         
         
-        $query .= "  ORDER BY a." . $sort_by . " " . $order_dirrection . " LIMIT $start, $limit";
+        if($sort_by) {
+            $query .= " ORDER BY " . $sort_by;
+        }
+
+        if($order_dirrection) {
+            $query .=  " " . $order_dirrection;
+        }
+
+        if($start AND $limit) {
+            $query .= " LIMIT $start, $limit";
+        }
+
 
 
         $query_type = 1;

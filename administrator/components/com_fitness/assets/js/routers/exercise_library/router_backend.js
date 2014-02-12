@@ -13,6 +13,7 @@ define([
         'views/exercise_library/backend/exercise_video',
         'views/exercise_library/backend/business_permissions',
         'views/exercise_library/backend/list',
+        'views/exercise_library/backend/list_header_container',
         'jwplayer', 
         'jwplayer_key',
 ], function (
@@ -29,7 +30,8 @@ define([
         Exercise_details_view,
         Exercise_video_view,
         Business_permissions_view,
-        List_view
+        List_view,
+        List_header_container_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -55,41 +57,52 @@ define([
 
         routes: {
             "": "list_view", 
-            "!/form_view": "form_view", 
+            "!/form_view/:id": "form_view", 
             "!/list_view": "list_view", 
+            "!/trash_list": "trash_list", 
         },
         
         back: function() {
             if(this.routesHit > 1) {
               window.history.back();
             } else {
-              this.navigate('', {trigger:true, replace:true});
+              this.navigate('', {trigger:true, replace:true});t
             }
         },
 
-        form_view : function() {
+        form_view : function(id) {
             $("#main_container").html(new Form_container_view().render().el);
+            if(!parseInt(id)) {
+                this.load_form_view(new Exercise_library_item_model());
+                return;
+            }
+            
             var self = this;
+            app.models.exercise_library_item.set({id : id});
             app.models.exercise_library_item.fetch({
-                data : {},
+                data : {state : 1},
                 success: function (model, response) {
-                    $("#header_wrapper").html(new Main_menu_view({model : app.models.exercise_library_item}).render().el);
-                    
-                    $("#exercise_details_wrapper").html(new Exercise_details_view({model : app.models.exercise_library_item}).render().el);
-                    
-                    $("#select_filter_wrapper").html(new Select_filter_block_view({model : app.models.exercise_library_item, block_width : '140px'}).render().el);
-                    
-                    $("#exercise_video_wrapper").html(new Exercise_video_view({model : app.models.exercise_library_item}).render().el);
-                    
-                    self.loadVideoPlayer();
-                    
-                    new Business_permissions_view({el : $("#permissions_wrapper"), model : app.models.exercise_library_item});
-                    
+                    self.load_form_view(model);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
                 }
             })
+        },
+        
+        load_form_view : function(model) {
+            $("#header_wrapper").html(new Main_menu_view({model : model}).render().el);
+
+            $("#exercise_details_wrapper").html(new Exercise_details_view({model : model}).render().el);
+
+            $("#select_filter_wrapper").html(new Select_filter_block_view({model : model, block_width : '140px'}).render().el);
+
+            if(model.get('id')) {
+                $("#exercise_video_wrapper").html(new Exercise_video_view({model : model}).render().el);
+                this.loadVideoPlayer();
+            }
+
+            new Business_permissions_view({el : $("#permissions_wrapper"), model : model});
         },
         
         loadVideoPlayer : function() {
@@ -101,7 +114,7 @@ define([
 
             var imageType = /no_video_image.*/;  
 
-            if (!video_path.match(imageType) && video_path) {  
+            if (video_path && !video_path.match(imageType) && video_path) {  
 
                 jwplayer('exercise_video').setup({
                     file: base_url + video_path,
@@ -128,12 +141,13 @@ define([
         },
         
         get_items : function() {
+            var params = app.models.request_params.toJSON();
+            if($.isEmptyObject(params)) {
+                return;
+            }
             app.collections.items.reset();
             app.collections.items.fetch({
-                data : app.models.request_params.toJSON(),
-                success: function (collection, response) {
-                    console.log(collection.toJSON());
-                },
+                data : params,
                 error: function (collection, response) {
                     alert(response.responseText);
                 }
@@ -147,7 +161,9 @@ define([
         },
         
         list_actions : function () {
-            $("#main_container").html(new List_view({collection : app.collections.items}).render().el);
+            $("#header_wrapper").html(new List_header_container_view({model : app.models.request_params, collection : app.collections.items}).render().el);
+            
+            $("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
             
             app.models.pagination = $.backbone_pagination({});
 
@@ -159,6 +175,12 @@ define([
         set_params_model : function() {
             app.collections.items.reset();
             app.models.request_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
+        },
+        
+        trash_list : function() {
+            app.models.request_params.set({page : 1, current_page : 'trash_list',  state : '-2', uid : app.getUniqueId()});
+            
+            this.list_actions();
         },
     });
 

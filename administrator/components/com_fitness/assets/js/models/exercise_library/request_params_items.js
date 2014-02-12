@@ -5,7 +5,7 @@ define([
     var model = Backbone.Model.extend({
         defaults : {
             current_page: 'list',
-            sort_by : 'exercise_name',
+            sort_by : 'a.exercise_name',
             order_dirrection : 'ASC',
             page : localStorage.getItem('currentPage') || 1,
             limit : localStorage.getItem('items_number') || 10,

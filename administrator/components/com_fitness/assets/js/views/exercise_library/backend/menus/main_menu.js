@@ -43,7 +43,7 @@ define([
         },
 
         onClickCancel : function() {
-            this.controller.navigate("!/list_view", true);
+            app.controller.navigate("!/list_view", true);
         },
         
         
@@ -97,14 +97,15 @@ define([
             var self = this;
             this.model.save(null, {
                 success: function (model, response) {
+                    var id = model.get('id');
                     if(self.save_method == 'save') {
-            
+                        app.controller.navigate("!/form_view/" + id, true);
                     } else if(self.save_method == 'save_close') {
-                        
+                        app.controller.navigate("!/list_view", true);
                     } else if(self.save_method == 'save_new') {
-                        
+                        app.controller.navigate("!/form_view/0", true);
                     } else {
-                        
+                        app.controller.navigate("!/list_view", true);
                     }
                 },
                 error: function (model, response) {

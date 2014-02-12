@@ -18,13 +18,18 @@ define([
             difficulty : null,
             created : null,
             created_by : null,
+            created_by_name : null,
             status : null,
             global_business_permissions : null,
             user_view_permission : null,
             my_exercise_clients : null, 
             video : null,
             assessed_by : null,
-            state : null
+            state : 1,
+            user_group_name : null,
+            assessed_by_name : null,
+            show_my_exercise : null,
+            business_profiles : null
         },
         
         validate: function(attrs, options) {
