@@ -69,8 +69,9 @@ define([
         },
         
         search : function() {
-            var text = this.$el.find("#exercise_name").val();
-            this.model.set({exercise_name : text});
+            var exercise_name = this.$el.find("#exercise_name").val();
+            var client_name = this.$el.find("#client_name").val();
+            this.model.set({exercise_name : exercise_name, client_name: client_name});
         },
         
         clearAll : function(){
@@ -81,6 +82,7 @@ define([
             this.model.set(
                 {
                     exercise_name : null,
+                    client_name : null,
                     exercise_type : null,
                     force_type : null,
                     mechanics_type : null,

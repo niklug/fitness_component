@@ -172,6 +172,7 @@ class FitnessModelExercise_library extends JModelList {
                 $data = new stdClass();
                 $data->id = $id;  
                 $data->exercise_name = JRequest::getVar('exercise_name'); 
+                $data->client_name = JRequest::getVar('client_name'); 
                 $data->sort_by = JRequest::getVar('sort_by'); 
                 $data->order_dirrection = JRequest::getVar('order_dirrection'); 
                 $data->page = JRequest::getVar('page'); 
@@ -222,7 +223,8 @@ class FitnessModelExercise_library extends JModelList {
         
         $start = ($page - 1) * $limit;
         
-        $search = $data->exercise_name;
+        $search_exercise_name = $data->exercise_name;
+        $search_client_name = $data->client_name;
         
         //get rid of empty element
         $exercise_type = array_filter(explode(",", $data->exercise_type));
@@ -246,8 +248,24 @@ class FitnessModelExercise_library extends JModelList {
         $query .= " WHERE a.state='$state' ";
         
 
-        if (!empty($search)) {
-            $query .= " AND a.exercise_name LIKE '%$search%' ";
+        if (!empty($search_exercise_name)) {
+            $query .= " AND a.exercise_name LIKE '%$search_exercise_name%' ";
+        }
+
+        if (!empty($search_client_name)) {
+            $sql = " SELECT id FROM #__users WHERE name LIKE '%$search_client_name%' ";
+
+            $client_ids = FitnessHelper::customQuery($sql, 3);
+
+           
+            if($client_ids) {
+                $query .= " AND ( FIND_IN_SET('$client_ids[0]', a.my_exercise_clients) ";
+
+                foreach ($client_ids as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.my_exercise_clients)";
+                }
+                $query .= ")";
+            }
         }
          
         //1
@@ -380,8 +398,20 @@ class FitnessModelExercise_library extends JModelList {
 
         $query .= " WHERE a.state='$state'";
         
-        if (!empty($search)) {
-            $query .= " AND a.exercise_name LIKE '%$search%' ";
+        if (!empty($search_exercise_name)) {
+            $query .= " AND a.exercise_name LIKE '%$search_exercise_name%' ";
+        }
+
+        if (!empty($search_client_name)) {
+            if($client_ids) {
+               
+                $query .= " AND ( FIND_IN_SET('$client_ids[0]', a.my_exercise_clients) ";
+
+                foreach ($client_ids as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.my_exercise_clients)";
+                }
+                $query .= ")";
+            }
         }
         
         //filters
