@@ -23,6 +23,7 @@ define([
             global_business_permissions : null,
             user_view_permission : null,
             my_exercise_clients : null, 
+            my_exercise_clients_names : null,
             video : null,
             assessed_by : null,
             state : 1,

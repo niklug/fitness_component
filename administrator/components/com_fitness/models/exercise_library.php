@@ -356,9 +356,24 @@ class FitnessModelExercise_library extends JModelList {
         
         
        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_business_profiles WHERE "
-                . " FIND_IN_SET(id, (SELECT business_profiles FROM #__fitness_exercise_library WHERE id =a.id))) business_profiles_names ";
+                . " FIND_IN_SET(id, (SELECT business_profiles FROM #__fitness_exercise_library WHERE id =a.id))) business_profiles_names, ";
+       
+       
+       //My Exercises List data
+       $user_id = JFactory::getUser()->id;
+       $helper = new FitnessHelper();
+       $business_profile_id = $helper->getBusinessProfileId($user_id);
+       $business_profile_id = $business_profile_id['data'];
 
-
+       $query .=  " (SELECT GROUP_CONCAT(name) FROM #__users WHERE  ";
+       
+       if(FitnessHelper::is_trainer($user_id)) {
+           $query .=  " id IN (SELECT user_id FROM #__fitness_clients WHERE business_profile_id='$business_profile_id') AND ";
+       }
+       
+       $query .= " FIND_IN_SET(id, (SELECT my_exercise_clients FROM #__fitness_exercise_library WHERE id =a.id))) my_exercise_clients_names ";
+       //
+       
         $query .= " FROM $table AS a ";
 
         $query .= " LEFT JOIN #__user_usergroup_map AS ugm ON a.created_by=ugm.user_id";

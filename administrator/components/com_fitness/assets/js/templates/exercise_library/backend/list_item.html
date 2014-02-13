@@ -74,6 +74,14 @@
         }%>
     </td>
     <td>
+        <%
+        if(my_exercise_clients_names) {
+            _.each(my_exercise_clients_names.split(','), function(item){ %>
+                <%= item + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    <td>
         <% if(state == '1') { %>
             <a style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span title="View Details" data-id="<%= id %>"  class="preview"></span></a>
         <% } else { %>
