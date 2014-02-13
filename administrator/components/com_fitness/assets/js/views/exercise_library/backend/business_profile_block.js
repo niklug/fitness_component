@@ -46,6 +46,12 @@ define([
         },
 
         setShowPublicDatabase : function(){
+            var item_id = this.options.item_model.get('id');
+            if(!item_id && !app.options.is_superuser) {
+                this.$el.find(".show_public_database").val('0');
+                return;
+            }
+            
             var user_view_permission = JSON.parse(this.options.item_model.get('user_view_permission'));
             
             if(user_view_permission && this.business_profile_id) {

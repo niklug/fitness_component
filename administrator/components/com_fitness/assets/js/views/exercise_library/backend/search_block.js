@@ -52,15 +52,20 @@ define([
         },
         
         connectBusinessFilter : function(collection) {
+            if(!app.options.is_superuser) {
+                return false;
+            }
              new Select_element_view({
                 model : this.model,
                 el : $("#business_profile_filter"),
                 collection : collection,
                 first_option_title : '-Global Business Permission-',
                 class_name : '',
-                id_name : '',
+                id_name : 'business_profile_select',
                 model_field : 'business_profiles'
             }).render();
+            
+            
         },
         
         search : function() {
@@ -73,7 +78,18 @@ define([
             form.find(".filter_select").val(0);
             form.find("input[type=text]").val('');
             
-            this.model.clear().set(this.model.defaults);
+            this.model.set(
+                {
+                    exercise_name : null,
+                    exercise_type : null,
+                    force_type : null,
+                    mechanics_type : null,
+                    body_part : null,
+                    target_muscles : null, 
+                    equipment_type : null,
+                    difficulty : null,
+                }
+            );
         },
         
         onChangeState : function(event) {

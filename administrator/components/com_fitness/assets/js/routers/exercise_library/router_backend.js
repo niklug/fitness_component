@@ -51,7 +51,14 @@ define([
             
             app.collections.items = new Exercise_library_collection();
             
-            app.models.request_params = new Request_params_items_model();
+            //business logic
+            var business_profiles = null;
+            if(!app.options.is_superuser) {
+                business_profiles = app.options.business_profile_id;
+            }
+            //
+            
+            app.models.request_params = new Request_params_items_model({business_profiles : business_profiles});
             app.models.request_params.bind("change", this.get_items, this);
         },
 

@@ -454,7 +454,7 @@ class FitnessModelExercise_library extends JModelList {
             $query .=  " " . $order_dirrection;
         }
 
-        if($start AND $limit) {
+        if($limit) {
             $query .= " LIMIT $start, $limit";
         }
 

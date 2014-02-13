@@ -11,7 +11,7 @@
                         <%
                         var selected_published = '';
                         var selected_unpublished = 'selected="selected"';
-                        if(global_business_permissions == '1') {
+                        if(global_business_permissions == '1' || !id) {
                             selected_published = 'selected="selected"';
                             selected_unpublished = '';
                         }
@@ -26,6 +26,18 @@
     <% } %>
     <div id="business_profiles_list"></div>
 </fieldset>
+
+<% if(id) { %>
+<fieldset class="adminform">
+    <div class="clr"></div>
+    <div id="comments_wrapper"></div>
+    <div class="clr"></div>
+    <input id="add_comment_0" class="" type="button" value="Add Comment" >
+    <div class="clr"></div>
+</fieldset>
+<% } %>
+
+
 
 
 

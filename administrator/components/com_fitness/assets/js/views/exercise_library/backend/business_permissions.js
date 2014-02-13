@@ -63,6 +63,10 @@ define([
                 this.setGlobalViewAccess(value);
             }
             
+            if(this.model.get('id')) {
+                this.connectComments();
+            }
+            
             return this;
         },
         
@@ -101,6 +105,21 @@ define([
             } else {
                 checkboxes.attr('disabled', false);
             }
+        },
+        
+        connectComments : function() {
+            var comment_options = {
+                'item_id' : this.model.get('id'),
+                'fitness_administration_url' : app.options.ajax_call_url,
+                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
+                'db_table' : '#__fitness_exercise_library_comments',
+                'read_only' : false,
+                'anable_comment_email' : false
+            }
+            var comments = $.comments(comment_options, comment_options.item_id, 0);
+
+            var comments_html = comments.run();
+            $("#comments_wrapper").html(comments_html);
         },
     });
             

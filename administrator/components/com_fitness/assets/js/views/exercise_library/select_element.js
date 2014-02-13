@@ -21,7 +21,6 @@ define([
         
         render : function(){
             var data = {
-                title : this.options.title,
                 first_option_title : this.options.first_option_title,
                 class_name : this.options.class_name,
                 id_name : this.options.id_name,
