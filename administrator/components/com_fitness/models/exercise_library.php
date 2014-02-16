@@ -186,6 +186,7 @@ class FitnessModelExercise_library extends JModelList {
                 $data->equipment_type = JRequest::getVar('equipment_type', '0'); 
                 $data->difficulty = JRequest::getVar('difficulty', '0'); 
                 $data->business_profiles = JRequest::getVar('business_profiles'); 
+                $data->current_page = JRequest::getVar('current_page'); 
 
                 $data = $this->getExerciseVideos($table, $data);
                 
@@ -213,6 +214,11 @@ class FitnessModelExercise_library extends JModelList {
     }
     
     public function getExerciseVideos($table, $data) {
+        $user_id = JFactory::getUser()->id;
+        $helper = new FitnessHelper();
+        $business_profile_id = $helper->getBusinessProfileId($user_id);
+        $business_profile_id = $business_profile_id['data'];
+       
         $id = $data->id;
         
         $sort_by = $data->sort_by;
@@ -341,6 +347,17 @@ class FitnessModelExercise_library extends JModelList {
             }
             $query .= ")";
         }
+        
+        //frontend Exercise database
+        if($data->current_page == 'exercise_database') {
+            $query .= " AND  FIND_IN_SET('$business_profile_id', a.business_profiles) ";
+            $query .= " AND  a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' ";
+        }
+        
+        //frontend Exercise database
+        if($data->current_page == 'my_exercises') {
+            $query .= " AND  FIND_IN_SET('$user_id', a.my_exercise_clients) ";
+        }
 
         $query .= " ) items_total, ";
         //end get total number
@@ -378,11 +395,6 @@ class FitnessModelExercise_library extends JModelList {
        
        
        //My Exercises List data
-       $user_id = JFactory::getUser()->id;
-       $helper = new FitnessHelper();
-       $business_profile_id = $helper->getBusinessProfileId($user_id);
-       $business_profile_id = $business_profile_id['data'];
-
        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__users WHERE  ";
        
        if(FitnessHelper::is_trainer($user_id)) {
@@ -490,6 +502,19 @@ class FitnessModelExercise_library extends JModelList {
         }
         //end filters
         
+        
+        //frontend Exercise database
+        if($data->current_page == 'exercise_database') {
+            $query .= " AND  FIND_IN_SET('$business_profile_id', a.business_profiles) ";
+            $query .= " AND  a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' ";
+        }
+        
+        
+        //frontend Exercise database
+        if($data->current_page == 'my_exercises') {
+            $query .= " AND  FIND_IN_SET('$user_id', a.my_exercise_clients) ";
+        }
+
         
         if($sort_by) {
             $query .= " ORDER BY " . $sort_by;

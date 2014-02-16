@@ -519,5 +519,30 @@ class FitnessController extends JController {
     public function shopping_list_ingredients(){
         echo json_encode($this->admin_nutrition_plan_model->shopping_list_ingredients());
     }
+    
+    //exercise library
+    function select_filter() {
+        $view = $this -> getView('exercise_library', 'json');
+        $view->setModel($this->getModel('exercise_library'));
+        $view -> select_filter(); 
+    }
+
+    function exercise_library() {
+        $view = $this -> getView('exercise_library', 'json');
+        $view->setModel($this->getModel('exercise_library'));
+        $view -> exercise_library(); 
+    }
+
+    function business_profiles() {
+        $view = $this -> getView('exercise_library', 'json');
+        $view->setModel($this->getModel('exercise_library'));
+        $view -> business_profiles(); 
+    }
+
+    function clients() {
+        $view = $this -> getView('exercise_library', 'json');
+        $view->setModel($this->getModel('exercise_library'));
+        $view -> clients(); 
+    }
         
 }

@@ -1,5 +1,7 @@
 <div class="fitness_block_wrapper recipe_filter">
-    <h5><%= title %></h5>
+    <div style="padding: 3px;">
+        <b style="font-size: 14px;"><%= title %></b>
+    </div>
     <div class="clr"></div>
     <hr class="orange_line">
     <div class="internal_wrapper" style="padding: 0;">
@@ -9,9 +11,7 @@
             id="<%= id_name %>" 
             name="<%= id_name + '[]' %>"  
             style="width:100%;margin: 0;font-size: 12px;">
-            
             <option  value="0"><%= first_option_title %></option>
-
         </select>
     </div>
     <div class="clr"></div>

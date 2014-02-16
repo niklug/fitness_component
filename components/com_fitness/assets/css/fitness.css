@@ -683,18 +683,18 @@ td.center, th.center, .center {
 
 
 
-#plan_menu, #recipe_mainmenu {
+#plan_menu, #recipe_mainmenu, #exercise_mainmenu {
     width: 100%;
 }
 
-#plan_menu ul, #recipe_mainmenu ul {
+#plan_menu ul, #recipe_mainmenu ul, #exercise_mainmenu ul {
     width: 100%;
     display: inline-block;
     margin: 0;
     padding: 0;
 }
 
-#plan_menu ul li, #recipe_mainmenu ul li {
+#plan_menu ul li, #recipe_mainmenu ul li, #exercise_mainmenu ul li  {
     border: 1px solid #CCCCCC;
     float: left;
     line-height: 1.7em;
@@ -705,13 +705,13 @@ td.center, th.center, .center {
     width: auto;
 }
 
-#plan_menu ul li a , #recipe_mainmenu ul li a{
+#plan_menu ul li a , #recipe_mainmenu ul li a, #exercise_mainmenu ul li a{
     text-decoration: none !important;
     color: #BC4A26;
     font-size: 16px;
 }
 
-#plan_menu ul li a:hover, #plan_menu ul li a:active, .active_link,
+#plan_menu ul li a:hover, #plan_menu ul li a:active,  #exercise_mainmenu ul li a:active,.active_link,
 #recipe_mainmenu ul li a:hover, #recipe_mainmenu ul li a:active, .active_link {
     color:#fff !important;
     border-bottom: 2px solid #BC4A26;

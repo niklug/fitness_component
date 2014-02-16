@@ -98,7 +98,7 @@ define([
                 collection : app.collections.exercise_type,
                 title : 'Exercise Type',
                 first_option_title : 'None',
-                class_name : '',
+                class_name : 'dark_input_style',
                 id_name : 'exercise_type_select',
                 select_size : 12,
                 model_field : 'exercise_type'
@@ -110,7 +110,7 @@ define([
                 collection : app.collections.force_type,
                 title : 'Force Type',
                 first_option_title : 'Not Applicable',
-                class_name : '',
+                class_name : 'dark_input_style',
                 id_name : 'force_type_select',
                 select_size : 12,
                 model_field : 'force_type'
@@ -122,7 +122,7 @@ define([
                 collection : app.collections.difficulty,
                 title : 'Difficulty',
                 first_option_title : 'None',
-                class_name : '',
+                class_name : 'dark_input_style',
                 id_name : 'difficulty_select',
                 select_size : 12,
                 model_field : 'difficulty'
@@ -134,7 +134,7 @@ define([
                 collection : app.collections.mechanics_type,
                 title : 'Mechanics Type',
                 first_option_title : 'Not Applicable',
-                class_name : '',
+                class_name : 'dark_input_style',
                 id_name : 'mechanics_type_select',
                 select_size : 12,
                 model_field : 'mechanics_type'
@@ -146,7 +146,7 @@ define([
                 collection : app.collections.body_part,
                 title : 'Body Part(s)',
                 first_option_title : 'None',
-                class_name : '',
+                class_name : 'dark_input_style',
                 id_name : 'body_part_select',
                 select_size : 12,
                 model_field : 'body_part'
@@ -158,7 +158,7 @@ define([
                 collection : app.collections.target_muscles,
                 title : 'Target Muscle(s)',
                 first_option_title : 'None',
-                class_name : '',
+                class_name : 'dark_input_style',
                 id_name : 'target_muscles_select',
                 select_size : 12,
                 model_field : 'target_muscles'
@@ -170,7 +170,7 @@ define([
                 collection : app.collections.equipment_type,
                 title : 'Equipment Type',
                 first_option_title : 'None',
-                class_name : '',
+                class_name : 'dark_input_style',
                 id_name : 'equipment_type_select',
                 select_size : 12,
                 model_field : 'equipment_type'

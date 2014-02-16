@@ -81,15 +81,15 @@ define([
             
             this.model.set(
                 {
-                    exercise_name : null,
-                    client_name : null,
-                    exercise_type : null,
-                    force_type : null,
-                    mechanics_type : null,
-                    body_part : null,
-                    target_muscles : null, 
-                    equipment_type : null,
-                    difficulty : null,
+                    exercise_name : '',
+                    client_name : '',
+                    exercise_type : '',
+                    force_type : '',
+                    mechanics_type : '',
+                    body_part : '',
+                    target_muscles : '', 
+                    equipment_type : '',
+                    difficulty : '',
                 }
             );
         },

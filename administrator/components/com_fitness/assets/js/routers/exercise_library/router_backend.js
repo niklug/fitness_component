@@ -149,9 +149,7 @@ define([
         
         get_items : function() {
             var params = app.models.request_params.toJSON();
-            if($.isEmptyObject(params)) {
-                return;
-            }
+            console.log(params);
             app.collections.items.reset();
             app.collections.items.fetch({
                 data : params,
