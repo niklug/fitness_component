@@ -13,6 +13,7 @@ define([
         'views/exercise_library/frontend/list',
         'views/exercise_library/select_filter_block',
         'views/exercise_library/frontend/menus/submenu_exercise_database',
+        'views/exercise_library/frontend/popular_exercises/list',
         'jwplayer', 
         'jwplayer_key',
 ], function (
@@ -29,7 +30,8 @@ define([
         Exercise_video_view,
         List_view,
         Select_filter_block_view,
-        Submenu_exercise_database_view
+        Submenu_exercise_database_view,
+        Popular_exercises_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -49,15 +51,14 @@ define([
             
             app.collections.items = new Exercise_library_collection();
             
-            //business logic
-            var business_profiles = null;
-            if(!app.options.is_superuser) {
-                business_profiles = app.options.business_profile_id;
-            }
-            //
-            
             app.models.request_params = new Request_params_items_model();
             app.models.request_params.bind("change", this.get_items, this);
+            
+            //popolar exercises
+            app.collections.popular_items = new Exercise_library_collection();
+            app.models.request_params_popular = new Request_params_items_model();
+            
+            
         },
 
         routes: {
@@ -80,7 +81,22 @@ define([
             app.collections.items.fetch({
                 data : params,
                 success: function (collection, response) {
+                    //console.log(collection.toJSON());
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            });  
+        },
+        
+        get_items_popular : function() {
+            app.models.request_params_popular.set({sort_by : 'created', order_dirrection : 'DESC', limit : 15});
+            app.collections.popular_items.reset();
+            app.collections.popular_items.fetch({
+                data : app.models.request_params_popular.toJSON(),
+                success: function (collection, response) {
                     console.log(collection.toJSON());
+                    $("#right_side").html(new Popular_exercises_view({collection : collection}).render().el);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -123,6 +139,8 @@ define([
             app.models.pagination.bind("change:currentPage", this.set_params_model, this);
 
             app.models.pagination.bind("change:items_number", this.set_params_model, this);
+            
+            this.get_items_popular();
         },
         
         set_params_model : function() {

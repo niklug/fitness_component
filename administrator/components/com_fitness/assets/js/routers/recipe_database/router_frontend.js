@@ -164,7 +164,7 @@ define([
             $("#my_favourites_link").addClass("active_link");
 
             app.models.get_recipe_params.set({page : 1, current_page : 'my_favourites', state : 1, uid : app.getUniqueId()});
-         },
+        },
 
         my_recipes : function () {
             this.recipe_pages_actions();
