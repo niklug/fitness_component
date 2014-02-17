@@ -42,6 +42,16 @@ define([
             return this;
         },
         
+        events: {
+            "click .view_exercise" : "onClickViewExercise",
+            "click .add_favourite" : "onClickAddFavourite",
+            "click .remove_favourites" : "onClickRemoveFavourite",
+            "click .trash_exercise" : "onClickTrashExercise",
+            "click .delete_exercise" : "onClickDeleteExercise",
+            "click .restore_exercise" : "onClickRestoreExercisee",
+
+        },
+        
         addItem : function(model) {
             this.item = new List_item_view({el : this.container_el, model : model}).render(); 
 
@@ -54,6 +64,36 @@ define([
         clearItems : function() {
             this.container_el.empty();
         },
+        
+        onClickAddFavourite : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.add_favourite(id);
+        },
+        
+        onClickRemoveFavourite : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.remove_favourite(id);
+        },
+        
+        onClickTrashExercise : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.trash_exercise(id);
+        },
+        
+        onClickDeleteExercise : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.delete_exercise(id);
+        },
+        
+        onClickRestoreExercisee : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.restore_exercise(id);
+        },
+        
+        onClickViewExercise : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.item_view(id);
+        }
         
     });
             

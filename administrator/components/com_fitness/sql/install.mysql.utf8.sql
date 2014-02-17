@@ -1358,3 +1358,15 @@ CREATE TABLE IF NOT EXISTS `#__fitness_exercise_library` (
   `state` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_exercise_library_favourites` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) unsigned NOT NULL,
+  `client_id` int(11)  NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `client_id` (`client_id`),
+  KEY `item_id` (`item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__fitness_exercise_library(id) ON DELETE CASCADE,
+  FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

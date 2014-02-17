@@ -19,6 +19,18 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
+            if( 
+                app.collections.exercise_type 
+                && app.collections.force_type 
+                && app.collections.difficulty 
+                && app.collections.mechanics_type 
+                && app.collections.body_part 
+                && app.collections.target_muscles 
+                && app.collections.equipment_type
+            ) {
+                this.render();
+                return;
+            } 
       
             app.collections.exercise_type = new Select_filter_collection();
             app.collections.force_type = new Select_filter_collection();
@@ -80,7 +92,7 @@ define([
                 })
  
             ).then (function(response) {
-                self.loadFilters();
+                self.render();
             })
         },
         
@@ -88,13 +100,16 @@ define([
         
         render : function(){
             $(this.el).html(this.template({block_width : this.options.block_width}));
+
+            this.loadFilters();
             return this;
         },
         
         loadFilters : function() {
+            //console.log($(this.el));
             new Select_filter_fiew({
                 model : this.model,
-                el : $("#exercise_type_filter_wrapper"),
+                el : $(this.el).find("#exercise_type_filter_wrapper"),
                 collection : app.collections.exercise_type,
                 title : 'Exercise Type',
                 first_option_title : 'None',
@@ -106,7 +121,7 @@ define([
 
             new Select_filter_fiew({
                 model : this.model,
-                el : $("#force_type_filter_wrapper"),
+                el : $(this.el).find("#force_type_filter_wrapper"),
                 collection : app.collections.force_type,
                 title : 'Force Type',
                 first_option_title : 'Not Applicable',
@@ -118,7 +133,7 @@ define([
 
             new Select_filter_fiew({
                 model : this.model,
-                el : $("#difficulty_filter_wrapper"),
+                el : $(this.el).find("#difficulty_filter_wrapper"),
                 collection : app.collections.difficulty,
                 title : 'Difficulty',
                 first_option_title : 'None',
@@ -127,22 +142,26 @@ define([
                 select_size : 12,
                 model_field : 'difficulty'
             }).render();
+            
+         
+            if(! _.include(this.options.not_show, 'mechanics_type')) {
+
+                new Select_filter_fiew({
+                    model : this.model,
+                    el : $(this.el).find("#mechanics_type_filter_wrapper"),
+                    collection : app.collections.mechanics_type,
+                    title : 'Mechanics Type',
+                    first_option_title : 'Not Applicable',
+                    class_name : 'dark_input_style',
+                    id_name : 'mechanics_type_select',
+                    select_size : 12,
+                    model_field : 'mechanics_type'
+                }).render();
+            }
 
             new Select_filter_fiew({
                 model : this.model,
-                el : $("#mechanics_type_filter_wrapper"),
-                collection : app.collections.mechanics_type,
-                title : 'Mechanics Type',
-                first_option_title : 'Not Applicable',
-                class_name : 'dark_input_style',
-                id_name : 'mechanics_type_select',
-                select_size : 12,
-                model_field : 'mechanics_type'
-            }).render();
-
-            new Select_filter_fiew({
-                model : this.model,
-                el : $("#body_part_filter_wrapper"),
+                el : $(this.el).find("#body_part_filter_wrapper"),
                 collection : app.collections.body_part,
                 title : 'Body Part(s)',
                 first_option_title : 'None',
@@ -154,7 +173,7 @@ define([
 
             new Select_filter_fiew({
                 model : this.model,
-                el : $("#target_mucles_filter_wrapper"),
+                el : $(this.el).find("#target_mucles_filter_wrapper"),
                 collection : app.collections.target_muscles,
                 title : 'Target Muscle(s)',
                 first_option_title : 'None',
@@ -166,7 +185,7 @@ define([
 
             new Select_filter_fiew({
                 model : this.model,
-                el : $("#equipment_type_filter_wrapper"),
+                el : $(this.el).find("#equipment_type_filter_wrapper"),
                 collection : app.collections.equipment_type,
                 title : 'Equipment Type',
                 first_option_title : 'None',

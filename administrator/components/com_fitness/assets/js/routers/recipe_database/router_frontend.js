@@ -352,9 +352,7 @@ define([
         },
         
         add_diary : function(id) {
-
            app.models.get_recipe_params.set({current_page : 'add_diary'});
-  
            var self = this;
             app.models.recipe.fetch({
                 data : {id : id},

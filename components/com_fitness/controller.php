@@ -260,13 +260,7 @@ class FitnessController extends JController {
         $view -> favourite_recipe(); 
     }
     
-    function removeFavourite() {
-        $view = $this -> getView('recipe_database', 'json');
-        $view->setModel($this->getModel('recipe_database'));
-        $view -> removeFavourite(); 
-    }
 
-    
     function uploadImage() {
         $filename = $_FILES['file']['name'];
         
@@ -543,6 +537,12 @@ class FitnessController extends JController {
         $view = $this -> getView('exercise_library', 'json');
         $view->setModel($this->getModel('exercise_library'));
         $view -> clients(); 
+    }
+    
+    function favourite_exercise() {
+        $view = $this -> getView('exercise_library', 'json');
+        $view->setModel($this->getModel('exercise_library'));
+        $view -> favourite_exercise(); 
     }
         
 }

@@ -11,7 +11,7 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template());
+            var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
             return this;
         },
@@ -19,6 +19,8 @@ define([
         events : {
             "click #search_by_name" : "search",
             "click #clear_all" : "clearAll",
+            "click #view_trash" : "onClickViewTrash",
+            "click #close_trash_list" : "onClickCloseTrashList",
         },
         
         search : function() {
@@ -45,6 +47,14 @@ define([
                 }
             );
         },
+        
+        onClickViewTrash : function() {
+            app.controller.navigate("!/trash_list", true);
+        },
+        
+        onClickCloseTrashList : function(){
+            app.controller.navigate("!/my_exercises", true);
+        }
     });
             
     return view;

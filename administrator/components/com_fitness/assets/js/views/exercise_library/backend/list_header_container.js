@@ -32,7 +32,7 @@ define([
         },
 
         connectFiltersBlock : function() {
-            this.$el.find("#select_filter_wrapper").html(new Select_filter_block_view({model : this.model, block_width : '140px'}).render().el);
+            new Select_filter_block_view({el : this.$el.find("#select_filter_wrapper"), model : this.model, block_width : '140px'});
         },
         
         connectSearchBlock : function() {

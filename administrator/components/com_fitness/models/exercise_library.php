@@ -246,10 +246,16 @@ class FitnessModelExercise_library extends JModelList {
         
         $state = $data->state;
         
+        $current_page = $data->current_page;
+        
         $query .= " SELECT a.*, ";
         
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
+        
+        if ($current_page == 'my_favourites') {
+            $query .= " LEFT JOIN #__fitness_exercise_library_favourites AS mf ON mf.item_id=a.id";
+        }
         
         $query .= " WHERE a.state='$state' ";
         
@@ -358,6 +364,11 @@ class FitnessModelExercise_library extends JModelList {
         if($data->current_page == 'my_exercises') {
             $query .= " AND  FIND_IN_SET('$user_id', a.my_exercise_clients) ";
         }
+        
+        
+        if($current_page == 'my_favourites') {
+            $query .= " AND mf.client_id='$user_id'";
+        }
 
         $query .= " ) items_total, ";
         //end get total number
@@ -390,23 +401,29 @@ class FitnessModelExercise_library extends JModelList {
                 . " FIND_IN_SET(id, (SELECT difficulty FROM #__fitness_exercise_library WHERE id =a.id))) difficulty_names, ";
         
         
-       $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_business_profiles WHERE "
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_business_profiles WHERE "
                 . " FIND_IN_SET(id, (SELECT business_profiles FROM #__fitness_exercise_library WHERE id =a.id))) business_profiles_names, ";
        
        
-       //My Exercises List data
-       $query .=  " (SELECT GROUP_CONCAT(name) FROM #__users WHERE  ";
+        //My Exercises List data
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__users WHERE  ";
        
-       if(FitnessHelper::is_trainer($user_id)) {
-           $query .=  " id IN (SELECT user_id FROM #__fitness_clients WHERE business_profile_id='$business_profile_id') AND ";
-       }
+        if(FitnessHelper::is_trainer($user_id)) {
+            $query .=  " id IN (SELECT user_id FROM #__fitness_clients WHERE business_profile_id='$business_profile_id') AND ";
+        }
        
-       $query .= " FIND_IN_SET(id, (SELECT my_exercise_clients FROM #__fitness_exercise_library WHERE id =a.id))) my_exercise_clients_names ";
-       //
+        $query .= " FIND_IN_SET(id, (SELECT my_exercise_clients FROM #__fitness_exercise_library WHERE id =a.id))) my_exercise_clients_names, ";
+        //
+       
+        $query .= " (SELECT id FROM #__fitness_exercise_library_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite";  
        
         $query .= " FROM $table AS a ";
 
         $query .= " LEFT JOIN #__user_usergroup_map AS ugm ON a.created_by=ugm.user_id";
+        
+        if ($current_page == 'my_favourites') {
+            $query .= " LEFT JOIN #__fitness_exercise_library_favourites AS mf ON mf.item_id=a.id";
+        }
 
         $query .= " WHERE a.state='$state'";
         
@@ -504,15 +521,19 @@ class FitnessModelExercise_library extends JModelList {
         
         
         //frontend Exercise database
-        if($data->current_page == 'exercise_database') {
+        if($current_page == 'exercise_database') {
             $query .= " AND  FIND_IN_SET('$business_profile_id', a.business_profiles) ";
             $query .= " AND  a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' ";
         }
         
         
         //frontend Exercise database
-        if($data->current_page == 'my_exercises') {
+        if($current_page == 'my_exercises') {
             $query .= " AND  FIND_IN_SET('$user_id', a.my_exercise_clients) ";
+        }
+        
+        if($current_page == 'my_favourites') {
+            $query .= " AND mf.client_id='$user_id'";
         }
 
         
@@ -543,6 +564,65 @@ class FitnessModelExercise_library extends JModelList {
         
         return $data;
 
+    }
+    
+    
+    public function favourite_exercise() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $user = &JFactory::getUser();
+
+        
+        $data = new stdClass();
+
+        
+        $data->item_id = $model->id;   
+        
+        $data->client_id = $user->id;
+
+
+        $table = '#__fitness_exercise_library_favourites';
+
+        $helper = new FitnessHelper();
+
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+
+                break;
+            case 'PUT': 
+                //update
+                $query = "SELECT id FROM $table WHERE client_id='$data->client_id' AND item_id='$data->item_id'";
+                $exists = FitnessHelper::customQuery($query, 0);
+                if($exists) return;
+                
+                $inserted_id = $helper->insertUpdateObj($data, $table);
+                return $inserted_id;
+                break;
+            case 'POST': // Create
+                
+                break;
+            case 'DELETE': // Delete Item
+                $db = JFactory::getDBO();
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $query = "DELETE FROM $table WHERE client_id='$data->client_id' AND item_id='$id'";
+                $db->setQuery($query);
+                if (!$db->query()) {
+                    throw new Exception($e->getMessage());
+                }
+                break;
+
+            default:
+                break;
+        }
+        return $model;
     }
     
 

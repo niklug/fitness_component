@@ -102,7 +102,7 @@ define([
 
             $("#exercise_details_wrapper").html(new Exercise_details_view({model : model}).render().el);
 
-            $("#select_filter_wrapper").html(new Select_filter_block_view({model : model, block_width : '140px'}).render().el);
+            new Select_filter_block_view({el : $("#select_filter_wrapper"), model : model, block_width : '140px'});
 
             if(model.get('id')) {
                 $("#exercise_video_wrapper").html(new Exercise_video_view({model : model}).render().el);

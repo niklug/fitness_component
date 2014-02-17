@@ -38,5 +38,10 @@ class FitnessViewExercise_library extends JView {
     function clients() {
         echo json_encode($this->admin_exercise_library_model->clients());
     }
+    
+    function favourite_exercise() {
+        $model = $this -> getModel("exercise_library");
+        echo json_encode($model->favourite_exercise());
+    }
    
 }

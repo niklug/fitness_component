@@ -1,16 +1,26 @@
 <div class="fitness_block_wrapper" style="height:44px;margin-top: 10px;">
     <div class="internal_wrapper">
-        <table>
+        <table width="100%">
             <tr>
-                <td>
+                <td width="100">
                     <label>Exercise Name</label>
                 </td>
-                <td>
+                <td width="150">
                     <input  class="dark_input_style" id="exercise_name" size="30" type="text" >
                 </td>
-                <td>
+                <td width="120">
                     <a data-id="" style="cursor: pointer; float:left;margin-left: 5px;" id="search_by_name" onclick="javascript:void(0)">[Search]</a>
                     <a data-id="" style="cursor: pointer;float:right;margin-left: 10px;" id="clear_all" onclick="javascript:void(0)">[Clear]</a>
+                </td>
+                <td>
+                    <% if(current_page == 'my_exercises') {%>
+                        <a data-id="" style="cursor: pointer;float:right;" id="view_trash" onclick="javascript:void(0)">[VIEW TRASH]</a>
+                    <% } %>
+                    
+                    
+                    <% if(current_page == 'trash_list') {%>
+                        <a data-id="" style="cursor: pointer;float:right;" id="close_trash_list" onclick="javascript:void(0)">[CLOSE TRASH]</a>
+                    <% } %>
                 </td>
             </tr>
         </table>
