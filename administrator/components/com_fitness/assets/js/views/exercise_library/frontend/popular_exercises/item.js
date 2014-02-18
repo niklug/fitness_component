@@ -22,13 +22,13 @@ define([
         },
         
         events: {
-            "click .view_recipe" : "onClickViewRecipe",
+            "click .view_item" : "onClickView",
         },
 
-        onClickViewRecipe : function(event) {
+        onClickView : function(event) {
             var id = $(event.target).attr("data-id");
-            app.controller.navigate("!/recipe_database", true);
-            app.controller.navigate("!/nutrition_recipe/" + id, true);
+            app.models.request_params.set({current_page : 'exercise_database'});
+            app.controller.navigate("!/item_view/" + id, true);
         }
 
     });

@@ -21,6 +21,7 @@ define([
             "click #clear_all" : "clearAll",
             "click #view_trash" : "onClickViewTrash",
             "click #close_trash_list" : "onClickCloseTrashList",
+            "click #add_item" : "onClickAddItem",
         },
         
         search : function() {
@@ -54,6 +55,10 @@ define([
         
         onClickCloseTrashList : function(){
             app.controller.navigate("!/my_exercises", true);
+        },
+        
+        onClickAddItem : function() {
+            app.controller.navigate("!/form_view/0", true);
         }
     });
             

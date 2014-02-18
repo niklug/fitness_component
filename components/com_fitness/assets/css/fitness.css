@@ -901,6 +901,13 @@ td.center, th.center, .center {
     border: 3px solid #FFFFFF;
 }
 
+#exercise_video {
+    border: 3px solid #FFFFFF;
+    background-size: 640px 340px;
+    height: 340px;
+    width: 640px;
+}
+
 
 #nutrition_guide_menu {
     width: auto;

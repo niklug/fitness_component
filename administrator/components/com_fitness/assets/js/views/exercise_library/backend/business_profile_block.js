@@ -52,7 +52,13 @@ define([
                 return;
             }
             
-            var user_view_permission = JSON.parse(this.options.item_model.get('user_view_permission'));
+            var user_view_permission = this.options.item_model.get('user_view_permission');
+            
+            if(!user_view_permission) {
+                return;
+            }
+            
+            user_view_permission = JSON.parse(user_view_permission);
             
             if(user_view_permission && this.business_profile_id) {
                 var show_public_database = user_view_permission[this.business_profile_id];

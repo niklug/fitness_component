@@ -7,13 +7,16 @@ define([
         'models/exercise_library/exercise_library_item',
         'models/exercise_library/request_params_items',
         'models/exercise_library/favourite_exercise',
-        'views/exercise_library/backend/form_container',
         'views/exercise_library/select_filter_block',
-        'views/exercise_library/backend/exercise_details',
-        'views/exercise_library/backend/exercise_video',
         'views/exercise_library/frontend/list',
         'views/exercise_library/frontend/menus/submenu_exercise_database',
+        'views/exercise_library/frontend/menus/submenu_item',
+        'views/exercise_library/frontend/menus/submenu_form',
         'views/exercise_library/frontend/popular_exercises/list',
+        'views/exercise_library/frontend/item',
+        'views/exercise_library/frontend/form',
+        
+        'jquery.backbone_video_upload',
         'jwplayer', 
         'jwplayer_key',
 ], function (
@@ -25,13 +28,14 @@ define([
         Exercise_library_item_model,
         Request_params_items_model,
         Favourite_exercise_model,
-        Form_container_view,
         Select_filter_block_view,
-        Exercise_details_view,
-        Exercise_video_view,
         List_view,
         Submenu_exercise_database_view,
-        Popular_exercises_view
+        Submenu_item_view,
+        Submenu_form_view,
+        Popular_exercises_view,
+        Item_view,
+        Form_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -70,13 +74,14 @@ define([
             "!/add_favourite/:id" : "add_favourite",
             "!/remove_favourite/:id" : "remove_favourite",
             "!/item_view/:id" : "item_view",
+            "!/form_view/:id": "form_view", 
         },
         
         back: function() {
             if(this.routesHit > 1) {
               window.history.back();
             } else {
-              this.navigate('', {trigger:true, replace:true});t
+              this.navigate("", {trigger:true, replace:true});
             }
         },
 
@@ -132,7 +137,7 @@ define([
             
             $(".plan_menu_link").removeClass("active_link");
             
-            new Select_filter_block_view({el : $("#filters_container"), model : app.models.request_params, block_width : '152.5px', not_show : ['mechanics_type']});
+            this.connectSelectFilter();
             
             $("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
 
@@ -142,6 +147,14 @@ define([
 
             app.models.pagination.bind("change:items_number", this.set_params_model, this);
             
+            this.connecPopular();
+        },
+        
+        connectSelectFilter : function() {
+            new Select_filter_block_view({el : $("#filters_container"), model : app.models.request_params, block_width : '152.5px', not_show : ['mechanics_type']});
+        },
+        
+        connecPopular : function() {
             $("#right_side").html(new Popular_exercises_view({collection : app.collections.popular_items, model : app.models.request_params_popular}).render().el);
         },
         
@@ -223,19 +236,71 @@ define([
         },
         
         item_view : function(id) {
+            $("#filters_container").empty();
             var self = this;
             app.models.exercise_library_item.set({id : id});
             app.models.exercise_library_item.fetch({
                 data : {state : 1},
                 success: function (model, response) {
-                    console.log(model.toJSON());
+                    $("#submenu_container").html(new Submenu_item_view({model : model, request_params_model : app.models.request_params}).render().el);
+                    
+                    $("#main_container").html(new Item_view({model : model, request_params_model : app.models.request_params}).render().el);
+                    
+                    self.connecPopular();
+                    
+                    var video_path = app.models.exercise_library_item.get('video');
+                    $.fitness_helper.loadVideoPlayer(video_path, app, 400, 700, 'exercise_video');
+                    
+                    self.increaseViewed(model);
+                    
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
                 }
             })
         },
-       
+        
+        increaseViewed : function(model) {
+            var viewed =  parseInt(model.get('viewed')) + 1;
+            model.save({viewed : viewed}, {
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+               
+        form_view : function(id) {
+            $("#filters_container").empty();
+            if(!parseInt(id)) {
+                this.load_form_view(new Exercise_library_item_model());
+                return;
+            }
+            
+            var self = this;
+            app.models.exercise_library_item.set({id : id});
+            app.models.exercise_library_item.fetch({
+                data : {state : 1},
+                success: function (model, response) {
+                    self.load_form_view(model);
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            })
+        },
+        
+        load_form_view : function(model) {
+            $("#submenu_container").html(new Submenu_form_view({model : model, request_params_model : app.models.request_params}).render().el);
+            
+            $("#main_container").html(new Form_view({model : model}).render().el);
+            
+            new Select_filter_block_view({el : $("#select_filter_wrapper"), model : model, block_width : '140px'});
+            
+            if(model.get('id')) {
+                var video_path = app.models.exercise_library_item.get('video');
+                $.fitness_helper.loadVideoPlayer(video_path, app, 250, 440, 'exercise_video');
+            }
+        },
         
     });
 

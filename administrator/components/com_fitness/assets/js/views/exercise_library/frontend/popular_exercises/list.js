@@ -22,7 +22,7 @@ define([
          
             this.collection.bind("add", this.addItem, this);
             
-            this.model.set({sort_by : 'created', current_page : '', order_dirrection : 'DESC', limit : 15});
+            this.model.set({sort_by : 'viewed', current_page : 'exercise_database', order_dirrection : 'DESC', limit : 15});
 
             if(this.collection.length == 0) {
                 this.collection.fetch({

@@ -379,7 +379,40 @@
                         
                         
                    });
-                }
+                },
+                
+                loadVideoPlayer : function(video_path, app, height, width, container) {
+                    var no_video_image_big = app.options.no_video_image_big;
+
+                    var base_url = app.options.base_url;
+
+                    var imageType = /no_video_image.*/;  
+
+                    if (video_path && !video_path.match(imageType) && video_path) {  
+
+                        jwplayer(container).setup({
+                            file: base_url + video_path,
+                            image: "",
+                            height: height,
+                            width: width,
+                            autostart: true,
+                            mute: true,
+                            controls: false,
+                            events: {
+                                onReady: function () { 
+                                    var self = this;
+                                    setTimeout(function(){
+                                        self.pause();
+                                        self.setMute(false);
+                                        self.setControls(true);
+                                    },3000);
+                                }
+                            }
+                        });
+                    } else {
+                        $("#" + container).css('background-image', 'url(' +  no_video_image_big + ')');
+                    }
+                },
             });
 
             return new Helper_model(options);

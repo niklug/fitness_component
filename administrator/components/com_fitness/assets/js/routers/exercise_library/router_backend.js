@@ -106,50 +106,16 @@ define([
 
             if(model.get('id')) {
                 $("#exercise_video_wrapper").html(new Exercise_video_view({model : model}).render().el);
-                this.loadVideoPlayer();
+                
+                var video_path = model.get('video');
+                $.fitness_helper.loadVideoPlayer(video_path, app, 250, 400, 'exercise_video');
             }
 
             new Business_permissions_view({el : $("#permissions_wrapper"), model : model});
         },
-        
-        loadVideoPlayer : function() {
-            var no_video_image_big = app.options.no_video_image_big;
-
-            var video_path = app.models.exercise_library_item.get('video');
-
-            var base_url = app.options.base_url;
-
-            var imageType = /no_video_image.*/;  
-
-            if (video_path && !video_path.match(imageType) && video_path) {  
-
-                jwplayer('exercise_video').setup({
-                    file: base_url + video_path,
-                    image: "",
-                    height: 250,
-                    width: 400,
-                    autostart: true,
-                    mute: true,
-                    controls: false,
-                    events: {
-                        onReady: function () { 
-                            var self = this;
-                            setTimeout(function(){
-                                self.pause();
-                                self.setMute(false);
-                                self.setControls(true);
-                            },3000);
-                        }
-                    }
-                });
-            } else {
-                $("#exercise_video").css('background-image', 'url(' +  no_video_image_big + ')');
-            }
-        },
-        
+     
         get_items : function() {
             var params = app.models.request_params.toJSON();
-            console.log(params);
             app.collections.items.reset();
             app.collections.items.fetch({
                 data : params,

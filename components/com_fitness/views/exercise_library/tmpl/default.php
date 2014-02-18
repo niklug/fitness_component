@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
     <h2>EXERCISE LIBRARY</h2>
     
-    <div id="exercise_mainmenu"></div>
+    <div  id="exercise_mainmenu"></div>
     
     <div class="clr"></div>
     <br/>
@@ -22,7 +22,7 @@ defined('_JEXEC') or die;
     
     <div class="clr"></div>
     
-    <div style="padding: 2px;" id="submenu_container"></div>
+    <div  id="submenu_container"></div>
     
     <div id="main_container"></div>
 

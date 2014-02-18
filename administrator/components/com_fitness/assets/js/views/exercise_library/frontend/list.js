@@ -92,7 +92,7 @@ define([
         
         onClickViewExercise : function(event) {
             var id = $(event.target).attr('data-id');
-            app.controller.item_view(id);
+            app.controller.navigate("!/item_view/" + id, true);
         }
         
     });
