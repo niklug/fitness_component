@@ -377,6 +377,10 @@ $helper = new FitnessHelper();
 
 <script type="text/javascript">
     (function($) {
+        
+        var user_id = '<?php echo JFactory::getUser()->id ?>';
+        
+        
         $("#business_profile_id").on('change', function() {
              var form = $("#adminForm");
              form.submit();
@@ -385,7 +389,7 @@ $helper = new FitnessHelper();
 
         $(".edit_event").live('click', function(e) {
             var event_id = $(this).data('id');
-            var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB&id=' + event_id;
+            var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB&id=' + event_id + '&cid=' + user_id;
             loadAppointmentHtml(event_id, url);
         });
 
@@ -394,7 +398,7 @@ $helper = new FitnessHelper();
         });
 
         $("#add_appointment").live('click', function(e) {
-            var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB';
+            var url = '<?php echo JURI::root()?>index.php?option=com_multicalendar&month_index=0&task=editevent&delete=1&palette=0&paletteDefault=F00&calid=0&mt=true&css=cupertino&lang=en-GB' + '&cid=' + user_id;
             loadAppointmentHtml('', url);
         });
 

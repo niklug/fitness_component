@@ -185,8 +185,7 @@ class FitnessModelnutrition_diaries extends JModelList {
         
         
         if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query->where('(c.primary_trainer = ' . (int) $user->id . ' OR c.other_trainers LIKE ' . $other_trainers . ' )');
+            $query->where('(c.primary_trainer = ' . (int) $user->id . ' OR FIND_IN_SET(' . $user->id . ' , c.other_trainers) )');
         }
 
         

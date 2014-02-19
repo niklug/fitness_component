@@ -164,9 +164,8 @@ class FitnessModelnutrition_recipes extends JModelList {
         
         // if usual Trainer of the Business Profile    
         if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
             $query->where('(c.primary_trainer = ' . (int) $user->id 
-                    . ' OR c.other_trainers LIKE ' . $other_trainers . ' )'
+                    . ' OR FIND_IN_SET(' . $user->id . ' , c.other_trainers) )'
                     . ' OR um.group_id='.(int) $trainers_group_id
                     . ' OR um.group_id='.(int) FitnessHelper::SUPERUSER_GROUP_ID
                     );

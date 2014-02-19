@@ -680,8 +680,7 @@ class FitnessHelper extends FitnessFactory
    
         // if simple trainer
         if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query .= ' AND ( primary_trainer = ' . (int) $user->id . ' OR other_trainers LIKE ' . $other_trainers . ' ) ';
+            $query .= ' AND ( primary_trainer = ' . (int) $user->id . ' OR FIND_IN_SET(' . $user->id . ' , other_trainers) ) ';
         }
         $db->setQuery($query);
         $ret['success'] = 1;

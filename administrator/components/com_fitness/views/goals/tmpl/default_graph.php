@@ -29,7 +29,7 @@ $db = JFactory::getDbo();
 $sql = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE state='1'";
 if(getUserGroup() != 'Super Users') {
     $user_id = &JFactory::getUser()->id;
-    $sql .= " AND (primary_trainer='$user_id' OR other_trainers LIKE '%$user_id%')";
+    $sql .= " AND (primary_trainer='$user_id' OR FIND_IN_SET(' . $user_id . ' , other_trainers))";
 }
 $db->setQuery($sql);
 $clients = $db->loadObjectList();

@@ -134,8 +134,7 @@ class FitnessModelclients extends JModelList {
         $user = &JFactory::getUser();
         
         if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $query->where('(a.primary_trainer = ' . (int) $user->id . ' OR a.other_trainers LIKE ' . $other_trainers . ' )');
+            $query->where('(a.primary_trainer = ' . (int) $user->id . ' OR FIND_IN_SET(' . $user->id . ' , a.other_trainers) )');
         }
        
         // Filter by published state

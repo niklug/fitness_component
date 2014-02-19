@@ -356,8 +356,7 @@ function listCalendarByRange($calid, $sd, $ed, $client_id, $trainer_id, $locatio
 
 
         if ($is_simple_trainer) {
-            $other_trainers = $db->Quote('%' . $db->escape($user->id, true) . '%');
-            $sql .= " AND (c.primary_trainer = " . (int) $user->id . " OR c.other_trainers LIKE " . $other_trainers . " OR (a.client_id='')) ";
+            $sql .= " AND (c.primary_trainer = " . (int) $user->id . " OR FIND_IN_SET('" .  $user->id  . "' , c.other_trainers) OR (a.client_id='')) ";
         }
 
 
@@ -807,7 +806,7 @@ function get_trainers($user_id) {
 function get_clients() {
     $trainer_id = JRequest::getVar("trainer_id");
     $db = & JFactory::getDBO();
-    $query = "SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$trainer_id' OR other_trainers LIKE '%$trainer_id%' AND state='1'";
+    $query = "SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$trainer_id' OR FIND_IN_SET('$trainer_id' , other_trainers) AND state='1'";
     $db->setQuery($query);
     $status['success'] = 1;
     if (!$db->query()) {
