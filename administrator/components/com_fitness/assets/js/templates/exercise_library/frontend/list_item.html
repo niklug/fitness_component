@@ -38,13 +38,13 @@
                         <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[add favourite]</a>
                 <% } %>
                 
-                <% if(current_page == 'my_exercises') { %>
+                <% if(current_page == 'my_exercises' && edit_allowed) { %>
                     <br/><br/>
                     <a data-id="<%= id %>" style="cursor: pointer;" class="trash_exercise" onclick="javascript:void(0)">[trash exercise]</a>
                 <% } else if (current_page == 'my_favourites') { %>
                     <br/><br/>
                     <a data-id="<%= id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
-                <% } else if (current_page == 'trash_list') { %>
+                <% } else if (current_page == 'trash_list' && edit_allowed) { %>
                     <a data-id="<%= id %>" style="cursor: pointer;" class="restore_exercise" onclick="javascript:void(0)">[restore exercise]</a>
                     <br><br>
                     <a data-id="<%= id %>" style="cursor: pointer;" class="delete_exercise" onclick="javascript:void(0)">[delete exercise]</a>

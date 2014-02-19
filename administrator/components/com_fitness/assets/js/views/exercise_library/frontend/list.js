@@ -53,6 +53,16 @@ define([
         },
         
         addItem : function(model) {
+            var edit_allowed = app.controller.edit_allowed(model);
+            
+            model.set({edit_allowed : edit_allowed});
+            
+            var current_page = this.model.get('current_page');
+            
+            if(current_page == 'trash_list' && !edit_allowed) {
+                return;
+            }
+            
             this.item = new List_item_view({el : this.container_el, model : model}).render(); 
 
             app.models.pagination.set({'items_total' : model.get('items_total')});

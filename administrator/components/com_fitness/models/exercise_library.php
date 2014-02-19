@@ -257,6 +257,9 @@ class FitnessModelExercise_library extends JModelList {
             $query .= " LEFT JOIN #__fitness_exercise_library_favourites AS mf ON mf.item_id=a.id";
         }
         
+        $query .= " LEFT JOIN #__fitness_clients AS c ON c.user_id = a.created_by ";
+
+        
         $query .= " WHERE a.state='$state' ";
         
 
@@ -344,7 +347,11 @@ class FitnessModelExercise_library extends JModelList {
             $query .= ")";
         }
         
-        //by business
+        //by business 
+        if(FitnessHelper::is_trainer($user_id)) {
+            $query .= " AND (a.created_by='$user_id' OR c.primary_trainer='$user_id' OR  FIND_IN_SET('$user_id' , c.other_trainers) ) ";
+        }
+        
         if($business_profiles) {
             $query .= " AND ( FIND_IN_SET('$business_profiles[0]', a.business_profiles) ";
             
@@ -360,7 +367,7 @@ class FitnessModelExercise_library extends JModelList {
             $query .= " AND  a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' ";
         }
         
-        //frontend Exercise database
+        //frontend My exercises
         if($data->current_page == 'my_exercises') {
             $query .= " AND  FIND_IN_SET('$user_id', a.my_exercise_clients) ";
         }
@@ -424,6 +431,8 @@ class FitnessModelExercise_library extends JModelList {
         if ($current_page == 'my_favourites') {
             $query .= " LEFT JOIN #__fitness_exercise_library_favourites AS mf ON mf.item_id=a.id";
         }
+        
+        $query .= " LEFT JOIN #__fitness_clients AS c ON c.user_id = a.created_by ";
 
         $query .= " WHERE a.state='$state'";
         
@@ -509,6 +518,9 @@ class FitnessModelExercise_library extends JModelList {
         }
         
         //by business
+        if(FitnessHelper::is_trainer($user_id)) {
+            $query .= " AND (a.created_by='$user_id' OR c.primary_trainer='$user_id' OR  FIND_IN_SET('$user_id' , c.other_trainers) ) ";
+        }
         if($business_profiles) {
             $query .= " AND ( FIND_IN_SET('$business_profiles[0]', a.business_profiles) ";
             
@@ -527,7 +539,7 @@ class FitnessModelExercise_library extends JModelList {
         }
         
         
-        //frontend Exercise database
+        //frontend My Exercises
         if($current_page == 'my_exercises') {
             $query .= " AND  FIND_IN_SET('$user_id', a.my_exercise_clients) ";
         }
