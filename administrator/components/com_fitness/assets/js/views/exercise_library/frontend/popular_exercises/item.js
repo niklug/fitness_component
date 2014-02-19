@@ -27,7 +27,6 @@ define([
 
         onClickView : function(event) {
             var id = $(event.target).attr("data-id");
-            app.models.request_params.set({current_page : 'exercise_database'});
             app.controller.navigate("!/item_view/" + id, true);
         }
 

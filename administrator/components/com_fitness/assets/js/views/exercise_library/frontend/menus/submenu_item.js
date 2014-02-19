@@ -29,7 +29,8 @@ define([
         },
 
         onClickClose : function() {
-            app.controller.back();
+            var current_page = this.options.request_params_model.get('current_page');
+            app.controller.navigate("!/" + current_page, true);
         },
 
         onClickAddFavourite : function(event) {

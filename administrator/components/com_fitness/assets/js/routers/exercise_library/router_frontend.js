@@ -242,6 +242,7 @@ define([
             app.models.exercise_library_item.fetch({
                 data : {state : 1},
                 success: function (model, response) {
+                    model.set({edit_allowed : self.edit_allowed(model)});
                     $("#submenu_container").html(new Submenu_item_view({model : model, request_params_model : app.models.request_params}).render().el);
                     
                     $("#main_container").html(new Item_view({model : model, request_params_model : app.models.request_params}).render().el);
@@ -281,7 +282,11 @@ define([
             app.models.exercise_library_item.fetch({
                 data : {state : 1},
                 success: function (model, response) {
-                    self.load_form_view(model);
+                    if(self.edit_allowed(model)) {
+                        self.load_form_view(model);
+                    } else {
+                        self.navigate("!/my_exercises", true);
+                    }
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -301,6 +306,20 @@ define([
                 $.fitness_helper.loadVideoPlayer(video_path, app, 250, 440, 'exercise_video');
             }
         },
+        
+        edit_allowed : function(model) {
+            var access = false;
+            var id = model.get('id');
+            var client_id = app.options.client_id;
+            var created_by = model.get('created_by');
+            var my_exercise_clients = model.get('my_exercise_clients');
+            
+            if(client_id == created_by) {
+                access = true;
+            }
+           
+            return access;
+        }
         
     });
 
