@@ -19,22 +19,34 @@ define([
         template:_.template(template),
 
         initialize : function() {
-            this.collection.bind("reset", this.clearItems, this);
+            this.collection.bind("add", this.addItem, this);
+            
+            this.model.set({sort_by : 'created', order_dirrection : 'DESC', limit : 15});
+
+            if(this.collection.length == 0) {
+                this.collection.fetch({
+                    data : this.model.toJSON(),
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }); 
+            }
         },
 
         render : function () {
             $(this.el).html(this.template());
             this.container_el = this.$el.find("#latest_recipes_container");
+  
             var self = this;
             _.each(this.collection.models, function(model){
-                self.container_el.append( new Item_view({model : model}).render().el);
+                self.addItem(model);
             });
-                
+  
             return this;
         },
-
-        clearItems : function() {
-            this.container_el.empty();
+        
+        addItem : function(model) {
+            this.container_el.append( new Item_view({model : model}).render().el);
         },
 
     });

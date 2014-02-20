@@ -6,8 +6,7 @@ define([
         'collections/nutrition_plan/nutrition_guide/recipe_types',
         'collections/nutrition_plan/nutrition_guide/recipe_variations',
         'views/nutrition_plan/nutrition_guide/add_recipe_item',
-        'views/nutrition_plan/nutrition_guide/recipe_types_filter',
-        'views/nutrition_plan/nutrition_guide/recipe_variations_filter',
+        'views/exercise_library/select_filter',
 	'text!templates/nutrition_plan/nutrition_guide/add_recipe.html',
 ], function (
         $,
@@ -17,8 +16,7 @@ define([
         Recipe_types_collection,
         Recipe_variations_collection, 
         Add_recipe_item_view,
-        Recipe_types_filter_view,
-        Recipe_variations_filter_view,
+        Select_filter_fiew,
         template 
     ) {
 
@@ -37,9 +35,32 @@ define([
             $(this.el).html(this.template());
             this.container_el = this.$el.find(".example_day_meal_recipes_list");
 
-            this.connectFilter();
+            if(app.collections.recipe_types && app.collections.recipe_variations) {
+                this.connectFilters();
+                return this;
+            }
 
-            this.connectRecipeVariationsFilter();
+                
+            app.collections.recipe_types = new Recipe_types_collection();
+            app.collections.recipe_variations = new Recipe_variations_collection();
+            
+            var self = this;
+            $.when (
+                app.collections.recipe_types.fetch({
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }),
+                
+                app.collections.recipe_variations.fetch({
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                })
+ 
+            ).then (function(response) {
+                self.connectFilters();
+            })
 
             return this;
         },
@@ -66,41 +87,31 @@ define([
             this.controller.navigate("!/example_day/" + this.model.get('example_day_id'), true);
         },
 
-        connectFilter : function() {
-            this.filter_container = this.$el.find("#recipe_database_filter_wrapper");
+        connectFilters : function() {
+            new Select_filter_fiew({
+                model : app.models.get_recipe_params,
+                el : this.$el.find("#recipe_database_filter_wrapper"),
+                collection : app.collections.recipe_types,
+                title : 'FILTER CATEGORIES',
+                first_option_title : 'ALL CATEGORIES',
+                class_name : 'dark_input_style',
+                id_name : '',
+                select_size : 17,
+                model_field : 'filter_options'
+            }).render();
 
-            app.collections.recipe_types = new Recipe_types_collection();
-
-            var self = this;
-
-            app.collections.recipe_types.fetch({
-                wait : true,
-                success : function(collection, response) {
-                    self.filter_container.html(new Recipe_types_filter_view({model : response}).render().el);
-                },
-                error: function (collection, response) {
-                    alert(response.responseText);
-                }
-            })
+            new Select_filter_fiew({
+                model : app.models.get_recipe_params,
+                el : this.$el.find("#recipe_variations_filter_wrapper"),
+                collection : app.collections.recipe_variations,
+                title : 'RECIPE VARIATIONS',
+                first_option_title : 'ALL VARIATIONS',
+                class_name : 'dark_input_style',
+                id_name : '',
+                select_size : 12,
+                model_field : 'recipe_variations_filter_options'
+            }).render();
         },
-
-        connectRecipeVariationsFilter : function() {
-            this.recipe_variations_filter_container = this.$el.find("#recipe_variations_filter_wrapper");
-
-            app.collections.recipe_variations = new Recipe_variations_collection();
-
-            var self = this;
-
-            app.collections.recipe_variations.fetch({
-                wait : true,
-                success : function(collection, response) {
-                    self.recipe_variations_filter_container.html(new Recipe_variations_filter_view({collection : collection}).render().el);
-                },
-                error: function (collection, response) {
-                    alert(response.responseText);
-                }
-            })
-        }
 
     });
             

@@ -312,7 +312,6 @@ define([
             var id = model.get('id');
             var client_id = app.options.client_id;
             var created_by = model.get('created_by');
-            var my_exercise_clients = model.get('my_exercise_clients');
             
             if(client_id == created_by) {
                 access = true;

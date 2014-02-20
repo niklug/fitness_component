@@ -126,26 +126,12 @@ define([
             });  
         },
         
-        get_recipes_latest : function() {
-            app.models.get_recipe_params_latest.set({sort_by : 'created', order_dirrection : 'DESC', limit : 15});
-            app.collections.recipes_latest.reset();
-            app.collections.recipes_latest.fetch({
-                data : app.models.get_recipe_params_latest.toJSON(),
-                success: function (collection, response) {
-                    $("#recipes_latest_wrapper").html(new Latest_recipes_view({collection : collection}).render().el);
-                },
-                error: function (collection, response) {
-                    alert(response.responseText);
-                }
-            });  
-        },
-        
         get_ingredients : function() {
             app.collections.ingredients.reset();
             app.collections.ingredients.fetch({
                 data : app.models.request_params_ingredients.toJSON(),
                 success: function (collection, response) {
-                    console.log(collection);
+                    //console.log(collection);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -205,7 +191,11 @@ define([
 
             app.models.pagination.bind("change:items_number", this.set_recipes_model, this);
             
-            this.get_recipes_latest();
+            this.connecLatest();
+        },
+        
+        connecLatest : function() {
+            $("#recipes_latest_wrapper").html(new Latest_recipes_view({collection : app.collections.recipes_latest, model : app.models.get_recipe_params_latest}).render().el);
         },
 
         nutrition_recipe : function(id) {
@@ -214,9 +204,11 @@ define([
                 wait : true,
                 data : {id : id},
                 success: function (model, response) {
+                    model.set({edit_allowed : self.edit_allowed(model)});
                     $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
                     self.load_recipe_submenu();
-                    self.loadVideoPlayer();
+                    var video_path = model.get('video');
+                    $.fitness_helper.loadVideoPlayer(video_path, app, 340, 640, 'recipe_video');
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -230,8 +222,10 @@ define([
                 wait : true,
                 data : {id : id},
                 success: function (model, response) {
+                    model.set({edit_allowed : self.edit_allowed(model)});
                     $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
-                    self.loadVideoPlayer();
+                    var video_path = model.get('video');
+                    $.fitness_helper.loadVideoPlayer(video_path, app, 340, 640, 'recipe_video');
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -253,43 +247,7 @@ define([
                 $("#recipe_submenu").html(new Submenu_add_diary_view({model : app.models.recipe}).render().el);
             } 
         },
-        
-        loadVideoPlayer : function() {
-            var no_video_image_big = app.options.no_video_image_big;
-
-            var video_path = app.models.recipe.get('video');
-
-            var base_url = app.options.base_url;
-
-            var imageType = /no_video_image.*/;  
-
-            if (!video_path.match(imageType) && video_path) {  
-
-                jwplayer('recipe_video').setup({
-                    file: base_url + video_path,
-                    image: "",
-                    height: 340,
-                    width: 640,
-                    autostart: true,
-                    mute: true,
-                    controls: false,
-                    events: {
-                        onReady: function () { 
-                            var self = this;
-                            setTimeout(function(){
-                                self.pause();
-                                self.setMute(false);
-                                self.setControls(true);
-                            },3000);
-                        }
-                    }
-                });
-            } else {
-                $("#recipe_video").css('background-image', 'url(' +  no_video_image_big + ')');
-            }
-        },
-        
-       
+               
         common_actions : function() {
             app.views.main_menu.show();
             $("#recipe_submenu").empty();
@@ -310,7 +268,11 @@ define([
                 wait : true,
                 data : {id : id},
                 success: function (model, response) {
-                    new EditRecipeContainer_view({el : $("#recipe_main_container"), model : model});
+                    if(self.edit_allowed(model)) {
+                        new EditRecipeContainer_view({el : $("#recipe_main_container"), model : model});
+                    } else {
+                        self.navigate("!/my_recipes", true);
+                    }
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -359,13 +321,27 @@ define([
                 success: function (model, response) {
                     $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
                     self.load_recipe_submenu();
-                    self.loadVideoPlayer();
+                    var video_path = model.get('video');
+                    $.fitness_helper.loadVideoPlayer(video_path, app, 340, 640, 'recipe_video');
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
                 }
             }); 
-       }
+       },
+       
+       edit_allowed : function(model) {
+            var access = false;
+            var id = model.get('id');
+            var client_id = app.options.client_id;
+            var created_by = model.get('created_by');
+            
+            if(client_id == created_by) {
+                access = true;
+            }
+           
+            return access;
+        }
     
     });
 

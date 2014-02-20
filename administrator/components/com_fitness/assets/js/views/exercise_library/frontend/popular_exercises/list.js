@@ -45,14 +45,10 @@ define([
                 
             return this;
         },
-        
-        
+
         addItem : function(model) {
             this.container_el.append( new Item_view({model : model}).render().el);
         },
-        
-
-
     });
             
     return view;
