@@ -58,8 +58,8 @@
     </td>
     <td><%= moment(new Date(Date.parse(created))).format("ddd, D MMM  YY")  %></td>
     <td><%= created_by_name %></td>
-    <td id="status_button_place_<%= id %>">
-        <%= $.fitness_helper.setExerciseLibraryStatus(status, id) %>
+    <td id="status_button_place_<%= id %>" >
+     
     </td>
     <td>
         <%
@@ -89,11 +89,18 @@
         <% } %>
     </td>
     <td class="center"> 
-        <% if(state == '1') { %>
+        <% if(state == '1' && edit_allowed) { %>
             <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
-        <% } else { %>
+        <% } else if (edit_allowed) { %>
             <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
         <% } %>
     </td>
-    <td class="center"><input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/></td>
+    
+    
+    <td class="center">
+        <% if(edit_allowed) { %>
+        <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+         <% } %>
+    </td>
+   
 </tr>

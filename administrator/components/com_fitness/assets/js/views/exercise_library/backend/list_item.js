@@ -22,9 +22,20 @@ define([
         
         connectStatus : function() {
             var id = this.model.get('id');
+            var status = this.model.get('status');
+            var options = _.extend({}, app.options.status_options);
             if(id) {
-                var status = $.status(app.options.status_options);
-                status.run();
+                var edit_allowed = this.model.get('edit_allowed');
+                
+                if(edit_allowed == false) {
+                    options.status_button = 'status_button_not_active';
+                }
+
+                var status_obj = $.status(options);
+
+                this.$el.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
+
+                status_obj.run();
             }
         },
 

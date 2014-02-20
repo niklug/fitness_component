@@ -592,7 +592,7 @@
     border: 2px solid #4C4C4C;
 }
 
-.status_button, .status_button_dialog, .status_button_mini, .status_button_dialog_mini, .status_button_passive {
+.status_button, .status_button_not_active, .status_button_dialog, .status_button_mini, .status_button_dialog_mini, .status_button_passive {
     display: block;
     font-size: 10px !important;
     height: 11px;

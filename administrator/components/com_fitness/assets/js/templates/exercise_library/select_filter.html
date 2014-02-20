@@ -10,7 +10,9 @@
             multiple size="<%= select_size %>"
             id="<%= id_name %>" 
             name="<%= id_name + '[]' %>"  
-            style="width:100%;margin: 0;font-size: 12px;">
+            style="width:100%;margin: 0;font-size: 12px;"
+            <%= element_disabled %>  
+        >
             <option  value="0"><%= first_option_title %></option>
         </select>
     </div>

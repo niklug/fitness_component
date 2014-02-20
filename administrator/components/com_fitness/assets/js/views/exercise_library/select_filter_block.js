@@ -107,6 +107,13 @@ define([
         
         loadFilters : function() {
             //console.log($(this.el));
+            var element_disabled = '';
+            
+            if(!app.controller.edit_allowed(this.model)) {
+                var element_disabled = 'disabled';
+            }
+            
+            
             new Select_filter_fiew({
                 model : this.model,
                 el : $(this.el).find("#exercise_type_filter_wrapper"),
@@ -116,7 +123,8 @@ define([
                 class_name : 'dark_input_style',
                 id_name : 'exercise_type_select',
                 select_size : 12,
-                model_field : 'exercise_type'
+                model_field : 'exercise_type',
+                element_disabled : element_disabled
             }).render();
 
             new Select_filter_fiew({
@@ -128,7 +136,8 @@ define([
                 class_name : 'dark_input_style',
                 id_name : 'force_type_select',
                 select_size : 12,
-                model_field : 'force_type'
+                model_field : 'force_type',
+                element_disabled : element_disabled
             }).render();
 
             new Select_filter_fiew({
@@ -140,7 +149,8 @@ define([
                 class_name : 'dark_input_style',
                 id_name : 'difficulty_select',
                 select_size : 12,
-                model_field : 'difficulty'
+                model_field : 'difficulty',
+                element_disabled : element_disabled
             }).render();
             
          
@@ -155,7 +165,8 @@ define([
                     class_name : 'dark_input_style',
                     id_name : 'mechanics_type_select',
                     select_size : 12,
-                    model_field : 'mechanics_type'
+                    model_field : 'mechanics_type',
+                    element_disabled : element_disabled
                 }).render();
             }
 
@@ -168,7 +179,8 @@ define([
                 class_name : 'dark_input_style',
                 id_name : 'body_part_select',
                 select_size : 12,
-                model_field : 'body_part'
+                model_field : 'body_part',
+                element_disabled : element_disabled
             }).render();
 
             new Select_filter_fiew({
@@ -180,7 +192,8 @@ define([
                 class_name : 'dark_input_style',
                 id_name : 'target_muscles_select',
                 select_size : 12,
-                model_field : 'target_muscles'
+                model_field : 'target_muscles',
+                element_disabled : element_disabled
             }).render();
 
             new Select_filter_fiew({
@@ -192,7 +205,8 @@ define([
                 class_name : 'dark_input_style',
                 id_name : 'equipment_type_select',
                 select_size : 12,
-                model_field : 'equipment_type'
+                model_field : 'equipment_type',
+                element_disabled : element_disabled
             }).render();
         }
 

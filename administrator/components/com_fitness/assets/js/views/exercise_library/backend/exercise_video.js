@@ -24,9 +24,11 @@ define([
             var template = _.template(this.template(data));
         
             this.$el.html(template);
-
-            this.connectVideoUpload();
             
+            if(this.model.get('edit_allowed')) {
+                this.connectVideoUpload();
+            }
+
             return this;
         },
     

@@ -53,6 +53,7 @@ $business_profile_id = $business_profile_id['data'];
         'video_path' : 'images/Exercise_Library_Videos',
         
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
+        'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
         'business_profile_id' : '<?php echo $business_profile_id; ?>'
     };
     

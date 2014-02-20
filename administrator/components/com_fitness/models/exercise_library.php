@@ -218,6 +218,7 @@ class FitnessModelExercise_library extends JModelList {
         $helper = new FitnessHelper();
         $business_profile_id = $helper->getBusinessProfileId($user_id);
         $business_profile_id = $business_profile_id['data'];
+        $super_user_group = FitnessHelper::SUPERUSER_GROUP_ID;
        
         $id = $data->id;
         
@@ -349,7 +350,7 @@ class FitnessModelExercise_library extends JModelList {
         
         //by business 
         if(FitnessHelper::is_trainer($user_id)) {
-            $query .= " AND (a.created_by='$user_id' OR c.primary_trainer='$user_id' OR  FIND_IN_SET('$user_id' , c.other_trainers) ) ";
+            $query .= " AND (a.created_by='$user_id' OR c.primary_trainer='$user_id' OR  FIND_IN_SET('$user_id' , c.other_trainers) OR ugm.group_id='$super_user_group') ";
         }
         
         if($business_profiles) {
@@ -422,7 +423,9 @@ class FitnessModelExercise_library extends JModelList {
         $query .= " FIND_IN_SET(id, (SELECT my_exercise_clients FROM #__fitness_exercise_library WHERE id =a.id))) my_exercise_clients_names, ";
         //
        
-        $query .= " (SELECT id FROM #__fitness_exercise_library_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite";  
+        $query .= " (SELECT id FROM #__fitness_exercise_library_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite, ";  
+        
+        $query .= " (SELECT user_id FROM #__user_usergroup_map WHERE user_id=a.created_by AND group_id='$super_user_group') AS created_by_superuser"; 
        
         $query .= " FROM $table AS a ";
 
@@ -519,7 +522,7 @@ class FitnessModelExercise_library extends JModelList {
         
         //by business
         if(FitnessHelper::is_trainer($user_id)) {
-            $query .= " AND (a.created_by='$user_id' OR c.primary_trainer='$user_id' OR  FIND_IN_SET('$user_id' , c.other_trainers) ) ";
+            $query .= " AND (a.created_by='$user_id' OR c.primary_trainer='$user_id' OR  FIND_IN_SET('$user_id' , c.other_trainers) OR ugm.group_id='$super_user_group') ";
         }
         if($business_profiles) {
             $query .= " AND ( FIND_IN_SET('$business_profiles[0]', a.business_profiles) ";
@@ -560,8 +563,6 @@ class FitnessModelExercise_library extends JModelList {
         if($limit) {
             $query .= " LIMIT $start, $limit";
         }
-
-
 
         $query_type = 1;
 

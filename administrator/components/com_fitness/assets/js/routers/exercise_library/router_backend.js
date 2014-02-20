@@ -80,15 +80,16 @@ define([
         form_view : function(id) {
             $("#main_container").html(new Form_container_view().render().el);
             if(!parseInt(id)) {
-                this.load_form_view(new Exercise_library_item_model());
+                this.load_form_view(new Exercise_library_item_model({edit_allowed : true}));
                 return;
             }
-            
+
             var self = this;
             app.models.exercise_library_item.set({id : id});
             app.models.exercise_library_item.fetch({
                 data : {state : 1},
                 success: function (model, response) {
+                    model.set({edit_allowed : self.edit_allowed(model)});
                     self.load_form_view(model);
                 },
                 error: function (collection, response) {
@@ -153,6 +154,20 @@ define([
             
             this.list_actions();
         },
+        
+        edit_allowed : function(model) {
+            var access = true;
+            
+            var created_by_superuser = model.get('created_by_superuser');
+            var is_trainer = app.options.is_trainer;
+            
+            //trainers not allowed edit items created by Super Users
+            if(is_trainer &&  created_by_superuser) {
+                access = false;
+            }
+           
+            return access;
+        }
     });
 
     return Controller;

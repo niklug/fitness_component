@@ -3,8 +3,13 @@
         <td width="100">
             <label>Exercise Name</label>
         </td>
-        <td>
-            <input id="exercise_name" size="50" type="text" title="" value="<%= exercise_name %>" name="exercise_name">
+        <td >
+            <% if(edit_allowed) { %>
+                <input id="exercise_name" size="50" type="text" title="" value="<%= exercise_name %>" name="exercise_name">
+            <% } else { %>
+                <input readonly id="exercise_name" size="50" type="text" title="" value="<%= exercise_name %>" name="exercise_name">
+            <% } %>
+            
         </td>
     </tr>
     <tr>
@@ -42,7 +47,7 @@
             <label>Status</label>
         </td>
         <td id="status_button_place_<%= id %>">
-            <%= $.fitness_helper.setExerciseLibraryStatus(status, id) %>
+
         </td>
     </tr>
     <tr>
@@ -53,6 +58,7 @@
             <%= assessed_by_name || '-' %>
         </td>
     </tr>
+    <% if(edit_allowed) { %>
     <tr>
         <td>
             <label>Published</label>
@@ -73,4 +79,5 @@
             </select>
         </td>
     </tr>
+    <% } %> 
 </table>

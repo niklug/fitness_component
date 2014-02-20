@@ -25,7 +25,8 @@ define([
                 first_option_title : this.options.first_option_title,
                 class_name : this.options.class_name,
                 id_name : this.options.id_name,
-                select_size : this.options.select_size
+                select_size : this.options.select_size,
+                element_disabled : this.options.element_disabled || ''
             };
             $(this.el).html(this.template(data));
             
