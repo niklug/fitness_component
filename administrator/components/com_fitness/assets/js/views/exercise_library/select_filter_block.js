@@ -109,8 +109,9 @@ define([
             //console.log($(this.el));
             var element_disabled = '';
             
-            if(!app.controller.edit_allowed(this.model)) {
-                var element_disabled = 'disabled';
+            
+            if(typeof this.options.element_disabled && this.options.element_disabled == true) {
+                element_disabled = 'disabled';
             }
             
             

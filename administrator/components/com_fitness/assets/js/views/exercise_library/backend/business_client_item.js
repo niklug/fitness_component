@@ -13,6 +13,7 @@ define([
         render: function(){
             var data = this.model.toJSON();
             data.$ = $;
+            data.app = app;
             var template = _.template(this.template(data));
             this.$el.html(template);
             

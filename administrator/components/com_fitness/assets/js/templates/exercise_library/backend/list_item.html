@@ -75,10 +75,25 @@
     </td>
     <td>
         <%
+        if(clients_of_trainer) {
+            clients_of_trainer = clients_of_trainer.split(',');
+        }
+        if(my_exercise_clients) {
+            my_exercise_clients = my_exercise_clients.split(',');
+        }
+
         if(my_exercise_clients_names) {
-            _.each(my_exercise_clients_names.split(','), function(item){ %>
-                <%= item + "<br/>" %>
-            <% })
+            _.each(my_exercise_clients_names.split(','), function(item, index){ 
+                if(app.options.is_trainer) {
+                    if(_.include(clients_of_trainer, my_exercise_clients[index])) {
+                    %>
+                        <%= item + "<br/>" %>
+                    <%
+                    }
+                } else { %>
+                    <%= item + "<br/>" %>
+                <% }
+            })
         } %>
     </td>
     <td>

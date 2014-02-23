@@ -350,7 +350,10 @@ class FitnessModelExercise_library extends JModelList {
         
         //by business 
         if(FitnessHelper::is_trainer($user_id)) {
-            $query .= " AND (a.created_by='$user_id' OR c.primary_trainer='$user_id' OR  FIND_IN_SET('$user_id' , c.other_trainers) OR ugm.group_id='$super_user_group') ";
+            $query .= " AND (a.created_by='$user_id' "
+                    . " OR c.primary_trainer='$user_id' "
+                    . " OR  FIND_IN_SET('$user_id' , c.other_trainers) OR ugm.group_id='$super_user_group' "
+                    . " OR a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' )";
         }
         
         if($business_profiles) {
@@ -425,7 +428,9 @@ class FitnessModelExercise_library extends JModelList {
        
         $query .= " (SELECT id FROM #__fitness_exercise_library_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite, ";  
         
-        $query .= " (SELECT user_id FROM #__user_usergroup_map WHERE user_id=a.created_by AND group_id='$super_user_group') AS created_by_superuser"; 
+        $query .= " (SELECT user_id FROM #__user_usergroup_map WHERE user_id=a.created_by AND group_id='$super_user_group') AS created_by_superuser, "; 
+        
+        $query .= " (SELECT GROUP_CONCAT(user_id) FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AS clients_of_trainer ";
        
         $query .= " FROM $table AS a ";
 
@@ -522,8 +527,15 @@ class FitnessModelExercise_library extends JModelList {
         
         //by business
         if(FitnessHelper::is_trainer($user_id)) {
-            $query .= " AND (a.created_by='$user_id' OR c.primary_trainer='$user_id' OR  FIND_IN_SET('$user_id' , c.other_trainers) OR ugm.group_id='$super_user_group') ";
+            $query .= " AND (a.created_by='$user_id' "
+                    . " OR c.primary_trainer='$user_id'"
+                    . " OR  FIND_IN_SET('$user_id' , c.other_trainers) "
+                    . " OR ugm.group_id='$super_user_group'"
+                    . " OR a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' ) ";
         }
+
+            
+
         if($business_profiles) {
             $query .= " AND ( FIND_IN_SET('$business_profiles[0]', a.business_profiles) ";
             
@@ -638,5 +650,26 @@ class FitnessModelExercise_library extends JModelList {
         return $model;
     }
     
+    public function getClients() {
+        $user_id = JFactory::getUser()->id;
+        
+        $query = "SELECT a.*, ";
+        
+
+        $query .= " (SELECT user_id FROM #__fitness_clients WHERE (primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AND user_id=a.user_id ) is_client_of_trainer,";
+  
+        
+        $query .= " u.name as name ";
+        
+        $query .= " FROM #__fitness_clients AS a";
+        
+        $query .= " LEFT JOIN #__users AS u ON a.user_id=u.id";
+
+        $query .= " WHERE a.state='1'";
+        
+        $query .= " ORDER BY u.name ASC";
+        
+        return FitnessHelper::customQuery($query, 1);
+    }
 
 }

@@ -4,7 +4,7 @@ define([
     'app'
 ], function ( _, Backbone, app, model) {
     var collection = Backbone.Collection.extend({
-        url : app.options.ajax_call_url + '&format=text&view=exercise_library&task=clients&id=',
+        url : app.options.ajax_call_url + '&format=text&view=exercise_library&task=exercise_library_clients&id=',
     });
     
     return collection;

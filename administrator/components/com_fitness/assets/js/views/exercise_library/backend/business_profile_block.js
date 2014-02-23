@@ -32,6 +32,8 @@ define([
             
             this.setBusinessProfiles();
             
+            this.setPermissions();
+            
             return this;
         },
         
@@ -105,6 +107,15 @@ define([
             if(_.include(business_profiles.split(","), this.business_profile_id)) {
                 this.$el.find(".bisiness_profile_item").attr('checked', true);
             }
+        },
+        
+        setPermissions : function() {
+            var edit_allowed = app.controller.edit_allowed(this.options.item_model);
+
+            if(edit_allowed == false) {
+                this.$el.find(".show_public_database").attr('disabled', true);
+            }
+            
         }
         
     });

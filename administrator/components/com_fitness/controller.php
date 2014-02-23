@@ -367,7 +367,7 @@ class FitnessController extends JController
             $view -> business_profiles(); 
         }
         
-        function clients() {
+        function exercise_library_clients() {
             $view = $this -> getView('exercise_library', 'json');
             $view->setModel($this->getModel('exercise_library'));
             $view -> clients(); 

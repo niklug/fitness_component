@@ -32,8 +32,8 @@ class FitnessViewExercise_library extends JView {
         echo json_encode($helper->getBusinessProfiles());
     }
     function clients() {
-        $helper = new FitnessHelper();
-        echo json_encode($helper->getAllClients());
+        $model = $this -> getModel("exercise_library");
+        echo json_encode($model -> getClients());
     }
     
 }

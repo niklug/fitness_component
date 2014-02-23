@@ -101,6 +101,12 @@ $helper = new FitnessHelper();
         }
         var fitness_helper = $.fitness_helper(helper_options);
         
+        var business_profile_id = '<?php echo $this->item->business_profile_id; ?>';
+        
+        if(business_profile_id) {
+            setFields(business_profile_id);
+        }
+        
                    
         $("#business_profile_id").on('change', function() {
 
@@ -109,20 +115,27 @@ $helper = new FitnessHelper();
             // primary trainers
             var business_profile_id = $(this).val();
                 
+            setFields(business_profile_id);
+        });
+        
+        function setFields(business_profile_id) {
             fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#jform_primary_trainer', '<?php echo $this->item->primary_trainer; ?>');
             
             // populate other trainers select
             fitness_helper.on('change:trainers', function(model, items) {
                 fitness_helper.populateSelect(items, '#jform_other_trainers', '');
+                fitness_helper.excludeSelectOption('#jform_primary_trainer', '#jform_other_trainers');
             });
             
             
             // populate clients select
             fitness_helper.populateClientsSelectOnBusiness('getUsersByBusiness', 'goals', business_profile_id, '#jform_user_id', '<?php echo $this->item->user_id; ?>');
-        });
+            
+            // exclude options logic
+            
+        }
 
-        // exclude options logic
-        fitness_helper.excludeSelectOption('#jform_primary_trainer', '#jform_other_trainers');
+        
 
 
         Joomla.submitbutton = function(task)

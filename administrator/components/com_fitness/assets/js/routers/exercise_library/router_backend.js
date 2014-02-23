@@ -83,7 +83,6 @@ define([
                 this.load_form_view(new Exercise_library_item_model({edit_allowed : true}));
                 return;
             }
-
             var self = this;
             app.models.exercise_library_item.set({id : id});
             app.models.exercise_library_item.fetch({
@@ -102,8 +101,13 @@ define([
             $("#header_wrapper").html(new Main_menu_view({model : model}).render().el);
 
             $("#exercise_details_wrapper").html(new Exercise_details_view({model : model}).render().el);
+            
+            var element_disabled = false;
+            if(!this.edit_allowed(model)) {
+                var element_disabled = true;
+            }
 
-            new Select_filter_block_view({el : $("#select_filter_wrapper"), model : model, block_width : '140px'});
+            new Select_filter_block_view({el : $("#select_filter_wrapper"), model : model, block_width : '140px', element_disabled : element_disabled});
 
             if(model.get('id')) {
                 $("#exercise_video_wrapper").html(new Exercise_video_view({model : model}).render().el);
@@ -157,12 +161,17 @@ define([
         
         edit_allowed : function(model) {
             var access = true;
-            
+            var created_by = model.get('created_by');
             var created_by_superuser = model.get('created_by_superuser');
             var is_trainer = app.options.is_trainer;
+            var user_id = app.options.user_id;
             
             //trainers not allowed edit items created by Super Users
             if(is_trainer &&  created_by_superuser) {
+                access = false;
+            }
+            
+            if(is_trainer && (user_id != created_by)) {
                 access = false;
             }
            

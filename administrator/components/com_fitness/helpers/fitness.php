@@ -716,27 +716,19 @@ class FitnessHelper extends FitnessFactory
         if(!$trainers_group_id) {
             $trainers_group_id = self::getTrainersGroupId();
         }
-        $db = &JFactory::getDBo();
         $query = "SELECT id AS value, name AS text FROM #__users "
                 . "INNER JOIN #__user_usergroup_map ON #__user_usergroup_map.user_id=#__users.id"
                 . " WHERE #__user_usergroup_map.group_id='$trainers_group_id'";
-        $db->setQuery($query);
-        if (!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $trainers = $db->loadObjectList();
         
-        return $trainers;
+        return self::customQuery($query, 1);
     }
     
     
     
     public function getTrainersClientsTable($trainers_group_id) {
-        
         if(!$trainers_group_id) {
             $trainers_group_id = self::getTrainersGroupId();
         }
-        $db = &JFactory::getDBo();
         $query = "SELECT DISTINCT c.primary_trainer AS value, u.username AS text FROM #__fitness_clients AS c"
                 . " LEFT JOIN #__users AS u on u.id=c.primary_trainer"
                 . " INNER JOIN #__user_usergroup_map AS m ON m.user_id=u.id"
@@ -745,15 +737,7 @@ class FitnessHelper extends FitnessFactory
         if(!self::is_superuser()) {
             $query .= " AND m.group_id='$trainers_group_id'";
         }
-
-
-        $db->setQuery($query);
-        if (!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $trainers = $db->loadObjectList();
-        
-        return $trainers;
+        return self::customQuery($query, 1);
     }
     
     
@@ -1556,6 +1540,7 @@ class FitnessHelper extends FitnessFactory
             $query = "SELECT a.*, u.name as name FROM #__fitness_clients AS a";
             $query .= " LEFT JOIN #__users AS u ON a.user_id=u.id";
             $query .= " WHERE a.state='1'";
+            $query .= " ORDER BY u.name ASC";
             return self::customQuery($query, 1);
         }
        
