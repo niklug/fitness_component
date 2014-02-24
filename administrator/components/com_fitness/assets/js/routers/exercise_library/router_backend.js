@@ -163,19 +163,55 @@ define([
             var access = true;
             var created_by = model.get('created_by');
             var created_by_superuser = model.get('created_by_superuser');
+            var is_client_of_trainer = model.get('is_client_of_trainer');
             var is_trainer = app.options.is_trainer;
             var user_id = app.options.user_id;
             
             //trainers not allowed edit items created by Super Users
-            if(is_trainer &&  created_by_superuser) {
+            if(is_trainer && created_by_superuser) {
                 access = false;
             }
             
             if(is_trainer && (user_id != created_by)) {
                 access = false;
             }
+            // logged trainer; item created by client
+            if(is_trainer && is_client_of_trainer) {
+                access = true;
+            }
            
             return access;
+        },
+        
+        copy_exercise : function(id) {
+            var self = this;
+            app.models.exercise_library_item.set({id : id});
+            app.models.exercise_library_item.fetch({
+                data : {state : 1},
+                success: function (model, response) {
+                    model.set({
+                        id : null, 
+                        created_by : app.options.user_id,
+                        created : moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                        status : '1',
+                        my_exercise_clients : null, 
+                        assessed_by : null,
+                        viewed : null
+                    });
+                    
+                    model.save(null, {
+                        success: function (model, response) {
+                            self.set_params_model();
+                        },
+                        error: function (model, response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            })
         }
     });
 

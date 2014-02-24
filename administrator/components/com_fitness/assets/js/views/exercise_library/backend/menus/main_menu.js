@@ -74,6 +74,8 @@ define([
             data.my_exercise_clients = this.getMyExerciseList();
             
             data.business_profiles = this.getBusinessProfiles();
+            
+            data.status = $(".status_button").attr('data-status_id');
 
             this.model.set(data);
             

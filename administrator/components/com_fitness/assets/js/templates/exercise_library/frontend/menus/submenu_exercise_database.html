@@ -10,8 +10,22 @@
                 </td>
                 <td width="120">
                     <a data-id="" style="cursor: pointer; float:left;margin-left: 5px;" id="search_by_name" onclick="javascript:void(0)">[Search]</a>
-                    <a data-id="" style="cursor: pointer;float:right;margin-left: 10px;" id="clear_all" onclick="javascript:void(0)">[Clear]</a>
+                    <a data-id="" style="cursor: pointer;float:left;margin-left: 10px;" id="clear_all" onclick="javascript:void(0)">[Clear]</a>
                 </td>
+                
+                <td class="center" width="120">
+                    <select style="font-size: 12px;" id="sort_filter"  size="1">
+                        <option value="0">-Select Sort By-</option>
+                        <option value="1">Exercise Name (Ascending)</option>
+                        <option value="2">Exercise Name (Descending)</option>
+                        <option value="3">Author Name (Ascending)</option>
+                        <option value="4">Author Name (Descending)</option>
+                        <option value="5">Date Created (Ascending)</option>
+                        <option value="6">Date Created (Descending)</option>
+                        <option value="7">Status</option>
+                    </select>
+                </td>
+                
                 <td>
                     <% if(current_page == 'my_exercises') {%>
                                                 

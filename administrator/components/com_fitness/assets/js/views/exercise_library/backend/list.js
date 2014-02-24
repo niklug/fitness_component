@@ -51,6 +51,7 @@ define([
             "click .restore" : "onClickRestore",
             "click .delete" : "onClickDelete",
             "click .view" : "onClickView",
+            "click .copy_exercise" : "onClickCopyExercise",
             "click #select_trashed" : "onClickSelectTrashed",
         },
         
@@ -148,6 +149,11 @@ define([
                 $(".trash_checkbox").prop("checked", true);
             }
         },
+        
+        onClickCopyExercise : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.copy_exercise(id);
+        }
     });
             
     return view;

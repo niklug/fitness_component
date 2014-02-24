@@ -1080,3 +1080,11 @@ td.center, th.center, .center {
     height: 20px;
     width: 20px;
 }
+
+.copy_icon {
+    background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/copy.png");
+    background-repeat: no-repeat;
+    display: block;
+    height: 20px;
+    width: 20px;
+}

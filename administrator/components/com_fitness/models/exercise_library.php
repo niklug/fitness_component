@@ -430,6 +430,10 @@ class FitnessModelExercise_library extends JModelList {
         
         $query .= " (SELECT user_id FROM #__user_usergroup_map WHERE user_id=a.created_by AND group_id='$super_user_group') AS created_by_superuser, "; 
         
+        
+        $query .= " (SELECT user_id FROM #__fitness_clients WHERE (primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AND user_id=a.created_by ) AS is_client_of_trainer,";
+        
+        
         $query .= " (SELECT GROUP_CONCAT(user_id) FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AS clients_of_trainer ";
        
         $query .= " FROM $table AS a ";

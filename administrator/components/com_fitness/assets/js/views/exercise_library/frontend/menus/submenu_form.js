@@ -97,7 +97,7 @@ define([
                     if(self.save_method == 'save') {
                         app.controller.navigate("!/form_view/" + id, true);
                     } else if(self.save_method == 'save_close') {
-                        app.controller.navigate("!/form_view/" + id, true);
+                        app.controller.navigate("!/item_view/" + id, true);
                     } else if(self.save_method == 'save_new') {
                         app.controller.navigate("!/form_view/0", true);
                     } else {
