@@ -70,13 +70,13 @@ $business_profile_id = $business_profile_id['data'];
         'status_button_place' : '#status_button_place_',
         'statuses' : {
             '1' : {'label' : 'PENDING', 'class' : 'goal_status_pending', 'email_alias' : ''}, 
-            '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : ''},
-            '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : ''}
+            '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : 'Approved'},
+            '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : 'NotApproved'}
         },
         'statuses2' : {},
         'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
         'hide_image_class' : 'hideimage',
-        'show_send_email' : false,
+        'show_send_email' : true,
         setStatuses : function(item_id) {
             return this.statuses;
         },

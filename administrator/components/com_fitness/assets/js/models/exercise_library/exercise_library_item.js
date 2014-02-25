@@ -25,7 +25,6 @@ define([
             my_exercise_clients : null, 
             my_exercise_clients_names : null,
             video : null,
-            assessed_by : null,
             state : 1,
             user_group_name : null,
             assessed_by_name : null,

@@ -40,7 +40,10 @@ class FitnessEmail extends FitnessHelper
             case 'NutritionDiary':
                 return new NutritionDiaryEmail();
                 break;
-            
+            case 'ExerciseLibrary':
+                return new ExerciseLibraryEmail();
+                break;
+
             case 'Comment':
                 switch ($data->method) {
                     case 'GoalComment':
@@ -930,11 +933,12 @@ class CommentExerciseLibraryEmail extends FitnessEmail {
                 $trainers_data = $this->getClientTrainers($this->comment_created_by,  'all');
                 $ids = array_merge($ids, $trainers_data['data']);
                 break;
-            case 'private_superuser': // comment email to client (recipe creator)
+            case 'private_superuser': // comment email to client (item creator)
                 $ids = array_merge($ids, array($this->item_created_by));
                 break;
-            case 'private_trainer': // comment email to client (recipe creator)
-                $ids = array_merge($ids, array($this->item_created_by));
+            case 'private_trainer': // comment email to client (item creator)
+                //$ids = array_merge($ids, array($this->item_created_by));
+                $ids = array_merge($ids, $this->getMyExerciseListClients($this->data->item_id));
                 break;
             case 'private_client': // comment email to client's trainers
                 $trainers_data = $this->getClientTrainers($this->comment_created_by,  'all');
@@ -944,6 +948,82 @@ class CommentExerciseLibraryEmail extends FitnessEmail {
                 break;
         }
 
+        $this->recipients_ids = $ids;
+    }
+    
+    
+    
+    public function getMyExerciseListClients($id) {
+        $query = "SELECT my_exercise_clients FROM #__fitness_exercise_library WHERE id='$id'";
+        
+        $clients = self::customQuery($query, 0);
+        
+        return split(",", $clients);
+        
+    }
+
+}
+
+
+class ExerciseLibraryEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        $this->data = $data;
+        $id = $data->id;
+        
+        if (!$id) {
+            throw new Exception('Error: no Exercise Library id');
+        }
+
+        switch ($data->method) {
+            case 'Approved':
+                $subject = 'Exercise Video Approved';
+                $layout = 'email_exercise_library_approved';
+                $this->send_to = 'send_to_client';
+                break;
+            case 'NotApproved':
+                $subject = 'Exercise Video Not Approved';
+                $layout = 'email_exercise_library_notapproved';
+                $this->send_to = 'send_to_client';
+                break;
+            case 'NewExercise':
+                $subject = 'New Exercise Video Created';
+                $layout = 'email_exercise_library_submitted';
+                $this->send_to = 'send_to_trainers';
+                break;
+ 
+            default:
+                break;
+        }
+        
+        $this->subject = $subject;
+
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id;
+    }
+    
+
+    protected function get_recipients_ids() {
+        $ids = array();
+        
+        $this->item = $this->getExerciseVideo($this->data->id);
+        
+        $client_id = $this->item->created_by;
+
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+        
+        if($this->send_to == 'send_to_client') {
+            $ids[] = $client_id;
+        }
+        
+        if($this->send_to == 'send_to_trainers') {
+            
+            $trainers_data = $this->getClientTrainers($client_id,  'all');
+            
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+        
         $this->recipients_ids = $ids;
     }
     

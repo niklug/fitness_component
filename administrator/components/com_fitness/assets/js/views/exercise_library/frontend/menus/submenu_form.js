@@ -91,6 +91,7 @@ define([
             }
             
             var self = this;
+            var item_id = this.model.get('id');
             this.model.save(null, {
                 success: function (model, response) {
                     var id = model.get('id');
@@ -103,11 +104,36 @@ define([
                     } else {
                         app.controller.navigate("!/my_exercises", true);
                     }
+                    
+                    if(!item_id) {
+                        self.email_new_item(model.get('id'));
+                    }
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
             });
+        },
+        
+        email_new_item : function(id) {
+            var data = {};
+            var url = app.options.fitness_frontend_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.id = id;
+            data.view = 'ExerciseLibrary';
+            data.method = 'NewExercise';
+            $.AjaxCall(data, url, view, task, table, function(output){
+                //console.log(output);
+                var emails = output.split(',');
+                var message = 'Emails were sent to: ' +  "</br>";
+                $.each(emails, function(index, email) { 
+                    message += email +  "</br>";
+                });
+                $("#emais_sended").append(message);
+           });
         },
         
     });

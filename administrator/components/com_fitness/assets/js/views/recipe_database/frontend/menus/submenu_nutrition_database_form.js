@@ -59,6 +59,7 @@ define([
                             self.controller.navigate("");
                             self.controller.navigate("!/add_ingredient", true);
                         }
+                        
                     },
                     error: function (model, response) {
                         alert(response.responseText);

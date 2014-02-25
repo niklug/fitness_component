@@ -1549,6 +1549,7 @@ class FitnessHelper extends FitnessFactory
             $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name,";
             $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name";
             $query .= " FROM #__fitness_exercise_library AS a";
+            $query .= " WHERE a.id='$id'";
             
             return self::customQuery($query, 2);
         }

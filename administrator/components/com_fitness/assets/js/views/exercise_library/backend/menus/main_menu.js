@@ -76,8 +76,10 @@ define([
             data.business_profiles = this.getBusinessProfiles();
             
             data.status = $(".status_button").attr('data-status_id');
-
+            
             this.model.set(data);
+            
+            this.model.unset('assessed_by');
             
             console.log(this.model.toJSON());
             

@@ -108,6 +108,7 @@ define([
                 }
             }
             
+            var id = this.model.get('id');
             var self = this;
             this.model.save(null, {
                 success: function (model, response) {
@@ -122,12 +123,36 @@ define([
                     } else {
                         self.controller.navigate("!/my_recipes", true);
                     }
+                    if(!id) {
+                        self.email_new_recipe(model.get('id'));
+                    }
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
             });
-        }
+        },
+        
+        email_new_recipe : function(id) {
+            var data = {};
+            var url = app.options.fitness_frontend_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.id = id;
+            data.view = 'NutritionRecipe';
+            data.method = 'NewRecipe';
+            $.AjaxCall(data, url, view, task, table, function(output){
+                //console.log(output);
+                var emails = output.split(',');
+                var message = 'Emails were sent to: ' +  "</br>";
+                $.each(emails, function(index, email) { 
+                    message += email +  "</br>";
+                });
+                $("#emais_sended").append(message);
+           });
+        },
     });
             
     return view;
