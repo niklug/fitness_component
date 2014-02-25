@@ -55,6 +55,9 @@ class EmailTemplateData extends FitnessHelper
             case 'EmailPdfShoppingList' : 
                 return new EmailPdfShoppingList($params);
                 break;
+            case 'ExerciseLibrary' : 
+                return new EmailPdfExerciseLibrary($params);
+                break;
             
 
             default:
@@ -694,4 +697,71 @@ class EmailPdfShoppingList extends EmailTemplateData  {
         return $data;
     }
     
+}
+
+
+class EmailPdfExerciseLibrary extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->comment_id = $params['comment_id'];
+    }
+    
+    protected function getItemData() {
+        
+        $this->item = $this->getExerciseVideo($this->id);
+
+        $this->business_profile_user = $this->item->created_by;
+        
+        require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_recipes.php';
+        
+        $nutrition_recipes_model = new FitnessModelnutrition_recipes();
+        
+        $this->item->status_html = $nutrition_recipes_model->status_html($this->item->id, $this->item->status, 'status_button');
+    }
+    
+        
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+        
+        $layout = &JRequest::getVar('layout');
+        
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->id . '&comment_id=' . $this->comment_id;
+        
+        $data->open_link = JUri::root() . 'index.php/contact/exercise-library#!/item_view/' . $this->id;
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $date = JFactory::getDate($this->item->created);
+        
+        $data->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
+
+        $data->user_name = JFactory::getUser($this->item->created_by)->name;
+        
+        $data->assessed_by = JFactory::getUser($this->item->assessed_by)->name;
+        
+        $data->created_by = JFactory::getUser($this->item->created_by)->name;
+        
+        
+        //comments
+        if($this->comment_id) {
+            $comment = $this->getCommentData($this->comment_id, '#__fitness_exercise_library_comments');
+            
+            $date = JFactory::getDate($comment->created);
+        
+            $data->comment->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
+
+            $data->comment->created_by = JFactory::getUser($comment->created_by)->name;
+            
+            $data->comment->comment_text = $comment->comment;
+        }
+
+        return $data;
+    }
 }

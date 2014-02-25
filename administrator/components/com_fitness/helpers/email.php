@@ -52,6 +52,10 @@ class FitnessEmail extends FitnessHelper
                     case 'DiaryComment':
                         return new CommentDiaryEmail();
                     break;
+                    case 'ExerciseLibraryComment':
+                        return new CommentExerciseLibraryEmail();
+                    break;
+
                     default:
                         return;
                     break;
@@ -670,11 +674,7 @@ class CommentRecipeEmail extends FitnessEmail {
         $this->recipe_created_by = $this->item->created_by;
         
         $this->comment_created_by = $this->data->created_by;
-        
-        // $this->item - recipe object
-        // $this->data - comment object
-        
-        
+
         // if recipe is global and comment created by superuser
         if((self::is_superuser($this->recipe_created_by) OR (self::is_trainer($this->recipe_created_by))) AND self::is_superuser($this->comment_created_by)) {
             $this->condition = 'global_superuser';
@@ -839,6 +839,109 @@ class CommentDiaryEmail extends FitnessEmail {
         if($this->send_to == 'client') {
            //add client
             $ids[] = $this->item_user_id;
+        }
+
+        $this->recipients_ids = $ids;
+    }
+    
+}
+
+
+
+
+
+class CommentExerciseLibraryEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: comment id');
+        }
+
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        $layout = 'email_exercise_library_comment';
+
+        $this->item = $this->getExerciseVideo($this->data->item_id);
+
+        $this->item_created_by = $this->item->created_by;
+        
+        $this->comment_created_by = $this->data->created_by;
+
+        // if item is global and comment created by superuser
+        if((self::is_superuser($this->item_created_by) OR (self::is_trainer($this->item_created_by))) AND self::is_superuser($this->comment_created_by)) {
+            $this->condition = 'global_superuser';
+        }
+        
+        
+        
+        // if item is global and comment created by trainer
+        if((self::is_superuser($this->item_created_by) OR (self::is_trainer($this->item_created_by))) AND self::is_trainer($this->comment_created_by)) {
+            $this->condition = 'global_trainer';
+        }
+        
+        
+        
+        // if item is global and comment created by client
+        if((self::is_superuser($this->item_created_by) OR (self::is_trainer($this->item_created_by))) AND self::is_client($this->comment_created_by)) {
+            $this->condition = 'global_client';
+        }
+        
+        
+
+        // if item is private and comment created by superuser
+        if(self::is_client($this->item_created_by) AND self::is_superuser($this->comment_created_by)) {
+            $this->condition = 'private_superuser';
+        }
+        
+        
+        // if item is private and comment created by trainer
+        if(self::is_client($this->item_created_by) AND self::is_trainer($this->comment_created_by)) {
+            $this->condition = 'private_trainer';
+        }
+        
+        
+        // if item is private and comment created by client
+        if(self::is_client($this->item_created_by) AND self::is_client($this->comment_created_by)) {
+            $this->condition = 'private_client';
+        }
+        
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        
+        $ids = array();
+        
+        switch ($this->condition) {
+            case 'global_superuser': // no comment email
+                // nobody
+                break;
+            case 'global_trainer': // comment email to trainer's clients
+                $trainer_clients = $this->getTrainerClients($this->comment_created_by);
+                $ids = array_merge($ids, $trainer_clients);
+                break;
+            case 'global_client': // comment email to client's trainers
+                $trainers_data = $this->getClientTrainers($this->comment_created_by,  'all');
+                $ids = array_merge($ids, $trainers_data['data']);
+                break;
+            case 'private_superuser': // comment email to client (recipe creator)
+                $ids = array_merge($ids, array($this->item_created_by));
+                break;
+            case 'private_trainer': // comment email to client (recipe creator)
+                $ids = array_merge($ids, array($this->item_created_by));
+                break;
+            case 'private_client': // comment email to client's trainers
+                $trainers_data = $this->getClientTrainers($this->comment_created_by,  'all');
+                $ids = array_merge($ids, $trainers_data['data']);
+                break;
+            default:
+                break;
         }
 
         $this->recipients_ids = $ids;

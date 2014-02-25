@@ -252,136 +252,138 @@ class FitnessModelExercise_library extends JModelList {
         $query .= " SELECT a.*, ";
         
         //get total number
-        $query .= " (SELECT COUNT(*) FROM $table AS a ";
-        
-        if ($current_page == 'my_favourites') {
-            $query .= " LEFT JOIN #__fitness_exercise_library_favourites AS mf ON mf.item_id=a.id";
-        }
-        
-        $query .= " LEFT JOIN #__fitness_clients AS c ON c.user_id = a.created_by ";
+        if($id) {
+            $query .= " (SELECT COUNT(*) FROM $table AS a ";
 
-        
-        $query .= " WHERE a.state='$state' ";
-        
+            if ($current_page == 'my_favourites') {
+                $query .= " LEFT JOIN #__fitness_exercise_library_favourites AS mf ON mf.item_id=a.id";
+            }
 
-        if (!empty($search_exercise_name)) {
-            $query .= " AND a.exercise_name LIKE '%$search_exercise_name%' ";
-        }
+            $query .= " LEFT JOIN #__fitness_clients AS c ON c.user_id = a.created_by ";
 
-        if (!empty($search_client_name)) {
-            $sql = " SELECT id FROM #__users WHERE name LIKE '%$search_client_name%' ";
 
-            $client_ids = FitnessHelper::customQuery($sql, 3);
+            $query .= " WHERE a.state='$state' ";
 
-           
-            if($client_ids) {
-                $query .= " AND ( FIND_IN_SET('$client_ids[0]', a.my_exercise_clients) ";
 
-                foreach ($client_ids as $filter_option) {
-                    $query .= " OR FIND_IN_SET('$filter_option', a.my_exercise_clients)";
+            if (!empty($search_exercise_name)) {
+                $query .= " AND a.exercise_name LIKE '%$search_exercise_name%' ";
+            }
+
+            if (!empty($search_client_name)) {
+                $sql = " SELECT id FROM #__users WHERE name LIKE '%$search_client_name%' ";
+
+                $client_ids = FitnessHelper::customQuery($sql, 3);
+
+
+                if($client_ids) {
+                    $query .= " AND ( FIND_IN_SET('$client_ids[0]', a.my_exercise_clients) ";
+
+                    foreach ($client_ids as $filter_option) {
+                        $query .= " OR FIND_IN_SET('$filter_option', a.my_exercise_clients)";
+                    }
+                    $query .= ")";
+                }
+            }
+
+            //1
+            if($exercise_type) {
+                $query .= " AND ( FIND_IN_SET('$exercise_type[0]', a.exercise_type) ";
+
+                foreach ($exercise_type as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.exercise_type)";
                 }
                 $query .= ")";
             }
-        }
-         
-        //1
-        if($exercise_type) {
-            $query .= " AND ( FIND_IN_SET('$exercise_type[0]', a.exercise_type) ";
-            
-            foreach ($exercise_type as $filter_option) {
-                $query .= " OR FIND_IN_SET('$filter_option', a.exercise_type)";
-            }
-            $query .= ")";
-        }
-        //2
-        if($force_type) {
-            $query .= " AND ( FIND_IN_SET('$force_type[0]', a.force_type) ";
-            
-            foreach ($force_type as $filter_option) {
-                $query .= " OR FIND_IN_SET('$filter_option', a.force_type)";
-            }
-            $query .= ")";
-        }
-        //3
-        if($mechanics_type) {
-            $query .= " AND ( FIND_IN_SET('$mechanics_type[0]', a.mechanics_type) ";
-            
-            foreach ($mechanics_type as $filter_option) {
-                $query .= " OR FIND_IN_SET('$filter_option', a.mechanics_type)";
-            }
-            $query .= ")";
-        }
-        //4
-        if($body_part) {
-            $query .= " AND ( FIND_IN_SET('$body_part[0]', a.body_part) ";
-            
-            foreach ($body_part as $filter_option) {
-                $query .= " OR FIND_IN_SET('$filter_option', a.body_part)";
-            }
-            $query .= ")";
-        }
-        //5
-        if($target_muscles) {
-            $query .= " AND ( FIND_IN_SET('$target_muscles[0]', a.target_muscles) ";
-            
-            foreach ($target_muscles as $filter_option) {
-                $query .= " OR FIND_IN_SET('$filter_option', a.target_muscles)";
-            }
-            $query .= ")";
-        }
-        //6
-        if($equipment_type) {
-            $query .= " AND ( FIND_IN_SET('$equipment_type[0]', a.equipment_type) ";
-            
-            foreach ($equipment_type as $filter_option) {
-                $query .= " OR FIND_IN_SET('$filter_option', a.equipment_type)";
-            }
-            $query .= ")";
-        }
-        //7
-        if($difficulty) {
-            $query .= " AND ( FIND_IN_SET('$difficulty[0]', a.difficulty) ";
-            
-            foreach ($difficulty as $filter_option) {
-                $query .= " OR FIND_IN_SET('$filter_option', a.difficulty)";
-            }
-            $query .= ")";
-        }
-        
-        //by business 
-        if(FitnessHelper::is_trainer($user_id)) {
-            $query .= " AND (a.created_by='$user_id' "
-                    . " OR c.primary_trainer='$user_id' "
-                    . " OR  FIND_IN_SET('$user_id' , c.other_trainers) OR ugm.group_id='$super_user_group' "
-                    . " OR a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' )";
-        }
-        
-        if($business_profiles) {
-            $query .= " AND ( FIND_IN_SET('$business_profiles[0]', a.business_profiles) ";
-            
-            foreach ($business_profiles as $filter_option) {
-                $query .= " OR FIND_IN_SET('$filter_option', a.business_profiles)";
-            }
-            $query .= ")";
-        }
-        
-        //frontend Exercise database
-        if($data->current_page == 'exercise_database') {
-            $query .= " AND  FIND_IN_SET('$business_profile_id', a.business_profiles) ";
-            $query .= " AND  a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' ";
-        }
-        
-        //frontend My exercises
-        if($data->current_page == 'my_exercises') {
-            $query .= " AND  FIND_IN_SET('$user_id', a.my_exercise_clients) ";
-        }
-        
-        
-        if($current_page == 'my_favourites') {
-            $query .= " AND mf.client_id='$user_id'";
-        }
+            //2
+            if($force_type) {
+                $query .= " AND ( FIND_IN_SET('$force_type[0]', a.force_type) ";
 
-        $query .= " ) items_total, ";
+                foreach ($force_type as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.force_type)";
+                }
+                $query .= ")";
+            }
+            //3
+            if($mechanics_type) {
+                $query .= " AND ( FIND_IN_SET('$mechanics_type[0]', a.mechanics_type) ";
+
+                foreach ($mechanics_type as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.mechanics_type)";
+                }
+                $query .= ")";
+            }
+            //4
+            if($body_part) {
+                $query .= " AND ( FIND_IN_SET('$body_part[0]', a.body_part) ";
+
+                foreach ($body_part as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.body_part)";
+                }
+                $query .= ")";
+            }
+            //5
+            if($target_muscles) {
+                $query .= " AND ( FIND_IN_SET('$target_muscles[0]', a.target_muscles) ";
+
+                foreach ($target_muscles as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.target_muscles)";
+                }
+                $query .= ")";
+            }
+            //6
+            if($equipment_type) {
+                $query .= " AND ( FIND_IN_SET('$equipment_type[0]', a.equipment_type) ";
+
+                foreach ($equipment_type as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.equipment_type)";
+                }
+                $query .= ")";
+            }
+            //7
+            if($difficulty) {
+                $query .= " AND ( FIND_IN_SET('$difficulty[0]', a.difficulty) ";
+
+                foreach ($difficulty as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.difficulty)";
+                }
+                $query .= ")";
+            }
+
+            //by business 
+            if(FitnessHelper::is_trainer($user_id)) {
+                $query .= " AND (a.created_by='$user_id' "
+                        . " OR c.primary_trainer='$user_id' "
+                        . " OR  FIND_IN_SET('$user_id' , c.other_trainers) OR ugm.group_id='$super_user_group' "
+                        . " OR a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' )";
+            }
+
+            if($business_profiles) {
+                $query .= " AND ( FIND_IN_SET('$business_profiles[0]', a.business_profiles) ";
+
+                foreach ($business_profiles as $filter_option) {
+                    $query .= " OR FIND_IN_SET('$filter_option', a.business_profiles)";
+                }
+                $query .= ")";
+            }
+
+            //frontend Exercise database
+            if($data->current_page == 'exercise_database') {
+                $query .= " AND  FIND_IN_SET('$business_profile_id', a.business_profiles) ";
+                $query .= " AND  a.user_view_permission LIKE '%\"$business_profile_id\":\"1\"%' ";
+            }
+
+            //frontend My exercises
+            if($data->current_page == 'my_exercises') {
+                $query .= " AND  FIND_IN_SET('$user_id', a.my_exercise_clients) ";
+            }
+
+
+            if($current_page == 'my_favourites') {
+                $query .= " AND mf.client_id='$user_id'";
+            }
+
+            $query .= " ) items_total, ";
+        }
         //end get total number
         
         
@@ -586,6 +588,8 @@ class FitnessModelExercise_library extends JModelList {
             $query .= " AND a.id='$id' ";
             $query_type = 2;
         }
+        
+
 
         $data = FitnessHelper::customQuery($query, $query_type);
         
