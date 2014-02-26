@@ -386,29 +386,17 @@
 
                     var base_url = app.options.base_url;
 
-                    var imageType = /no_video_image.*/;  
-
+                    var imageType = /no_video_image.*/; 
+                    
+                    var image = base_url + video_path.split('.')[0] + '.jpg';
                     if (video_path && !video_path.match(imageType) && video_path) {  
 
                         jwplayer(container).setup({
                             file: base_url + video_path,
-                            image: "",
+                            image:  image,
                             height: height,
-                            width: width,
-                            autostart: true,
-                            mute: true,
-                            controls: false,
-                            events: {
-                                onReady: function () { 
-                                    var self = this;
-                                    setTimeout(function(){
-                                        self.pause();
-                                        self.setMute(false);
-                                        self.setControls(true);
-                                    },3000);
-                                }
-                            }
-                        });
+                            width: width
+                       });
                     } else {
                         $("#" + container).css('background-image', 'url(' +  no_video_image_big + ')');
                     }

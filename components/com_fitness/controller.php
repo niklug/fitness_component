@@ -335,10 +335,11 @@ class FitnessController extends JController {
         $filename = $_FILES['file']['name'];
         
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        
+        $video_name = $_GET['video_name'];
 
-        $filename =  $_GET['video_name']  . '.' . $ext;
- 
-
+        $filename =  $video_name . '.' . $ext;
+        
         $upload_folder = $_GET['upload_folder'];
 
         $task = $_POST['method'];
@@ -347,6 +348,10 @@ class FitnessController extends JController {
         if($task == 'clear') {
             $filename = $_POST['filename'];
             unlink($upload_folder . $filename);
+            
+            $thumbnail_name = explode('.', $filename);
+            $thumbnail = $upload_folder . $thumbnail_name[0] . '.jpg';
+            unlink($thumbnail);
             echo $filename;
             return false;
         }
@@ -392,6 +397,7 @@ class FitnessController extends JController {
         } 
         
         unlink($upload_folder . $filename);
+        unlink($thumbnail);
         
 
         if (file_exists($upload_folder .$filename) && $filename) {
@@ -401,11 +407,34 @@ class FitnessController extends JController {
          }
 
         if (move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder . $filename)) {
-            echo "ok";
+            $this->createThumbnail($upload_folder, $video_name, $ext) ;
+            //echo "ok";
         } else {
             header("HTTP/1.0 404 Not Found");
         }
     }
+    
+    private function createThumbnail($upload_folder, $video_name, $ext) {
+        $extension = "ffmpeg";
+        $extension_soname = $extension . "." . PHP_SHLIB_SUFFIX;
+        $extension_fullname = PHP_EXTENSION_DIR . "/" . $extension_soname;
+
+        // load extension
+        if(!extension_loaded($extension)) {
+            die("Can't load extension $extension_fullname\n");
+        }
+        
+        $video = $upload_folder . $video_name . '.' . $ext;
+
+        $thumbnail = $upload_folder . $video_name . '.jpg';
+
+        $second = 20;
+
+        $command = "ffmpeg  -itsoffset -$second  -i $video -vcodec mjpeg -vframes 1 -an -f rawvideo -s 400x250 $thumbnail";
+        shell_exec($command);
+    }
+    
+    
     
     function ingredients() {
         $view = $this -> getView('recipe_database', 'json');

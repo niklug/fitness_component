@@ -23,35 +23,50 @@
                     </tr>
                 </table>
                 <br/>
-                <% if ((current_page == 'my_exercises') || (current_page == 'exercise_database')) { %>
-                    <br/><br/>
-                    <% if (is_favourite) {
-                        var display_remove_favourite = 'inline';
-                        var display_add_favourite = 'none';
-
-                    } else {  
-                        var display_add_favourite = 'inline';
-                        var display_remove_favourite = 'none';
-                    } %>
-                        <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
-
-                        <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[add favourite]</a>
-                <% } %>
                 
-                <% if(current_page == 'my_exercises' && edit_allowed) { %>
-                    <br/><br/>
-                    <a data-id="<%= id %>" style="cursor: pointer;" class="trash_exercise" onclick="javascript:void(0)">[trash exercise]</a>
-                <% } else if (current_page == 'my_favourites') { %>
-                    <br/><br/>
-                    <a data-id="<%= id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
-                <% } else if (current_page == 'trash_list' && edit_allowed) { %>
-                    <a data-id="<%= id %>" style="cursor: pointer;" class="restore_exercise" onclick="javascript:void(0)">[restore exercise]</a>
-                    <br><br>
-                    <a data-id="<%= id %>" style="cursor: pointer;" class="delete_exercise" onclick="javascript:void(0)">[delete exercise]</a>
-                <% } %>
-                
-                <br/><br/>
-                <a data-id="<%= id %>" style="cursor: pointer;" class="view_exercise" onclick="javascript:void(0)">[view exercise]</a>
+                <table width="100%">
+                    <tr>
+                        <td  width="70%">
+                            <%
+                            var thumbnail = app.options.base_url + video.split('.')[0] + '.jpg';
+                            if(video) {
+                            %>
+                            <div data-id="<%= id %>"  class="view_exercise" style="cursor:pointer;text-align: center;background-size: 250px auto; border: 3px solid #FFFFFF; height:150px; width: 250px;background-image: url('<%= thumbnail %>');" ></div>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if ((current_page == 'my_exercises') || (current_page == 'exercise_database')) { %>
+                                <br/><br/>
+                                <% if (is_favourite) {
+                                    var display_remove_favourite = 'inline';
+                                    var display_add_favourite = 'none';
+
+                                } else {  
+                                    var display_add_favourite = 'inline';
+                                    var display_remove_favourite = 'none';
+                                } %>
+                                    <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
+
+                                    <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[add favourite]</a>
+                            <% } %>
+
+                            <% if(current_page == 'my_exercises' && edit_allowed) { %>
+                                <br/><br/>
+                                <a data-id="<%= id %>" style="cursor: pointer;" class="trash_exercise" onclick="javascript:void(0)">[trash exercise]</a>
+                            <% } else if (current_page == 'my_favourites') { %>
+                                <br/><br/>
+                                <a data-id="<%= id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
+                            <% } else if (current_page == 'trash_list' && edit_allowed) { %>
+                                <a data-id="<%= id %>" style="cursor: pointer;" class="restore_exercise" onclick="javascript:void(0)">[restore exercise]</a>
+                                <br><br>
+                                <a data-id="<%= id %>" style="cursor: pointer;" class="delete_exercise" onclick="javascript:void(0)">[delete exercise]</a>
+                            <% } %>
+
+                            <br/><br/>
+                            <a data-id="<%= id %>" style="cursor: pointer;" class="view_exercise" onclick="javascript:void(0)">[view exercise]</a>
+                        </td>
+                    </tr>
+                </table>
             </td>
             <td style="vertical-align: top;">
                 <table width="100%">
