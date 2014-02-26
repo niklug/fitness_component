@@ -29,8 +29,6 @@ define([
                     alert(response.responseText);
                 }
             })
-
-            
         },
         
         template:_.template(template),
@@ -64,8 +62,6 @@ define([
                 id_name : 'business_profile_select',
                 model_field : 'business_profiles'
             }).render();
-            
-            
         },
         
         search : function() {

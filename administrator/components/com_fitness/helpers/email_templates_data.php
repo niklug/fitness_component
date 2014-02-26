@@ -58,7 +58,9 @@ class EmailTemplateData extends FitnessHelper
             case 'ExerciseLibrary' : 
                 return new EmailPdfExerciseLibrary($params);
                 break;
-            
+            case 'NutritionDatabase' : 
+                return new NutritionDatabaseTemplateData($params);
+                break;
 
             default:
                 break;
@@ -66,6 +68,7 @@ class EmailTemplateData extends FitnessHelper
     }
     
     protected function getBusinessProfileData() {
+        if(!$this->business_profile_user) return;
 
         $business_profile_id = $this->getBusinessProfileId($this->business_profile_user);
         
@@ -764,4 +767,38 @@ class EmailPdfExerciseLibrary extends EmailTemplateData  {
 
         return $data;
     }
+}
+
+
+
+
+class NutritionDatabaseTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->layout = $params['layout'];
+
+    }
+    
+    protected function getItemData() {
+        $this->item = $this->getNutritionDatabaseItem($this->id);
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        $data->sitelink = JUri::root() .  'index.php?option=com_multicalendar&view=pdf&layout=email_new_nd_item&tpml=component&id=' . $this->id;
+        
+        $data->open_link = JUri::root() . 'index.php?option=com_fitness&view=nutrition_planning';
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+
+        return $data;
+    }
+
 }

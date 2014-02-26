@@ -10,9 +10,12 @@ define([
         
         initialize : function() {
             this.collection.bind("add", this.addItem, this);
-            var selected_items = this.model.get(this.options.model_field);
-            if((typeof selected_items !== 'undefined') && selected_items) {
-                this.selected_items = selected_items.split(',');
+            
+            if(this.model) {
+                var selected_items = this.model.get(this.options.model_field);
+                if((typeof selected_items !== 'undefined') && selected_items) {
+                    this.selected_items = selected_items.split(',');
+                }
             }
             
         },
@@ -64,7 +67,10 @@ define([
             var model_field = this.options.model_field;
             var option = {};
             option[model_field] = ids;
-            this.model.set(option);
+            
+            if(this.model) {
+                this.model.set(option);
+            }
         }
     });
             

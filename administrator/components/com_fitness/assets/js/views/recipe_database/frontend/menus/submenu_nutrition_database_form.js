@@ -51,6 +51,10 @@ define([
             $("#add_ingredient_form" ).die().live('submit', function(event) {
                 event.preventDefault();
                 var data = Backbone.Syphon.serialize(this);
+                var item_id = self.model.get('id');
+                
+                data.category = data.category[0];
+
                 self.model.save(data, {
                     success: function (model, response) {
                         if(self.save_method == 'save_close') {
@@ -60,6 +64,9 @@ define([
                             self.controller.navigate("!/add_ingredient", true);
                         }
                         
+                        if(!item_id) {
+                            self.email_new_item(model.get('id'));
+                        }
                     },
                     error: function (model, response) {
                         alert(response.responseText);
@@ -68,7 +75,29 @@ define([
             });
 
             $("#add_ingredient_form" ).submit();
-        }
+        },
+        
+        
+        email_new_item : function(id) {
+            var data = {};
+            var url = app.options.fitness_frontend_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.id = id;
+            data.view = 'NutritionDatabase';
+
+            $.AjaxCall(data, url, view, task, table, function(output){
+                //console.log(output);
+                var emails = output.split(',');
+                var message = 'Emails were sent to: ' +  "</br>";
+                $.each(emails, function(index, email) { 
+                    message += email +  "</br>";
+                });
+                $("#emais_sended").append(message);
+           });
+        },
     });
             
     return view;

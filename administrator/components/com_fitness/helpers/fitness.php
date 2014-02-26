@@ -1480,7 +1480,7 @@ class FitnessHelper extends FitnessFactory
             
             switch ($method) {
                 case 'GET': // Get Item(s)
-                    return $this->getNutritionDatabaseCategories();;
+                    return $this->getNutritionDatabaseCategories();
                     break;
                 case 'PUT': // Update
                     $id = $helper->insertUpdateObj($model, $table);
@@ -1553,6 +1553,15 @@ class FitnessHelper extends FitnessFactory
             
             return self::customQuery($query, 2);
         }
-       
+        
+        public function getNutritionDatabaseItem($id) {
+            $query = "SELECT a.*, c.name AS category ";
+            $query .= " FROM #__fitness_nutrition_database AS a";
+            $query .= " LEFT JOIN #__fitness_database_categories AS c ON a.category=c.id";
+            $query .= " WHERE a.id='$id'";
+            
+            return self::customQuery($query, 2);
+        }
+
 }
 

@@ -40,8 +40,13 @@ class FitnessEmail extends FitnessHelper
             case 'NutritionDiary':
                 return new NutritionDiaryEmail();
                 break;
+            
             case 'ExerciseLibrary':
                 return new ExerciseLibraryEmail();
+                break;
+            
+            case 'NutritionDatabase':
+                return new NutritionDatabaseEmail();
                 break;
 
             case 'Comment':
@@ -129,7 +134,7 @@ class FitnessEmail extends FitnessHelper
         $this->generate_contents();
 
         $this->get_recipients_ids();
-               
+
         $data = $this->send_mass_email();
         
         return $data;
@@ -1028,5 +1033,40 @@ class ExerciseLibraryEmail extends FitnessEmail {
     }
     
 }
+
+
+
+class NutritionDatabaseEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        $this->data = $data;
+        $id = $data->id;
+        
+        if (!$id) {
+            throw new Exception('Error: no item id');
+        }
+        
+        $subject = 'New Nutrition Database Item added';
+        $layout = 'email_new_nd_item';
+
+        
+        $this->subject = $subject;
+
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id;
+    }
+    
+
+    protected function get_recipients_ids() {
+        $ids = array();
+        
+        $query = "SELECT user_id FROM #__user_usergroup_map WHERE group_id='8'";
+        
+        $ids = self::customQuery($query, 3);
+                
+        $this->recipients_ids = $ids;
+    }
+    
+}
+
 
 

@@ -518,6 +518,9 @@ class FitnessModelrecipe_database extends JModelList {
         return $model;
     }
     
-  
+    public function ingredient_categories() {
+        $helper = $this->helper;
+        return $helper->getNutritionDatabaseCategories();
+    }
     
 }
