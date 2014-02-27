@@ -23,6 +23,11 @@
         
         
         filter="safehtml" /> 
+       
+       <field name="business_profile_id" type="text" class="inputbox"
+            label="Business Profile"
+            required="true"
+       /> 
 
          <field
         name="state"

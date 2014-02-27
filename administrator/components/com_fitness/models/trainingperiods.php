@@ -11,6 +11,8 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
 
+require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'fitness.php';
+
 /**
  * Methods supporting a list of Fitness records.
  */
@@ -30,10 +32,10 @@ class FitnessModeltrainingperiods extends JModelList {
                 'name', 'a.name',
                 'color', 'a.color',
                 'state', 'a.state',
-
+                'business_name', 'business_name',
             );
         }
-
+        $this->helper = new FitnessHelper();
         parent::__construct($config);
     }
 
@@ -53,7 +55,9 @@ class FitnessModeltrainingperiods extends JModelList {
         $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
         $this->setState('filter.state', $published);
 
-        
+        // Filter by business profile
+        $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
+        $this->setState('filter.business_profile_id', $business_profile_id);
 
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
@@ -96,11 +100,19 @@ class FitnessModeltrainingperiods extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*'
+                        'list.select', 'a.*,  bp.name AS business_name'
                 )
         );
         $query->from('`#__fitness_training_period` AS a');
 
+        $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = a.business_profile_id');
+        
+        $user_id = JFactory::getUser()->id;
+        if(FitnessHelper::is_trainer($user_id)) {
+            $business_profile_id = $this->helper->getBusinessProfileId($user_id);
+            $business_profile_id = $business_profile_id['data'];
+            $query->where('a.business_profile_id = ' . (int) $business_profile_id);
+        }
         
 
         
@@ -124,7 +136,11 @@ class FitnessModeltrainingperiods extends JModelList {
             }
         }
 
-        
+        // Filter by business profile
+        $business_profile_id = $this->getState('filter.business_profile_id');
+        if (is_numeric($business_profile_id)) {
+            $query->where('a.business_profile_id = ' . (int) $business_profile_id);
+        }
 
 
         // Add the list ordering clause.

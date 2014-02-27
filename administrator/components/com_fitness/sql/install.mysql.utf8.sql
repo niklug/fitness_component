@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_locations` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 
 `name` VARCHAR(255)  NOT NULL ,
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`)
 ) DEFAULT COLLATE=utf8_general_ci;
@@ -90,6 +91,7 @@ PRIMARY KEY (`id`)
 CREATE TABLE IF NOT EXISTS `#__fitness_goal_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -679,6 +681,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_training_period` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `color` varchar(20) NOT NULL,
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   `state` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -712,6 +715,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_mini_goals` (
 CREATE TABLE IF NOT EXISTS `#__fitness_mini_goal_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
   `state` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -872,6 +876,8 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_focus` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 
 `name` VARCHAR(255)  NOT NULL ,
+`color` VARCHAR(20)  NOT NULL ,
+`business_profile_id` INT(11) UNSIGNED NOT NULL ,
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;

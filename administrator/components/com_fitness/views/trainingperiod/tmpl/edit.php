@@ -13,6 +13,10 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
+
+require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&layout=edit&id=' . (int) $this->item->id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="trainingperiod-form" class="form-validate">
@@ -20,19 +24,26 @@ JHtml::_('behavior.keepalive');
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_TRAININGPERIOD'); ?></legend>
             <ul class="adminformlist">
-				<li><?php echo $this->form->getLabel('name'); ?>
-				<?php echo $this->form->getInput('name'); ?></li>
-				<li><?php echo $this->form->getLabel('color'); ?>
-				<?php echo $this->form->getInput('color'); ?></li>
-				<li><?php echo $this->form->getLabel('state'); ?>
-				<?php echo $this->form->getInput('state'); ?></li>
+                <li>
+                    <?php
+                    echo $this->form->getLabel('business_profile_id');
+       
+                    echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $this->item->business_profile_id, '', true, "required");
+                    ?>
+                </li>
+                <li><?php echo $this->form->getLabel('name'); ?>
+                    <?php echo $this->form->getInput('name'); ?></li>
+                <li><?php echo $this->form->getLabel('color'); ?>
+                    <?php echo $this->form->getInput('color'); ?></li>
+                <li><?php echo $this->form->getLabel('state'); ?>
+                    <?php echo $this->form->getInput('state'); ?></li>
 
 
             </ul>
         </fieldset>
     </div>
 
-    
+
 
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
@@ -49,28 +60,28 @@ JHtml::_('behavior.keepalive');
 
 
 <script type="text/javascript">
-    
+
     (function($) {
 
         Joomla.submitbutton = function(task)
-            {
-                if (task == 'trainingperiod.cancel') {
+        {
+            if (task == 'trainingperiod.cancel') {
+                Joomla.submitform(task, document.getElementById('trainingperiod-form'));
+            }
+            else {
+
+                if (task != 'trainingperiod.cancel' && document.formvalidator.isValid(document.id('trainingperiod-form'))) {
+
                     Joomla.submitform(task, document.getElementById('trainingperiod-form'));
                 }
-                else{
-                    
-                    if (task != 'trainingperiod.cancel' && document.formvalidator.isValid(document.id('trainingperiod-form'))) {
-                        
-                        Joomla.submitform(task, document.getElementById('trainingperiod-form'));
-                    }
-                    else {
-                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                    }
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
                 }
             }
+        }
 
     })($js);
-    
 
-        
+
+
 </script>

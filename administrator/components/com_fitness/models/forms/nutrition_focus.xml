@@ -14,6 +14,21 @@
         
          required="true" 
         filter="safehtml" /> 
+       
+       <field name="business_profile_id" type="text" class="inputbox"
+            label="Business Profile"
+            required="true"
+       /> 
+       
+       <field name="color" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_CATEGORY_COLOR"
+            description="COM_FITNESS_FORM_DESC_CATEGORY_COLOR" 
+            default="#FF0000"
+        
+        
+        
+        filter="safehtml" /> 
 
          <field
         name="state"

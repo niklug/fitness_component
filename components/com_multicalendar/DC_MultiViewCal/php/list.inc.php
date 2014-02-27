@@ -1,20 +1,26 @@
 <?php
 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
-
 /** get locations from fitness component
  * npkorban
  * 
  * @return type
  */
 function getLocations() { 
-    $db	= & JFactory::getDBO();
-    $query = "SELECT name FROM #__fitness_locations";
-    $db->setQuery($query);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
+    $helper = new FitnessHelper();
+    
+    $query = "SELECT name FROM #__fitness_locations WHERE state='1'";
+
+    $user_id = JRequest::getVar('cid');
+
+     
+    if($user_id && FitnessHelper::is_trainer($user_id)) {
+        $business_profile_id = $helper->getBusinessProfileId($user_id);
+
+        $business_profile_id = $business_profile_id['data'];
+        $query .= " AND business_profile_id='$business_profile_id'";
     }
-    $locations = $db->loadResultArray();
-    return $locations;
+
+    return FitnessHelper::customQuery($query, 3);
 }
 
 /** get Appointment (category) from fitness component

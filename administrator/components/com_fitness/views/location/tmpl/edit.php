@@ -13,6 +13,9 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
+require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 
@@ -21,17 +24,24 @@ JHtml::_('behavior.keepalive');
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_LOCATION'); ?></legend>
             <ul class="adminformlist">
-				<li><?php echo $this->form->getLabel('name'); ?>
-				<?php echo $this->form->getInput('name'); ?></li>
-				<li><?php echo $this->form->getLabel('state'); ?>
-				<?php echo $this->form->getInput('state'); ?></li>
+                <li>
+                    <?php
+                    echo $this->form->getLabel('business_profile_id');
+
+                    echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $this->item->business_profile_id, '', true, "required");
+                    ?>
+                </li>
+                <li><?php echo $this->form->getLabel('name'); ?>
+                    <?php echo $this->form->getInput('name'); ?></li>
+                <li><?php echo $this->form->getLabel('state'); ?>
+                    <?php echo $this->form->getInput('state'); ?></li>
 
 
             </ul>
         </fieldset>
     </div>
 
-    
+
 
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
@@ -46,29 +56,29 @@ JHtml::_('behavior.keepalive');
 </form>
 
 <script type="text/javascript">
-    
+
     (function($) {
 
 
         Joomla.submitbutton = function(task)
-            {
-                if (task == 'location.cancel') {
+        {
+            if (task == 'location.cancel') {
+                Joomla.submitform(task, document.getElementById('location-form'));
+            }
+            else {
+
+                if (task != 'location.cancel' && document.formvalidator.isValid(document.id('location-form'))) {
+
                     Joomla.submitform(task, document.getElementById('location-form'));
                 }
-                else{
-                    
-                    if (task != 'location.cancel' && document.formvalidator.isValid(document.id('location-form'))) {
-                        
-                        Joomla.submitform(task, document.getElementById('location-form'));
-                    }
-                    else {
-                        alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-                    }
+                else {
+                    alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
                 }
             }
+        }
 
     })($js);
-    
 
-        
+
+
 </script>

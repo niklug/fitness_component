@@ -169,7 +169,10 @@ $helper = new FitnessHelper();
             <fieldset style="margin: 30px 12px 12px;;"  class="adminform">
                 <legend>NUTRITION FOCUS</legend>
                 <?php echo $this->form->getLabel('nutrition_focus'); ?>
-                <?php echo $this->form->getInput('nutrition_focus'); ?>
+                
+                <?php
+                echo $helper->generateSelect($helper->getNutritionFocuses(), 'jform[nutrition_focus]', 'jform_nutrition_focus', $this->item->nutrition_focus, '', true, "required");
+                ?>
                 <div class="clr"></div>
                 <?php echo $this->form->getLabel('trainer_comments'); ?>
                 <?php echo $this->form->getInput('trainer_comments'); ?>

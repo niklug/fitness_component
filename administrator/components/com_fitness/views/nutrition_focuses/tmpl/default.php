@@ -13,9 +13,6 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.tooltip');
 JHTML::_('script','system/multiselect.js',false,true);
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 
 $user	= JFactory::getUser();
 $userId	= $user->get('id');
@@ -23,6 +20,10 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_fitness');
 $saveOrder	= $listOrder == 'a.ordering';
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_fitness&view=nutrition_focuses'); ?>" method="post" name="adminForm" id="adminForm">
@@ -31,8 +32,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('Search'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+			<button type="button" id="reset_filtered"><?php echo JText::_('Reset All'); ?></button>
 		</div>
+            
+                
 		
         
 		<div class='filter-select fltrt'>
@@ -40,6 +43,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
 			</select>
+		</div>
+            
+                <div class='filter-select fltrt'>
+                    <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id', $this->state->get('filter.business_profile_id') , 'Business Name', false, "inputbox"); ?>
 		</div>
 
 
@@ -55,6 +62,14 @@ $saveOrder	= $listOrder == 'a.ordering';
 
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_FOCUSES_NAME', 'a.name', $listDirn, $listOrder); ?>
+				</th>
+                                
+                                <th class='left'>
+                                    Color
+				</th>
+                                
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Business Name', 'business_name', $listDirn, $listOrder); ?>
 				</th>
 
 
@@ -117,6 +132,14 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo $this->escape($item->name); ?>
 				<?php endif; ?>
 				</td>
+                                
+                                <td>
+                                    <div style="width:100px; height:15px;background-color:<?php echo $item->color; ?>;" ></div>
+                                </td>
+                                
+                                <td>
+					<?php echo $item->business_name; ?>
+				</td>
 
 
                 <?php if (isset($this->items[0]->state)) { ?>
@@ -161,3 +184,26 @@ $saveOrder	= $listOrder == 'a.ordering';
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
+
+<script type="text/javascript">
+
+    (function($) {
+
+        $("#reset_filtered").click(function(){
+            var limit = $("#limit").val();
+            var form = $("#adminForm");
+            form.find("select").val('');
+            form.find("input").val('');
+            $("#limit").val(limit);
+            form.submit();
+        });
+        
+        $("#business_profile_id").on('change', function() {
+             var form = $("#adminForm");
+             form.submit();
+        })
+
+    })($js);
+    
+    
+</script>

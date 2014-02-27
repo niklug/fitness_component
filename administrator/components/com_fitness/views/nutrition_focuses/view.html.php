@@ -36,10 +36,15 @@ class FitnessViewNutrition_focuses extends JView
 		}
         
 		$this->addToolbar();
-        
-        $input = JFactory::getApplication()->input;
-        FitnessHelper::addSubmenu('Dashboard', 'dashboard');
-        FitnessHelper::addSubmenu('Settings', 'settings');
+                
+                $document = &JFactory::getDocument();
+                $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
+                $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
+                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
+
+                $input = JFactory::getApplication()->input;
+                FitnessHelper::addSubmenu('Dashboard', 'dashboard');
+                FitnessHelper::addSubmenu('Settings', 'settings');
         
 		parent::display($tpl);
 	}

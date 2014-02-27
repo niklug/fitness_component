@@ -1562,6 +1562,91 @@ class FitnessHelper extends FitnessFactory
             
             return self::customQuery($query, 2);
         }
+        
+        public function getNutritionFocuses() {
+            $query = "SELECT *, id AS value, name AS text FROM #__fitness_nutrition_focus";
+            $query .= " WHERE state='1'";
 
+            $user_id = JFactory::getUser()->id;
+            
+            if(self::is_trainer($user_id)) {
+                $business_profile_id = $this->getBusinessProfileId($user_id);
+                $business_profile_id = $business_profile_id['data'];
+                $query .= " AND business_profile_id='$business_profile_id'";
+            }
+
+            $query .= " ORDER BY name ASC";
+            
+            return self::customQuery($query, 1);
+        }
+        
+        public function getPrimaryGoalCategory() {
+            $query = "SELECT *, id AS value, name AS text FROM #__fitness_goal_categories";
+            $query .= " WHERE state='1'";
+
+            $user_id = JFactory::getUser()->id;
+            
+            if(self::is_trainer($user_id)) {
+                $business_profile_id = $this->getBusinessProfileId($user_id);
+                $business_profile_id = $business_profile_id['data'];
+                $query .= " AND business_profile_id='$business_profile_id'";
+            }
+
+            $query .= " ORDER BY name ASC";
+            
+            return self::customQuery($query, 1);
+        }
+        
+        public function getMiniGoalCategory() {
+            $query = "SELECT *, id AS value, name AS text FROM #__fitness_mini_goal_categories";
+            $query .= " WHERE state='1'";
+
+            $user_id = JFactory::getUser()->id;
+            
+            if(self::is_trainer($user_id)) {
+                $business_profile_id = $this->getBusinessProfileId($user_id);
+                $business_profile_id = $business_profile_id['data'];
+                $query .= " AND business_profile_id='$business_profile_id'";
+            }
+
+            $query .= " ORDER BY name ASC";
+            
+            return self::customQuery($query, 1);
+        }
+        
+        public function getTrainingPeriod() {
+            $query = "SELECT *, id AS value, name AS text FROM #__fitness_training_period";
+            $query .= " WHERE state='1'";
+
+            $user_id = JFactory::getUser()->id;
+            
+            if(self::is_trainer($user_id)) {
+                $business_profile_id = $this->getBusinessProfileId($user_id);
+                $business_profile_id = $business_profile_id['data'];
+                $query .= " AND business_profile_id='$business_profile_id'";
+            }
+
+            $query .= " ORDER BY name ASC";
+            
+            return self::customQuery($query, 1);
+        }
+        
+        public function getLocations() {
+            $query = "SELECT *, id AS value, name AS text FROM #__fitness_locations";
+            $query .= " WHERE state='1'";
+
+            $user_id = JFactory::getUser()->id;
+            
+            if(self::is_trainer($user_id)) {
+                $business_profile_id = $this->getBusinessProfileId($user_id);
+                $business_profile_id = $business_profile_id['data'];
+                $query .= " AND business_profile_id='$business_profile_id'";
+            }
+
+            $query .= " ORDER BY name ASC";
+            
+            return self::customQuery($query, 1);
+        }
+        
 }
 

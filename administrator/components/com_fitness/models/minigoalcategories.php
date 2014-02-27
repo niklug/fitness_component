@@ -29,10 +29,11 @@ class FitnessModelminigoalcategories extends JModelList {
                                 'id', 'a.id',
                 'name', 'a.name',
                 'state', 'a.state',
+                'business_name', 'business_name',
 
             );
         }
-
+        $this->helper = new FitnessHelper();
         parent::__construct($config);
     }
 
@@ -54,6 +55,12 @@ class FitnessModelminigoalcategories extends JModelList {
 
         
 
+        // Filter by business profile
+        $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
+        $this->setState('filter.business_profile_id', $business_profile_id);
+        
+        
+        
         // Load the parameters.
         $params = JComponentHelper::getParams('com_fitness');
         $this->setState('params', $params);
@@ -95,10 +102,19 @@ class FitnessModelminigoalcategories extends JModelList {
         // Select the required fields from the table.
         $query->select(
                 $this->getState(
-                        'list.select', 'a.*'
+                        'list.select', 'a.*,  bp.name AS business_name'
                 )
         );
         $query->from('`#__fitness_mini_goal_categories` AS a');
+        
+        $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = a.business_profile_id');
+        
+        $user_id = JFactory::getUser()->id;
+        if(FitnessHelper::is_trainer($user_id)) {
+            $business_profile_id = $this->helper->getBusinessProfileId($user_id);
+            $business_profile_id = $business_profile_id['data'];
+            $query->where('a.business_profile_id = ' . (int) $business_profile_id);
+        }
 
              
     // Filter by published state
@@ -113,16 +129,18 @@ class FitnessModelminigoalcategories extends JModelList {
         // Filter by search in title
         $search = $this->getState('filter.search');
         if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
-            } else {
+
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('( a.name LIKE '.$search.'  OR  a.state LIKE '.$search.' )');
-            }
+                $query->where('( a.name LIKE '.$search.'  )');
+
         }
 
         
-
+        // Filter by business profile
+        $business_profile_id = $this->getState('filter.business_profile_id');
+        if (is_numeric($business_profile_id)) {
+            $query->where('a.business_profile_id = '.(int) $business_profile_id);
+        } 
 
         // Add the list ordering clause.
         $orderCol = $this->state->get('list.ordering');

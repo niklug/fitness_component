@@ -49,10 +49,11 @@ class FitnessViewSettings extends JView {
         FitnessHelper::addSubmenu('Primary Goals', 'primarygoals');
         FitnessHelper::addSubmenu('Training Periods', 'trainingperiods');
         FitnessHelper::addSubmenu('Locations', 'locations');
-        FitnessHelper::addSubmenu('Recipe Types', 'recipe_types');
+        
         FitnessHelper::addSubmenu('Nutrition Focuses', 'nutrition_focuses');
         
         if(FitnessHelper::is_superuser()){
+            FitnessHelper::addSubmenu('Recipe Types', 'recipe_types');
             FitnessHelper::addSubmenu('Nutrition Database Categories', 'database_categories');
             FitnessHelper::addSubmenu('User Groups', 'user_groups');
             FitnessHelper::addSubmenu('Business Profiles', 'business_profiles');

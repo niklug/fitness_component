@@ -12,6 +12,10 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
 ?>
 
 
@@ -20,13 +24,17 @@ JHtml::_('behavior.keepalive');
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_PRIMARYGOAL'); ?></legend>
             <ul class="adminformlist">
-
-                				<li><?php echo $this->form->getLabel('id'); ?>
-				<?php echo $this->form->getInput('id'); ?></li>
-				<li><?php echo $this->form->getLabel('name'); ?>
-				<?php echo $this->form->getInput('name'); ?></li>
-				<li><?php echo $this->form->getLabel('state'); ?>
-				<?php echo $this->form->getInput('state'); ?></li>
+                <li>
+                    <?php
+                    echo $this->form->getLabel('business_profile_id');
+       
+                    echo $helper->generateSelect($helper->getBusinessProfileList(), 'jform[business_profile_id]', 'business_profile_id', $this->item->business_profile_id, '', true, "required");
+                    ?>
+                </li>
+                    <li><?php echo $this->form->getLabel('name'); ?>
+                    <?php echo $this->form->getInput('name'); ?></li>
+                    <li><?php echo $this->form->getLabel('state'); ?>
+                    <?php echo $this->form->getInput('state'); ?></li>
 
 
             </ul>
@@ -49,26 +57,22 @@ JHtml::_('behavior.keepalive');
 
 <script type="text/javascript">
     
-    (function($) {
-
-        Joomla.submitbutton = function(task)
+    Joomla.submitbutton = function(task)
             {
-                if (task == 'sessionfocus.cancel') {
-                    Joomla.submitform(task, document.getElementById('sessionfocus-form'));
+                if (task == 'primarygoal.cancel') {
+                    Joomla.submitform(task, document.getElementById('primarygoal-form'));
                 }
                 else{
                     
-                    if (task != 'sessionfocus.cancel' && document.formvalidator.isValid(document.id('sessionfocus-form'))) {
+                    if (task != 'primarygoal.cancel' && document.formvalidator.isValid(document.id('primarygoal-form'))) {
                         
-                        Joomla.submitform(task, document.getElementById('sessionfocus-form'));
+                        Joomla.submitform(task, document.getElementById('primarygoal-form'));
                     }
                     else {
                         alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
                     }
                 }
             }
-
-    })($js);
     
 
         

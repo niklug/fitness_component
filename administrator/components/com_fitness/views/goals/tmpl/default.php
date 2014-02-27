@@ -80,22 +80,12 @@ echo $this->loadTemplate('graph');?>
 			</select>
 		</div>
 
-                
-                <?php
-                $db = JFactory::getDbo();
-                $sql = "SELECT id, name FROM #__fitness_goal_categories WHERE state='1'";
-                $db->setQuery($sql);
-                if(!$db->query()) {
-                    JError::raiseError($db->getErrorMsg());
-                }
-                $goal_category= $db->loadObjectList();
-                ?>
-
                 <div class='filter-select fltrt'>
 			<select name="filter_goal_category" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('-Primary Goal-');?></option>
-				<?php echo JHtml::_('select.options', $goal_category, "id", "name", $this->state->get('filter.goal_category'), true);?>
+				<?php echo JHtml::_('select.options', $helper->getPrimaryGoalCategory(), "id", "name", $this->state->get('filter.goal_category'), true);?>
 			</select>
+                    
 		</div>
             
                 

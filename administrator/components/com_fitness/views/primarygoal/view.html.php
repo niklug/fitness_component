@@ -35,10 +35,6 @@ class FitnessViewPrimarygoal extends JView
             throw new Exception(implode("\n", $errors));
 		}
                 
-                $document = &JFactory::getDocument();
-                $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
-                $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
-                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
 
 		$this->addToolbar();
 		parent::display($tpl);

@@ -30,6 +30,10 @@ if($primary_goal_id) {
     $session->set('primary_goal_id', $primary_goal_id);
 }
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
+
 
 ?>
 
@@ -51,22 +55,11 @@ if($primary_goal_id) {
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
 			</select>
 		</div>
-            
-                        
-                <?php
-                $db = JFactory::getDbo();
-                $sql = "SELECT id, name FROM #__fitness_training_period WHERE state='1'";
-                $db->setQuery($sql);
-                if(!$db->query()) {
-                    JError::raiseError($db->getErrorMsg());
-                }
-                $training_period= $db->loadObjectList();
-                ?>
 
                 <div class='filter-select fltrt'>
 			<select name="filter_training_period" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('-Training Period-');?></option>
-				<?php echo JHtml::_('select.options', $training_period, "id", "name", $this->state->get('filter.training_period'), true);?>
+				<?php echo JHtml::_('select.options', $helper->getTrainingPeriod(), "id", "name", $this->state->get('filter.training_period'), true);?>
 			</select>
 		</div>
             

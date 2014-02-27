@@ -23,6 +23,11 @@ $primary_goal_id = $session->get('primary_goal_id');
 $primary_goal = $this->backend_list_model->getGoal($primary_goal_id);
 
 
+require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
+
+
 ?>
 <style type="text/css">
 #jform_details-lbl, #jform_comments-lbl {
@@ -41,23 +46,33 @@ $primary_goal = $this->backend_list_model->getGoal($primary_goal_id);
             <legend><?php echo JText::_('COM_FITNESS_LEGEND_MINIGOAL'); ?></legend>
             <ul class="adminformlist">
                 <input id="jform_primary_goal_id" class="inputbox" type="hidden" value="<?php echo $primary_goal_id?>" name="jform[primary_goal_id]">
+                        
+                        <li>
+                            <?php echo $this->form->getLabel('mini_goal_category_id'); ?>
 
-				<li><?php echo $this->form->getLabel('mini_goal_category_id'); ?>
-				<?php echo $this->form->getInput('mini_goal_category_id'); ?></li>
-                                <li><?php echo $this->form->getLabel('training_period_id'); ?>
-				<?php echo $this->form->getInput('training_period_id'); ?></li> 
-                                <li><?php echo $this->form->getLabel('start_date'); ?>
-				<?php echo $this->form->getInput('start_date'); ?></li>
-				<li><?php echo $this->form->getLabel('deadline'); ?>
-				<?php echo $this->form->getInput('deadline'); ?></li>
-                                <li><?php echo $this->form->getLabel('status'); ?>
-				<?php echo $this->form->getInput('status'); ?></li>
-				<li><?php echo $this->form->getLabel('details'); ?>
-				<?php echo $this->form->getInput('details'); ?></li>
-				<li><?php echo $this->form->getLabel('comments'); ?>
-				<?php echo $this->form->getInput('comments'); ?></li>
-				<li><?php echo $this->form->getLabel('state'); ?>
-				<?php echo $this->form->getInput('state'); ?></li>
+                            <?php
+                            echo $helper->generateSelect($helper->getMiniGoalCategory(), 'jform[mini_goal_category_id]', 'jform_mini_goal_category_id', $this->item->mini_goal_category_id, '', true, "required");
+                            ?>
+                        </li>
+                        <li>
+                            <?php echo $this->form->getLabel('training_period_id'); ?>
+
+                            <?php
+                            echo $helper->generateSelect($helper->getTrainingPeriod(), 'jform[training_period_id]', 'jform_training_period_id', $this->item->training_period_id, '', true, "required");
+                            ?>
+                        </li>
+                        <li><?php echo $this->form->getLabel('start_date'); ?>
+                        <?php echo $this->form->getInput('start_date'); ?></li>
+                        <li><?php echo $this->form->getLabel('deadline'); ?>
+                        <?php echo $this->form->getInput('deadline'); ?></li>
+                        <li><?php echo $this->form->getLabel('status'); ?>
+                        <?php echo $this->form->getInput('status'); ?></li>
+                        <li><?php echo $this->form->getLabel('details'); ?>
+                        <?php echo $this->form->getInput('details'); ?></li>
+                        <li><?php echo $this->form->getLabel('comments'); ?>
+                        <?php echo $this->form->getInput('comments'); ?></li>
+                        <li><?php echo $this->form->getLabel('state'); ?>
+                        <?php echo $this->form->getInput('state'); ?></li>
 
 
             </ul>

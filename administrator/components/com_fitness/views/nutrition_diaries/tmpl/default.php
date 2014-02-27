@@ -129,20 +129,10 @@ $helper = new FitnessHelper();
                 </select>
         </div>
 
-        <?php
-        $db = JFactory::getDbo();
-        $sql = "SELECT id, name FROM #__fitness_nutrition_focus WHERE state='1'";
-        $db->setQuery($sql);
-        if(!$db->query()) {
-            JError::raiseError($db->getErrorMsg());
-        }
-        $nutrition_focus = $db->loadObjectList();
-        ?>
-
         <div class='filter-select fltrt'>
                 <select name="filter_nutrition_focus" class="inputbox" onchange="this.form.submit()">
                         <option value=""><?php echo JText::_('-Nutrition Focus-');?></option>
-                        <?php echo JHtml::_('select.options', $nutrition_focus, "id", "name", $this->state->get('filter.nutrition_focus'), true);?>
+                        <?php echo JHtml::_('select.options', $helper->getNutritionFocuses(), "id", "name", $this->state->get('filter.nutrition_focus'), true);?>
                 </select>
         </div>
         

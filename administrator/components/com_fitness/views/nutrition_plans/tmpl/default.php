@@ -78,38 +78,20 @@ $helper = new FitnessHelper();
                     <?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true); ?>
                 </select>
             </div>
-            
-            <?php
-            $db = JFactory::getDbo();
-            $sql = "SELECT id, name FROM #__fitness_nutrition_focus WHERE state='1'";
-            $db->setQuery($sql);
-            if(!$db->query()) {
-                JError::raiseError($db->getErrorMsg());
-            }
-            $nutrition_focus = $db->loadObjectList();
-            ?>
+
 
             <div class='filter-select fltrt'>
                     <select name="filter_nutrition_focus" class="inputbox" onchange="this.form.submit()">
                             <option value=""><?php echo JText::_('-Nutrition Focus-');?></option>
-                            <?php echo JHtml::_('select.options', $nutrition_focus, "id", "name", $this->state->get('filter.nutrition_focus'), true);?>
+                            <?php echo JHtml::_('select.options', $helper->getNutritionFocuses(), "id", "name", $this->state->get('filter.nutrition_focus'), true);?>
                     </select>
             </div>
                             
-            <?php
-            $db = JFactory::getDbo();
-            $sql = "SELECT id, name FROM #__fitness_goal_categories WHERE state='1' ";
-            $db->setQuery($sql);
-            if(!$db->query()) {
-                JError::raiseError($db->getErrorMsg());
-            }
-            $goal_category= $db->loadObjectList();
-            ?>
 
             <div class='filter-select fltrt'>
                     <select name="filter_goal_category" class="inputbox" onchange="this.form.submit()">
                             <option value=""><?php echo JText::_('-Primary Goal-');?></option>
-                            <?php echo JHtml::_('select.options', $goal_category, "id", "name", $this->state->get('filter.goal_category'), true);?>
+                            <?php echo JHtml::_('select.options', $helper->getPrimaryGoalCategory(), "id", "name", $this->state->get('filter.goal_category'), true);?>
                     </select>
             </div>
             
