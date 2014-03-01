@@ -61,6 +61,9 @@ class EmailTemplateData extends FitnessHelper
             case 'NutritionDatabase' : 
                 return new NutritionDatabaseTemplateData($params);
                 break;
+            case 'MenuPlan' : 
+                return new MenuPlanTemplateData($params);
+                break;
 
             default:
                 break;
@@ -802,3 +805,74 @@ class NutritionDatabaseTemplateData extends EmailTemplateData  {
     }
 
 }
+
+
+
+class MenuPlanTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->comment_id = $params['comment_id'];
+    }
+    
+    protected function getItemData() {
+        
+        $this->item = $this->getMenuPlanData($this->id);
+
+        $this->business_profile_user = $this->item->created_by;
+        
+        require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_plan.php';
+        
+        $model = new FitnessModelnutrition_plan();
+        
+        $this->item->status_html = $model->menu_plan_status_html($this->item->id, $this->item->status, 'status_button');
+    }
+    
+        
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+        
+        $layout = &JRequest::getVar('layout');
+        
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->id . '&comment_id=' . $this->comment_id;
+        
+        $data->open_link = JUri::root() . 'index.php/contact/nutrition-planning#!/menu_plan/' . $this->id;
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $date = JFactory::getDate($this->item->start_date);
+        
+        $data->start_date =  $date->toFormat('%A, %d %b %Y');
+
+        $data->user_name = JFactory::getUser($this->item->created_by)->name;
+        
+        $data->assessed_by = JFactory::getUser($this->item->assessed_by)->name;
+        
+        $data->created_by = JFactory::getUser($this->item->created_by)->name;
+        
+        $data->trainer_name = JFactory::getUser()->name;
+        
+        
+        //comments
+        if($this->comment_id) {
+            $comment = $this->getCommentData($this->comment_id, '#__fitness_nutrition_plan_example_day_meal_comments');
+            
+            $date = JFactory::getDate($comment->created);
+        
+            $data->comment->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
+
+            $data->comment->created_by = JFactory::getUser($comment->created_by)->name;
+            
+            $data->comment->comment_text = $comment->comment;
+        }
+
+        return $data;
+    }
+}
+

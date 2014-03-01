@@ -1039,4 +1039,42 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return $model;
         }
         
+        
+        function menu_plan_status_html($item_id, $status, $button_class) {
+            switch($status) {
+                case '1' :
+                    $class = 'menu_plan_status_pending';
+                    $text = 'PENDING';
+                    break;
+                case '2' :
+                    $class = 'status_approved';
+                    $text = 'APPROVED';
+                    break;
+                case '3' :
+                    $class = 'status_notapproved';
+                    $text = 'NOT APPROVED';
+                    break;
+                case '4' :
+                    $class = 'status_inprogress';
+                    $text = 'IN PROGRESS';
+                    break;
+                case '5' :
+                    $class = 'status_submitted';
+                    $text = 'SUBMITTED';
+                    break;
+                case '6' :
+                    $class = 'status_resubmit';
+                    $text = 'RESUBMIT';
+                    break;
+                default :
+                    $class = 'menu_plan_status_pending';
+                    $text = 'PENDING';
+                    break;
+            }
+
+            $html = '<a href="javascript:void(0)" data-item_id="' . $item_id . '" data-status_id="' . $status . '" class="' . $button_class . ' ' . $class . '">' . $text . '</a>';
+
+            return $html;
+        }
+        
 }
