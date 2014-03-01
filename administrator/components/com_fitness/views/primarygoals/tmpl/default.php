@@ -166,6 +166,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 			<?php endforeach; ?>
 		</tbody>
 	</table>
+        
+        <?php include JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' . DS . 'settings' . DS . 'tmpl' . DS . 'default_batch.php' ; ?>
 
 	<div>
 		<input type="hidden" name="task" value="" />
@@ -194,6 +196,14 @@ $saveOrder	= $listOrder == 'a.ordering';
              var form = $("#adminForm");
              form.submit();
         })
+        
+        
+        var batch_options = {
+            table : '#__fitness_goal_categories',
+            ajax_call_url : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1'
+        };
+        
+        var batch_copy = $.batch_copy(batch_options);
 
     })($js);
     

@@ -373,5 +373,11 @@ class FitnessController extends JController
             $view -> clients(); 
         }
         
+        public function batch_copy(){
+            require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+            $helper = new FitnessHelper();
+            echo json_encode($helper->batch_copy());
+        }
+        
 
 }

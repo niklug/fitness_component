@@ -1648,5 +1648,44 @@ class FitnessHelper extends FitnessFactory
             return self::customQuery($query, 1);
         }
         
+        
+        public function batch_copy() {
+            $db = JFactory::getDBO();
+            
+            $status['success'] = 1;
+            
+            $table = JRequest::getVar('table');
+            
+            $data = json_decode(JRequest::getVar('data_encoded'));
+            
+            $ids = $data->ids;
+            
+            $business_profile_id = $data->business_profile_id;
+            
+            $query = " SELECT * FROM $table WHERE id IN ($ids)";
+            
+            $items = self::customQuery($query, 1);
+            
+            foreach ($items as $item) {
+                
+                $item->id = null;
+                
+                if($business_profile_id) {
+                    $item->business_profile_id = $business_profile_id;
+                }
+
+                $insert = $db->insertObject($table, $item, 'id');
+ 
+                if (!$insert) {
+                    $status['success'] = false;
+                    $status['message'] = $db->stderr();
+                }
+            }
+            
+            
+            $result = array( 'status' => $status, 'data' => $items);
+            
+            return $result;
+        }
 }
 
