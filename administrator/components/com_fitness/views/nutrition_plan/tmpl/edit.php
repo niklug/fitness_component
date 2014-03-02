@@ -319,6 +319,11 @@ $helper = new FitnessHelper();
 
 </form>
 
+<?php
+
+$user_id = JFactory::getUser()->id;
+
+?>
 
 
 <script type="text/javascript">
@@ -375,7 +380,8 @@ $helper = new FitnessHelper();
             'empty_html_data' : {'calories' : "", 'water' : "", 'protein' : "", 'fats' : "", 'carbs' : ""},
             
             'is_backend' : true,
-    
+            'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
+            'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
     
         };
         
@@ -392,11 +398,11 @@ $helper = new FitnessHelper();
             'status_button_place' : '#status_button_place_',
             'statuses' : {
                 '1' : {'label' : 'PENDING', 'class' : 'menu_plan_status_pending', 'email_alias' : ''}, 
-                '2' : {'label' : 'APPROVED', 'class' : 'status_approved', 'email_alias' : ''},
-                '3' : {'label' : 'NOT APPROVED', 'class' : 'status_notapproved', 'email_alias' : ''},
-                '4' : {'label' : 'IN PROGRESS', 'class' : 'status_inprogress', 'email_alias' : ''},
+                '2' : {'label' : 'APPROVED', 'class' : 'status_approved', 'email_alias' : 'menu_plan_approved'},
+                '3' : {'label' : 'NOT APPROVED', 'class' : 'status_notapproved', 'email_alias' : 'menu_plan_notapproved'},
+                '4' : {'label' : 'IN PROGRESS', 'class' : 'status_inprogress', 'email_alias' : 'menu_plan_inprogress'},
                 '5' : {'label' : 'SUBMITTED', 'class' : 'status_submitted', 'email_alias' : ''}, 
-                '6' : {'label' : 'RESUBMIT', 'class' : 'status_resubmit', 'email_alias' : ''}
+                '6' : {'label' : 'RESUBMIT', 'class' : 'status_resubmit', 'email_alias' : 'menu_plan_resubmit'}
             },
             'statuses2' : {},
             'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
@@ -405,7 +411,7 @@ $helper = new FitnessHelper();
             setStatuses : function(item_id) {
                 return this.statuses;
             },
-            'view' : 'NutritionPlan'
+            'view' : 'MenuPlan'
         }
         
         options.status_options = status_options;

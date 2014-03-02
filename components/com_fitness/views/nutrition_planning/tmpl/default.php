@@ -5,6 +5,8 @@ $trainer_id =  $this->active_plan_data->trainer_id;
 
 $nutrition_plan_id = $this->active_plan_data->id;
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
 ?>
 
 <div style="opacity: 1;" class="fitness_wrapper">
@@ -133,7 +135,9 @@ $nutrition_plan_id = $this->active_plan_data->id;
             
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
             
-            'item_id' : '<?php echo  $nutrition_plan_id?>'
+            'item_id' : '<?php echo  $nutrition_plan_id?>',
+            'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
+            'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
         };
         
         

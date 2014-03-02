@@ -292,6 +292,15 @@ class FitnessHelper extends FitnessFactory
     //const ACTIVITY_LEVEL_REST = '3';
     //
     
+    //Menu plan
+    const PENDING_MENU_PLAN_STATUS = '1';
+    const APPROVED_MENU_PLAN_STATUS = '2';
+    const NOTAPPROVED_MENU_PLAN_STATUS = '3';
+    const INPROGRESS_MENU_PLAN_STATUS = '4';
+    const SUBMITTED_MENU_PLAN_STATUS = '5';
+    const RESUBMIT_MENU_PLAN_STATUS = '6';
+    //
+    
     public $_activity_level = array('', 'Heavy Training Day', 'Light Training Day', 'Recovery/Rest Training Day');
     //
 

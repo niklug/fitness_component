@@ -33,6 +33,9 @@ class FitnessEmail extends FitnessHelper
             case 'NutritionPlan':
                 return new NutritionPlanEmail();
                 break;
+            case 'MenuPlan':
+                return new MenuPlanEmail();
+                break;
             case 'NutritionRecipe':
                 return new NutritionRecipeEmail();
                 break;
@@ -62,6 +65,9 @@ class FitnessEmail extends FitnessHelper
                     break;
                     case 'ExerciseLibraryComment':
                         return new CommentExerciseLibraryEmail();
+                    break;
+                    case 'MenuPlanCommentComment':
+                        return new CommentMenuPlanEmail();
                     break;
 
                     default:
@@ -1068,5 +1074,213 @@ class NutritionDatabaseEmail extends FitnessEmail {
     
 }
 
+
+
+class MenuPlanEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        $this->data = $data;
+        $id = $data->id;
+        
+        if (!$id) {
+            throw new Exception('Error: no menu plan id');
+        }
+
+        switch ($data->method) {
+            case 'menu_plan_pending':
+                $subject = 'Pending';
+                $layout = 'email_menu_plan_pending';
+                break;
+            case 'menu_plan_approved':
+                $subject = 'Approved';
+                $layout = 'email_menu_plan_approved';
+                break;
+            case 'menu_plan_notapproved':
+                $subject = 'Not Approved';
+                $layout = 'email_menu_plan_notapproved';
+                break;
+            case 'menu_plan_inprogress':
+                $subject = 'In Progress';
+                $layout = 'email_menu_plan_inprogress';
+                break;
+            case 'menu_plan_submitted':
+                $subject = 'Submitted';
+                $layout = 'email_menu_plan_submitted';
+                break;
+            
+            case 'menu_plan_resubmit':
+                $subject = 'Resubmit';
+                $layout = 'email_menu_plan_resubmit';
+                break;
+
+            default:
+                break;
+        }
+        
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id;
+
+        $this->subject = $subject;
+
+    }
+    
+
+    protected function get_recipients_ids() {
+        
+        $this->item = $this->getMenuPlanData($this->id);
+        
+        $client_id = $this->getClientIdByNutritionPlanId($this->item->nutrition_plan_id);
+        
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+        
+        $ids = array();
+        
+        // to client
+        if($this->data->method == 'menu_plan_approved'
+            OR $this->data->method == 'menu_plan_notapproved' 
+            OR $this->data->method == 'menu_plan_resubmit'     
+            OR $this->data->method == 'menu_plan_inprogress'  
+        ) {
+
+            $ids[] = $client_id;
+        }
+        
+        // to trainers
+        if($this->data->method == 'menu_plan_pending'
+            OR $this->data->method == 'menu_plan_submitted' 
+            OR $this->data->method == 'menu_plan_inprogress'     
+        ) {
+            $trainers_data = $this->getClientTrainers($client_id,  'all');
+
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+
+        $this->recipients_ids = $ids;
+    }
+
+}
+
+class CommentMenuPlanEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: comment id');
+        }
+
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        
+        $layout = 'email_exercise_library_comment';
+
+        $this->item = $this->getMenuPlanData($this->data->item_id);
+
+        $this->item_created_by = $this->item->created_by;
+        
+        $this->comment_created_by = $this->data->created_by;
+        
+        $status = $this->item->status;
+
+        if($status == self::INPROGRESS_MENU_PLAN_STATUS) {
+            if(self::is_client($this->comment_created_by)) {
+                $send_to = 'all_trainers';
+            }
+            if(self::is_trainer($this->comment_created_by)) {
+                $send_to = 'client_all_trainers';
+            }
+        }
+        
+        
+        if($status == self::SUBMITTED_MENU_PLAN_STATUS) {
+            if(self::is_client($this->comment_created_by)) {
+                return;
+            }
+            if(self::is_trainer($this->comment_created_by)) {
+                return;
+            }
+        }
+        
+        
+        if($status == self::PENDING_MENU_PLAN_STATUS) {
+            if(self::is_client($this->comment_created_by)) {
+                return;
+            }
+            if(self::is_trainer($this->comment_created_by)) {
+                return;
+            }
+        }
+        
+        
+        if($status == self::RESUBMIT_MENU_PLAN_STATUS) {
+            if(self::is_client($this->comment_created_by)) {
+                $send_to = 'all_trainers';
+            }
+            if(self::is_trainer($this->comment_created_by)) {
+                $send_to = 'client_all_trainers';
+            }
+        }
+        
+        
+        if($status == self::APPROVED_MENU_PLAN_STATUS) {
+            if(self::is_client($this->comment_created_by)) {
+                $send_to = 'all_trainers';
+            }
+            if(self::is_trainer($this->comment_created_by)) {
+                $send_to = 'client_all_trainers';
+            }
+        }
+        
+        
+        if($status == self::NOTAPPROVED_MENU_PLAN_STATUS) {
+            if(self::is_client($this->comment_created_by)) {
+                $send_to = 'all_trainers';
+            }
+            if(self::is_trainer($this->comment_created_by)) {
+                $send_to = 'client_all_trainers';
+            }
+        }
+        
+        if($send_to) {
+            $this->send_to = $send_to;
+        }
+        
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        
+        $ids = array();
+        
+        if(!$this->send_to) {
+            return;
+        }
+        
+        $client_id = $this->getClientIdByNutritionPlanId($this->item->nutrition_plan_id);
+        
+        $trainers_data = $this->getClientTrainers($client_id,  'all');
+        
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+        
+        if($this->send_to == 'all_trainers') {
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+        
+        if($this->send_to == 'client_all_trainers') {
+            $ids[] = $client_id;
+            
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+        
+        $this->recipients_ids = $ids;
+    }
+}
 
 

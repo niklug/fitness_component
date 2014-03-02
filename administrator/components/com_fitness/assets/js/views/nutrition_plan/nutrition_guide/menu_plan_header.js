@@ -70,6 +70,15 @@ define([
                     success: function (model, response) {
                         var id = model.get('id');
                         app.routers.nutrition_plan.navigate("!/menu_plan/" + id, true);
+                        console.log(app.options.is_trainer);
+                        if(app.options.is_trainer) {
+                            self.send_status_email(model.get('id'), 'menu_plan_pending');
+                        }
+                        
+                        if(app.options.is_client) {
+                            self.send_status_email(model.get('id'), 'menu_plan_inprogress');
+                        }
+                        
                     },
                     error: function (model, response) {
                         alert(response.responseText);
@@ -89,7 +98,29 @@ define([
             
             
         },
+        
+        send_status_email : function(id, method) {
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
 
+            data.id = id;
+            data.view = 'MenuPlan';
+            data.method = method;
+
+            $.AjaxCall(data, url, view, task, table, function(output){
+                //console.log(output);
+                var emails = output.split(',');
+                var message = 'Emails were sent to: ' +  "</br>";
+                $.each(emails, function(index, email) { 
+                    message += email +  "</br>";
+                });
+                $("#emais_sended").append(message);
+           });
+        },
+        
         onClickDelete : function(event) {
             this.model.destroy( {
                 success: function (model, response) {
@@ -109,9 +140,13 @@ define([
             this.model.set({status : '5'});
             this.model.unset('assessed_by_name');
             this.model.unset('created_by_name');
+            var self = this;
             this.model.save(null, {
                 success: function (model, response) {
                     app.routers.nutrition_plan.navigate("!/nutrition_guide", true);
+                    if(app.options.is_client) {
+                        self.send_status_email(model.get('id'), 'menu_plan_submitted');
+                    }
                 },
                 error: function (model, response) {
                     alert(response.responseText);

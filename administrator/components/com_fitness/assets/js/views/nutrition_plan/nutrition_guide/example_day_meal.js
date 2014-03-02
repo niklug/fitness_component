@@ -59,6 +59,8 @@ define([
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : app.options.example_day_meal_comments_db_table,
                 'read_only' : true,
+                'anable_comment_email' : true,
+                'comment_method' : 'MenuPlanComment'
             }
             
             var comments = $.comments(comment_options, comment_options.item_id, meal_id).run();
