@@ -80,7 +80,7 @@
                                     $html .= '<span' . $text_style . '>' . $ingredient->meal_name . '</span>';
                                     $html .= '</td>';
                                     $html .= '<td width="100">';
-                                    $html .= '<span' . $text_style . '>' . $ingredient->quantity . ' ' . $ingredient->measurement . '</span>';
+                                    $html .= '<span' . $text_style . '>' . $ingredient->quantity_sum . ' ' . $ingredient->measurement . '</span>';
                                     $html .= '</td>';
                                     $html .= '</tr>';
                                     $html .= '</table>';

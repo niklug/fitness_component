@@ -122,8 +122,15 @@ define([
             
             get_database_recipes : function() {
                 app.collections.add_meal_recipes.reset();
+                
+                var params = app.models.get_recipe_params.toJSON();
+                
+                //console.log(app.nutrition_plan);
+                
+                params.client_id = app.nutrition_plan.options.client_selected;
+                
                 app.collections.add_meal_recipes.fetch({
-                    data : app.models.get_recipe_params.toJSON(),
+                    data : params,
                     error: function (model, response) {
                         alert(response.responseText);
                     }

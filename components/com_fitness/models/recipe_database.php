@@ -70,9 +70,12 @@ class FitnessModelrecipe_database extends JModelList {
         $current_page = $data->current_page;
         
         $state = $data->state;
-                
-        $user = &JFactory::getUser();
-        $user_id = $user->id;
+
+        $user_id = $data->user_id;
+
+        $trainers_group_id = FitnessHelper::getTrainersGroupId();
+        
+        $SUPERUSER_GROUP_ID = FitnessHelper::SUPERUSER_GROUP_ID;
         
         $query = "SELECT a.*,";
         
@@ -110,16 +113,20 @@ class FitnessModelrecipe_database extends JModelList {
             $query .= ")";
         }
         
+        
+        
         if(($current_page == 'my_recipes') OR ($current_page == 'trash_list')) {
             $query .= " AND a.created_by = '$user_id'";
         } else if ($current_page == 'my_favourites') {
             $query .= " AND mf.client_id='$user_id'";
-        } else  {
-            // except recipes created not by another clients
+        } else if($current_page == 'meal_recipes') {
+            // by Business Profile 
+            $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by = '$user_id')";
+        } else {
+        
+            // except recipes created  by another clients
             $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
             // by Business Profile 
-            $trainers_group_id = FitnessHelper::getTrainersGroupId();
-            $SUPERUSER_GROUP_ID = FitnessHelper::SUPERUSER_GROUP_ID;
             $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
         }
 
@@ -178,12 +185,13 @@ class FitnessModelrecipe_database extends JModelList {
             $query .= " AND a.created_by = '$user_id'";
         } else if ($current_page == 'my_favourites') {
             $query .= " AND mf.client_id='$user_id'";
+        } else if($current_page == 'meal_recipes') {
+            // by Business Profile 
+            $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by = '$user_id')";
         } else {
             // except recipes created not by another clients
             $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
             // by Business Profile 
-            $trainers_group_id = FitnessHelper::getTrainersGroupId();
-            $SUPERUSER_GROUP_ID = FitnessHelper::SUPERUSER_GROUP_ID;
             $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
         }
         
@@ -425,6 +433,14 @@ class FitnessModelrecipe_database extends JModelList {
                 $data->filter_options = JRequest::getVar('filter_options'); 
                 $data->recipe_variations_filter_options = JRequest::getVar('recipe_variations_filter_options'); 
                 $data->current_page= JRequest::getVar('current_page'); 
+                
+                $user_id = JRequest::getVar('client_id');
+ 
+                if(!$user_id) {
+                    $user_id = JFactory::getUser()->id;
+                }
+
+                $data->user_id = $user_id;
 
                 if($id) {
                     $data = $this->getRecipe($table, $data);

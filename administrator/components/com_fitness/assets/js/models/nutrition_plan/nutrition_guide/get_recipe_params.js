@@ -11,7 +11,7 @@ define([
             state : 1,
             filter_options : '',
             recipe_variations_filter_options : '',
-            current_page : 'recipe_database'
+            current_page : 'meal_recipes'
         }
     });
     return model;

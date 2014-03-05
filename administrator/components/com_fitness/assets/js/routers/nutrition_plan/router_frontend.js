@@ -102,8 +102,12 @@ define([
             
             get_database_recipes : function() {
                 app.collections.add_meal_recipes.reset();
+                //console.log(app.models.get_recipe_params.toJSON());
                 app.collections.add_meal_recipes.fetch({
                     data : app.models.get_recipe_params.toJSON(),
+                    success : function(collection, response) {
+                        //console.log(collection.models.length);
+                    },
                     error: function (model, response) {
                         alert(response.responseText);
                     }
