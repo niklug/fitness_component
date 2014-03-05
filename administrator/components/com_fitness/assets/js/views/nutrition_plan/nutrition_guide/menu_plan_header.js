@@ -138,6 +138,8 @@ define([
         
         onClickSubmit : function() {
             this.model.set({status : '5'});
+            var submit_date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+            this.model.set({submit_date : submit_date});
             this.model.unset('assessed_by_name');
             this.model.unset('created_by_name');
             var self = this;

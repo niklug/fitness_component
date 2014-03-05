@@ -9,6 +9,7 @@
                 <th>SUBMIT DATE</th>
                 <th>ASSESSED BY</th>
                 <th>VIEW</th>
+                <th>COPY</th>
                 <th style="text-align: center;">DELETE</th>
             </thead>
             <tbody>
@@ -41,6 +42,15 @@
                            
                         </a>    
                     </td>
+                    
+                    
+                    <td class="center">
+                         <% if(item.status != '1' && item.status != '') { %>
+                         <a title="Copy Menu Plan" style="cursor: pointer;display: inline-block" class="copy_menu_plan" onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="copy_icon"></span></a>
+                         <% } %>
+                    </td>
+                    
+    
                     <td style="text-align: center;">
                         <a class="delete " data-id="<%= item.id %>" onclick="javascript:void(0)" style="cursor: pointer;">
                             [X]

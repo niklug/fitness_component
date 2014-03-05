@@ -347,6 +347,7 @@ $user_id = JFactory::getUser()->id;
             'example_day_meal_comments_db_table' : '#__fitness_nutrition_plan_example_day_meal_comments',
             
             'client_id' : '<?php echo JFactory::getUser()->id;?>',
+            'user_id' : '<?php echo JFactory::getUser()->id;?>',
             'trainer_id' : '<?php echo $this->item->trainer_id;?>',
             
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
@@ -411,7 +412,9 @@ $user_id = JFactory::getUser()->id;
             setStatuses : function(item_id) {
                 return this.statuses;
             },
-            'view' : 'MenuPlan'
+            'view' : 'MenuPlan',
+            'set_updater' : true,
+            'user_id' : options.user_id 
         }
         
         options.status_options = status_options;

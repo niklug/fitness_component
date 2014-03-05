@@ -130,7 +130,7 @@
                             text = 'PENDING';
                             break;
                     }
-                    var html = '<a style="cursor:default;" href="javascript:void(0)"  class="status_button ' + style_class + '">' + text + '</a>';
+                    var html = '<a style="cursor:default;" href="javascript:void(0)"  class="recipe_status_button ' + style_class + '">' + text + '</a>';
                     return html;
                 },
                 

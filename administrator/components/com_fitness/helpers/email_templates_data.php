@@ -817,7 +817,15 @@ class MenuPlanTemplateData extends EmailTemplateData  {
     
     protected function getItemData() {
         
-        $this->item = $this->getMenuPlanData($this->id);
+        //comments
+        if($this->comment_id) {
+            $this->comment = $this->getCommentData($this->comment_id, '#__fitness_nutrition_plan_example_day_meal_comments');
+            
+            $this->item = $this->getExampleDayMeal($this->comment->sub_item_id);
+        } else {
+            $this->item = $this->getMenuPlanData($this->id);
+        }
+        
 
         $this->business_profile_user = $this->item->created_by;
         
@@ -858,20 +866,20 @@ class MenuPlanTemplateData extends EmailTemplateData  {
         
         $data->trainer_name = JFactory::getUser()->name;
         
+        $client_id = $this->getClientIdByNutritionPlanId($this->item->nutrition_plan_id);
         
+        $data->client_name = JFactory::getUser($client_id)->name;
         //comments
         if($this->comment_id) {
-            $comment = $this->getCommentData($this->comment_id, '#__fitness_nutrition_plan_example_day_meal_comments');
-            
-            $date = JFactory::getDate($comment->created);
+            $date = JFactory::getDate($this->comment->created);
         
             $data->comment->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
 
-            $data->comment->created_by = JFactory::getUser($comment->created_by)->name;
+            $data->comment->created_by = JFactory::getUser($this->comment->created_by)->name;
             
-            $data->comment->comment_text = $comment->comment;
+            $data->comment->comment_text= $this->comment->comment;
         }
-
+        
         return $data;
     }
 }

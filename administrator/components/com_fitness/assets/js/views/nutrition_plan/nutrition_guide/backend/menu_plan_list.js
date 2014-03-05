@@ -24,6 +24,7 @@ define([
         events: {
             "click .preview" : "onClickPreview",
             "click .delete" : "onClickDelete",
+            "click .copy_menu_plan" : "onClickCopy",
         },
 
         onClickPreview : function(event) {
@@ -45,6 +46,11 @@ define([
         connectStatus : function() {
             var status = $.status(app.options.status_options);
             status.run();
+        },
+        
+        onClickCopy : function(event) {
+            var id = $(event.target).attr('data-id');
+            this.controller.copy_menu_plan(id);
         }
     });
             

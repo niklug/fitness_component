@@ -22,12 +22,18 @@ define([
 
         events: {
             "click .preview" : "onClickPreview",
+            "click .copy_menu_plan" : "onClickCopy",
         },
 
         onClickPreview : function(event) {
             var id = $(event.target).attr('data-id');
             this.controller.navigate("!/menu_plan/" + id, true);
         },
+        
+        onClickCopy : function(event) {
+            var id = $(event.target).attr('data-id');
+            this.controller.copy_menu_plan(id);
+        }
     });
             
     return view;

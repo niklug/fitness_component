@@ -61,6 +61,7 @@
             $obj = EmailTemplateData::factory($params);
 
             $data = $obj->processing();
+
         } catch (Exception $exc) {
             echo $exc->getMessage();
             die();
@@ -106,9 +107,7 @@
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->user_name; ?>,
-                                                                    </p>
-                                                                    <p>Additional comments or instructions have been posted about this menu plan. Please take a moment to review, take into account and action any requests or instructions.</p></td>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">                                                                   <p>Additional comments or instructions have been posted about this menu plan. Please take a moment to review, take into account and action any requests or instructions.</p></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">MENU PLAN NAME:</td>
@@ -120,15 +119,15 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">MEAL DESCRIPTION: </td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->created_by; ?> </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->item->description; ?> </td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">CREATED BY: <br /></td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->assessed_by; ?></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->created_by; ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td width="28%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">COMMENT BY: <br />
-                                                                    DATE / TIME:</td>
+                                                                                                                                                                                                                 DATE / TIME:</td>
                                                                 <td width="72%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->comment->created_by?> <br />
                                                                                                                                                                                                                  <?php echo $data->comment->created;?></td>
                                                             </tr>

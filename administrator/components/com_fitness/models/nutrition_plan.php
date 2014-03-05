@@ -954,7 +954,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
             switch ($method) {
                 case 'GET': // Get Item(s)
                     
-                    $id = JRequest::getVar('id');
+                    $id = JRequest::getVar('id', 0, '', 'INT');
+                    
                     $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
                     
                     $query = "SELECT a.*, "
@@ -972,7 +973,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     
                     $query .= " ORDER BY a.start_date DESC";
                     
-                    $items = FitnessHelper::customQuery($query, 1);
+                    $query_type = 1;
+                    
+                    if($id) {
+                        $query_type = 2;
+                    }
+                    
+                    $items = FitnessHelper::customQuery($query, $query_type);
                     return $items;
                     break;
                 case 'PUT': // Update

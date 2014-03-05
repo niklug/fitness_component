@@ -11,6 +11,9 @@
 // no direct access
 defined('_JEXEC') or die;
 
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+
 function getUserGroup($user_id) {
     if(!$user_id) {
         $user_id = &JFactory::getUser()->id;
@@ -35,12 +38,8 @@ $db->setQuery($sql);
 $clients = $db->loadObjectList();
 
 function getTrainingPeriods() {
-    // Training Period List
-    $db = JFactory::getDbo();
-    $sql = "SELECT * FROM #__fitness_training_period WHERE state='1'";
-    $db->setQuery($sql);
-    $training_periods = $db->loadObjectList();
-
+    $helper = new FitnessHelper();
+    $training_periods = $helper->getTrainingPeriod();
     foreach ($training_periods as $item) {
         $color = '<div style="float:left;margin-right:5px;width:15px; height:15px;background-color:' . $item->color . '" ></div>';
         $name = '<div> ' . $item->name . '</div>';

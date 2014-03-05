@@ -210,14 +210,9 @@ class FitnessModelgoals_periods extends JModelList {
     
     
     function getTrainingPeriods() {
-        // Training Period List
-        $db = JFactory::getDbo();
-        $sql = "SELECT * FROM #__fitness_training_period WHERE state='1'";
-        $db->setQuery($sql);
-        if(!$db->query()) {
-                JError::raiseError($db->getErrorMsg());
-            }
-        $training_periods = $db->loadObjectList();
+        
+        $helper = new FitnessHelper();
+        $training_periods = $helper->getTrainingPeriod();
 
         foreach ($training_periods as $item) {
             $color = '<div style="float:left;margin-right:5px;width:15px; height:15px;background-color:' . $item->color . '" ></div>';

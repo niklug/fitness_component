@@ -66,7 +66,7 @@ class FitnessEmail extends FitnessHelper
                     case 'ExerciseLibraryComment':
                         return new CommentExerciseLibraryEmail();
                     break;
-                    case 'MenuPlanCommentComment':
+                    case 'MenuPlanComment':
                         return new CommentMenuPlanEmail();
                     break;
 
@@ -1088,28 +1088,28 @@ class MenuPlanEmail extends FitnessEmail {
 
         switch ($data->method) {
             case 'menu_plan_pending':
-                $subject = 'Pending';
+                $subject = 'New Menu Plan Created';
                 $layout = 'email_menu_plan_pending';
                 break;
             case 'menu_plan_approved':
-                $subject = 'Approved';
+                $subject = 'Nutrition Plan: Menu Approved';
                 $layout = 'email_menu_plan_approved';
                 break;
             case 'menu_plan_notapproved':
-                $subject = 'Not Approved';
+                $subject = 'Nutrition Plan: Menu Not Approved';
                 $layout = 'email_menu_plan_notapproved';
                 break;
             case 'menu_plan_inprogress':
-                $subject = 'In Progress';
+                $subject = 'Nutrition Plan: New Menu Created';
                 $layout = 'email_menu_plan_inprogress';
                 break;
             case 'menu_plan_submitted':
-                $subject = 'Submitted';
+                $subject = 'Menu Plan Submitted';
                 $layout = 'email_menu_plan_submitted';
                 break;
             
             case 'menu_plan_resubmit':
-                $subject = 'Resubmit';
+                $subject = 'Nutrition Plan: Resubmit Your Menu';
                 $layout = 'email_menu_plan_resubmit';
                 break;
 
@@ -1126,7 +1126,7 @@ class MenuPlanEmail extends FitnessEmail {
 
     protected function get_recipients_ids() {
         
-        $this->item = $this->getMenuPlanData($this->id);
+        $this->item = $this->getMenuPlanData($this->data->id);
         
         $client_id = $this->getClientIdByNutritionPlanId($this->item->nutrition_plan_id);
         
@@ -1173,15 +1173,16 @@ class CommentMenuPlanEmail extends FitnessEmail {
 
         $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
         
-        $layout = 'email_exercise_library_comment';
+        $layout = 'email_menu_plan_comment';
 
-        $this->item = $this->getMenuPlanData($this->data->item_id);
-
+        $this->item = $this->getExampleDayMeal($this->data->sub_item_id);
+        
         $this->item_created_by = $this->item->created_by;
         
         $this->comment_created_by = $this->data->created_by;
         
         $status = $this->item->status;
+        
 
         if($status == self::INPROGRESS_MENU_PLAN_STATUS) {
             if(self::is_client($this->comment_created_by)) {

@@ -58,9 +58,13 @@ define([
                 'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : app.options.example_day_meal_comments_db_table,
-                'read_only' : true,
+                'read_only' : false,
                 'anable_comment_email' : true,
                 'comment_method' : 'MenuPlanComment'
+            }
+            
+            if(app.options.is_client) {
+                comment_options.read_only = true;
             }
             
             var comments = $.comments(comment_options, comment_options.item_id, meal_id).run();

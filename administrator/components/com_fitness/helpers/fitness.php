@@ -1381,6 +1381,14 @@ class FitnessHelper extends FitnessFactory
         return $data;
     }
     
+    public function getExampleDayMeal($id) {
+        $query = "SELECT a.*, m.* FROM #__fitness_nutrition_plan_example_day_meals AS a"
+                . " LEFT JOIN #__fitness_nutrition_plan_menus AS m ON m.id=a.menu_id"
+                . " WHERE a.id='$id'";
+        $data = self::customQuery($query, 2);
+        return $data;
+    }
+    
     public function getExampleDayMealRecipes($meal_id) {
         $query = "SELECT r.*, a.*, r.number_serves AS number_serves, r.id AS id,";
                     
@@ -1513,7 +1521,9 @@ class FitnessHelper extends FitnessFactory
         }
         
         public function getMenuPlanData($id) {
-            $query = "SELECT * FROM #__fitness_nutrition_plan_menus";
+            $query = "SELECT a.*"
+                    . " FROM #__fitness_nutrition_plan_menus AS a"
+                    . " WHERE a.id='$id'";
             return self::customQuery($query, 2);
         }
         
@@ -1629,7 +1639,7 @@ class FitnessHelper extends FitnessFactory
 
             $user_id = JFactory::getUser()->id;
             
-            if(self::is_trainer($user_id)) {
+            if(self::is_trainer($user_id) OR self::is_client($user_id)) {
                 $business_profile_id = $this->getBusinessProfileId($user_id);
                 $business_profile_id = $business_profile_id['data'];
                 $query .= " AND business_profile_id='$business_profile_id'";
