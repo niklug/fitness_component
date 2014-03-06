@@ -63,10 +63,14 @@ define([
                 'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : '#__fitness_nutrition_plan_supplements_comments',
-                'read_only' : true,
+                'read_only' : false,
+                'anable_comment_email' : true,
+                'comment_method' : 'SupplementComment'
             };
 
             var comments = $.comments(comment_options, comment_options.item_id, this.model.get('id'));
+            
+            console.log(comments);
             
             var comments_html = comments.run();
 

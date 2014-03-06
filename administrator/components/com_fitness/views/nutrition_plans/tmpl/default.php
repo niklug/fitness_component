@@ -87,13 +87,21 @@ $helper = new FitnessHelper();
                     </select>
             </div>
                             
-
             <div class='filter-select fltrt'>
-                    <select name="filter_goal_category" class="inputbox" onchange="this.form.submit()">
-                            <option value=""><?php echo JText::_('-Primary Goal-');?></option>
-                            <?php echo JHtml::_('select.options', $helper->getPrimaryGoalCategory(), "id", "name", $this->state->get('filter.goal_category'), true);?>
+                    <select name="filter_mini_goal" class="inputbox" onchange="this.form.submit()">
+                            <option value=""><?php echo JText::_('-Mini Goal-');?></option>
+                            <?php echo JHtml::_('select.options', $helper->getMiniGoalCategory(), "id", "name", $this->state->get('filter.mini_goal'), true);?>
                     </select>
             </div>
+            <div class='filter-select fltrt'>
+                    <select name="filter_primary_goal" class="inputbox" onchange="this.form.submit()">
+                            <option value=""><?php echo JText::_('-Primary Goal-');?></option>
+                            <?php echo JHtml::_('select.options', $helper->getPrimaryGoalCategory(), "id", "name", $this->state->get('filter.primary_goal'), true);?>
+                    </select>
+            </div>
+            
+            
+            
             
             <?php
             $force_active[] = JHTML::_('select.option', '1', 'Force Active' );
@@ -157,8 +165,14 @@ $helper = new FitnessHelper();
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_FORCE_ACTIVE', 'a.force_active', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
-				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_PRIMARY_GOAL', 'a.primary_goal_name', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_PRIMARY_GOAL', 'primary_goal_name', $listDirn, $listOrder); ?>
 				</th>
+                                
+                                <th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Mini Goal', 'mini_goal_name', $listDirn, $listOrder); ?>
+				</th>
+                                
+                                
 				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_FITNESS_NUTRITION_PLANS_NUTRITION_FOCUS', 'a.nutrition_focus_name', $listDirn, $listOrder); ?>
 				</th>
@@ -248,6 +262,9 @@ $helper = new FitnessHelper();
 				</td>
 				<td>
 					<?php echo $item->primary_goal_name; ?>
+				</td>
+                                <td>
+					<?php echo $item->mini_goal_name; ?>
 				</td>
 				<td>
 					<?php echo $item->nutrition_focus_name; ?>

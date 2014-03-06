@@ -1359,6 +1359,14 @@ class FitnessHelper extends FitnessFactory
         return $data;
     }
     
+    public function getPlanProtocol($id) {
+        $query = "SELECT * FROM #__fitness_nutrition_plan_supplement_protocols WHERE id='$id'";
+        
+        $data = self::customQuery($query, 2);
+       
+        return $data;
+    }
+    
     public function getPlanSupplements($id) {
         $query = "SELECT * FROM #__fitness_nutrition_plan_supplements WHERE protocol_id='$id'";
         $protocols = self::customQuery($query, 1);

@@ -64,6 +64,10 @@ class EmailTemplateData extends FitnessHelper
             case 'MenuPlan' : 
                 return new MenuPlanTemplateData($params);
                 break;
+            
+            case 'Supplement':
+                return new SupplementEmailTemplateData($params);
+                break;
 
             default:
                 break;
@@ -381,11 +385,11 @@ class NutritionPlanEmailTemplateData extends EmailTemplateData  {
     public function __construct($params) {
         $this->id = $params['id'];
         $this->layout = $params['layout'];
-
+        $this->comment_id = $params['comment_id'];
     }
     
     protected function getItemData() {
-        $this->item = $this->getNutritionPlan($this->id);
+        $this->item = $this->getPlanData($this->id);
         
         $this->business_profile_user = $this->item->client_id;
     }
@@ -400,7 +404,7 @@ class NutritionPlanEmailTemplateData extends EmailTemplateData  {
         
         $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
 
-        $data->sitelink = JUri::root() .  'index.php?option=com_multicalendar&view=pdf&layout=email_notify_nutrition_plan&tpml=component&id=' . $this->id;
+        $data->sitelink = JUri::root() .  'index.php?option=com_multicalendar&view=pdf&layout=email_notify_nutrition_plan&tpml=component&id=' . $this->id . '&comment_id=' . $this->comment_id;
         
         $data->open_link = JUri::root() . 'index.php?option=com_fitness&view=nutrition_planning';
         
@@ -412,8 +416,38 @@ class NutritionPlanEmailTemplateData extends EmailTemplateData  {
         $user = &JFactory::getUser($this->item->trainer_id);
         $data->trainer_name =  $user->name;
         
-        $date = JFactory::getDate($this->item ->active_start);
-        $data->active_start =  $date->toFormat('%A, %d %b %Y');
+        $date = JFactory::getDate($this->item ->primary_goal_start_date);
+        $data->primary_goal_start_date =  $date->toFormat('%A, %d %b %Y');
+        
+        $date = JFactory::getDate($this->item ->primary_goal_deadline);
+        $data->primary_goal_deadline =  $date->toFormat('%A, %d %b %Y');
+        
+        
+        $date = JFactory::getDate($this->item ->mini_goal_start_date);
+        $data->mini_goal_start_date =  $date->toFormat('%A, %d %b %Y');
+        
+        $date = JFactory::getDate($this->item ->mini_goal_deadline);
+        $data->mini_goal_deadline =  $date->toFormat('%A, %d %b %Y');
+        
+        $table = '#__fitness_nutrition_plan_targets_comments';
+        
+        if($this->layout == 'email_macros_comment') {
+            $table = '#__fitness_nutrition_plan_macronutrients_comments';
+        }
+        
+        //comments
+        if($this->comment_id) {
+            $comment = $this->getCommentData($this->comment_id, $table);
+            
+            $date = JFactory::getDate($comment->created);
+        
+            $data->comment->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
+
+            $data->comment->created_by = JFactory::getUser($comment->created_by)->name;
+            
+            $data->comment->comment_text = $comment->comment;
+        }
+        
 
         return $data;
     }
@@ -884,3 +918,81 @@ class MenuPlanTemplateData extends EmailTemplateData  {
     }
 }
 
+
+
+
+
+class SupplementEmailTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->layout = $params['layout'];
+        $this->comment_id = $params['comment_id'];
+    }
+    
+    protected function getItemData() {
+        
+        
+        $protocol = $this->getPlanProtocol($this->id);
+
+        
+        $this->item = $this->getPlanData($protocol->nutrition_plan_id);
+        
+        $this->item->protocol = $protocol;
+        
+        $this->business_profile_user = $this->item->client_id;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        $data->sitelink = JUri::root() .  'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&id=' . $this->id . '&comment_id=' . $this->comment_id;
+        
+        $data->open_link = JUri::root() . 'index.php?option=com_fitness&view=nutrition_planning#!/supplements';
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $user = &JFactory::getUser($this->item->client_id );
+        $data->client_name = $user->name;
+
+        $user = &JFactory::getUser($this->item->trainer_id);
+        $data->trainer_name =  $user->name;
+        
+        $date = JFactory::getDate($this->item ->primary_goal_start_date);
+        $data->primary_goal_start_date =  $date->toFormat('%A, %d %b %Y');
+        
+        $date = JFactory::getDate($this->item ->primary_goal_deadline);
+        $data->primary_goal_deadline =  $date->toFormat('%A, %d %b %Y');
+        
+        
+        $date = JFactory::getDate($this->item ->mini_goal_start_date);
+        $data->mini_goal_start_date =  $date->toFormat('%A, %d %b %Y');
+        
+        $date = JFactory::getDate($this->item ->mini_goal_deadline);
+        $data->mini_goal_deadline =  $date->toFormat('%A, %d %b %Y');
+
+        //comments
+        if($this->comment_id) {
+            $comment = $this->getCommentData($this->comment_id, '#__fitness_nutrition_plan_supplements_comments');
+            
+            $date = JFactory::getDate($comment->created);
+        
+            $data->comment->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
+
+            $data->comment->created_by = JFactory::getUser($comment->created_by)->name;
+            
+            $data->comment->comment_text = $comment->comment;
+        }
+        
+
+        return $data;
+    }
+
+}

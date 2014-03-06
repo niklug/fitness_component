@@ -69,6 +69,15 @@ class FitnessEmail extends FitnessHelper
                     case 'MenuPlanComment':
                         return new CommentMenuPlanEmail();
                     break;
+                    case 'TargetsComment':
+                        return new CommentTargetsCommentEmail();
+                    break;
+                    case 'MacrosComment':
+                        return new CommentMacrosCommentEmail();
+                    break;
+                    case 'SupplementComment':
+                        return new CommentSupplementCommentEmail();
+                    break;
 
                     default:
                         return;
@@ -447,7 +456,7 @@ class NutritionPlanEmail extends FitnessEmail {
     protected function get_recipients_ids() {
         $ids = array();
         
-        if($data->method == 'Notify') {
+        if($this->data->method == 'Notify') {
             $client_id = $this->getClientIdByNutritionPlanId($this->data->id);
         }
         
@@ -1285,3 +1294,209 @@ class CommentMenuPlanEmail extends FitnessEmail {
 }
 
 
+
+
+
+class CommentTargetsCommentEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: comment id');
+        }
+
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        
+        $layout = 'email_targets_comment';
+
+        $this->item = $this->getPlanData($this->data->item_id);
+        
+        $this->comment_created_by = $this->data->created_by;
+        
+        if(self::is_client($this->comment_created_by)) {
+            $send_to = 'all_trainers';
+        }
+        
+        if(self::is_trainer($this->comment_created_by)) {
+            $send_to = 'client';
+        }
+
+        
+        if($send_to) {
+            $this->send_to = $send_to;
+        }
+        
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        
+        $ids = array();
+        
+        if(!$this->send_to) {
+            return;
+        }
+        
+        $client_id = $this->getClientIdByNutritionPlanId($this->item->id);
+        
+        $trainers_data = $this->getClientTrainers($client_id,  'all');
+        
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+        
+        if($this->send_to == 'all_trainers') {
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+        
+        if($this->send_to == 'client') {
+            $ids[] = $client_id;
+        }
+        
+        $this->recipients_ids = $ids;
+    }
+}
+
+
+
+class CommentMacrosCommentEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: comment id');
+        }
+
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        
+        $layout = 'email_macros_comment';
+
+        $this->item = $this->getPlanData($this->data->item_id);
+        
+        $this->comment_created_by = $this->data->created_by;
+        
+        if(self::is_client($this->comment_created_by)) {
+            $send_to = 'all_trainers';
+        }
+        
+        if(self::is_trainer($this->comment_created_by)) {
+            $send_to = 'client';
+        }
+
+        
+        if($send_to) {
+            $this->send_to = $send_to;
+        }
+        
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        
+        $ids = array();
+        
+        if(!$this->send_to) {
+            return;
+        }
+        
+        $client_id = $this->getClientIdByNutritionPlanId($this->item->id);
+        
+        $trainers_data = $this->getClientTrainers($client_id,  'all');
+        
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+        
+        if($this->send_to == 'all_trainers') {
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+        
+        if($this->send_to == 'client') {
+            $ids[] = $client_id;
+        }
+        
+        $this->recipients_ids = $ids;
+    }
+}
+
+
+
+
+
+class CommentSupplementCommentEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: comment id');
+        }
+
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        
+        $layout = 'email_supplement_comment';
+        
+        $this->item = $this->getPlanProtocol($this->data->sub_item_id);
+
+        $this->comment_created_by = $this->data->created_by;
+        
+        if(self::is_client($this->comment_created_by)) {
+            $send_to = 'all_trainers';
+        }
+        
+        if(self::is_trainer($this->comment_created_by)) {
+            $send_to = 'client';
+        }
+
+        
+        if($send_to) {
+            $this->send_to = $send_to;
+        }
+        
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->sub_item_id . '&comment_id=' . $this->data->id;
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        
+        $ids = array();
+        
+        if(!$this->send_to) {
+            return;
+        }
+        
+        $client_id = $this->getClientIdByNutritionPlanId($this->item->nutrition_plan_id);
+        
+        $trainers_data = $this->getClientTrainers($client_id,  'all');
+        
+        if (!$client_id) {
+            throw new Exception('error: no client id');
+        }
+        
+        if($this->send_to == 'all_trainers') {
+            $ids = array_merge($ids, $trainers_data['data']);
+        }
+        
+        if($this->send_to == 'client') {
+            $ids[] = $client_id;
+        }
+        
+        $this->recipients_ids = $ids;
+    }
+}

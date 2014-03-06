@@ -48,6 +48,8 @@ define([
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : '#__fitness_nutrition_plan_supplements_comments',
                 'read_only' : true,
+                'anable_comment_email' : true,
+                'comment_method' : 'SupplementComment'
             };
 
             var comments = $.comments(comment_options, comment_options.item_id, this.model.get('id'));

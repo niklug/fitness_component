@@ -155,11 +155,12 @@ define([
                 // connect comments
                 var comment_options = {
                     'item_id' :  id,
-                    'fitness_administration_url' : app.options.fitness_frontend_url,
+                    'fitness_administration_url' : app.options.ajax_call_url,
                     'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                     'db_table' :  '#__fitness_nutrition_plan_targets_comments',
-                    'read_only' : true,
-                    'anable_comment_email' : false
+                    'read_only' : false,
+                    'anable_comment_email' : true,
+                    'comment_method' : 'TargetsComment'
                 }
                 var comments =  $.comments(comment_options, comment_options.item_id, 0);
 
@@ -178,11 +179,12 @@ define([
                  // connect comments
                  var comment_options = {
                     'item_id' :  id,
-                    'fitness_administration_url' : app.options.fitness_frontend_url,
+                    'fitness_administration_url' : app.options.ajax_call_url,
                     'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
-                    'read_only' : true,
-                    'anable_comment_email' : false
+                    'read_only' : false,
+                    'anable_comment_email' : true,
+                    'comment_method' : 'MacrosComment'
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 1);
 

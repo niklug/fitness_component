@@ -165,7 +165,8 @@ define([
                     'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                     'db_table' :  '#__fitness_nutrition_plan_targets_comments',
                     'read_only' : true,
-                    'anable_comment_email' : false
+                    'anable_comment_email' : true,
+                    'comment_method' : 'TargetsComment'
                 }
                 var comments =  $.comments(comment_options, comment_options.item_id, 0);
 
@@ -200,7 +201,8 @@ define([
                     'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                     'db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
                     'read_only' : true,
-                    'anable_comment_email' : false
+                    'anable_comment_email' : true,
+                    'comment_method' : 'MacrosComment'
                 }
                 var comments = $.comments(comment_options, comment_options.item_id, 1);
 

@@ -229,6 +229,7 @@ class FitnessModelgoals_periods extends JModelList {
              (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
              mgn.name AS mini_goal_name,
              nf.name AS nutrition_focus_name,
+             (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name,
              (SELECT calories FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") calories,
              (SELECT protein FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") protein,
              (SELECT fats FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") fats,

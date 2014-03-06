@@ -32,7 +32,8 @@ class FitnessModelnutrition_plans extends JModelList {
                 'active_start', 'a.active_start',
                 'active_finish', 'a.active_finish',
                 'force_active', 'a.force_active',
-                'primary_goal', 'a.primary_goal',
+                'primary_goal', 'gn.id',
+                'mini_goal', 'mgc.id',
                 'nutrition_focus', 'a.nutrition_focus',
                 'business_name', 'business_name',
                 'created', 'a.created',
@@ -83,9 +84,15 @@ class FitnessModelnutrition_plans extends JModelList {
                 $force_active = $app->getUserStateFromRequest($this->context . '.filter.force_active', 'filter_force_active', '', 'string');
                 $this->setState('filter.force_active', $force_active);
                 
-                // Filter by goal category
-                $goal_category = $app->getUserStateFromRequest($this->context . '.filter.goal_category', 'filter_goal_category', '', 'string');
-                $this->setState('filter.goal_category', $goal_category);
+                // Filter by primary goal
+                $primary_goal = $app->getUserStateFromRequest($this->context . '.filter.primary_goal', 'filter_primary_goal', '', 'string');
+                $this->setState('filter.primary_goal', $primary_goal);
+                
+                
+                // Filter by mini goal
+                $mini_goal = $app->getUserStateFromRequest($this->context . '.filter.mini_goal', 'filter_mini_goal', '', 'string');
+
+                $this->setState('filter.mini_goal', $mini_goal);
                 
                 
                 // Filter by nutrition focus
@@ -144,7 +151,7 @@ class FitnessModelnutrition_plans extends JModelList {
                          (SELECT protein FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') protein,
                          (SELECT fats FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') fats,
                          (SELECT carbs FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type='  . $db->quote('heavy') .  ') carbs,'
-                        . 'bp.name AS business_name'
+                        . 'bp.name AS business_name, mgc.name AS mini_goal_name'
                 )
         );
         $query->from('#__fitness_nutrition_plan AS a');
@@ -155,11 +162,18 @@ class FitnessModelnutrition_plans extends JModelList {
         
         $query->leftJoin('#__fitness_goal_categories AS gn ON gn.id = gc.goal_category_id');
         
+
+        $query->leftJoin('#__fitness_mini_goals AS mg ON mg.id = a.mini_goal');
+        
+        $query->leftJoin('#__fitness_mini_goal_categories AS mgc ON mg.mini_goal_category_id=mgc.id');
+        
+        
         $query->leftJoin('#__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus');
         
         $query->leftJoin('#__fitness_clients AS c ON c.user_id = a.client_id');
         
         $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = c.business_profile_id');
+
         
 
         
@@ -226,13 +240,18 @@ class FitnessModelnutrition_plans extends JModelList {
             $query->where('a.trainer_id = '.(int) $primary_trainer);
         } 
                 
-        // Filter by goal category
-        $goal_category = $this->getState('filter.goal_category');
-        if (is_numeric($goal_category)) {
-            $query->where('gn.id = '.(int) $goal_category);
+        // Filter by primary goal
+        $primary_goal = $this->getState('filter.primary_goal');
+        if (is_numeric($primary_goal)) {
+            $query->where('gn.id = '.(int) $primary_goal);
         }    
         
-        
+        // Filter by mini goal
+        $mini_goal = $this->getState('filter.mini_goal');
+        //var_dump($mini_goal);
+        if (is_numeric($mini_goal)) {
+            $query->where('mgc.id = '.(int) $mini_goal);
+        } 
         
         // Filter by nutrition focus
         $nutrition_focus = $this->getState('filter.nutrition_focus');
@@ -322,7 +341,7 @@ class FitnessModelnutrition_plans extends JModelList {
         $db = JFactory::getDBO();
         $query = "SELECT id, force_active, created  FROM #__fitness_nutrition_plan  WHERE 
             " . $db->quote($current_date) . "
-            BETWEEN active_start AND active_finish
+            BETWEEN CONCAT(active_start, " . $db->quote(' 00:00:00') . ") AND CONCAT(active_finish, " . $db->quote(' 23:59:59') . ")
             AND client_id='$client_id'
             AND state='1'
         ";
