@@ -324,5 +324,154 @@ class FitnessModelprograms extends JModelList {
 
         return $html;
     }
+    
+    
+    
+    public function programs() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $id = JRequest::getVar('id', 0, '', 'INT');
+
+        $table = '#__dc_mv_events';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $data = new stdClass();
+                $data->id = $id;  
+                $data->title = JRequest::getVar('title'); 
+                $data->client_name = JRequest::getVar('client_name'); 
+                $data->sort_by = JRequest::getVar('sort_by'); 
+                $data->order_dirrection = JRequest::getVar('order_dirrection'); 
+                $data->page = JRequest::getVar('page'); 
+                $data->limit = JRequest::getVar('limit'); 
+                $data->state = JRequest::getVar('state'); 
+
+                $data->business_profiles = JRequest::getVar('business_profiles'); 
+                $data->current_page = JRequest::getVar('current_page'); 
+
+                $data = $this->getPrograms($table, $data);
+                
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
+    
+    
+    
+    public function getPrograms($table, $data) {
+        
+        $helper = new FitnessHelper();
+        
+        $table = '#__dc_mv_events';
+        
+        $page = $data->page;
+        
+        $limit = $data->limit;
+        
+        $start = ($page - 1) * $limit;
+        
+        $query = " SELECT a.*,";
+        
+        
+        //get total number
+        $query .= " (SELECT COUNT(*) FROM $table AS a ";
+        
+        $query .= " ) items_total, ";
+        //end get total number
+        
+        $query .= " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name ";
+        
+        $query .= "  FROM $table AS a";
+        
+        if($limit) {
+            $query .= " LIMIT $start, $limit";
+        }
+        
+        
+        $items = FitnessHelper::customQuery($query, 1);
+        
+        $i = 0;
+        foreach ($items as $item) {
+            $group_clients_data = $this->getGroupClientsData($item->id, $item->client_id);
+            $items[$i]->group_clients_data = $group_clients_data;
+            $i++;
+        }
+
+        return $items;
+
+    }
+    
+    
+    public function getGroupClientsData($event_id, $client_id) {
+
+        $query = "SELECT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
+        
+        $clients = FitnessHelper::customQuery($query, 3);
+
+        if($client_id) {
+            $clients = array_merge($clients, array($client_id));
+        }
+        
+        $clients = array_unique($clients);
+
+        $data = array();
+        $i = 0;
+        foreach ($clients as $client) {
+            $user = &JFactory::getUser($client);
+            
+            $sentConfirmEmailData = $this->getSentConfirmEmailData($event_id, $client);
+            
+            $data[$i]->client_name = $user->name;
+            
+            $data[$i]->sent = $sentConfirmEmailData->sent;
+            
+            $data[$i]->confirmed = $sentConfirmEmailData->confirmed;
+                    
+            $i++;
+            
+        }
+       
+        return $data;
+    }
+    
+    
+    public function getSentConfirmEmailData($event_id, $client_id) {
+
+        $query = "SELECT sent, confirmed
+            FROM  #__fitness_email_reminder
+            WHERE event_id='$event_id'
+            AND client_id='$client_id'
+            LIMIT 1
+         ";
+        
+        return FitnessHelper::customQuery($query, 2);
+    }
 
 }

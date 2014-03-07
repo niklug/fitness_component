@@ -379,5 +379,11 @@ class FitnessController extends JController
             echo json_encode($helper->batch_copy());
         }
         
+        function programs() {
+            $view = $this -> getView('programs', 'json');
+            $view->setModel($this->getModel('programs'));
+            $view -> programs(); 
+        }
+        
 
 }

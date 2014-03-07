@@ -30,7 +30,14 @@ class FitnessViewPrograms extends JView {
         $this->pagination = $this->get('Pagination');
         $document = &JFactory::getDocument();
         $document->addStyleSheet(JURI::base() . 'components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'fitness.css');
+        
+        $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
 
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'underscore-min.js');
+        
+        include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
+
+        /*
         $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'underscore-min.js');
@@ -41,7 +48,7 @@ class FitnessViewPrograms extends JView {
         echo '<!--[if IE]><script type="text/javascript" src="' . JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
         $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'graph.js');
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'ajax_call_function.js');
-
+        */
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
             throw new Exception(implode("\n", $errors));
@@ -85,8 +92,8 @@ class FitnessViewPrograms extends JView {
         
         $canDo = FitnessHelper::getActions($state->get('filter.category_id'));
 
-        JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_PROGRAMS'), 'programs.png');
-
+        JToolBarHelper::title(JText::_('Programs & Workouts'), 'programs.png');
+        /*
         //Check if the form exists before showing the add/edit buttons
         $formPath = JPATH_COMPONENT_ADMINISTRATOR . '/views/program';
         if (file_exists($formPath)) {
@@ -134,6 +141,8 @@ class FitnessViewPrograms extends JView {
         if ($canDo->get('core.admin')) {
             JToolBarHelper::preferences('com_fitness');
         }
+         * 
+         */
     }
     
     

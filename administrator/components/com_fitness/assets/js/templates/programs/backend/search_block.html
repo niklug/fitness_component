@@ -1,0 +1,77 @@
+<table width="100%">
+    <tr>
+        <td width="90">
+            <label>Exercise Name</label>
+        </td>
+        <td width="170">
+            <input id="exercise_name" size="30" type="text" >
+        </td>
+        <td width="160">
+            <label>Client Name(My Exercises List)</label>
+        </td>
+        <td width="150">
+            <input id="client_name" size="30" type="text" >
+        </td>
+        <td width="50">
+            <input id="search_by_name" type="button" value="Search">
+        </td>
+        <td width="100">
+            <input id="clear_all" type="button" value="Clear All">
+        </td>
+        
+        <td width="200" id="business_profile_filter">
+            
+        </td>
+        
+        <td  width="120">
+            <select id="state_filter" class="inputbox" size="1" name="state">
+                <%
+                var selected_published = '';
+                var selected_unpublished = 'selected="selected"';
+                if(current_page == 'list') {
+                    selected_published = 'selected="selected"';
+                    selected_unpublished = '';
+                }
+                
+                %>
+                <option <%= selected_published %> value="1">Published</option>
+                <option <%= selected_unpublished %>   value="0">Unpublished</option>
+            </select>
+        </td>
+
+        <% if(current_page == 'list') { %>
+        
+        <td class="right">
+            <div id="toolbar" class="toolbar-list right">
+                <a title="Add Video Item" id="add_item" class="toolbar" onclick="javascript:void(0)">
+                    <span  class="icon-32-new"> </span>
+                </a>
+                <a title="Trash Selected Items" id="trash_selected" class="toolbar" onclick="javascript:void(0)">
+                    <span  class="icon-32-trash"> </span>
+                </a>
+            </div>
+        </td>
+        
+        
+        <% } %>
+        
+        <% if(current_page == 'trash_list') { %>
+        
+        <td class="right">
+            <div id="toolbar" class="toolbar-list right">
+                <a title="Delete Selected Items" id="delete_selected" class="toolbar" onclick="javascript:void(0)">
+                    <span  class="icon-32-delete"> </span>
+                </a>
+            </div>
+        </td>
+        
+        <% } %>
+        
+        <td></td>
+    </tr>
+</table>
+
+
+
+
+

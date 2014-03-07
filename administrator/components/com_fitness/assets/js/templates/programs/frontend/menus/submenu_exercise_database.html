@@ -1,0 +1,47 @@
+<div class="fitness_block_wrapper" style="height:44px;margin-top: 10px;">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <tr>
+                <td width="100">
+                    <label>Exercise Name</label>
+                </td>
+                <td width="150">
+                    <input  class="dark_input_style" id="exercise_name" size="30" type="text" >
+                </td>
+                <td width="120">
+                    <a data-id="" style="cursor: pointer; float:left;margin-left: 5px;" id="search_by_name" onclick="javascript:void(0)">[Search]</a>
+                    <a data-id="" style="cursor: pointer;float:left;margin-left: 10px;" id="clear_all" onclick="javascript:void(0)">[Clear]</a>
+                </td>
+                
+                <td class="center" width="120">
+                    <select style="font-size: 12px;" id="sort_filter"  size="1">
+                        <option value="0">-Select Sort By-</option>
+                        <option value="1">Exercise Name (Ascending)</option>
+                        <option value="2">Exercise Name (Descending)</option>
+                        <option value="3">Author Name (Ascending)</option>
+                        <option value="4">Author Name (Descending)</option>
+                        <option value="5">Date Created (Ascending)</option>
+                        <option value="6">Date Created (Descending)</option>
+                        <option value="7">Status</option>
+                    </select>
+                </td>
+                
+                <td>
+                    <% if(current_page == 'my_exercises') {%>
+                                                
+                        <a data-id="" style="cursor: pointer;float:right;margin-left: 20px;" id="view_trash" onclick="javascript:void(0)">[VIEW TRASH]</a>
+                        
+                        <a data-id="" style="cursor: pointer;float:right;" id="add_item" onclick="javascript:void(0)">[UPLOAD VIDEO]</a>
+                    <% } %>
+                    
+                    
+                    <% if(current_page == 'trash_list') {%>
+                        <a data-id="" style="cursor: pointer;float:right;" id="close_trash_list" onclick="javascript:void(0)">[CLOSE TRASH]</a>
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <div class="clr"></div>
+    </div>
+    <hr class="orange_line">
+</div>
