@@ -354,6 +354,12 @@ class FitnessModelprograms extends JModelList {
                 $data->page = JRequest::getVar('page'); 
                 $data->limit = JRequest::getVar('limit'); 
                 $data->state = JRequest::getVar('state'); 
+                
+                $data->title = JRequest::getVar('title', '0'); 
+                $data->location = JRequest::getVar('location', '0'); 
+                $data->session_type = JRequest::getVar('session_type', '0'); 
+                $data->session_focus = JRequest::getVar('session_focus', '0'); 
+                $data->status = JRequest::getVar('status', '0'); 
 
                 $data->business_profiles = JRequest::getVar('business_profiles'); 
                 $data->current_page = JRequest::getVar('current_page'); 
@@ -396,12 +402,43 @@ class FitnessModelprograms extends JModelList {
         $limit = $data->limit;
         
         $start = ($page - 1) * $limit;
-        
+
         $query = " SELECT a.*,";
+        
+        $query .= " t.name AS appointment_name,";
+        
+        $query .= " l.name AS location_name,";
+        
+        $query .= " st.name AS session_type_name,";
+        
+        $query .= " sf.name AS session_focus_name,";
         
         
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
+        
+        $query .= " WHERE 1";
+        
+        //1
+        if($data->title) {
+            $query .= " AND a.title IN ($data->title)";
+        }
+        //2
+        if($data->location) {
+            $query .= " AND a.location IN ($data->location)";
+        }
+        //3
+        if($data->session_type) {
+            $query .= " AND a.session_type IN ($data->session_type)";
+        }
+        //4
+        if($data->session_focus) {
+            $query .= " AND a.session_focus IN ($data->session_focus)";
+        }
+        //5
+        if($data->status) {
+            $query .= " AND a.status IN ($data->status)";
+        }
         
         $query .= " ) items_total, ";
         //end get total number
@@ -409,6 +446,39 @@ class FitnessModelprograms extends JModelList {
         $query .= " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name ";
         
         $query .= "  FROM $table AS a";
+        
+        
+        $query .= " LEFT JOIN #__fitness_categories AS t ON t.id = a.title ";
+        
+        $query .= " LEFT JOIN #__fitness_locations AS l ON l.id = a.location ";
+        
+        $query .= " LEFT JOIN #__fitness_session_type AS st ON st.id = a.session_type ";
+        
+        $query .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
+        
+        $query .= " WHERE 1";
+        
+        //1
+        if($data->title) {
+            $query .= " AND a.title IN ($data->title)";
+        }
+        //2
+        if($data->location) {
+            $query .= " AND a.location IN ($data->location)";
+        }
+        //3
+        if($data->session_type) {
+            $query .= " AND a.session_type IN ($data->session_type)";
+        }
+        //4
+        if($data->session_focus) {
+            $query .= " AND a.title IN ($data->session_focus)";
+        }
+        //5
+        if($data->status) {
+            $query .= " AND a.status IN ($data->status)";
+        }
+        
         
         if($limit) {
             $query .= " LIMIT $start, $limit";

@@ -19,19 +19,21 @@ CREATE TABLE IF NOT EXISTS `#__dc_mv_calendars` (
 -- Table structure for table '#__dc_mv_events'
 -- 
 
+
 CREATE TABLE IF NOT EXISTS `#__dc_mv_events` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `calid` int(10) unsigned DEFAULT NULL,
   `starttime` datetime DEFAULT NULL,
   `endtime` datetime DEFAULT NULL,
-  `title` varchar(250) DEFAULT NULL,
-  `location` varchar(250) DEFAULT NULL,
+  `title` int(11) unsigned NOT NULL,
+  `location` int(11) unsigned DEFAULT NULL,
   `description` text,
-  `session_type` varchar(255) NOT NULL,
-  `session_focus` varchar(255) NOT NULL,
+  `comments` text,
+  `session_type` int(11) unsigned NOT NULL,
+  `session_focus` int(11) unsigned NOT NULL,
   `client_id` int(11) NOT NULL,
   `trainer_id` int(11) NOT NULL,
-  `status` int(1) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '1',
   `frontend_published` int(1) NOT NULL DEFAULT '0',
   `isalldayevent` tinyint(3) unsigned DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,
@@ -40,10 +42,14 @@ CREATE TABLE IF NOT EXISTS `#__dc_mv_events` (
   `rrule` varchar(255) DEFAULT NULL,
   `uid` int(10) DEFAULT NULL,
   `exdate` text,
-  `business_profile_id` int(11) unsigned DEFAULT NULL,
+  `business_profile_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+
 
 CREATE TABLE IF NOT EXISTS `#__dc_mv_configuration` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

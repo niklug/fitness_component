@@ -125,7 +125,7 @@ define([
             app.collections.items.fetch({
                 data : params,
                 success : function (collection, response) {
-                    console.log(collection.toJSON());
+                    //console.log(collection.toJSON());
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -140,7 +140,7 @@ define([
         },
         
         list_actions : function () {
-            //$("#header_wrapper").html(new List_header_container_view({model : app.models.request_params, collection : app.collections.items}).render().el);
+            $("#header_wrapper").html(new List_header_container_view({model : app.models.request_params, collection : app.collections.items}).render().el);
             
             $("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
             

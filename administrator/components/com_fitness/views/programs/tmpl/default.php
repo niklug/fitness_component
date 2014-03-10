@@ -38,14 +38,10 @@ $business_profile_id = $business_profile_id['data'];
         'user_name': '<?php echo JFactory::getUser()->name; ?>',
         'user_id': '<?php echo JFactory::getUser()->id; ?>',
         'client_id': '<?php echo JFactory::getUser()->id; ?>',
-        'db_table_exercise_type': '#__fitness_settings_exercise_type',
-        'db_table_body_part': '#__fitness_settings_body_part',
-        'db_table_difficulty': '#__fitness_settings_difficulty',
-        'db_table_equipment': '#__fitness_settings_equipment',
-        'db_table_force_type': '#__fitness_settings_force_type',
-        'db_table_mechanics_type': '#__fitness_settings_mechanics_type',
-        'db_table_target_muscles': '#__fitness_settings_target_muscles',
-        
+        'db_table_appointments': '#__fitness_categories',
+        'db_table_locations': '#__fitness_locations',
+        'db_table_session_types': '#__fitness_session_type',
+        'db_table_session_focuses': '#__fitness_session_focus',
 
         'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
         'no_video_image_big' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_big.png',

@@ -1261,6 +1261,7 @@ function insertEvent($post) {
     $obj->color = $post['color'];
     $obj->calid = JRequest::getVar('calid');
     $obj->published = 1;
+    $obj->status = 1;
     $insert = $db->insertObject('#__dc_mv_events', $obj, 'id');
     $db->setQuery($query);
     if (!$insert) {

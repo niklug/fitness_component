@@ -3,9 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'views/exercise_library/select_filter_block',
-        'views/exercise_library/backend/search_block',
-	'text!templates/exercise_library/backend/list_header_container.html'
+        'views/programs/select_filter_block',
+        'views/programs/backend/search_block',
+	'text!templates/programs/backend/list_header_container.html'
 ], function (
         $,
         _,
@@ -26,14 +26,14 @@ define([
             
             this.connectFiltersBlock();
             
-            this.connectSearchBlock();
+            //this.connectSearchBlock();
             
             return this;
         },
 
         connectFiltersBlock : function() {
             
-            new Select_filter_block_view({el : this.$el.find("#select_filter_wrapper"), model : this.model, block_width : '140px'});
+            new Select_filter_block_view({el : this.$el.find("#select_filter_wrapper"), model : this.model, block_width : '180px'});
         },
         
         connectSearchBlock : function() {
