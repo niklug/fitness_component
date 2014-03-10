@@ -207,7 +207,7 @@ class FitnessModelprograms extends JModelList {
         
         
 
-        $query->where("a.title NOT IN ('Assessment')");
+        $query->where("a.title NOT IN ('5')"); //IN Assessment
          
         //Filtering date
         $filter_date_from = $this->state->get("filter.date.from");

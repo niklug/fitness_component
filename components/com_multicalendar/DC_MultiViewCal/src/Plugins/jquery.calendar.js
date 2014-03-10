@@ -1441,7 +1441,7 @@
             html += "<b> Location: </b>" + event[9] + "</br>";
             html += "<b> Trainer: </b>" + trainer + "</br>";
             html += "<b> Clients: </b>" +  "</br>";
-            //console.log(event[16]);
+            //console.log(event);
             $.each(event[16], function(index,  client) {
                 
                 if(client) {

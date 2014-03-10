@@ -341,11 +341,29 @@ function listCalendarByRange($calid, $sd, $ed, $client_id, $trainer_id, $locatio
 
 
     try {
-        $sql = "select a.* from `" . DC_MV_CAL . "` AS a ";
+        $sql = "select a.*, ";
+        
+        $sql .= " t.name AS appointment_name,";
+        
+        $sql .= " l.name AS location_name,";
+        
+        $sql .= " st.name AS session_type_name,";
+        
+        $sql .= " sf.name AS session_focus_name";
+        
+        $sql .= " FROM `" . DC_MV_CAL . "` AS a ";
 
         $sql .= " LEFT JOIN #__fitness_clients AS c ON c.user_id = a.client_id ";
 
         $sql .= " LEFT JOIN #__fitness_business_profiles AS bp ON bp.id = c.business_profile_id ";
+        
+        $sql .= " LEFT JOIN #__fitness_categories AS t ON t.id = a.title ";
+        
+        $sql .= " LEFT JOIN #__fitness_locations AS l ON l.id = a.location ";
+        
+        $sql .= " LEFT JOIN #__fitness_session_type AS st ON st.id = a.session_type ";
+        
+        $sql .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
 
         $sql .= " where a." . DC_MV_CAL_IDCAL . "=" . $calid;
 
@@ -454,7 +472,7 @@ function listCalendarByRange($calid, $sd, $ed, $client_id, $trainer_id, $locatio
 
             $ev = array(
                 $row->id,
-                $row->title,
+                $row->appointment_name,
                 php2JsTime(mySql2PhpTime($row->starttime)),
                 php2JsTime(mySql2PhpTime($row->endtime)),
                 $row->isalldayevent,
@@ -463,7 +481,7 @@ function listCalendarByRange($calid, $sd, $ed, $client_id, $trainer_id, $locatio
                 ((is_numeric($row->uid) && $row->uid > 0) ? $row->uid : $row->rrule), //Recurring event rule,
                 $row->color,
                 1, //editable
-                $row->location,
+                $row->location_name,
                 '', //$attends
                 $row->description,
                 $row->owner,
@@ -1133,6 +1151,7 @@ function saveDragedData() {
     $starttime = $post['starttime'];
     $field = $post['field'];
     $value = $post['value'];
+
     $event_id = $post['event_id'];
     $db = & JFactory::getDBO();
     $query = "SELECT id, title,  starttime FROM #__dc_mv_events WHERE id='$event_id'";
@@ -1155,9 +1174,10 @@ function saveDragedData() {
             $ret['success'] = false;
             $ret['message'] = $category_name['message'];
         }
-        $value = $category_name['name'][0];
         $color = $category_name['color'][0];
     }
+    
+    
 
     if ($exists) {
         $query = "UPDATE #__dc_mv_events SET $field='$value' WHERE starttime='$starttime'";
@@ -1170,7 +1190,7 @@ function saveDragedData() {
             $ret['message'] = $db->stderr();
         }
 
-        if (($field == 'client_id') AND !(in_array($event_name[0], array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
+        if (($field == 'client_id') AND !(in_array($event_name[0], array(1, 5)))) { // for all categories except Personal Training and Assessment
             $client_id = $value;
             $insertGroupClient = insertGroupClient($event_id, $client_id);
         }
@@ -1179,7 +1199,7 @@ function saveDragedData() {
             $post['title'] = $value;
             $post['color'] = $color;
             insertEvent($post);
-            if (!(in_array($value, array('Personal Training', 'Assessment')))) { // for all categories except Personal Training and Assessment
+            if (!(in_array($value, array(1, 5)))) { // for all categories except Personal Training and Assessment
                 $event_id = $db->insertid();
                 $client_id = $post['client_id'];
                 if (is_int($client_id)) {
@@ -1232,7 +1252,7 @@ function insertEvent($post) {
     $obj = new stdClass();
     $obj->starttime = $post['starttime'];
     $obj->endtime = $post['endtime'];
-    if (in_array($post['title'], array('Personal Training', 'Assessment'))) {
+    if (in_array($post['title'], array('1', '5'))) {
         $obj->client_id = $post['client_id'];
     }
     $obj->trainer_id = $post['trainer_id'];
@@ -1266,12 +1286,13 @@ function sendRemindersManually() {
     }
     $query .= "
         AND title  IN (
-        'Personal Training',
-        'Semi-Private Training', 
-        'Assessment',
-        'Consultation',
-        'Special Event') 
+        '1', 
+        '2', 
+        '5',
+        '6',
+        '7') 
     ";
+     // IN 'Personal Training', 'Semi-Private Training', 'Assessment', 'Consultation', 'Special Event'
     $db->setQuery($query);
     if (!$db->query()) {
         $ret['success'] = false;

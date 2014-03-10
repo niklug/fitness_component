@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * @version     1.0.0
  * @package     com_fitness
@@ -1302,7 +1302,28 @@ class FitnessHelper extends FitnessFactory
     }
     
     public function getEvent($event_id) {
-       $query = "SELECT * FROM #__dc_mv_events WHERE id='$event_id'";
+        $query = "SELECT a.*, ";
+        
+        $query .= " t.name AS appointment_name,";
+        
+        $query .= " l.name AS location_name,";
+        
+        $query .= " st.name AS session_type_name,";
+        
+        $query .= " sf.name AS session_focus_name";
+        
+        $query = " FROM #__dc_mv_events AS a";
+       
+        $query .= " LEFT JOIN #__fitness_categories AS t ON t.id = a.title ";
+        
+        $query .= " LEFT JOIN #__fitness_locations AS l ON l.id = a.location ";
+        
+        $query .= " LEFT JOIN #__fitness_session_type AS st ON st.id = a.session_type ";
+        
+        $query .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
+        
+        $query .= " WHERE a.id='$event_id'";
+        
        return self::customQuery($query, 2);
     }
     

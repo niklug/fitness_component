@@ -123,10 +123,10 @@
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF;">
                                                                     <p><?php echo $data->start_date;?><br />
                                                                         <?php echo $data->start_time ;?>  <br />
-                                                                        <?php echo $data->item->location;?> </p>
-                                                                    <p><?php echo $data->item->title;?><br />
-                                                                        <?php echo $data->item->session_type;?> <br />
-                                                                        <?php echo $data->item->session_focus;?> </p>
+                                                                        <?php echo $data->item->location_name;?> </p>
+                                                                    <p><?php echo $data->item->appointment_name;?><br />
+                                                                        <?php echo $data->item->session_type_name;?> <br />
+                                                                        <?php echo $data->item->session_focus_name;?> </p>
                                                                     <p><?php echo $data->trainer_name ;?> </p></td>
                                                             </tr>
                                                         </table>

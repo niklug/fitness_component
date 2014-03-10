@@ -124,12 +124,15 @@ class MultiCalendarController extends JController
             }
              $query .= "
                 AND title  IN (
-                'Personal Training',
-                'Semi-Private Training', 
-                'Assessment',
-                'Consultation',
-                'Special Event') 
+                '1', 
+                '2', 
+                '5',
+                '6',
+                '7') 
             ";
+             
+             // IN 'Personal Training', 'Semi-Private Training', 'Assessment', 'Consultation', 'Special Event'
+             
             $db->setQuery($query);
             try {
                 $db->query();

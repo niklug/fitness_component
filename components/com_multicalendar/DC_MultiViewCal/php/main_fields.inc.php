@@ -25,9 +25,12 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
                                 if (isset($appointments[0])) {
                                     echo '<select style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
                                     echo '<option  value="" >-Select-</option>';
-                                    for ($i = 0; $i < count($appointments[0]); $i++) {
-                                        echo '<option data-catid="' . $appointments[2][$i] . '" id="' . $appointments[1][$i] . '" value="' . ($appointments[0][$i]) . '" ' . ((isset($event) && (trim($event->title) == trim($appointments[0][$i]))) ? "selected" : "") . '>' . $appointments[0][$i] . '</option>';
+  
+                                    foreach ($appointments as $appointment) {
+                                        echo '<option data-catid="' . $appointment->id . '" id="' . $appointment->color . '" value="' . ($appointment->id) . '" ' . ((isset($event) && trim($event->title == $appointment->id )) ? "selected" : "") . '>' . $appointment->name . '</option>';
                                     }
+                                    
+                                    
                                     echo '</select>';
                                 }
 
@@ -90,9 +93,12 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
                                 if (isset($dc_locations)) {
                                     echo '<select  id="Location" name="Location" class="required safe inputtext" >';
                                     echo '<option>-Select-</option>';
-                                    for ($i = 0; $i < count($dc_locations); $i++) {
-                                        echo '<option value="' . ($dc_locations[$i]) . '" ' . ((isset($event) && ($event->location == trim($dc_locations[$i]))) ? "selected" : "") . '>' . $dc_locations[$i] . '</option>';
+
+                                    foreach ($dc_locations as $dc_location) {
+                                        echo '<option value="' . ($dc_location->id) . '" ' . ((isset($event) && ($event->location == $dc_location->id)) ? "selected" : "") . '>' . $dc_location->name . '</option>';
                                     }
+                                    
+                                    
                                     echo '</select>';
                                 }
 

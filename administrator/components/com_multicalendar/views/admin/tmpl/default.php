@@ -155,16 +155,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
         </select>
     </div>
     <?php
- 
-    
-    $db = JFactory::getDbo();
-    $sql = "SELECT name FROM #__fitness_locations WHERE state='1'";
-    $db->setQuery($sql);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $locations = $db->loadObjectList();
-
+    $locations = $helper->getLocations();
     ?>
 
     <div  style="float:left;margin-left: 10px;">
@@ -172,7 +163,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                 <option value=""><?php echo JText::_('-Select Locations-');?></option>
                 <?php 
                     foreach ($locations as $location) {
-                        echo '<option value="' . $location->name . '">' . $location->name . '</option>';
+                        echo '<option value="' . $location->id . '">' . $location->name . '</option>';
                     }
                 ?>
         </select>
@@ -195,7 +186,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                 <option value=""><?php echo JText::_('-Select Appointments-');?></option>
                 <?php 
                     foreach ($appointments as $appointment) {
-                        echo '<option value="' . $appointment->name . '">' . $appointment->name . '</option>';
+                        echo '<option value="' . $appointment->id . '">' . $appointment->name . '</option>';
                     }
                 ?>
         </select>
@@ -217,7 +208,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                 <option value=""><?php echo JText::_('-Select Session Types-');?></option>
                 <?php 
                     foreach ($session_types as $session_type) {
-                        echo '<option value="' . $session_type->name . '">' . $session_type->name . '</option>';
+                        echo '<option value="' . $session_type->id . '">' . $session_type->name . '</option>';
                     }
                 ?>
         </select>
@@ -239,7 +230,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                 <option value=""><?php echo JText::_('-Select Session Focuses-');?></option>
                 <?php 
                     foreach ($session_focuses as $session_focus) {
-                        echo '<option value="' . $session_focus->name . '">' . $session_focus->name . '</option>';
+                        echo '<option value="' . $session_focus->id . '">' . $session_focus->name . '</option>';
                     }
                 ?>
         </select>
@@ -275,7 +266,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                     <ul>
                                     <?php 
                                         foreach ($appointments as $appointment) {
-                                            echo '<li data-name="title" data-value="' . $appointment->id . '" class="drag_data" title="' . $appointment->name . '" 
+                                            echo '<li data-name="title" data-value="' . $appointment->id . '" class="drag_data" title="' . $appointment->id . '" 
                                                   style="background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
                                         }
                                     
@@ -313,7 +304,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                     <ul>
                                     <?php 
                                         foreach ($locations as $location) {
-                                            echo '<li data-name="location" data-value="' . trim($location->name) . '" class="drag_data" title="' . $location->name   . '" ">' 
+                                            echo '<li data-name="location" data-value="' . $location->id . '" class="drag_data" title="' . $location->name   . '" ">' 
                                                  . $location->name . '</li>';
                                         }
                                     

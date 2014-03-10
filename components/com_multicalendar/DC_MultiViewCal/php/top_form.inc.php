@@ -190,12 +190,12 @@
                     var session_type = '<?php echo $event->session_type; ?>';
                     $('#session_type').html('<option value="" >-Select-</option>');
                     $.each(message, function(index, value) {
-                        if(session_type == value) {
+                        if(session_type == index) {
                             var selected = 'selected';
                         } else {
                             selected = '';
                         }
-                        $('#session_type').append('<option ' + selected + ' data-session_type="' + index + '" value="' + value + '">' + value + '</option>');
+                        $('#session_type').append('<option ' + selected + ' data-session_type="' + index + '" value="' + index + '">' + value + '</option>');
                     });
                     var session_type = $('#session_type').find(':selected').data('session_type');
                     setupSessionFocus(catid, session_type);
@@ -227,12 +227,12 @@
                     var session_focus = '<?php echo $event->session_focus; ?>';
                     $('#session_focus').html('<option value="" >-Select-</option>');
                     $.each(message, function(index, value) {
-                        if(session_focus == value) {
+                        if(session_focus == index) {
                             var selected = 'selected';
                         } else {
                             selected = '';
                         }
-                        $('#session_focus').append('<option ' + selected + ' value="' + value + '">' + value + '</option>');
+                        $('#session_focus').append('<option ' + selected + ' value="' + index + '">' + value + '</option>');
                     });
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown)

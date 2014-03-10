@@ -8,7 +8,9 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
 function getLocations() { 
     $helper = new FitnessHelper();
     
-    $query = "SELECT name FROM #__fitness_locations WHERE state='1'";
+    $query = "SELECT *, id AS value, name AS text FROM #__fitness_locations WHERE state='1'";
+    
+    $query .= " ORDER BY name ASC";
 
     $user_id = JRequest::getVar('cid');
 
@@ -20,7 +22,7 @@ function getLocations() {
         $query .= " AND business_profile_id='$business_profile_id'";
     }
 
-    return FitnessHelper::customQuery($query, 3);
+    return FitnessHelper::customQuery($query, 1);
 }
 
 /** get Appointment (category) from fitness component
@@ -30,12 +32,8 @@ function getLocations() {
  */
 function getAppointments() { 
     $db	= & JFactory::getDBO();
-    $query = "SELECT name, color, id FROM #__fitness_categories";
-    $db->setQuery($query);
-    $appointment[0] = $db->loadResultArray(0);
-    $appointment[1] = $db->loadResultArray(1);
-    $appointment[2] = $db->loadResultArray(2);
-    return $appointment;
+    $query = "SELECT id, name, color FROM #__fitness_categories WHERE state='1'";
+    return FitnessHelper::customQuery($query, 1);
 }
 
 function getEmailPdfData($event_id) {
@@ -100,8 +98,8 @@ function getExercises($event_id) {
 //$dc_subjects = getAppointments();
 $dc_locations = getLocations();
 
+
 $appointments = getAppointments();
-$dc_subjects = $appointments[0];
 
 
 define("JC_JQUERY_MV",true);
@@ -149,35 +147,42 @@ function isValid($g1,$u1,$groups,$userid)
 }
 
 global $arrayJS_list;
-$arrayJS_list = 'dc_subjects = ';
-if (isset($dc_subjects) && is_array($dc_subjects))
-{
+
+$arrayJS_list .= 'dc_subjects = ';
+if (isset($appointments)) {
     $arrayJS_list .= ' new Array (';
-    for ($i=0;$i<count($dc_subjects);$i++)
-    {
-        if ($i!=0)
+    $i = 0;
+    foreach ($appointments as $appointment) {
+        if ($i!= 0) {
             $arrayJS_list .= ', ';
-        $arrayJS_list .= '"'.$dc_subjects[$i].'"';
+        }
+        $arrayJS_list .= '"'. $appointment->name .'"';
+        
+        $i++;
     }
     $arrayJS_list .= ');';
-}
-else
+} else {
     $arrayJS_list .= '"";';
+}
+
 
 $arrayJS_list .= 'dc_locations = ';
-if (isset($dc_locations) && is_array($dc_locations))
-{
+if (isset($dc_locations)) {
     $arrayJS_list .= ' new Array (';
-    for ($i=0;$i<count($dc_locations);$i++)
-    {
-        if ($i!=0)
+    $i = 0;
+    foreach ($dc_locations as $dc_location) {
+        if ($i!= 0) {
             $arrayJS_list .= ', ';
-        $arrayJS_list .= '"'.$dc_locations[$i].'"';
+        }
+        $arrayJS_list .= '"'. $dc_location->name .'"';
+        
+        $i++;
     }
     $arrayJS_list .= ');';
-}
-else
+} else {
     $arrayJS_list .= '"";';
+}
+
 
 global $zscripts;$zscripts ='';
 function print_html($container)

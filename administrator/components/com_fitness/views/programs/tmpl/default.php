@@ -85,7 +85,7 @@ $business_profile_id = $business_profile_id['data'];
             'show_send_email' : true,
              setStatuses : function(item_id) {
                 var appointment_title = $("#appointment_title_" + item_id).attr('data-appointment');
-                if(appointment_title == 'Personal Training') return  this.statuses;
+                if(appointment_title == '1') return  this.statuses;
                 return  this.statuses2;
             },
             'view' : 'Programs'

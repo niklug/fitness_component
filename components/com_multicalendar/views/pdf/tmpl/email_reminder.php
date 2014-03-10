@@ -120,17 +120,18 @@
                                                                 <td width="71%" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
                                                                     <p><?php echo $data->start_date;?><br />
                                                                         <?php echo $data->start_time ;?><br />
-                                                                        <?php echo $data->item->location;?>
+                                                                        <?php echo $data->item->location_name;?>
                                                                     </p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">APPOINTMENT:<br />
+                                                                <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
+                                                                    APPOINTMENT:<br />
                                                                     SESSION TYPE:<br />
                                                                     SESSION FOCUS:</td>
                                                                 <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
-                                                                    <?php echo $data->item->title;?><br />
-                                                                    <?php echo $data->item->session_type;?><br />
-                                                                    <?php echo $data->item->session_focus;?></td>
+                                                                    <?php echo $data->item->appointment_name;?><br />
+                                                                    <?php echo $data->item->session_type_name;?><br />
+                                                                    <?php echo $data->item->session_focus_name;?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">TRAINER NAME:</td>
