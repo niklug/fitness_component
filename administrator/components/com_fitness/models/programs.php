@@ -348,18 +348,25 @@ class FitnessModelprograms extends JModelList {
                 $data = new stdClass();
                 $data->id = $id;  
                 $data->title = JRequest::getVar('title'); 
-                $data->client_name = JRequest::getVar('client_name'); 
                 $data->sort_by = JRequest::getVar('sort_by'); 
                 $data->order_dirrection = JRequest::getVar('order_dirrection'); 
                 $data->page = JRequest::getVar('page'); 
                 $data->limit = JRequest::getVar('limit'); 
-                $data->state = JRequest::getVar('state'); 
+                $data->published = JRequest::getVar('published'); 
+                $data->frontend_published = JRequest::getVar('frontend_published'); 
                 
                 $data->title = JRequest::getVar('title', '0'); 
                 $data->location = JRequest::getVar('location', '0'); 
                 $data->session_type = JRequest::getVar('session_type', '0'); 
                 $data->session_focus = JRequest::getVar('session_focus', '0'); 
                 $data->status = JRequest::getVar('status', '0'); 
+                
+                $data->date_from = JRequest::getVar('date_from', '0'); 
+                $data->date_to = JRequest::getVar('date_to', '0'); 
+                $data->client_name = JRequest::getVar('client_name'); 
+                $data->trainer_name = JRequest::getVar('trainer_name'); 
+                $data->created_by_name = JRequest::getVar('created_by_name'); 
+                
 
                 $data->business_profiles = JRequest::getVar('business_profiles'); 
                 $data->current_page = JRequest::getVar('current_page'); 
@@ -402,6 +409,10 @@ class FitnessModelprograms extends JModelList {
         $limit = $data->limit;
         
         $start = ($page - 1) * $limit;
+        
+        $sort_by = $data->sort_by;
+        
+        $order_dirrection = $data->order_dirrection;
 
         $query = " SELECT a.*,";
         
@@ -417,7 +428,7 @@ class FitnessModelprograms extends JModelList {
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
         
-        $query .= " WHERE 1";
+        $query .= " WHERE a.published='$data->published' ";
         
         //1
         if($data->title) {
@@ -440,6 +451,57 @@ class FitnessModelprograms extends JModelList {
             $query .= " AND a.status IN ($data->status)";
         }
         
+        if (!empty($data->date_from)) {
+            $query .= " AND a.starttime >= '$data->date_from'";
+        }
+        
+        if (!empty($data->date_to)) {
+            $query .= " AND a.endtime <= '$data->date_to'";
+        }
+        
+        //search by client name
+        if (!empty($data->client_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
+
+            $client_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($client_ids) {
+                $query .= " AND (a.client_id IN ($client_ids) OR a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids)))";
+            }
+        }
+        
+        
+        //search by trainer name
+        if (!empty($data->trainer_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->trainer_name%' ";
+
+            $trainer_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($trainer_ids) {
+                $query .= " AND a.trainer_id IN ($trainer_ids)";
+            }
+        }
+        
+        //search by created_by name
+        if (!empty($data->created_by_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->created_by_name%' ";
+
+            $owner_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($owner_ids) {
+                $query .= " AND a.owner IN ($owner_ids)";
+            }
+        }
+        
+        //filter by business profile
+        if (!empty($data->business_profiles)) {
+            $query .= " AND a.business_profile_id IN ($data->business_profiles)";
+        }
+        
+        if (isset($data->frontend_published)  AND $data->frontend_published != '2') {
+            $query .= " AND a.frontend_published IN ('$data->frontend_published')";
+        }
+        
         $query .= " ) items_total, ";
         //end get total number
         
@@ -456,7 +518,7 @@ class FitnessModelprograms extends JModelList {
         
         $query .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
         
-        $query .= " WHERE 1";
+        $query .= " WHERE a.published='$data->published' ";
         
         //1
         if($data->title) {
@@ -472,7 +534,7 @@ class FitnessModelprograms extends JModelList {
         }
         //4
         if($data->session_focus) {
-            $query .= " AND a.title IN ($data->session_focus)";
+            $query .= " AND a.session_focus IN ($data->session_focus)";
         }
         //5
         if($data->status) {
@@ -480,9 +542,74 @@ class FitnessModelprograms extends JModelList {
         }
         
         
+        if (!empty($data->date_from)) {
+            $query .= " AND a.starttime >= '$data->date_from'";
+        }
+        
+        if (!empty($data->date_to)) {
+            $query .= " AND a.endtime <= '$data->date_to'";
+        }
+        
+        //search by client name
+        if (!empty($data->client_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
+
+            $client_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($client_ids) {
+                $query .= " AND (a.client_id IN ($client_ids) OR a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids)))";
+            }
+        }
+        
+        //search by trainer name
+        if (!empty($data->trainer_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->trainer_name%' ";
+
+            $trainer_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($trainer_ids) {
+                $query .= " AND a.trainer_id IN ($trainer_ids)";
+            }
+        }
+        
+        //search by created_by name
+        if (!empty($data->created_by_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->created_by_name%' ";
+
+            $owner_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($owner_ids) {
+                $query .= " AND a.owner IN ($owner_ids)";
+            }
+        }
+        
+        
+        //filter by business profile
+        if (!empty($data->business_profiles)) {
+            $query .= " AND a.business_profile_id IN ($data->business_profiles)";
+        }
+        
+
+        if (isset($data->frontend_published) AND $data->frontend_published != '2') {
+            $query .= " AND a.frontend_published IN ('$data->frontend_published')";
+        }
+
+        
+        
+        
+        if($sort_by) {
+            $query .= " ORDER BY " . $sort_by;
+        }
+        
+        if($order_dirrection) {
+            $query .=  " " . $order_dirrection;
+        }
+        
         if($limit) {
             $query .= " LIMIT $start, $limit";
         }
+        
+        
         
         
         $items = FitnessHelper::customQuery($query, 1);

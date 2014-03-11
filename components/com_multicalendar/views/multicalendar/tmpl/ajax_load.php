@@ -246,7 +246,7 @@ $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $client_id, 
     $ret = array();
 
     $db = & JFactory::getDBO();
-    $user = & JFactory::getUser();
+    $user = & JFactory::getUser(JRequest::getVar('cid'));
     try {
         if (checkIfOverlapping($calid, $st, $et, $sub, $loc, 0)) {
             $sql = "insert into `" . DC_MV_CAL . "` (
@@ -294,6 +294,7 @@ $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $client_id, 
         $ret['success'] = false;
         $ret['message'] = $e->getMessage();
     }
+
     return $ret;
 }
 
@@ -738,6 +739,7 @@ function get_session_type() {
     $catid = JRequest::getVar("catid");
     $db = & JFactory::getDBO();
     $query = "SELECT id, name FROM #__fitness_session_type WHERE category_id='$catid' AND state='1'";
+    $query .= " ORDER BY name";
     $db->setQuery($query);
     $id = $db->loadResultArray(0);
     $name = $db->loadResultArray(1);
@@ -754,6 +756,7 @@ function get_session_focus() {
     $session_type = JRequest::getVar("session_type");
     $db = & JFactory::getDBO();
     $query = "SELECT id, name FROM #__fitness_session_focus WHERE category_id='$catid' AND session_type_id='$session_type' AND state='1'";
+    $query .= " ORDER BY name";
     $db->setQuery($query);
     $id = $db->loadResultArray(0);
     $name = $db->loadResultArray(1);
@@ -1261,6 +1264,7 @@ function insertEvent($post) {
     $obj->color = $post['color'];
     $obj->calid = JRequest::getVar('calid');
     $obj->published = 1;
+    $obj->owner = JRequest::getVar('cid');
     $obj->status = 1;
     $insert = $db->insertObject('#__dc_mv_events', $obj, 'id');
     $db->setQuery($query);

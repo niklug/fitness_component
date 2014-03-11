@@ -3,9 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/exercise_library/business_profiles',
-        'views/exercise_library/select_element',
-	'text!templates/exercise_library/backend/search_block.html'
+        'collections/programs/business_profiles',
+        'views/programs/select_element',
+	'text!templates/programs/backend/search_block.html'
 ], function (
         $,
         _,
@@ -36,14 +36,19 @@ define([
         render: function(){
             var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
+            
+            this.$el.find("#date_from").datepicker({ dateFormat: "yy-mm-dd"});
+            
+            this.$el.find("#date_to").datepicker({ dateFormat: "yy-mm-dd"});
            
             return this;
         },
         
         events : {
-            "click #search_by_name" : "search",
+            "click #search" : "search",
             "click #clear_all" : "clearAll",
             "change #state_filter" : "onChangeState",
+            "change #workout_filter" : "onChangePublishedWorkout",
             "click #add_item" : "onClickAddItem",
             "click #trash_selected" : "onClickTrashSelected",
             "click #delete_selected" : "onClickDeleteSelected",
@@ -65,9 +70,12 @@ define([
         },
         
         search : function() {
-            var exercise_name = this.$el.find("#exercise_name").val();
+            var date_from = this.$el.find("#date_from").val();
+            var date_to = this.$el.find("#date_to").val();
             var client_name = this.$el.find("#client_name").val();
-            this.model.set({exercise_name : exercise_name, client_name: client_name});
+            var trainer_name = this.$el.find("#trainer_name").val();
+            var created_by_name = this.$el.find("#created_by_name").val();
+            this.model.set({date_from : date_from, date_to : date_to, client_name: client_name, trainer_name : trainer_name, created_by_name : created_by_name});
         },
         
         clearAll : function(){
@@ -77,15 +85,11 @@ define([
             
             this.model.set(
                 {
-                    exercise_name : '',
-                    client_name : '',
-                    exercise_type : '',
-                    force_type : '',
-                    mechanics_type : '',
-                    body_part : '',
-                    target_muscles : '', 
-                    equipment_type : '',
-                    difficulty : '',
+                    date_from : null,
+                    date_to : null,
+                    client_name : null,
+                    trainer_name : null,
+                    created_by_name : null
                 }
             );
         },
@@ -98,6 +102,13 @@ define([
             } else {
                 app.controller.navigate("!/trash_list", true);
             }
+        },
+        
+        
+        onChangePublishedWorkout : function(event) {
+            var value = $(event.target).val();
+            
+            this.model.set({frontend_published :  value});
         },
         
         onClickTrashSelected : function() {

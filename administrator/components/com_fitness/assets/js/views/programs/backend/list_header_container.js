@@ -26,7 +26,7 @@ define([
             
             this.connectFiltersBlock();
             
-            //this.connectSearchBlock();
+            this.connectSearchBlock();
             
             return this;
         },

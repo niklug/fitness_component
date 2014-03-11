@@ -94,9 +94,10 @@ define([
         
         onClickTrash : function(event) {
             var id = $(event.target).attr('data-id');
-            this.model = this.collection.get(id);
+            var model = this.collection.get(id);
+            console.log(model);
             var self  = this;
-            this.model.save({state : '-2'}, {
+            model.save({state : '-2'}, {
                 success: function (model, response) {
                     self.hide_items(id);
                 },
@@ -108,9 +109,9 @@ define([
         
         onClickRestore : function(event) {
             var id = $(event.target).attr('data-id');
-            this.model = this.collection.get(id);
+            var model = this.collection.get(id);
             var self = this;
-            this.model.save({state : '1'}, {
+            model.save({state : '1'}, {
                 success: function (model, response) {
                     self.hide_items(id);
                 },
@@ -122,9 +123,9 @@ define([
 
         onClickDelete : function(event) {
             var id = $(event.target).attr('data-id');
-            this.model = this.collection.get(id);
+            var model = this.collection.get(id);
             var self = this;
-            this.model.destroy({
+            model.destroy({
                 success: function (model) {
                     self.hide_items(id);
                 },

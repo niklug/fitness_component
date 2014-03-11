@@ -4,7 +4,7 @@ define([
 	'backbone',
         'app',
         'collections/programs/items',
-        'models/programs/exercise_library_item',
+        'models/programs/item',
         'models/programs/request_params_items',
         'views/programs/backend/form_container',
         'views/programs/select_filter_block',
@@ -86,7 +86,7 @@ define([
             var self = this;
             app.models.exercise_library_item.set({id : id});
             app.models.exercise_library_item.fetch({
-                data : {state : 1},
+                data : {published : 1},
                 success: function (model, response) {
                     model.set({edit_allowed : self.edit_allowed(model)});
                     self.load_form_view(model);
@@ -134,7 +134,7 @@ define([
         },
         
         list_view : function() {
-            app.models.request_params.set({page : 1, current_page : 'list',  state : 1, uid : app.getUniqueId()});
+            app.models.request_params.set({page : 1, current_page : 'list',  published : 1, uid : app.getUniqueId()});
             
             this.list_actions();
         },
@@ -157,7 +157,7 @@ define([
         },
         
         trash_list : function() {
-            app.models.request_params.set({page : 1, current_page : 'trash_list',  state : '-2', uid : app.getUniqueId()});
+            app.models.request_params.set({page : 1, current_page : 'trash_list',  published : '-2', uid : app.getUniqueId()});
             
             this.list_actions();
         },
@@ -190,7 +190,7 @@ define([
             var self = this;
             app.models.exercise_library_item.set({id : id});
             app.models.exercise_library_item.fetch({
-                data : {state : 1},
+                data : {published : 1},
                 success: function (model, response) {
                     model.set({
                         id : null, 

@@ -63,6 +63,7 @@ define([
 
         onFilterSelect : function(event){
             var ids = $(event.target).find(':selected').map(function(){ return this.value }).get().join(",");
+            //console.log(ids);
             var model_field = this.options.model_field;
             var option = {};
             option[model_field] = ids;

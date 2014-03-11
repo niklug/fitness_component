@@ -1,6 +1,6 @@
 <tr data-id="<%= id %>" class="item_row">
     <td>
-        <div style="float:left; width:100px;"><%= moment(new Date(Date.parse(starttime))).format("ddd, D MMM  YY") %></div>
+        <div style="float:left; width:100px;"><%= moment(new Date(Date.parse(starttime))).format("ddd, D MMM  YYYY") %></div>
         <div style="float:left;width:20px;"><%= moment(new Date(Date.parse(starttime))).format("HH:mm")  %></div>
     </td>
     
@@ -67,7 +67,7 @@
     </td>
     
     <td>
-        <% if(state == '1') { %>
+        <% if(published == '1') { %>
             <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
         <% } else { %>
             <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
@@ -79,9 +79,9 @@
     </td>
     
     <td class="center"> 
-        <% if(state == '1' && edit_allowed) { %>
+        <% if(published == '1') { %>
             <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
-        <% } else if (edit_allowed) { %>
+        <% } else { %>
             <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
         <% } %>
     </td>
@@ -97,22 +97,22 @@
     <td class="center">
         <%
         var icon_class = 'unpublish';
-        if(frontend_published) {
+        if(parseInt(frontend_published)) {
             icon_class = 'publish';
         }
         %>
-        <span class="jgrid"><span class="state <%= icon_class %> " ></span></span> <br/>
+        <span class="jgrid"><span style="cursor:pointer;"  data-id="<%= id %>"  class="publish_workout state <%= icon_class %> " ></span></span> <br/>
 
     </td>
     
     <td class="center">
         <%
         var icon_class = 'unpublish';
-        if(published) {
+        if(parseInt(published)) {
             icon_class = 'publish';
         }
         %>
-        <span class="jgrid"><span class="state <%= icon_class %> " ></span></span> <br/>
+        <span class="jgrid"><span style="cursor:pointer;" data-id="<%= id %>" class="publish_event state <%= icon_class %> " ></span></span> <br/>
 
     </td>
     

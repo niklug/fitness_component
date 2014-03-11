@@ -43,10 +43,14 @@ define([
         },
         
         events: {
-            "click #sort_exercise_name" : "onClickSortExerciseName",
-            "click #sort_created" : "onClickSortCreated",
-            "click #sort_created_by" : "onClickSortCreatedBy",
-            "click #sort_status" : "onClickSortStatus",
+            "click #sort_starttime" : "sort_starttime",
+            "click #sort_status" : "sort_status",
+            "click #sort_trainer" : "sort_trainer",
+            "click #sort_location" : "sort_location",
+            "click #sort_appointment_type" : "sort_appointment_type",
+            "click #sort_session_type" : "sort_session_type",
+            "click #sort_session_focus" : "sort_session_focus",
+   
             "click .trash" : "onClickTrash",
             "click .restore" : "onClickRestore",
             "click .delete" : "onClickDelete",
@@ -69,6 +73,93 @@ define([
         
         clearItems : function() {
             this.container_el.empty();
+        },
+        
+        sort_starttime : function() {
+            this.model.set({sort_by : 'a.starttime', order_dirrection : 'DESC'});
+        },
+
+        
+        sort_status : function() {
+            this.model.set({sort_by : 'a.status', order_dirrection : 'ASC'});
+        },
+        
+        sort_trainer : function() {
+            this.model.set({sort_by : 'trainer_name', order_dirrection : 'ASC'});
+        },
+        
+        sort_location : function() {
+            this.model.set({sort_by : 'location_name', order_dirrection : 'ASC'});
+        },
+        
+        sort_appointment_type : function() {
+            this.model.set({sort_by : 'appointment_name', order_dirrection : 'ASC'});
+        },
+        
+        sort_session_type : function() {
+            this.model.set({sort_by : 'session_type_name', order_dirrection : 'ASC'});
+        },
+        
+        sort_session_focus : function() {
+            this.model.set({sort_by : 'session_focus_name', order_dirrection : 'ASC'});
+        },
+        
+        onClickTrash : function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({published : '-2'}, {
+                success: function (model, response) {
+                    self.hide_items(id);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickRestore : function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = this.collection.get(id);
+            var self = this;
+            model.save({published : '1'}, {
+                success: function (model, response) {
+                    self.hide_items(id);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+
+        onClickDelete : function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = this.collection.get(id);
+            var self = this;
+            model.destroy({
+                success: function (model) {
+                    self.hide_items(id);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        hide_items : function(items) {
+            var self = this;
+            var items = items.split(",");
+            _.each(items, function(item, key){ 
+                self.container_el.find(".item_row[data-id=" + item + "]").fadeOut();
+            });
+        },
+        
+        onClickSelectTrashed : function(event) {
+            $(".trash_checkbox").prop("checked", false);
+
+            if($(event.target).attr("checked")) {
+                $(".trash_checkbox").prop("checked", true);
+            }
         },
         
     });

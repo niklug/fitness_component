@@ -109,7 +109,27 @@ define([
                 model_field : 'location',
                 element_disabled : element_disabled
             }).render();
+            
+            
+            
+            
+            //
+            var session_type_grouped = app.collections.session_types.groupBy('name');
 
+            var session_type_names = _.keys(session_type_grouped);
+            
+            var session_type_values = _.values(session_type_grouped);
+
+            app.collections.session_types.reset();
+            
+            _.each(session_type_values, function(value, index) {
+                var id = (value).map(function(model) { return model.get('id'); }).join(',');
+                
+                app.collections.session_types.add([
+                    {id : id, name : session_type_names[index]}
+                ]);
+            });
+            
             new Select_filter_fiew({
                 model : this.model,
                 el : $(this.el).find("#session_type_wrapper"),
@@ -122,8 +142,27 @@ define([
                 model_field : 'session_type',
                 element_disabled : element_disabled
             }).render();
+            /////
+            
+            
+            ///////////
+            var session_focus_grouped = app.collections.session_focuses.groupBy('name');
 
+            var session_focus_names = _.keys(session_focus_grouped);
+            
+            var session_focus_values = _.values(session_focus_grouped);
 
+            app.collections.session_focuses.reset();
+            
+            _.each(session_focus_values, function(value, index) {
+                var id = (value).map(function(model) { return model.get('id'); }).join(',');
+                
+                app.collections.session_focuses.add([
+                    {id : id, name : session_focus_names[index]}
+                ]);
+            });
+            
+            
             new Select_filter_fiew({
                 model : this.model,
                 el : $(this.el).find("#session_focus_filter_wrapper"),
@@ -136,7 +175,7 @@ define([
                 model_field : 'session_focus',
                 element_disabled : element_disabled
             }).render();
-
+            //////
             
             
             // status options
