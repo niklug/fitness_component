@@ -46,7 +46,7 @@ define([
                 }),
                 
                 app.collections.locations.fetch({
-                    data : {table : app.options.db_table_locations},
+                    data : {table : app.options.db_table_locations, by_business_profile : 1},
                     error: function (collection, response) {
                         alert(response.responseText);
                     }

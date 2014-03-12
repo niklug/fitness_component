@@ -79,7 +79,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</th>
 
 
-                <?php if (isset($this->items[0]->state)) { ?>
+                <?php if (isset($this->items[0]->state) AND FitnessHelper::is_superuser(JFactory::getUser()->id)) { ?>
 				<th width="5%">
 					<?php echo JHtml::_('grid.sort',  'JPUBLISHED', 'a.state', $listDirn, $listOrder); ?>
 				</th>
@@ -131,7 +131,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php if (isset($item->checked_out) && $item->checked_out) : ?>
 					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'sessiontypes.', $canCheckin); ?>
 				<?php endif; ?>
-				<?php if ($canEdit) : ?>
+				<?php if ($canEdit AND FitnessHelper::is_superuser(JFactory::getUser()->id)) : ?>
 					<a href="<?php echo JRoute::_('index.php?option=com_fitness&task=sessiontype.edit&id='.(int) $item->id); ?>">
 					<?php echo $this->escape($item->name); ?></a>
 				<?php else : ?>
@@ -143,8 +143,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 				</td>
 
 
-                <?php if (isset($this->items[0]->state)) { ?>
-				    <td class="center">
+                <?php if (isset($this->items[0]->state) AND FitnessHelper::is_superuser(JFactory::getUser()->id)) { ?>
+				    <td claates="center">
 					    <?php echo JHtml::_('jgrid.published', $item->state, $i, 'sessiontypes.', $canChange, 'cb'); ?>
 				    </td>
                 <?php } ?>

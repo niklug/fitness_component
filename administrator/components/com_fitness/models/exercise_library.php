@@ -146,7 +146,20 @@ class FitnessModelExercise_library extends JModelList {
     
     public function select_filter() {
         $table = JRequest::getVar('table');
-        $query = "SELECT id, name FROM $table WHERE state='1' ORDER BY name ASC";
+        $by_business_profile = JRequest::getVar('by_business_profile');
+        $query = "SELECT id, name FROM $table WHERE state='1'";
+        
+        $user_id = JFactory::getUser()->id;
+            
+        if($by_business_profile AND FitnessHelper::is_trainer($user_id)) {
+            $helper = new FitnessHelper();
+            $business_profile_id = $helper->getBusinessProfileId($user_id);
+            $business_profile_id = $business_profile_id['data'];
+            $query .= " AND business_profile_id='$business_profile_id'";
+        }
+        
+        $query .= " ORDER BY name ASC";
+            
         $data = FitnessHelper::customQuery($query, 1);
         return $data;
     }

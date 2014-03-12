@@ -22,7 +22,7 @@ define([
         Backbone,
         app,
         Items_collection,
-        Exercise_library_item_model,
+        Item_model,
         Request_params_items_model,
         Form_container_view,
         Select_filter_block_view,
@@ -47,7 +47,7 @@ define([
                 return new Date().getUTCMilliseconds();
             }
                         
-            app.models.exercise_library_item = new Exercise_library_item_model();
+            app.models.item = new Item_model();
             
             app.collections.items = new Items_collection();
             
@@ -66,7 +66,9 @@ define([
             "": "list_view", 
             "!/form_view/:id": "form_view", 
             "!/list_view": "list_view", 
-            "!/trash_list": "trash_list", 
+            "!/unpublished_list": "unpublished_list", 
+            "!/update_list": "update_list", 
+            
         },
         
         back: function() {
@@ -158,7 +160,6 @@ define([
         
         trash_list : function() {
             app.models.request_params.set({page : 1, current_page : 'trash_list',  published : '-2', uid : app.getUniqueId()});
-            
             this.list_actions();
         },
         
@@ -186,36 +187,23 @@ define([
             return access;
         },
         
-        copy_exercise : function(id) {
+        copy_item : function(id) {
             var self = this;
-            app.models.exercise_library_item.set({id : id});
-            app.models.exercise_library_item.fetch({
-                data : {published : 1},
-                success: function (model, response) {
-                    model.set({
-                        id : null, 
-                        created_by : app.options.user_id,
-                        created : moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-                        status : '1',
-                        my_exercise_clients : null, 
-                        assessed_by : null,
-                        viewed : null
-                    });
-                    
-                    model.save(null, {
-                        success: function (model, response) {
-                            self.set_params_model();
-                        },
-                        error: function (model, response) {
-                            alert(response.responseText);
-                        }
-                    });
-                },
-                error: function (collection, response) {
-                    alert(response.responseText);
-                }
-            })
-        }
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'Programs';
+            var task = 'copyEvent';
+            var table = '';
+            data.id = id;
+            $.AjaxCall(data, url, view, task, table, function(output){
+                self.update_list();
+            });
+        },
+        
+        update_list : function() {
+            app.models.request_params.set({ uid : app.getUniqueId()});
+        },
+
     });
 
     return Controller;

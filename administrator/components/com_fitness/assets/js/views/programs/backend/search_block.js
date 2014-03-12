@@ -50,8 +50,7 @@ define([
             "change #state_filter" : "onChangeState",
             "change #workout_filter" : "onChangePublishedWorkout",
             "click #add_item" : "onClickAddItem",
-            "click #trash_selected" : "onClickTrashSelected",
-            "click #delete_selected" : "onClickDeleteSelected",
+            "click #trash_delete_selected" : "onClickTrashDeleteSelected",
         },
         
         connectBusinessFilter : function(collection) {
@@ -89,7 +88,11 @@ define([
                     date_to : null,
                     client_name : null,
                     trainer_name : null,
-                    created_by_name : null
+                    created_by_name : null,
+                    title : null,
+                    location : null,
+                    session_type : null,
+                    session_focus :null
                 }
             );
         },
@@ -97,10 +100,14 @@ define([
         onChangeState : function(event) {
             var value = $(event.target).val();
             
-            if(parseInt(value)) {
-                app.controller.navigate("!/list_view", true);
-            } else {
-                app.controller.navigate("!/trash_list", true);
+            if(parseInt(value) == 1) {
+                this.model.set({page : 1, current_page : 'list',  published : '1', uid : app.getUniqueId()});
+            } else if(parseInt(value) == '-2') {
+                this.model.set({page : 1, current_page : 'trash_list',  published : '-2', uid : app.getUniqueId()});
+            } else if(parseInt(value) == '0') {
+                this.model.set({page : 1, current_page : 'unpublished_list',  published : '0', uid : app.getUniqueId()});
+            } else if(value == '*') {
+                this.model.set({page : 1, current_page : 'all_list',  published : '*', uid : app.getUniqueId()});;
             }
         },
         
@@ -111,47 +118,41 @@ define([
             this.model.set({frontend_published :  value});
         },
         
-        onClickTrashSelected : function() {
+        
+                
+        onClickTrashDeleteSelected : function() {
             var selected = new Array();
             $('.trash_checkbox:checked').each(function() {
                 selected.push($(this).attr('data-id'));
             });
-
+            
+            var current_page = this.model.get('current_page');
             var self = this;
+            
             if(selected.length > 0) {
                 _.each(selected, function(item, key){ 
-                    self.trashItem(item);
+                    if(current_page == 'trash_list') {
+                        self.deleteItem(item);
+                    } else {
+                       self.trashItem(item); 
+                    }
                 });
             }
             $("#select_trashed").prop("checked", false);
         },
+
         
         trashItem : function(id) {
             var model = this.collection.get(id);
             var self  = this;
-            model.save({id : id, state : '-2'}, {
+            model.save({id : id, published : '-2'}, {
                 success: function (model, response) {
-                    self.hide_items(id);
+                    app.controller.update_list();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
             });
-        },
-        
-        onClickDeleteSelected : function() {
-            var selected = new Array();
-            $('.trash_checkbox:checked').each(function() {
-                selected.push($(this).attr('data-id'));
-            });
-
-            var self = this;
-            if(selected.length > 0) {
-                _.each(selected, function(item, key){ 
-                    self.deleteItem(item);
-                });
-            }
-            $("#select_trashed").prop("checked", false);
         },
         
         deleteItem : function(id) {
@@ -159,19 +160,11 @@ define([
             var self = this;
             model.destroy({
                 success: function (model, response) {
-                    self.hide_items(id);
+                    app.controller.update_list();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
-            });
-        },
-        
-        hide_items : function(items) {
-            var self = this;
-            var items = items.split(",");
-            _.each(items, function(item, key){ 
-                $(".item_row[data-id=" + item + "]").fadeOut();
             });
         },
         

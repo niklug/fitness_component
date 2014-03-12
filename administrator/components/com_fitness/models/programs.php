@@ -428,7 +428,12 @@ class FitnessModelprograms extends JModelList {
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
         
-        $query .= " WHERE a.published='$data->published' ";
+        $query .= " WHERE 1 ";
+
+        if(isset($data->published) AND $data->published != '*') {
+            $query .= " AND a.published='$data->published' ";
+        }
+        
         
         //1
         if($data->title) {
@@ -518,7 +523,12 @@ class FitnessModelprograms extends JModelList {
         
         $query .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
         
-        $query .= " WHERE a.published='$data->published' ";
+        $query .= " WHERE 1 ";
+
+        if(isset($data->published) AND $data->published != '*') {
+            $query .= " AND a.published='$data->published' ";
+        }
+        
         
         //1
         if($data->title) {
@@ -669,6 +679,71 @@ class FitnessModelprograms extends JModelList {
          ";
         
         return FitnessHelper::customQuery($query, 2);
+    }
+    
+    public function copyEvent() {
+        $status['success'] = 1;
+        
+        $db = JFactory::getDbo();
+        
+        $helper = new FitnessHelper();
+        
+        $data = json_decode(JRequest::getVar('data_encoded'));
+        
+        $id = $data->id;
+        
+        //copy event
+        $query = "SELECT * FROM #__dc_mv_events WHERE id='$id'";
+        
+        $event =  FitnessHelper::customQuery($query, 2);
+        
+        if($event->id) {
+            $event->id = null;
+            $event->status = 1;
+            $event->owner = JFactory::getUser()->id;
+            $insert = $db->insertObject('#__dc_mv_events', $event, 'id');
+            
+            if (!$insert) {
+                $status['success'] = 1;
+                $status['message'] = $db->stderr();
+            }
+
+            $inserted_event_id = $db->insertid();
+        }
+        
+        
+        
+        //copy exercises
+        $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$id'";
+
+        $exercises =  FitnessHelper::customQuery($query, 1);
+
+        foreach ($exercises as $exercise) {
+            $exercise->id = null;
+            $exercise->event_id = $inserted_event_id;
+            $insert = $db->insertObject('#__fitness_events_exercises', $exercise, 'id');
+            if (!$insert) {
+                $status['success'] = 1;
+                $status['message'] = $db->stderr();
+            }
+        }
+        
+        //copy clients
+        $query = "SELECT * FROM #__fitness_appointment_clients WHERE event_id='$id'";
+
+        $clients =  FitnessHelper::customQuery($query, 1);
+
+        foreach ($clients as $client) {
+            $client->id = null;
+            $client->event_id = $inserted_event_id;
+            $insert = $db->insertObject('#__fitness_appointment_clients', $client, 'id');
+            if (!$insert) {
+                $status['success'] = 1;
+                $status['message'] = $db->stderr();
+            }
+        }
+        
+        return array( 'status' => $status);
     }
 
 }

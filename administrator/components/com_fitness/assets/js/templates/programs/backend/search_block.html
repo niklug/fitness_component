@@ -1,31 +1,16 @@
-<% if(current_page == 'list') { %>
+
         
-        <div style="display: inline-block; float: right;"  class="right">
-            <div id="toolbar" class="toolbar-list right">
-                <a title="Add Video Item" id="add_item" class="toolbar" onclick="javascript:void(0)">
-                    <span  class="icon-32-new"> </span>
-                </a>
-                <a title="Trash Selected Items" id="trash_selected" class="toolbar" onclick="javascript:void(0)">
-                    <span  class="icon-32-trash"> </span>
-                </a>
-            </div>
-        </div>
-        
-        
-        <% } %>
-        
-        <% if(current_page == 'trash_list') { %>
-        
-        <div style="display: inline-block;float: right;" class="right">
-            <div id="toolbar" class="toolbar-list right">
-                <a title="Delete Selected Items" id="delete_selected" class="toolbar" onclick="javascript:void(0)">
-                    <span  class="icon-32-delete"> </span>
-                </a>
-            </div>
-        </div>
-        
-        <% } %>
+<div style="display: inline-block; float: right;"  class="right">
+    <div id="toolbar" class="toolbar-list right">
+        <a title="Add New" id="add_item" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-new"> </span>
+        </a>
+        <a title="Trash/Delete" id="trash_delete_selected" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-trash"> </span>
+        </a>
+    </div>
 </div>
+
 
 <div class="clr"></div>
 
@@ -54,7 +39,8 @@
     <select id="workout_filter" class="inputbox" size="1" name="workout">
         <%
         var selected_published = '';
-        var selected_unpublished = 'selected="selected"';
+        var selected_unpublished = '';
+        var selected_all = '';
         if(current_page == 'list') {
             selected_published = 'selected="selected"';
             selected_unpublished = '';
@@ -63,21 +49,37 @@
         %>
         <option <%= selected_published %> value="1">Published Workout</option>
         <option <%= selected_unpublished %>   value="0">Unpublished Workout</option>
-        <option <%= selected_unpublished %>   value="2">All Workouts</option>
+        <option <%= selected_all %>   value="2">All Workouts</option>
     </select>
     
     <select id="state_filter" class="inputbox" size="1" name="state">
         <%
         var selected_published = '';
-        var selected_unpublished = 'selected="selected"';
+        var selected_unpublished = '';
+        var selected_trashed = '';
+        var selected_all = '';
+        
         if(current_page == 'list') {
             selected_published = 'selected="selected"';
-            selected_unpublished = '';
+        }
+        
+        if(current_page == 'unpublished_list') {
+            selected_unpublished = 'selected="selected"';
+        }
+        
+        if(current_page == 'trash_list') {
+            selected_trashed = 'selected="selected"';
+        }
+        
+        if(current_page == 'all_list') {
+            selected_all = 'selected="selected"';
         }
 
         %>
-        <option <%= selected_published %> value="1">Published Event</option>
-        <option <%= selected_unpublished %>   value="0">Unpublished Event</option>
+        <option <%= selected_published %> value="1">Published Events</option>
+        <option <%= selected_unpublished %>   value="0">Unpublished Events</option>
+        <option <%= selected_trashed %>   value="-2">Trashed Events</option>
+        <option <%= selected_all %>   value="*">All Events</option>
     </select>
     
     

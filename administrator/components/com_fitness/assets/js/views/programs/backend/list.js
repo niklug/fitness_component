@@ -19,6 +19,7 @@ define([
         initialize : function() {
             this.collection.bind("add", this.addItem, this);
             this.collection.bind("reset", this.clearItems, this);
+            this.status_obj = $.status(app.options.status_options);
         },
         
         template:_.template(template),
@@ -57,6 +58,14 @@ define([
             "click .view" : "onClickView",
             "click .copy_exercise" : "onClickCopyExercise",
             "click #select_trashed" : "onClickSelectTrashed",
+            
+            "click .publish_event" : "onClickPublishEvent",
+            "click .publish_workout" : "onClickPublishWorkout",
+            
+            "click .copy_item" : "onClickCopy",
+            
+            "click .appointment_email" : "sendAppointmentEmail",
+            "click .notify_email" : "sendNotifyEmail",
         },
         
         addItem : function(model) {
@@ -110,7 +119,7 @@ define([
             var self  = this;
             model.save({published : '-2'}, {
                 success: function (model, response) {
-                    self.hide_items(id);
+                    app.controller.update_list();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -124,7 +133,7 @@ define([
             var self = this;
             model.save({published : '1'}, {
                 success: function (model, response) {
-                    self.hide_items(id);
+                    app.controller.update_list();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -138,7 +147,7 @@ define([
             var self = this;
             model.destroy({
                 success: function (model) {
-                    self.hide_items(id);
+                    app.controller.update_list();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -146,13 +155,6 @@ define([
             });
         },
         
-        hide_items : function(items) {
-            var self = this;
-            var items = items.split(",");
-            _.each(items, function(item, key){ 
-                self.container_el.find(".item_row[data-id=" + item + "]").fadeOut();
-            });
-        },
         
         onClickSelectTrashed : function(event) {
             $(".trash_checkbox").prop("checked", false);
@@ -161,6 +163,65 @@ define([
                 $(".trash_checkbox").prop("checked", true);
             }
         },
+        
+        onClickPublishEvent : function(event) {
+            var id = $(event.target).attr('data-id');
+            var state = $(event.target).attr('data-published');
+            
+            var published = 1;
+            
+            if(parseInt(state) == '1') {
+                published = 0;
+            }
+            
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({published : published}, {
+                success: function (model, response) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickPublishWorkout : function(event) {
+            var id = $(event.target).attr('data-id');
+            var state = $(event.target).attr('data-frontend_published');
+            
+            var frontend_published = 1;
+            
+            if(parseInt(state) == '1') {
+                frontend_published = 0;
+            }
+            
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({frontend_published : frontend_published}, {
+                success: function (model, response) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickCopy : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.copy_item(id);
+        },
+        
+        sendAppointmentEmail : function(event) {
+            var id = $(event.target).attr('data-id');
+            this.status_obj.sendEmail(id, 'Appointment');
+        },
+        
+        sendNotifyEmail : function(event) {
+            var id = $(event.target).attr('data-id');
+            this.status_obj.sendEmail(id, 'Notify');
+        }
         
     });
             

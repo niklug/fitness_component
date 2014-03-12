@@ -60,7 +60,10 @@ class FitnessViewSessiontypes extends JView
 		$canDo	= FitnessHelper::getActions($state->get('filter.category_id'));
 
 		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_SESSIONTYPES'), 'sessiontypes.png');
-
+                
+                if(!FitnessHelper::is_superuser(JFactory::getUser()->id)){
+                    return;
+                }
         //Check if the form exists before showing the add/edit buttons
         $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/sessiontype';
         if (file_exists($formPath)) {
