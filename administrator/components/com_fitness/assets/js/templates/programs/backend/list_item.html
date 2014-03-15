@@ -18,7 +18,7 @@
         if(group_clients_data) {
             _.each(group_clients_data, function(item){ 
                 var icon_class = 'unpublish';
-                if(item.sent) {
+                if(parseInt(item.sent)) {
                     icon_class = 'publish';
                 }
                 %>
@@ -32,12 +32,12 @@
         <%
         if(group_clients_data) {
             _.each(group_clients_data, function(item){ 
-                var icon_class = 'unpublish';
-                if(item.confirmed) {
-                    icon_class = 'publish';
+                var icon_class_confirmed = 'unpublish';
+                if(parseInt(item.confirmed)) {
+                    icon_class_confirmed= 'publish';
                 }
                 %>
-                <span class="jgrid"><span class="state <%= icon_class %> " ></span></span> <br/>
+                <span class="jgrid"><span class="state <%= icon_class_confirmed %> " ></span></span> <br/>
                 
             <% })
         } 

@@ -120,12 +120,12 @@ define([
             
             var session_type_values = _.values(session_type_grouped);
 
-            app.collections.session_types.reset();
+            app.collections.session_types_grouped = new Backbone.Collection();
             
             _.each(session_type_values, function(value, index) {
                 var id = (value).map(function(model) { return model.get('id'); }).join(',');
                 
-                app.collections.session_types.add([
+                app.collections.session_types_grouped.add([
                     {id : id, name : session_type_names[index]}
                 ]);
             });
@@ -133,7 +133,7 @@ define([
             new Select_filter_fiew({
                 model : this.model,
                 el : $(this.el).find("#session_type_wrapper"),
-                collection : app.collections.session_types,
+                collection : app.collections.session_types_grouped,
                 title : 'Session Type',
                 first_option_title : 'None',
                 class_name : 'dark_input_style',
@@ -152,12 +152,12 @@ define([
             
             var session_focus_values = _.values(session_focus_grouped);
 
-            app.collections.session_focuses.reset();
+            app.collections.session_focuses_grouped = new Backbone.Collection();
             
             _.each(session_focus_values, function(value, index) {
                 var id = (value).map(function(model) { return model.get('id'); }).join(',');
                 
-                app.collections.session_focuses.add([
+                app.collections.session_focuses_grouped.add([
                     {id : id, name : session_focus_names[index]}
                 ]);
             });
@@ -166,7 +166,7 @@ define([
             new Select_filter_fiew({
                 model : this.model,
                 el : $(this.el).find("#session_focus_filter_wrapper"),
-                collection : app.collections.session_focuses,
+                collection : app.collections.session_focuses_grouped,
                 title : 'Session Focus',
                 first_option_title : 'None',
                 class_name : 'dark_input_style',

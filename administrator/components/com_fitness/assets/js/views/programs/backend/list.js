@@ -221,7 +221,12 @@ define([
         sendNotifyEmail : function(event) {
             var id = $(event.target).attr('data-id');
             this.status_obj.sendEmail(id, 'Notify');
-        }
+        },
+        
+        onClickView : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.navigate("!/form_view/" + id, true);
+        },
         
     });
             

@@ -9,8 +9,7 @@ define([
         'views/programs/backend/form_container',
         'views/programs/select_filter_block',
         'views/programs/backend/menus/main_menu',
-        'views/programs/backend/exercise_details',
-        'views/programs/backend/exercise_video',
+        'views/programs/backend/form_details',
         'views/programs/backend/business_permissions',
         'views/programs/backend/list',
         'views/programs/backend/list_header_container',
@@ -27,8 +26,7 @@ define([
         Form_container_view,
         Select_filter_block_view,
         Main_menu_view,
-        Exercise_details_view,
-        Exercise_video_view,
+        Form_details_view,
         Business_permissions_view,
         List_view,
         List_header_container_view
@@ -82,43 +80,43 @@ define([
         form_view : function(id) {
             $("#main_container").html(new Form_container_view().render().el);
             if(!parseInt(id)) {
-                this.load_form_view(new Exercise_library_item_model({edit_allowed : true}));
+                this.load_form_view(new Item_model(
+                 /*      
+                {
+                    title : '5',
+                    session_type : '26',
+                    session_focus : '481',
+                    starttime : '2014-03-13 04:30:00',
+                    endtime : '2014-03-13 05:00:00',
+                    location : '1',
+                    frontend_published : '0',
+                    published : '1',
+                    trainer_id : '488'
+                }
+                */        
+                ));
                 return;
             }
+            
             var self = this;
-            app.models.exercise_library_item.set({id : id});
-            app.models.exercise_library_item.fetch({
-                data : {published : 1},
+            app.models.item.set({id : id});
+            app.models.item.fetch({
+                data : {state : 1},
                 success: function (model, response) {
-                    model.set({edit_allowed : self.edit_allowed(model)});
                     self.load_form_view(model);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
                 }
             })
+
         },
         
         load_form_view : function(model) {
             $("#header_wrapper").html(new Main_menu_view({model : model}).render().el);
 
-            $("#exercise_details_wrapper").html(new Exercise_details_view({model : model}).render().el);
+            new Form_details_view({el : $("#details_wrapper"), model : model});
             
-            var element_disabled = false;
-            if(!this.edit_allowed(model)) {
-                var element_disabled = true;
-            }
-
-            new Select_filter_block_view({el : $("#select_filter_wrapper"), model : model, block_width : '140px', element_disabled : element_disabled});
-
-            if(model.get('id')) {
-                $("#exercise_video_wrapper").html(new Exercise_video_view({model : model}).render().el);
-                
-                var video_path = model.get('video');
-                $.fitness_helper.loadVideoPlayer(video_path, app, 250, 400, 'exercise_video');
-            }
-
-            new Business_permissions_view({el : $("#permissions_wrapper"), model : model});
         },
      
         get_items : function() {

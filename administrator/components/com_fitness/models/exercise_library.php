@@ -147,7 +147,7 @@ class FitnessModelExercise_library extends JModelList {
     public function select_filter() {
         $table = JRequest::getVar('table');
         $by_business_profile = JRequest::getVar('by_business_profile');
-        $query = "SELECT id, name FROM $table WHERE state='1'";
+        $query = "SELECT * FROM $table WHERE state='1'";
         
         $user_id = JFactory::getUser()->id;
             
@@ -265,7 +265,7 @@ class FitnessModelExercise_library extends JModelList {
         $query .= " SELECT a.*, ";
         
         //get total number
-        if($id) {
+        if(!$id) {
             $query .= " (SELECT COUNT(*) FROM $table AS a ";
 
             if ($current_page == 'my_favourites') {
@@ -581,6 +581,13 @@ class FitnessModelExercise_library extends JModelList {
         if($current_page == 'my_favourites') {
             $query .= " AND mf.client_id='$user_id'";
         }
+        
+        $query_type = 1;
+
+        if($id) {
+            $query .= " AND a.id='$id' ";
+            $query_type = 2;
+        }
 
         
         if($sort_by) {
@@ -594,15 +601,6 @@ class FitnessModelExercise_library extends JModelList {
         if($limit) {
             $query .= " LIMIT $start, $limit";
         }
-
-        $query_type = 1;
-
-        if($id) {
-            $query .= " AND a.id='$id' ";
-            $query_type = 2;
-        }
-        
-
 
         $data = FitnessHelper::customQuery($query, $query_type);
         

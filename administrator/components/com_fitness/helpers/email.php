@@ -130,7 +130,7 @@ class FitnessEmail extends FitnessHelper
                 throw new Exception('Email function error');
             }
             
-            if ($data->method == 'Appointment') {//confirmation
+            if ($this->data->method == 'Appointment') {//confirmation
                 $this->setSentEmailStatus($this->data->id, $recipient_id);
             }
             

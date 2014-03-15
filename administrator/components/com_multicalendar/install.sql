@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `#__dc_mv_events` (
   `status` int(1) NOT NULL DEFAULT '1',
   `frontend_published` int(1) NOT NULL DEFAULT '0',
   `isalldayevent` tinyint(3) unsigned DEFAULT NULL,
-  `color` varchar(10) DEFAULT NULL,
   `owner` int(11) DEFAULT NULL,
   `published` tinyint(1) DEFAULT NULL,
   `rrule` varchar(255) DEFAULT NULL,

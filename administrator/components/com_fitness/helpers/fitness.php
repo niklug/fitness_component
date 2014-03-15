@@ -1312,7 +1312,7 @@ class FitnessHelper extends FitnessFactory
         
         $query .= " sf.name AS session_focus_name";
         
-        $query = " FROM #__dc_mv_events AS a";
+        $query .= " FROM #__dc_mv_events AS a";
        
         $query .= " LEFT JOIN #__fitness_categories AS t ON t.id = a.title ";
         
