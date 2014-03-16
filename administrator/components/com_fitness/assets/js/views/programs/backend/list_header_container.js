@@ -37,7 +37,7 @@ define([
         },
         
         connectSearchBlock : function() {
-            this.$el.find("#search_wrapper").html(new Search_block_view({model : this.model, collection : this.collection}).render().el);
+            new Search_block_view({el : this.$el.find("#search_wrapper"), model : this.model, collection : this.collection});
         }
     });
             

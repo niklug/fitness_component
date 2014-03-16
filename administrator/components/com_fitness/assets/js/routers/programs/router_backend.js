@@ -7,14 +7,12 @@ define([
         'models/programs/item',
         'models/programs/request_params_items',
         'views/programs/backend/form_container',
-        'views/programs/select_filter_block',
         'views/programs/backend/menus/main_menu',
         'views/programs/backend/form_details',
-        'views/programs/backend/business_permissions',
+        'views/programs/backend/form_trainer',
+        'views/programs/backend/form_clients',
         'views/programs/backend/list',
-        'views/programs/backend/list_header_container',
-        'jwplayer', 
-        'jwplayer_key',
+        'views/programs/backend/list_header_container'
 ], function (
         $,
         _,
@@ -24,10 +22,10 @@ define([
         Item_model,
         Request_params_items_model,
         Form_container_view,
-        Select_filter_block_view,
         Main_menu_view,
         Form_details_view,
-        Business_permissions_view,
+        Form_trainer_view,
+        Form_event_clients_view,
         List_view,
         List_header_container_view
     ) {
@@ -50,13 +48,13 @@ define([
             app.collections.items = new Items_collection();
             
             //business logic
-            var business_profiles = null;
+            var business_profile_id = null;
             if(!app.options.is_superuser) {
-                business_profiles = app.options.business_profile_id;
+                business_profile_id = app.options.business_profile_id;
             }
             //
             
-            app.models.request_params = new Request_params_items_model({business_profiles : business_profiles});
+            app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id});
             app.models.request_params.bind("change", this.get_items, this);
         },
 
@@ -117,6 +115,11 @@ define([
 
             new Form_details_view({el : $("#details_wrapper"), model : model});
             
+            new Form_trainer_view({el : $("#trainer_data_wrapper"), model : model});
+            
+            if(model.get('id')) {
+                new Form_event_clients_view({el : $("#clients_data_wrapper"), model : model});
+            }
         },
      
         get_items : function() {

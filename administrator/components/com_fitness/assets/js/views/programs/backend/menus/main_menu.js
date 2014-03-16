@@ -81,6 +81,10 @@ define([
             
             data.published = $('#published:checked').val() || '0';
             
+            data.business_profile_id = $('#business_profile_select').val();
+            
+            data.trainer_id = $('#trainer_id').val();
+            
             this.model.set(data);
 
             

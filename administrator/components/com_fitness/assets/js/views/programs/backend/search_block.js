@@ -19,13 +19,17 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
+            if(app.collections.business_profiles) {
+                this.render();
+            } 
+            
             app.collections.business_profiles = new Business_profiles_collection();
             var self = this;
             app.collections.business_profiles.fetch({
                 success : function (collection, response) {
-                    self.connectBusinessFilter(collection);
+                    self.render();
                 },
-                error: function (collection, response) {
+                error : function (collection, response) {
                     alert(response.responseText);
                 }
             })
@@ -40,6 +44,8 @@ define([
             this.$el.find("#date_from").datepicker({ dateFormat: "yy-mm-dd"});
             
             this.$el.find("#date_to").datepicker({ dateFormat: "yy-mm-dd"});
+            
+            this.connectBusinessFilter();
            
             return this;
         },
@@ -53,18 +59,18 @@ define([
             "click #trash_delete_selected" : "onClickTrashDeleteSelected",
         },
         
-        connectBusinessFilter : function(collection) {
+        connectBusinessFilter : function() {
             if(!app.options.is_superuser) {
                 return false;
             }
              new Select_element_view({
                 model : this.model,
                 el : $("#business_profile_filter"),
-                collection : collection,
+                collection : app.collections.business_profiles,
                 first_option_title : '-Global Business Permission-',
-                class_name : '',
+                class_name : 'filter_select',
                 id_name : 'business_profile_select',
-                model_field : 'business_profiles'
+                model_field : 'business_profile_id'
             }).render();
         },
         
@@ -92,7 +98,8 @@ define([
                     title : null,
                     location : null,
                     session_type : null,
-                    session_focus :null
+                    session_focus : null,
+                    business_profile_id : null
                 }
             );
         },

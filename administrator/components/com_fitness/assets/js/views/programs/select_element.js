@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/exercise_library/select_element.html',
+	'text!templates/programs/select_element.html',
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
@@ -27,7 +27,8 @@ define([
                 first_option_title : this.options.first_option_title,
                 class_name : this.options.class_name,
                 id_name : this.options.id_name,
-                select_size : this.options.select_size
+                select_size : this.options.select_size,
+                element_disabled : this.options.element_disabled || ''
             };
             $(this.el).html(this.template(data));
             

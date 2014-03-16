@@ -37,4 +37,15 @@ class FitnessViewPrograms extends JView {
         echo json_encode($model -> copyEvent());
     }
     
+    function getPrimaryTrainersByBusiness() {
+        $business_profile_id = JRequest::getVar('business_profile_id');
+        $helper = new FitnessHelper();
+        echo json_encode($helper->getPrimaryTrainersByBusiness($business_profile_id));
+    }
+    
+    function event_clients() {
+        $model = $this -> getModel("programs");
+        echo json_encode($model -> event_clients());
+    }
+    
 }

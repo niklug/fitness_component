@@ -75,7 +75,7 @@ define([
         
         render: function(){
             var data = this.model.toJSON();
-            console.log(data);
+            //console.log(data);
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);

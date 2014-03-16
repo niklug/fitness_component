@@ -19,13 +19,17 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
+            if(app.collections.business_profiles) {
+                this.render();
+            } 
+            
             app.collections.business_profiles = new Business_profiles_collection();
             var self = this;
             app.collections.business_profiles.fetch({
                 success : function (collection, response) {
-                    self.connectBusinessFilter(collection);
+                    self.render();
                 },
-                error: function (collection, response) {
+                error : function (collection, response) {
                     alert(response.responseText);
                 }
             })
@@ -36,7 +40,9 @@ define([
         render: function(){
             var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
-           
+            
+            this.connectBusinessFilter();
+            
             return this;
         },
         
@@ -49,16 +55,16 @@ define([
             "click #delete_selected" : "onClickDeleteSelected",
         },
         
-        connectBusinessFilter : function(collection) {
+        connectBusinessFilter : function() {
             if(!app.options.is_superuser) {
                 return false;
             }
              new Select_element_view({
                 model : this.model,
                 el : $("#business_profile_filter"),
-                collection : collection,
+                collection : app.collections.business_profiles,
                 first_option_title : '-Global Business Permission-',
-                class_name : '',
+                class_name : 'filter_select',
                 id_name : 'business_profile_select',
                 model_field : 'business_profiles'
             }).render();
@@ -86,6 +92,7 @@ define([
                     target_muscles : '', 
                     equipment_type : '',
                     difficulty : '',
+                    business_profiles : ''
                 }
             );
         },

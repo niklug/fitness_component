@@ -25,9 +25,6 @@ $business_profile_id = $business_profile_id['data'];
 
 ?>
 
-
-
-
 <script type="text/javascript">
 
     var options = {
@@ -50,6 +47,8 @@ $business_profile_id = $business_profile_id['data'];
         
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
         'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
+        'is_simple_trainer' : '<?php echo FitnessFactory::is_simple_trainer($user_id); ?>',
+        'is_trainer_administrator' : '<?php echo FitnessFactory::is_trainer_administrator($user_id); ?>',
         'business_profile_id' : '<?php echo $business_profile_id; ?>'
     };
     

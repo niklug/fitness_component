@@ -21,6 +21,15 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
+            
+            if( 
+                app.collections.business_profiles 
+                && app.collections.clients
+            ) {
+                this.render();
+                return;
+            } 
+            
             app.collections.business_profiles = new Business_profiles_collection();
             app.collections.clients = new Clients_collection();
 

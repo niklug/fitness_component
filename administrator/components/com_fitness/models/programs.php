@@ -368,7 +368,7 @@ class FitnessModelprograms extends JModelList {
                 $data->created_by_name = JRequest::getVar('created_by_name'); 
                 
 
-                $data->business_profiles = JRequest::getVar('business_profiles'); 
+                $data->business_profile_id = JRequest::getVar('business_profile_id'); 
                 $data->current_page = JRequest::getVar('current_page'); 
 
                 $data = $this->getPrograms($table, $data);
@@ -502,8 +502,8 @@ class FitnessModelprograms extends JModelList {
             }
 
             //filter by business profile
-            if (!empty($data->business_profiles)) {
-                $query .= " AND a.business_profile_id IN ($data->business_profiles)";
+            if (!empty($data->business_profile_id)) {
+                $query .= " AND a.business_profile_id IN ($data->business_profile_id)";
             }
 
             if (isset($data->frontend_published)  AND $data->frontend_published != '2') {
@@ -599,8 +599,8 @@ class FitnessModelprograms extends JModelList {
         
         
         //filter by business profile
-        if (!empty($data->business_profiles)) {
-            $query .= " AND a.business_profile_id IN ($data->business_profiles)";
+        if (!empty($data->business_profile_id)) {
+            $query .= " AND a.business_profile_id IN ($data->business_profile_id)";
         }
         
 
@@ -757,6 +757,56 @@ class FitnessModelprograms extends JModelList {
         }
         
         return array( 'status' => $status);
+    }
+    
+    
+    
+    public function event_clients() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        
+        $event_id = JRequest::getVar('event_id', 0, '', 'INT');
+
+        $table = '#__fitness_appointment_clients';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $query .= "SELECT  client_id AS id,";
+                $query .= " (SELECT name FROM #__users WHERE id=a.client_id) name";
+                $query .= "  FROM #__fitness_appointment_clients AS a";
+                $query .= "  WHERE a.event_id='$event_id' AND a.client_id !='0'";
+                $data = FitnessHelper::customQuery($query, 1);
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
     }
 
 }
