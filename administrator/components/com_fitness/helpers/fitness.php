@@ -1744,58 +1744,28 @@ class FitnessHelper extends FitnessFactory
     
             $all_trainers = JRequest::getVar("all_trainers");
     
-            $db = & JFactory::getDBO();
-            
-            $query = "SELECT primary_trainer, other_trainers, business_profile_id";
+            $query = "SELECT CONCAT(primary_trainer, ',', other_trainers) AS trainers, business_profile_id";
             
             $query .= " FROM #__fitness_clients";
             
             $query .= "  WHERE state='1'";
             
-            if($business_profile_id) {
-                $query .= " AND business_profile_id='$business_profile_id' ";
-            }
+            $data = self::customQuery($query, 1);
             
-            $db->setQuery($query);
-            
-            if (!$db->query()) {
-                throw new Exception($db->getErrorMsg());
-            }
-            
-            $primary_trainer = $db->loadResultArray(0);
-            
-            $other_trainers = $db->loadResultArray(1);
-            
-            $business_profile_ids = $db->loadResultArray(2);
-            
-            $other_trainers = explode(',', $other_trainers[0]);
-            
-            $all_trainers_id = array_unique(array_merge($primary_trainer, $other_trainers));
-            
-            if ($primary_only) {
-                $all_trainers_id = $primary_trainer;
-            }
-            
-            if ($secondary_only) {
-                $all_trainers_id = $other_trainers;
-            }
-            
-            $items = array();
-            $i = 0;
-            foreach ($all_trainers_id as $user_id) {
-                $item = new stdClass();
+            foreach ($data as $item) {
+                $item_trainers = array_filter(explode(',', $item->trainers));
                 
-                $user = &JFactory::getUser($user_id);
-                
-                $item->id = $user_id;
-                $item->name = $user->name;
-                $item->business_profile_id = $business_profile_ids[$i];
-                
-                $items[] = $item;
-                $i++;
+                foreach ($item_trainers as $item_trainer) {
+                    $trainer = new stdClass();
+                    $trainer->id = $item_trainer;
+                    $user = &JFactory::getUser($item_trainer);
+                    $trainer->name = $user->name;
+                    $trainer->business_profile_id = $item->business_profile_id;
+                    
+                    $trainers[] = $trainer;
+                }
             }
-
-            return $items;
+            return $trainers;
         }
 }
 

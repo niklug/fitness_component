@@ -62,9 +62,6 @@ define([
             "": "list_view", 
             "!/form_view/:id": "form_view", 
             "!/list_view": "list_view", 
-            "!/unpublished_list": "unpublished_list", 
-            "!/update_list": "update_list", 
-            
         },
         
         back: function() {
@@ -137,7 +134,8 @@ define([
         },
         
         list_view : function() {
-            app.models.request_params.set({page : 1, current_page : 'list',  published : 1, uid : app.getUniqueId()});
+            //show all
+            app.models.request_params.set({page : 1, current_page : 'all_list', published : '*', frontend_published : '2',  uid : app.getUniqueId()});
             
             this.list_actions();
         },

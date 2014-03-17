@@ -110,6 +110,7 @@ define([
         events : {
             "change #title" : "onChangeAppointment",
             "change #session_type" : "onChangeSessionType",
+            "change #start_time" : "onChangeStarttime",
         },
         
         loadAppointment : function() {
@@ -130,7 +131,7 @@ define([
             var id = $(event.target).val();
             this.$el.find("#session_focus_select").empty();
             this.loadSessionType(id);
-            
+            this.setEndInterval(id);
         },
         
         loadSessionType : function(id) {
@@ -180,7 +181,54 @@ define([
                 id_name : 'location',
                 model_field : 'location'
             }).render();
+        },
+        
+        setEndInterval : function(id) {
+            var endInterval;
+            switch(id) {
+                case '1' :
+                   endInterval = 45;
+                   break;
+                case '2' :
+                   endInterval = 30;
+                   break;
+                case '3' :
+                   endInterval = 45;
+                   break;
+                default :
+                   endInterval = 60; 
+            }
+            this.set_etparttime(endInterval);
+        },
+
+        set_etparttime : function(minutes) {
+            var start_time = this.$el.find("#start_time").val();
+            if(!start_time) return;
+            var start_time = start_time.split(":");
+            var date = new Date();
+            date.setHours(start_time[0]);
+            date.setMinutes(start_time[1]);
+            var newdate = this.addMinutes(date, minutes);
+            var hours = newdate.getHours();
+            var minutes = newdate.getMinutes();
+            $("#finish_time").val(this.pad(hours) + ':' + this.pad(minutes));
+        },
+
+        addMinutes : function(inDate, inMinutes) {
+            var newdate = new Date();
+            newdate.setTime(inDate.getTime() + inMinutes * 60000);
+            return newdate;
+        },
+
+        pad : function (d) {
+            return (d < 10) ? '0' + d.toString() : d.toString();
+        },
+        
+        onChangeStarttime : function() {
+            var event_id = this.$el.find("#title").val();
+            this.setEndInterval(event_id);
         }
+        
 
 
     });

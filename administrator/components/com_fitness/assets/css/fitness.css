@@ -605,6 +605,7 @@
     font-weight: bold;
     line-height: 19px;
     text-decoration: none !important;
+    display: inline-block;
 }
 
 

@@ -74,6 +74,10 @@ define([
             data.starttime  = start_date_field.val() + ' ' + start_time_field.val();
             
             data.endtime = finish_date_field.val() + ' ' + finish_time_field.val();
+            
+            if(!this.model.get('id')) {
+                data.endtime = start_date_field.val() + ' ' + finish_time_field.val();
+            }
 
             data.owner = app.options.user_id;
             
@@ -115,19 +119,8 @@ define([
                 start_date_field.addClass("red_style_border");
                 return false;
             }
-            
-            if(!finish_date_field.val()) {
-                finish_date_field.addClass("red_style_border");
-                return false;
-            }
-            
             if(!start_time_field.val()) {
                 start_time_field.addClass("red_style_border");
-                return false;
-            }
-            
-            if(!finish_time_field.val()) {
-                finish_time_field.addClass("red_style_border");
                 return false;
             }
             //end validation

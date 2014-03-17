@@ -514,7 +514,9 @@ class FitnessModelprograms extends JModelList {
         }
         //end get total number
         
-        $query .= " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name ";
+        $query .= " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name, ";
+        
+        $query .= " (SELECT name FROM #__users WHERE id=a.owner) created_by_name ";
         
         $query .= "  FROM $table AS a";
         
@@ -781,7 +783,7 @@ class FitnessModelprograms extends JModelList {
 
         switch ($method) {
             case 'GET': // Get Item(s)
-                $query .= "SELECT  client_id AS id,";
+                $query .= "SELECT  client_id AS id, status, id AS item_id, ";
                 $query .= " (SELECT name FROM #__users WHERE id=a.client_id) name";
                 $query .= "  FROM #__fitness_appointment_clients AS a";
                 $query .= "  WHERE a.event_id='$event_id' AND a.client_id !='0'";

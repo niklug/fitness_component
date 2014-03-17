@@ -41,9 +41,17 @@
         var selected_published = '';
         var selected_unpublished = '';
         var selected_all = '';
-        if(current_page == 'list') {
+        
+        if(frontend_published == '1') {
             selected_published = 'selected="selected"';
-            selected_unpublished = '';
+        }
+        
+        if(frontend_published == '0') {
+            selected_unpublished = 'selected="selected"';
+        }
+        
+        if(frontend_published == '2') {
+            selected_all = 'selected="selected"';
         }
 
         %>

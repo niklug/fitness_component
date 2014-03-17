@@ -747,24 +747,6 @@
                 case 3:
                    endInterval = 45;
                    break;
-                case 4:
-                   endInterval = 60;
-                   break;
-                case 5:
-                   endInterval = 60;
-                   break;
-                case 6:
-                   endInterval = 60;
-                   break;
-                case 7:
-                   endInterval = 60;
-                   break;
-                case 8:
-                   endInterval = 45;
-                   break;
-                case 9:
-                   endInterval = 60;
-                   break;
                 default :
                    endInterval = 60; 
             }

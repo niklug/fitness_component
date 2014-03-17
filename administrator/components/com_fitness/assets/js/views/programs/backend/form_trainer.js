@@ -56,7 +56,7 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template());
+            var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
             
             this.connectBusinessSelect();
@@ -82,8 +82,11 @@ define([
         connectBusinessSelect : function() {
             var business_name_collection = new Backbone.Collection;
             
+            var element_disabled = '';
+            
             if(app.options.is_trainer) {
                 business_name_collection.add(app.collections.business_profiles.where({id : app.options.business_profile_id}));
+                element_disabled = 'disabled';
             }
             
             if(app.options.is_superuser) {
@@ -97,7 +100,8 @@ define([
                 first_option_title : '-Global Business Permission-',
                 class_name : '',
                 id_name : 'business_profile_select',
-                model_field : 'business_profile_id'
+                model_field : 'business_profile_id',
+                element_disabled : element_disabled
             }).render();
         },
         
@@ -111,6 +115,8 @@ define([
             var trainers_collection = new Backbone.Collection;
             
             trainers_collection.add(app.collections.trainers.where({business_profile_id : business_profile_id}));
+            
+            //console.log(trainers_collection);
             
             var element_disabled = '';
             
