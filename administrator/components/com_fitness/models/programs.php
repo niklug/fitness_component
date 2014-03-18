@@ -415,6 +415,8 @@ class FitnessModelprograms extends JModelList {
         $order_dirrection = $data->order_dirrection;
         
         $id = $data->id;
+        
+        $user_id = JFactory::getUser()->id;
 
         $query = " SELECT a.*,";
         
@@ -516,7 +518,10 @@ class FitnessModelprograms extends JModelList {
         
         $query .= " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name, ";
         
-        $query .= " (SELECT name FROM #__users WHERE id=a.owner) created_by_name ";
+        $query .= " (SELECT name FROM #__users WHERE id=a.owner) created_by_name, ";
+        
+        // if logged simple trainer associated to the event's clients 
+        $query .= "  (SELECT GROUP_CONCAT(id) FROM #__fitness_appointment_clients WHERE client_id IN  (SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers))) is_associated_trainer";
         
         $query .= "  FROM $table AS a";
         

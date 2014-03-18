@@ -129,11 +129,11 @@ define([
                 element_disabled = 'disabled';
             }
             
-            if(app.options.is_trainer && !app.options.is_trainer_administrator) {
+            if(app.options.is_trainer && !app.options.is_trainer_administrator && !this.model.get('id')) {
+                
                 this.model.set({trainer_id : app.options.user_id});
             }
-
-             new Select_element_view({
+            new Select_element_view({
                 model : this.model,
                 el : $("#trainer_select"),
                 collection : trainers_collection,

@@ -98,6 +98,13 @@ define([
             app.models.item.fetch({
                 data : {state : 1},
                 success: function (model, response) {
+                    var edit_allowed = self.edit_allowed(model);
+
+                    if(!edit_allowed) {
+                        self.navigate("!/list_view", true);
+                        return;
+                    }
+                    
                     self.load_form_view(model);
                 },
                 error: function (collection, response) {
@@ -163,24 +170,50 @@ define([
         },
         
         edit_allowed : function(model) {
-            var access = true;
-            var created_by = model.get('created_by');
-            var created_by_superuser = model.get('created_by_superuser');
-            var is_client_of_trainer = model.get('is_client_of_trainer');
-            var is_trainer = app.options.is_trainer;
+            var access = false;
+            
+            var created_by = model.get('owner');
+            
+            var trainer_id = model.get('trainer_id');
+            
+            var is_associated_trainer = model.get('is_associated_trainer');
+            
+            var is_simple_trainer = app.options.is_simple_trainer;
+            
+            var business_profile_id = model.get('business_profile_id');
+            
+            var is_trainer_administrator = app.options.is_trainer_administrator;
+            
+            var is_superuser = app.options.is_superuser;
+            
             var user_id = app.options.user_id;
             
-            //trainers not allowed edit items created by Super Users
-            if(is_trainer && created_by_superuser) {
-                access = false;
-            }
             
-            if(is_trainer && (user_id != created_by)) {
-                access = false;
+            //if simple trainer//
+            
+            // if event created by logged simple trainer
+            if(is_simple_trainer && (user_id == created_by)) {
+                var access = true;
             }
-            // logged trainer; item created by client
-            if(is_trainer && is_client_of_trainer) {
-                access = true;
+            //if logged simple trainer is event's trainer 
+            if(is_simple_trainer && (user_id == trainer_id)) {
+                var access = true;
+            }
+            //if logged simple trainer associated to the event's clients 
+            if(is_simple_trainer && is_associated_trainer) {
+                var access = true;
+            }
+            // //
+            
+            // if trainer administrator //
+            if(is_trainer_administrator && (business_profile_id == app.options.business_profile_id)) {
+                var access = true;
+            }
+            // //
+            
+            // if superuser
+            if(is_superuser) {
+                var access = true;
             }
            
             return access;
