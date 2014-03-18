@@ -1737,13 +1737,7 @@ class FitnessHelper extends FitnessFactory
         }
         
         
-        function getPrimaryTrainersByBusiness($business_profile_id) {
-            $primary_only = JRequest::getVar("primary_only");
-            
-            $secondary_only = JRequest::getVar("secondary_only");
-    
-            $all_trainers = JRequest::getVar("all_trainers");
-    
+        function get_trainers() {
             $query = "SELECT CONCAT(primary_trainer, ',', other_trainers) AS trainers, business_profile_id";
             
             $query .= " FROM #__fitness_clients";
@@ -1766,6 +1760,22 @@ class FitnessHelper extends FitnessFactory
                 }
             }
             return $trainers;
+        }
+        
+        function get_trainer_clients() {
+            $trainer_id = JRequest::getVar('trainer_id', 0, '', 'INT');
+            
+            $query = "SELECT DISTINCT a.user_id AS client_id, c.name AS name";
+
+            $query .= " FROM #__fitness_clients AS a";
+            
+            $query .= " LEFT JOIN #__users AS c ON c.id=a.user_id";
+
+            $query .= " WHERE a.primary_trainer='$trainer_id' OR FIND_IN_SET('$trainer_id' , a.other_trainers) AND a.state='1'";
+            
+            $query .= "ORDER BY c.name";
+
+            return self::customQuery($query, 1);
         }
 }
 

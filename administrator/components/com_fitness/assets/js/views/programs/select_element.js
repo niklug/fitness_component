@@ -47,6 +47,17 @@ define([
 
         addItem : function(model) {
             var id = model.get('id');
+            
+            var name = model.get('name');
+            
+            if(typeof this.options.value_field !== 'undefined') {
+                id = model.get(this.options.value_field);
+            }
+            
+            if(typeof this.options.text_field !== 'undefined') {
+                name = model.get(this.options.text_field);
+            }
+            
             var selected = '';
 
             if(typeof this.selected_items !== 'undefined') {
@@ -55,7 +66,7 @@ define([
                 }
             }
     
-            this.$el.find("select").append('<option ' + selected + ' value="' + model.get('id') + '">' + model.get('name') + '</option>');
+            this.$el.find("select").append('<option ' + selected + ' value="' + id + '">' + name + '</option>');
         },
 
         events: {

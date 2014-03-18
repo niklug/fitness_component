@@ -783,10 +783,15 @@ class FitnessModelprograms extends JModelList {
 
         switch ($method) {
             case 'GET': // Get Item(s)
-                $query .= "SELECT  client_id AS id, status, id AS item_id, ";
+                $query .= "SELECT  a.*, ";
                 $query .= " (SELECT name FROM #__users WHERE id=a.client_id) name";
                 $query .= "  FROM #__fitness_appointment_clients AS a";
-                $query .= "  WHERE a.event_id='$event_id' AND a.client_id !='0'";
+                $query .= "  WHERE 1";
+                
+                if($event_id) {
+                    $query .= " AND a.event_id='$event_id' ";
+                }
+                
                 $data = FitnessHelper::customQuery($query, 1);
                 return $data;
                 break;

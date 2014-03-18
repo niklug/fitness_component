@@ -5,6 +5,7 @@ define([
         'app',
         'collections/exercise_library/business_profiles',
         'collections/programs/trainers',
+        'collections/programs/event_clients',
         'views/programs/select_element',
 	'text!templates/programs/backend/form_trainer.html'
 ], function (
@@ -14,6 +15,7 @@ define([
         app,
         Business_profiles_collection, 
         Trainers_collection, 
+        Event_clients_collection, 
         Select_element_view,
         template
     ) {
@@ -72,6 +74,7 @@ define([
         
         events : {
             "change #business_profile_select" : "onChangeBusinessName",
+            "change #trainer_id" : "onChangeTrainer",
         },
 
         onChangeBusinessName : function(event) {
@@ -141,6 +144,32 @@ define([
                 element_disabled : element_disabled
             }).render();
         },
+        
+        onChangeTrainer : function() {
+            var event_clients_collection = new Event_clients_collection();
+            var self = this;
+            event_clients_collection.fetch({
+                data : {event_id : this.model.get('id')},
+                success : function (collection, response) {
+                    _.each(collection.models, function(model) {
+                        self.deleteClientEvent(model);
+                    });
+                    $("#clients_data").empty();
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            })
+        },
+        
+        deleteClientEvent : function(model) {
+            model.destroy({
+                wait :true,
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        }
     });
             
     return view;
