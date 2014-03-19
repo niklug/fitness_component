@@ -148,9 +148,11 @@ define([
         onChangeTrainer : function() {
             var event_clients_collection = new Event_clients_collection();
             var self = this;
+            var event_id = this.model.get('id');
             event_clients_collection.fetch({
-                data : {event_id : this.model.get('id')},
+                data : {event_id : event_id},
                 success : function (collection, response) {
+                    if(!event_id) return;
                     _.each(collection.models, function(model) {
                         self.deleteClientEvent(model);
                     });

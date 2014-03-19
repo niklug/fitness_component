@@ -69,7 +69,7 @@ define([
         },
         
         addItem : function(model) {
-            model.set({edit_allowed : app.controller.edit_allowed(model)});
+            //model.set({edit_allowed : app.controller.edit_allowed(model)});
             
             var edit_allowed = app.controller.edit_allowed(model);
 

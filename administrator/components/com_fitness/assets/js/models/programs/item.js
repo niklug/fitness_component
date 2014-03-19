@@ -23,7 +23,9 @@ define([
             business_profile_id : app.options.business_profile_id,
             status : '1',
             published : '1',
-            calid : '0'
+            calid : '0',
+            auto_publish_workout : null,
+            auto_publish_event : null
         },
         
         validate: function(attrs, options) {

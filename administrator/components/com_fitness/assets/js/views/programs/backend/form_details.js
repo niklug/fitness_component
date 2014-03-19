@@ -94,16 +94,17 @@ define([
                 this.loadSessionFocus(session_type_id);
             }
             
-            this.$el.find("#start_date").datepicker({ dateFormat: "yy-mm-dd"});
+            this.$el.find("#start_date, #finish_date").datepicker({ dateFormat: "yy-mm-dd"});
             
-            this.$el.find("#finish_date").datepicker({ dateFormat: "yy-mm-dd"});
+            this.$el.find("#auto_publish_workout, #auto_publish_event").datepicker({ dateFormat: "yy-mm-dd", minDate: 0});
             
-            this.$el.find('#start_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
-            
-            this.$el.find('#finish_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
-            
+            this.$el.find('#start_time, #finish_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+             
             this.loadLocations();
             
+            this.setAutoPublishWorkout();
+            
+            this.setAutoPublishEvent();
             return this;
         },
         
@@ -111,6 +112,8 @@ define([
             "change #title" : "onChangeAppointment",
             "change #session_type" : "onChangeSessionType",
             "change #start_time" : "onChangeStarttime",
+            "click #frontend_published" : "setAutoPublishWorkout",
+            "click #published" : "setAutoPublishEvent",
         },
         
         loadAppointment : function() {
@@ -227,6 +230,26 @@ define([
         onChangeStarttime : function() {
             var event_id = this.$el.find("#title").val();
             this.setEndInterval(event_id);
+        },
+        
+        setAutoPublishWorkout : function() {
+            var checked = $("#frontend_published").is(":checked");
+            var disabled = false;
+            if(checked) {
+                disabled = true;
+                $("#auto_publish_workout").val('');
+            }
+            $("#auto_publish_workout").attr('disabled', disabled);
+        },
+        
+        setAutoPublishEvent : function() {
+            var checked = $("#published").is(":checked");
+            var disabled = false;
+            if(checked) {
+                disabled = true;
+                $("#auto_publish_event").val('');
+            }
+            $("#auto_publish_event").attr('disabled', disabled);
         }
         
 

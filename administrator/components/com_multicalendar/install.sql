@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS `#__dc_mv_events` (
   `uid` int(10) DEFAULT NULL,
   `exdate` text,
   `business_profile_id` int(11) unsigned NOT NULL,
+  `auto_publish_workout` varchar(10) DEFAULT NULL,
+  `auto_publish_event` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

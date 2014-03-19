@@ -75,6 +75,9 @@ define([
             this.model.save(null, {
                 success: function (model, response) {
                     self.render().el;
+                    if(app.collections.clients_rest.length - 1) {
+                        $("#add_client").show();
+                    }
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -87,6 +90,7 @@ define([
             this.model.destroy({
                 success: function (model) {
                     self.close();
+                    $("#add_client").show();
                 },
                 error: function (model, response) {
                     alert(response.responseText);

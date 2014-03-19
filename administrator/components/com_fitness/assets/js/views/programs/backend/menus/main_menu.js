@@ -56,6 +56,8 @@ define([
             
             var session_focus_field = $('#session_focus');
             
+            var location_field = $('#location');
+            
             var start_date_field = $('#start_date');
             
             var finish_date_field = $('#finish_date');
@@ -89,12 +91,16 @@ define([
             
             data.trainer_id = $('#trainer_id').val();
             
+            data.auto_publish_workout = $('#auto_publish_workout').val();
+            
+            data.auto_publish_event = $('#auto_publish_event').val();
+            
             this.model.set(data);
 
             
             console.log(this.model.toJSON());
             
-            $('#title, #session_type, #session_focus, #start_date, #finish_date, #start_time, #finish_time').removeClass("red_style_border");
+            $('#title, #session_type, #session_focus, #start_date, #finish_date, #start_time, #finish_time, #location').removeClass("red_style_border");
             
             //validation          
             if (!this.model.isValid()) {
@@ -109,7 +115,10 @@ define([
                 } else if(validate_error == 'session_focus') {
                     session_focus_field.addClass("red_style_border");
                     return false;
-                } else {
+                }  else if(validate_error == 'location') {
+                    location_field.addClass("red_style_border");
+                    return false;
+                }else {
                     alert(this.model.validationError);
                     return false;
                 }

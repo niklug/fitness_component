@@ -521,7 +521,7 @@ class FitnessModelprograms extends JModelList {
         $query .= " (SELECT name FROM #__users WHERE id=a.owner) created_by_name, ";
         
         // if logged simple trainer associated to the event's clients 
-        $query .= "  (SELECT GROUP_CONCAT(id) FROM #__fitness_appointment_clients WHERE client_id IN  (SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers))) is_associated_trainer";
+        $query .= "  (SELECT GROUP_CONCAT(id) FROM #__fitness_appointment_clients WHERE client_id IN  (SELECT user_id FROM #__fitness_clients WHERE (primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AND state='1') AND event_id=a.id) is_associated_trainer";
         
         $query .= "  FROM $table AS a";
         

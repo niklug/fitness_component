@@ -24,31 +24,22 @@ define([
         
         initialize : function() {
             app.collections.trainer_clients = new Trainer_clients_collection();
-            
-            if( 
-                app.collections.event_clients 
-            ) {
-                this.render();
-                return;
-            } 
-            
+
             app.collections.event_clients = new Event_clients_collection();
             
             var self = this;
-            $.when (
-                app.collections.event_clients.fetch({
-                    data : {event_id : this.model.get('id')},
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                })
-
-            ).then (function(response) {
-                self.render();
+            
+            app.collections.event_clients.fetch({
+                data : {event_id : this.model.get('id')},
+                success : function (collection, response) {
+                    self.render();
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
             })
         },
 
-        
         template:_.template(template),
         
         render: function(){
@@ -87,16 +78,21 @@ define([
             app.collections.trainer_clients.fetch({
                 data : {trainer_id : trainer_id},
                 success : function (collection, response) {
+                    self.$el.find("#add_client").hide();
+                    
+                    app.collections.clients_rest = collection;
                     
                     _.each(added_clients, function(item){
-                        var model = collection.findWhere({client_id : item});
-                        collection.remove(model);
+                        var model = app.collections.clients_rest.findWhere({client_id : item});
+                        app.collections.clients_rest.remove(model);
                     });
                     
-                    if(!collection.length) {return;}
+                    if(!app.collections.clients_rest.length) {
+                        return;
+                    }
  
                     var model = new Event_client_item_model({event_id : self.model.get('id')});
-                    self.addItem(model, collection); 
+                    self.addItem(model, app.collections.clients_rest); 
                 },
                 error : function (collection, response) {
                     alert(response.responseText);

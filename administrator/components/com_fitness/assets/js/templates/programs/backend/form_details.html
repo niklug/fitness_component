@@ -80,11 +80,15 @@
             
         </td>
     </tr>
+</table>
+
+
+<table>
     <tr>
         <td>
             <label>Publish Workout</label>
         </td>
-        <td>
+        <td width="37">
             <%
             var frontend_published_checked = '';
             if(parseInt(frontend_published)) {
@@ -92,6 +96,12 @@
             }
             %>
             <input type="checkbox" name="frontend_published" id="frontend_published"  value="1" <%= frontend_published_checked %>  />
+        </td>
+        <td>
+            <label>Auto Publish Workout on</label>
+        </td>
+        <td>
+            <input type="text" name="auto_publish_workout" id="auto_publish_workout" size="10"  value="<%= auto_publish_workout %>" />
         </td>
     </tr>
     <tr>
@@ -106,6 +116,12 @@
         </td>
         <td>
             <input type="checkbox" name="published" id="published"  value="1" <%= published_checked %>/>
+        </td>
+        <td>
+            <label>Auto Publish Event on</label>
+        </td>
+        <td>
+            <input type="text" name="auto_publish_event" id="auto_publish_event" size="10" value="<%= auto_publish_event %>" />
         </td>
     </tr>
 </table>

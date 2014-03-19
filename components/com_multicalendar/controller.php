@@ -30,37 +30,43 @@ class MultiCalendarController extends JController
 {
     function __construct($config = array())
 	{
-                $UTC = '10';
-                $offset = $UTC * 60 * 60;
-                $this->offset = $offset;
-                $dateFormat = "Y-m-d H:i:s";
-                
-                $time = "H:i:s";
+            require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 
-                $this->current_date =  gmdate($dateFormat, time() + $offset);
+            $helper = new FitnessHelper();
+            $this->helper = $helper;
+            
+            $current_date = $this->helper->getTimeCreated();
+            
+            $date = new JDate($current_date);
+            
                 
-                $this->current_date_28 =  gmdate($dateFormat, time() + $offset + 60*60*28);
-                
-                $this->current_date_36 =  gmdate($dateFormat, time() + $offset + 60*60*36);
-                
-                $this->current_time =  gmdate($time, time() + $offset);
-                
-                $this->administrator_email = 'npkorban@mail.ru'; 
-                
-                require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
-                
-                $helper = new FitnessHelper();
-                $this->helper = $helper;
-                
-                $this->evaluating_status = $helper::EVELUATING_GOAL_STATUS;
-                $this->inprogress_status = $helper::INPROGRESS_GOAL_STATUS;
-                $this->assessing_status = $helper::ASSESSING_GOAL_STATUS;
-                
-                
-		if(JRequest::getCmd('view') === 'insert') {
-			$config['base_path'] = JPATH_COMPONENT_ADMINISTRATOR;
-		}
-		parent::__construct($config);
+            $unix_time_28 = $date->toUnix() + 24*60*60*28;
+            $current_date_28 = JFactory::getDate($unix_time_28);   
+            
+            
+            $unix_time_36 = $date->toUnix() + 24*60*60*36;
+            $current_date_36 = JFactory::getDate($unix_time_36);   
+
+
+            $this->current_date =  $date->format("Y-m-d");
+
+            $this->current_date_28 = $current_date_28->format("Y-m-d");
+
+            $this->current_date_36 =  $current_date_36->format("Y-m-d");
+
+            $this->current_time =  $date->format("H:i:s");
+
+            $this->administrator_email = 'npkorban@mail.ru'; 
+
+            $this->evaluating_status = $helper::EVELUATING_GOAL_STATUS;
+            $this->inprogress_status = $helper::INPROGRESS_GOAL_STATUS;
+            $this->assessing_status = $helper::ASSESSING_GOAL_STATUS;
+
+
+            if(JRequest::getCmd('view') === 'insert') {
+                    $config['base_path'] = JPATH_COMPONENT_ADMINISTRATOR;
+            }
+            parent::__construct($config);
 	}
 	function display()
 	{
@@ -85,6 +91,10 @@ class MultiCalendarController extends JController
                 
                 if ($task == 'confirm_email') {
                     $this->confirmEmail();
+                }
+                
+                if ($task == 'cron_auto_publish') {
+                    $this->autoPublishCron();
                 }
                 
 		if ($task=="load")
@@ -146,6 +156,7 @@ class MultiCalendarController extends JController
                 return false;
             }  
             $result = $db->loadObjectList();
+
             foreach ($result as $event) {
   
                 $this->send_appointment_email($event->id);
@@ -160,7 +171,7 @@ class MultiCalendarController extends JController
          */
         public function send_appointment_email($event_id) {
 
-            $client_ids = getClientsByEvent($event_id); 
+            $client_ids = $this->getClientEmailByEvent($event_id); 
             
             $subject = 'Appointment Confirmation';
             foreach ($client_ids as $client_id) {
@@ -462,6 +473,45 @@ class MultiCalendarController extends JController
                 return false;
             }
             die();
+    }
+    
+    public function autoPublishCron() {
+        $db = JFactory::getDbo();
+        
+        $table = '#__dc_mv_events';
+        
+        $query = "SELECT * FROM $table";
+        
+        $events = FitnessHelper::customQuery($query, 1);
+        
+        echo $this->current_date;
+        echo "<br/>";
+        
+        foreach ($events as $event) {
+            // update publish workout
+            if($event->auto_publish_workout AND $this->current_date >= $event->auto_publish_workout) {
+                $event->frontend_published = '1';
+                $update = $db->updateObject($table, $event, 'id');
+                if (!$update) {
+                    throw new Exception($db->stderr());
+                }
+                echo "<br/>";
+                echo $event->id . '  workout published';
+             }
+             
+             // update publish event
+            if($event->auto_publish_event AND $this->current_date >= $event->auto_publish_event) {
+                $event->published = '1';
+                $update = $db->updateObject($table, $event, 'id');
+                if (!$update) {
+                    throw new Exception($db->stderr());
+                }
+                echo "<br/>";
+                echo $event->id . '  event published';
+             }
+        }
+        
+        die();
     }
 		
 }
