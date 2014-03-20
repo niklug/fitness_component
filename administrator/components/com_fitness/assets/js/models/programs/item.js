@@ -21,7 +21,6 @@ define([
             frontend_published : null,
             owner : app.options.user_id,
             business_profile_id : app.options.business_profile_id,
-            status : '1',
             published : '1',
             calid : '0',
             auto_publish_workout : null,

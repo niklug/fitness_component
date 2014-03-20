@@ -210,9 +210,7 @@ class MultiCalendarController extends JController
         public function getClientsByEvent($event_id) {
 
             $db = & JFactory::getDBO();
-            $query = "SELECT DISTINCT client_id FROM #__dc_mv_events WHERE id='$event_id' AND client_id !='0'";
-            $query .= " UNION ";
-            $query .= "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id !='0'";
+            $query = "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id !='0'";
 
             $db->setQuery($query);
             try {

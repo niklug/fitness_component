@@ -45,7 +45,6 @@ define([
         
         events: {
             "click #sort_starttime" : "sort_starttime",
-            "click #sort_status" : "sort_status",
             "click #sort_trainer" : "sort_trainer",
             "click #sort_location" : "sort_location",
             "click #sort_appointment_type" : "sort_appointment_type",
@@ -89,11 +88,6 @@ define([
         
         sort_starttime : function() {
             this.model.set({sort_by : 'a.starttime', order_dirrection : 'DESC'});
-        },
-
-        
-        sort_status : function() {
-            this.model.set({sort_by : 'a.status', order_dirrection : 'ASC'});
         },
         
         sort_trainer : function() {

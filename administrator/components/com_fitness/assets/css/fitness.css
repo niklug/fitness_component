@@ -1100,6 +1100,27 @@ td.center, th.center, .center {
     width: 20px;
 }
 
+.email_button_40 {
+background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/email_button.png");
+background-repeat: no-repeat;
+background-size: 40px auto;
+display: inline-block;
+height: 40px;
+margin-left: 10px;
+width: 40px;
+}
+
+
+.pdf_button_40 {
+background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/pdf_button.png");
+background-repeat: no-repeat;
+background-size: 40px auto;
+display: inline-block;
+height: 40px;
+margin-left: 10px;
+width: 40px;
+}
+
 
 .appointment_email {
     background-image: url("../../../../../administrator/components/com_multicalendar/images/header/calendar.png");

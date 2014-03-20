@@ -16,35 +16,31 @@ define([
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.append(template);
-            this.connectStatus();
+   
+            this.connectClientStatuses();
+            
             return this;
         },
         
-        connectStatus : function() {
-            var id = this.model.get('id');
-
-            var status = this.model.get('status');
+        connectStatus : function(id, status) {
+            var status_obj = $.status(app.options.status_options);
             
-            if(!parseInt(status)) {
-                status = '1';
-            }
-            
-            var options = _.extend({}, app.options.status_options);
-            
-            if(id) {
-                var edit_allowed = this.model.get('edit_allowed');
-                
-                if(edit_allowed == false) {
-                    options.status_button = 'status_button_not_active';
-                }
+            var html = '<div id="status_button_place_' + id + '">' + status_obj.statusButtonHtml(id, status) + '</div>';
 
-                var status_obj = $.status(options);
+            this.$el.find("#status_button_" + this.model.get('id')).append(html);
 
-                this.$el.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
-
-                status_obj.run();
-            }
+            status_obj.run();
         },
+        
+        connectClientStatuses : function() {
+            var group_clients_data = this.model.get('group_clients_data');
+            var self = this;
+            if(group_clients_data) {
+                _.each(group_clients_data, function(item){ 
+                    self.connectStatus(item.id, item.status);
+                })
+            } 
+        }
 
     });
             

@@ -528,7 +528,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
     ?>
     <!-- Exicise table --> 
     <?php
-    if (isset($event->status)) {
+    if (isset($event->id)) {
         require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/exercises.inc.php' );
     }
     ?>

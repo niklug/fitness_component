@@ -7,7 +7,7 @@ $(document).ready(function() {
     });  
 
 </script>  
-<?php if (isset($event->status)) { ?>
+<?php if (isset($event->id)) { ?>
     <div id="clients_wrapper" style="display:none;">
         <hr>
         <table border="0">

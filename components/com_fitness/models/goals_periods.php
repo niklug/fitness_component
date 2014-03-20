@@ -261,7 +261,6 @@ class FitnessModelgoals_periods extends JModelList {
     
 
     public function nutrition_plan() {
-
         $method = JRequest::getVar('_method');
 
         if(!$method) {
@@ -271,13 +270,13 @@ class FitnessModelgoals_periods extends JModelList {
         $model = json_decode(JRequest::getVar('model'));
 
         $table = '#__fitness_nutrition_plan';
+        
 
         $helper = new FitnessHelper();
 
         switch ($method) {
             case 'GET': // Get Item(s)
-                $id = JRequest::getVar('id');
-
+                $id = JRequest::getVar('id', 0, '', 'INT');
                 $client_id = JRequest::getVar('client_id');
 
                 if($client_id) {
@@ -286,7 +285,6 @@ class FitnessModelgoals_periods extends JModelList {
                 } 
 
                 $plan_data = $helper->getPlanData($id);
-
                 $client_id = $plan_data->client_id;
 
                 $client_trainers = $helper->get_client_trainers_names($client_id);

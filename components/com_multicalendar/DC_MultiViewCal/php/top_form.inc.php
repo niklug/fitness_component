@@ -13,7 +13,7 @@
                generateFormHtml(catid);
                // get session focus by category (appointment)
                setupSessionType(catid);
-               hide_event_status_wrapper();
+
             });
             
             var catid = $(this).find(':selected').data('catid');
@@ -61,22 +61,6 @@
 
 
             /********************/ 
-             /* EVENT STATUS */
-            $(".open_status").live('click', function(e) {
-                var event_status = $(this).data('status');
-                openSetEventStatusBox(event_status);
-            });
-
-            $(".set_status").live('click', function(e) {
-                var event_status = $(this).data('status');
-                eventSetStatus(event_status);
-            });
-
-
-            $(".event_status_wrapper .hideimage").live('click', function(e) {
-                hide_event_status_wrapper();
-            });
-
 
             $(".open_client_status").live('click', function() {
                 var client_status = $(this).attr('data-status');
@@ -390,74 +374,13 @@
         }
 
 
-        function openSetEventStatusBox(event_status) {
-             $(".event_status_wrapper").html(generateStatusBoxHtml(event_status));
-             $(".event_status_wrapper").show();
-             $(".event_status__button").show();
-             if(event_status == 1)  $(".event_status_wrapper .event_status_pending").hide();
-             if(event_status == 2)  $(".event_status_wrapper .event_status_attended").hide();
-             if(event_status == 3)  $(".event_status_wrapper .event_status_cancelled").hide();
-             if(event_status == 4)  $(".event_status_wrapper .event_status_latecancel").hide();
-             if(event_status == 5)  $(".event_status_wrapper .event_status_noshow").hide();
-             if(event_status == 6)  $(".event_status_wrapper .event_status_complete").hide();
-        }
-
         function generateStatusBoxHtml(event_status) {
             var catid = $('#Subject').find(':selected').data('catid');
             if(catid == 1 || catid == 5) return  generatePrivateStatusBoxHtml(event_status);
             return generateSemiStatusBoxHtml(event_status);
         }
 
-        function generatePrivateStatusBoxHtml(event_status) {
-            var html = '';
-            html += '<img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" >';
-            html += '<a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';  
-            html += '<a data-status="2" class="set_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';      
-            html += '<a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';     
-            html += '<a data-status="4" class="set_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';      
-            html += '<a data-status="5" class="set_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';      
-            html += '<input type="checkbox" checked class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>';      
-            return html;     
-        }
 
-        function generateSemiStatusBoxHtml(event_status) {
-            var html = '';
-            html += '<img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" >';
-            html += '<a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';  
-            html += '<a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>'; 
-            html += '<a data-status="6" class="set_status event_status_complete event_status__button" href="javascript:void(0)">complete</a>'; 
-            return html;     
-        }
-
-        function hide_event_status_wrapper() {
-            $(".event_status_wrapper").fadeOut();
-        }
-
-        function eventSetStatus(event_status) {
-            var event_id = '<?php echo $event->id; ?>';
-            var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
-            var url = DATA_FEED_URL+ "&method=set_event_status";
-            $.ajax({
-                    type : "POST",
-                    url : url,
-                    data : {
-                        event_id : event_id,
-                        event_status : event_status
-                    },
-                    dataType : 'text',
-                    success : function(event_status) {
-                        hide_event_status_wrapper();
-                        $("#event_status").html( 'Appointment status' + event_status_html(event_status) );
-
-                        appointmentEmailLogic(event_id, event_status, 'personal');
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown)
-                    {
-                        alert("error");
-                    }
-            });
-
-        }
 
         function appointmentEmailLogic(event_id, event_status, appointment_client_id){
             
@@ -512,21 +435,6 @@
                 $("#emais_sended").append(message);
             });
         }
-    
-        
-
-        function event_status_html(event_status) {
-             if(event_status == 1)  return '<a data-status="' + event_status + '" class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
-             if(event_status == 2)  return '<a data-status="' + event_status + '"   class="open_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';
-             if(event_status == 3)  return '<a data-status="' + event_status + '"  class="open_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';
-             if(event_status == 4)  return '<a data-status="' + event_status + '" class="open_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';
-             if(event_status == 5)  return '<a data-status="' + event_status + '"  class="open_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
-             if(event_status == 6)  return '<a data-status="' + event_status + '"  class="open_status event_status_complete event_status__button" href="javascript:void(0)">complete</a>';
-
-        }
-
-        /* END EVENT STATUS */
-
 
 
         /* START GROUP C STATUS */
@@ -695,7 +603,7 @@
 
         function assessmentForm() {
 
-            <?php if (isset($event->status)) { ?>
+            <?php if (isset($event->id)) { ?>
             $("#clients_wrapper").hide();
             $("#assessment_wrapper").show();
 
@@ -850,18 +758,6 @@
                 <div style="float:left;margin-left:50px;<?php if ($stparttime == '00:00') echo 'visibility:hidden;' ?>"> Start Time </div>
                 <div style="float:left;margin-left:16px;"> End Date </div>
                 <div style="display: inline;float: none;margin-left: 54px;<?php if ($stparttime == '00:00') echo 'visibility:hidden;' ?>"> End Time </div>
-                <?php
-                if (isset($event->status)) {
-                    ?>
-                    <div id="event_status">
-                        Appointment status
-                    <?php
-                    echo event_state_html($event->status);
-                    ?>
-                    </div>  
-                        <?php
-                    }
-                    ?>
 
                 <div> 
                     <input MaxLength="10" class="required date" id="stpartdate" name="stpartdate" type="text" value="<?php echo $stpartdate; ?>" />
@@ -884,9 +780,6 @@
             </label>  
 
             <hr>
-            
-      <div class="event_status_wrapper"> </div>
-            
                   
       <div class="client_status_wrapper">
           <img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" >

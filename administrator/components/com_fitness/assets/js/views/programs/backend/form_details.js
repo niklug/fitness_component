@@ -117,10 +117,20 @@ define([
         },
         
         loadAppointment : function() {
+            var appointments_collection = new Backbone.Collection;
+            // filter for "Personal Training", "Semi-Private Training","Resistance Workout", "Cardio Workout"
+           
+            appointments_collection.add([
+                app.collections.appointments.get(1),
+                app.collections.appointments.get(2),
+                app.collections.appointments.get(3),
+                app.collections.appointments.get(4)
+            ]);
+            
             new Select_element_view({
                 model : this.model,
                 el : this.$el.find("#appointment_select"),
-                collection : app.collections.appointments,
+                collection : appointments_collection,
                 first_option_title : '-Select-',
                 class_name : '',
                 id_name : 'title',

@@ -11,6 +11,7 @@ define([
         'views/programs/backend/form_details',
         'views/programs/backend/form_trainer',
         'views/programs/backend/form_clients',
+        'views/programs/backend/form_workout_instructions',
         'views/programs/backend/list',
         'views/programs/backend/list_header_container'
 ], function (
@@ -26,6 +27,7 @@ define([
         Form_details_view,
         Form_trainer_view,
         Form_event_clients_view,
+        Form_event_workout_instructions,
         List_view,
         List_header_container_view
     ) {
@@ -123,6 +125,8 @@ define([
             
             if(model.get('id')) {
                 new Form_event_clients_view({el : $("#clients_data_wrapper"), model : model});
+                
+                new Form_event_workout_instructions({el : $("#workout_instuctions_wrapper"), model : model});
             }
         },
      

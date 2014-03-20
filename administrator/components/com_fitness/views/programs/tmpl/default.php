@@ -52,40 +52,10 @@ $business_profile_id = $business_profile_id['data'];
         'business_profile_id' : '<?php echo $business_profile_id; ?>'
     };
     
-    //status class
-    var status_options = {
-        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
-        'db_table' : '#__dc_mv_events',
-        'status_button' : 'status_button',
-        'status_button_dialog' : 'status_button_dialog',
-        'dialog_status_wrapper' : 'dialog_status_wrapper',
-        'dialog_status_template' : '#dialog_status_template',
-        'status_button_template' : '#status_button_template',
-        'status_button_place' : '#status_button_place_',
-        'statuses' : {
-            '1' : {'label' : 'PENDING', 'class' : 'event_status_pending', 'email_alias' : ''},
-            '2' : {'label' : 'ATTENDED', 'class' : 'event_status_attended', 'email_alias' : 'AppointmentAttended'}, 
-            '3' : {'label' : 'CANCELLED', 'class' : 'event_status_cancelled', 'email_alias' : 'AppointmentCancelled'},
-            '4' : {'label' : 'LATE CANCEL', 'class' : 'event_status_latecancel', 'email_alias' : 'AppointmentLatecancel'},
-            '5' : {'label' : 'NO SHOW', 'class' : 'event_status_noshow', 'email_alias' : 'AppointmentNoshow'}, 
-        },
-        'statuses2' : {
-            '1' : {'label' : 'PENDING', 'class' : 'event_status_pending', 'email_alias' : ''},
-            '3' : {'label' : 'CANCELLED', 'class' : 'event_status_cancelled', 'email_alias' : 'AppointmentCancelled'},
-            '6' : {'label' : 'COMPLETE', 'class' : 'event_status_complete', 'email_alias' : ''}
-        },
-        'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
-        'hide_image_class' : 'hideimage',
-        'show_send_email' : true,
-         setStatuses : function(item_id) {
-            return  this.statuses;
-        },
-        'view' : 'Programs'
-    }
+
     
        //event client status options
-    var status_options_ec = {
+    var status_options = {
         'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
         'db_table' : '#__fitness_appointment_clients',
@@ -117,8 +87,6 @@ $business_profile_id = $business_profile_id['data'];
     }
 
     options.status_options = status_options;
-    
-    options.status_options_ec = status_options_ec;
 
 
     //requireJS options

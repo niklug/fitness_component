@@ -448,8 +448,8 @@ class FitnessModelgoals extends JModelList {
      * @return type
      */
     function getGraphData($client_id, $data_encoded) {
-
         $data = json_decode($data_encoded);
+
         // primary goals
         $primary_goals = $this->getPrimaryGoalsGraphData($client_id, $data);
         if($primary_goals['status']['success'] == false) {
@@ -465,18 +465,19 @@ class FitnessModelgoals extends JModelList {
             $ret['message'] = $mini_goals['status']['message'];
             return  json_encode(array('status' => $ret));
         }
-        
+
         
         // appointment data
-        $personal_training = $this->getAppointmentsGraphData($client_id, 'Personal Training');
+        $personal_training = $this->getAppointmentsGraphData($client_id, '1');//'Personal Training'
+       
         if($personal_training['status']['success'] == false) {
             $ret['success'] = 0;
-            $ret['message'] = $appointments_data['status']['message'];
+            $ret['message'] = $personal_training['status']['message'];
             return  json_encode(array('status' => $ret));
         }
         
         // Semi-Private Training
-        $semi_private = $this->getAppointmentsGraphData($client_id, 'Semi-Private Training');
+        $semi_private = $this->getAppointmentsGraphData($client_id, '2');//'Semi-Private Training'
         if($semi_private['status']['success'] == false) {
             $ret['success'] = 0;
             $ret['message'] = $semi_private['status']['message'];
@@ -485,7 +486,7 @@ class FitnessModelgoals extends JModelList {
         
           
         // Resistance Workout
-        $resistance_workout = $this->getAppointmentsGraphData($client_id, 'Resistance Workout');
+        $resistance_workout = $this->getAppointmentsGraphData($client_id, '3');//'Resistance Workout'
         if($resistance_workout['status']['success'] == false) {
             $ret['success'] = 0;
             $ret['message'] = $resistance_workout['status']['message'];
@@ -493,7 +494,7 @@ class FitnessModelgoals extends JModelList {
         }      
 
         // Cardio Workout
-        $cardio_workout = $this->getAppointmentsGraphData($client_id, 'Cardio Workout');
+        $cardio_workout = $this->getAppointmentsGraphData($client_id, '4');//'Cardio Workout'
         if($cardio_workout['status']['success'] == false) {
             $ret['success'] = 0;
             $ret['message'] = $cardio_workout['status']['message'];
@@ -501,7 +502,7 @@ class FitnessModelgoals extends JModelList {
         }  
  
         // Assessment
-        $assessment = $this->getAppointmentsGraphData($client_id, 'Assessment');
+        $assessment = $this->getAppointmentsGraphData($client_id, '5');//'Assessment'
         if($assessment['status']['success'] == false) {
             $ret['success'] = 0;
             $ret['message'] = $assessment['status']['message'];
@@ -621,8 +622,8 @@ class FitnessModelgoals extends JModelList {
         $db = &JFactory::getDBo();
         $query = "SELECT e.*, u.name AS trainer_name FROM #__dc_mv_events AS e
             LEFT JOIN #__users AS u ON  e.trainer_id=u.id
-            WHERE (e.client_id='$client_id' OR e.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id='$client_id'))
-                AND title='$title' AND published='1'";
+            WHERE e.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id='$client_id')
+                AND e.title='$title' AND e.published='1'";
         $db->setQuery($query);
         $ret['success'] = 1;
         if (!$db->query()) {

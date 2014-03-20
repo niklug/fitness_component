@@ -57,7 +57,7 @@ define([
 
             var status = this.model.get('status');
 
-            var status_obj = $.status(app.options.status_options_ec);
+            var status_obj = $.status(app.options.status_options);
 
             this.$el.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
 

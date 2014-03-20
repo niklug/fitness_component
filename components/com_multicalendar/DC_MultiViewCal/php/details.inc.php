@@ -56,7 +56,7 @@
                      </label>
                 </td>
                 <?php
-                if (isset($event->status)) {
+                if (isset($event->id)) {
                 ?>
                 <td width="10%">
                     <a title="Send by Email" href="javascript:void(0)" id="email_button"></a>

@@ -24,7 +24,6 @@ define([
                 && app.collections.locations
                 && app.collections.session_types
                 && app.collections.session_focuses
-                && app.collections.statuses 
             ) {
                 this.render();
                 return;
@@ -34,7 +33,6 @@ define([
             app.collections.locations = new Select_filter_collection();
             app.collections.session_types = new Select_filter_collection();
             app.collections.session_focuses = new Select_filter_collection();
-            app.collections.statuses = new Select_filter_collection();
                        
             var self = this;
             $.when (
@@ -177,33 +175,7 @@ define([
             }).render();
             //////
             
-            
-            // status options
-            _.each(app.options.status_options.statuses, function(value, index) {
-                app.collections.statuses.add([
-                    {id : _.keys(app.options.status_options.statuses)[index - 1], name : (_.values(app.options.status_options.statuses))[index - 1].label}
-                ]);
-                
-                app.collections.statuses.add([
-                    {id : _.keys(app.options.status_options.statuses2)[2], name : (_.values(app.options.status_options.statuses2))[2].label}
-                ]);
-            });
-            
-            
-            new Select_filter_fiew({
-                model : this.model,
-                el : $(this.el).find("#status_filter_wrapper"),
-                collection : app.collections.statuses,
-                title : 'Status',
-                first_option_title : 'None',
-                class_name : 'dark_input_style',
-                id_name : '',
-                select_size : 12,
-                model_field : 'status',
-                element_disabled : element_disabled
-            }).render();
         }
- 
     });
             
     return view;

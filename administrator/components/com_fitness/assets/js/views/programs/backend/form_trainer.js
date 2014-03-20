@@ -146,6 +146,7 @@ define([
         },
         
         onChangeTrainer : function() {
+            $("#add_client").show();
             var event_clients_collection = new Event_clients_collection();
             var self = this;
             var event_id = this.model.get('id');
