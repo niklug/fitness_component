@@ -121,7 +121,6 @@ define([
                  $("#overview_link").addClass("active_link");
                  // connect Graph from Goals frontend logic
                  $.goals_frontend(app.options);
-                 return;
                  var id = app.models.nutrition_plan.get('id');
                  app.models.nutrition_plan.fetch({
                     data: {id : id},

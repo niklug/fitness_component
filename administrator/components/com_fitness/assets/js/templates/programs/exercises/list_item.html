@@ -1,0 +1,42 @@
+<tr data-id="<%= id %>" class="item_row row1">
+    <td class="center">
+        
+    </td>
+    <td class="center">
+        
+    </td>
+    <td class="center">
+        
+    </td>
+    <td contenteditable class="data_cell" data-name="title"> 
+        <%= title %>
+    </td>
+    <td contenteditable class="data_cell" data-name="speed">
+        <%= speed %>
+    </td>
+    <td contenteditable class="data_cell" data-name="weight">
+        <%= weight %>
+    </td>
+    <td contenteditable class="data_cell" data-name="reps">
+        <%= reps %>
+    </td>
+    <td contenteditable class="data_cell" data-name="time">
+        <%= time %>
+    </td>
+    <td contenteditable class="data_cell" data-name="sets">
+        <%= sets %>
+    </td>
+    
+    <td contenteditable class="data_cell" data-name="rest">
+        <%= rest %>
+    </td>
+    <td class="center">
+        <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
+    </td>
+    <td class="center">
+        <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+    </td>
+    <td class="center">
+        <input tabindex="-1" data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+    </td>
+</tr>

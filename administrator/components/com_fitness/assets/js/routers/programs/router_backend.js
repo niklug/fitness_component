@@ -13,7 +13,8 @@ define([
         'views/programs/backend/form_clients',
         'views/programs/backend/form_workout_instructions',
         'views/programs/backend/list',
-        'views/programs/backend/list_header_container'
+        'views/programs/backend/list_header_container',
+        'views/programs/exercises/list'
 ], function (
         $,
         _,
@@ -29,7 +30,8 @@ define([
         Form_event_clients_view,
         Form_event_workout_instructions,
         List_view,
-        List_header_container_view
+        List_header_container_view,
+        Exercises_list_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -127,6 +129,8 @@ define([
                 new Form_event_clients_view({el : $("#clients_data_wrapper"), model : model});
                 
                 new Form_event_workout_instructions({el : $("#workout_instuctions_wrapper"), model : model});
+                
+                new Exercises_list_view({el : $("#exercises_list"), model : model});
             }
         },
      

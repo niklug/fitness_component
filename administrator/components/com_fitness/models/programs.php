@@ -526,7 +526,7 @@ class FitnessModelprograms extends JModelList {
             case 'GET': // Get Item(s)
                 $query .= "SELECT  a.*, ";
                 $query .= " (SELECT name FROM #__users WHERE id=a.client_id) name";
-                $query .= "  FROM #__fitness_appointment_clients AS a";
+                $query .= "  FROM $table AS a";
                 $query .= "  WHERE 1";
                 
                 if($event_id) {
@@ -556,5 +556,62 @@ class FitnessModelprograms extends JModelList {
 
         return $model;
     }
+    
+    public function event_exercises() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        
+        $event_id = JRequest::getVar('event_id', 0, '', 'INT');
+
+        $table = '#__fitness_events_exercises';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $query .= "SELECT  a.* ";
+                $query .= "  FROM $table AS a";
+                $query .= "  WHERE 1";
+                if($event_id) {
+                    $query .= " AND a.event_id='$event_id' ";
+                }
+                $query .= "  ORDER BY a.order";
+                
+                if($event_id) {
+                    $query .= " AND a.event_id='$event_id' ";
+                }
+                
+                $data = FitnessHelper::customQuery($query, 1);
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
+
 
 }

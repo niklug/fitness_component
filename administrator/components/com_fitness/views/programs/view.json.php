@@ -27,6 +27,11 @@ class FitnessViewPrograms extends JView {
         echo json_encode($model -> programs());
     }
     
+    function event_exercises() {
+        $model = $this -> getModel("programs");
+        echo json_encode($model -> event_exercises());
+    }
+    
     function business_profiles() {
         $helper = new FitnessHelper();
         echo json_encode($helper->getBusinessProfiles());
