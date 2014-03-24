@@ -16,8 +16,21 @@ define([
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.append(template);
+            
+            this.setComments();
+            
             return this;
         },
+        
+        setComments : function() {
+            var exercise_comment_show =  localStorage.getItem("exercise_comment_show");
+
+            if(parseInt(exercise_comment_show)) {
+                this.$el.find(".comments").show();
+            } else {
+                this.$el.find(".comments").hide();
+            }
+       }
     });
             
     return view;

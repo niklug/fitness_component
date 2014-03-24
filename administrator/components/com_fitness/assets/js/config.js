@@ -38,7 +38,11 @@ require.config({
         },
         jwplayer_key: {
             deps: ['jwplayer']
-         }
+        },
+        'jquery.tableDnD': {
+            deps: ['jquery'],
+            exports: 'jquery.tableDnD'
+        },
     },
     paths: {
         jquery: 'lib/jquery',
@@ -70,7 +74,8 @@ require.config({
         'jquery.recipe_database' : 'lib/recipe_database_class',
         'jquery.nutritionMeal' : 'lib/nutrition_meal_class',
         'jquery.calculateSummary' : 'lib/plan_summary_class',
-        'jquery.gredient_graph' : 'lib/gredient_graph'
+        'jquery.gredient_graph' : 'lib/gredient_graph',
+        'jquery.tableDnD' : 'lib/jquery.tablednd'
     },
 
     waitSeconds: 10

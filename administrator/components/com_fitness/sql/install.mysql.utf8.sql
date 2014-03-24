@@ -190,6 +190,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_events_exercises` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `event_id` int(11) unsigned NOT NULL,
   `order` int(11) NOT NULL,
+  `sequence` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
   `speed` varchar(255) NOT NULL,
   `weight` varchar(255) NOT NULL,

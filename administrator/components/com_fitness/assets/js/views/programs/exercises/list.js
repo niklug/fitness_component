@@ -6,7 +6,8 @@ define([
         'collections/programs/exercises/items',
         'models/programs/exercises/item',        
         'views/programs/exercises/list_item',
-	'text!templates/programs/exercises/list.html'
+	'text!templates/programs/exercises/list.html',
+        'jquery.tableDnD'
 ], function (
         $,
         _, 
@@ -26,9 +27,6 @@ define([
             $.when (
                 app.collections.exercises.fetch({
                     data : {event_id : this.model.get('id')},
-                    success : function (collection, response) {
-                        console.log(collection.toJSON());
-                    },
                     error : function (collection, response) {
                         alert(response.responseText);
                     }
@@ -55,6 +53,11 @@ define([
                     self.addItem(model);
                 });
             }
+            
+            this.connectDragPlugin();
+            
+            this.setComments();
+            
             return this;
         },
         
@@ -67,6 +70,7 @@ define([
             "click .copy_item" : "onClickCopy",
             "focusout .data_cell" : "onCellEdit",
             "focusin .data_cell" : "onCellSetCursor",
+            "click #show_hide_comments" : "onClickShowComments",
         },
         
         addItem : function(model) {
@@ -78,7 +82,7 @@ define([
         },
         
         onClickAdd : function() {
-            var model = new Item_model({event_id : this.model.get('id')});
+            var model = new Item_model({event_id : this.model.get('id'), order : this.$el.find("#exercise_table tbody tr").length});
             this.saveItem(model);
         },
         
@@ -88,6 +92,7 @@ define([
                 success: function (model, response) {
                     self.addItem(model);
                     app.collections.exercises.add(model);
+                    self.connectDragPlugin();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -201,7 +206,6 @@ define([
             
             model.save(null, {
                 success: function (model, response) {
-                    console.log(model);
                     $(event.target).removeClass("focused_cell");
                 },
                 error: function (model, response) {
@@ -212,7 +216,64 @@ define([
         
         onCellSetCursor : function(event) {
             $(event.target).addClass("focused_cell");
-        }
+        },
+        
+        connectDragPlugin : function() {
+            var self = this;
+            this.$el.find("#exercise_table").die().tableDnD({
+                onDrop: function(table, row) {
+                    var rows = table.tBodies[0].rows;
+
+                    var debugStr = "Row dropped was "+row.id+". New order: ";
+
+                    for (var i=0; i<rows.length; i++) {
+                        debugStr += rows[i].id+" ";
+                        self.setEventExerciseOrder(rows[i].id.replace('exercise_row_', ''), i);
+                    }
+                    //console.log(debugStr);
+                }
+            });
+        },
+        
+        setEventExerciseOrder : function(id, order) {
+            var obj = {}
+            
+            obj.order = order;
+
+            var model = app.collections.exercises.get(id);
+            
+            model.set(obj);
+            
+            model.save(null, {
+                 error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickShowComments : function() {
+            var exercise_comment_show =  localStorage.getItem("exercise_comment_show");
+          
+            if(parseInt(exercise_comment_show)) {
+                localStorage.setItem("exercise_comment_show", "0");
+            } else {
+                localStorage.setItem("exercise_comment_show", "1");
+            }
+            
+            this.setComments();
+        },
+        
+        setComments : function() {
+            var exercise_comment_show =  localStorage.getItem("exercise_comment_show");
+
+            if(parseInt(exercise_comment_show)) {
+                this.$el.find(".comments").show();
+                this.$el.find("#show_hide_comments").html('[HIDE COMMENTS]');
+            } else {
+                this.$el.find(".comments").hide();
+                this.$el.find("#show_hide_comments").html('[SHOW COMMENTS]');
+            }
+       }
     });
             
     return view;

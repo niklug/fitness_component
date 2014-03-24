@@ -583,11 +583,13 @@ class FitnessModelprograms extends JModelList {
                 if($event_id) {
                     $query .= " AND a.event_id='$event_id' ";
                 }
-                $query .= "  ORDER BY a.order";
+                
                 
                 if($event_id) {
                     $query .= " AND a.event_id='$event_id' ";
                 }
+                
+                $query .= "  ORDER BY a.order ASC";
                 
                 $data = FitnessHelper::customQuery($query, 1);
                 return $data;

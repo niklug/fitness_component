@@ -1,35 +1,41 @@
-<tr data-id="<%= id %>" class="item_row row1">
-    <td class="center">
-        
+<tr data-id="<%= id %>" class="item_row row1" id="exercise_row_<%= id %>">
+    <td class="center drag_item" title="Drag, move and drop the row to change the ordering.">
+          
     </td>
     <td class="center">
         
     </td>
-    <td class="center">
-        
+    <td contenteditable class="data_cell center" data-name="sequence"> 
+        <%= sequence %>
     </td>
     <td contenteditable class="data_cell" data-name="title"> 
         <%= title %>
     </td>
-    <td contenteditable class="data_cell" data-name="speed">
+    <td contenteditable class="data_cell center" data-name="speed">
         <%= speed %>
     </td>
-    <td contenteditable class="data_cell" data-name="weight">
+    <td contenteditable class="data_cell center" data-name="weight">
         <%= weight %>
     </td>
-    <td contenteditable class="data_cell" data-name="reps">
+    <td contenteditable class="data_cell center" data-name="reps">
         <%= reps %>
     </td>
-    <td contenteditable class="data_cell" data-name="time">
+    <td contenteditable class="data_cell center" data-name="time">
         <%= time %>
     </td>
-    <td contenteditable class="data_cell" data-name="sets">
+    <td contenteditable class="data_cell center" data-name="sets">
         <%= sets %>
     </td>
     
-    <td contenteditable class="data_cell" data-name="rest">
+    <td contenteditable class="data_cell center" data-name="rest">
         <%= rest %>
     </td>
+    
+
+    <td contenteditable class="data_cell comments" data-name="comments">
+        <%= comments %>
+    </td>
+    
     <td class="center">
         <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
     </td>

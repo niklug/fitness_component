@@ -1139,3 +1139,12 @@ width: 40px;
   border: 1px solid rgba(81, 203, 238, 1);
   background-color: #fff;
 }
+
+
+.drag_item {
+    background-image: url("../images/move_arrow.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 22px auto;
+    cursor: move;
+}

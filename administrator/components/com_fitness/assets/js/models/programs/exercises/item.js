@@ -10,13 +10,15 @@ define([
             id : null,
             event_id : null,
             order : 0,
+            sequence : null,
             title : null,
             speed : null,
             weight : null,
             reps : null,
             time : null,
             sets : null,
-            rest : null
+            rest : null,
+            comments : null
         },
     });
     

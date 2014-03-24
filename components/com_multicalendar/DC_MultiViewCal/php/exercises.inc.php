@@ -71,9 +71,10 @@
         function attachDragExerciseRows() {
             $("#exercise_table").tableDnD({
                 onDragStart: function(table, row) {
-                    $("#debugArea").html("Started dragging row "+row.id);
+                    //$("#debugArea").html("Started dragging row "+row.id);
                 },
                 onDrop: function(table, row) {
+                    //console.log('fuck');
                     var rows = table.tBodies[0].rows;
 
                     var debugStr = "Row dropped was "+row.id+". New order: ";
