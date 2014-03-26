@@ -54,7 +54,10 @@ $business_profile_id = $business_profile_id['data'];
         
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
         'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
-        'business_profile_id' : '<?php echo $business_profile_id; ?>'
+        'business_profile_id' : '<?php echo $business_profile_id; ?>',
+        
+        'event_id' : '<?php echo JRequest::getVar('event_id') ?>',
+        'exercise_id' : '<?php echo JRequest::getVar('exercise_id') ?>',
     };
     
     //status class

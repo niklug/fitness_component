@@ -14,7 +14,8 @@ define([
         'views/programs/backend/form_workout_instructions',
         'views/programs/backend/list',
         'views/programs/backend/list_header_container',
-        'views/programs/exercises/list'
+        'views/programs/exercises/list',
+        'views/programs/backend/comments_block'
 ], function (
         $,
         _,
@@ -31,7 +32,8 @@ define([
         Form_event_workout_instructions,
         List_view,
         List_header_container_view,
-        Exercises_list_view
+        Exercises_list_view,
+        Comments_block_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -79,21 +81,7 @@ define([
         form_view : function(id) {
             $("#main_container").html(new Form_container_view().render().el);
             if(!parseInt(id)) {
-                this.load_form_view(new Item_model(
-                 /*      
-                {
-                    title : '5',
-                    session_type : '26',
-                    session_focus : '481',
-                    starttime : '2014-03-13 04:30:00',
-                    endtime : '2014-03-13 05:00:00',
-                    location : '1',
-                    frontend_published : '0',
-                    published : '1',
-                    trainer_id : '488'
-                }
-                */        
-                ));
+                this.load_form_view(new Item_model());
                 return;
             }
             
@@ -131,6 +119,8 @@ define([
                 new Form_event_workout_instructions({el : $("#workout_instuctions_wrapper"), model : model});
                 
                 new Exercises_list_view({el : $("#exercises_list"), model : model});
+                
+                new Comments_block_view({el : $("#comments_block"), model : model});
             }
         },
      

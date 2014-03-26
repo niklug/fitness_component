@@ -15,7 +15,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            data.app = app;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             return this;
         },
@@ -25,6 +27,7 @@ define([
             "click #save_close" : "onClickSaveClose",
             "click #save_new" : "onClickSaveNew",
             "click #cancel" : "onClickCancel",
+            "click .add_exercise" : "onClickAddExersice",
         },
 
         onClickSave : function() {
@@ -154,6 +157,11 @@ define([
         getBusinessProfiles : function() {
             var ids = $(".bisiness_profile_item:checked").map(function(){ return this.getAttribute("data-business_profile_id") }).get().join(",");
             return ids;
+        },
+        
+        onClickAddExersice : function(event) {
+            var id = this.model.get('id');
+            app.controller.add_event_exercise(id);
         }
     });
             

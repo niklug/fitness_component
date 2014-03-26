@@ -38,7 +38,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            data.app = app;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             
             this.connectBusinessFilter();
@@ -53,6 +55,7 @@ define([
             "click #add_item" : "onClickAddItem",
             "click #trash_selected" : "onClickTrashSelected",
             "click #delete_selected" : "onClickDeleteSelected",
+            "click #back_program" : "onClickBackProgram",
         },
         
         connectBusinessFilter : function() {
@@ -173,6 +176,10 @@ define([
         
         onClickAddItem : function() {
             app.controller.navigate("!/form_view/0", true);
+        },
+        
+        onClickBackProgram : function() {
+            app.controller.route_program();
         }
     });
             

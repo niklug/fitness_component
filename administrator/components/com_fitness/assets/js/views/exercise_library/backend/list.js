@@ -53,6 +53,7 @@ define([
             "click .view" : "onClickView",
             "click .copy_exercise" : "onClickCopyExercise",
             "click #select_trashed" : "onClickSelectTrashed",
+            "click .add_exercise" : "onClickAddExersice",
         },
         
         addItem : function(model) {
@@ -95,7 +96,6 @@ define([
         onClickTrash : function(event) {
             var id = $(event.target).attr('data-id');
             var model = this.collection.get(id);
-            console.log(model);
             var self  = this;
             model.save({state : '-2'}, {
                 success: function (model, response) {
@@ -154,6 +154,11 @@ define([
         onClickCopyExercise : function(event) {
             var id = $(event.target).attr('data-id');
             app.controller.copy_exercise(id);
+        },
+        
+        onClickAddExersice : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.add_event_exercise(id);
         }
     });
             

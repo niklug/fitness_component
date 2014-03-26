@@ -198,6 +198,8 @@ CREATE TABLE IF NOT EXISTS `#__fitness_events_exercises` (
   `time` varchar(255) NOT NULL,
   `sets` varchar(255) NOT NULL,
   `rest` varchar(255) NOT NULL,
+  `video_id` int(11) NOT NULL,
+  `comments` text,
   PRIMARY KEY (`id`),
   KEY `event_id` (`event_id`),
   FOREIGN KEY (event_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE
@@ -873,6 +875,22 @@ CREATE TABLE IF NOT EXISTS `#__fitness_exercise_library_comments` (
   FOREIGN KEY (item_id) REFERENCES #__fitness_exercise_library(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+
+CREATE TABLE IF NOT EXISTS `#__fitness_program_comments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) unsigned NOT NULL,
+  `item_id` int(11) unsigned NOT NULL,
+  `sub_item_id` int(11) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `business_profile_id` int(11) unsigned NOT NULL,
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_focus` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 
@@ -1377,3 +1395,4 @@ CREATE TABLE IF NOT EXISTS `#__fitness_exercise_library_favourites` (
   FOREIGN KEY (item_id) REFERENCES #__fitness_exercise_library(id) ON DELETE CASCADE,
   FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+

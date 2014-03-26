@@ -52,6 +52,9 @@
     </td>
     
     <td>
+        <%= created_by_name %>
+    </td>
+    <td>
         <%= location_name %>
     </td>
     
@@ -90,11 +93,7 @@
     <td class="center">
         <a data-id="<%= id %>" class="appointment_email" href="javascript:void(0)" title="Send Appointment Email"></a>
     </td>
-    
-    <td class="center">
-        <a data-id="<%= id %>" class="email_button notify_email" href="javascript:void(0)" title="Send Workout Email"></a>
-    </td>
-    
+   
     <td class="center">
         <%
         var icon_class = 'unpublish';

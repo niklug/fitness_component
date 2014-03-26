@@ -18,7 +18,8 @@ define([
             time : null,
             sets : null,
             rest : null,
-            comments : null
+            comments : null,
+            video_id : null
         },
     });
     

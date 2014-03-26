@@ -71,6 +71,9 @@ define([
             "focusout .data_cell" : "onCellEdit",
             "focusin .data_cell" : "onCellSetCursor",
             "click #show_hide_comments" : "onClickShowComments",
+            "click .search_video" : "onClickSearchVideo",
+            "click .show_exercise_video" : "onClickShowVideo",
+            
         },
         
         addItem : function(model) {
@@ -273,6 +276,21 @@ define([
                 this.$el.find(".comments").hide();
                 this.$el.find("#show_hide_comments").html('[SHOW COMMENTS]');
             }
+       },
+       
+       onClickSearchVideo : function(event) {
+           var exercise_id = $(event.target).attr('data-id');
+           
+           var el_url = app.options.base_url + 'administrator/index.php?option=com_fitness&view=exercise_library&tmpl=component&event_id=' + this.model.get('id') + '&exercise_id=' + exercise_id;
+
+           window.location = el_url;
+       },
+       
+       onClickShowVideo : function(event) {
+           var id = $(event.target).attr('data-id');
+           var el_url = app.options.base_url + 'administrator/index.php?option=com_fitness&view=exercise_library#!/form_view/' + id;
+
+           window.open(el_url,'_blank');
        }
     });
             

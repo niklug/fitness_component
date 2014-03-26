@@ -46,6 +46,7 @@ define([
         events: {
             "click #sort_starttime" : "sort_starttime",
             "click #sort_trainer" : "sort_trainer",
+            "click #sort_author" : "sort_author",
             "click #sort_location" : "sort_location",
             "click #sort_appointment_type" : "sort_appointment_type",
             "click #sort_session_type" : "sort_session_type",
@@ -64,7 +65,6 @@ define([
             "click .copy_item" : "onClickCopy",
             
             "click .appointment_email" : "sendAppointmentEmail",
-            "click .notify_email" : "sendNotifyEmail",
         },
         
         addItem : function(model) {
@@ -92,6 +92,10 @@ define([
         
         sort_trainer : function() {
             this.model.set({sort_by : 'trainer_name', order_dirrection : 'ASC'});
+        },
+        
+        sort_author : function() {
+            this.model.set({sort_by : 'created_by_name', order_dirrection : 'ASC'});
         },
         
         sort_location : function() {
@@ -186,7 +190,7 @@ define([
         onClickPublishWorkout : function(event) {
             var id = $(event.target).attr('data-id');
             var state = $(event.target).attr('data-frontend_published');
-            
+
             var frontend_published = 1;
             
             if(parseInt(state) == '1') {
@@ -198,6 +202,9 @@ define([
             model.save({frontend_published : frontend_published}, {
                 success: function (model, response) {
                     app.controller.update_list();
+                    if(parseInt(frontend_published)) {
+                        self.sendNotifyEmail(id);
+                    }
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -215,8 +222,7 @@ define([
             this.status_obj.sendEmail(id, 'Appointment');
         },
         
-        sendNotifyEmail : function(event) {
-            var id = $(event.target).attr('data-id');
+        sendNotifyEmail : function(id) {
             this.status_obj.sendEmail(id, 'Notify');
         },
         

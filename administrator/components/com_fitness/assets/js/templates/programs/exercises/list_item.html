@@ -3,7 +3,11 @@
           
     </td>
     <td class="center">
-        
+        <% if(parseInt(video_id)){ %>
+            <a class="show_exercise_video" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Show Exercise Video"  data-id="<%= video_id %>"  class="video_link_icon"></span></a>
+        <% } else { %>
+            <a class="search_video" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Search Video"  data-id="<%= id %>"  class="search_video_icon"></span></a>
+        <% } %>
     </td>
     <td contenteditable class="data_cell center" data-name="sequence"> 
         <%= sequence %>

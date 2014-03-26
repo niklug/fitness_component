@@ -100,6 +100,13 @@
             })
         } %>
     </td>
+    
+    <% if(app.options.exercise_id) { %>
+    <td>
+        <a class="add_exercise" title="Add to Exercise" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="video_link_icon"></span></a>
+    </td>
+    <% } %>  
+    
     <td>
         <% if(state == '1') { %>
             <a title="View Details" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>

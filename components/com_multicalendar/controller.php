@@ -31,6 +31,7 @@ class MultiCalendarController extends JController
     function __construct($config = array())
 	{
             require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+            require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email.php';
 
             $helper = new FitnessHelper();
             $this->helper = $helper;
@@ -487,18 +488,19 @@ class MultiCalendarController extends JController
         
         foreach ($events as $event) {
             // update publish workout
-            if($event->auto_publish_workout AND $this->current_date >= $event->auto_publish_workout) {
+            if($event->auto_publish_workout AND $this->current_date >= $event->auto_publish_workout && !$event->frontend_published) {
                 $event->frontend_published = '1';
                 $update = $db->updateObject($table, $event, 'id');
                 if (!$update) {
                     throw new Exception($db->stderr());
                 }
+                $this->sendPublishWorkoutEmail($event->id);
                 echo "<br/>";
                 echo $event->id . '  workout published';
              }
              
              // update publish event
-            if($event->auto_publish_event AND $this->current_date >= $event->auto_publish_event) {
+            if($event->auto_publish_event AND $this->current_date >= $event->auto_publish_event && !$event->published) {
                 $event->published = '1';
                 $update = $db->updateObject($table, $event, 'id');
                 if (!$update) {
@@ -510,6 +512,23 @@ class MultiCalendarController extends JController
         }
         
         die();
+    }
+    
+    public function sendPublishWorkoutEmail($event_id) {
+        $clients = $this->helper->getClientsByEvent($event_id);
+        $obj = new AppointmentEmail();
+        foreach ($clients as $client) {
+             try {
+
+                $data_obj = new stdClass();
+                $data_obj->id = $event_id;
+                $data_obj->client_id = $client;
+                $data_obj->method = 'Notify';
+                $emails  .= ' ' .$obj->processing($data_obj);
+            } catch (Exception $exc) {
+               echo $exc->getMessage();
+            }
+        }
     }
 		
 }
