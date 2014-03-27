@@ -239,6 +239,27 @@ define([
             });
         },
         
+        add_event_exercises : function(id, count) {
+            var model = new Exercise_model();
+            
+            var video_model = app.collections.items.get(id);
+            
+            model.clear();
+            
+            model.set({
+                id : null,
+                event_id : app.options.event_id,
+                video_id : id,
+                title : video_model.get('exercise_name')
+            });
+            var self = this;
+            model.save(null, {
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
         route_program : function() {
             var url = app.options.base_url + 'administrator/index.php?option=com_fitness&view=programs#!/form_view/' + app.options.event_id;
             window.location = url;

@@ -75,7 +75,8 @@ require.config({
         'jquery.nutritionMeal' : 'lib/nutrition_meal_class',
         'jquery.calculateSummary' : 'lib/plan_summary_class',
         'jquery.gredient_graph' : 'lib/gredient_graph',
-        'jquery.tableDnD' : 'lib/jquery.tablednd'
+        'jquery.tableDnD' : 'lib/jquery.tablednd',
+        'jquery.ajax_indicator' : 'lib/ajax_indicator'
     },
 
     waitSeconds: 10

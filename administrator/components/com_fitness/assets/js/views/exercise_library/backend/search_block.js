@@ -56,6 +56,7 @@ define([
             "click #trash_selected" : "onClickTrashSelected",
             "click #delete_selected" : "onClickDeleteSelected",
             "click #back_program" : "onClickBackProgram",
+            "click #add_selected_exercises" : "onClickAddSelectedExercises",
         },
         
         connectBusinessFilter : function() {
@@ -180,7 +181,21 @@ define([
         
         onClickBackProgram : function() {
             app.controller.route_program();
-        }
+        },
+        
+        onClickAddSelectedExercises : function() {
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    app.controller.add_event_exercises(item);
+                });
+            }
+            
+            $("#select_trashed,.trash_checkbox").prop("checked", false);
+        },
     });
             
     return view;

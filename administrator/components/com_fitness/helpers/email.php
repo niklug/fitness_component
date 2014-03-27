@@ -324,7 +324,7 @@ class AppointmentEmail extends FitnessEmail {
                 $layout = 'email_reminder';
                 break;
             case 'Notify':
-                $subject = 'Review Your Feedback';
+                $subject = 'Workout Info Available';
                 $layout = 'email_notify';
                 break;
             

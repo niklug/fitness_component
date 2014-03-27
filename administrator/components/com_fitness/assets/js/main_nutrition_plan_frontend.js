@@ -16,11 +16,12 @@ require([
     'jquery.drawPie',
     'jqueryui',
     'backbone.syphon',
-    'jquery.backbone_pagination'
+    'jquery.backbone_pagination',
+    'jquery.ajax_indicator'
     
 
 ], function($, _, Backbone, moment, app, Controller, Main_menu_view) {
-
+    $.ajax_indicator({});
     $.fitness_helper = $.fitness_helper(app.options);
     Backbone.emulateHTTP = true ;
     Backbone.emulateJSON = true;
