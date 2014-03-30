@@ -95,19 +95,20 @@ define([
                 element_disabled : element_disabled
             }).render();
 
-            new Select_filter_fiew({
-                model : this.model,
-                el : $(this.el).find("#locations_filter_wrapper"),
-                collection : app.collections.locations,
-                title : 'Location',
-                first_option_title : 'None',
-                class_name : 'dark_input_style',
-                id_name : '',
-                select_size : 12,
-                model_field : 'location',
-                element_disabled : element_disabled
-            }).render();
-            
+            if(! _.include(this.options.not_show, 'locations')) {
+                new Select_filter_fiew({
+                    model : this.model,
+                    el : $(this.el).find("#locations_filter_wrapper"),
+                    collection : app.collections.locations,
+                    title : 'Location',
+                    first_option_title : 'None',
+                    class_name : 'dark_input_style',
+                    id_name : '',
+                    select_size : 12,
+                    model_field : 'location',
+                    element_disabled : element_disabled
+                }).render();
+            }
             
             
             

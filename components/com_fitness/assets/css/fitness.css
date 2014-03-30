@@ -145,7 +145,10 @@ a:hover, a:active, a:focus {
     border: 2px solid #C79700;
 }
 
-.recipe_status_button, .status_button, .status_button_dialog, .status_button_mini, .status_button_dialog_mini {
+.recipe_status_button, .status_button, .status_button_dialog,
+.status_button_mini, .status_button_dialog_mini,
+.event_status__button
+{
     display: block;
     font-size: 10px !important;
     height: 11px;
@@ -213,6 +216,48 @@ a:hover, a:active, a:focus {
     background-color: #ECB8FF !important;
     border: 2px solid #4B0082;
 }
+
+
+.event_status_pending { 
+    background-color: #EBEBEB !important;
+    border: 1px solid #818283;
+    color: #818283 !important;
+}
+
+.event_status_attended {
+    background-color: #DEFFE2 !important;
+    border: 1px solid #1BC721;
+    color: #006C09 !important;
+}
+
+
+.event_status_cancelled {
+    background-color: #FFCA9F !important;
+    border: 1px solid #1BC721;
+    color: #006C09 !important;
+}
+
+
+.event_status_latecancel {
+    background-color: #F9E4F6 !important;
+    border: 1px solid #1BC721;
+    color: #006C09 !important;
+}
+
+
+
+.event_status_noshow {
+    background-color: #9999FF !important;
+    border: 1px solid #1BC721;
+    color: #006C09 !important;
+}
+
+.event_status_complete {
+    background-color: #DEFFE2 !important;
+    border: 1px solid #1BC721;
+    color: #006C09 !important;
+}
+
 
 
 .status_pass_stamp {
@@ -446,7 +491,10 @@ td.center, th.center, .center {
 }
 
 
-.delete_meal, .fitness_wrapper .delete_comment , .fitness_wrapper .delete_plan_meal, .fitness_wrapper .delete_shopping_item{
+.delete_meal, .fitness_wrapper .delete_comment , 
+.fitness_wrapper .delete_plan_meal, .fitness_wrapper .delete_shopping_item,
+.delete_icon
+{
     background-image: url("../images/cross.png");
     background-size: 15px auto;
     display: inline-block;
@@ -683,18 +731,19 @@ td.center, th.center, .center {
 
 
 
-#plan_menu, #recipe_mainmenu, #exercise_mainmenu {
+
+#plan_menu, #recipe_mainmenu, #exercise_mainmenu,#mainmenu {
     width: 100%;
 }
 
-#plan_menu ul, #recipe_mainmenu ul, #exercise_mainmenu ul {
+#plan_menu ul, #recipe_mainmenu ul, #exercise_mainmenu ul, #mainmenu ul {
     width: 100%;
     display: inline-block;
     margin: 0;
     padding: 0;
 }
 
-#plan_menu ul li, #recipe_mainmenu ul li, #exercise_mainmenu ul li  {
+#plan_menu ul li, #recipe_mainmenu ul li, #exercise_mainmenu ul li, #mainmenu ul li  {
     border: 1px solid #CCCCCC;
     float: left;
     line-height: 1.7em;
@@ -705,18 +754,21 @@ td.center, th.center, .center {
     width: auto;
 }
 
-#plan_menu ul li a , #recipe_mainmenu ul li a, #exercise_mainmenu ul li a{
+#plan_menu ul li a , #recipe_mainmenu ul li a, #exercise_mainmenu ul li a, #mainmenu ul li a{
     text-decoration: none !important;
     color: #BC4A26;
     font-size: 16px;
 }
 
 #plan_menu ul li a:hover, #plan_menu ul li a:active,  #exercise_mainmenu ul li a:active,.active_link,
-#recipe_mainmenu ul li a:hover, #recipe_mainmenu ul li a:active, .active_link {
+#recipe_mainmenu ul li a:hover, #recipe_mainmenu ul li a:active,
+#mainmenu ul li a:hover, #mainmenu ul li a:active
+{
     color:#fff !important;
     border-bottom: 2px solid #BC4A26;
     font-weight:bold;
 }
+
 
 
 .recipe_database_image {

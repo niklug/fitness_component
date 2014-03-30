@@ -80,7 +80,7 @@
         });
 
         $('#resultLoading .bg').height('100%');
-        $('#resultLoading').fadeTo(8000,1);
+        $('#resultLoading').fadeTo(10000,1);
         $('body').css('cursor', 'wait');
     }
 

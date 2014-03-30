@@ -3,12 +3,16 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/exercise_library/frontend/menus/main_menu.html'
+	'text!templates/programs/frontend/menus/main_menu.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
         
-        el : $("#exercise_mainmenu"),
+        initialize : function() {
+            this.render();
+        },
+        
+        el : $("#mainmenu"),
 
         template:_.template(template),
         
@@ -20,8 +24,8 @@ define([
 
         events: {
             "click #my_favourites_link" : "onClickFavourites",
-            "click #my_exercises_link" : "onClickMyExercises",
-            "click #exercise_database_link" : "onClickExerciseDatabase",
+            "click #my_workouts_link" : "onClickMyWorkouts",
+            "click #workout_programs_link" : "onClickWorkoutPrograms",
         },
 
         onClickFavourites : function() {
@@ -29,13 +33,13 @@ define([
             return false;
         },
 
-        onClickMy_recipes : function() {
-            app.controller.navigate("!/my_exercises", true);
+        onClickMyWorkouts : function() {
+            app.controller.navigate("!/my_workouts", true);
             return false;
         },
 
-        onClickRecipe_database : function() {
-            app.controller.navigate("!/exercise_database", true);
+        onClickWorkoutPrograms : function() {
+            app.controller.navigate("!/workout_programs", true);
             return false;
         },
         

@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/exercise_library/frontend/list_item.html'
+	'text!templates/programs/frontend/list_item.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
@@ -23,9 +23,16 @@ define([
   
         connectStatus : function() {
             var id = this.model.get('id');
-            if(id) {
-                var status = $.status(app.options.status_options);
-            }
+            
+            var status = this.model.get('status');
+
+            var status_obj = $.status(app.options.status_options);
+            
+            var html = status_obj.statusButtonHtml(id, status);
+
+            this.$el.find("#status_button_" + id).html(html);
+            
+            this.$el.find("#status_button_" + id + " a").css("cursor", "default");
         },
     });
             

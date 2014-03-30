@@ -579,5 +579,36 @@ class FitnessController extends JController {
         $view->setModel($this->getModel('exercise_library'));
         $view -> favourite_exercise(); 
     }
+    
+    //Programs
+    function programs() {
+        $view = $this -> getView('programs', 'json');
+        $view -> programs(); 
+    }
+
+    function event_exercises() {
+        $view = $this -> getView('programs', 'json');
+        $view -> event_exercises(); 
+    }
+
+    function copyEvent() {
+        $view = $this -> getView('programs', 'json');
+        $view -> copyEvent(); 
+    }
+
+    function get_trainers() {
+        $view = $this -> getView('programs', 'json');
+        $view -> get_trainers(); 
+    }
+
+    function get_trainer_clients() {
+        $view = $this -> getView('programs', 'json');
+        $view -> get_trainer_clients(); 
+    }
+
+    function event_clients() {
+        $view = $this -> getView('programs', 'json');
+        $view -> event_clients(); 
+    }
         
 }

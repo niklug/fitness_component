@@ -92,7 +92,6 @@ class FitnessModelprograms extends JModelList {
             case 'GET': // Get Item(s)
                 $data = new stdClass();
                 $data->id = $id;  
-                $data->title = JRequest::getVar('title'); 
                 $data->sort_by = JRequest::getVar('sort_by'); 
                 $data->order_dirrection = JRequest::getVar('order_dirrection'); 
                 $data->page = JRequest::getVar('page'); 
@@ -100,10 +99,10 @@ class FitnessModelprograms extends JModelList {
                 $data->published = JRequest::getVar('published'); 
                 $data->frontend_published = JRequest::getVar('frontend_published'); 
                 
-                $data->title = JRequest::getVar('title', '0'); 
-                $data->location = JRequest::getVar('location', '0'); 
-                $data->session_type = JRequest::getVar('session_type', '0'); 
-                $data->session_focus = JRequest::getVar('session_focus', '0'); 
+                $data->title = JRequest::getVar('title', 0, '', 'INT'); 
+                $data->location = JRequest::getVar('location', 0, '', 'INT'); 
+                $data->session_type = JRequest::getVar('session_type', 0, '', 'INT'); 
+                $data->session_focus = JRequest::getVar('session_focus', 0, '', 'INT'); 
                 
                 $data->date_from = JRequest::getVar('date_from', '0'); 
                 $data->date_to = JRequest::getVar('date_to', '0'); 
@@ -251,6 +250,11 @@ class FitnessModelprograms extends JModelList {
             if (isset($data->frontend_published)  AND $data->frontend_published != '2') {
                 $query .= " AND a.frontend_published IN ('$data->frontend_published')";
             }
+            
+            //frontend client logged
+            if($data->current_page == 'my_workouts' AND FitnessHelper::is_client($user_id)) {
+                $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
+            }
 
             $query .= " ) items_total, ";
         }
@@ -260,8 +264,15 @@ class FitnessModelprograms extends JModelList {
         
         $query .= " (SELECT name FROM #__users WHERE id=a.owner) created_by_name, ";
         
+        //frontend client logged
+        if(FitnessHelper::is_client($user_id)) {
+            $query .= " (SELECT status FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id' LIMIT 1) status,";
+        }
+        
         // if logged simple trainer associated to the event's clients 
         $query .= "  (SELECT GROUP_CONCAT(id) FROM #__fitness_appointment_clients WHERE client_id IN  (SELECT user_id FROM #__fitness_clients WHERE (primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AND state='1') AND event_id=a.id) is_associated_trainer";
+        
+        
         
         $query .= "  FROM $table AS a";
         
@@ -280,7 +291,7 @@ class FitnessModelprograms extends JModelList {
             $query .= " AND a.published='$data->published' ";
         }
         
-        
+
         //1
         if($data->title) {
             $query .= " AND a.title IN ($data->title)";
@@ -298,7 +309,7 @@ class FitnessModelprograms extends JModelList {
             $query .= " AND a.session_focus IN ($data->session_focus)";
         }
         
-        
+      
         if (!empty($data->date_from)) {
             $query .= " AND a.starttime >= '$data->date_from'";
         }
@@ -350,8 +361,13 @@ class FitnessModelprograms extends JModelList {
         if (isset($data->frontend_published) AND $data->frontend_published != '2') {
             $query .= " AND a.frontend_published IN ('$data->frontend_published')";
         }
-
         
+        //frontend client logged
+        if($data->current_page == 'my_workouts' AND FitnessHelper::is_client($user_id)) {
+            $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
+        }
+
+       
         $query_type = 1;
         if($id) {
             $query .= " AND a.id='$id' ";
@@ -455,7 +471,6 @@ class FitnessModelprograms extends JModelList {
         
         if($event->id) {
             $event->id = null;
-            $event->status = 1;
             $event->owner = JFactory::getUser()->id;
             $insert = $db->insertObject('#__dc_mv_events', $event, 'id');
             

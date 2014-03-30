@@ -1,190 +1,49 @@
-<div class="exercise_list_item_wrapper" data-id="<%= id%>" style="margin-top: 0px;border:none;">
-    <table width="100%">
-        <tr>
-            <td style="vertical-align: top;" width="60%">
-                <table width="100%">
-                    <tr>
-                        <td  width="140">AUTHOR</td>
-                        <td><%= created_by_name %></td>
-                    </tr>
-                    <tr>
-                        <td>DATE CREATED</td>
-                        <td><%= moment(new Date(Date.parse(created))).format("ddd, D MMM  YY")  %></td>
-                    </tr>
-                    <tr>
-                        <td>STATUS</td>
-                        <td>
-                            <%= $.fitness_helper.setExerciseLibraryStatus(status, id) %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>ASSESSED BY</td>
-                        <td><%= assessed_by_name || '-'  %></td>
-                    </tr>
-                </table>
-                <br/>
-                
-                <table width="100%">
-                    <tr>
-                        <td  width="70%">
-                            <%
-                            var thumbnail = app.options.base_url + video.split('.')[0] + '.jpg';
-                            if(video) {
-                            %>
-                            <div data-id="<%= id %>"  class="view_exercise" style="cursor:pointer;text-align: center;background-size: 250px auto; border: 3px solid #FFFFFF; height:150px; width: 250px;background-image: url('<%= thumbnail %>');" ></div>
-                            <% } %>
-                        </td>
-                        <td>
-                            <% if ((current_page == 'my_exercises') || (current_page == 'exercise_database')) { %>
-                                <br/><br/>
-                                <% if (is_favourite) {
-                                    var display_remove_favourite = 'inline';
-                                    var display_add_favourite = 'none';
-
-                                } else {  
-                                    var display_add_favourite = 'inline';
-                                    var display_remove_favourite = 'none';
-                                } %>
-                                    <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
-
-                                    <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[add favourite]</a>
-                            <% } %>
-
-                            <% if(current_page == 'my_exercises' && edit_allowed) { %>
-                                <br/><br/>
-                                <a data-id="<%= id %>" style="cursor: pointer;" class="trash_exercise" onclick="javascript:void(0)">[trash exercise]</a>
-                            <% } else if (current_page == 'my_favourites') { %>
-                                <br/><br/>
-                                <a data-id="<%= id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
-                            <% } else if (current_page == 'trash_list' && edit_allowed) { %>
-                                <a data-id="<%= id %>" style="cursor: pointer;" class="restore_exercise" onclick="javascript:void(0)">[restore exercise]</a>
-                                <br><br>
-                                <a data-id="<%= id %>" style="cursor: pointer;" class="delete_exercise" onclick="javascript:void(0)">[delete exercise]</a>
-                            <% } %>
-
-                            <br/><br/>
-                            <a data-id="<%= id %>" style="cursor: pointer;" class="view_exercise" onclick="javascript:void(0)">[view exercise]</a>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td style="vertical-align: top;">
-                <table width="100%">
-                    <tr>
-                        <td width="140">EXERCISE NAME</td>
-                        <td><%= exercise_name  %></td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top;">
-                            EXERCISE TYPE
-                        </td>
-                        <td>
-                            <%
-                            if(exercise_type_names) {
-                                _.each(exercise_type_names.split(','), function(item){ %>
-                                    <%= item + "<br/>" %>
-                                <% })
-                            }  else { %>
-                                <%= '-' %>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top;">
-                            FORCE TYPE
-                        </td>
-                        <td>
-                            <%
-                            if(force_type_names) {
-                                _.each(force_type_names.split(','), function(item){ %>
-                                    <%= item + "<br/>" %>
-                                <% })
-                            }  else { %>
-                                <%= '-' %>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top;">
-                            MECHANICS TYPE
-                        </td>
-                        <td>
-                            <%
-                            if(mechanics_type_names) {
-                                _.each(mechanics_type_names.split(','), function(item){ %>
-                                    <%= item + "<br/>" %>
-                                <% })
-                            }  else { %>
-                                <%= '-' %>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top;">
-                            BODY PART
-                        </td>
-                        <td>
-                            <%
-                            if(body_part_names) {
-                                _.each(body_part_names.split(','), function(item){ %>
-                                    <%= item + "<br/>" %>
-                                <% })
-                            }  else { %>
-                                <%= '-' %>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top;">
-                            TARGET MUSCLES
-                        </td>
-                        <td>
-                            <%
-                            if(target_muscles_names) {
-                                _.each(target_muscles_names.split(','), function(item){ %>
-                                    <%= item + "<br/>" %>
-                                <% })
-                            }  else { %>
-                                <%= '-' %>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top;">
-                            EQUIPMENT
-                        </td>
-                        <td>
-                            <%
-                            if(equipment_type_names) {
-                                _.each(equipment_type_names.split(','), function(item){ %>
-                                    <%= item + "<br/>" %>
-                                <% })
-                            }  else { %>
-                                <%= '-' %>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top;">
-                            DIFFICULTY
-                        </td>
-                        <td>
-                            <%
-                            if(difficulty_names) {
-                                _.each(difficulty_names.split(','), function(item){ %>
-                                    <%= item + "<br/>" %>
-                                <% })
-                            }  else { %>
-                                <%= '-' %>
-                            <% } %>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+<tr data-id="<%= id %>" class="item_row">
+    <td>
+        <div style="float:left; width:130px;"><%= moment(new Date(Date.parse(starttime))).format("ddd, D MMM  YYYY") %></div>
+        <div style="float:left;width:20px;"><%= moment(new Date(Date.parse(starttime))).format("HH:mm")  %></div>
+    </td>
     
-    <br>
-    <hr>
-    <br>
-</div>
+    <td>
+        <%= appointment_name %>
+    </td>
+    
+    <td>
+        <%= session_type_name %>
+    </td>
+    
+    <td>
+        <%= session_focus_name %>
+    </td>
+    
+    <td>
+        <%= created_by_name %>
+    </td>
+    
+    <td width="70"  id="status_button_<%= id %>" ></td>
+    
+    <td>
+        <% if(published == '1') { %>
+            <a title="View" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
+        <% } else { %>
+            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+        <% } %>
+    </td>
+    
+    <td>
+         <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
+    </td>
+    
+    <td > 
+        <% if(published == '1') { %>
+            <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
+        <% } else { %>
+            <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+        <% } %>
+    </td>
+    
+    <td >
+        <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+    </td>
+
+</tr>

@@ -41,10 +41,8 @@ define([
             var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
             
-            this.$el.find("#date_from").datepicker({ dateFormat: "yy-mm-dd"});
-            
-            this.$el.find("#date_to").datepicker({ dateFormat: "yy-mm-dd"});
-            
+            this.$el.find("#date_from, #date_to").datepicker({ dateFormat: "yy-mm-dd"});
+               
             this.connectBusinessFilter();
            
             return this;
@@ -90,15 +88,15 @@ define([
             
             this.model.set(
                 {
-                    date_from : null,
-                    date_to : null,
-                    client_name : null,
-                    trainer_name : null,
-                    created_by_name : null,
-                    title : null,
-                    location : null,
-                    session_type : null,
-                    session_focus : null,
+                    date_from : '',
+                    date_to : '',
+                    client_name : '',
+                    trainer_name : '',
+                    created_by_name : '',
+                    title : '',
+                    location : '',
+                    session_type : '',
+                    session_focus : '',
                     business_profile_id : null
                 }
             );

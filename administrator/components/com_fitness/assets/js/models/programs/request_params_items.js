@@ -9,17 +9,17 @@ define([
             order_dirrection : 'DESC',
             page : localStorage.getItem('currentPage') || 1,
             limit : localStorage.getItem('items_number') || 10,
-            published : null,
-            frontend_published : null,
-            date_from : null,
-            date_to : null,
-            client_name : null,
-            trainer_name : null,
-            created_by_name : null,
-            title : null,
-            location : null,
-            session_type : null,
-            session_focus :null
+            published : '',
+            frontend_published : '',
+            date_from : '',
+            date_to : '',
+            client_name : '',
+            trainer_name : '',
+            created_by_name : '',
+            title : '',
+            location : '',
+            session_type : '',
+            session_focus :''
         }
     });
     return model;
