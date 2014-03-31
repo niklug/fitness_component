@@ -253,7 +253,6 @@ class FitnessModelprograms extends JModelList {
             
             //frontend client logged
             if($data->current_page == 'my_workouts' AND FitnessHelper::is_client($user_id)) {
-                //$query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
                 $query .= " AND a.owner='$user_id'";
             }
             
@@ -272,6 +271,7 @@ class FitnessModelprograms extends JModelList {
         
         //frontend client logged
         if(FitnessHelper::is_client($user_id)) {
+            $query .= " (SELECT id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id' LIMIT 1) client_item_id,";
             $query .= " (SELECT status FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id' LIMIT 1) status,";
         }
         
@@ -413,6 +413,10 @@ class FitnessModelprograms extends JModelList {
         } else {
             $group_clients_data = $this->getGroupClientsData($items->id);
             $items->group_clients_data = $group_clients_data;
+            
+            $secondary_trainers = $helper->get_client_trainers_names($user_id, 'secondary');
+            $items->secondary_trainers = $secondary_trainers;
+            $items->client_name = JFactory::getUser($user_id)->name;
         }
 
         return $items;

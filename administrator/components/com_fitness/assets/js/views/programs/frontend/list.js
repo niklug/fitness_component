@@ -17,6 +17,8 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
+            this.collection.off("add");
+            this.collection.off("reset");
             this.collection.bind("add", this.addItem, this);
             this.collection.bind("reset", this.clearItems, this);
         },
@@ -43,7 +45,7 @@ define([
         },
         
         events: {
-            "click .view_exercise" : "onClickViewExercise",
+            "click .view_item" : "onClickViewItem",
             "click .add_favourite" : "onClickAddFavourite",
             "click .remove_favourites" : "onClickRemoveFavourite",
             
@@ -69,9 +71,12 @@ define([
         },
         
         addItem : function(model) {
+            
             var edit_allowed = app.controller.edit_allowed(model);
             var delete_allowed = app.controller.delete_allowed(model);
             var status_change_allowed = app.controller.status_change_allowed(model);
+            
+            console.log(status_change_allowed);
             
             model.set({edit_allowed : edit_allowed, status_change_allowed : status_change_allowed, delete_allowed : delete_allowed});
             
@@ -255,6 +260,11 @@ define([
             }
             $("#select_all,.trash_checkbox").prop("checked", false);
         },
+        
+        onClickViewItem : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.navigate("!/item_view/" + id, true);
+        }
         
     });
             

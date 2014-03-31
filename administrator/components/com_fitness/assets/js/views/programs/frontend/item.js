@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/exercise_library/frontend/item.html'
+	'text!templates/programs/frontend/item.html'
 ], function (
         $,
         _, 
@@ -22,10 +22,14 @@ define([
             data.app = app;
             $(this.el).html(this.template(data));
             
-            this.connectComments();
+            app.controller.connectStatus(this.model, this.$el);
+            
+            //this.connectComments();
             
             return this;
         },
+        
+        
         
         connectComments : function() {
             var comment_options = {

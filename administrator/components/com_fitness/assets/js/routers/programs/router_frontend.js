@@ -6,12 +6,12 @@ define([
         'collections/programs/items',
         'models/programs/item',
         'models/programs/request_params_items',
-        'views/programs/backend/form_container',
-        'views/programs/backend/menus/main_menu',
         'views/programs/frontend/menus/submenu_list',
-        'views/programs/backend/form_workout_instructions',
+        'views/programs/frontend/menus/submenu_item',
         'views/programs/frontend/list',
-        'views/programs/select_filter_block'
+        'views/programs/select_filter_block',
+        'views/programs/frontend/item',
+        
 ], function (
         $,
         _,
@@ -20,13 +20,11 @@ define([
         Items_collection,
         Item_model,
         Request_params_items_model,
-        Form_container_view,
-        Main_menu_view,
         Submenu_list_view,
-        Form_event_workout_instructions,
+        Submenu_item_view,
         List_view,
-
-        Select_filter_block_view
+        Select_filter_block_view,
+        Item_view
         
     ) {
 
@@ -64,6 +62,7 @@ define([
             "!/workout_programs": "workout_programs", 
             "!/my_favourites": "my_favourites", 
             "!/trash_list": "trash_list", 
+            "!/item_view/:id": "item_view",
         },
         
         back: function() {
@@ -143,6 +142,8 @@ define([
             new Select_filter_block_view({el : $("#filters_container"), model : app.models.request_params, block_width : '250px', not_show : ['locations']});
         },
         
+        
+        
         edit_allowed : function(model) {
             var access = false;
 
@@ -193,7 +194,50 @@ define([
             }
            
             return access;
-        }
+        },
+        
+        item_view : function(id) {
+            var self = this;
+            app.models.item.set({id : id});
+            app.models.item.fetch({
+                success: function (model, response) {
+                    model.set({edit_allowed : self.edit_allowed(model), status_change_allowed : self.status_change_allowed(model), delete_allowed : self.delete_allowed(model)});
+            
+                    $("#submenu_container").html(new Submenu_item_view({model : model, request_params_model : app.models.request_params}).render().el);
+
+                    $("#main_container").html(new Item_view({model : model, request_params_model : app.models.request_params}).render().el);
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+            
+            this.hideFilters();
+        },
+        
+        hideFilters : function() {
+            $("#filters_container").empty();
+        },
+        
+        connectStatus : function(model, view) {
+            var id = model.get('client_item_id');
+            var status = model.get('status');
+
+            var options = _.extend({}, app.options.status_options);
+            if(id) {
+                var status_change_allowed = model.get('status_change_allowed');
+                
+                if(status_change_allowed == false) {
+                    options.status_button = 'status_button_not_active';
+                }
+
+                var status_obj = $.status(options);
+
+                view.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
+
+                status_obj.run();
+            }
+        },
         
 
     });

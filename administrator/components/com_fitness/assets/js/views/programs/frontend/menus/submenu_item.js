@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/exercise_library/frontend/menus/submenu_item.html'
+	'text!templates/programs/frontend/menus/submenu_item.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
@@ -13,6 +13,7 @@ define([
         render: function(){
             var data  = this.model.toJSON();
             data.app = app;
+            data.is_favourite = false;//TODO
             _.extend(data, this.options.request_params_model.toJSON());
             var template = _.template(this.template(data));
             this.$el.html(template);
@@ -20,12 +21,12 @@ define([
         },
 
         events: {
-            "click .close_exercise" : "onClickClose",
+            "click .close_item" : "onClickClose",
             "click .add_favourite" : "onClickAddFavourite",
             "click .remove_favourites" : "onClickRemoveFavourites",
-            "click .edit_exercise" : "onClickEditExercise",
-            "click .trash_exercise" : "onClickTrashExercise",
-            "click .delete_exercise" : "onClickDeleteExercise",
+            "click .edit_item" : "onClickEditItem",
+            "click .trash_item" : "onClickTrashItem",
+            "click .delete_item" : "onClickDeleteItem",
         },
 
         onClickClose : function() {
@@ -43,18 +44,18 @@ define([
             app.controller.remove_favourite(id);
         },
         
-        onClickTrashExercise : function(event) {
+        onClickTrashItem : function(event) {
             var id = $(event.target).attr('data-id');
             app.controller.trash_exercise(id);
             app.controller.back();
         },
         
-        onClickDeleteExercise : function(event) {
+        onClickDeleteItem: function(event) {
             var id = $(event.target).attr('data-id');
             app.controller.delete_exercise(id);
         },
         
-        onClickEditExercise : function(event) {
+        onClickEditItem : function(event) {
             var id = $(event.target).attr('data-id');
             app.controller.navigate("!/form_view/" + id, true);
         },

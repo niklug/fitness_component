@@ -20,16 +20,16 @@
         <%= created_by_name %>
     </td>
     
-    <td id="status_button_place_<%= id %>" ></td>
+    <td id="status_button_place_<%= client_item_id %>" ></td>
     
     <td>
-        <% if(edit_allowed) { %>
-            <% if(published == '1') { %>
-                <a title="View" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
-            <% } else { %>
-                <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
-            <% } %>
-       <% } %>
+
+        <% if(published == '1') { %>
+            <a title="View" style="cursor: pointer;" class="view_item " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
+        <% } else { %>
+            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+        <% } %>
+
     </td>
     
     <td>
