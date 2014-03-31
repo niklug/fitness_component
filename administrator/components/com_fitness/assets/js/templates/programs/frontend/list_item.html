@@ -20,14 +20,16 @@
         <%= created_by_name %>
     </td>
     
-    <td width="70"  id="status_button_<%= id %>" ></td>
+    <td id="status_button_place_<%= id %>" ></td>
     
     <td>
-        <% if(published == '1') { %>
-            <a title="View" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
-        <% } else { %>
-            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
-        <% } %>
+        <% if(edit_allowed) { %>
+            <% if(published == '1') { %>
+                <a title="View" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
+            <% } else { %>
+                <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+            <% } %>
+       <% } %>
     </td>
     
     <td>
@@ -35,15 +37,19 @@
     </td>
     
     <td > 
-        <% if(published == '1') { %>
-            <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
-        <% } else { %>
-            <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+        <% if(delete_allowed) { %>
+            <% if(published == '1') { %>
+                <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+            <% } %>
         <% } %>
     </td>
     
     <td >
-        <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+        <% if(delete_allowed) { %>
+            <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+        <% } %>
     </td>
 
 </tr>

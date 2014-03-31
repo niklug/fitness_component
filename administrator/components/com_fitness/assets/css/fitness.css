@@ -219,7 +219,12 @@
     padding: 5px;
     position: absolute;
     right: 0;
-    top: 0
+    top: 0;
+    height: 5px;
+    margin: 2px;
+    width: 5px;
+    background-repeat: no-repeat;
+    background-image: url("../images/close.png");
 }
 
 .send_email_button {
@@ -594,7 +599,6 @@
 }
 
 .recipe_status_button, .status_button, .status_button_not_active, .status_button_dialog, .status_button_mini, .status_button_dialog_mini, .status_button_passive {
-    display: block;
     font-size: 10px !important;
     height: 11px;
     margin: 0;

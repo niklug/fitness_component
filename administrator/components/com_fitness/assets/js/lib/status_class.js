@@ -24,13 +24,15 @@
         
         if(this.options.status_button != 'status_button_not_active') {
             $("." + this.options.status_button).die().live('click', function() {
+
                 $("#" + self.options.dialog_status_wrapper).remove();
                 var item_id = $(this).attr('data-item_id');
                 var status_id = $(this).attr('data-status_id');
                 var dialog_html = self.generateDialogHtml(item_id, status_id);
 
                 $("body").append(dialog_html);
-                var position = $(this).position();
+                var position = $(this).offset();
+                
                 var top = position.top;
                 var left = position.left;
                 $("#" + self.options.dialog_status_wrapper).css('top', top + 'px');
@@ -103,7 +105,6 @@
         var variables = { 'statuses' : statuses,
             'item_id' : item_id,
             'status_id' : status_id,
-            'close_image' : this.options.close_image,
             'wrapper' : this.options.dialog_status_wrapper,
             'hide_image_class' : this.options.hide_image_class,
             'status_button_dialog' : this.options.status_button_dialog,
@@ -150,7 +151,6 @@
         var variables = { 'statuses' : statuses,
             'item_id' : item_id,
             'status_id' : status_id,
-            'close_image' : this.options.close_image,
             'wrapper' : this.options.dialog_status_wrapper,
             'hide_image_class' : this.options.hide_image_class,
             'status_button_dialog' : this.options.status_button_dialog,

@@ -9,13 +9,8 @@ define([
         'views/programs/backend/form_container',
         'views/programs/backend/menus/main_menu',
         'views/programs/frontend/menus/submenu_list',
-        'views/programs/backend/form_details',
-        'views/programs/backend/form_trainer',
-        'views/programs/backend/form_clients',
         'views/programs/backend/form_workout_instructions',
         'views/programs/frontend/list',
-        'views/programs/exercises/list',
-        'views/programs/backend/comments_block',
         'views/programs/select_filter_block'
 ], function (
         $,
@@ -28,13 +23,9 @@ define([
         Form_container_view,
         Main_menu_view,
         Submenu_list_view,
-        Form_details_view,
-        Form_trainer_view,
-        Form_event_clients_view,
         Form_event_workout_instructions,
         List_view,
-        Exercises_list_view,
-        Comments_block_view,
+
         Select_filter_block_view
         
     ) {
@@ -89,7 +80,7 @@ define([
             app.collections.items.fetch({
                 data : params,
                 success : function (collection, response) {
-                    console.log(collection.toJSON());
+                    //console.log(collection.toJSON());
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -98,12 +89,19 @@ define([
         },
         
         my_workouts : function() {
-            //show all
             app.models.request_params.set({page : 1, current_page : 'my_workouts', published : '1', frontend_published : '2',  uid : app.getUniqueId()});
             
             this.list_actions();
             
             $("#my_workouts_link").addClass("active_link");
+        },
+        
+        workout_programs : function() {
+            app.models.request_params.set({page : 1, current_page : 'workout_programs', published : '1', frontend_published : '2',  uid : app.getUniqueId()});
+            
+            this.list_actions();
+            
+            $("#workout_programs_link").addClass("active_link");
         },
         
         trash_list : function() {
@@ -119,6 +117,8 @@ define([
             $("#submenu_container").html(new Submenu_list_view({model : app.models.request_params}).render().el);
             
             this.connectSelectFilter();
+            
+            $(".menu_link").removeClass("active_link");
             
             $("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
             
@@ -143,6 +143,57 @@ define([
             new Select_filter_block_view({el : $("#filters_container"), model : app.models.request_params, block_width : '250px', not_show : ['locations']});
         },
         
+        edit_allowed : function(model) {
+            var access = false;
+
+            var user_id = app.options.user_id;
+            var created_by = model.get('owner');
+            var appointment = model.get('title');
+            
+            if(user_id == created_by) {
+                access = true;
+            }
+            
+            //'Resistance Workout' and 'Cardio Workout'
+            if(appointment == '3' || appointment == '4') {
+                access = true;
+            }
+            
+
+            return access;
+        },
+        
+        delete_allowed : function(model) {
+            var access = false;
+
+            var user_id = app.options.user_id;
+            var created_by = model.get('owner');
+            
+            if(user_id == created_by) {
+                access = true;
+            }
+
+            return access;
+        },
+        
+        status_change_allowed : function(model) {
+            var access = false;
+            
+            var user_id = app.options.user_id;
+            var created_by = model.get('owner');
+            var appointment = model.get('title');
+            
+            if(user_id == created_by) {
+                return true;
+            }
+
+            //'Resistance Workout' and 'Cardio Workout'
+            if(appointment == '3' || appointment == '4') {
+                return true;
+            }
+           
+            return access;
+        }
         
 
     });

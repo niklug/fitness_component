@@ -78,5 +78,13 @@ class FitnessViewNutrition_diaries extends JView {
         $model = $this -> getModel("nutrition_diaries");
         echo json_encode($model->saveAsRecipe($table, $data_encoded));
     }
+    
+    function updateStatus() {
+        $data_encoded = JRequest::getVar('data_encoded');
+        $table = JRequest::getVar('table');
+        require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'nutrition_diary.php';
+        $model = new FitnessModelnutrition_diary();
+        echo $model -> updateStatus($data_encoded, $table);
+    }
    
 }

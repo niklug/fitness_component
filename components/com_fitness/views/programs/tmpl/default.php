@@ -85,7 +85,6 @@ $business_profile_id = $business_profile_id['data'];
             '3' : {'label' : 'CANCELLED', 'class' : 'event_status_cancelled', 'email_alias' : 'AppointmentCancelled'},
             '6' : {'label' : 'COMPLETE', 'class' : 'event_status_complete', 'email_alias' : ''}
         },
-        'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
         'hide_image_class' : 'hideimage',
         'show_send_email' : true,
          setStatuses : function(item_id) {

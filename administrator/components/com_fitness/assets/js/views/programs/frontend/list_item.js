@@ -23,16 +23,23 @@ define([
   
         connectStatus : function() {
             var id = this.model.get('id');
-            
             var status = this.model.get('status');
 
-            var status_obj = $.status(app.options.status_options);
-            
-            var html = status_obj.statusButtonHtml(id, status);
+            var options = _.extend({}, app.options.status_options);
+            if(id) {
+                var status_change_allowed = this.model.get('status_change_allowed');
+                console.log(status_change_allowed);
+                
+                if(status_change_allowed == false) {
+                    options.status_button = 'status_button_not_active';
+                }
 
-            this.$el.find("#status_button_" + id).html(html);
-            
-            this.$el.find("#status_button_" + id + " a").css("cursor", "default");
+                var status_obj = $.status(options);
+
+                this.$el.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
+
+                status_obj.run();
+            }
         },
     });
             

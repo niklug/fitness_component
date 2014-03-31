@@ -610,5 +610,12 @@ class FitnessController extends JController {
         $view = $this -> getView('programs', 'json');
         $view -> event_clients(); 
     }
+    
+    function updateStatus() {
+        $view = $this -> getView('nutrition_diaries', 'json');
+        $view->setModel($this->getModel('nutrition_diaries'));
+        $view -> updateStatus();
+    }
+        
         
 }

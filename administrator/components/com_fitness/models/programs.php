@@ -253,7 +253,13 @@ class FitnessModelprograms extends JModelList {
             
             //frontend client logged
             if($data->current_page == 'my_workouts' AND FitnessHelper::is_client($user_id)) {
+                //$query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
+                $query .= " AND a.owner='$user_id'";
+            }
+            
+            if($data->current_page == 'workout_programs' AND FitnessHelper::is_client($user_id)) {
                 $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
+                $query .= " AND a.owner NOT IN ('$user_id')";
             }
 
             $query .= " ) items_total, ";
@@ -364,7 +370,13 @@ class FitnessModelprograms extends JModelList {
         
         //frontend client logged
         if($data->current_page == 'my_workouts' AND FitnessHelper::is_client($user_id)) {
+            //$query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
+            $query .= " AND a.owner='$user_id'";
+        }
+        
+        if($data->current_page == 'workout_programs' AND FitnessHelper::is_client($user_id)) {
             $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
+            $query .= " AND a.owner NOT IN ('$user_id')";
         }
 
        

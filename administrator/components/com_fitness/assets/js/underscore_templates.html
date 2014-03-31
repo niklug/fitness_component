@@ -1,7 +1,7 @@
 <!--  Status  -->
 <script type="text/template" id="dialog_status_template">
     <div id="<%= wrapper %>">
-        <img class="<%=  hide_image_class %>" src="<%= close_image %>" alt="close" title="close" >
+        <div class="<%=  hide_image_class %>" title="close" ></div>
         <% _.each(statuses, function(item, key){
             if(status_id != key) {
             %>
