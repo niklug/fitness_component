@@ -75,9 +75,7 @@ define([
             var edit_allowed = app.controller.edit_allowed(model);
             var delete_allowed = app.controller.delete_allowed(model);
             var status_change_allowed = app.controller.status_change_allowed(model);
-            
-            console.log(status_change_allowed);
-            
+           
             model.set({edit_allowed : edit_allowed, status_change_allowed : status_change_allowed, delete_allowed : delete_allowed});
             
             

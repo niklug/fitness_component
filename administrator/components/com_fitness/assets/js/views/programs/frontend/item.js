@@ -3,12 +3,14 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/programs/exercises/list',
 	'text!templates/programs/frontend/item.html'
 ], function (
         $,
         _, 
         Backbone, 
         app,
+        Exercises_list_view,
         template
     ) {
 
@@ -24,28 +26,39 @@ define([
             
             app.controller.connectStatus(this.model, this.$el);
             
-            //this.connectComments();
+            app.controller.connectComments(this.model, this.$el);
+            
+            this.connectExercises();
             
             return this;
         },
         
-        
-        
-        connectComments : function() {
-            var comment_options = {
-                'item_id' : this.model.get('id'),
-                'fitness_administration_url' : app.options.ajax_call_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : '#__fitness_exercise_library_comments',
-                'read_only' : true,
-                'anable_comment_email' : true,
-                'comment_method' : 'ExerciseLibraryComment'
-            }
-            var comments = $.comments(comment_options, comment_options.item_id, 0);
-
-            var comments_html = comments.run();
-            $(this.el).find("#comments_wrapper").html(comments_html);
+        events : {
+            "click #pdf_button" : "onClickPdf",
+            "click #email_button" : "onClickEmail"
         },
+        
+        onClickPdf : function() {
+            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=' + this.model.get('id') + '&client_id=' + app.options.user_id;
+            $.fitness_helper.printPage(htmlPage);
+        },
+        
+        onClickEmail : function() {
+            var data = {};
+            data.url = app.options.ajax_call_url;
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
+
+            data.id =  this.model.get('id');
+            data.view = 'Programs';
+            data.method = 'Workout';
+            $.fitness_helper.sendEmail(data);
+        },
+
+        connectExercises : function() {
+            new Exercises_list_view({el : this.$el.find("#exercises_list"), model : this.model, readonly : true});
+        }
 
     });
             

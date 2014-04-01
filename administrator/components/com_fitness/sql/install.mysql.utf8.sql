@@ -1186,17 +1186,26 @@ FOREIGN KEY (group_id) REFERENCES #__usergroups(id) ON DELETE CASCADE
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_recipes_favourites` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `recipe_id` int(11) unsigned NOT NULL,
+  `item_id` int(11) unsigned NOT NULL,
   `client_id` int(11)  NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `recipe_id` (`recipe_id`),
+  KEY `item_id` (`item_id`),
   KEY `client_id` (`client_id`),
-  FOREIGN KEY (recipe_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES #__fitness_nutrition_recipes(id) ON DELETE CASCADE,
   FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
-
+CREATE TABLE IF NOT EXISTS `#__fitness_appointments_favourites` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) unsigned NOT NULL,
+  `client_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`),
+  KEY `client_id` (`client_id`),
+  FOREIGN KEY (item_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE,
+  FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_example_day_meals` (

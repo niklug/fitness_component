@@ -9,13 +9,9 @@
                 var display_add_favourite = 'inline';
                 var display_remove_favourite = 'none';
             } %>
-            <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
+            <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourite" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
 
             <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
-
-            <% if (edit_allowed) { %>
-            <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="trash_item" onclick="javascript:void(0)">[TRASH]</a>
-            <% } %>
             
             <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="close_item" onclick="javascript:void(0)">[CLOSE]</a>
             

@@ -3,77 +3,270 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/exercise_library/frontend/form.html'
-], function ( $, _, Backbone, app, template ) {
+        'collections/programs/select_filter',
+        'views/programs/select_element',
+        'views/programs/exercises/list',
+	'text!templates/programs/frontend/form.html',
+        'jquery.timepicker'
+], function (
+        $,
+        _, 
+        Backbone, 
+        app,
+        Select_filter_collection,
+        Select_element_view,
+        Exercises_list_view,
+        template
+    ) {
 
     var view = Backbone.View.extend({
         
+        initialize : function() {
+            if( 
+                app.collections.appointments 
+                && app.collections.locations
+                && app.collections.session_types
+                && app.collections.session_focuses
+            ) {
+                this.render();
+                return;
+            } 
+      
+            app.collections.appointments = new Select_filter_collection();
+            app.collections.locations = new Select_filter_collection();
+            app.collections.session_types = new Select_filter_collection();
+            app.collections.session_focuses = new Select_filter_collection();
+                       
+            var self = this;
+            $.when (
+                app.collections.appointments.fetch({
+                    data : {table : app.options.db_table_appointments},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }),
+                
+                app.collections.locations.fetch({
+                    data : {table : app.options.db_table_locations, by_business_profile : 1},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }),
+                
+                app.collections.session_types.fetch({
+                    data : {table : app.options.db_table_session_types},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }),
+                
+                app.collections.session_focuses.fetch({
+                    data : {table : app.options.db_table_session_focuses},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                })
+
+            ).then (function(response) {
+                self.render();
+            })
+        },
+
         template:_.template(template),
         
-        render: function(){
+        render : function () {
             var data = this.model.toJSON();
             data.$ = $;
-            var template = _.template(this.template(data));
-            this.$el.html(template);
+            data.app = app;
+            $(this.el).html(this.template(data));
             
-            this.connectStatus();
+            app.controller.connectStatus(this.model, this.$el);
             
-            var id = this.model.get('id');
-            if(id) {
-                this.connectComments();
-                
-                this.connectVideoUpload();
+            app.controller.connectComments(this.model, this.$el);
+            
+            this.connectExercises();
+            
+            this.loadAppointment();
+            
+            var category_id = this.model.get('title');
+        
+            if(category_id) {
+                this.loadSessionType(category_id);
             }
+            
+            var session_type_id = this.model.get('session_type');
+            
+            if(session_type_id) {
+                this.loadSessionFocus(session_type_id);
+            }
+            
+            this.$el.find("#start_date, #finish_date").datepicker({ dateFormat: "yy-mm-dd"});
+            
+            $('#start_time, #finish_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+             
+            this.loadLocations();
+            
             return this;
         },
         
-        connectStatus : function() {
-            var status = $.status(app.options.status_options);
+        events : {
+            "click #pdf_button" : "onClickPdf",
+            "click #email_button" : "onClickEmail",
+            "change #title" : "onChangeAppointment",
+            "change #session_type" : "onChangeSessionType",
+            "change #start_time" : "onChangeStarttime",
         },
         
-        connectComments : function() {
-            var comment_options = {
-                'item_id' : this.model.get('id'),
-                'fitness_administration_url' : app.options.ajax_call_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : '#__fitness_exercise_library_comments',
-                'read_only' : true,
-                'anable_comment_email' : true,
-                'comment_method' : 'ExerciseLibraryComment'
-            }
-            var comments = $.comments(comment_options, comment_options.item_id, 0);
+        onClickPdf : function() {
+            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=' + this.model.get('id') + '&client_id=' + app.options.user_id;
+            $.fitness_helper.printPage(htmlPage);
+        },
+        
+        onClickEmail : function() {
+            var data = {};
+            data.url = app.options.ajax_call_url;
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
 
-            var comments_html = comments.run();
-            $(this.el).find("#comments_wrapper").html(comments_html);
+            data.id =  this.model.get('id');
+            data.view = 'Programs';
+            data.method = 'Workout';
+            $.fitness_helper.sendEmail(data);
         },
-        
-        connectVideoUpload : function() {
-            var videopath = '';
+
+        connectExercises : function() {
             if(this.model.get('id')) {
-                videopath = this.model.get('video');
+                new Exercises_list_view({el : this.$el.find("#exercises_list"), model : this.model, readonly : false});
             }
-            var filename = '';
-            if(typeof videopath !== 'undefined') {
-                var fileNameIndex = videopath.lastIndexOf("/") + 1;
-                filename = videopath.substr(fileNameIndex);
+        },
+        
+        loadAppointment : function() {
+            var appointments_collection = new Backbone.Collection;
+            // filter for "Personal Training", "Semi-Private Training","Resistance Workout", "Cardio Workout"
+           
+            appointments_collection.add([
+                app.collections.appointments.get(1),
+                app.collections.appointments.get(2),
+                app.collections.appointments.get(3),
+                app.collections.appointments.get(4)
+            ]);
+            
+            new Select_element_view({
+                model : this.model,
+                el : this.$el.find("#appointment_select"),
+                collection : appointments_collection,
+                first_option_title : '-Select-',
+                class_name : 'dark_input_style',
+                id_name : 'title',
+                model_field : 'title'
+            }).render();
+            
+            
+        },
+        
+        onChangeAppointment : function(event) {
+            var id = $(event.target).val();
+            this.$el.find("#session_focus_select").empty();
+            this.loadSessionType(id);
+            this.setEndInterval(id);
+        },
+        
+        loadSessionType : function(id) {
+            var session_type_collection = new Backbone.Collection;
+            
+            session_type_collection.add(app.collections.session_types.where({category_id : id}));
+
+            new Select_element_view({
+                model : this.model,
+                el : this.$el.find("#session_type_select"),
+                collection : session_type_collection,
+                first_option_title : '-Select-',
+                class_name : 'dark_input_style',
+                id_name : 'session_type',
+                model_field : 'session_type'
+            }).render();
+        },
+        
+        onChangeSessionType : function(event) {
+            var id = $(event.target).val();
+            this.loadSessionFocus(id);
+        },
+        
+        loadSessionFocus : function(id) {
+            var session_focus_collection = new Backbone.Collection;
+            
+            session_focus_collection.add(app.collections.session_focuses.where({session_type_id : id}));
+
+            new Select_element_view({
+                model : this.model,
+                el : this.$el.find("#session_focus_select"),
+                collection : session_focus_collection,
+                first_option_title : '-Select-',
+                class_name : 'dark_input_style',
+                id_name : 'session_focus',
+                model_field : 'session_focus'
+            }).render();
+        },
+        
+        loadLocations : function() {
+            new Select_element_view({
+                model : this.model,
+                el : this.$el.find("#location_select"),
+                collection : app.collections.locations,
+                first_option_title : '-Select-',
+                class_name : 'dark_input_style',
+                id_name : 'location',
+                model_field : 'location'
+            }).render();
+        },
+        
+        setEndInterval : function(id) {
+            var endInterval;
+            switch(id) {
+                case '1' :
+                   endInterval = 45;
+                   break;
+                case '2' :
+                   endInterval = 30;
+                   break;
+                case '3' :
+                   endInterval = 45;
+                   break;
+                default :
+                   endInterval = 60; 
             }
+            this.set_etparttime(endInterval);
+        },
 
-            var video_upload_options = {
-                'url' : app.options.fitness_frontend_url + '&view=recipe_database&task=uploadVideo&format=text',
-                'video' : filename,
-                'default_video_image' : app.options.default_video_image,
-                'upload_folder' : app.options.video_upload_folder,
-                'preview_height' : '180px',
-                'preview_width' : '250px',
-                'el' : this.$el.find("#video_upload_content"),
-                'video_path' : app.options.video_path,
-                'base_url' : app.options.base_url,
-                'video_name' : this.model.get('id')
+        set_etparttime : function(minutes) {
+            var start_time = this.$el.find("#start_time").val();
+            if(!start_time) return;
+            var start_time = start_time.split(":");
+            var date = new Date();
+            date.setHours(start_time[0]);
+            date.setMinutes(start_time[1]);
+            var newdate = this.addMinutes(date, minutes);
+            var hours = newdate.getHours();
+            var minutes = newdate.getMinutes();
+            $("#finish_time").val(this.pad(hours) + ':' + this.pad(minutes));
+        },
 
-            };
-            var video_upload = $.backbone_video_upload(video_upload_options); 
-            video_upload.render();
-        }
+        addMinutes : function(inDate, inMinutes) {
+            var newdate = new Date();
+            newdate.setTime(inDate.getTime() + inMinutes * 60000);
+            return newdate;
+        },
+
+        pad : function (d) {
+            return (d < 10) ? '0' + d.toString() : d.toString();
+        },
+        
+        onChangeStarttime : function() {
+            var event_id = this.$el.find("#title").val();
+            this.setEndInterval(event_id);
+        },
+        
 
     });
             

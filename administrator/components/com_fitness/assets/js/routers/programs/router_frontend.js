@@ -6,11 +6,15 @@ define([
         'collections/programs/items',
         'models/programs/item',
         'models/programs/request_params_items',
+        'models/programs/favourite',
         'views/programs/frontend/menus/submenu_list',
         'views/programs/frontend/menus/submenu_item',
+        'views/programs/frontend/menus/submenu_form',
         'views/programs/frontend/list',
         'views/programs/select_filter_block',
         'views/programs/frontend/item',
+        'views/programs/frontend/form',
+        'views/programs/backend/comments_block'
         
 ], function (
         $,
@@ -20,11 +24,15 @@ define([
         Items_collection,
         Item_model,
         Request_params_items_model,
+        Favourite_model,
         Submenu_list_view,
         Submenu_item_view,
+        Submenu_form_view,
         List_view,
         Select_filter_block_view,
-        Item_view
+        Item_view,
+        Form_view,
+        Comments_block_view
         
     ) {
 
@@ -63,6 +71,8 @@ define([
             "!/my_favourites": "my_favourites", 
             "!/trash_list": "trash_list", 
             "!/item_view/:id": "item_view",
+            "!/form_view/:id": "form_view",
+            "!/my_favourites" : "my_favourites",
         },
         
         back: function() {
@@ -109,6 +119,14 @@ define([
             this.list_actions();
             
             $("#my_workouts_link").addClass("active_link");
+        },
+        
+        my_favourites : function () {
+            app.models.request_params.set({page : 1, current_page : 'my_favourites', published : '1', uid : app.getUniqueId()});
+            
+            this.list_actions();
+            
+            $("#my_favourites_link").addClass("active_link");
         },
         
         
@@ -239,6 +257,65 @@ define([
             }
         },
         
+        connectComments : function(model, view) {
+            if(model.get('id')) {
+                new Comments_block_view({el : view.find("#comments_block"), model : model, read_only : true});
+            }
+        },
+        
+        add_favourite : function(id) {
+            var favourite_model = new Favourite_model({id : id})
+            favourite_model.save(null, {
+                success: function (model) {
+                    model.trigger('save');
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+
+        remove_favourite : function(id) {
+            var favourite_model = new Favourite_model({id : id})
+            var self = this;
+            favourite_model.destroy({
+                success: function (model) {
+                    model.trigger('detroy');
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        form_view : function(id) {
+            $("#filters_container").empty();
+            if(!parseInt(id)) {
+                this.load_form_view(new Item_model());
+                return;
+            }
+            
+            var self = this;
+            app.models.item.set({id : id});
+            app.models.item.fetch({
+                success: function (model, response) {
+                    if(self.edit_allowed(model)) {
+                        self.load_form_view(model);
+                    } else {
+                        self.navigate("!/workout_programs", true);
+                    }
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            })
+        },
+        
+        load_form_view : function(model) {
+            $("#submenu_container").html(new Submenu_form_view({model : model, request_params_model : app.models.request_params}).render().el);
+            
+            new Form_view({el : $("#main_container"), model : model});
+        },
 
     });
 

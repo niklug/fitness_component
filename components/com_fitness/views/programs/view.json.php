@@ -14,6 +14,7 @@ if(!JSession::checkToken('get')) {
 
 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'programs.php';
 
+
 //=======================================================
 // AJAX View
 //======================================================
@@ -50,6 +51,12 @@ class FitnessViewPrograms extends JView {
     
     function event_clients() {
          echo json_encode($this->admin_programs_model->event_clients());
+    }
+    
+    function favourite_event() {
+        $helper = new FitnessHelper();
+        $table = '#__fitness_appointments_favourites';
+        echo json_encode($helper->favourite_item($table));
     }
    
 }

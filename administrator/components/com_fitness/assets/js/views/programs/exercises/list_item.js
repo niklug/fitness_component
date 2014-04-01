@@ -14,6 +14,7 @@ define([
             var data = this.model.toJSON();
             data.app = app;
             data.$ = $;
+            data.readonly = this.options.readonly || false;
             var template = _.template(this.template(data));
             this.$el.append(template);
             

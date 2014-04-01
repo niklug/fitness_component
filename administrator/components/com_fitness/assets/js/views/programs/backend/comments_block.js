@@ -27,7 +27,7 @@ define([
                 'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : '#__fitness_program_comments',
-                'read_only' : false,
+                'read_only' : this.options.read_only || false,
                 //'anable_comment_email' : true,
                 //'comment_method' : 'ExerciseLibraryComment'
             }

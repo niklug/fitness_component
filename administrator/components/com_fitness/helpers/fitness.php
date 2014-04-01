@@ -961,7 +961,7 @@ class FitnessHelper extends FitnessFactory
                    (SELECT ROUND(SUM(total_sugars),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS total_sugars,
                    (SELECT ROUND(SUM(sodium),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS sodium,";
         
-        $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE recipe_id=a.id AND client_id='$user_id') AS is_favourite ";       
+        $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite ";       
         
         $query .=  " FROM #__fitness_nutrition_recipes AS a"
                 . " "
@@ -1775,6 +1775,59 @@ class FitnessHelper extends FitnessFactory
             $query .= "ORDER BY c.name";
 
             return self::customQuery($query, 1);
+        }
+        
+        public function favourite_item($table) {
+            
+            $method = JRequest::getVar('_method');
+
+            if(!$method) {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+
+            $model = json_decode(JRequest::getVar('model'));
+
+            $user = &JFactory::getUser();
+
+            $data = new stdClass();
+
+            $data->item_id = $model->id;   
+
+            $data->client_id = $user->id;
+
+            $helper = new FitnessHelper();
+
+
+            switch ($method) {
+                case 'GET': // Get Item(s)
+
+                    break;
+                case 'PUT': 
+                    //update
+                    $query = "SELECT id FROM $table WHERE client_id='$data->client_id' AND item_id='$data->item_id'";
+                    $exists = FitnessHelper::customQuery($query, 0);
+                    if($exists) return;
+
+                    $inserted_id = $helper->insertUpdateObj($data, $table);
+                    return $inserted_id;
+                    break;
+                case 'POST': // Create
+
+                    break;
+                case 'DELETE': // Delete Item
+                    $db = JFactory::getDBO();
+                    $id = JRequest::getVar('id', 0, '', 'INT');
+                    $query = "DELETE FROM $table WHERE client_id='$data->client_id' AND item_id='$id'";
+                    $db->setQuery($query);
+                    if (!$db->query()) {
+                        throw new Exception($e->getMessage());
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            return $model;
         }
 }
 

@@ -86,7 +86,7 @@ class FitnessModelrecipe_database extends JModelList {
         $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         
         if ($current_page == 'my_favourites') {
-            $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
+            $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.item_id=a.id";
         }
         
         
@@ -146,7 +146,7 @@ class FitnessModelrecipe_database extends JModelList {
                    (SELECT ROUND(SUM(total_sugars),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS total_sugars,
                    (SELECT ROUND(SUM(sodium),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS sodium,";
                 
-        $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE recipe_id=a.id AND client_id='$user_id') AS is_favourite";       
+        $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite";       
                 
         $query .= " FROM  #__fitness_nutrition_recipes AS a";
 
@@ -155,7 +155,7 @@ class FitnessModelrecipe_database extends JModelList {
         
         
         if ($current_page == 'my_favourites') {
-            $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.recipe_id=a.id";
+            $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.item_id=a.id";
         }
         
         $query .= " WHERE a.state='$state'";
@@ -329,67 +329,6 @@ class FitnessModelrecipe_database extends JModelList {
         $result = array( 'status' => $status, 'data' => $recipe);
         
         return $result;
-    }
-    
-
-    
-    
-    public function favourite_recipe() {
-            
-        $method = JRequest::getVar('_method');
-
-        if(!$method) {
-            $method = $_SERVER['REQUEST_METHOD'];
-        }
-
-        $model = json_decode(JRequest::getVar('model'));
-        
-        $user = &JFactory::getUser();
-
-        
-        $data = new stdClass();
-
-        
-        $data->recipe_id = $model->id;   
-        
-        $data->client_id = $user->id;
-
-
-        $table = '#__fitness_nutrition_recipes_favourites';
-
-        $helper = new FitnessHelper();
-
-
-        switch ($method) {
-            case 'GET': // Get Item(s)
-
-                break;
-            case 'PUT': 
-                //update
-                $query = "SELECT id FROM $table WHERE client_id='$data->client_id' AND recipe_id='$data->recipe_id'";
-                $exists = FitnessHelper::customQuery($query, 0);
-                if($exists) return;
-                
-                $inserted_id = $helper->insertUpdateObj($data, $table);
-                return $inserted_id;
-                break;
-            case 'POST': // Create
-                
-                break;
-            case 'DELETE': // Delete Item
-                $db = JFactory::getDBO();
-                $id = JRequest::getVar('id', 0, '', 'INT');
-                $query = "DELETE FROM $table WHERE client_id='$data->client_id' AND recipe_id='$id'";
-                $db->setQuery($query);
-                if (!$db->query()) {
-                    throw new Exception($e->getMessage());
-                }
-                break;
-
-            default:
-                break;
-        }
-        return $model;
     }
     
 

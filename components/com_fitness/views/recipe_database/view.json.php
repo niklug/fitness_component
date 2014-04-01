@@ -61,15 +61,9 @@ class FitnessViewRecipe_database extends JView {
     }
     
     function favourite_recipe() {
-        $model = $this -> getModel("recipe_database");
-        echo json_encode($model->favourite_recipe());
-    }
-    
-    function removeFavourite() {
-        $table = JRequest::getVar('table');
-        $data_encoded = JRequest::getVar('data_encoded','','POST');
-        $model = $this -> getModel("recipe_database");
-        echo json_encode($model->removeFavourite($table, $data_encoded));
+        $helper = new FitnessHelper();
+        $table = '#__fitness_nutrition_recipes_favourites';
+        echo json_encode($helper->favourite_item($table));
     }
     
 

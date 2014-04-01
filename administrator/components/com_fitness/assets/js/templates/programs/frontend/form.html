@@ -1,92 +1,174 @@
-<div class="fitness_block_wrapper" style="margin-top: 20px;padding: 5px;">
+<div class="fitness_block_wrapper" style="margin-top: 20px;">
     <table width="100%">
         <tr>
-            <td style="vertical-align: top;" width="50%">
-                <div id="select_filter_wrapper"></div>
+            <td width="50%" style="vertical-align: top;padding-left: 0;">
+                <div class="internal_wrapper">
+                    <h5 class="orange_text">APPOINTMENT OVERVIEW</h5>
+                    <hr class="orange_line">
+                    <table width="100%">
+                        <tr>
+                            <td width="130">
+                                <label>Appointment</label>
+                            </td>
+                            <td id="appointment_select">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Session Type</label> 
+                            </td>
+                            <td id="session_type_select">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Session Focus</label> 
+                            </td>
+                            <td id="session_focus_select">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Start Date/Time</label>
+                            </td>
+                            <td>
+                                <%
+                                var start_date = '';
+                                if(starttime) {
+                                start_date = starttime.substring(0,10);
+                                }
+                                %>
+                                <input class="dark_input_style" style="width:80px;"  name="start_date" id="start_date" size="12" type="text" value="<%= start_date  %>">
+                                <%
+                                var start_time = '';
+                                if(starttime) {
+                                start_time = starttime.substring(10,16);
+                                }
+                                %>      
+                                <input class="dark_input_style" style="width:55px;margin-left: 10px;"  size="5" type="text" name="start_time" id="start_time"  value="<%= start_time  %>">
+                            </td>
+                        </tr>
+
+                        <% if(id) { %>
+                        <tr>
+                            <td>
+                                <label>Finish Date/Time</label>
+                            </td>
+                            <td>
+                                <%
+                                var finish_date = '';
+                                if(endtime) {
+                                finish_date = endtime.substring(0,10);
+                                }
+                                %>
+                                <input class="dark_input_style" style="width:80px;"  name="finish_date" id="finish_date" size="12" type="text" value="<%= finish_date %>">
+                                <% 
+                                var finish_time = '';
+                                if(endtime) {
+                                finish_time = endtime.substring(10,16);
+                                }  
+                                %>
+                                <input class="dark_input_style" style="width:55px;margin-left: 10px;"  size="5" type="text" name="finish_time" id="finish_time"  value="<%= finish_time  %>">
+                            </td>
+                        </tr>
+                        <% } else { %>
+                        <input  name="finish_date" id="finish_date" type="hidden">
+                        <input type="hidden" name="finish_time" id="finish_time">
+                        <% } %>
+
+                        <tr>
+                            <td>
+                                <label>Location</label>
+                            </td>
+                            <td id="location_select">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Status</td>
+                            <td id="status_button_place_<%= client_item_id %>" ></td>
+                        </tr>
+                    </table>
+                </div>
             </td>
+            <td style="vertical-align:top; padding-right: 0;">
+                <div class="internal_wrapper">
+                    <h5 class="orange_text">CLIENTS & TRAINERS</h5>
+                    <hr class="orange_line">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                Client Name
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= client_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Primary Trainer
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= trainer_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;">
+                                Secondary Trainers
+                            </td>
+                            <td>
+                                <br/>
+                                <span class="grey_title">
+                                    <%
+                                    _.each(secondary_trainers, function(item, key){ %>
+                                    <%=  item + " <br/>" %>
+                                    <%
+                                    })
 
-            <td style="vertical-align: top;">
-                <table width="100%">
-                    <tr>
-                        <td width="100">
-                            <label>Exercise Name</label>
-                        </td>
-                        <td>
-                            <input id="exercise_name" size="50" type="text" title="" value="<%= exercise_name %>" name="exercise_name">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Author Name</label>
-                        </td>
-                        <td id="created_by" >
-                            <%= created_by_name %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>User Group</label>
-                        </td>
-                        <td id="user_group" >
-                            <%= user_group_name %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Created Date</label>
-                        </td>
-                        <td id="created" >
-                            <%
-                            var d1 = new Date(Date.parse(created));            
-                            var created = moment(d1).format("dddd, D MMM  YYYY");      
-                            %>
-                            <% if (id) { %>
-                                <%= created %>
-                            <% } %> 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Status</label>
-                        </td>
-                        <td id="status_button_place_<%= id %>">
-                            <%= $.fitness_helper.setExerciseLibraryStatus(status, id) %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Assessed By</label>
-                        </td>
-                        <td id="assessed_by" >
-                            <%= assessed_by_name || '-' %>
-                        </td>
-                    </tr>
-                </table>
-
-                </br>
-                <div id="video_upload_content"></div>
-                <!--
-                <% if(id) { %>
-                    <br><br>
-                    <label>Video Preview</label>
-                    <br>
-                    <div style="background-size: 440px 250px; width:auto; height:250px;" id="exercise_video"></div>
-                <% } %>
-                -->
+                                    %>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </td>
         </tr>
-        <% if(id) { %>
-        <tr>
-            <td colspan="2">
-                <br/>
-                <div class="clr"></div>
-                <div id="comments_wrapper"></div>
-                <div class="clr"></div>
-                <input id="add_comment_0" class="" type="button" value="Add Comment" >
-                <div class="clr"></div>
-            </td>
-        </tr>
-        <% } %>
     </table>
+
+
+    <div class="internal_wrapper">
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td class="left">
+                        <h5 class="orange_text">WORKOUT INSTRUCTIONS</h5>
+                    </td>
+                    <td>
+                        <a class="pdf_button" style="float:right; margin-left: 10px;" title="Save in PDF" href="javascript:void(0)" id="pdf_button"></a>
+                        <a class="email_button" style="float:right; margin-left: 10px;" title="Send by Email" href="javascript:void(0)" id="email_button"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr class="orange_line">
+        <textarea style="width:98%;" cols="20" id="description" name="description" rows="5" ><%= description %></textarea>  
+    </div>
+    <br/>
+
+    <div style="width:100%" id="exercises_list"></div>
+
+
+    <br/>
+    <div class="internal_wrapper">
+        <div style="width:100%;" id="comments_block"></div>
+    </div>
 </div>
+
 

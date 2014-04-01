@@ -40,8 +40,9 @@ class FitnessViewExercise_library extends JView {
     }
     
     function favourite_exercise() {
-        $model = $this -> getModel("exercise_library");
-        echo json_encode($model->favourite_exercise());
+        $helper = new FitnessHelper();
+        $table = '#__fitness_exercise_library_favourites';
+        echo json_encode($helper->favourite_item($table));
     }
    
 }

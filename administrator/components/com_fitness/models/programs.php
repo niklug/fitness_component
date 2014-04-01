@@ -260,7 +260,11 @@ class FitnessModelprograms extends JModelList {
                 $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
                 $query .= " AND a.owner NOT IN ('$user_id')";
             }
-
+            
+            if ($data->current_page  == 'my_favourites') {
+                $query .= " AND a.id IN (SELECT item_id FROM #__fitness_appointments_favourites WHERE client_id='$user_id')";
+            }
+        
             $query .= " ) items_total, ";
         }
         //end get total number
@@ -274,6 +278,8 @@ class FitnessModelprograms extends JModelList {
             $query .= " (SELECT id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id' LIMIT 1) client_item_id,";
             $query .= " (SELECT status FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id' LIMIT 1) status,";
         }
+        
+        $query .= " (SELECT id FROM #__fitness_appointments_favourites WHERE item_id=a.id AND client_id='$user_id') is_favourite, "; 
         
         // if logged simple trainer associated to the event's clients 
         $query .= "  (SELECT GROUP_CONCAT(id) FROM #__fitness_appointment_clients WHERE client_id IN  (SELECT user_id FROM #__fitness_clients WHERE (primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AND state='1') AND event_id=a.id) is_associated_trainer";
@@ -377,6 +383,10 @@ class FitnessModelprograms extends JModelList {
         if($data->current_page == 'workout_programs' AND FitnessHelper::is_client($user_id)) {
             $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
             $query .= " AND a.owner NOT IN ('$user_id')";
+        }
+        
+        if ($data->current_page  == 'my_favourites') {
+            $query .= " AND a.id IN (SELECT item_id FROM #__fitness_appointments_favourites WHERE client_id='$user_id')";
         }
 
        

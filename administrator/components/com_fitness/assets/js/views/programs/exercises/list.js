@@ -22,6 +22,8 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
+            this.readonly = this.options.readonly || false;
+
             app.collections.exercises = new Exercises_collection();
             var self = this;
             $.when (
@@ -43,6 +45,7 @@ define([
             var data = {};
             data.$ = $;
             data.app = app;
+            data.readonly = this.readonly;
             $(this.el).html(this.template(data));
             
             this.container_el = this.$el.find("#items_container");
@@ -77,7 +80,7 @@ define([
         },
         
         addItem : function(model) {
-            this.item = new List_item_view({el : this.container_el, model : model}).render(); 
+            this.item = new List_item_view({el : this.container_el, model : model, readonly : this.readonly}).render(); 
         },
         
         clearItems : function() {
@@ -85,7 +88,10 @@ define([
         },
         
         onClickAdd : function() {
-            var model = new Item_model({event_id : this.model.get('id'), order : this.$el.find("#exercise_table tbody tr").length});
+            var model = new Item_model({
+                event_id : this.model.get('id'),
+                order : this.$el.find("#exercise_table tbody tr").length,
+            });
             this.saveItem(model);
         },
         

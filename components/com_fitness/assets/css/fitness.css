@@ -1066,3 +1066,40 @@ td.center, th.center, .center {
 #dialog_status_wrapper a{
     margin: 5px;
 }
+
+
+.drag_item {
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/move_arrow.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 22px auto;
+    cursor: move;
+}
+
+.search_video_icon {
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/search_video.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+.video_link_icon {
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/video_link.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+
+.video_link_icon_32 {
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/video_link.png");
+    background-repeat: no-repeat;
+    background-size: 32px auto;
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+}
