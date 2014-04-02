@@ -107,6 +107,6 @@ $business_profile_id = $business_profile_id['data'];
         app.options = options;
     });
 </script>
-
+<?php //JFactory::getDocument()->addScript(JURI::root() . "administrator/components/com_fitness/assets/js/lib/jquery.js"); ?>
 <script src="<?php echo JURI::root(); ?>administrator/components/com_fitness/assets/js/config.js" type="text/javascript"></script>
 <script src="<?php echo JURI::root(); ?>administrator/components/com_fitness/assets/js/main_programs_frontend.js" type="text/javascript"></script>

@@ -17,6 +17,8 @@ require([
     
 
 ], function($, _, Backbone, moment, app, Controller, Main_menu_view) {
+    //console.log($.fn.jquery);
+
     $.ajax_indicator({});
     $.fitness_helper = $.fitness_helper(app.options);
     Backbone.emulateHTTP = true ;

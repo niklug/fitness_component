@@ -1737,11 +1737,29 @@ class FitnessHelper extends FitnessFactory
         
         
         function get_trainers() {
+            $primary_only = JRequest::getVar('primary_only');
+            
+            $secondary_only = JRequest::getVar('secondary_only');
+            
+            $client_id = JRequest::getVar('client_id');
+            
             $query = "SELECT CONCAT(primary_trainer, ',', other_trainers) AS trainers, business_profile_id";
+            
+            if($primary_only) {
+                $query = "SELECT primary_trainer AS trainers, business_profile_id";
+            }
+            
+            if($secondary_only) {
+                $query = "SELECT other_trainers AS trainers, business_profile_id";
+            }
             
             $query .= " FROM #__fitness_clients";
             
             $query .= "  WHERE state='1'";
+            
+            if($client_id) {
+                $query .= "  and user_id='$client_id' LIMIT 1";
+            }
             
             $data = self::customQuery($query, 1);
             

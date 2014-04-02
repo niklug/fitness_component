@@ -1,5 +1,17 @@
 require.config({
     //baseUrl: set up in view,
+    
+    map: {
+      // '*' means all modules will get 'jquery-private'
+      // for their 'jquery' dependency.
+      '*': { 'jquery': 'jquery_private' },
+
+      // 'jquery-private' wants the real jQuery module
+      // though. If this line was not here, there would
+      // be an unresolvable cyclic dependency.
+      'jquery_private': { 'jquery': 'jquery' }
+    },
+    
     shim: {
         underscore: {
             exports: '_'
@@ -43,9 +55,11 @@ require.config({
             deps: ['jquery'],
             exports: 'jquery.tableDnD'
         },
+
     },
     paths: {
         jquery: 'lib/jquery',
+        jquery_private: 'lib/jquery_private',
         'jqueryui': 'lib/jquery-ui',
         'jquery.validate' : 'lib/jquery.validate.min',
         underscore: 'lib/underscore-min',

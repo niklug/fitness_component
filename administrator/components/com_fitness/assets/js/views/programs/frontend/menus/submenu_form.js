@@ -23,7 +23,7 @@ define([
             "click #cancel" : "onClickCancel",
         },
 
-                onClickSave : function() {
+        onClickSave : function() {
             this.save_method = 'save';
             this.saveItem();
         },
@@ -39,7 +39,12 @@ define([
         },
 
         onClickCancel : function() {
-            app.controller.navigate("!/list_view", true);
+            var id = this.model.get('id');
+            if(id) {
+                app.controller.navigate("!/item_view/" + id, true);
+            } else {
+                app.controller.back();
+            }
         },
         
         
@@ -79,17 +84,15 @@ define([
 
             data.owner = app.options.user_id;
             
-            data.frontend_published = $('#frontend_published:checked').val() || '0';
+            data.frontend_published = '1';
             
-            data.published = $('#published:checked').val() || '0';
+            data.published = '1';
             
-            data.business_profile_id = $('#business_profile_select').val();
+            data.business_profile_id = app.options.business_profile_id;
             
-            data.trainer_id = $('#trainer_id').val();
+            data.client_id = app.options.user_id;
             
-            data.auto_publish_workout = $('#auto_publish_workout').val();
-            
-            data.auto_publish_event = $('#auto_publish_event').val();
+            data.trainer_id = app.collections.trainers.models[0].get('id');
             
             data.description = $('#description').val();
             
@@ -140,11 +143,11 @@ define([
                     if(self.save_method == 'save') {
                         app.controller.navigate("!/form_view/" + id, true);
                     } else if(self.save_method == 'save_close') {
-                        app.controller.navigate("!/list_view", true);
+                        app.controller.navigate("!/item_view/" + id, true);
                     } else if(self.save_method == 'save_new') {
                         app.controller.navigate("!/form_view/0", true);
                     } else {
-                        app.controller.navigate("!/list_view", true);
+                        app.controller.navigate("!/my_workouts", true);
                     }
                 },
                 error: function (model, response) {

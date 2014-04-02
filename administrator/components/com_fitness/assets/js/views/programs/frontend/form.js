@@ -4,6 +4,7 @@ define([
 	'backbone',
         'app',
         'collections/programs/select_filter',
+        'collections/programs/trainers',
         'views/programs/select_element',
         'views/programs/exercises/list',
 	'text!templates/programs/frontend/form.html',
@@ -14,6 +15,7 @@ define([
         Backbone, 
         app,
         Select_filter_collection,
+        Trainers_collection, 
         Select_element_view,
         Exercises_list_view,
         template
@@ -27,6 +29,7 @@ define([
                 && app.collections.locations
                 && app.collections.session_types
                 && app.collections.session_focuses
+                && app.collections.trainers
             ) {
                 this.render();
                 return;
@@ -36,6 +39,7 @@ define([
             app.collections.locations = new Select_filter_collection();
             app.collections.session_types = new Select_filter_collection();
             app.collections.session_focuses = new Select_filter_collection();
+            app.collections.trainers = new Trainers_collection();
                        
             var self = this;
             $.when (
@@ -62,6 +66,13 @@ define([
                 
                 app.collections.session_focuses.fetch({
                     data : {table : app.options.db_table_session_focuses},
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                }),
+                
+                app.collections.trainers.fetch({
+                    data : {primary_only : true, client_id : app.options.user_id},
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
@@ -102,8 +113,8 @@ define([
             
             this.$el.find("#start_date, #finish_date").datepicker({ dateFormat: "yy-mm-dd"});
             
-            $('#start_time, #finish_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
-             
+            $("#start_time, #finish_time").timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+
             this.loadLocations();
             
             return this;
@@ -115,6 +126,8 @@ define([
             "change #title" : "onChangeAppointment",
             "change #session_type" : "onChangeSessionType",
             "change #start_time" : "onChangeStarttime",
+            "focusout #start_time" : "onChangeStarttime",
+            "mouseout #start_time" : "onChangeStarttime",
         },
         
         onClickPdf : function() {
@@ -241,6 +254,7 @@ define([
 
         set_etparttime : function(minutes) {
             var start_time = this.$el.find("#start_time").val();
+            console.log(start_time);
             if(!start_time) return;
             var start_time = start_time.split(":");
             var date = new Date();
@@ -263,11 +277,11 @@ define([
         },
         
         onChangeStarttime : function() {
-            var event_id = this.$el.find("#title").val();
-            this.setEndInterval(event_id);
+            var appointment_id = this.$el.find("#title").val();
+            this.setEndInterval(appointment_id);
         },
         
-
+       
     });
             
     return view;

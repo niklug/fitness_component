@@ -24,7 +24,7 @@ define([
             published : '1',
             calid : '0',
             auto_publish_workout : '',
-            auto_publish_event : ''
+            auto_publish_event : '',
         },
         
         validate: function(attrs, options) {

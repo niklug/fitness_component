@@ -49,7 +49,7 @@ define([
                 return new Date().getUTCMilliseconds();
             }
                         
-            app.models.item = new Item_model();
+            app.models.item = new Item_model({});
             
             app.collections.items = new Items_collection();
             
@@ -60,7 +60,7 @@ define([
             }
             //
             
-            app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id});
+            app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id, current_page : 'my_workouts'});
             app.models.request_params.bind("change", this.get_items, this);
         },
 
@@ -239,6 +239,9 @@ define([
         
         connectStatus : function(model, view) {
             var id = model.get('client_item_id');
+            if(!id) {
+                return;
+            }
             var status = model.get('status');
 
             var options = _.extend({}, app.options.status_options);
@@ -298,6 +301,7 @@ define([
             var self = this;
             app.models.item.set({id : id});
             app.models.item.fetch({
+                wait : true,
                 success: function (model, response) {
                     if(self.edit_allowed(model)) {
                         self.load_form_view(model);
@@ -312,6 +316,7 @@ define([
         },
         
         load_form_view : function(model) {
+
             $("#submenu_container").html(new Submenu_form_view({model : model, request_params_model : app.models.request_params}).render().el);
             
             new Form_view({el : $("#main_container"), model : model});

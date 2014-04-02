@@ -24,7 +24,7 @@ define([
             "click #clear_all" : "clearAll",
             "click #view_trash" : "onClickViewTrash",
             "click #close_trash_list" : "onClickCloseTrashList",
-            "click #add_item" : "onClickAddItem",
+            "click #new_item" : "onClickAddItem",
             "change #sort_filter" : "onChangeSortFilter",
         },
         

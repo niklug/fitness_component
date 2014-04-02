@@ -83,7 +83,7 @@ class FitnessModelprograms extends JModelList {
         $model = json_decode(JRequest::getVar('model'));
         
         $id = JRequest::getVar('id', 0, '', 'INT');
-
+        
         $table = '#__dc_mv_events';
 
         $helper = new FitnessHelper();
@@ -124,6 +124,14 @@ class FitnessModelprograms extends JModelList {
                 break;
             case 'POST': // Create
                 $id = $helper->insertUpdateObj($model, $table);
+                
+                if($model->client_id) {
+                    $table = '#__fitness_appointment_clients';
+                    $data = new stdClass();
+                    $data->event_id = $id;
+                    $data->client_id = $model->client_id;
+                    $helper->insertUpdateObj($data, $table);
+                }
                 break;
             case 'DELETE': // Delete Item
                 $id = JRequest::getVar('id', 0, '', 'INT');
@@ -388,8 +396,7 @@ class FitnessModelprograms extends JModelList {
         if ($data->current_page  == 'my_favourites') {
             $query .= " AND a.id IN (SELECT item_id FROM #__fitness_appointments_favourites WHERE client_id='$user_id')";
         }
-
-       
+        
         $query_type = 1;
         if($id) {
             $query .= " AND a.id='$id' ";
@@ -412,7 +419,7 @@ class FitnessModelprograms extends JModelList {
 
 
         $items = FitnessHelper::customQuery($query, $query_type);
-        
+
         if(!$id) {
             $i = 0;
             foreach ($items as $item) {
