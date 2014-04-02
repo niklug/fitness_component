@@ -91,9 +91,9 @@ define([
             data.app = app;
             $(this.el).html(this.template(data));
             
-            app.controller.connectStatus(this.model, this.$el);
+            app.controller.connectStatus(this.model, $(this.el));
             
-            app.controller.connectComments(this.model, this.$el);
+            app.controller.connectComments(this.model, $(this.el));
             
             this.connectExercises();
             
@@ -111,9 +111,9 @@ define([
                 this.loadSessionFocus(session_type_id);
             }
             
-            this.$el.find("#start_date, #finish_date").datepicker({ dateFormat: "yy-mm-dd"});
+            $(this.el).find("#start_date, #finish_date").datepicker({ dateFormat: "yy-mm-dd"});
             
-            $("#start_time, #finish_time").timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+            $(this.el).find("#start_time, #finish_time").timepicker({ 'timeFormat': 'H:i', 'step': 15 });
 
             this.loadLocations();
             
@@ -150,7 +150,7 @@ define([
 
         connectExercises : function() {
             if(this.model.get('id')) {
-                new Exercises_list_view({el : this.$el.find("#exercises_list"), model : this.model, readonly : false});
+                new Exercises_list_view({el : $(this.el).find("#exercises_list"), model : this.model, readonly : false});
             }
         },
         
@@ -167,7 +167,7 @@ define([
             
             new Select_element_view({
                 model : this.model,
-                el : this.$el.find("#appointment_select"),
+                el : $(this.el).find("#appointment_select"),
                 collection : appointments_collection,
                 first_option_title : '-Select-',
                 class_name : 'dark_input_style',
@@ -180,7 +180,7 @@ define([
         
         onChangeAppointment : function(event) {
             var id = $(event.target).val();
-            this.$el.find("#session_focus_select").empty();
+            $(this.el).find("#session_focus_select").empty();
             this.loadSessionType(id);
             this.setEndInterval(id);
         },
@@ -192,7 +192,7 @@ define([
 
             new Select_element_view({
                 model : this.model,
-                el : this.$el.find("#session_type_select"),
+                el : $(this.el).find("#session_type_select"),
                 collection : session_type_collection,
                 first_option_title : '-Select-',
                 class_name : 'dark_input_style',
@@ -213,7 +213,7 @@ define([
 
             new Select_element_view({
                 model : this.model,
-                el : this.$el.find("#session_focus_select"),
+                el : $(this.el).find("#session_focus_select"),
                 collection : session_focus_collection,
                 first_option_title : '-Select-',
                 class_name : 'dark_input_style',
@@ -225,7 +225,7 @@ define([
         loadLocations : function() {
             new Select_element_view({
                 model : this.model,
-                el : this.$el.find("#location_select"),
+                el : $(this.el).find("#location_select"),
                 collection : app.collections.locations,
                 first_option_title : '-Select-',
                 class_name : 'dark_input_style',
@@ -253,7 +253,7 @@ define([
         },
 
         set_etparttime : function(minutes) {
-            var start_time = this.$el.find("#start_time").val();
+            var start_time = $(this.el).find("#start_time").val();
             console.log(start_time);
             if(!start_time) return;
             var start_time = start_time.split(":");
@@ -277,7 +277,7 @@ define([
         },
         
         onChangeStarttime : function() {
-            var appointment_id = this.$el.find("#title").val();
+            var appointment_id = $(this.el).find("#title").val();
             this.setEndInterval(appointment_id);
         },
         
