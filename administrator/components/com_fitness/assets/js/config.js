@@ -55,7 +55,7 @@ require.config({
             deps: ['jquery'],
             exports: 'jquery.tableDnD'
         },
-
+        
     },
     paths: {
         jquery: 'lib/jquery',

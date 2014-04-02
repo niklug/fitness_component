@@ -126,8 +126,8 @@ define([
             "change #title" : "onChangeAppointment",
             "change #session_type" : "onChangeSessionType",
             "change #start_time" : "onChangeStarttime",
-            "focusout #start_time" : "onChangeStarttime",
-            "mouseout #start_time" : "onChangeStarttime",
+            //"focusout #start_time" : "onChangeStarttime",
+            //"mouseout #start_time" : "onChangeStarttime",
         },
         
         onClickPdf : function() {

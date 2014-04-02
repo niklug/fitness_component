@@ -1,3 +1,3 @@
 define(['lib/jquery'], function () {
-    return jQuery.noConflict(true);
+    return jQuery.noConflict();
 });
