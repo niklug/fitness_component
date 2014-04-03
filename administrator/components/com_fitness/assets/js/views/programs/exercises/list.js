@@ -287,14 +287,14 @@ define([
        onClickSearchVideo : function(event) {
            var exercise_id = $(event.target).attr('data-id');
            
-           var el_url = app.options.base_url + 'administrator/index.php?option=com_fitness&view=exercise_library&tmpl=component&event_id=' + this.model.get('id') + '&exercise_id=' + exercise_id;
+           var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=exercise_library&event_id=' + this.model.get('id') + '&exercise_id=' + exercise_id;
 
            window.location = el_url;
        },
        
        onClickShowVideo : function(event) {
            var id = $(event.target).attr('data-id');
-           var el_url = app.options.base_url + 'administrator/index.php?option=com_fitness&view=exercise_library#!/form_view/' + id;
+           var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=exercise_library#!/form_view/' + id;
 
            window.open(el_url,'_blank');
        }

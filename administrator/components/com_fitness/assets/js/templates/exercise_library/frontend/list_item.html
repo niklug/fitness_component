@@ -34,7 +34,12 @@
                             <div data-id="<%= id %>"  class="view_exercise" style="cursor:pointer;text-align: center;background-size: 250px auto; border: 3px solid #FFFFFF; height:150px; width: 250px;background-image: url('<%= thumbnail %>');" ></div>
                             <% } %>
                         </td>
+                         
                         <td>
+                            <% if(app.options.exercise_id) { %>
+                                <a class="add_exercise" title="" style="cursor: pointer;"  onclick="javascript:void(0)" data-id="<%= id %>" >[add to program]</a>
+                            <% } %> 
+                        
                             <% if ((current_page == 'my_exercises') || (current_page == 'exercise_database')) { %>
                                 <br/><br/>
                                 <% if (is_favourite) {

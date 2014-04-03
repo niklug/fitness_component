@@ -239,7 +239,7 @@ define([
             });
         },
         
-        add_event_exercises : function(id, count) {
+        add_event_exercises : function(id) {
             var model = new Exercise_model();
             
             var video_model = app.collections.items.get(id);
@@ -261,7 +261,7 @@ define([
         },
         
         route_program : function() {
-            var url = app.options.base_url + 'administrator/index.php?option=com_fitness&view=programs#!/form_view/' + app.options.event_id;
+            var url = app.options.base_url_relative + 'index.php?option=com_fitness&view=programs#!/form_view/' + app.options.event_id;
             window.location = url;
         }
     });

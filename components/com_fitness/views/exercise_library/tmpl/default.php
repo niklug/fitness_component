@@ -45,6 +45,7 @@ $business_profile_id = $business_profile_id['data'];
         'fitness_frontend_url': '<?php echo JURI::root(); ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         'calendar_frontend_url': '<?php echo JURI::root() ?>index.php?option=com_multicalendar&task=load&calid=0',
         'base_url': '<?php echo JURI::root(); ?>',
+        'base_url_relative': '<?php echo JURI::base(); ?>',
         'ajax_call_url': '<?php echo JURI::root(); ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         'user_name': '<?php echo JFactory::getUser()->name; ?>',
         'user_id': '<?php echo JFactory::getUser()->id; ?>',
@@ -64,7 +65,10 @@ $business_profile_id = $business_profile_id['data'];
         'video_path' : 'images/Exercise_Library_Videos',
         
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
-        'business_profile_id' : '<?php echo $business_profile_id; ?>'
+        'business_profile_id' : '<?php echo $business_profile_id; ?>',
+        
+        'event_id' : '<?php echo JRequest::getVar('event_id') ?>',
+        'exercise_id' : '<?php echo JRequest::getVar('exercise_id') ?>',
     };
     
     //status class

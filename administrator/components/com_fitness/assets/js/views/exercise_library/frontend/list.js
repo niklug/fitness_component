@@ -49,7 +49,7 @@ define([
             "click .trash_exercise" : "onClickTrashExercise",
             "click .delete_exercise" : "onClickDeleteExercise",
             "click .restore_exercise" : "onClickRestoreExercisee",
-
+            "click .add_exercise" : "onClickAddExercise",
         },
         
         addItem : function(model) {
@@ -103,6 +103,10 @@ define([
         onClickViewExercise : function(event) {
             var id = $(event.target).attr('data-id');
             app.controller.navigate("!/item_view/" + id, true);
+        },
+        onClickAddExercise : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.add_event_exercise(id);
         }
         
     });

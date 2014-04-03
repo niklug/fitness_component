@@ -53,7 +53,7 @@ define([
             "click .view" : "onClickView",
             "click .copy_exercise" : "onClickCopyExercise",
             "click #select_trashed" : "onClickSelectTrashed",
-            "click .add_exercise" : "onClickAddExersice",
+            "click .add_exercise" : "onClickAddExercise",
         },
         
         addItem : function(model) {
@@ -156,7 +156,7 @@ define([
             app.controller.copy_exercise(id);
         },
         
-        onClickAddExersice : function(event) {
+        onClickAddExercise : function(event) {
             var id = $(event.target).attr('data-id');
             app.controller.add_event_exercise(id);
         }

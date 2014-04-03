@@ -7,6 +7,7 @@ define([
         'models/exercise_library/exercise_library_item',
         'models/exercise_library/request_params_items',
         'models/exercise_library/favourite_exercise',
+        'models/programs/exercises/item',
         'views/exercise_library/select_filter_block',
         'views/exercise_library/frontend/list',
         'views/exercise_library/frontend/menus/submenu_exercise_database',
@@ -28,6 +29,7 @@ define([
         Exercise_library_item_model,
         Request_params_items_model,
         Favourite_exercise_model,
+        Exercise_model,
         Select_filter_block_view,
         List_view,
         Submenu_exercise_database_view,
@@ -318,6 +320,34 @@ define([
             }
            
             return access;
+        },
+        
+        add_event_exercise : function(id) {
+            var model = new Exercise_model();
+            
+            var video_model = app.collections.items.get(id);
+            
+            model.clear();
+            
+            model.set({
+                id : app.options.exercise_id,
+                video_id : id,
+                title : video_model.get('exercise_name')
+            });
+            var self = this;
+            model.save(null, {
+                success: function (model, response) {
+                    self.route_program();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        route_program : function() {
+            var url = app.options.base_url_relative + 'index.php?option=com_fitness&view=programs#!/form_view/' + app.options.event_id;
+            window.location = url;
         }
         
     });

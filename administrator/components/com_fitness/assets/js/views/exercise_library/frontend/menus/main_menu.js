@@ -29,12 +29,12 @@ define([
             return false;
         },
 
-        onClickMy_recipes : function() {
+        onClickMyExercises : function() {
             app.controller.navigate("!/my_exercises", true);
             return false;
         },
 
-        onClickRecipe_database : function() {
+        onClickExerciseDatabase : function() {
             app.controller.navigate("!/exercise_database", true);
             return false;
         },

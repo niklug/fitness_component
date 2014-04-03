@@ -12,10 +12,17 @@
             <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
 
             <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
-
+            
+            <% if(app.options.exercise_id) { %>
+                <a class="add_exercise" title="" style="cursor: pointer;margin-right:10px;"  onclick="javascript:void(0)" data-id="<%= id %>" >[ADD TO PROGRAM]</a>
+            <% } %> 
+            
+            
             <% if (edit_allowed) { %>
             <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="trash_exercise" onclick="javascript:void(0)">[TRASH]</a>
             <% } %>
+            
+            
             
             <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="close_exercise" onclick="javascript:void(0)">[CLOSE]</a>
             

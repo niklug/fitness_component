@@ -26,6 +26,7 @@ define([
             "click .edit_exercise" : "onClickEditExercise",
             "click .trash_exercise" : "onClickTrashExercise",
             "click .delete_exercise" : "onClickDeleteExercise",
+            "click .add_exercise" : "onClickAddExercise",
         },
 
         onClickClose : function() {
@@ -58,6 +59,11 @@ define([
             var id = $(event.target).attr('data-id');
             app.controller.navigate("!/form_view/" + id, true);
         },
+        
+        onClickAddExercise : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.add_event_exercise(id);
+        }
     });
             
     return view;
