@@ -117,6 +117,10 @@ define([
 
             this.loadLocations();
             
+            if(!app.controller.is_item_owner(this.model)) {
+                $(this.el).find("#description").attr('readonly', true);
+            }
+            
             return this;
         },
         
@@ -163,6 +167,12 @@ define([
                 app.collections.appointments.get(4)
             ]);
             
+            //allow edit field only for creator
+            var element_disabled = 'disabled';
+            if(app.controller.is_item_owner(this.model)) {
+                element_disabled = '';
+            }
+            
             new Select_element_view({
                 model : this.model,
                 el : $(this.el).find("#appointment_select"),
@@ -170,7 +180,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : 'dark_input_style',
                 id_name : 'title',
-                model_field : 'title'
+                model_field : 'title',
+                element_disabled : element_disabled
             }).render();
             
             
@@ -187,7 +198,13 @@ define([
             var session_type_collection = new Backbone.Collection;
             
             session_type_collection.add(app.collections.session_types.where({category_id : id}));
-
+            
+            //allow edit field only for creator
+            var element_disabled = 'disabled';
+            if(app.controller.is_item_owner(this.model)) {
+                element_disabled = '';
+            }
+            
             new Select_element_view({
                 model : this.model,
                 el : $(this.el).find("#session_type_select"),
@@ -195,7 +212,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : 'dark_input_style',
                 id_name : 'session_type',
-                model_field : 'session_type'
+                model_field : 'session_type',
+                element_disabled : element_disabled
             }).render();
         },
         
@@ -208,7 +226,13 @@ define([
             var session_focus_collection = new Backbone.Collection;
             
             session_focus_collection.add(app.collections.session_focuses.where({session_type_id : id}));
-
+            
+            //allow edit field only for creator
+            var element_disabled = 'disabled';
+            if(app.controller.is_item_owner(this.model)) {
+                element_disabled = '';
+            }
+            
             new Select_element_view({
                 model : this.model,
                 el : $(this.el).find("#session_focus_select"),
@@ -216,7 +240,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : 'dark_input_style',
                 id_name : 'session_focus',
-                model_field : 'session_focus'
+                model_field : 'session_focus',
+                element_disabled : element_disabled
             }).render();
         },
         
@@ -252,7 +277,6 @@ define([
 
         set_etparttime : function(minutes) {
             var start_time = $(this.el).find("#start_time").val();
-            console.log(start_time);
             if(!start_time) return;
             var start_time = start_time.split(":");
             var date = new Date();

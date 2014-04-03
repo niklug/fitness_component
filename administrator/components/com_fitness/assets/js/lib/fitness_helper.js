@@ -382,13 +382,15 @@
                 },
                 
                 loadVideoPlayer : function(video_path, app, height, width, container) {
+                    
                     var no_video_image_big = app.options.no_video_image_big;
 
                     var base_url = app.options.base_url;
-
+                    
                     var imageType = /no_video_image.*/; 
                     
                     var image = base_url + video_path.split('.')[0] + '.jpg';
+                    console.log($("#container"));
                     if (video_path && !video_path.match(imageType) && video_path) {  
 
                         jwplayer(container).setup({

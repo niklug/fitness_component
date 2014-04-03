@@ -294,7 +294,14 @@ define([
        
        onClickShowVideo : function(event) {
            var id = $(event.target).attr('data-id');
-           var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=exercise_library#!/form_view/' + id;
+     
+           var view = 'item_view';
+           
+           if(app.options.is_backend) {
+               view = 'form_view';
+           }
+           
+           var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=exercise_library#!/' + view + '/' + id;
 
            window.open(el_url,'_blank');
        }

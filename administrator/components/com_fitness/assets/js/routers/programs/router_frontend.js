@@ -178,7 +178,18 @@ define([
                 access = true;
             }
             
-
+            return access;
+        },
+        
+        is_item_owner : function(model) {
+            var access = false;
+            
+            var user_id = app.options.user_id;
+            var created_by = model.get('owner');
+            
+            if(user_id == created_by) {
+                access = true;
+            }
             return access;
         },
         

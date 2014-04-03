@@ -302,11 +302,6 @@ define([
             $("#main_container").html(new Form_view({model : model}).render().el);
             
             new Select_filter_block_view({el : $("#select_filter_wrapper"), model : model, block_width : '140px'});
-            
-            if(model.get('id')) {
-                var video_path = app.models.exercise_library_item.get('video');
-                $.fitness_helper.loadVideoPlayer(video_path, app, 250, 440, 'exercise_video');
-            }
         },
         
         edit_allowed : function(model) {

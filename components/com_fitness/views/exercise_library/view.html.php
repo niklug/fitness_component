@@ -50,7 +50,6 @@ class FitnessViewExercise_library extends JView {
 
         $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
 
-
         parent::display($tpl);
     }
 
