@@ -16,6 +16,7 @@ define([
             //console.log(data);
             data.app = app;
             data.$ = $;
+            data.appointment_id = this.options.item_model.get('title');
             var template = _.template(this.template(data));
             this.$el.html(template);
             

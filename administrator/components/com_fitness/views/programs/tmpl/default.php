@@ -59,9 +59,9 @@ $business_profile_id = $business_profile_id['data'];
 
     
        //event client status options
-    var status_options = {
+        var status_options = {
         'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-        'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
+        'calendar_frontend_url' : '<?php echo JURI::root()?>administrator/index.php?option=com_multicalendar&task=load&calid=0',
         'db_table' : '#__fitness_appointment_clients',
         'status_button' : 'status_button',
         'status_button_dialog' : 'status_button_dialog',
@@ -78,18 +78,30 @@ $business_profile_id = $business_profile_id['data'];
         },
         'statuses2' : {
             '1' : {'label' : 'PENDING', 'class' : 'event_status_pending', 'email_alias' : ''},
-            '3' : {'label' : 'CANCELLED', 'class' : 'event_status_cancelled', 'email_alias' : 'AppointmentCancelled'},
-            '6' : {'label' : 'COMPLETE', 'class' : 'event_status_complete', 'email_alias' : ''}
+            '6' : {'label' : 'COMPLETE', 'class' : 'event_status_complete', 'email_alias' : ''},
+            '7' : {'label' : 'INCOMPLETE', 'class' : 'event_status_incomplete', 'email_alias' : ''},
+            '8' : {'label' : 'NOT ATTEMPTED', 'class' : 'event_status_notattemped', 'email_alias' : ''},
+            '9' : {'label' : 'RESCHEDULED', 'class' : 'event_status_rescheduled', 'email_alias' : ''}
         },
-        'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
         'hide_image_class' : 'hideimage',
         'show_send_email' : true,
          setStatuses : function(item_id) {
-            return  this.statuses;
+             var appointment_id = null;
+             
+             var el = document.getElementById("status_button_place_" + item_id);
+             
+             if(el) {
+                var appointment_id =  el.getAttribute("data-appointment_id");
+             }
+
+             if(appointment_id == '1' || appointment_id == '2') {
+                 return  this.statuses;
+             }
+
+            return  this.statuses2;
         },
         'view' : 'Programs'
     }
-
     options.status_options = status_options;
 
 

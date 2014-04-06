@@ -67,7 +67,7 @@ define([
         },
         
         addItem : function(model, collection) {
-            this.container_el.append(new Event_client_item_view({model : model, collection : collection}).render().el); 
+            this.container_el.append(new Event_client_item_view({model : model, item_model : this.model, collection : collection}).render().el); 
         },
         
         onClickAddClient : function() {

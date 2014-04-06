@@ -79,10 +79,9 @@ define([
             
             if(!this.model.get('id')) {
                 data.endtime = start_date_field.val() + ' ' + finish_time_field.val();
+                data.owner = app.options.user_id;
             }
 
-            data.owner = app.options.user_id;
-            
             data.frontend_published = $('#frontend_published:checked').val() || '0';
             
             data.published = $('#published:checked').val() || '0';

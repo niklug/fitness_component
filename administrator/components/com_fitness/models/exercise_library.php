@@ -151,7 +151,7 @@ class FitnessModelExercise_library extends JModelList {
         
         $user_id = JFactory::getUser()->id;
             
-        if($by_business_profile AND FitnessHelper::is_trainer($user_id)) {
+        if($by_business_profile AND (FitnessHelper::is_trainer($user_id) OR FitnessHelper::is_client($user_id))) {
             $helper = new FitnessHelper();
             $business_profile_id = $helper->getBusinessProfileId($user_id);
             $business_profile_id = $business_profile_id['data'];

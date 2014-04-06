@@ -87,13 +87,30 @@ $business_profile_id = $business_profile_id['data'];
         },
         'statuses2' : {
             '1' : {'label' : 'PENDING', 'class' : 'event_status_pending', 'email_alias' : ''},
-            '3' : {'label' : 'CANCELLED', 'class' : 'event_status_cancelled', 'email_alias' : 'AppointmentCancelled'},
-            '6' : {'label' : 'COMPLETE', 'class' : 'event_status_complete', 'email_alias' : ''}
+            '6' : {'label' : 'COMPLETE', 'class' : 'event_status_complete', 'email_alias' : ''},
+            '7' : {'label' : 'INCOMPLETE', 'class' : 'event_status_incomplete', 'email_alias' : ''},
+            '8' : {'label' : 'NOT ATTEMPTED', 'class' : 'event_status_notattemped', 'email_alias' : ''},
+            '9' : {'label' : 'RESCHEDULED', 'class' : 'event_status_rescheduled', 'email_alias' : ''}
         },
         'hide_image_class' : 'hideimage',
         'show_send_email' : true,
          setStatuses : function(item_id) {
-            return  this.statuses;
+             var appointment_id = null;
+             
+             var el = document.getElementById("status_button_place_" + item_id);
+             
+             if(el) {
+                var appointment_id =  el.getAttribute("data-appointment_id");
+             }
+             
+             console.log(appointment_id);
+             console.log(item_id);
+
+             if(appointment_id == '1' || appointment_id == '2') {
+                 return  this.statuses;
+             }
+
+            return  this.statuses2;
         },
         'view' : 'Programs'
     }

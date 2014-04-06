@@ -1684,7 +1684,7 @@ class FitnessHelper extends FitnessFactory
 
             $user_id = JFactory::getUser()->id;
             
-            if(self::is_trainer($user_id)) {
+            if(self::is_trainer($user_id) OR self::is_client($user_id)) {
                 $business_profile_id = $this->getBusinessProfileId($user_id);
                 $business_profile_id = $business_profile_id['data'];
                 $query .= " AND business_profile_id='$business_profile_id'";

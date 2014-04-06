@@ -262,7 +262,9 @@ define([
                 if(status_change_allowed == false) {
                     options.status_button = 'status_button_not_active';
                 }
-
+                
+                options.model = model;
+                
                 var status_obj = $.status(options);
 
                 view.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));

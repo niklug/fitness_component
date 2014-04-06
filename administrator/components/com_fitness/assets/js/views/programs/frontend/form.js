@@ -130,6 +130,7 @@ define([
             "change #title" : "onChangeAppointment",
             "change #session_type" : "onChangeSessionType",
             "change #start_time" : "onChangeStarttime",
+            "change #start_date" : "onChangeStartDate",
         },
         
         onClickPdf : function() {
@@ -158,13 +159,11 @@ define([
         
         loadAppointment : function() {
             var appointments_collection = new Backbone.Collection;
-            // filter for "Personal Training", "Semi-Private Training","Resistance Workout", "Cardio Workout"
+            // clients should not be able to create 'Personal Training' or 'Semi-Private Training' appointments
            
             appointments_collection.add([
-                app.collections.appointments.get(1),
-                app.collections.appointments.get(2),
                 app.collections.appointments.get(3),
-                app.collections.appointments.get(4)
+                app.collections.appointments.get(4),
             ]);
             
             //allow edit field only for creator
@@ -302,6 +301,11 @@ define([
             var appointment_id = $(this.el).find("#title").val();
             this.setEndInterval(appointment_id);
         },
+        
+        onChangeStartDate : function(event) {
+            var value  = $(event.target).val();
+            $(this.el).find("#finish_date").val(value);
+        }
         
        
     });

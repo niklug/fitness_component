@@ -80,19 +80,13 @@ define([
             
             if(!this.model.get('id')) {
                 data.endtime = start_date_field.val() + ' ' + finish_time_field.val();
+                data.owner = app.options.user_id;
+                data.frontend_published = '1';
+                data.published = '1';
+                data.business_profile_id = app.options.business_profile_id;
+                data.client_id = app.options.user_id;
+                data.trainer_id = app.collections.trainers.models[0].get('id');
             }
-
-            data.owner = app.options.user_id;
-            
-            data.frontend_published = '1';
-            
-            data.published = '1';
-            
-            data.business_profile_id = app.options.business_profile_id;
-            
-            data.client_id = app.options.user_id;
-            
-            data.trainer_id = app.collections.trainers.models[0].get('id');
             
             data.description = $('#description').val();
             

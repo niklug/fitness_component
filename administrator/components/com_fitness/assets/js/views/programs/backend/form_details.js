@@ -114,6 +114,7 @@ define([
             "change #start_time" : "onChangeStarttime",
             "click #frontend_published" : "setAutoPublishWorkout",
             "click #published" : "setAutoPublishEvent",
+            "change #start_date" : "onChangeStartDate",
         },
         
         loadAppointment : function() {
@@ -260,6 +261,11 @@ define([
                 $("#auto_publish_event").val('');
             }
             $("#auto_publish_event").attr('disabled', disabled);
+        },
+        
+        onChangeStartDate : function(event) {
+            var value  = $(event.target).val();
+            $(this.el).find("#finish_date").val(value);
         }
         
 
