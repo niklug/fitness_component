@@ -53,6 +53,7 @@ class FitnessEmail extends FitnessHelper
                 break;
 
             case 'Comment':
+
                 switch ($data->method) {
                     case 'GoalComment':
                         return new CommentGoalEmail();
@@ -77,6 +78,9 @@ class FitnessEmail extends FitnessHelper
                     break;
                     case 'SupplementComment':
                         return new CommentSupplementCommentEmail();
+                    break;
+                    case 'ProgramComment':
+                        return new CommentProgramEmail();
                     break;
 
                     default:
@@ -1498,5 +1502,109 @@ class CommentSupplementCommentEmail extends FitnessEmail {
         }
         
         $this->recipients_ids = $ids;
+    }
+}
+
+
+
+class CommentProgramEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: comment id');
+        }
+
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        
+        $layout = 'email_program_comment';
+        
+        $this->item = $this->getEvent($this->data->item_id);
+
+        $this->item->clients = $this->getEventClients($this->item->id);
+
+        $this->comment_created_by = $this->data->created_by;
+        
+        //client makes a comment
+        if(self::is_client($this->comment_created_by) && $this->item->published && $this->item->frontend_published) {
+            $send_to = 'trainers_clients';
+        }
+        
+        //trainer makes a comment
+        if(self::is_trainer($this->comment_created_by) && $this->item->published && $this->item->frontend_published) {
+            $send_to = 'clients';
+        }
+
+        if($send_to) {
+            $this->send_to = $send_to;
+        }
+        
+        $this->layout = $layout;
+
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        $ids = array();
+        
+        if(!$this->send_to) {
+            return;
+        }
+        
+        $clients = array();
+        
+        foreach ($this->item->clients as $client) {
+            $clients[] = $client->client_id;
+        }
+        
+        //client makes a comment send to other clients and client's trainers
+        if($this->send_to == 'trainers_clients') {
+            
+            $ids = $clients;
+            
+            $trainers_data = $this->getClientTrainers($this->comment_created_by,  'all');
+            
+            $ids = array_merge($ids, $trainers_data['data']);
+            
+        }
+        
+        //trainer makes a comment send to other clients
+        if($this->send_to == 'clients') {
+            $ids = $clients;
+        }
+        
+        // send except cteator
+        unset($ids[$this->comment_created_by]);
+
+        $this->recipients_ids = $ids;
+    }
+    
+    protected function generate_contents(){
+        $contents = array();
+        foreach ($this->recipients_ids as $recipient_id) {
+            if(!$recipient_id)  continue;
+            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->data->item_id . '&comment_id=' . $this->data->id . '&client_id=' . $recipient_id;
+            $result = $this->getContentCurl($url);
+            $contents[] = $result['data'];
+        }
+        $this->contents = $contents;
+    }
+    
+    public function processing($data) {
+        
+        $this->setParams($data);
+        
+        $this->get_recipients_ids();
+      
+        $this->generate_contents();
+        
+        $data = $this->send_mass_email();
+
+        return $data;
     }
 }
