@@ -51,6 +51,10 @@ define([
             if (!attrs.location || attrs.location == '0') {
               return 'location';
             }
+     
+            if (new Date(Date.parse(attrs.endtime)).getTime() <=  new Date(Date.parse(attrs.starttime)).getTime()) {
+              return "end_date_time";
+            }
             
             if (!attrs.owner) {
               return 'Error: no owner id';

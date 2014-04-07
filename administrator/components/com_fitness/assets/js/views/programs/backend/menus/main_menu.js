@@ -24,6 +24,7 @@ define([
             "click #save" : "onClickSave",
             "click #save_close" : "onClickSaveClose",
             "click #save_new" : "onClickSaveNew",
+            "click #save_copy" : "onClickSaveCopy",
             "click #cancel" : "onClickCancel",
         },
 
@@ -40,6 +41,20 @@ define([
         onClickSaveNew : function() {
             this.save_method = 'save_new';
             this.saveItem();
+        },
+        
+        onClickSaveCopy : function() {
+            var id = this.model.get('id');
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'Programs';
+            var task = 'copyEvent';
+            var table = '';
+            data.id = id;
+            $.AjaxCall(data, url, view, task, table, function(output){
+                console.log(output);
+                app.controller.navigate("!/form_view/" + output, true);
+            });
         },
 
         onClickCancel : function() {
@@ -65,7 +80,6 @@ define([
             var start_time_field = $('#start_time');
             
             var finish_time_field = $('#finish_time');
-            
             
             data.title = appointment_field.val();
             
@@ -119,7 +133,11 @@ define([
                 }  else if(validate_error == 'location') {
                     location_field.addClass("red_style_border");
                     return false;
-                }else {
+                } else if(validate_error == 'end_date_time') {
+                    finish_date_field.addClass("red_style_border");
+                    finish_time_field.addClass("red_style_border");
+                    return false;
+                } else {
                     alert(this.model.validationError);
                     return false;
                 }

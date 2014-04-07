@@ -821,12 +821,17 @@ td.center, th.center, .center {
     border-top:1px solid #474747 !important;
 }
 
+
 .table_border_bottom_dark {
     border-bottom:1px solid #474747 !important;
 }
 
 .table_border_bottom {
     border-bottom:1px solid #fff !important;
+}
+
+.table_border_dark {
+    border:1px solid #474747 !important;
 }
 
 .show_element{

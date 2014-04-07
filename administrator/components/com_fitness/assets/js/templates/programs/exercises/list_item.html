@@ -8,11 +8,11 @@ if(readonly) {
 %>
 <tr data-id="<%= id %>" class="item_row row1" id="exercise_row_<%= id %>">
     <% if(!readonly) {%>
-        <td class="center drag_item" title="Drag, move and drop the row to change the ordering.">
+        <td class="center drag_item table_border_dark" title="Drag, move and drop the row to change the ordering.">
 
         </td>
     <% } %>
-    <td class="center">
+    <td class="center table_border_dark">
         <% if(parseInt(video_id)){ %>
             <a class="show_exercise_video" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Show Exercise Video"  data-id="<%= video_id %>"  class="video_link_icon"></span></a>
         <% } else { %>
@@ -21,44 +21,44 @@ if(readonly) {
             <% } %>
         <% } %>
     </td>
-    <td <%= contenteditable %> class="data_cell center" data-name="sequence"> 
+    <td <%= contenteditable %> class="data_cell center table_border_dark" data-name="sequence"> 
         <%= sequence %>
     </td>
-    <td <%= contenteditable %> class="data_cell" data-name="title"> 
+    <td <%= contenteditable %> class="data_cell table_border_dark" data-name="title"> 
         <%= title %>
     </td>
-    <td <%= contenteditable %> class="data_cell center" data-name="speed">
+    <td <%= contenteditable %> class="data_cell center table_border_dark" data-name="speed">
         <%= speed %>
     </td>
-    <td <%= contenteditable %> class="data_cell center" data-name="weight">
+    <td <%= contenteditable %> class="data_cell center table_border_dark" data-name="weight">
         <%= weight %>
     </td>
-    <td <%= contenteditable %> class="data_cell center" data-name="reps">
+    <td <%= contenteditable %> class="data_cell center table_border_dark" data-name="reps">
         <%= reps %>
     </td>
-    <td <%= contenteditable %> class="data_cell center" data-name="time">
+    <td <%= contenteditable %> class="data_cell center table_border_dark" data-name="time">
         <%= time %>
     </td>
-    <td <%= contenteditable %> class="data_cell center" data-name="sets">
+    <td <%= contenteditable %> class="data_cell center table_border_dark" data-name="sets">
         <%= sets %>
     </td>
     
-    <td <%= contenteditable %> class="data_cell center" data-name="rest">
+    <td <%= contenteditable %> class="data_cell center table_border_dark" data-name="rest">
         <%= rest %>
     </td>
     
 
-    <td <%= contenteditable %> class="data_cell comments" data-name="comments">
+    <td <%= contenteditable %> class="data_cell comments table_border_dark" data-name="comments">
         <%= comments %>
     </td>
     <% if(!readonly) {%>
-        <td class="center">
-            <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
+        <td class="center table_border_dark">
+            <a title="Copy" style="cursor: pointer;" class="copy_item " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
         </td>
-        <td class="center">
+        <td class="center table_border_dark">
             <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
         </td>
-        <td class="center">
+        <td class="center table_border_dark">
             <input tabindex="-1" data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
         </td>
     <% } %>

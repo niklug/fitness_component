@@ -32,10 +32,13 @@
 
     </td>
     
+    <% if(current_page == 'my_workouts') { %>
     <td>
          <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
     </td>
+    <% } %>
     
+    <% if(current_page == 'my_workouts' || current_page == 'trash_list') { %>
     <td > 
         <% if(delete_allowed) { %>
             <% if(published == '1') { %>
@@ -45,9 +48,10 @@
             <% } %>
         <% } %>
     </td>
+    <% } %>
     
     <td >
-        <% if(delete_allowed) { %>
+        <% if((current_page == 'my_workouts' || current_page == 'trash_list') && (delete_allowed == true)) { %>
             <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
         <% } %>
     </td>

@@ -32,7 +32,9 @@ define([
                 error : function (collection, response) {
                     alert(response.responseText);
                 }
-            })
+            });
+            
+            this.status_obj = $.status(app.options.status_options);
         },
         
         template:_.template(template),
@@ -55,6 +57,8 @@ define([
             "change #workout_filter" : "onChangePublishedWorkout",
             "click #add_item" : "onClickAddItem",
             "click #trash_delete_selected" : "onClickTrashDeleteSelected",
+            "click #publish_workout_selected" : "onClickPublishWorkout",
+            "click #unpublish_workout_selected" : "onClickUnpublishWorkout",
         },
         
         connectBusinessFilter : function() {
@@ -151,6 +155,75 @@ define([
             var model = this.collection.get(id);
             var self  = this;
             model.save({id : id, published : '-2'}, {
+                success: function (model, response) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickPublishWorkout : function() {
+            
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+            
+            var self = this;
+            
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    self.publishWorkout(item);
+                });
+            }
+            $("#select_trashed").prop("checked", false);
+        },
+        
+        publishWorkout : function(id) {
+            var model = this.collection.get(id);
+            
+            var frontend_published = model.get('frontend_published');
+            
+            var self  = this;
+            model.save({id : id, frontend_published : '1'}, {
+                success: function (model, response) {
+                    app.controller.update_list();
+                    if(!parseInt(frontend_published)) {
+                        self.sendNotifyEmail(id);
+                    }
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        sendNotifyEmail : function(id) {
+            this.status_obj.sendEmail(id, 'Notify');
+        },
+        
+        onClickUnpublishWorkout : function() {
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+
+            var self = this;
+            
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    self.unpublishWorkout(item);
+                });
+            }
+            $("#select_trashed").prop("checked", false);
+        },
+        
+        unpublishWorkout : function(id) {
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({id : id, frontend_published : '0'}, {
                 success: function (model, response) {
                     app.controller.update_list();
                 },

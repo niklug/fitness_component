@@ -962,6 +962,11 @@
     border-bottom:1px solid #ccc !important;
 }
 
+.table_border_dark {
+    border:1px solid #474747 !important;
+}
+
+
 .internal_wrapper {
     padding: 5px;
     min-height: 19px;

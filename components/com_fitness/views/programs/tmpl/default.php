@@ -93,7 +93,7 @@ $business_profile_id = $business_profile_id['data'];
             '9' : {'label' : 'RESCHEDULED', 'class' : 'event_status_rescheduled', 'email_alias' : ''}
         },
         'hide_image_class' : 'hideimage',
-        'show_send_email' : true,
+        'show_send_email' : false,
          setStatuses : function(item_id) {
              var appointment_id = null;
              
@@ -102,10 +102,6 @@ $business_profile_id = $business_profile_id['data'];
              if(el) {
                 var appointment_id =  el.getAttribute("data-appointment_id");
              }
-             
-             console.log(appointment_id);
-             console.log(item_id);
-
              if(appointment_id == '1' || appointment_id == '2') {
                  return  this.statuses;
              }

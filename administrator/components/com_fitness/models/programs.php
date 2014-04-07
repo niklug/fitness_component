@@ -547,7 +547,7 @@ class FitnessModelprograms extends JModelList {
             }
         }
         
-        return array( 'status' => $status);
+        return array( 'status' => $status, 'data' => $inserted_event_id);
     }
     
     

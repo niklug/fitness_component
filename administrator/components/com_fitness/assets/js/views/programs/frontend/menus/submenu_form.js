@@ -113,7 +113,11 @@ define([
                 }  else if(validate_error == 'location') {
                     location_field.addClass("red_style_border");
                     return false;
-                }else {
+                }  else if(validate_error == 'end_date_time') {
+                    finish_date_field.addClass("red_style_border");
+                    finish_time_field.addClass("red_style_border");
+                    return false;
+                } else {
                     alert(this.model.validationError);
                     return false;
                 }

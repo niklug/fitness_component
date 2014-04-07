@@ -13,6 +13,15 @@
 
             <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
             
+            
+            <% if((title == '3' || title == '4') && parseInt(frontend_published) && current_page == 'workout_programs') { %>
+            <a data-id="<%= id %>" style="cursor: pointer;margin-left:10px;" class="copy_item" onclick="javascript:void(0)">[COPY TO MY WORKOUTS]</a>
+            <% } %>
+            
+            <% if((current_page == 'my_workouts') && edit_allowed == true) { %>
+            <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="delete_item" onclick="javascript:void(0)">[DELETE]</a>
+            <% } %>
+            
             <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="close_item" onclick="javascript:void(0)">[CLOSE]</a>
             
             <% if (edit_allowed) { %>
