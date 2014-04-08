@@ -342,24 +342,76 @@ class AppointmentEmail extends FitnessEmail {
                 $layout = 'email_pdf_workout';
                 break;
             
+            //
+            case 'ProgramComplete':
+                $subject = 'Workout Complete';
+                $layout = 'email_program_complete';
+                break;
+            
+            case 'ProgramIncomplete':
+                $subject = 'Workout Incomplete';
+                $layout = 'email_program_incomplete';
+                break;
+            
+            case 'ProgramNotattempted':
+                $subject = 'Workout Not Attempted';
+                $layout = 'email_program_notattempted';
+                break;
+            
+            case 'ProgramResheduled':
+                $subject = 'Workout Rescheduled';
+                $layout = 'email_program_rescheduled';
+                break;
+            
             default:
                 break;
         }
+        
+        $user_id = JFactory::getUser()->id;
+        
+        //client changes status
+        if(self::is_client($user_id)) {
+            $send_to = 'trainers';
+        }
+        
+        //trainer changes status
+        if(self::is_trainer($user_id)) {
+            $send_to = 'clients';
+        }
+
+        if($send_to) {
+            $this->send_to = $send_to;
+        }
+        
         
         $this->subject = $subject;
         $this->layout = $layout;
     }
 
     protected function get_recipients_ids() {
+        $ids = array();
         
+        $item = $this->getAppointmentClientItem($this->data->id);
         
-        if((int)$this->data->appointment_client_id) {
-            $client_id = $this->getClientIdByAppointmentClientId($this->data->appointment_client_id);
-            $ids =  array($client_id);
-        } else {
-            $ids = $this->getClientsByEvent($this->data->id);
+        $this->item = $item;
+      
+        if($this->send_to == 'trainers') {
+            $trainers_data = $this->getClientTrainers($item->client_id,  'all');
+            
+            $ids = $trainers_data['data'];
         }
-
+        
+        if($this->send_to == 'clients') {
+            $event_clients = $this->getEventClients($item->event_id);
+            
+            $clients = array();
+        
+            foreach ($event_clients as $client) {
+                $clients[] = $client->client_id;
+            }
+            
+            $ids = $clients;
+        }
         
         $this->recipients_ids = $ids;
     }
@@ -368,7 +420,7 @@ class AppointmentEmail extends FitnessEmail {
         $contents = array();
         foreach ($this->recipients_ids as $recipient_id) {
             if(!$recipient_id)  continue;
-            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->data->id . '&client_id=' . $recipient_id;
+            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->item->event_id  . '&client_id=' . $recipient_id;
             $result = $this->getContentCurl($url);
             $contents[] = $result['data'];
         }
@@ -380,8 +432,7 @@ class AppointmentEmail extends FitnessEmail {
         $this->setParams($data);
         
         $this->get_recipients_ids();
-        
-                
+    
         $this->generate_contents();
         
         $data = $this->send_mass_email();

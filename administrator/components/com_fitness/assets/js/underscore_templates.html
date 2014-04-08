@@ -9,10 +9,17 @@
             <% 
             }
         })  
+        var display = 'display:none;';
         if(show_send_email) {
+            display = 'display:inline-block;';
+        }
         %>
-            <input type="checkbox" checked id="send_diary_email" name="send_diary_email" value="1"> <span style="font-size:12px;">Send email</span>
-        <% } %>
+            <input style="<%= display %>" type="checkbox" checked id="send_diary_email" name="send_diary_email" value="1">
+            
+        <% if(show_send_email) { %>
+            <span style="font-size:12px;">Send email</span>
+        <% }  %>
+        
     </div>
       
 </script>
