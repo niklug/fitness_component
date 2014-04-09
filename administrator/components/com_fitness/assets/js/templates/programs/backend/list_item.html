@@ -44,9 +44,15 @@
         %>
     </td>
     
-    <td width="70"  id="status_button_<%= id %>" ></td>
-    
-    
+    <td width="70"  id="status_button_<%= id %>"  data-appointment="<%= title %>">
+        <%
+        _.each(group_clients_data, function(item){ 
+               %>
+               <div id="status_button_place_<%= item.id %>"  data-appointment_id="<%= title %>"></div>
+               <%
+         })
+        %>
+    </td>
     <td>
         <%= trainer_name %>
     </td>

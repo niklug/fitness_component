@@ -305,24 +305,6 @@ class AppointmentEmail extends FitnessEmail {
         $send_to_trainer = false;
 
         switch ($data->method) {
-            //status
-            case 'AppointmentAttended':
-                $subject = 'Appointment Complete';
-                $layout = 'email_status_attended';
-                break;
-            case 'AppointmentCancelled':
-                $subject = 'Appointment Cancelled';
-                $layout = 'email_status_cancelled';
-                break;
-            case 'AppointmentLatecancel':
-                $subject = 'Late Appointment Cancellation';
-                $layout = 'email_status_late_cancel';
-                break;
-            case 'AppointmentNoshow':
-                $subject = 'You Missed Your Appointment';
-                $layout = 'email_status_no_show';
-                break;
-            //
             case 'Appointment': //confirmation
                 $subject = 'Appointment Confirmation';
                 $layout = 'email_reminder';
@@ -340,6 +322,24 @@ class AppointmentEmail extends FitnessEmail {
             case 'Workout':
                 $subject = 'Workout/Training Session';
                 $layout = 'email_pdf_workout';
+                break;
+            
+            //status
+            case 'AppointmentAttended':
+                $subject = 'Appointment Complete';
+                $layout = 'email_status_attended';
+                break;
+            case 'AppointmentCancelled':
+                $subject = 'Appointment Cancelled';
+                $layout = 'email_status_cancelled';
+                break;
+            case 'AppointmentLatecancel':
+                $subject = 'Late Appointment Cancellation';
+                $layout = 'email_status_late_cancel';
+                break;
+            case 'AppointmentNoshow':
+                $subject = 'You Missed Your Appointment';
+                $layout = 'email_status_no_show';
                 break;
             
             //
@@ -374,9 +374,20 @@ class AppointmentEmail extends FitnessEmail {
             $send_to = 'trainers';
         }
         
-        //trainer changes status
+        
+        //send to one client 
         if(self::is_trainer($user_id)) {
+            $send_to = 'client';
+        }
+        
+        // send to all clients
+        if(self::is_trainer($user_id) AND ($layout == 'email_reminder' OR $layout == 'email_notify')) {
             $send_to = 'clients';
+        }
+        
+        //client sends workour heself
+        if(self::is_client($user_id) AND ($layout == 'email_pdf_workout')) {
+            $send_to = 'client';
         }
 
         if($send_to) {
@@ -393,7 +404,13 @@ class AppointmentEmail extends FitnessEmail {
         
         $item = $this->getAppointmentClientItem($this->data->id);
         
+        $this->event_id = $item->event_id;
+        
         $this->item = $item;
+
+        if($this->send_to == 'client') {
+            $ids[] = $item->client_id;
+        }
       
         if($this->send_to == 'trainers') {
             $trainers_data = $this->getClientTrainers($item->client_id,  'all');
@@ -402,8 +419,9 @@ class AppointmentEmail extends FitnessEmail {
         }
         
         if($this->send_to == 'clients') {
-            $event_clients = $this->getEventClients($item->event_id);
+            $this->event_id = $this->data->id;
             
+            $event_clients = $this->getEventClients($this->data->id);
             $clients = array();
         
             foreach ($event_clients as $client) {
@@ -413,6 +431,12 @@ class AppointmentEmail extends FitnessEmail {
             $ids = $clients;
         }
         
+        //client sends workour heself
+        if(($this->send_to == 'client') AND ($this->layout == 'email_pdf_workout')) {
+            $ids[] = JFactory::getUser()->id;
+            $this->event_id = $this->data->id;
+        }
+        
         $this->recipients_ids = $ids;
     }
     
@@ -420,7 +444,7 @@ class AppointmentEmail extends FitnessEmail {
         $contents = array();
         foreach ($this->recipients_ids as $recipient_id) {
             if(!$recipient_id)  continue;
-            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->item->event_id  . '&client_id=' . $recipient_id;
+            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->event_id  . '&client_id=' . $recipient_id;
             $result = $this->getContentCurl($url);
             $contents[] = $result['data'];
         }
@@ -428,7 +452,7 @@ class AppointmentEmail extends FitnessEmail {
     }
     
     public function processing($data) {
-        
+       
         $this->setParams($data);
         
         $this->get_recipients_ids();

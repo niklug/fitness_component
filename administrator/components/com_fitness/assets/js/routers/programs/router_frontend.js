@@ -271,7 +271,7 @@ define([
                 
                 var status_obj = $.status(options);
 
-                view.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status, model.get('title')));
+                view.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
 
                 status_obj.run();
             }

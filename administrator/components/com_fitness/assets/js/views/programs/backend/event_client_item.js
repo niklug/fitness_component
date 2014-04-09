@@ -18,7 +18,7 @@ define([
             data.$ = $;
             data.appointment_id = this.options.item_model.get('title');
             var template = _.template(this.template(data));
-            this.$el.html(template);
+            $(this.el).html(template);
             
             this.loadClientSelect();
             
@@ -32,6 +32,18 @@ define([
             "click .delete_event_client" : "delete",
         },
         
+        connectStatus : function(model) {
+            var id = this.model.get('id');
+
+            var status = this.model.get('status');
+
+            var status_obj = $.status(app.options.status_options);
+             
+            $(this.el).find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
+
+            status_obj.run();
+        },
+        
         loadClientSelect : function() {
             var element_disabled = '';
             
@@ -41,7 +53,7 @@ define([
             
             new Select_element_view({
                 model : this.model,
-                el : this.$el.find(".event_client_select"),
+                el : $(this.el).find(".event_client_select"),
                 collection : this.collection,
                 first_option_title : '-Select-',
                 class_name : 'client_id',
@@ -51,20 +63,10 @@ define([
                 value_field : 'client_id',
                 text_field : 'name'
             }).render();
+            
+            
         },
-        
-        connectStatus : function() {
-            var id = this.model.get('id');
 
-            var status = this.model.get('status');
-
-            var status_obj = $.status(app.options.status_options);
-
-            this.$el.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
-
-            status_obj.run();
-        },
-        
         onClientSelect : function(event) {
             var client_id = $(event.target).val();
             

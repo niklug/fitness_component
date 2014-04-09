@@ -24,9 +24,9 @@ define([
         connectStatus : function(id, status) {
             var status_obj = $.status(app.options.status_options);
               
-            var html = '<div id="status_button_place_' + id + '"  data-appointment_id="' + this.model.get('title') + '">' + status_obj.statusButtonHtml(id, status, this.model.get('title')) + '</div>';
-            
-            this.$el.find("#status_button_" + this.model.get('id')).append(html);
+            var html =  status_obj.statusButtonHtml(id, status);
+
+            this.$el.find("#status_button_place_" + id).html(html);
 
             status_obj.run();
         },

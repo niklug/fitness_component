@@ -44,9 +44,9 @@ define([
         
         render: function(){
             var template = _.template(this.template());
-            this.$el.html(template);
+            $(this.el).html(template);
             
-            this.container_el = this.$el.find("#clients_data");
+            this.container_el = $(this.el).find("#clients_data");
             
             this.loadClientsFields();
            
@@ -68,6 +68,19 @@ define([
         
         addItem : function(model, collection) {
             this.container_el.append(new Event_client_item_view({model : model, item_model : this.model, collection : collection}).render().el); 
+            this.connectStatus(model);
+        },
+        
+        connectStatus : function(model) {
+            var id = model.get('id');
+
+            var status = model.get('status');
+
+            var status_obj = $.status(app.options.status_options);
+             
+            $("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
+
+            status_obj.run();
         },
         
         onClickAddClient : function() {

@@ -85,8 +85,16 @@ $business_profile_id = $business_profile_id['data'];
         },
         'hide_image_class' : 'hideimage',
         'show_send_email' : true,
-         setStatuses : function(item_id, appointment_id) {
-             if((appointment_id == '1') || (appointment_id == '2')) {
+         setStatuses : function(item_id) {
+             var appointment_id = null;
+             
+             var el = document.getElementById("status_button_place_" + item_id);
+             
+             if(el) {
+                var appointment_id =  el.getAttribute("data-appointment_id");
+             }
+
+             if(appointment_id == '1' || appointment_id == '2') {
                  return  this.statuses;
              }
 
