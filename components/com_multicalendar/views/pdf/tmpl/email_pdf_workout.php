@@ -119,16 +119,17 @@
             </div>
 
             <div style="width: 784px;margin-top: 20px;">
-                <h3 style="margin: 0; padding: 0;">WORKOUT / PROGRAM DETAILS</h3>
+                <h3 style="margin: 0; padding: 0;">WORKOUT DETAILS</h3>
                 <hr style="width:100%;">
-                <h4 style="margin: 0; padding: 0;">Trainer Instructions / Comments</h4>
+                <h4 style="margin: 0; padding: 0;">Workout Instructions</h4>
                 <div style="padding: 5px;width: 770px;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px; margin-top: 10px;">
                     <?php echo $data->item->description;?>
                 </div>
                 
                 <table width="100%" style="border:1px solid #000000;margin-top: 10px;border-collapse: collapse;"  border="0" >
                     <tr style="background-color: #989898;">
-                        <th style="border:1px solid #000000;padding:5px;" width="40%">Exercise/Description/Notes</th>
+                        <th style="border:1px solid #000000;padding:5px;" width="10%">Seq</th>
+                        <th style="border:1px solid #000000;padding:5px;" width="40%">Exercise Name</th>
                         <th style="border:1px solid #000000;padding:5px;" width="10%">Speed</th>
                         <th style="border:1px solid #000000;padding:5px;" width="10%">Weight</th>
                         <th style="border:1px solid #000000;padding:5px;" width="10%">Reps</th>
@@ -140,6 +141,7 @@
                     <?php
                        foreach ($data->exercises as $exercise) {
                            echo '<tr>
+                                    <td style="border:1px solid #000000;padding:5px;">'.$exercise->sequence.'</td>
                                     <td style="border:1px solid #000000;padding:5px;">'.$exercise->title.'</td>
                                     <td style="border:1px solid #000000;padding:5px;">'.$exercise->speed.'</td>
                                     <td style="border:1px solid #000000;padding:5px;">'.$exercise->weight.'</td>

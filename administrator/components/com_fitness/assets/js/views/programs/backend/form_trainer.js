@@ -5,7 +5,6 @@ define([
         'app',
         'collections/exercise_library/business_profiles',
         'collections/programs/trainers',
-        'collections/programs/event_clients',
         'views/programs/select_element',
 	'text!templates/programs/backend/form_trainer.html'
 ], function (
@@ -15,7 +14,6 @@ define([
         app,
         Business_profiles_collection, 
         Trainers_collection, 
-        Event_clients_collection, 
         Select_element_view,
         template
     ) {
@@ -76,11 +74,6 @@ define([
             "change #business_profile_select" : "onChangeBusinessName",
             "change #trainer_id" : "onChangeTrainer",
         },
-
-        onChangeBusinessName : function(event) {
-            var id = $(event.target).val();
-            
-        },
         
         connectBusinessSelect : function() {
             var business_name_collection = new Backbone.Collection;
@@ -110,8 +103,8 @@ define([
         
         onChangeBusinessName : function(event) {
             var business_profile_id = $(event.target).val();
-            
             this.loadTrainersSelect(business_profile_id);
+            app.controller.deleteClients(this.model);
         },
         
         loadTrainersSelect : function(business_profile_id) {
@@ -146,33 +139,9 @@ define([
         },
         
         onChangeTrainer : function() {
-            $("#add_client").show();
-            var event_clients_collection = new Event_clients_collection();
-            var self = this;
-            var event_id = this.model.get('id');
-            event_clients_collection.fetch({
-                data : {event_id : event_id},
-                success : function (collection, response) {
-                    if(!event_id) return;
-                    _.each(collection.models, function(model) {
-                        self.deleteClientEvent(model);
-                    });
-                    $("#clients_data").empty();
-                },
-                error : function (collection, response) {
-                    alert(response.responseText);
-                }
-            })
+            app.controller.deleteClients(this.model);
         },
-        
-        deleteClientEvent : function(model) {
-            model.destroy({
-                wait :true,
-                error: function (model, response) {
-                    alert(response.responseText);
-                }
-            });
-        }
+
     });
             
     return view;

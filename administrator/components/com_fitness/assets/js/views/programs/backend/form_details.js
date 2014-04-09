@@ -146,6 +146,7 @@ define([
             this.$el.find("#session_focus_select").empty();
             this.loadSessionType(id);
             this.setEndInterval(id);
+            app.controller.deleteClients(this.model);
         },
         
         loadSessionType : function(id) {

@@ -4,6 +4,7 @@ define([
 	'backbone',
         'app',
         'collections/programs/items',
+        'collections/programs/event_clients',
         'models/programs/item',
         'models/programs/request_params_items',
         'views/programs/backend/form_container',
@@ -22,6 +23,7 @@ define([
         Backbone,
         app,
         Items_collection,
+        Event_clients_collection, 
         Item_model,
         Request_params_items_model,
         Form_container_view,
@@ -233,6 +235,35 @@ define([
         update_list : function() {
             app.models.request_params.set({ uid : app.getUniqueId()});
         },
+        
+        deleteClients : function(model) {
+            var event_clients_collection = new Event_clients_collection();
+            var self = this;
+            var event_id = model.get('id');
+            event_clients_collection.fetch({
+                data : {event_id : event_id},
+                success : function (collection, response) {
+                    if(!event_id) return;
+                    _.each(collection.models, function(model) {
+                        self.deleteClientEvent(model);
+                    });
+                    $("#clients_data").empty();
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            })
+        },
+        
+        deleteClientEvent : function(model) {
+            $("#add_client").show();
+            model.destroy({
+                wait :true,
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        }
 
     });
 

@@ -24,7 +24,7 @@ define([
             "click .add_favourite" : "onClickAddFavourite",
             "click .remove_favourite" : "onClickRemoveFavourite",
             "click .edit_item" : "onClickEditItem",
-            "click .delete_item" : "onClickDeleteItem",
+            "click .trash_item" : "onClickTrashItem",
             "click .copy_item" : "onClickCopy",
         },
 
@@ -46,17 +46,18 @@ define([
             app.controller.remove_favourite(id);
         },
         
-        onClickDeleteItem: function(event) {
+        onClickTrashItem: function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = app.collections.items.get(id);
             var self  = this;
-            this.model.destroy({
-                success: function (model) {
+            model.save({published : '-2'}, {
+                success: function (model, response) {
                     app.controller.navigate("!/my_workouts", true);
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
             });
-
         },
         
         onClickEditItem : function(event) {

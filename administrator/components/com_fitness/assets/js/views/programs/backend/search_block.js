@@ -59,6 +59,7 @@ define([
             "click #trash_delete_selected" : "onClickTrashDeleteSelected",
             "click #publish_workout_selected" : "onClickPublishWorkout",
             "click #unpublish_workout_selected" : "onClickUnpublishWorkout",
+            "click #copy_selected" : "onClickCopySelected",
         },
         
         connectBusinessFilter : function() {
@@ -244,6 +245,20 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        onClickCopySelected : function() {
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+            var self = this;
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    app.controller.copy_item(item);
+                });
+            }
+            $("#select_trashed,.trash_checkbox").prop("checked", false);
         },
         
         onClickAddItem : function() {

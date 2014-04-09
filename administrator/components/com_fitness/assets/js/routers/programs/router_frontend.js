@@ -259,6 +259,10 @@ define([
             if(id) {
                 var status_change_allowed = model.get('status_change_allowed');
                 
+                if(!parseInt(model.get('frontend_published'))) {
+                    options.status_button = 'status_button_not_active';
+                }
+                
                 if(status_change_allowed == false) {
                     options.status_button = 'status_button_not_active';
                 }
@@ -267,7 +271,7 @@ define([
                 
                 var status_obj = $.status(options);
 
-                view.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
+                view.find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status, model.get('title')));
 
                 status_obj.run();
             }

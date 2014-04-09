@@ -146,8 +146,8 @@
             }); 
     }
 
-    Status.prototype.statusButtonHtml = function(item_id, status_id) {
-        var statuses = this.options.setStatuses(item_id);
+    Status.prototype.statusButtonHtml = function(item_id, status_id, appointment_id) {
+        var statuses = this.options.setStatuses(item_id, appointment_id);
         var variables = { 'statuses' : statuses,
             'item_id' : item_id,
             'status_id' : status_id,
