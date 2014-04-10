@@ -146,6 +146,7 @@ define([
             data.table = '';
 
             data.id =  this.model.get('id');
+            data.client_id =  app.options.user_id;
             data.view = 'Programs';
             data.method = 'Workout';
             $.fitness_helper.sendEmail(data);

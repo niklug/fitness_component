@@ -299,12 +299,7 @@
                 },
 
                 sendEmail : function(o) {
-                    var data = {};
-                    data.id = o.id;
-                    data.view = o.view;
-                    data.method = o.method;
-                    data.checked = o.checked;
-                    
+                    var data = o;
                     this.ajaxCall(data, o.url, o.view, o.task, o.table, function(output) {
                         var emails = output.split(',');
                         var message = 'Emails were sent to: ' +  "</br>";

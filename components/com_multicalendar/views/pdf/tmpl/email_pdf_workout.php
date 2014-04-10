@@ -65,7 +65,7 @@
                                 <td width="25%">Appointment:</td>
                                 <td>
                                     <i>
-                                        <?php echo $data->item->title;?>
+                                        <?php echo $data->item->appointment_name;?>
                                     </i>
                                 </td>
                             </tr>
@@ -73,7 +73,7 @@
                                 <td>Session Type:</td>
                                 <td>
                                     <i>
-                                        <?php echo $data->item->session_type;?> 
+                                        <?php echo $data->item->session_type_name;?> 
                                     </i>
                                 </td>
                             </tr>
@@ -81,7 +81,7 @@
                                 <td>Session Focus:</td>
                                 <td>
                                     <i>
-                                        <?php echo $data->item->session_focus;?>
+                                        <?php echo $data->item->session_focus_name;?>
                                     </i>
                                 </td>
                             </tr>
@@ -110,7 +110,7 @@
                                 <td>Location:</td>
                                 <td>
                                     <i>
-                                        <?php echo $data->item->location;?>
+                                        <?php echo $data->item->location_name;?>
                                     </i>
                                 </td>
                             </tr>

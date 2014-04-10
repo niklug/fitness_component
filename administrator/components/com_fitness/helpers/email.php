@@ -295,6 +295,7 @@ class AppointmentEmail extends FitnessEmail {
     
     protected function setParams($data) {
         $this->data = $data;
+
         $id = $data->id;
         if (!$id) {
             throw new Exception('Error: no id');
@@ -358,9 +359,14 @@ class AppointmentEmail extends FitnessEmail {
                 $layout = 'email_program_notattempted';
                 break;
             
-            case 'ProgramResheduled':
-                $subject = 'Workout Rescheduled';
-                $layout = 'email_program_rescheduled';
+            case 'ProgramSheduled':
+                $subject = 'Workout Scheduled';
+                $layout = 'email_program_scheduled';
+                break;
+            
+            case 'ProgramAssessing':
+                $subject = 'New Workout Submitted';
+                $layout = 'email_program_assessing';
                 break;
             
             default:
@@ -431,10 +437,11 @@ class AppointmentEmail extends FitnessEmail {
             $ids = $clients;
         }
         
-        //client sends workour heself
+        //client sends workout heself
         if(($this->send_to == 'client') AND ($this->layout == 'email_pdf_workout')) {
             $ids[] = JFactory::getUser()->id;
             $this->event_id = $this->data->id;
+            
         }
         
         $this->recipients_ids = $ids;
@@ -444,7 +451,17 @@ class AppointmentEmail extends FitnessEmail {
         $contents = array();
         foreach ($this->recipients_ids as $recipient_id) {
             if(!$recipient_id)  continue;
-            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->event_id  . '&client_id=' . $recipient_id;
+            $client_id = $this->item->client_id;
+            
+            if($this->send_to == 'clients') {
+                $client_id = $recipient_id;
+            }
+            
+            if($this->layout == 'email_pdf_workout'){
+                $client_id = $this->data->client_id;
+            }
+            
+            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->event_id  . '&client_id=' . $client_id;
             $result = $this->getContentCurl($url);
             $contents[] = $result['data'];
         }

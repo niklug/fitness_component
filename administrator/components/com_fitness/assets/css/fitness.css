@@ -283,9 +283,14 @@
     border: 2px solid #AB4423;
 }
 
-.event_status_rescheduled {
+.event_status_scheduled {
     background-color: #FCF7A7 !important;
     border: 2px solid #E7AE24;
+}
+
+.event_status_assessing {
+    background-color: #ECB8FF !important;
+    border: 2px solid #4B0082;
 }
 
 
@@ -1142,6 +1147,16 @@ display: inline-block;
 height: 40px;
 margin-left: 10px;
 width: 40px;
+}
+
+.pdf_button_20 {
+background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/pdf_button.png");
+background-repeat: no-repeat;
+background-size: 20px auto;
+display: inline-block;
+height: 20px;
+margin-left: 10px;
+width: 20px;
 }
 
 

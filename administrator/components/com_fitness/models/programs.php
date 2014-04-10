@@ -525,6 +525,7 @@ class FitnessModelprograms extends JModelList {
         foreach ($exercises as $exercise) {
             $exercise->id = null;
             $exercise->event_id = $inserted_event_id;
+            
             $insert = $db->insertObject('#__fitness_events_exercises', $exercise, 'id');
             if (!$insert) {
                 $status['success'] = 1;
@@ -540,6 +541,7 @@ class FitnessModelprograms extends JModelList {
         foreach ($clients as $client) {
             $client->id = null;
             $client->event_id = $inserted_event_id;
+            $client->status = '1';
             $insert = $db->insertObject('#__fitness_appointment_clients', $client, 'id');
             if (!$insert) {
                 $status['success'] = 1;

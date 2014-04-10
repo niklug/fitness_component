@@ -35,6 +35,7 @@ define([
                 })
 
             ).then (function(response) {
+                
                 self.render();
             })
         },
@@ -50,12 +51,7 @@ define([
             
             this.container_el = this.$el.find("#items_container");
             
-            var self = this;
-            if(app.collections.exercises.length) {
-                _.each(app.collections.exercises.models, function(model) {
-                    self.addItem(model);
-                });
-            }
+            this.updateList();
             
             this.connectDragPlugin();
             
@@ -79,6 +75,19 @@ define([
             
         },
         
+        updateList : function() {
+            var self = this;
+            var sorted = app.collections.exercises.sortBy(function(model) {
+                return parseInt(model.get('order'));
+            });
+ 
+            if(sorted.length) {
+                _.each(sorted, function(model) {
+                      self.addItem(model);
+                });
+            }
+        },
+        
         addItem : function(model) {
             this.item = new List_item_view({el : this.container_el, model : model, readonly : this.readonly}).render(); 
         },
@@ -98,10 +107,10 @@ define([
         saveItem : function(model) {
             var self  = this;
             model.save(null, {
+                wait : true,
                 success: function (model, response) {
-                    self.addItem(model);
                     app.collections.exercises.add(model);
-                    self.connectDragPlugin();
+                    self.render();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -111,17 +120,7 @@ define([
         
         onClickDelete : function(event) {
             var id = $(event.target).attr('data-id');
-            var model = new Item_model({id : id});
-            var self = this;
-            model.destroy({
-                success: function (model) {
-                    app.collections.exercises.remove(model);
-                    self.hide_items(model.get('id'));
-                },
-                error: function (model, response) {
-                    alert(response.responseText);
-                }
-            });
+            this.deleteItem(id);
         },
         
         hide_items : function(items) {
@@ -151,6 +150,7 @@ define([
             var model = new Item_model();
             model.set({id : id});
             var self = this;
+            app.collections.exercises.remove(model);
             model.destroy({
                 success: function (model, response) {
                     self.hide_items(id);
@@ -174,12 +174,12 @@ define([
             this.copyExercise(id);
         },
         
-        copyExercise : function(id) {
+        copyExercise : function(id, order) {
             var model = app.collections.exercises.get(id);
             
             var new_model = model.clone() 
-  
-            new_model.set({id : null});
+
+            new_model.set({id : null, order : order});
     
             this.saveItem(new_model);
         },
@@ -190,10 +190,13 @@ define([
                 selected.push($(this).attr('data-id'));
             });
             var self = this;
+            var order = $(this.el).find("#exercise_table tbody tr").length
             if(selected.length > 0) {
                 _.each(selected, function(item, key){ 
-                    self.copyExercise(item);
+                    order = order + 1;
+                    self.copyExercise(item, order);
                 });
+                
             }
             $("#select_all,.trash_checkbox").prop("checked", false);
         },

@@ -81,7 +81,8 @@ $business_profile_id = $business_profile_id['data'];
             '6' : {'label' : 'COMPLETE', 'class' : 'event_status_complete', 'email_alias' : 'ProgramComplete'},
             '7' : {'label' : 'INCOMPLETE', 'class' : 'event_status_incomplete', 'email_alias' : 'ProgramIncomplete'},
             '8' : {'label' : 'NOT ATTEMPTED', 'class' : 'event_status_notattemped', 'email_alias' : 'ProgramNotattempted'},
-            '9' : {'label' : 'RESCHEDULED', 'class' : 'event_status_rescheduled', 'email_alias' : 'ProgramResheduled'}
+            '9' : {'label' : 'SCHEDULED', 'class' : 'event_status_scheduled', 'email_alias' : 'ProgramSheduled'},
+            '10' : {'label' : 'ASSESSING', 'class' : 'event_status_assessing', 'email_alias' : 'ProgramAssessing'}
         },
         'hide_image_class' : 'hideimage',
         'show_send_email' : true,

@@ -30,6 +30,8 @@ define([
         events : {
             "click .client_id" : "onClientSelect",
             "click .delete_event_client" : "delete",
+            "click .send_workout_email" : "onClickSendEmail",
+            "click .pdf_button" : "onClickPdf",
         },
         
         connectStatus : function(model) {
@@ -106,6 +108,18 @@ define([
             $(this.el).remove();
         },
         
+        onClickSendEmail :function(event) {
+            var id = $(event.target).attr('data-id');
+            var client_id = this.model.get('client_id');
+            app.controller.sendWorkoutEmail(id, client_id);
+        },
+        
+        onClickPdf : function(event) {
+            var id = $(event.target).attr('data-id');
+            var client_id = this.model.get('client_id');
+            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=' + id + '&client_id=' + client_id;
+            $.fitness_helper.printPage(htmlPage);
+        },
 
     });
             

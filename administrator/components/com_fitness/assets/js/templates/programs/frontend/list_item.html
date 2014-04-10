@@ -22,23 +22,24 @@
     
     <td id="status_button_place_<%= client_item_id %>" data-appointment_id="<%= title %>"  ></td>
     
+    
+    <% if(status != '10') { %>
     <td>
-
         <% if(published == '1') { %>
             <a title="View" style="cursor: pointer;" class="view_item " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
         <% } else { %>
             <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
         <% } %>
-
     </td>
+    <% } %>
     
-    <% if(current_page == 'my_workouts') { %>
+    <% if(current_page == 'my_workouts' && status != '10') { %>
     <td>
          <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
     </td>
     <% } %>
     
-    <% if(current_page == 'my_workouts' || current_page == 'trash_list') { %>
+    <% if((current_page == 'my_workouts' || current_page == 'trash_list') && status != '10') { %>
     <td > 
         <% if(delete_allowed) { %>
             <% if(published == '1') { %>
@@ -50,10 +51,12 @@
     </td>
     <% } %>
     
+     <% if(status != '10') { %>
     <td >
         <% if((current_page == 'my_workouts' || current_page == 'trash_list') && (delete_allowed == true)) { %>
             <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
         <% } %>
     </td>
+    <% } %>
 
 </tr>

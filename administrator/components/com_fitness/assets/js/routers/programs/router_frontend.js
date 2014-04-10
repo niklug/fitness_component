@@ -168,6 +168,12 @@ define([
             var user_id = app.options.user_id;
             var created_by = model.get('owner');
             var appointment = model.get('title');
+            var status = model.get('status');
+            
+            // if ‘COMPLETE', 'INCOMPLETE' or 'NOT ATTEMPTED’,
+            if(status == '6' || status == '7' || status == '8'  || status == '10') {
+                return false;
+            }
             
             if(user_id == created_by) {
                 access = true;
@@ -212,6 +218,12 @@ define([
             var user_id = app.options.user_id;
             var created_by = model.get('owner');
             var appointment = model.get('title');
+            var status = model.get('status');
+            
+            // if ‘COMPLETE', 'INCOMPLETE' or 'NOT ATTEMPTED’,
+            if(status == '6' || status == '7' || status == '8' || status == '10') {
+                return false;
+            }
             
             if(user_id == created_by) {
                 return true;

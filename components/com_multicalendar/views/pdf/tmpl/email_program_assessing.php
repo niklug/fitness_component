@@ -13,25 +13,25 @@
                 text-decoration:none;
             }
             .lightContainer a, .lightContainer a:visited{
-                color:#000;
+                color:#482104;
             }
             .lightContainer a:hover {
                 color:#0e0601 !important;
             }
             .darkContainer a, .darkContainer a:visited {
-                color:FFA600;
+                color:#6633FF;
             }
             .darkContainer a:hover {
-                color:#FFA600 !important;
+                color:#6633FF !important;
             }
             .readMore a:hover {
-                background-color:#562704 !important;
-                color: #FFA600 !important;
+                background-color:#400D60 !important;
+                color: #CCC !important;
             }
             body {
                 margin:0;
                 background-color:#dddddd;
-                color:#FFA600;
+                color:#6633FF;
                 font-family:Arial, Helvetica, sans-serif;
                 font-size:12px;
                 -webkit-text-size-adjust: none;
@@ -80,7 +80,7 @@
                                 <!--Start Of Company Name And Slogan [row number #1]-->
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#FFA600" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
+                                        <td bgcolor="#6633FF" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
                                             <img alt="Elite Fitness Training" height="78" src="<?php echo $data->header_image  ?>" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
@@ -100,44 +100,41 @@
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">WORKOUT RESCHEDULED</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">NEW WORKOUT SUBMITTED</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF;">
-                                                                    <p>
-                                                                        The date or time for this workout program has now been changed! Be sure to review the workout details for the new date and time. Please take note as other details may have also been changed.</p></td>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <p>Hi <?php echo $data->trainer_name ?>,</p>         <p>Your client has created a new workout that requires assessment. Please approve or modify this workout for your client and provide feedback as necessary.</p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF;"><p>CLIENT NAME: <br />
-                                                                        PRIMARY TRAINER:<br />
-                                                                        <br />
-                                                                        START DATE: <br />
+                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <p>CLIENT NAME:<br />
+                                                                        TRAINER NAME:</p>
+                                                                    <p>START DATE: <br />
                                                                         START TIME: <br />
-                                                                        LOCATION:<br />
-                                                                        <br />
-                                                                        APPOINTMENT: <br />
+                                                                        LOCATION:</p>
+                                                                    <p>APPOINTMENT: <br />
                                                                         SESSION TYPE: <br />
-                                                                        SESSION FOCUS: </p></td>
-                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF;">
-                                                                    <p><?php echo $data->client_name ?>  <br />
-                                                                        <?php echo $data->trainer_name ?> <br />
-                                                                        <br />
-                                                                        <?php echo $data->start_date;?><br />
+                                                                        SESSION FOCUS:</p></td>
+                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <p><?php echo $data->client_name ?><br />
+                                                                        <?php echo $data->trainer_name ?></p>
+                                                                    <p><?php echo $data->start_date;?><br />
                                                                         <?php echo $data->start_time ;?> <br />
-                                                                        <?php echo $data->item->location_name;?><br />
-                                                                        <br />
-                                                                        <?php echo $data->item->appointment_name;?><br />
+                                                                        <?php echo $data->item->location_name;?></p>
+                                                                    <p><?php echo $data->item->appointment_name;?><br />
                                                                         <?php echo $data->item->session_type_name;?><br />
-                                                                        <?php echo $data->item->session_focus_name;?></p></td>
+                                                                        <?php echo $data->item->session_focus_name;?>
+                                                                    </p></td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td class="readMore" width="160" height="22" bgcolor="#FEA529" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#3B0008; text-align:center;">
-                                                                    <a  target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#000;">CLICK HERE TO OPEN</a>
+                                                                <td class="readMore" width="160" height="22" bgcolor="#130036" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFF; text-align:center;">
+                                                                    <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#6633FF;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -152,6 +149,7 @@
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $data->path ?>/borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
+ 
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>

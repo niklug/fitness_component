@@ -117,10 +117,23 @@ define([
             
             $('#title, #session_type, #session_focus, #start_date, #finish_date, #start_time, #finish_time, #location').removeClass("red_style_border");
             
-            //validation          
+            //validation  
+            
+            if(!start_date_field.val()) {
+                start_date_field.addClass("red_style_border");
+                return false;
+            }
+            
+            
+            if(!start_time_field.val()) {
+                start_time_field.addClass("red_style_border");
+                return false;
+            }
+            
+            
             if (!this.model.isValid()) {
                 var validate_error = this.model.validationError;
-                
+                console.log(validate_error);
                 if(validate_error == 'title') {
                     appointment_field.addClass("red_style_border");
                     return false;
@@ -142,15 +155,8 @@ define([
                     return false;
                 }
             }
+               
             
-            if(!start_date_field.val()) {
-                start_date_field.addClass("red_style_border");
-                return false;
-            }
-            if(!start_time_field.val()) {
-                start_time_field.addClass("red_style_border");
-                return false;
-            }
             //end validation
 
             
