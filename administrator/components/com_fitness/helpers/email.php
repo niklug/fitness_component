@@ -368,6 +368,10 @@ class AppointmentEmail extends FitnessEmail {
                 $subject = 'New Workout Submitted';
                 $layout = 'email_program_assessing';
                 break;
+            case 'ProgramAssessingT':
+                $subject = 'New Workout Submitted';
+                $layout = 'email_program_assessing_t';
+                break;
             
             default:
                 break;
@@ -431,6 +435,7 @@ class AppointmentEmail extends FitnessEmail {
             $clients = array();
         
             foreach ($event_clients as $client) {
+                
                 $clients[] = $client->client_id;
             }
             
@@ -1615,8 +1620,6 @@ class CommentProgramEmail extends FitnessEmail {
         
         $this->item = $this->getEvent($this->data->item_id);
 
-        $this->item->clients = $this->getEventClients($this->item->id);
-
         $this->comment_created_by = $this->data->created_by;
         
         //client makes a comment
@@ -1648,14 +1651,15 @@ class CommentProgramEmail extends FitnessEmail {
             return;
         }
         
-        $clients = array();
-        
-        foreach ($this->item->clients as $client) {
-            $clients[] = $client->client_id;
-        }
-        
+        $this->item->client_items = $this->getAppointmentClientItems($this->item->id);
+
         //client makes a comment send to other clients and client's trainers
         if($this->send_to == 'trainers_clients') {
+            $clients = array();
+        
+            foreach ($this->item->client_items as $item) {
+                $clients[] = $item->client_id;
+            }
             
             $ids = $clients;
             
@@ -1667,7 +1671,12 @@ class CommentProgramEmail extends FitnessEmail {
         
         //trainer makes a comment send to other clients
         if($this->send_to == 'clients') {
-            $ids = $clients;
+            foreach ($this->item->client_items as $item) {
+                // if status is not ASSESSING
+                if($item->status != '10') {
+                    $ids[] = $item->client_id;
+                }
+            }
         }
         
         // send except cteator

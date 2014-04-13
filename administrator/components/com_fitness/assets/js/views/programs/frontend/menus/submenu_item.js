@@ -81,6 +81,7 @@ define([
             var task = 'copyEvent';
             var table = '';
             data.id = id;
+            data.client_id = app.options.user_id;
             $.AjaxCall(data, url, view, task, table, function(output){
                 
             });

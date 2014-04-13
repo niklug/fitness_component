@@ -497,6 +497,7 @@ class FitnessModelprograms extends JModelList {
         
         $id = $data->id;
         
+        $client_id = $data->client_id;
         //copy event
         $query = "SELECT * FROM #__dc_mv_events WHERE id='$id'";
         
@@ -534,13 +535,27 @@ class FitnessModelprograms extends JModelList {
         }
         
         //copy clients
-        $query = "SELECT * FROM #__fitness_appointment_clients WHERE event_id='$id'";
+        // from admin
+        if(!$client_id) {
+            $query = "SELECT * FROM #__fitness_appointment_clients WHERE event_id='$id'";
 
-        $clients =  FitnessHelper::customQuery($query, 1);
+            $clients =  FitnessHelper::customQuery($query, 1);
 
-        foreach ($clients as $client) {
+            foreach ($clients as $client) {
+                $client->id = null;
+                $client->event_id = $inserted_event_id;
+                $client->status = '1';
+                $insert = $db->insertObject('#__fitness_appointment_clients', $client, 'id');
+                if (!$insert) {
+                    $status['success'] = 1;
+                    $status['message'] = $db->stderr();
+                }
+            }
+        // copy by client from frontend
+        } else {
             $client->id = null;
             $client->event_id = $inserted_event_id;
+            $client->client_id = $client_id;
             $client->status = '1';
             $insert = $db->insertObject('#__fitness_appointment_clients', $client, 'id');
             if (!$insert) {
