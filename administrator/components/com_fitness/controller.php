@@ -416,5 +416,18 @@ class FitnessController extends JController
             $view->setModel($this->getModel('programs'));
             $view -> event_clients(); 
         }
+        
+        // programs templates
+        function programs_templates() {
+            $view = $this -> getView('programs_templates', 'json');
+            $view->setModel($this->getModel('programs_templates'));
+            $view -> programs_templates(); 
+        }
+        
+        function copyProgramTemplate() {
+            $view = $this -> getView('programs_templates', 'json');
+            $view->setModel($this->getModel('programs_templates'));
+            $view -> copyProgramTemplate(); 
+        }
 
 }

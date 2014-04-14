@@ -1,0 +1,128 @@
+<table width="400">
+    <tr>
+        <td width="100">
+            <label>Appointment</label>
+        </td>
+        <td id="appointment_select">
+            
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Session Type</label> 
+        </td>
+        <td id="session_type_select">
+            
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Session Focus</label> 
+        </td>
+        <td id="session_focus_select">
+            
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Start Date/Time</label>
+        </td>
+        <td>
+            <%
+            var start_date = '';
+            if(starttime) {
+                start_date = starttime.substring(0,10);
+            }
+            %>
+            <input  name="start_date" id="start_date" size="12" type="text" value="<%= start_date  %>">
+            <%
+            var start_time = '';
+            if(starttime) {
+                start_time = starttime.substring(10,16);
+            }
+            %>      
+            <input style="width:55px;margin-left: 10px;"  size="5" type="text" name="start_time" id="start_time"  value="<%= start_time  %>">
+        </td>
+    </tr>
+    
+    <% if(id) { %>
+    <tr>
+        <td>
+            <label>Finish Date/Time</label>
+        </td>
+        <td>
+            <%
+            var finish_date = '';
+            if(endtime) {
+                finish_date = endtime.substring(0,10);
+            }
+            %>
+            <input  name="finish_date" id="finish_date" size="12" type="text" value="<%= finish_date %>">
+            <% 
+            var finish_time = '';
+            if(endtime) {
+                finish_time = endtime.substring(10,16);
+            }  
+            %>
+            <input  style="width:55px;margin-left: 10px;"  size="5" type="text" name="finish_time" id="finish_time"  value="<%= finish_time  %>">
+        </td>
+    </tr>
+    <% } else { %>
+        <input  name="finish_date" id="finish_date" type="hidden">
+        <input type="hidden" name="finish_time" id="finish_time">
+    <% } %>
+    
+    <tr>
+        <td>
+            <label>Location</label>
+        </td>
+        <td id="location_select">
+            
+        </td>
+    </tr>
+</table>
+
+
+<table>
+    <tr>
+        <td>
+            <label>Publish Workout</label>
+        </td>
+        <td width="37">
+            <%
+            var frontend_published_checked = '';
+            if(parseInt(frontend_published)) {
+                frontend_published_checked = 'checked';
+            }
+            %>
+            <input type="checkbox" name="frontend_published" id="frontend_published"  value="1" <%= frontend_published_checked %>  />
+        </td>
+        <td>
+            <label>Auto Publish Workout on</label>
+        </td>
+        <td>
+            <input type="text" name="auto_publish_workout" id="auto_publish_workout" size="12"  value="<%= auto_publish_workout %>" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+             <%
+            var published_checked = '';
+            if(parseInt(published)) {
+                published_checked = 'checked';
+            }
+            %>
+            <label>Publish Event</label>
+        </td>
+        <td>
+            <input type="checkbox" name="published" id="published"  value="1" <%= published_checked %>/>
+        </td>
+        <td>
+            <label>Auto Publish Event on</label>
+        </td>
+        <td>
+            <input type="text" name="auto_publish_event" id="auto_publish_event" size="12" value="<%= auto_publish_event %>" />
+        </td>
+    </tr>
+</table>
+

@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Fitness.
  */
-class FitnessViewPrograms extends JView {
+class FitnessViewPrograms_templates extends JView {
 
     protected $items;
     protected $pagination;
@@ -54,12 +54,13 @@ class FitnessViewPrograms extends JView {
         FitnessHelper::addSubmenu('Client Planning', 'goals');
         FitnessHelper::addSubmenu('Assessments', 'assessments');
         FitnessHelper::addSubmenu('Calendar', 'calendar');
-        FitnessHelper::addSubmenu('Program Templates', 'programs_templates');
+        FitnessHelper::addSubmenu('Programs', 'programs');
         FitnessHelper::addSubmenu('Exercise Library', 'exercise_library');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
         FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
         FitnessHelper::addSubmenu('Recipe Database', 'nutrition_recipes');
         FitnessHelper::addSubmenu('Settings', 'settings');
+
         
         parent::display($tpl);
     }
@@ -72,8 +73,12 @@ class FitnessViewPrograms extends JView {
     protected function addToolbar() {
         require_once JPATH_COMPONENT . '/helpers/fitness.php';
 
-        JToolBarHelper::title(JText::_('Programs & Workouts'), 'programs.png');
-        
+
+        JToolBarHelper::title(JText::_('Program & Workout Templates'), 'programs.png');
+       
     }
+    
+    
+
 
 }

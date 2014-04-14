@@ -16,7 +16,7 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
 /**
  * Methods supporting a list of Fitness records.
  */
-class FitnessModelprograms extends JModelList {
+class FitnessModelprograms_templates extends JModelList {
 
     /**
      * Constructor.
@@ -72,7 +72,7 @@ class FitnessModelprograms extends JModelList {
         return $items;
     }
     
-    public function programs() {
+    public function programs_templates() {
             
         $method = JRequest::getVar('_method');
 
@@ -84,7 +84,7 @@ class FitnessModelprograms extends JModelList {
         
         $id = JRequest::getVar('id', 0, '', 'INT');
         
-        $table = '#__dc_mv_events';
+        $table = '#__fitness_programs_templates';
 
         $helper = new FitnessHelper();
 
@@ -96,25 +96,23 @@ class FitnessModelprograms extends JModelList {
                 $data->order_dirrection = JRequest::getVar('order_dirrection'); 
                 $data->page = JRequest::getVar('page'); 
                 $data->limit = JRequest::getVar('limit'); 
-                $data->published = JRequest::getVar('published'); 
-                $data->frontend_published = JRequest::getVar('frontend_published'); 
-                
-                $data->title = JRequest::getVar('title'); 
-                $data->location = JRequest::getVar('location'); 
+                $data->state = JRequest::getVar('state'); 
+
+                $data->name = JRequest::getVar('name');
+                $data->appointment_id = JRequest::getVar('title'); 
                 $data->session_type = JRequest::getVar('session_type'); 
                 $data->session_focus = JRequest::getVar('session_focus'); 
                 
                 $data->date_from = JRequest::getVar('date_from', '0'); 
                 $data->date_to = JRequest::getVar('date_to', '0'); 
                 $data->client_name = JRequest::getVar('client_name'); 
-                $data->trainer_name = JRequest::getVar('trainer_name'); 
                 $data->created_by_name = JRequest::getVar('created_by_name'); 
                 
 
                 $data->business_profile_id = JRequest::getVar('business_profile_id'); 
                 $data->current_page = JRequest::getVar('current_page'); 
 
-                $data = $this->getPrograms($table, $data);
+                $data = $this->getProgramTemplate($table, $data);
                 
                 return $data;
                 break;
@@ -124,14 +122,7 @@ class FitnessModelprograms extends JModelList {
                 break;
             case 'POST': // Create
                 $id = $helper->insertUpdateObj($model, $table);
-                
-                if($model->client_id) {
-                    $table = '#__fitness_appointment_clients';
-                    $data = new stdClass();
-                    $data->event_id = $id;
-                    $data->client_id = $model->client_id;
-                    $helper->insertUpdateObj($data, $table);
-                }
+
                 break;
             case 'DELETE': // Delete Item
                 $id = JRequest::getVar('id', 0, '', 'INT');
@@ -149,11 +140,11 @@ class FitnessModelprograms extends JModelList {
     
     
     
-    public function getPrograms($table, $data) {
+    public function getProgramTemplate($table, $data) {
         
         $helper = new FitnessHelper();
         
-        $table = '#__dc_mv_events';
+        $table = '#__fitness_programs_templates';
         
         $page = $data->page;
         
@@ -172,73 +163,51 @@ class FitnessModelprograms extends JModelList {
         $query = " SELECT a.*,";
         
         $query .= " t.name AS appointment_name,";
-        
-        $query .= " l.name AS location_name,";
-        
+
         $query .= " st.name AS session_type_name,";
         
-        $query .= " sf.name AS session_focus_name,";
+        $query .= " sf.name AS session_focus_name,";    
         
+        $query .= " bp.name AS business_profile_name,"; 
         
         //get total number
         if(!$id) {
             $query .= " (SELECT COUNT(*) FROM $table AS a ";
 
             $query .= " WHERE 1 ";
-
-            if(isset($data->published) AND $data->published != '*') {
-                $query .= " AND a.published='$data->published' ";
-            }
-
-
+            
             //1
-            if($data->title) {
-                $query .= " AND a.title IN ($data->title)";
+            if(isset($data->name)) {
+                $query .= " AND a.name LIKE '%$data->name%'  ";
             }
+            
             //2
-            if($data->location) {
-                $query .= " AND a.location IN ($data->location)";
+            if(isset($data->state) AND $data->state != '*') {
+                $query .= " AND a.state='$data->state' ";
             }
+
             //3
+            if($data->appointment_id) {
+                $query .= " AND a.appointment_id IN ($data->appointment_id)";
+            }
+
+            //4
             if($data->session_type) {
                 $query .= " AND a.session_type IN ($data->session_type)";
             }
-            //4
+            //5
             if($data->session_focus) {
                 $query .= " AND a.session_focus IN ($data->session_focus)";
             }
-
+            //6
             if (!empty($data->date_from)) {
-                $query .= " AND a.starttime >= '$data->date_from'";
+                $query .= " AND a.created >= '$data->date_from'";
             }
-
+            //7
             if (!empty($data->date_to)) {
-                $query .= " AND a.endtime <= '$data->date_to'";
+                $query .= " AND a.created <= '$data->date_to'";
             }
-
-            //search by client name
-            if (!empty($data->client_name)) {
-                $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
-
-                $client_ids = FitnessHelper::customQuery($sql, 0);
-
-                if($client_ids) {
-                    $query .= " AND a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))";
-                }
-            }
-
-
-            //search by trainer name
-            if (!empty($data->trainer_name)) {
-                $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->trainer_name%' ";
-
-                $trainer_ids = FitnessHelper::customQuery($sql, 0);
-
-                if($trainer_ids) {
-                    $query .= " AND a.trainer_id IN ($trainer_ids)";
-                }
-            }
-
+            //8
             //search by created_by name
             if (!empty($data->created_by_name)) {
                 $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->created_by_name%' ";
@@ -246,120 +215,65 @@ class FitnessModelprograms extends JModelList {
                 $owner_ids = FitnessHelper::customQuery($sql, 0);
 
                 if($owner_ids) {
-                    $query .= " AND a.owner IN ($owner_ids)";
+                    $query .= " AND a.created_by IN ($owner_ids)";
                 }
             }
-
+            //9
             //filter by business profile
             if (!empty($data->business_profile_id)) {
                 $query .= " AND a.business_profile_id IN ($data->business_profile_id)";
             }
 
-            if (isset($data->frontend_published)  AND $data->frontend_published != '2') {
-                $query .= " AND a.frontend_published IN ('$data->frontend_published')";
-            }
-            
-            //frontend client logged
-            if($data->current_page == 'my_workouts' AND FitnessHelper::is_client($user_id)) {
-                $query .= " AND a.owner='$user_id'";
-            }
-            
-            if($data->current_page == 'workout_programs' AND FitnessHelper::is_client($user_id)) {
-                $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
-                $query .= " AND a.owner NOT IN ('$user_id')";
-            }
-            
-            if ($data->current_page  == 'my_favourites') {
-                $query .= " AND a.id IN (SELECT item_id FROM #__fitness_appointments_favourites WHERE client_id='$user_id')";
-            }
-        
+
             $query .= " ) items_total, ";
         }
         //end get total number
         
-        $query .= " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name, ";
-        
-        $query .= " (SELECT name FROM #__users WHERE id=a.owner) created_by_name, ";
-        
-        //frontend client logged
-        if(FitnessHelper::is_client($user_id)) {
-            $query .= " (SELECT id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id' LIMIT 1) client_item_id,";
-            $query .= " (SELECT status FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id' LIMIT 1) status,";
-        }
-        
-        $query .= " (SELECT id FROM #__fitness_appointments_favourites WHERE item_id=a.id AND client_id='$user_id') is_favourite, "; 
-        
-        // if logged simple trainer associated to the event's clients 
-        $query .= "  (SELECT GROUP_CONCAT(id) FROM #__fitness_appointment_clients WHERE client_id IN  (SELECT user_id FROM #__fitness_clients WHERE (primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AND state='1') AND event_id=a.id) is_associated_trainer";
-        
-        
+        $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name ";
         
         $query .= "  FROM $table AS a";
         
-        
-        $query .= " LEFT JOIN #__fitness_categories AS t ON t.id = a.title ";
-        
-        $query .= " LEFT JOIN #__fitness_locations AS l ON l.id = a.location ";
+        $query .= " LEFT JOIN #__fitness_categories AS t ON t.id = a.appointment_id ";
         
         $query .= " LEFT JOIN #__fitness_session_type AS st ON st.id = a.session_type ";
         
         $query .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
         
-        $query .= " WHERE 1 ";
-
-        if(isset($data->published) AND $data->published != '*') {
-            $query .= " AND a.published='$data->published' ";
-        }
+        $query .= " LEFT JOIN #__fitness_business_profiles AS bp ON bp.id = a.business_profile_id ";
         
-
+        $query .= " WHERE 1 ";
+        
         //1
-        if($data->title) {
-            $query .= " AND a.title IN ($data->title)";
+        if(isset($data->name)) {
+            $query .= " AND a.name LIKE '%$data->name%'  ";
         }
+            
         //2
-        if($data->location) {
-            $query .= " AND a.location IN ($data->location)";
+        if(isset($data->state) AND $data->state != '*') {
+            $query .= " AND a.state='$data->state' ";
         }
         //3
+        if($data->appointment_id) {
+            $query .= " AND a.appointment_id IN ($data->appointment_id)";
+        }
+
+        //4
         if($data->session_type) {
             $query .= " AND a.session_type IN ($data->session_type)";
         }
-        //4
+        //5
         if($data->session_focus) {
             $query .= " AND a.session_focus IN ($data->session_focus)";
         }
-        
-      
+        //6
         if (!empty($data->date_from)) {
-            $query .= " AND a.starttime >= '$data->date_from'";
+            $query .= " AND a.created >= '$data->date_from'";
         }
-        
+        //7
         if (!empty($data->date_to)) {
-            $query .= " AND a.endtime <= '$data->date_to'";
+            $query .= " AND a.created <= '$data->date_to'";
         }
-        
-        //search by client name
-        if (!empty($data->client_name)) {
-            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
-
-            $client_ids = FitnessHelper::customQuery($sql, 0);
-
-            if($client_ids) {
-                $query .= " AND a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))";
-            }
-        }
-        
-        //search by trainer name
-        if (!empty($data->trainer_name)) {
-            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->trainer_name%' ";
-
-            $trainer_ids = FitnessHelper::customQuery($sql, 0);
-
-            if($trainer_ids) {
-                $query .= " AND a.trainer_id IN ($trainer_ids)";
-            }
-        }
-        
+        //8
         //search by created_by name
         if (!empty($data->created_by_name)) {
             $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->created_by_name%' ";
@@ -367,36 +281,15 @@ class FitnessModelprograms extends JModelList {
             $owner_ids = FitnessHelper::customQuery($sql, 0);
 
             if($owner_ids) {
-                $query .= " AND a.owner IN ($owner_ids)";
+                $query .= " AND a.created_by IN ($owner_ids)";
             }
         }
-        
-        
+        //9
         //filter by business profile
         if (!empty($data->business_profile_id)) {
             $query .= " AND a.business_profile_id IN ($data->business_profile_id)";
         }
-        
 
-        if (isset($data->frontend_published) AND $data->frontend_published != '2') {
-            $query .= " AND a.frontend_published IN ('$data->frontend_published')";
-        }
-        
-        //frontend client logged
-        if($data->current_page == 'my_workouts' AND FitnessHelper::is_client($user_id)) {
-            //$query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
-            $query .= " AND a.owner='$user_id'";
-        }
-        
-        if($data->current_page == 'workout_programs' AND FitnessHelper::is_client($user_id)) {
-            $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
-            $query .= " AND a.owner NOT IN ('$user_id')";
-        }
-        
-        if ($data->current_page  == 'my_favourites') {
-            $query .= " AND a.id IN (SELECT item_id FROM #__fitness_appointments_favourites WHERE client_id='$user_id')";
-        }
-        
         $query_type = 1;
         if($id) {
             $query .= " AND a.id='$id' ";
@@ -419,22 +312,6 @@ class FitnessModelprograms extends JModelList {
 
 
         $items = FitnessHelper::customQuery($query, $query_type);
-
-        if(!$id) {
-            $i = 0;
-            foreach ($items as $item) {
-                $group_clients_data = $this->getGroupClientsData($item->id);
-                $items[$i]->group_clients_data = $group_clients_data;
-                $i++;
-            }
-        } else {
-            $group_clients_data = $this->getGroupClientsData($items->id);
-            $items->group_clients_data = $group_clients_data;
-            
-            $secondary_trainers = $helper->get_client_trainers_names($user_id, 'secondary');
-            $items->secondary_trainers = $secondary_trainers;
-            $items->client_name = JFactory::getUser($user_id)->name;
-        }
 
         return $items;
 
@@ -486,7 +363,7 @@ class FitnessModelprograms extends JModelList {
         return FitnessHelper::customQuery($query, 2);
     }
     
-    public function copyEvent() {
+    public function copyProgramTemplate() {
         $status['success'] = 1;
         
         $db = JFactory::getDbo();
@@ -496,17 +373,16 @@ class FitnessModelprograms extends JModelList {
         $data = json_decode(JRequest::getVar('data_encoded'));
         
         $id = $data->id;
-        
-        $client_id = $data->client_id;
-        //copy event
-        $query = "SELECT * FROM #__dc_mv_events WHERE id='$id'";
+
+        //copy item
+        $query = "SELECT * FROM #__fitness_programs_templates WHERE id='$id'";
         
         $event =  FitnessHelper::customQuery($query, 2);
         
         if($event->id) {
             $event->id = null;
-            $event->owner = JFactory::getUser()->id;
-            $insert = $db->insertObject('#__dc_mv_events', $event, 'id');
+            $event->created_by = JFactory::getUser()->id;
+            $insert = $db->insertObject('#__fitness_programs_templates', $event, 'id');
             
             if (!$insert) {
                 $status['success'] = 1;
@@ -517,7 +393,7 @@ class FitnessModelprograms extends JModelList {
         }
         
         
-        
+        /*
         //copy exercises
         $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$id'";
 
@@ -563,6 +439,8 @@ class FitnessModelprograms extends JModelList {
                 $status['message'] = $db->stderr();
             }
         }
+         * 
+         */
         
         return array( 'status' => $status, 'data' => $inserted_event_id);
     }

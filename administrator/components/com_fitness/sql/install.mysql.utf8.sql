@@ -1405,3 +1405,19 @@ CREATE TABLE IF NOT EXISTS `#__fitness_exercise_library_favourites` (
   FOREIGN KEY (client_id) REFERENCES #__fitness_clients(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+
+CREATE TABLE IF NOT EXISTS `#__fitness_programs_templates` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `appointment_id` int(11) unsigned NOT NULL,
+  `session_type` int(11) unsigned NOT NULL,
+  `session_focus` int(11) unsigned NOT NULL,
+  `description` text NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `state` int(1) DEFAULT '1',
+  `business_profile_id` int(11) unsigned NOT NULL,
+  `created` date NOT NULL,
+  `access` int(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `business_profile_id` (`business_profile_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
