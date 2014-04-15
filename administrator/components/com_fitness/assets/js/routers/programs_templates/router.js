@@ -4,26 +4,26 @@ define([
 	'backbone',
         'app',
         'collections/programs_templates/items',
-        'collections/programs_templates/event_clients',
+        'collections/programs_templates/template_clients',
         'models/programs_templates/item',
         'models/programs_templates/request_params_items',
-        'views/programs/backend/form_container',
-        'views/programs/backend/menus/main_menu',
-        'views/programs/backend/form_details',
-        'views/programs/backend/form_trainer',
-        'views/programs/backend/form_clients',
+        'views/programs_templates/backend/form_container',
+        'views/programs_templates/backend/menus/main_menu',
+        'views/programs_templates/backend/form_details',
+        'views/programs_templates/backend/form_trainer',
+        'views/programs_templates/backend/form_clients',
         'views/programs/backend/form_workout_instructions',
         'views/programs_templates/backend/list',
         'views/programs_templates/backend/list_header_container',
-        'views/programs/exercises/list',
-        'views/programs/backend/comments_block'
+        'views/programs_templates/exercises/list',
+        'views/programs_templates/backend/comments_block'
 ], function (
         $,
         _,
         Backbone,
         app,
         Items_collection,
-        Event_clients_collection, 
+        Template_clients_collection, 
         Item_model,
         Request_params_items_model,
         Form_container_view,
@@ -237,13 +237,13 @@ define([
         },
         
         deleteClients : function(model) {
-            var event_clients_collection = new Event_clients_collection();
+            var template_clients_collection = new Template_clients_collection();
             var self = this;
-            var event_id = model.get('id');
-            event_clients_collection.fetch({
-                data : {event_id : event_id},
+            var template_id = model.get('id');
+            template_clients_collection.fetch({
+                data : {item_id : template_id},
                 success : function (collection, response) {
-                    if(!event_id) return;
+                    if(!template_id) return;
                     _.each(collection.models, function(model) {
                         self.deleteClientEvent(model);
                     });
@@ -264,20 +264,7 @@ define([
                 }
             });
         },
-        
-        sendWorkoutEmail : function(id, client_id) {
-            var data = {};
-            data.url = app.options.ajax_call_url;
-            data.view = '';
-            data.task = 'ajax_email';
-            data.table = '';
 
-            data.id =  id;
-            data.client_id = client_id || app.options.user_id;
-            data.view = 'Programs';
-            data.method = 'Workout';
-            $.fitness_helper.sendEmail(data);
-        },
 
     });
 

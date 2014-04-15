@@ -27,5 +27,15 @@ class FitnessViewPrograms_templates extends JView {
         echo json_encode($model -> copyProgramTemplate());
     }
     
+    function pr_temp_clients() {
+        $model = $this -> getModel("programs_templates");
+        echo json_encode($model -> pr_temp_clients());
+    }
+    
+    function pr_temp_exercises() {
+        $model = $this -> getModel("programs_templates");
+        echo json_encode($model -> pr_temp_exercises());
+    }
+    
     
 }

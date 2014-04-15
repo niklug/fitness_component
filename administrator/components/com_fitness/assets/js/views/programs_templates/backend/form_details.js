@@ -5,7 +5,7 @@ define([
         'app',
         'collections/programs/select_filter',
         'views/programs/select_element',
-	'text!templates/programs/backend/form_details.html',
+	'text!templates/programs_templates/backend/form_details.html',
         'jquery.timepicker'
 ], function (
         $,
@@ -22,7 +22,6 @@ define([
         initialize : function() {
             if( 
                 app.collections.appointments 
-                && app.collections.locations
                 && app.collections.session_types
                 && app.collections.session_focuses
             ) {
@@ -31,7 +30,6 @@ define([
             } 
       
             app.collections.appointments = new Select_filter_collection();
-            app.collections.locations = new Select_filter_collection();
             app.collections.session_types = new Select_filter_collection();
             app.collections.session_focuses = new Select_filter_collection();
                        
@@ -43,14 +41,7 @@ define([
                         alert(response.responseText);
                     }
                 }),
-                
-                app.collections.locations.fetch({
-                    data : {table : app.options.db_table_locations, by_business_profile : 1},
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                }),
-                
+
                 app.collections.session_types.fetch({
                     data : {table : app.options.db_table_session_types},
                     error: function (collection, response) {
@@ -82,7 +73,7 @@ define([
             
             this.loadAppointment();
             
-            var category_id = this.model.get('title');
+            var category_id = this.model.get('appointment_id');
         
             if(category_id) {
                 this.loadSessionType(category_id);
@@ -93,23 +84,12 @@ define([
             if(session_type_id) {
                 this.loadSessionFocus(session_type_id);
             }
-            
-            this.$el.find("#start_date, #finish_date").datepicker({ dateFormat: "yy-mm-dd"});
-            
-            this.$el.find("#auto_publish_workout, #auto_publish_event").datepicker({ dateFormat: "yy-mm-dd", minDate: 0});
-            
-            this.$el.find('#start_time, #finish_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
-             
-            this.loadLocations();
-            
-            this.setAutoPublishWorkout();
-            
-            this.setAutoPublishEvent();
+   
             return this;
         },
         
         events : {
-            "change #title" : "onChangeAppointment",
+            "change #appointment_id" : "onChangeAppointment",
             "change #session_type" : "onChangeSessionType",
             "change #start_time" : "onChangeStarttime",
             "click #frontend_published" : "setAutoPublishWorkout",
@@ -134,8 +114,8 @@ define([
                 collection : appointments_collection,
                 first_option_title : '-Select-',
                 class_name : '',
-                id_name : 'title',
-                model_field : 'title'
+                id_name : 'appointment_id',
+                model_field : 'appointment_id'
             }).render();
             
             
@@ -185,91 +165,6 @@ define([
                 model_field : 'session_focus'
             }).render();
         },
-        
-        loadLocations : function() {
-            new Select_element_view({
-                model : this.model,
-                el : this.$el.find("#location_select"),
-                collection : app.collections.locations,
-                first_option_title : '-Select-',
-                class_name : '',
-                id_name : 'location',
-                model_field : 'location'
-            }).render();
-        },
-        
-        setEndInterval : function(id) {
-            var endInterval;
-            switch(id) {
-                case '1' :
-                   endInterval = 45;
-                   break;
-                case '2' :
-                   endInterval = 30;
-                   break;
-                case '3' :
-                   endInterval = 45;
-                   break;
-                default :
-                   endInterval = 60; 
-            }
-            this.set_etparttime(endInterval);
-        },
-
-        set_etparttime : function(minutes) {
-            var start_time = this.$el.find("#start_time").val();
-            if(!start_time) return;
-            var start_time = start_time.split(":");
-            var date = new Date();
-            date.setHours(start_time[0]);
-            date.setMinutes(start_time[1]);
-            var newdate = this.addMinutes(date, minutes);
-            var hours = newdate.getHours();
-            var minutes = newdate.getMinutes();
-            $("#finish_time").val(this.pad(hours) + ':' + this.pad(minutes));
-        },
-
-        addMinutes : function(inDate, inMinutes) {
-            var newdate = new Date();
-            newdate.setTime(inDate.getTime() + inMinutes * 60000);
-            return newdate;
-        },
-
-        pad : function (d) {
-            return (d < 10) ? '0' + d.toString() : d.toString();
-        },
-        
-        onChangeStarttime : function() {
-            var appointment_id = this.$el.find("#title").val();
-            this.setEndInterval(appointment_id);
-        },
-        
-        setAutoPublishWorkout : function() {
-            var checked = $("#frontend_published").is(":checked");
-            var disabled = false;
-            if(checked) {
-                disabled = true;
-                $("#auto_publish_workout").val('');
-            }
-            $("#auto_publish_workout").attr('disabled', disabled);
-        },
-        
-        setAutoPublishEvent : function() {
-            var checked = $("#published").is(":checked");
-            var disabled = false;
-            if(checked) {
-                disabled = true;
-                $("#auto_publish_event").val('');
-            }
-            $("#auto_publish_event").attr('disabled', disabled);
-        },
-        
-        onChangeStartDate : function(event) {
-            var value  = $(event.target).val();
-            $(this.el).find("#finish_date").val(value);
-        }
-        
-
 
     });
             

@@ -4,7 +4,7 @@ define([
 	'backbone',
         'app',
         'views/programs/select_element',
-	'text!templates/programs/backend/event_client_item.html'
+	'text!templates/programs_templates/backend/client_item.html'
 ], function ( $, _, Backbone, app, Select_element_view, template ) {
 
     var view = Backbone.View.extend({
@@ -16,13 +16,11 @@ define([
             //console.log(data);
             data.app = app;
             data.$ = $;
-            data.appointment_id = this.options.item_model.get('title');
             var template = _.template(this.template(data));
             $(this.el).html(template);
             
             this.loadClientSelect();
-            
-            this.connectStatus();
+
             
             return this;
         },
@@ -30,20 +28,6 @@ define([
         events : {
             "click .client_id" : "onClientSelect",
             "click .delete_event_client" : "delete",
-            "click .send_workout_email" : "onClickSendEmail",
-            "click .pdf_button" : "onClickPdf",
-        },
-        
-        connectStatus : function(model) {
-            var id = this.model.get('id');
-
-            var status = this.model.get('status');
-
-            var status_obj = $.status(app.options.status_options);
-             
-            $(this.el).find("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
-
-            status_obj.run();
         },
         
         loadClientSelect : function() {
@@ -106,19 +90,6 @@ define([
         close : function() {
             $(this.el).unbind();
             $(this.el).remove();
-        },
-        
-        onClickSendEmail :function(event) {
-            var id = $(event.target).attr('data-id');
-            var client_id = this.model.get('client_id');
-            app.controller.sendWorkoutEmail(id, client_id);
-        },
-        
-        onClickPdf : function(event) {
-            var id = $(event.target).attr('data-id');
-            var client_id = this.model.get('client_id');
-            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=' + id + '&client_id=' + client_id;
-            $.fitness_helper.printPage(htmlPage);
         },
 
     });

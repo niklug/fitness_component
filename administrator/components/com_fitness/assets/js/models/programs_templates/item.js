@@ -16,6 +16,7 @@ define([
             created_by : app.options.user_id,
             state : '1',
             business_profile_id : app.options.business_profile_id,
+            trainer_id : '',
             created : '',
             access : ''
         },

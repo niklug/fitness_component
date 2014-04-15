@@ -3,20 +3,20 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/programs/event_clients',
-        'collections/programs/trainer_clients',
-        'models/programs/event_client_item',
-        'views/programs/backend/event_client_item',
-	'text!templates/programs/backend/form_clients.html'
+        'collections/programs_templates/template_clients',
+        'collections/programs_templates/trainer_clients',
+        'models/programs_templates/client_item',
+        'views/programs_templates/backend/client_item',
+	'text!templates/programs_templates/backend/form_clients.html'
 ], function (
         $,
         _,
         Backbone,
         app,
-        Event_clients_collection, 
+        Template_clients_collection, 
         Trainer_clients_collection, 
-        Event_client_item_model,
-        Event_client_item_view,
+        Client_item_model,
+        Client_item_view,
         template
     ) {
 
@@ -25,12 +25,12 @@ define([
         initialize : function() {
             app.collections.trainer_clients = new Trainer_clients_collection();
 
-            app.collections.event_clients = new Event_clients_collection();
+            app.collections.template_clients = new Template_clients_collection();
             
             var self = this;
             
-            app.collections.event_clients.fetch({
-                data : {event_id : this.model.get('id')},
+            app.collections.template_clients.fetch({
+                data : {item_id : this.model.get('id')},
                 success : function (collection, response) {
                     self.render();
                 },
@@ -58,30 +58,18 @@ define([
         },
         
         loadClientsFields : function() {
-            if(app.collections.event_clients.length) {
+            if(app.collections.template_clients.length) {
                 var self = this;
-                _.each(app.collections.event_clients.models, function(model) {
-                    self.addItem(model, app.collections.event_clients); 
+                _.each(app.collections.template_clients.models, function(model) {
+                    self.addItem(model, app.collections.template_clients); 
                 });
             }
         },
         
         addItem : function(model, collection) {
-            this.container_el.append(new Event_client_item_view({model : model, item_model : this.model, collection : collection}).render().el); 
-            this.connectStatus(model);
+            this.container_el.append(new Client_item_view({model : model, item_model : this.model, collection : collection}).render().el); 
         },
         
-        connectStatus : function(model) {
-            var id = model.get('id');
-
-            var status = model.get('status');
-
-            var status_obj = $.status(app.options.status_options);
-             
-            $("#status_button_place_" + id).html(status_obj.statusButtonHtml(id, status));
-
-            status_obj.run();
-        },
         
         onClickAddClient : function() {
             var added_clients = $(".client_id").map(function() { return this.value; }).get();
@@ -104,7 +92,7 @@ define([
                         return;
                     }
  
-                    var model = new Event_client_item_model({event_id : self.model.get('id')});
+                    var model = new Client_item_model({item_id : self.model.get('id')});
                     self.addItem(model, app.collections.clients_rest); 
                 },
                 error : function (collection, response) {

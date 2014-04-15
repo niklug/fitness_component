@@ -525,7 +525,7 @@ class FitnessModelprograms extends JModelList {
 
         foreach ($exercises as $exercise) {
             $exercise->id = null;
-            $exercise->event_id = $inserted_event_id;
+            $exercise->item_id = $inserted_event_id;
             
             $insert = $db->insertObject('#__fitness_events_exercises', $exercise, 'id');
             if (!$insert) {
@@ -634,7 +634,7 @@ class FitnessModelprograms extends JModelList {
         
         $id = JRequest::getVar('id', 0, '', 'INT');
         
-        $event_id = JRequest::getVar('event_id', 0, '', 'INT');
+        $item_id = JRequest::getVar('item_id', 0, '', 'INT');
 
         $table = '#__fitness_events_exercises';
 
@@ -645,14 +645,11 @@ class FitnessModelprograms extends JModelList {
                 $query .= "SELECT  a.* ";
                 $query .= "  FROM $table AS a";
                 $query .= "  WHERE 1";
-                if($event_id) {
-                    $query .= " AND a.event_id='$event_id' ";
-                }
                 
-                
-                if($event_id) {
-                    $query .= " AND a.event_id='$event_id' ";
+                if($item_id) {
+                    $query .= " AND a.item_id='$item_id' ";
                 }
+     
                 
                 $query .= "  ORDER BY a.order ASC";
                 

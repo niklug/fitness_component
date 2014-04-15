@@ -55,7 +55,7 @@ define([
             "click .trash" : "onClickTrash",
             "click .restore" : "onClickRestore",
             "click .delete" : "onClickDelete",
-            //"click .view" : "onClickView",
+            "click .view" : "onClickView",
             "click .copy_item" : "onClickCopyItem",
             "click #select_trashed" : "onClickSelectTrashed",
             

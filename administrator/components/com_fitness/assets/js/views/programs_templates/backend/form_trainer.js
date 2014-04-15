@@ -6,7 +6,7 @@ define([
         'collections/exercise_library/business_profiles',
         'collections/programs/trainers',
         'views/programs/select_element',
-	'text!templates/programs/backend/form_trainer.html'
+	'text!templates/programs_templates/backend/form_trainer.html'
 ], function (
         $,
         _,
@@ -66,6 +66,8 @@ define([
             if(business_profile_id) {
                 this.loadTrainersSelect(business_profile_id);
             }
+            
+            $(this.el).find("#access").val(this.model.get('access'));
             
             return this;
         },

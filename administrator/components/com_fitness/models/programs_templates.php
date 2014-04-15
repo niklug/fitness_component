@@ -99,7 +99,7 @@ class FitnessModelprograms_templates extends JModelList {
                 $data->state = JRequest::getVar('state'); 
 
                 $data->name = JRequest::getVar('name');
-                $data->appointment_id = JRequest::getVar('title'); 
+                $data->appointment_id = JRequest::getVar('appointment_id'); 
                 $data->session_type = JRequest::getVar('session_type'); 
                 $data->session_focus = JRequest::getVar('session_focus'); 
                 
@@ -229,7 +229,9 @@ class FitnessModelprograms_templates extends JModelList {
         }
         //end get total number
         
-        $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name ";
+        $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name, ";
+        
+        $query .= " (SELECT GROUP_CONCAT(name) FROM #__users WHERE id IN (SELECT client_id FROM #__fitness_pr_temp_clients WHERE item_id=a.id)) group_clients_names ";
         
         $query .= "  FROM $table AS a";
         
@@ -350,19 +352,7 @@ class FitnessModelprograms_templates extends JModelList {
         return $data;
     }
     
-    
-    public function getSentConfirmEmailData($event_id, $client_id) {
 
-        $query = "SELECT sent, confirmed
-            FROM  #__fitness_email_reminder
-            WHERE event_id='$event_id'
-            AND client_id='$client_id'
-            LIMIT 1
-         ";
-        
-        return FitnessHelper::customQuery($query, 2);
-    }
-    
     public function copyProgramTemplate() {
         $status['success'] = 1;
         
@@ -377,33 +367,33 @@ class FitnessModelprograms_templates extends JModelList {
         //copy item
         $query = "SELECT * FROM #__fitness_programs_templates WHERE id='$id'";
         
-        $event =  FitnessHelper::customQuery($query, 2);
+        $item =  FitnessHelper::customQuery($query, 2);
         
-        if($event->id) {
-            $event->id = null;
-            $event->created_by = JFactory::getUser()->id;
-            $insert = $db->insertObject('#__fitness_programs_templates', $event, 'id');
+        if($item->id) {
+            $item->id = null;
+            $item->created_by = JFactory::getUser()->id;
+            $insert = $db->insertObject('#__fitness_programs_templates', $item, 'id');
             
             if (!$insert) {
                 $status['success'] = 1;
                 $status['message'] = $db->stderr();
             }
 
-            $inserted_event_id = $db->insertid();
+            $inserted_item_id = $db->insertid();
         }
         
         
-        /*
+        
         //copy exercises
-        $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$id'";
+        $query = "SELECT * FROM #__fitness_pr_temp_exercises WHERE item_id='$id'";
 
         $exercises =  FitnessHelper::customQuery($query, 1);
 
         foreach ($exercises as $exercise) {
             $exercise->id = null;
-            $exercise->event_id = $inserted_event_id;
+            $exercise->item_id = $inserted_item_id;
             
-            $insert = $db->insertObject('#__fitness_events_exercises', $exercise, 'id');
+            $insert = $db->insertObject('#__fitness_pr_temp_exercises', $exercise, 'id');
             if (!$insert) {
                 $status['success'] = 1;
                 $status['message'] = $db->stderr();
@@ -411,43 +401,29 @@ class FitnessModelprograms_templates extends JModelList {
         }
         
         //copy clients
-        // from admin
-        if(!$client_id) {
-            $query = "SELECT * FROM #__fitness_appointment_clients WHERE event_id='$id'";
 
-            $clients =  FitnessHelper::customQuery($query, 1);
+        $query = "SELECT * FROM #__fitness_pr_temp_clients WHERE item_id='$id'";
 
-            foreach ($clients as $client) {
-                $client->id = null;
-                $client->event_id = $inserted_event_id;
-                $client->status = '1';
-                $insert = $db->insertObject('#__fitness_appointment_clients', $client, 'id');
-                if (!$insert) {
-                    $status['success'] = 1;
-                    $status['message'] = $db->stderr();
-                }
-            }
-        // copy by client from frontend
-        } else {
+        $clients =  FitnessHelper::customQuery($query, 1);
+
+        foreach ($clients as $client) {
             $client->id = null;
-            $client->event_id = $inserted_event_id;
-            $client->client_id = $client_id;
-            $client->status = '1';
-            $insert = $db->insertObject('#__fitness_appointment_clients', $client, 'id');
+            $client->item_id = $inserted_item_id;
+            $insert = $db->insertObject('#__fitness_pr_temp_clients', $client, 'id');
             if (!$insert) {
                 $status['success'] = 1;
                 $status['message'] = $db->stderr();
             }
         }
-         * 
-         */
+
+      
         
-        return array( 'status' => $status, 'data' => $inserted_event_id);
+        return array( 'status' => $status, 'data' => $inserted_item_id);
     }
     
     
     
-    public function event_clients() {
+    public function pr_temp_clients() {
             
         $method = JRequest::getVar('_method');
 
@@ -459,9 +435,9 @@ class FitnessModelprograms_templates extends JModelList {
         
         $id = JRequest::getVar('id', 0, '', 'INT');
         
-        $event_id = JRequest::getVar('event_id', 0, '', 'INT');
+        $item_id = JRequest::getVar('item_id', 0, '', 'INT');
 
-        $table = '#__fitness_appointment_clients';
+        $table = '#__fitness_pr_temp_clients';
 
         $helper = new FitnessHelper();
 
@@ -472,8 +448,8 @@ class FitnessModelprograms_templates extends JModelList {
                 $query .= "  FROM $table AS a";
                 $query .= "  WHERE 1";
                 
-                if($event_id) {
-                    $query .= " AND a.event_id='$event_id' ";
+                if($item_id) {
+                    $query .= " AND a.item_id='$item_id' ";
                 }
                 
                 $data = FitnessHelper::customQuery($query, 1);
@@ -500,7 +476,7 @@ class FitnessModelprograms_templates extends JModelList {
         return $model;
     }
     
-    public function event_exercises() {
+    public function pr_temp_exercises() {
             
         $method = JRequest::getVar('_method');
 
@@ -512,9 +488,9 @@ class FitnessModelprograms_templates extends JModelList {
         
         $id = JRequest::getVar('id', 0, '', 'INT');
         
-        $event_id = JRequest::getVar('event_id', 0, '', 'INT');
+        $item_id = JRequest::getVar('item_id', 0, '', 'INT');
 
-        $table = '#__fitness_events_exercises';
+        $table = '#__fitness_pr_temp_exercises';
 
         $helper = new FitnessHelper();
 
@@ -523,13 +499,9 @@ class FitnessModelprograms_templates extends JModelList {
                 $query .= "SELECT  a.* ";
                 $query .= "  FROM $table AS a";
                 $query .= "  WHERE 1";
-                if($event_id) {
-                    $query .= " AND a.event_id='$event_id' ";
-                }
                 
-                
-                if($event_id) {
-                    $query .= " AND a.event_id='$event_id' ";
+                if($item_id) {
+                    $query .= " AND a.item_id='$item_id' ";
                 }
                 
                 $query .= "  ORDER BY a.order ASC";

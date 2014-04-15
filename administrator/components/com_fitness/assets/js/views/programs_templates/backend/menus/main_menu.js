@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/programs/backend/menus/main_menu.html'
+	'text!templates/programs_templates/backend/menus/main_menu.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
@@ -47,12 +47,11 @@ define([
             var id = this.model.get('id');
             var data = {};
             var url = app.options.ajax_call_url;
-            var view = 'Programs';
-            var task = 'copyEvent';
+            var view = 'programs_templates';
+            var task = 'copyProgramTemplate';
             var table = '';
             data.id = id;
             $.AjaxCall(data, url, view, task, table, function(output){
-                console.log(output);
                 app.controller.navigate("!/form_view/" + output, true);
             });
         },
@@ -65,90 +64,58 @@ define([
         saveItem : function() {
             var data = {};
             
-            var appointment_field = $('#title');
+            var appointment_field = $('#appointment_id');
             
             var session_type_field = $('#session_type');
             
             var session_focus_field = $('#session_focus');
             
-            var location_field = $('#location');
+            var workout_name_field = $('#workout_name');
             
-            var start_date_field = $('#start_date');
-            
-            var finish_date_field = $('#finish_date');
-            
-            var start_time_field = $('#start_time');
-            
-            var finish_time_field = $('#finish_time');
-            
-            data.title = appointment_field.val();
+            data.appointment_id = appointment_field.val();
             
             data.session_type = session_type_field.val();
             
             data.session_focus = session_focus_field.val();
             
-            data.starttime  = start_date_field.val() + ' ' + start_time_field.val();
+            data.name = workout_name_field.val();
             
-            data.endtime = finish_date_field.val() + ' ' + finish_time_field.val();
-            
-            if(!this.model.get('id')) {
-                data.endtime = start_date_field.val() + ' ' + finish_time_field.val();
-                data.owner = app.options.user_id;
-            }
-
-            data.frontend_published = $('#frontend_published:checked').val() || '0';
-            
-            data.published = $('#published:checked').val() || '0';
+            data.state = '1';
             
             data.business_profile_id = $('#business_profile_select').val();
+
+            data.description = $('#description').val();
             
             data.trainer_id = $('#trainer_id').val();
             
-            data.auto_publish_workout = $('#auto_publish_workout').val();
+            data.access = $('#access').val();
             
-            data.auto_publish_event = $('#auto_publish_event').val();
-            
-            data.description = $('#description').val();
+            if(!this.model.get('id')) {
+                data.created_by = app.options.user_id;
+                data.created = moment(new Date()).format("YYYY-MM-DD");
+            }
             
             this.model.set(data);
 
             
             console.log(this.model.toJSON());
             
-            $('#title, #session_type, #session_focus, #start_date, #finish_date, #start_time, #finish_time, #location').removeClass("red_style_border");
-            
-            //validation  
-            
-            if(!start_date_field.val()) {
-                start_date_field.addClass("red_style_border");
-                return false;
-            }
-            
-            
-            if(!start_time_field.val()) {
-                start_time_field.addClass("red_style_border");
-                return false;
-            }
-            
+            $('#title, #session_type, #session_focus, #created, #workout_name').removeClass("red_style_border");
+
             
             if (!this.model.isValid()) {
                 var validate_error = this.model.validationError;
-                console.log(validate_error);
-                if(validate_error == 'title') {
+                if(validate_error == 'appointment_id') {
                     appointment_field.addClass("red_style_border");
+                    return false;
+                } else if(validate_error == 'name') {
+                    workout_name_field.addClass("red_style_border");
                     return false;
                 } else if(validate_error == 'session_type') {
                     session_type_field.addClass("red_style_border");
                     return false;
                 } else if(validate_error == 'session_focus') {
                     session_focus_field.addClass("red_style_border");
-                    return false;
-                }  else if(validate_error == 'location') {
-                    location_field.addClass("red_style_border");
-                    return false;
-                } else if(validate_error == 'end_date_time') {
-                    finish_date_field.addClass("red_style_border");
-                    finish_time_field.addClass("red_style_border");
                     return false;
                 } else {
                     alert(this.model.validationError);

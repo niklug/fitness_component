@@ -3,10 +3,10 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/programs/exercises/items',
-        'models/programs/exercises/item',        
-        'views/programs/exercises/list_item',
-	'text!templates/programs/exercises/list.html',
+        'collections/programs_templates/exercises/items',
+        'models/programs_templates/exercises/item',        
+        'views/programs_templates/exercises/list_item',
+	'text!templates/programs_templates/exercises/list.html',
         'jquery.tableDnD'
 ], function (
         $,
