@@ -15,7 +15,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template(this.model.toJSON()));
+            var data  = this.model.toJSON();
+            data.app = app;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             return this;
         },
@@ -26,6 +28,7 @@ define([
             "click #save_new" : "onClickSaveNew",
             "click #save_copy" : "onClickSaveCopy",
             "click #cancel" : "onClickCancel",
+            "click #add_template" : "onClickAddTemplate",
         },
 
         onClickSave : function() {
@@ -146,6 +149,11 @@ define([
                 }
             });
         },
+        
+        onClickAddTemplate : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.add_template(id);
+        }
 
     });
             

@@ -1,5 +1,14 @@
 <div id="toolbar" class="toolbar-list">
     <ul>
+        <% if(app.options.event_id) { %>
+            <li id="toolbar-apply" class="button">
+                <a title="Add Template" id="add_template" class="toolbar" onclick="javascript:void(0)">
+                    <span data-id="<%= id %>" class="add_template_icon_32"> </span>
+                    Add
+                </a>
+            </li>
+         <% }%>
+         
         <% if(parseInt(id)) { %>
             <li id="toolbar-apply" class="button">
                 <a id="save" class="toolbar" onclick="javascript:void(0)">
@@ -9,7 +18,7 @@
             </li>
          <% } else { %>
             <li id="toolbar-apply" class="button">
-                <a id="save" class="toolbar" onclick="javascript:void(0)">
+                <a  id="save" class="toolbar" onclick="javascript:void(0)">
                     <span  class="icon-32-forward"> </span>
                     Next
                 </a>

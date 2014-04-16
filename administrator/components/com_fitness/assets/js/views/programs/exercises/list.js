@@ -46,6 +46,8 @@ define([
             data.$ = $;
             data.app = app;
             data.readonly = this.readonly;
+            data.choose_template = this.options.choose_template || false;
+            
             $(this.el).html(this.template(data));
             
             this.container_el = this.$el.find("#items_container");
@@ -71,6 +73,7 @@ define([
             "click #show_hide_comments" : "onClickShowComments",
             "click .search_video" : "onClickSearchVideo",
             "click .show_exercise_video" : "onClickShowVideo",
+            "click #choose_template" : "onClickChooseTemplate",
             
         },
         
@@ -295,7 +298,7 @@ define([
            
            el_url += '&exercise_id=' + exercise_id;
            
-           el_url += '&back_url=' + encodeURIComponent(document.URL);
+           el_url += '&back_url=' + encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=programs#!/form_view/' + this.model.get('id'));
 
            window.location = el_url;
        },
@@ -312,6 +315,16 @@ define([
            var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=exercise_library#!/' + view + '/' + id;
 
            window.open(el_url,'_blank');
+       },
+       
+       onClickChooseTemplate : function() {
+           var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=programs_templates';
+           
+           el_url += '&event_id=' + this.model.get('id');
+           
+           el_url += '&back_url=' + encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=programs#!/form_view/' + this.model.get('id'));
+
+           window.location = el_url;
        }
     });
             

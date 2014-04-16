@@ -65,6 +65,8 @@ define([
             "click .copy_item" : "onClickCopy",
             
             "click .appointment_email" : "sendAppointmentEmail",
+            "click .add_template" : "onClickAddTemplate",
+            
         },
         
         addItem : function(model) {
@@ -228,6 +230,11 @@ define([
             var id = $(event.target).attr('data-id');
             app.controller.navigate("!/form_view/" + id, true);
         },
+        
+        onClickAddTemplate : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.add_template(id);
+        }
         
     });
             

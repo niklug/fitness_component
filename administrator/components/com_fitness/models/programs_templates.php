@@ -362,7 +362,7 @@ class FitnessModelprograms_templates extends JModelList {
             
             $insert = $db->insertObject('#__fitness_pr_temp_exercises', $exercise, 'id');
             if (!$insert) {
-                $status['success'] = 1;
+                $status['success'] = 0;
                 $status['message'] = $db->stderr();
             }
         }
@@ -378,7 +378,7 @@ class FitnessModelprograms_templates extends JModelList {
             $client->item_id = $inserted_item_id;
             $insert = $db->insertObject('#__fitness_pr_temp_clients', $client, 'id');
             if (!$insert) {
-                $status['success'] = 1;
+                $status['success'] = 0;
                 $status['message'] = $db->stderr();
             }
         }
@@ -495,6 +495,31 @@ class FitnessModelprograms_templates extends JModelList {
         $model->id = $id;
 
         return $model;
+    }
+    
+    public function import_pr_temp() {
+        $data = json_decode(JRequest::getVar('data_encoded'));
+        $id = $data->id;
+        $item_id = $data->item_id;
+        
+        //copy exercises
+        $query = "SELECT * FROM #__fitness_pr_temp_exercises WHERE item_id='$id'";
+
+        $exercises =  FitnessHelper::customQuery($query, 1);
+        
+        $db = JFactory::getDbo();
+        $status['success'] = 1;
+        foreach ($exercises as $exercise) {
+            $exercise->id = null;
+            $exercise->item_id = $item_id;
+            
+            $insert = $db->insertObject('#__fitness_events_exercises', $exercise, 'id');
+            if (!$insert) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+            }
+        }
+        return array( 'status' => $status);
     }
 
 

@@ -76,6 +76,12 @@
         <%= session_focus_name %>
     </td>
     
+    <% if(app.options.pr_temp_id) { %>
+    <td>
+        <a class="add_template" title="Add Program Template and Open" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="search_program_icon_20"></span></a>
+    </td>
+    <% } %>
+    
     <td>
         <% if(published == '1' || published == '0') { %>
             <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>

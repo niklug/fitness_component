@@ -40,7 +40,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            data.app = app;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             
             this.$el.find("#date_from, #date_to").datepicker({ dateFormat: "yy-mm-dd"});
@@ -57,6 +59,7 @@ define([
             "click #add_item" : "onClickAddItem",
             "click #trash_delete_selected" : "onClickTrashDeleteSelected",
             "click #copy_selected" : "onClickCopySelected",
+            "click #back_program" : "onClickCopyBackProgram",
         },
         
         connectBusinessFilter : function() {
@@ -187,6 +190,10 @@ define([
         
         onClickAddItem : function() {
             app.controller.navigate("!/form_view/0", true);
+        },
+        
+        onClickCopyBackProgram : function() {
+            app.controller.route_program();
         }
     });
             

@@ -6,7 +6,11 @@
                 <h5 class="orange_text">WORKOUT DETAILS</h5>
             </td>
             <td>
-                <a id="show_hide_comments"  style="cursor:pointer;float:right;margin-left: 10px;" href="javascript:void(0)">[SHOW COMMENTS]</a>     
+                <a id="show_hide_comments"  style="cursor:pointer;float:right;margin-left: 10px;" href="javascript:void(0)">[SHOW COMMENTS]</a>  
+                <% if(choose_template) {%>
+                <a id="choose_template"  style="cursor:pointer;float:right;margin-left: 10px;" href="javascript:void(0)">[CHOOSE TEMPLATE]</a>  
+                <% } %>
+                
                 <% if(!readonly) {%>
                 <a id="add_exercise"  style="cursor:pointer;float:right;margin-left: 10px;" href="javascript:void(0)">[ADD EXERCISE]</a>  
                 <% } %>

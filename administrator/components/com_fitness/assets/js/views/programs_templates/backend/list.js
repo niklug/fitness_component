@@ -60,7 +60,8 @@ define([
             "click #select_trashed" : "onClickSelectTrashed",
             
             "click .publish_item" : "onClickPublishItem",
-        
+            "click .add_template" : "onClickAddTemplate",
+            "click .search_program" : "onClickSearchProgram",
         },
         
         addItem : function(model) {
@@ -193,6 +194,15 @@ define([
             app.controller.navigate("!/form_view/" + id, true);
         },
         
+        onClickAddTemplate : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.add_template(id);
+        },
+        
+        onClickSearchProgram : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.search_program(id);
+        }
     });
             
     return view;

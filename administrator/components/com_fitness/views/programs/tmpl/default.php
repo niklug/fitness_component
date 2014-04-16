@@ -53,7 +53,9 @@ $business_profile_id = $business_profile_id['data'];
         
         'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
         
-        'business_profile_id' : '<?php echo $business_profile_id; ?>'
+        'business_profile_id' : '<?php echo $business_profile_id; ?>',
+        'pr_temp_id' : '<?php echo JRequest::getVar('pr_temp_id') ?>',
+        'back_url' : decodeURIComponent('<?php echo JRequest::getVar('back_url') ?>'),
     };
     
 

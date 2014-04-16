@@ -19,6 +19,10 @@ var sort_title = 'Click to sort by this column';
                     <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_session_type" onclick="javascript:void(0)">Session Type</a></th>
                     <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_session_focus" onclick="javascript:void(0)">Session Focus</a></th>
                     
+                    <% if(app.options.pr_temp_id) { %>
+                    <td></td>
+                    <% } %>
+                    
                     <th></th>
                     <th></th>
                     <th></th>

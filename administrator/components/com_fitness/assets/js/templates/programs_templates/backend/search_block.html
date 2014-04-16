@@ -1,5 +1,11 @@
 <div style="display: inline-block; float: right;"  class="right">
     <div id="toolbar" class="toolbar-list right">
+        <% if(app.options.event_id) { %>
+            <a id="back_program" tilte="Go Back" class="toolbar" onclick="javascript:void(0)">
+                <span  class="icon-32-back"> </span>
+            </a>
+        <% } %>
+                
         <a title="Add New" id="add_item" class="toolbar" onclick="javascript:void(0)">
             <span  class="icon-32-new"> </span>
         </a>

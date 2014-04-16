@@ -274,6 +274,31 @@ define([
             });
         },
 
+        route_program : function() {
+            var url = app.options.back_url;
+            window.location = url;
+        },
+        
+        add_template : function(id) {
+            var self = this;
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'programs_templates';
+            var task = 'import_pr_temp';
+            var table = '';
+            data.id = id;
+            data.item_id = app.options.event_id;
+            $.AjaxCall(data, url, view, task, table, function(output){
+                self.route_program();
+            });
+        },
+        
+        search_program : function(id) {
+            var url = app.options.base_url_relative + 'index.php?option=com_fitness&view=programs';
+            url += '&pr_temp_id=' + id;
+            url += '&back_url=' + encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=programs_templates');
+            window.location = url;
+        }
 
     });
 

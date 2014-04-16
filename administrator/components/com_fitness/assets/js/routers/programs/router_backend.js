@@ -128,7 +128,8 @@ define([
                     el : $("#exercises_list"),
                     model : model,
                     exercise_model : Exercise_model,
-                    exercises_collection : Exercises_collection
+                    exercises_collection : Exercises_collection,
+                    choose_template : true
                 });
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});
@@ -287,7 +288,25 @@ define([
             data.method = 'Workout';
             $.fitness_helper.sendEmail(data);
         },
-
+        
+        route_back_url : function() {
+            var url = app.options.back_url;
+            window.location = url;
+        },
+        
+        add_template : function(id) {
+            var self = this;
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'programs_templates';
+            var task = 'import_pr_temp';
+            var table = '';
+            data.id = app.options.pr_temp_id;
+            data.item_id = id;
+            $.AjaxCall(data, url, view, task, table, function(output){
+                self.form_view(id);
+            });
+        },
     });
 
     return Controller;

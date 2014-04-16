@@ -441,5 +441,11 @@ class FitnessController extends JController
             $view->setModel($this->getModel('programs_templates'));
             $view -> pr_temp_exercises(); 
         }
+        
+        function import_pr_temp() {
+            $view = $this -> getView('programs_templates', 'json');
+            $view->setModel($this->getModel('programs_templates'));
+            $view -> import_pr_temp(); 
+        }
 
 }
