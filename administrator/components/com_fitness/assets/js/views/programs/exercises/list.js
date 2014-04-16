@@ -289,7 +289,13 @@ define([
        onClickSearchVideo : function(event) {
            var exercise_id = $(event.target).attr('data-id');
            
-           var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=exercise_library&event_id=' + this.model.get('id') + '&exercise_id=' + exercise_id;
+           var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=exercise_library';
+           
+           el_url += '&event_id=' + this.model.get('id');
+           
+           el_url += '&exercise_id=' + exercise_id;
+           
+           el_url += '&back_url=' + encodeURIComponent(document.URL);
 
            window.location = el_url;
        },

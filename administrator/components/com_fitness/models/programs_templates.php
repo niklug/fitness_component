@@ -319,39 +319,6 @@ class FitnessModelprograms_templates extends JModelList {
 
     }
     
-    
-    public function getGroupClientsData($event_id) {
-
-        $query = "SELECT * FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
-        
-        $clients = FitnessHelper::customQuery($query, 1);
-
-        $data = array();
-        $i = 0;
-        foreach ($clients as $client) {
-            $user = &JFactory::getUser($client->client_id);
-            
-            $sentConfirmEmailData = $this->getSentConfirmEmailData($event_id, $client->client_id);
-            
-            $data[$i]->id = $client->id;
-            
-            $data[$i]->client_id = $client->client_id;
-            
-            $data[$i]->client_name = $user->name;
-            
-            $data[$i]->sent = $sentConfirmEmailData->sent;
-            
-            $data[$i]->confirmed = $sentConfirmEmailData->confirmed;
-            
-            $data[$i]->status = $client->status;
-                    
-            $i++;
-            
-        }
-       
-        return $data;
-    }
-    
 
     public function copyProgramTemplate() {
         $status['success'] = 1;

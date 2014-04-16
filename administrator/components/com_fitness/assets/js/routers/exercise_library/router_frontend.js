@@ -341,7 +341,7 @@ define([
         },
         
         route_program : function() {
-            var url = app.options.base_url_relative + 'index.php?option=com_fitness&view=programs#!/form_view/' + app.options.event_id;
+            var url = app.options.back_url;
             window.location = url;
         }
         

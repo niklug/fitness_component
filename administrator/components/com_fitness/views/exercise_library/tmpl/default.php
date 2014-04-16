@@ -59,6 +59,7 @@ $business_profile_id = $business_profile_id['data'];
         
         'event_id' : '<?php echo JRequest::getVar('event_id') ?>',
         'exercise_id' : '<?php echo JRequest::getVar('exercise_id') ?>',
+        'back_url' : decodeURIComponent('<?php echo JRequest::getVar('back_url') ?>'),
     };
     
     //status class

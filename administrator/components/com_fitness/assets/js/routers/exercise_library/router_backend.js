@@ -7,6 +7,7 @@ define([
         'models/exercise_library/exercise_library_item',
         'models/exercise_library/request_params_items',
         'models/programs/exercises/item',
+        'models/programs_templates/exercises/item',
         'views/exercise_library/backend/form_container',
         'views/exercise_library/select_filter_block',
         'views/exercise_library/backend/menus/main_menu',
@@ -25,7 +26,8 @@ define([
         Exercise_library_collection,
         Exercise_library_item_model,
         Request_params_items_model,
-        Exercise_model,
+        Program_exercise_model,
+        Pr_tepm_exercise_model,
         Form_container_view,
         Select_filter_block_view,
         Main_menu_view,
@@ -217,8 +219,12 @@ define([
         },
         
         add_event_exercise : function(id) {
-            var model = new Exercise_model();
+            var model = new Program_exercise_model();
             
+            if((/programs_templates/g).test(app.options.back_url)) {
+                model = new Pr_tepm_exercise_model();
+            }
+
             var video_model = app.collections.items.get(id);
             
             model.clear();
@@ -240,7 +246,11 @@ define([
         },
         
         add_event_exercises : function(id) {
-            var model = new Exercise_model();
+            var model = new Program_exercise_model();
+            
+            if((/programs_templates/g).test(app.options.back_url)) {
+                model = new Pr_tepm_exercise_model();
+            }
             
             var video_model = app.collections.items.get(id);
             
@@ -248,7 +258,7 @@ define([
             
             model.set({
                 id : null,
-                event_id : app.options.event_id,
+                item_id : app.options.event_id,
                 video_id : id,
                 title : video_model.get('exercise_name')
             });
@@ -261,7 +271,7 @@ define([
         },
         
         route_program : function() {
-            var url = app.options.base_url_relative + 'index.php?option=com_fitness&view=programs#!/form_view/' + app.options.event_id;
+            var url = app.options.back_url;
             window.location = url;
         }
     });
