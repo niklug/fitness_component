@@ -5,8 +5,10 @@ define([
         'app',
         'collections/programs/items',
         'collections/programs/event_clients',
+        'collections/programs/exercises/items',
         'models/programs/item',
         'models/programs/request_params_items',
+        'models/programs/exercises/item', 
         'views/programs/backend/form_container',
         'views/programs/backend/menus/main_menu',
         'views/programs/backend/form_details',
@@ -24,8 +26,10 @@ define([
         app,
         Items_collection,
         Event_clients_collection, 
+        Exercises_collection,
         Item_model,
         Request_params_items_model,
+        Exercise_model,
         Form_container_view,
         Main_menu_view,
         Form_details_view,
@@ -120,7 +124,12 @@ define([
                 
                 new Form_event_workout_instructions({el : $("#workout_instuctions_wrapper"), model : model});
                 
-                new Exercises_list_view({el : $("#exercises_list"), model : model});
+                new Exercises_list_view({
+                    el : $("#exercises_list"),
+                    model : model,
+                    exercise_model : Exercise_model,
+                    exercises_collection : Exercises_collection
+                });
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});
             }

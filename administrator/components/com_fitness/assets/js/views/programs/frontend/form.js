@@ -5,6 +5,8 @@ define([
         'app',
         'collections/programs/select_filter',
         'collections/programs/trainers',
+        'collections/programs/exercises/items',
+        'models/programs/exercises/item', 
         'views/programs/select_element',
         'views/programs/exercises/list',
 	'text!templates/programs/frontend/form.html',
@@ -16,6 +18,8 @@ define([
         app,
         Select_filter_collection,
         Trainers_collection, 
+        Exercises_collection,
+        Exercise_model,
         Select_element_view,
         Exercises_list_view,
         template
@@ -154,7 +158,13 @@ define([
 
         connectExercises : function() {
             if(this.model.get('id')) {
-                new Exercises_list_view({el : $(this.el).find("#exercises_list"), model : this.model, readonly : false});
+                new Exercises_list_view({
+                    el : $(this.el).find("#exercises_list"),
+                    model : this.model,
+                    exercise_model : Exercise_model,
+                    exercises_collection : Exercises_collection,
+                    readonly : false
+                });
             }
         },
         

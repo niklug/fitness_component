@@ -3,6 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'collections/programs/exercises/items',
+        'models/programs/exercises/item', 
         'views/programs/exercises/list',
 	'text!templates/programs/frontend/item.html'
 ], function (
@@ -10,6 +12,8 @@ define([
         _, 
         Backbone, 
         app,
+        Exercises_collection,
+        Exercise_model,
         Exercises_list_view,
         template
     ) {
@@ -58,7 +62,13 @@ define([
         },
 
         connectExercises : function() {
-            new Exercises_list_view({el : this.$el.find("#exercises_list"), model : this.model, readonly : true});
+            new Exercises_list_view({
+                el : $(this.el).find("#exercises_list"),
+                model : this.model,
+                exercise_model : Exercise_model,
+                exercises_collection : Exercises_collection,
+                readonly : true
+            });
         }
 
     });

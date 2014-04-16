@@ -1172,9 +1172,9 @@ class FitnessHelper extends FitnessFactory
         return $id;     
     }
     
-    public function getClientsByEvent($event_id) {
+    public function getClientsByEvent($item_id) {
         $db = & JFactory::getDBO();
-        $query = "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id !='0'";
+        $query = "SELECT DISTINCT client_id FROM #__fitness_appointment_clients WHERE item_id='$item_id' AND client_id !='0'";
 
         $db->setQuery($query);
         if (!$db->query()) {
@@ -1372,8 +1372,8 @@ class FitnessHelper extends FitnessFactory
         return $images;
     }
     
-    public function getExercises($event_id) {
-        $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$event_id'ORDER BY `#__fitness_events_exercises`.`order` ASC ";
+    public function getExercises($item_id) {
+        $query = "SELECT * FROM #__fitness_events_exercises WHERE item_id='$item_id' ORDER BY 'order' ASC ";
         return self::customQuery($query, 1);
     }
     

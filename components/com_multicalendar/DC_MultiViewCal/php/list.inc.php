@@ -84,9 +84,9 @@ function event_state_html($event_status) {
     return $html;
 }
 
-function getExercises($event_id) {
+function getExercises($item_id) {
     $db	= & JFactory::getDBO();
-    $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$event_id'ORDER BY `#__fitness_events_exercises`.`order` ASC ";
+    $query = "SELECT * FROM #__fitness_events_exercises WHERE item_id='$item_id' ORDER BY 'order' ASC ";
     $db->setQuery($query);
     if(!$db->query()) {
         JError::raiseError($db->getErrorMsg());

@@ -519,7 +519,7 @@ class FitnessModelprograms extends JModelList {
         
         
         //copy exercises
-        $query = "SELECT * FROM #__fitness_events_exercises WHERE event_id='$id'";
+        $query = "SELECT * FROM #__fitness_events_exercises WHERE item_id='$id'";
 
         $exercises =  FitnessHelper::customQuery($query, 1);
 

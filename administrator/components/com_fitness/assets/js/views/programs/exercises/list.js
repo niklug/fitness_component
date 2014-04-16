@@ -3,8 +3,6 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/programs/exercises/items',
-        'models/programs/exercises/item',        
         'views/programs/exercises/list_item',
 	'text!templates/programs/exercises/list.html',
         'jquery.tableDnD'
@@ -13,8 +11,6 @@ define([
         _, 
         Backbone, 
         app,
-        Exercises_collection,
-        Item_model,
         List_item_view,
         template
     ) {
@@ -24,7 +20,10 @@ define([
         initialize : function() {
             this.readonly = this.options.readonly || false;
 
-            app.collections.exercises = new Exercises_collection();
+            app.collections.exercises = new this.options.exercises_collection();
+            
+            app.models.exercise = this.options.exercise_model;
+
             var self = this;
             $.when (
                 app.collections.exercises.fetch({
@@ -97,7 +96,7 @@ define([
         },
         
         onClickAdd : function() {
-            var model = new Item_model({
+            var model = new app.models.exercise({
                 item_id : this.model.get('id'),
                 order : this.$el.find("#exercise_table tbody tr").length,
             });
@@ -147,7 +146,7 @@ define([
         },
         
         deleteItem : function(id) {
-            var model = new Item_model();
+            var model = new app.models.exercise();
             model.set({id : id});
             var self = this;
             app.collections.exercises.remove(model);

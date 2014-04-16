@@ -5,8 +5,10 @@ define([
         'app',
         'collections/programs_templates/items',
         'collections/programs_templates/template_clients',
+        'collections/programs_templates/exercises/items',
         'models/programs_templates/item',
         'models/programs_templates/request_params_items',
+        'models/programs_templates/exercises/item', 
         'views/programs_templates/backend/form_container',
         'views/programs_templates/backend/menus/main_menu',
         'views/programs_templates/backend/form_details',
@@ -15,7 +17,7 @@ define([
         'views/programs/backend/form_workout_instructions',
         'views/programs_templates/backend/list',
         'views/programs_templates/backend/list_header_container',
-        'views/programs_templates/exercises/list',
+        'views/programs/exercises/list',
         'views/programs_templates/backend/comments_block'
 ], function (
         $,
@@ -24,8 +26,10 @@ define([
         app,
         Items_collection,
         Template_clients_collection, 
+        Exercises_collection,
         Item_model,
         Request_params_items_model,
+        Exercise_model,
         Form_container_view,
         Main_menu_view,
         Form_details_view,
@@ -120,7 +124,12 @@ define([
                 
                 new Form_event_workout_instructions({el : $("#workout_instuctions_wrapper"), model : model});
                 
-                new Exercises_list_view({el : $("#exercises_list"), model : model});
+                new Exercises_list_view({
+                    el : $("#exercises_list"),
+                    model : model,
+                    exercise_model : Exercise_model,
+                    exercises_collection : Exercises_collection
+                });
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});
             }
