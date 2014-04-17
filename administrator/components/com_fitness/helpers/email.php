@@ -125,8 +125,14 @@ class FitnessEmail extends FitnessHelper
             $contents = $this->contents;
  
             if(is_array($contents)) {
+                if(!$contents[$i]) {
+                    throw new Exception('Email Body is empty');
+                }
                 $send = $this->sendEmail($email, $this->subject, $contents[$i]);
             } else {
+                if(!$contents) {
+                    throw new Exception('Email Body is empty');
+                }
                 $send = $this->sendEmail($email, $this->subject, $contents);
             }
 
@@ -444,16 +450,18 @@ class AppointmentEmail extends FitnessEmail {
         
         //client sends workout heself
         if(($this->send_to == 'client') AND ($this->layout == 'email_pdf_workout')) {
-            $ids[] = JFactory::getUser()->id;
+            $ids = array(JFactory::getUser()->id);
             $this->event_id = $this->data->id;
             
         }
         
+
         $this->recipients_ids = $ids;
     }
     
     protected function generate_contents(){
         $contents = array();
+
         foreach ($this->recipients_ids as $recipient_id) {
             if(!$recipient_id)  continue;
             $client_id = $this->item->client_id;
@@ -463,14 +471,17 @@ class AppointmentEmail extends FitnessEmail {
             }
             
             if($this->layout == 'email_pdf_workout'){
-                $client_id = $this->data->client_id;
+                $client_id = $recipient_id;
             }
             
             $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->event_id  . '&client_id=' . $client_id;
+            
             $result = $this->getContentCurl($url);
+
             $contents[] = $result['data'];
         }
         $this->contents = $contents;
+
     }
     
     public function processing($data) {

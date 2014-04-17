@@ -307,6 +307,20 @@ define([
                 self.form_view(id);
             });
         },
+        
+        add_templates : function(id) {
+            var self = this;
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'programs_templates';
+            var task = 'import_pr_temp';
+            var table = '';
+            data.id = app.options.pr_temp_id;
+            data.item_id = id;
+            $.AjaxCall(data, url, view, task, table, function(output){
+                
+            });
+        },
     });
 
     return Controller;

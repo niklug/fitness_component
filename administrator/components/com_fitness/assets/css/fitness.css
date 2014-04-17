@@ -1241,3 +1241,13 @@ width: 20px;
     height: 20px;
     width: 20px;
 }
+
+
+.search_program_icon_32 {
+    background-image: url("../images/search_program.png");
+    background-repeat: no-repeat;
+    background-size: 32px auto;
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+}

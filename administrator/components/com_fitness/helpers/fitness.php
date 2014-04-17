@@ -378,6 +378,8 @@ class FitnessHelper extends FitnessFactory
 
 
     function getContentCurl($url) {
+        $url = str_replace("https", "http", $url);
+        
         $ret['success'] = true;
         if(!function_exists('curl_version')) {
             throw new Exception('cURL not anabled');

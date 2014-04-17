@@ -55,15 +55,24 @@
         <% } %>
     </td>
     
+    <% 
+    var add_template_title = 'Create New Program From Template';
+    if(app.options.event_id) { 
+        add_template_title = 'Add Template To Appointment';
+    } 
+    %> 
+    
     <% if(app.options.event_id) { %>
     <td>
-        <a class="add_template" title="Add Template" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="add_template_icon_20"></span></a>
+        <a class="add_template" title="<%= add_template_title %>" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="add_template_icon_20"></span></a>
     </td>
-    <% } %>  
+    <% } %> 
     
+    <% if(!app.options.event_id) { %>
     <td>
-        <a class="search_program" title="Search Program" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="search_program_icon_20"></span></a>
+        <a class="search_program" title="Add Template To Existing Program" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="search_program_icon_20"></span></a>
     </td>
+    <% } %> 
     
     <td class="center">
         <%

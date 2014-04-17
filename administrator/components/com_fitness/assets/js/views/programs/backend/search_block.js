@@ -63,6 +63,8 @@ define([
             "click #unpublish_workout_selected" : "onClickUnpublishWorkout",
             "click #copy_selected" : "onClickCopySelected",
             "click #go_back" : "onClickGoBack",
+            "click #add_pr_tepm_multiple" : "onClickAddTemplateMultiple",
+            
         },
         
         connectBusinessFilter : function() {
@@ -270,6 +272,20 @@ define([
          
         onClickGoBack : function() {
             app.controller.route_back_url();
+        },
+        
+        onClickAddTemplateMultiple : function() {
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+            var self = this;
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    app.controller.add_templates(item);
+                });
+            }
+            $("#select_trashed,.trash_checkbox").prop("checked", false);
         }
     });
             

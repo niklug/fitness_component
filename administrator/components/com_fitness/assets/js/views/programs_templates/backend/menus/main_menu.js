@@ -29,6 +29,7 @@ define([
             "click #save_copy" : "onClickSaveCopy",
             "click #cancel" : "onClickCancel",
             "click #add_template" : "onClickAddTemplate",
+            "click #search_program" : "onClickSaerchProgram",
         },
 
         onClickSave : function() {
@@ -153,6 +154,11 @@ define([
         onClickAddTemplate : function(event) {
             var id = $(event.target).attr('data-id');
             app.controller.add_template(id);
+        },
+        
+        onClickSaerchProgram : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.search_program(id);
         }
 
     });

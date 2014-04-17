@@ -1,13 +1,34 @@
 <div id="toolbar" class="toolbar-list">
     <ul>
+        <% 
+        var add_template_title = 'Create New Program From Template';
+        if(app.options.event_id) { 
+            add_template_title = 'Add Template To Appointment';
+        } 
+        %>  
+
         <% if(app.options.event_id) { %>
-            <li id="toolbar-apply" class="button">
-                <a title="Add Template" id="add_template" class="toolbar" onclick="javascript:void(0)">
-                    <span data-id="<%= id %>" class="add_template_icon_32"> </span>
-                    Add
-                </a>
-            </li>
-         <% }%>
+        <li id="toolbar-apply" class="button">
+            <a title="<%= add_template_title %>" id="add_template" class="toolbar" onclick="javascript:void(0)">
+                <span data-id="<%= id %>" class="add_template_icon_32"> </span>
+            </a>
+        </li>
+        <% } %> 
+        
+        <% 
+        var search_program_title = 'Search Programs';
+        if(!app.options.event_id) { 
+            search_program_title = 'Add Template To Existing Program';
+        } 
+        %> 
+        
+        <% if(!app.options.event_id) { %>
+        <li id="toolbar-apply" class="button">
+            <a title="<%= search_program_title %>" id="search_program" class="toolbar" onclick="javascript:void(0)">
+                <span data-id="<%= id %>" class="search_program_icon_32"> </span>
+            </a>
+        </li>
+        <% } %> 
          
         <% if(parseInt(id)) { %>
             <li id="toolbar-apply" class="button">

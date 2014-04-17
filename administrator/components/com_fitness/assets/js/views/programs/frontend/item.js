@@ -50,9 +50,7 @@ define([
         onClickEmail : function() {
             var data = {};
             data.url = app.options.ajax_call_url;
-            data.view = '';
             data.task = 'ajax_email';
-            data.table = '';
 
             data.id =  this.model.get('id');
             data.client_id =  app.options.user_id;
