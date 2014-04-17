@@ -120,9 +120,11 @@ define([
             $(this.el).find("#start_time, #finish_time").timepicker({ 'timeFormat': 'H:i', 'step': 15 });
 
             this.loadLocations();
-            
+
             if(!app.controller.is_item_owner(this.model)) {
                 $(this.el).find("#description").attr('readonly', true);
+            } else {
+                $(this.el).find("#description").cleditor({width:'100%', height:150, useCSS:true})[0];
             }
             
             return this;

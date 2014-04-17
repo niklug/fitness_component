@@ -108,7 +108,7 @@ define([
             
             data.auto_publish_event = $('#auto_publish_event').val();
             
-            data.description = $('#description').val();
+            data.description = encodeURIComponent($('#description').val());
             
             this.model.set(data);
 

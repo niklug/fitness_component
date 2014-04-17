@@ -86,7 +86,7 @@ function event_state_html($event_status) {
 
 function getExercises($item_id) {
     $db	= & JFactory::getDBO();
-    $query = "SELECT * FROM #__fitness_events_exercises WHERE item_id='$item_id' ORDER BY 'order' ASC ";
+    $query = "SELECT a.* FROM #__fitness_events_exercises AS a WHERE a.item_id='$item_id' ORDER BY a.order ASC ";
     $db->setQuery($query);
     if(!$db->query()) {
         JError::raiseError($db->getErrorMsg());

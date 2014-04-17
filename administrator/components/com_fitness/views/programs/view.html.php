@@ -30,6 +30,7 @@ class FitnessViewPrograms extends JView {
         $this->pagination = $this->get('Pagination');
         $document = &JFactory::getDocument();
         $document->addStyleSheet(JURI::base() . 'components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'fitness.css');
+        $document->addStyleSheet(JURI::base() . 'components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'jquery.cleditor.css');
         
         $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
 

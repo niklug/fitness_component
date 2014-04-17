@@ -44,6 +44,7 @@ class FitnessViewPrograms extends JView {
         $document->addscript(JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
 
         $document->addscript(JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS . 'assets' . DS . 'js' . DS . 'lib' . DS . 'underscore-min.js');
+        
         include_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'assets' . DS . 'js' . DS . 'underscore_templates.html';
 
         $document->addStyleSheet(JUri::root() . 'components/com_fitness/assets/css/fitness.css');
@@ -51,6 +52,8 @@ class FitnessViewPrograms extends JView {
         $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
         
         $document->addStyleSheet(JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
+        
+        $document->addStyleSheet(JURI::root() . 'administrator/components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'jquery.cleditor.css');
 
 
         parent::display($tpl);

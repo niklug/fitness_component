@@ -1375,7 +1375,7 @@ class FitnessHelper extends FitnessFactory
     }
     
     public function getExercises($item_id) {
-        $query = "SELECT * FROM #__fitness_events_exercises WHERE item_id='$item_id' ORDER BY 'order' ASC ";
+        $query = "SELECT a.* FROM #__fitness_events_exercises AS a WHERE a.item_id='$item_id' ORDER BY a.order ASC ";
         return self::customQuery($query, 1);
     }
     

@@ -471,7 +471,7 @@ class AppointmentEmail extends FitnessEmail {
             }
             
             if($this->layout == 'email_pdf_workout'){
-                $client_id = $recipient_id;
+                $client_id = $this->data->client_id;
             }
             
             $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->event_id  . '&client_id=' . $client_id;

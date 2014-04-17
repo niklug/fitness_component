@@ -80,8 +80,12 @@ class FitnessModelprograms extends JModelList {
             $method = $_SERVER['REQUEST_METHOD'];
         }
 
-        $model = json_decode(JRequest::getVar('model'));
         
+        $model = json_decode(JRequest::getVar('model','','','',JREQUEST_ALLOWHTML));
+        
+        $model->description = urldecode($model->description);
+        
+
         $id = JRequest::getVar('id', 0, '', 'INT');
         
         $table = '#__dc_mv_events';

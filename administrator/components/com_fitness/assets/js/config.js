@@ -90,7 +90,9 @@ require.config({
         'jquery.calculateSummary' : 'lib/plan_summary_class',
         'jquery.gredient_graph' : 'lib/gredient_graph',
         'jquery.tableDnD' : 'lib/jquery.tablednd',
-        'jquery.ajax_indicator' : 'lib/ajax_indicator'
+        'jquery.ajax_indicator' : 'lib/ajax_indicator',
+        'jquery.cleditor' : 'lib/jquery.cleditor'
+
     },
 
     waitSeconds: 10

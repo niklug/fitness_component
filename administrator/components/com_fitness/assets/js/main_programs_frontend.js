@@ -13,7 +13,8 @@ require([
     'backbone.syphon',
     'jquery.backbone_pagination',
     'jquery.status',
-    'jquery.ajax_indicator'
+    'jquery.ajax_indicator',
+    'jquery.cleditor'
     
 
 ], function($, _, Backbone, moment, app, Controller, Main_menu_view) {

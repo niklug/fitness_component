@@ -88,7 +88,7 @@ define([
                 data.trainer_id = app.collections.trainers.models[0].get('id');
             }
             
-            data.description = $('#description').val();
+            data.description = encodeURIComponent($('#description').val());
             
             this.model.set(data);
 

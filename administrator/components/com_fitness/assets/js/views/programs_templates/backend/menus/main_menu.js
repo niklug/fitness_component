@@ -88,7 +88,7 @@ define([
             
             data.business_profile_id = $('#business_profile_select').val();
 
-            data.description = $('#description').val();
+            data.description = encodeURIComponent($('#description').val());
             
             data.trainer_id = $('#trainer_id').val();
             

@@ -24,6 +24,9 @@ define([
         render: function(){
             var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
+            
+            $(this.el).find("#description").cleditor({width:'100%', height:150, useCSS:true})[0];
+            
             return this;
         },
         
