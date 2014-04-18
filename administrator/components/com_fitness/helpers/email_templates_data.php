@@ -68,6 +68,10 @@ class EmailTemplateData extends FitnessHelper
             case 'Supplement':
                 return new SupplementEmailTemplateData($params);
                 break;
+            
+            case 'ProgramTemplate':
+                return new ProgramTemplateEmailTemplateData($params);
+                break;
 
             default:
                 break;
@@ -995,6 +999,64 @@ class SupplementEmailTemplateData extends EmailTemplateData  {
         //comments
         if($this->comment_id) {
             $comment = $this->getCommentData($this->comment_id, '#__fitness_nutrition_plan_supplements_comments');
+            
+            $date = JFactory::getDate($comment->created);
+        
+            $data->comment->created =  $date->toFormat('%A, %d %b %Y') . ' ' . $date->format('H:i');
+
+            $data->comment->created_by = JFactory::getUser($comment->created_by)->name;
+            
+            $data->comment->comment_text = $comment->comment;
+        }
+        
+
+        return $data;
+    }
+
+}
+
+
+class ProgramTemplateEmailTemplateData extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->layout = $params['layout'];
+        $this->comment_id = $params['comment_id'];
+    }
+    
+    protected function getItemData() {
+        
+        $this->item = $this->getProgramTemplate($this->id);
+
+        $this->business_profile_user = $this->item->created_by;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+
+        $data->sitelink = JUri::root() .  'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&id=' . $this->id . '&comment_id=' . $this->comment_id;
+        
+        $data->open_link = JUri::root() . 'administrator/index.php?option=com_fitness&view=programs_templates#!/form_view/' . $this->id;
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $date = JFactory::getDate($this->item ->created);
+        $data->created =  $date->toFormat('%A, %d %b %Y');
+        
+        $user = &JFactory::getUser($this->item->created_by );
+        $data->created_by_name = $user->name;
+
+
+        //comments
+        if($this->comment_id) {
+            $comment = $this->getCommentData($this->comment_id, '#__fitness_pr_temp_comments');
             
             $date = JFactory::getDate($comment->created);
         

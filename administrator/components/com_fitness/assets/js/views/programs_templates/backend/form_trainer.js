@@ -56,7 +56,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            console.log(data);
+            var template = _.template(this.template(data));
             this.$el.html(template);
             
             this.connectBusinessSelect();

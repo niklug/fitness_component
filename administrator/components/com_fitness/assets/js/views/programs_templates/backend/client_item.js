@@ -13,7 +13,8 @@ define([
         
         render : function(){
             var data = this.model.toJSON();
-            //console.log(data);
+            data.item_model = this.options.item_model.toJSON();
+            //console.log(this.options.item_model);
             data.app = app;
             data.$ = $;
             var template = _.template(this.template(data));

@@ -113,6 +113,8 @@ define([
         },
         
         load_form_view : function(model) {
+            model.set({edit_allowed : this.edit_allowed(model)});
+            model.set({is_owner : this.is_owner(model)});
             $("#header_wrapper").html(new Main_menu_view({model : model}).render().el);
 
             new Form_details_view({el : $("#details_wrapper"), model : model});
@@ -211,6 +213,16 @@ define([
                 access = false;
             }
            
+            return access;
+        },
+        
+        is_owner : function(model) {
+            var access = false;
+            var created_by = model.get('created_by');
+            var user_id = app.options.user_id;
+            if(created_by == user_id) {
+                access = true;
+            }
             return access;
         },
         

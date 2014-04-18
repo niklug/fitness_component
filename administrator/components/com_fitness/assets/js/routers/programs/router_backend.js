@@ -304,7 +304,7 @@ define([
             data.id = app.options.pr_temp_id;
             data.item_id = id;
             $.AjaxCall(data, url, view, task, table, function(output){
-                self.form_view(id);
+                app.controller.navigate("!/form_view/" + id, true);
             });
         },
         

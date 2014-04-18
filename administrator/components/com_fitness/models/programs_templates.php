@@ -341,6 +341,7 @@ class FitnessModelprograms_templates extends JModelList {
         if($item->id) {
             $item->id = null;
             $item->created_by = JFactory::getUser()->id;
+            $item->created = FitnessHelper::getDateCreated();
             $insert = $db->insertObject('#__fitness_programs_templates', $item, 'id');
             
             if (!$insert) {

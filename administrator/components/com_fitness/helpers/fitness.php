@@ -253,6 +253,13 @@ class FitnessFactory {
         $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
         return $date->format('Y-m-d H:i:s');
      }
+     
+     public static function getDateCreated(){
+        $config = JFactory::getConfig();
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
+        return $date->format('Y-m-d');
+     }
 
 }
 
@@ -1863,6 +1870,29 @@ class FitnessHelper extends FitnessFactory
                     break;
             }
             return $model;
+        }
+        
+        public function getProgramTemplate($id) {
+            $query = "SELECT a.*,";
+            
+            $query .= " t.name AS appointment_name,";
+
+            $query .= " st.name AS session_type_name,";
+        
+            $query .= " sf.name AS session_focus_name";    
+            
+            $query .= " FROM #__fitness_programs_templates AS a";
+            
+            $query .= " LEFT JOIN #__fitness_categories AS t ON t.id = a.appointment_id ";
+        
+            $query .= " LEFT JOIN #__fitness_session_type AS st ON st.id = a.session_type ";
+        
+            $query .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
+            
+            $query .= " WHERE a.id='$id'";
+            
+            
+            return self::customQuery($query, 2);
         }
 }
 

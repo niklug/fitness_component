@@ -28,8 +28,8 @@ define([
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : '#__fitness_pr_temp_comments',
                 'read_only' : this.options.read_only || false,
-                'anable_comment_email' : false,
-                'comment_method' : ''
+                'anable_comment_email' : true,
+                'comment_method' : 'ProgramTemplateComment'
             }
             var comments = $.comments(comment_options, comment_options.item_id, 0);
 

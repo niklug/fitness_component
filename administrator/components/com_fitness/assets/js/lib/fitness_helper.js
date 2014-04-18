@@ -398,6 +398,16 @@
                         $("#" + container).css('background-image', 'url(' +  no_video_image_big + ')');
                     }
                 },
+                
+                connectEditor : function(element, selector, disabled) {
+                    element.find(selector).cleditor({width:'100%', height:150, useCSS:true})[0];
+
+                    element.find("iframe").contents().find("body").css('color', '#fff');
+
+                    element.find(".cleditorMain").css('background-color', 'rgba(255, 255, 255, 0.1)');
+                    
+                    element.find(selector).cleditor()[0].disable(disabled);
+                },
             });
 
             return new Helper_model(options);

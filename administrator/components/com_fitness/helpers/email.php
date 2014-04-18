@@ -82,6 +82,9 @@ class FitnessEmail extends FitnessHelper
                     case 'ProgramComment':
                         return new CommentProgramEmail();
                     break;
+                    case 'ProgramTemplateComment':
+                        return new CommentProgramTemplateEmail();
+                    break;
 
                     default:
                         return;
@@ -1719,4 +1722,55 @@ class CommentProgramEmail extends FitnessEmail {
 
         return $data;
     }
+}
+
+
+
+
+
+class CommentProgramTemplateEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+ 
+        $this->data = $data;
+        $id = $data->id;
+        if (!$id) {
+            throw new Exception('Error: comment id');
+        }
+
+        $subject = 'New/Unread Message by ' . JFactory::getUser($this->data->created_by)->name;
+        
+        $layout = 'email_pr_temp_comment';
+
+        $this->comment_created_by = $this->data->created_by;
+
+        // only trainer can make a comment
+        if(!self::is_trainer($this->comment_created_by)) {
+            return;
+        }
+
+        $this->layout = $layout;
+        
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $this->data->item_id . '&comment_id=' . $this->data->id;
+
+        $this->subject = $subject;
+       
+    }
+    
+    
+   
+    protected function get_recipients_ids() {
+        $ids = array();
+ 
+        // get all trainers who leave a comment
+        
+        $item_id = $this->data->item_id;
+        $created_by = $this->comment_created_by;
+        $query = "SELECT DISTINCT created_by FROM #__fitness_pr_temp_comments WHERE item_id='$item_id' AND created_by NOT IN ($created_by)";
+        
+        $ids = FitnessHelper::customQuery($query, 3);
+     
+        $this->recipients_ids = $ids;
+    }
+
 }

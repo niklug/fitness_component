@@ -95,8 +95,6 @@ define([
             data.app = app;
             $(this.el).html(this.template(data));
             
-            app.controller.connectStatus(this.model, $(this.el));
-            
             app.controller.connectComments(this.model, $(this.el));
             
             this.connectExercises();
@@ -121,11 +119,12 @@ define([
 
             this.loadLocations();
 
+            var disabled_editor = false;
             if(!app.controller.is_item_owner(this.model)) {
-                $(this.el).find("#description").attr('readonly', true);
-            } else {
-                $(this.el).find("#description").cleditor({width:'100%', height:150, useCSS:true})[0];
-            }
+               disabled_editor = true;
+            } 
+
+            $.fitness_helper.connectEditor($(this.el), "#description", disabled_editor);
             
             return this;
         },
@@ -138,6 +137,8 @@ define([
             "change #start_time" : "onChangeStarttime",
             "change #start_date" : "onChangeStartDate",
         },
+        
+        
         
         onClickPdf : function() {
             var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=' + this.model.get('id') + '&client_id=' + app.options.user_id;
