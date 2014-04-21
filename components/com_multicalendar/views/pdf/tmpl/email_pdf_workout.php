@@ -140,7 +140,7 @@
                     <tbody style="background-color: #ffffff;">
                     <?php
                        foreach ($data->exercises as $exercise) {
-                           echo '<tr>
+                           $html =  '<tr>
                                     <td style="border:1px solid #000000;padding:5px;">'.$exercise->sequence.'</td>
                                     <td style="border:1px solid #000000;padding:5px;">'.$exercise->title.'</td>
                                     <td style="border:1px solid #000000;padding:5px;">'.$exercise->speed.'</td>
@@ -150,6 +150,14 @@
                                     <td style="border:1px solid #000000;padding:5px;">'.$exercise->sets.'</td>
                                     <td style="border:1px solid #000000;padding:5px;">'.$exercise->rest.'</td>
                                 </tr>';
+                           
+                           if($exercise->comments) {
+                               $html .=  '<tr>
+                                    <td colspan="8" style="border:1px solid #000000;padding:5px;color:#2c3993;">'.$exercise->comments.'</td>
+                               </tr>';
+                           }
+                           
+                           echo $html;
                        }
                     ?>
                     </tbody>

@@ -61,7 +61,7 @@ define([
             
             var id = this.model.get('id');
 
-            if(!id) {
+            if(!parseInt(id)) {
                 data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
                 data.created_by = app.options.user_id; 
             }
@@ -78,7 +78,11 @@ define([
             
             data.business_profiles = this.getBusinessProfiles();
             
-            data.status = $(".status_button").attr('data-status_id');
+            if(parseInt(id)) {
+                data.status = $(".status_button").attr('data-status_id');
+            } else {
+                data.status = '1';
+            }
             
             this.model.set(data);
             

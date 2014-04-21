@@ -108,7 +108,14 @@ define([
             
             data.auto_publish_event = $('#auto_publish_event').val();
             
-            data.description = encodeURIComponent($('#description').val());
+            var description = $('#description').val();
+             
+            if(typeof description !== 'undefined') {
+                description = encodeURIComponent(description);
+            } else {
+                description = '';
+            }
+            data.description = description;
             
             this.model.set(data);
 

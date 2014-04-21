@@ -19,7 +19,7 @@ define([
             created : null,
             created_by : null,
             created_by_name : null,
-            status : 1,
+            status : '1',
             global_business_permissions : null,
             user_view_permission : null,
             my_exercise_clients : null, 

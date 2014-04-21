@@ -88,7 +88,15 @@ define([
             
             data.business_profile_id = $('#business_profile_select').val();
 
-            data.description = encodeURIComponent($('#description').val());
+            var description = $('#description').val();
+             
+            if(typeof description !== 'undefined') {
+                description = encodeURIComponent(description);
+            } else {
+                description = '';
+            }
+            
+            data.description = description;
             
             data.trainer_id = $('#trainer_id').val();
             

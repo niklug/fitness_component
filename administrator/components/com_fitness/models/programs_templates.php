@@ -221,6 +221,18 @@ class FitnessModelprograms_templates extends JModelList {
                 }
             }
             //9
+            //
+
+            //search by client name
+            if (!empty($data->client_name)) {
+                $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
+
+                $client_ids = FitnessHelper::customQuery($sql, 0);
+
+                if($client_ids) {
+                    $query .= " AND a.id IN (SELECT  DISTINCT item_id FROM #__fitness_pr_temp_clients WHERE client_id IN ($client_ids))";
+                }
+            }
             //filter by business profile
             if (!empty($data->business_profile_id)) {
                 $query .= " AND a.business_profile_id IN ($data->business_profile_id)";
@@ -289,6 +301,18 @@ class FitnessModelprograms_templates extends JModelList {
             }
         }
         //9
+
+        ////search by client name
+            if (!empty($data->client_name)) {
+                $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
+
+                $client_ids = FitnessHelper::customQuery($sql, 0);
+
+                if($client_ids) {
+                    $query .= " AND a.id IN (SELECT  DISTINCT item_id FROM #__fitness_pr_temp_clients WHERE client_id IN ($client_ids))";
+                }
+            }
+            
         //filter by business profile
         if (!empty($data->business_profile_id)) {
             $query .= " AND a.business_profile_id IN ($data->business_profile_id)";
@@ -505,6 +529,26 @@ class FitnessModelprograms_templates extends JModelList {
         $id = $data->id;
         $item_id = $data->item_id;
         
+        //copy item (description)
+        $query = "SELECT * FROM #__fitness_programs_templates WHERE id='$id'";
+        
+        $item =  FitnessHelper::customQuery($query, 2);
+        
+        if($item->id) {
+            $model = new stdClass();
+            $model->id = $item_id;
+            $model->description = $item->description;
+            $helper = new FitnessHelper();
+            $insert = $helper->insertUpdateObj($model, '#__dc_mv_events');
+            
+            if (!$insert) {
+                $status['success'] = 1;
+                $status['message'] = $db->stderr();
+                return array( 'status' => $status);
+            }
+        }
+        //
+        
         //copy exercises
         $query = "SELECT * FROM #__fitness_pr_temp_exercises WHERE item_id='$id'";
 
@@ -520,6 +564,7 @@ class FitnessModelprograms_templates extends JModelList {
             if (!$insert) {
                 $status['success'] = 0;
                 $status['message'] = $db->stderr();
+                return array( 'status' => $status);
             }
         }
         return array( 'status' => $status);

@@ -54,12 +54,19 @@ define([
         
         events : {
             "click #search" : "search",
+            'keypress input[type=text]': 'filterOnEnter',
             "click #clear_all" : "clearAll",
             "change #state_filter" : "onChangeState",
             "click #add_item" : "onClickAddItem",
             "click #trash_delete_selected" : "onClickTrashDeleteSelected",
             "click #copy_selected" : "onClickCopySelected",
             "click #back_program" : "onClickCopyBackProgram",
+        },
+        
+        filterOnEnter : function(event) { 
+          if(event.which === 13) {
+            this.search();
+          }
         },
         
         connectBusinessFilter : function() {

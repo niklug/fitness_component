@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/programs/backend/form_workout_instructions.html'
+	'text!templates/programs_templates/backend/form_workout_instructions.html'
 ], function (
         $,
         _,

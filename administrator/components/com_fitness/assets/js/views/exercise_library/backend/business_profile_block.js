@@ -15,7 +15,7 @@ define([
             var data = this.model.toJSON();
             data.app = app;
             var template = _.template(this.template(data));
-            this.$el.html(template);
+            $(this.el).html(template);
             
             this.business_profile_id = this.model.get('id');
             var clients_models =  this.collection.where({business_profile_id : this.business_profile_id});
@@ -28,7 +28,7 @@ define([
             
             this.setMyExerciseList();
             
-            this.setShowMyExercise(this.$el.find(".show_my_exercise").val());
+            this.setShowMyExercise($(this.el).find(".show_my_exercise").val());
             
             this.setBusinessProfiles();
             
@@ -38,19 +38,19 @@ define([
         },
         
         events : {
-            "click .show_my_exercise" : "onChangeShowMyExercise",
+            "change .show_my_exercise" : "onChangeShowMyExercise",
             
         },
         
         addItem : function(model) {
-           var container = this.$el.find(".business_clients_wrapper");
+           var container = $(this.el).find(".business_clients_wrapper");
            container.append(new Business_client_item_view({model : model, item_model : this.options.item_model}).render().el);
         },
 
         setShowPublicDatabase : function(){
             var item_id = this.options.item_model.get('id');
             if(!item_id && !app.options.is_superuser) {
-                this.$el.find(".show_public_database").val('0');
+                $(this.el).find(".show_public_database").val('0');
                 return;
             }
             
@@ -64,7 +64,7 @@ define([
             
             if(user_view_permission && this.business_profile_id) {
                 var show_public_database = user_view_permission[this.business_profile_id];
-                this.$el.find(".show_public_database").val(show_public_database);
+                $(this.el).find(".show_public_database").val(show_public_database);
             }
         },
         
@@ -73,7 +73,7 @@ define([
             
             if(show_my_exercise_items && this.business_profile_id) {
                 var show_my_exercise = show_my_exercise_items[this.business_profile_id];
-                this.$el.find(".show_my_exercise").val(show_my_exercise);
+                $(this.el).find(".show_my_exercise").val(show_my_exercise);
             }
         },
         
@@ -83,12 +83,12 @@ define([
         },
         
         setShowMyExercise : function(value) {
-            this.$el.find(".business_clients_wrapper").show();
-            var checkboxes = this.$el.find(".bisiness_client");
+            $(this.el).find(".business_clients_wrapper").show();
+            var checkboxes = $(this.el).find(".bisiness_client");
             if(value == '0') {
                 checkboxes.attr('checked', false);
                 checkboxes.attr('disabled', true);
-                this.$el.find(".business_clients_wrapper").hide();
+                $(this.el).find(".business_clients_wrapper").hide();
             } else if(value == '1') {
                 checkboxes.attr('checked', true);
                 checkboxes.attr('disabled', true);
@@ -105,7 +105,7 @@ define([
             }
 
             if(_.include(business_profiles.split(","), this.business_profile_id)) {
-                this.$el.find(".bisiness_profile_item").attr('checked', true);
+                $(this.el).find(".bisiness_profile_item").attr('checked', true);
             }
         },
         
@@ -113,7 +113,7 @@ define([
             var edit_allowed = app.controller.edit_allowed(this.options.item_model);
 
             if(edit_allowed == false) {
-                this.$el.find(".show_public_database").attr('disabled', true);
+                $(this.el).find(".show_public_database").attr('disabled', true);
             }
             
         }

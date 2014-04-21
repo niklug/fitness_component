@@ -54,6 +54,7 @@ define([
         
         events : {
             "click #search" : "search",
+            'keypress input[type=text]': 'filterOnEnter',
             "click #clear_all" : "clearAll",
             "change #state_filter" : "onChangeState",
             "change #workout_filter" : "onChangePublishedWorkout",
@@ -65,6 +66,12 @@ define([
             "click #go_back" : "onClickGoBack",
             "click #add_pr_tepm_multiple" : "onClickAddTemplateMultiple",
             
+        },
+        
+        filterOnEnter : function(event) { 
+          if(event.which === 13) {
+            this.search();
+          }
         },
         
         connectBusinessFilter : function() {

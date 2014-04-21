@@ -7,7 +7,7 @@
         } 
         %>  
 
-        <% if(app.options.event_id) { %>
+        <% if(app.options.event_id  && parseInt(id)) { %>
         <li id="toolbar-apply" class="button">
             <a title="<%= add_template_title %>" id="add_template" class="toolbar" onclick="javascript:void(0)">
                 <span data-id="<%= id %>" class="add_template_icon_32"> </span>
@@ -22,7 +22,7 @@
         } 
         %> 
         
-        <% if(!app.options.event_id) { %>
+        <% if(!app.options.event_id  && parseInt(id)) { %>
         <li id="toolbar-apply" class="button">
             <a title="<%= search_program_title %>" id="search_program" class="toolbar" onclick="javascript:void(0)">
                 <span data-id="<%= id %>" class="search_program_icon_32"> </span>

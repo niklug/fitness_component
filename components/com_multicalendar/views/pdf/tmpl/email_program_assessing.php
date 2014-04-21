@@ -107,7 +107,7 @@
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    <p>Hi <?php echo $data->trainer_name ?>,</p>         <p>Your client has created a new workout that requires assessment. Please approve or modify this workout for your client and provide feedback as necessary.</p></td>
+                                                                    <p>This workout program has now been marked as &quot;assessing&quot;! Be sure to review the workout for any comments and questions.</p></td>
                                                             </tr>
                                                             <tr>
                                                                 <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
