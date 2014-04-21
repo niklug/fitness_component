@@ -385,7 +385,7 @@
                     var imageType = /no_video_image.*/; 
                     
                     var image = base_url + video_path.split('.')[0] + '.jpg';
-                    console.log($("#container"));
+            
                     if (video_path && !video_path.match(imageType) && video_path) {  
 
                         jwplayer(container).setup({

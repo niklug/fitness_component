@@ -69,7 +69,7 @@ define([
             
             data.image = $("#preview_image").attr('data-imagepath');
             
-            data.video = $("#preview_video").attr('data-videopath');
+            data.video = $("#video_container").attr('data-videopath');
             
             data.instructions = $("#instructions").val();
             

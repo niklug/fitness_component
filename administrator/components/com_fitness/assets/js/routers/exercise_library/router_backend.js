@@ -115,9 +115,6 @@ define([
 
             if(model.get('id')) {
                 $("#exercise_video_wrapper").html(new Exercise_video_view({model : model}).render().el);
-                
-                var video_path = model.get('video');
-                $.fitness_helper.loadVideoPlayer(video_path, app, 250, 400, 'exercise_video');
             }
 
             new Business_permissions_view({el : $("#permissions_wrapper"), model : model});

@@ -24,14 +24,23 @@
             template: _.template($('#video_upload_template').html()),
 
             initialize: function() {
-                _.bindAll(this, 'render', 'drop_video', 'change_video', 'file_validation', 'save_video', 'clear_video');
+                _.bindAll(this, 'render', 'drop_video', 'change_video', 'file_validation', 'save_video', 'clear_video', 'connectPlayer');
                 this.model.on("destroy", this.close, this);
                 this.video_name  = this.model.get('video_name');
+                
+                this.render();
+            },
+            
+            connectPlayer : function() {
+                this.loadVideoPlayer(this.model.get("base_url") + this.model.get("video_path") + '/' + this.model.get('video'),  180, 250, 'preview_video');
             },
 
-            render: function(eventName) {
+            render: function() {
                 $(this.el).html(this.template(this.model.toJSON()));
-                return this;
+                
+                if(this.model.get('video')) {
+                    setTimeout(this.connectPlayer, 1000);
+                }
             },
 
             events : {
@@ -72,7 +81,7 @@
                 reader.onloadend = function () {
                     $('#preview_video').css('background-image', 'none');
                     $('#preview_video').html('<div style="margin-top:80px;">' + self.video_name + '.' + self.filetype + '</div>');
-                    $('#preview_video').attr('data-videopath', model.get('video_path') + '/' + self.video_name + '.' + self.filetype );
+                    $('#video_container').attr('data-videopath', model.get('video_path') + '/' + self.video_name + '.' + self.filetype );
                 };
                 reader.readAsDataURL(this.videoFile);
                 return false;
@@ -100,7 +109,7 @@
                 reader.onloadend = function() {
                     $('#preview_video').css('background-image', 'none');
                     $('#preview_video').html('<div style="margin-top:80px;">' +  file.name+ '</div>');
-                    $('#preview_video').attr('data-videopath', model.get('video_path') + '/' + file.name);
+                    $('#video_container').attr('data-videopath', model.get('video_path') + '/' + file.name);
                 };
                 reader.readAsDataURL(this.videoFile);
              
@@ -156,9 +165,7 @@
                             contentType: false
                     })
                     .done(function () {
-                            console.log(self.videoFile.name + ' uploaded successfully !' );
-                            $('#preview_video').attr('data-videopath', self.model.get('video_path') + '/' + self.video_name + '.' + self.filetype);
-                            $('#preview_video').html('<div style="margin-top:80px;">' +  'Video uploaded successfully!' + '</div>');
+                            self.onSave();
                     })
                     .fail(function (response) {
                             alert(response.responseText)
@@ -166,6 +173,8 @@
                     });
                 };
             },
+            
+            
 
             clear_video : function() {
                 var url = this.model.get("url");
@@ -199,9 +208,43 @@
                 this.videoFile = null;
                 this.model.set({"video" : ''});
                 $('#preview_video').css('background-image', 'url(' +  this.model.get("default_video_image") + ')');
-                $('#preview_video').attr('data-videopath', '');
+                $('#video_container').attr('data-videopath', '');
                 $('#preview_video').html('');
-            }
+                
+                this.render();
+            },
+            
+            onSave : function() {
+                console.log(this.videoFile.name + ' uploaded successfully !' );
+                var videopath = this.model.get('video_path') + '/' + this.video_name + '.' + this.filetype;
+                
+                $('#video_container').attr('data-videopath', videopath);
+                
+                this.model.set({video : this.video_name + '.' + this.filetype});
+                
+                this.render();
+            },
+            
+            loadVideoPlayer : function(video_path, height, width, container) {
+                    
+                var no_video_image_big = this.model.get("default_video_image");
+
+                var imageType = /no_video_image.*/; 
+
+                var image = video_path.split('.')[0] + '.jpg';
+
+                if (video_path && !video_path.match(imageType) && video_path) {  
+
+                    jwplayer(container).setup({
+                        file: video_path,
+                        image:  image,
+                        height: height,
+                        width: width
+                   });
+                } else {
+                    $("#" + container).css('background-image', 'url(' +  no_video_image_big + ')');
+                }
+            },
 
          });
 

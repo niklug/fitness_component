@@ -66,7 +66,7 @@ define([
                 data.created_by = app.options.user_id; 
             }
             
-            data.video = $("#preview_video").attr('data-videopath');
+            data.video = $("#video_container").attr('data-videopath');
             
             data.global_business_permissions = $("#global_view_access").val();
 

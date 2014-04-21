@@ -670,7 +670,6 @@ $helper = new FitnessHelper();
         };
 
         var video_upload = $.backbone_video_upload(video_upload_options); 
-        video_upload.render();
         
         
         //PLAYER

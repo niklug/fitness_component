@@ -490,17 +490,16 @@
 <script type="text/template" id="video_upload_template">
     <%
     var full_video_path = video_path + '/' + video;
-    var video_html = '';
-   
     if(!video) {
         var background_image = 'url(' + "'" + default_video_image  + "')" ;
         full_video_path = '';
     } else {
         var background_image = 'none';
-        video_html = '<div style="margin-top:80px;">' + video + '</div>';
     }
     %>
-    <div class="form-left-col" style="text-align:center;">
+    <div class="form-left-col" style="text-align:center;" id="video_container" data-videopath="<%= full_video_path %>" >
+    
+        <% if(!video) { %>
         <form name="video_form">
             Select & Upload New Video 
             <div class="clr"></div>
@@ -511,9 +510,17 @@
             Or drag video here
         </form>
         
-        <div data-videopath="<%= full_video_path %>" style=" background-image: <%= background_image%>; background-repeat: no-repeat;background-size:100% 100%;margin: 5px; display: inline-block; border:2px dashed #ccc;height:<%= preview_height%>;width:<%= preview_width%>;" id="preview_video"><%= video_html %></div>
+        <% } %>
+        
+        <div 
+            
+            style="background-image: <%= background_image%>; background-repeat: no-repeat;background-size:100% 100%;margin: 5px; display: inline-block; border:2px dashed #ccc;height:<%= preview_height%>;width:<%= preview_width%>;"
+            id="preview_video">
+        </div>
         <br/>
+        <% if(!video) { %>
         <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+        <% } %>
         <a href="javascript:void(0)" class="clear_video">[Clear]</a>
     </div>
 
