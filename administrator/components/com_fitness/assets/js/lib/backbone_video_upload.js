@@ -25,9 +25,7 @@
 
             initialize: function() {
                 _.bindAll(this, 'render', 'drop_video', 'change_video', 'file_validation', 'save_video', 'clear_video', 'connectPlayer');
-                this.model.on("destroy", this.close, this);
                 this.video_name  = this.model.get('video_name');
-                
                 this.render();
             },
             
@@ -39,8 +37,14 @@
                 $(this.el).html(this.template(this.model.toJSON()));
                 
                 if(this.model.get('video')) {
-                    setTimeout(this.connectPlayer, 1000);
+                    this.onRender(this.connectPlayer);
                 }
+            },
+            
+            onRender : function(func) {
+                $(this.el).show('0', function() {
+                    func();
+                });
             },
 
             events : {
@@ -80,7 +84,7 @@
                 var self = this;
                 reader.onloadend = function () {
                     $('#preview_video').css('background-image', 'none');
-                    $('#preview_video').html('<div style="margin-top:80px;">' + self.video_name + '.' + self.filetype + '</div>');
+                    $('#preview_video').html('<div style="margin-top:80px;">' + filename + '</div>');
                     $('#video_container').attr('data-videopath', model.get('video_path') + '/' + self.video_name + '.' + self.filetype );
                 };
                 reader.readAsDataURL(this.videoFile);
@@ -148,9 +152,18 @@
                     
                     var url = this.model.get("url");
                     
-                    var upload_folder = this.model.get("upload_folder");
+                    var upload_folder = encodeURIComponent(this.model.get("upload_folder"));
+          
+                    var data = {
+                        video_name : self.video_name,
+                        upload_folder : upload_folder
+                    };
+
+
+                    var data_encoded = JSON.stringify(data);
                     
-                    url = url +'&upload_folder=' + upload_folder +'&video_name=' + self.video_name;
+                    url = url + '&data_encoded=' + data_encoded;
+                
                     
                     var ajax_load_html= '<div style="width:100%;text-align:center;margin-top:80px;margin-left: 28px;"><div class="ajax_loader"></div></div>';
                     
@@ -179,21 +192,26 @@
             clear_video : function() {
                 var url = this.model.get("url");
                     
-                var upload_folder = this.model.get("upload_folder");
-
-                url = url +'&upload_folder=' + upload_folder;
+                var upload_folder = encodeURIComponent(this.model.get("upload_folder"));
 
                 var filename = this.model.get("video");
+                
+                var data = {
+                    method : 'clear',
+                    format : 'text',
+                    filename : filename,
+                    upload_folder : upload_folder
+                };
+                
+                
+                var data_encoded = JSON.stringify(data);
                 
                 // upload FormData object by XMLHttpRequest
                 $.ajax({
                     type : "POST",
                     url : url,
                     data : {
-                        view : '',
-                        method : 'clear',
-                        format : 'text',
-                        filename : filename
+                        data_encoded : data_encoded
                     },
                     dataType : 'text',
                     success : function(response) {

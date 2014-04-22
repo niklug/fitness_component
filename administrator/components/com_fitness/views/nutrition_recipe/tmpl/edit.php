@@ -42,9 +42,10 @@ $helper = new FitnessHelper();
                         <td width="150">
                             <?php echo $this->form->getLabel('recipe_name'); ?>
                         </td>
-                        <td>
+                        <td width="150">
                             <?php echo $this->form->getInput('recipe_name'); ?>
                         </td>
+  
                     </tr>
                     <tr>
                         <td style="text-align: left;">
@@ -52,8 +53,6 @@ $helper = new FitnessHelper();
                         </td>
                         <td style="text-align: left;">
                             <div id="video_upload_content"></div>
-                        <td style="vertical-align: bottom;" >
-                            <div id="recipe_video_wrapper"></div>
                         </td>
                     </tr>
                     
@@ -672,39 +671,6 @@ $helper = new FitnessHelper();
         var video_upload = $.backbone_video_upload(video_upload_options); 
         
         
-        //PLAYER
-        var base_url = video_upload_options.base_url;
-
-
-        var imageType = /no_video_image.*/;  
-
-        
-        var recipe_name = '<?php echo $this->item->recipe_name ?>';
-
-        if (!videopath.match(imageType) && videopath) {  
-
-            jwplayer("recipe_video_wrapper").setup({
-                file: base_url + videopath,
-                image: "",
-                height: 200,
-                width: 300,
-                autostart: true,
-                mute: true,
-                controls: false,
-                events: {
-                    onReady: function () { 
-                        var self = this;
-                        setTimeout(function(){
-                            self.pause();
-                            self.setMute(false);
-                            self.setControls(true);
-                        },3000);
-                    }
-                }
-            });
-        }
-
-        
         
         
         Joomla.submitbutton = function(task)
@@ -716,7 +682,7 @@ $helper = new FitnessHelper();
 
                 if (task != 'nutrition_recipe.cancel' && document.formvalidator.isValid(document.id('nutrition_recipe-form'))) {
 
-                    var video_path = $("#preview_video").attr('data-videopath');
+                    var video_path = $("#video_container").attr('data-videopath');
                     
                     $("#jform_video_input").val(video_path);
                     

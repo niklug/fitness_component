@@ -136,9 +136,18 @@
                     
                     var url = this.model.get("url");
                     
-                    var upload_folder = this.model.get("upload_folder");
+                    var upload_folder = encodeURIComponent(this.model.get("upload_folder"));
                     
-                    url = url +'&upload_folder=' + upload_folder +'&image_name=' + self.image_name;
+                    var data = {
+                        image_name : self.image_name,
+                        upload_folder : upload_folder
+                    };
+
+
+                    var data_encoded = JSON.stringify(data);
+                    
+                    url = url + '&data_encoded=' + data_encoded;
+                    
                     
                     var ajax_load_html= '<div style="width:100%;text-align:center;margin-top:80px;margin-left: 28px;"><div class="ajax_loader"></div></div>';
                     
@@ -169,9 +178,18 @@
             clear_image : function() {
                 var url = this.model.get("url");
                     
-                var upload_folder = this.model.get("upload_folder");
+                var upload_folder = encodeURIComponent(this.model.get("upload_folder"));
 
-                url = url +'&upload_folder=' + upload_folder;
+                
+                var data = {
+                    method : 'clear',
+                    format : 'text',
+                    filename : filename,
+                    upload_folder : upload_folder
+                };
+                
+                
+                var data_encoded = JSON.stringify(data);
 
                 var filename = this.model.get("picture");
                 
@@ -180,10 +198,7 @@
                     type : "POST",
                     url : url,
                     data : {
-                        view : '',
-                        method : 'clear',
-                        format : 'text',
-                        filename : filename
+                        data_encoded : data_encoded
                     },
                     dataType : 'text',
                     success : function(response) {

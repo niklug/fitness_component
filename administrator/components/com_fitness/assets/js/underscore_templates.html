@@ -497,7 +497,7 @@
         var background_image = 'none';
     }
     %>
-    <div class="form-left-col" style="text-align:center;" id="video_container" data-videopath="<%= full_video_path %>" >
+    <div class="form-left-col" style="text-align:center; width:264px;display:inline-block;" id="video_container" data-videopath="<%= full_video_path %>" >
     
         <% if(!video) { %>
         <form name="video_form">
@@ -510,10 +510,11 @@
             Or drag video here
         </form>
         
+        <% } else { %>
+            <div style="height:65px;"></div>
         <% } %>
         
         <div 
-            
             style="background-image: <%= background_image%>; background-repeat: no-repeat;background-size:100% 100%;margin: 5px; display: inline-block; border:2px dashed #ccc;height:<%= preview_height%>;width:<%= preview_width%>;"
             id="preview_video">
         </div>

@@ -272,11 +272,18 @@ class FitnessController extends JController {
         
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
 
-        $filename =  $_GET['image_name']  . '.' . $ext;
+        $data = json_decode(JRequest::getVar('data_encoded'));
+        
+        $upload_folder = urldecode($data->upload_folder);
 
-        $upload_folder = $_GET['upload_folder'];
+        
+        $image_name = $data->image_name;
 
-        $task = $_POST['method'];
+        $filename =  $image_name . '.' . $ext;
+
+        $task = $data->method;
+        
+        
 
 
         if($task == 'clear') {
@@ -336,13 +343,19 @@ class FitnessController extends JController {
         
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         
-        $video_name = $_GET['video_name'];
+        
+        
+        $data = json_decode(JRequest::getVar('data_encoded'));
+        
+        $upload_folder = urldecode($data->upload_folder);
+
+        
+        $video_name = $data->video_name;
 
         $filename =  $video_name . '.' . $ext;
-        
-        $upload_folder = $_GET['upload_folder'];
 
-        $task = $_POST['method'];
+        $task = $data->method;
+        
 
 
         if($task == 'clear') {
