@@ -82,8 +82,6 @@ class FitnessModelprograms_templates extends JModelList {
 
         $model = json_decode(JRequest::getVar('model'));
         
-        $model->description = urldecode($model->description);
-        
         $id = JRequest::getVar('id', 0, '', 'INT');
         
         $table = '#__fitness_programs_templates';

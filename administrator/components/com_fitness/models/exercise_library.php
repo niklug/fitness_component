@@ -200,6 +200,7 @@ class FitnessModelExercise_library extends JModelList {
                 $data->difficulty = JRequest::getVar('difficulty', '0'); 
                 $data->business_profiles = JRequest::getVar('business_profiles'); 
                 $data->current_page = JRequest::getVar('current_page'); 
+                $data->created_by_name = JRequest::getVar('created_by_name'); 
 
                 $data = $this->getExerciseVideos($table, $data);
                 
@@ -360,6 +361,16 @@ class FitnessModelExercise_library extends JModelList {
                     $query .= " OR FIND_IN_SET('$filter_option', a.difficulty)";
                 }
                 $query .= ")";
+            }
+            
+            if (!empty($data->created_by_name)) {
+                $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->created_by_name%' ";
+
+                $owner_ids = FitnessHelper::customQuery($sql, 0);
+
+                if($owner_ids) {
+                    $query .= " AND a.created_by IN ($owner_ids)";
+                }
             }
 
             //by business 
@@ -543,6 +554,16 @@ class FitnessModelExercise_library extends JModelList {
             }
             $query .= ")";
         }
+        
+        if (!empty($data->created_by_name)) {
+                $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->created_by_name%' ";
+
+                $owner_ids = FitnessHelper::customQuery($sql, 0);
+
+                if($owner_ids) {
+                    $query .= " AND a.created_by IN ($owner_ids)";
+                }
+            }
         
         //by business
         if(FitnessHelper::is_trainer($user_id)) {

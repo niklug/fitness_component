@@ -50,6 +50,7 @@ define([
         
         events : {
             "click #search_by_name" : "search",
+            'keypress input[type=text]': 'filterOnEnter',
             "click #clear_all" : "clearAll",
             "change #state_filter" : "onChangeState",
             "click #add_item" : "onClickAddItem",
@@ -57,6 +58,12 @@ define([
             "click #delete_selected" : "onClickDeleteSelected",
             "click #back_program" : "onClickBackProgram",
             "click #add_selected_exercises" : "onClickAddSelectedExercises",
+        },
+        
+        filterOnEnter : function(event) { 
+          if(event.which === 13) {
+            this.search();
+          }
         },
         
         connectBusinessFilter : function() {
@@ -77,7 +84,8 @@ define([
         search : function() {
             var exercise_name = this.$el.find("#exercise_name").val();
             var client_name = this.$el.find("#client_name").val();
-            this.model.set({exercise_name : exercise_name, client_name: client_name});
+            var created_by_name = this.$el.find("#created_by_name").val();
+            this.model.set({exercise_name : exercise_name, client_name: client_name, created_by_name : created_by_name});
         },
         
         clearAll : function(){
@@ -96,7 +104,8 @@ define([
                     target_muscles : '', 
                     equipment_type : '',
                     difficulty : '',
-                    business_profiles : ''
+                    business_profiles : '',
+                    created_by_name : ''
                 }
             );
         },

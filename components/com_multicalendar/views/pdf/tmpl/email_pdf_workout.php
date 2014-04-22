@@ -123,7 +123,7 @@
                 <hr style="width:100%;">
                 <h4 style="margin: 0; padding: 0;">Workout Instructions</h4>
                 <div style="padding: 5px;width: 770px;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px; margin-top: 10px;">
-                    <?php echo $data->item->description;?>
+                    <?php echo urldecode($data->item->description);?>
                 </div>
                 
                 <table width="100%" style="border:1px solid #000000;margin-top: 10px;border-collapse: collapse;"  border="0" >

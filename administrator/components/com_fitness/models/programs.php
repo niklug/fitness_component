@@ -82,9 +82,7 @@ class FitnessModelprograms extends JModelList {
 
         
         $model = json_decode(JRequest::getVar('model','','','',JREQUEST_ALLOWHTML));
-        
-        $model->description = urldecode($model->description);
-        
+         
 
         $id = JRequest::getVar('id', 0, '', 'INT');
         

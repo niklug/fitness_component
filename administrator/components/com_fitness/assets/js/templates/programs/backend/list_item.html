@@ -1,7 +1,10 @@
 <tr data-id="<%= id %>" class="item_row">
-    <td>
-        <div style="float:left; width:100px;"><%= moment(new Date(Date.parse(starttime))).format("ddd, D MMM  YYYY") %></div>
-        <div style="float:left;width:20px;"><%= moment(new Date(Date.parse(starttime))).format("HH:mm")  %></div>
+    <td >
+        <a title="View Details" style="cursor: pointer;" data-id="<%= id %>"  class="view " onclick="javascript:void(0)">
+            <div data-id="<%= id %>" style="float:left; width:120px;"><%= moment(new Date(Date.parse(starttime))).format("ddd, D MMM  YYYY") %></div>
+            <div data-id="<%= id %>" style="float:left;width:20px;"><%= moment(new Date(Date.parse(starttime))).format("HH:mm")  %></div>
+        </a>
+        
     </td>
     
     <td>

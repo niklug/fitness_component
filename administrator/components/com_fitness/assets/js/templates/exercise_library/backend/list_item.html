@@ -1,5 +1,9 @@
 <tr data-id="<%= id %>" class="item_row">
-    <td><%= exercise_name  %></td>
+    <td>
+        <a title="View Details" style="cursor: pointer;" data-id="<%= id %>"  class="view " onclick="javascript:void(0)">
+            <%= exercise_name  %>
+        </a>
+    </td>
     <td>
         <%
         if(exercise_type_names) {
