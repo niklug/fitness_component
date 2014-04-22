@@ -122,7 +122,7 @@ define([
             
             //allow select only for trainer administrator
             
-            if(app.options.is_simple_trainer) {
+            if(app.options.is_trainer) {
                 element_disabled = 'disabled';
             }
             

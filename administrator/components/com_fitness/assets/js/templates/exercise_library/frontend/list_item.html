@@ -1,8 +1,19 @@
 <div class="exercise_list_item_wrapper" data-id="<%= id%>" style="margin-top: 0px;border:none;">
     <table width="100%">
         <tr>
-            <td style="vertical-align: top;" width="60%">
+            <td style="vertical-align: top;" width="50%">
                 <table width="100%">
+                    <tr>
+                        <td  colspan="2">
+                            <%
+                            var thumbnail = app.options.base_url + video.split('.')[0] + '.jpg';
+                             if(!video) {
+                                thumbnail = app.options.default_video_image;
+                            } %>
+                            <div data-id="<%= id %>"  class="view_exercise" style="cursor:pointer;text-align: center;background-size: 250px auto; border: 3px solid #FFFFFF; height:150px; width: 250px;background-image: url('<%= thumbnail %>');" ></div>
+                            
+                        </td>
+                    </tr>
                     <tr>
                         <td  width="140">AUTHOR</td>
                         <td><%= created_by_name %></td>
@@ -21,27 +32,15 @@
                         <td>ASSESSED BY</td>
                         <td><%= assessed_by_name || '-'  %></td>
                     </tr>
-                </table>
-                <br/>
-                
-                <table width="100%">
                     <tr>
-                        <td  width="70%">
-                            <%
-                            var thumbnail = app.options.base_url + video.split('.')[0] + '.jpg';
-                            if(video) {
-                            %>
-                            <div data-id="<%= id %>"  class="view_exercise" style="cursor:pointer;text-align: center;background-size: 250px auto; border: 3px solid #FFFFFF; height:150px; width: 250px;background-image: url('<%= thumbnail %>');" ></div>
-                            <% } %>
-                        </td>
-                         
-                        <td>
-                            <% if(app.options.exercise_id) { %>
+                        <td colspam="2">
+                            <% if(app.options.event_id) { %>
                                 <a class="add_exercise" title="" style="cursor: pointer;"  onclick="javascript:void(0)" data-id="<%= id %>" >[add to program]</a>
+                                <br/>
                             <% } %> 
                         
                             <% if ((current_page == 'my_exercises') || (current_page == 'exercise_database')) { %>
-                                <br/><br/>
+                                <br/>
                                 <% if (is_favourite) {
                                     var display_remove_favourite = 'inline';
                                     var display_add_favourite = 'none';

@@ -47,6 +47,7 @@ define([
             data.app = app;
             data.readonly = this.readonly;
             data.choose_template = this.options.choose_template || false;
+            data.search_videos = this.options.search_videos || false;
             
             $(this.el).html(this.template(data));
             
@@ -74,6 +75,7 @@ define([
             "click .search_video" : "onClickSearchVideo",
             "click .show_exercise_video" : "onClickShowVideo",
             "click #choose_template" : "onClickChooseTemplate",
+            "click #search_videos" : "onClickSearchVideo",
             
         },
         
@@ -290,7 +292,7 @@ define([
        },
        
        onClickSearchVideo : function(event) {
-           var exercise_id = $(event.target).attr('data-id');
+           var exercise_id = $(event.target).attr('data-id') || '';
            
            var el_url = app.options.base_url_relative + 'index.php?option=com_fitness&view=exercise_library';
            
@@ -325,7 +327,7 @@ define([
            el_url += '&back_url=' + encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=programs#!/form_view/' + this.model.get('id'));
 
            window.location = el_url;
-       }
+       },
     });
             
     return view;

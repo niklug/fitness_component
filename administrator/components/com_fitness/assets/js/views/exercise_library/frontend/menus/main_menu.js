@@ -13,7 +13,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template());
+            var data = {};
+            data.app = app;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             return this;
         },
@@ -22,6 +24,7 @@ define([
             "click #my_favourites_link" : "onClickFavourites",
             "click #my_exercises_link" : "onClickMyExercises",
             "click #exercise_database_link" : "onClickExerciseDatabase",
+            "click #back_program_link" : "onClickBackProgram",
         },
 
         onClickFavourites : function() {
@@ -45,6 +48,10 @@ define([
         
         show : function() {
             this.$el.show();
+        },
+        
+        onClickBackProgram : function() {
+            app.controller.route_program();
         }
     });
             

@@ -325,15 +325,13 @@ define([
             model.clear();
             
             model.set({
-                id : app.options.exercise_id,
+                id : app.options.exercise_id || null,
+                item_id : app.options.event_id,
                 video_id : id,
                 title : video_model.get('exercise_name')
             });
             var self = this;
             model.save(null, {
-                success: function (model, response) {
-                    self.route_program();
-                },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
