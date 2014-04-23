@@ -196,6 +196,7 @@ class FitnessModelclients extends JModelList {
             $query->order($db->escape($orderCol . ' ' . $orderDirn));
         }
 
+
         return $query;
     }
 
@@ -217,3 +218,5 @@ class FitnessModelclients extends JModelList {
     }
 
 }
+
+

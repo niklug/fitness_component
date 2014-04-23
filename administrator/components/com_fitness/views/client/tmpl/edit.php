@@ -123,7 +123,6 @@ $helper = new FitnessHelper();
             
             // populate other trainers select
             fitness_helper.on('change:trainers', function(model, items) {
-                fitness_helper.populateSelect(items, '#jform_other_trainers', '');
                 fitness_helper.excludeSelectOption('#jform_primary_trainer', '#jform_other_trainers');
             });
             
