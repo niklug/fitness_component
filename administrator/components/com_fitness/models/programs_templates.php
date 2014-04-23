@@ -354,15 +354,26 @@ class FitnessModelprograms_templates extends JModelList {
         $data = json_decode(JRequest::getVar('data_encoded'));
         
         $id = $data->id;
+        
+        $user_id = JFactory::getUser()->id;
 
         //copy item
         $query = "SELECT * FROM #__fitness_programs_templates WHERE id='$id'";
         
         $item =  FitnessHelper::customQuery($query, 2);
         
+        
+        $created_by = $item->created_by;
+        
         if($item->id) {
             $item->id = null;
-            $item->created_by = JFactory::getUser()->id;
+            
+            if($created_by != $user_id) {
+                $item->trainer_id = $user_id;
+            }
+            
+            $item->created_by = $user_id;
+
             $item->created = FitnessHelper::getDateCreated();
             $insert = $db->insertObject('#__fitness_programs_templates', $item, 'id');
             
@@ -393,18 +404,19 @@ class FitnessModelprograms_templates extends JModelList {
         }
         
         //copy clients
+        if($created_by == $user_id) {
+            $query = "SELECT * FROM #__fitness_pr_temp_clients WHERE item_id='$id'";
 
-        $query = "SELECT * FROM #__fitness_pr_temp_clients WHERE item_id='$id'";
+            $clients =  FitnessHelper::customQuery($query, 1);
 
-        $clients =  FitnessHelper::customQuery($query, 1);
-
-        foreach ($clients as $client) {
-            $client->id = null;
-            $client->item_id = $inserted_item_id;
-            $insert = $db->insertObject('#__fitness_pr_temp_clients', $client, 'id');
-            if (!$insert) {
-                $status['success'] = 0;
-                $status['message'] = $db->stderr();
+            foreach ($clients as $client) {
+                $client->id = null;
+                $client->item_id = $inserted_item_id;
+                $insert = $db->insertObject('#__fitness_pr_temp_clients', $client, 'id');
+                if (!$insert) {
+                    $status['success'] = 0;
+                    $status['message'] = $db->stderr();
+                }
             }
         }
 

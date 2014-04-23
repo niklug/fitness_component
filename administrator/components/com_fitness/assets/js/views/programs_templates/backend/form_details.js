@@ -84,6 +84,11 @@ define([
             if(session_type_id) {
                 this.loadSessionFocus(session_type_id);
             }
+            
+
+            if(!this.model.get('view_allowed')) {
+                $(this.el).find("#workout_name").attr('disabled', 'disabled');
+            }
    
             return this;
         },
@@ -108,6 +113,12 @@ define([
                 app.collections.appointments.get(4)
             ]);
             
+       
+            var element_disabled = 'disabled';
+            if(this.model.get('view_allowed')) {
+                element_disabled = '';
+            }
+            
             new Select_element_view({
                 model : this.model,
                 el : this.$el.find("#appointment_select"),
@@ -115,7 +126,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : '',
                 id_name : 'appointment_id',
-                model_field : 'appointment_id'
+                model_field : 'appointment_id',
+                element_disabled : element_disabled
             }).render();
             
             
@@ -132,6 +144,11 @@ define([
             var session_type_collection = new Backbone.Collection;
             
             session_type_collection.add(app.collections.session_types.where({category_id : id}));
+            
+            var element_disabled = 'disabled';
+            if(this.model.get('view_allowed')) {
+                element_disabled = '';
+            }
 
             new Select_element_view({
                 model : this.model,
@@ -140,7 +157,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : '',
                 id_name : 'session_type',
-                model_field : 'session_type'
+                model_field : 'session_type',
+                element_disabled : element_disabled
             }).render();
         },
         
@@ -153,7 +171,12 @@ define([
             var session_focus_collection = new Backbone.Collection;
             
             session_focus_collection.add(app.collections.session_focuses.where({session_type_id : id}));
-
+            
+            var element_disabled = 'disabled';
+            if(this.model.get('view_allowed')) {
+                element_disabled = '';
+            }
+            
             new Select_element_view({
                 model : this.model,
                 el : this.$el.find("#session_focus_select"),
@@ -161,7 +184,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : '',
                 id_name : 'session_focus',
-                model_field : 'session_focus'
+                model_field : 'session_focus',
+                element_disabled : element_disabled
             }).render();
         },
 

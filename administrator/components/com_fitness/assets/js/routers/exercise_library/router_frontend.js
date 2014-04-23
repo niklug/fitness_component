@@ -332,6 +332,11 @@ define([
             });
             var self = this;
             model.save(null, {
+                success: function (model, response) {
+                    if(app.options.exercise_id ) {
+                        self.route_program();
+                    }
+                },
                 error: function (model, response) {
                     alert(response.responseText);
                 }

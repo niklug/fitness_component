@@ -14,7 +14,7 @@ define([
         'views/programs_templates/backend/form_details',
         'views/programs_templates/backend/form_trainer',
         'views/programs_templates/backend/form_clients',
-        'views/programs/backend/form_workout_instructions',
+        'views/programs_templates/backend/form_workout_instructions',
         'views/programs_templates/backend/list',
         'views/programs_templates/backend/list_header_container',
         'views/programs/exercises/list',
@@ -114,6 +114,7 @@ define([
         
         load_form_view : function(model) {
             model.set({edit_allowed : this.edit_allowed(model)});
+            model.set({view_allowed : this.view_allowed(model)});
             model.set({is_owner : this.is_owner(model)});
             $("#header_wrapper").html(new Main_menu_view({model : model}).render().el);
 
@@ -126,11 +127,18 @@ define([
                 
                 new Form_event_workout_instructions({el : $("#workout_instuctions_wrapper"), model : model});
                 
+                var readonly_exercises = false;
+                
+                if(!model.get('view_allowed')) {
+                    readonly_exercises = true;
+                }
+                
                 new Exercises_list_view({
                     el : $("#exercises_list"),
                     model : model,
                     exercise_model : Exercise_model,
-                    exercises_collection : Exercises_collection
+                    exercises_collection : Exercises_collection,
+                    readonly : readonly_exercises
                 });
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});
@@ -221,6 +229,14 @@ define([
             var created_by = model.get('created_by');
             var user_id = app.options.user_id;
             if(created_by == user_id) {
+                access = true;
+            }
+            return access;
+        },
+        
+        view_allowed : function(model) {
+            var access = false;
+            if(this.is_owner(model) || app.options.is_trainer_administrator || app.options.is_superuser) {
                 access = true;
             }
             return access;

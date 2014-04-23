@@ -3,5 +3,7 @@
     <div id="clients_data"></div>
     <div class="clr"></div>
     <br/>
-    <a id="add_client" style="cursor: pointer;"  href="javascript:void(0)">[ADD CLIENT]</a>
+    <% if(view_allowed) { %>
+        <a id="add_client" style="cursor: pointer;"  href="javascript:void(0)">[ADD CLIENT]</a>
+    <% } %>
 </fieldset>

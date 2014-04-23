@@ -75,7 +75,7 @@ class FitnessViewPrograms_templates extends JView {
         require_once JPATH_COMPONENT . '/helpers/fitness.php';
 
 
-        JToolBarHelper::title(JText::_('Program & Workout Templates'), 'programs.png');
+        JToolBarHelper::title(JText::_('Program Templates'), 'programs.png');
        
     }
     

@@ -43,7 +43,7 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template());
+            var template = _.template(this.template(this.model.toJSON()));
             $(this.el).html(template);
             
             this.container_el = $(this.el).find("#clients_data");

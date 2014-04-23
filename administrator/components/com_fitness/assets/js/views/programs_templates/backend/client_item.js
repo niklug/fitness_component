@@ -27,7 +27,7 @@ define([
         },
         
         events : {
-            "click .client_id" : "onClientSelect",
+            "change .client_id" : "onClientSelect",
             "click .delete_event_client" : "delete",
         },
         

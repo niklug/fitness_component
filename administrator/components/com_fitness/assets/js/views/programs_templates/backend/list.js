@@ -66,7 +66,9 @@ define([
         
         addItem : function(model) {
             var edit_allowed = app.controller.edit_allowed(model);
-
+            model.set({is_owner : app.controller.is_owner(model)});
+            model.set({edit_allowed : app.controller.edit_allowed(model)});
+            model.set({view_allowed : app.controller.view_allowed(model)});
             if(!edit_allowed) return;
             
             this.item = new List_item_view({el : this.container_el, model : model}).render(); 
