@@ -560,7 +560,7 @@ class FitnessModelprograms_templates extends JModelList {
         //
         
         //copy exercises
-        $query = "SELECT * FROM #__fitness_pr_temp_exercises WHERE item_id='$id'";
+        $query = "SELECT a.* FROM #__fitness_pr_temp_exercises AS a  WHERE a.item_id='$id'";
 
         $exercises =  FitnessHelper::customQuery($query, 1);
         
@@ -569,8 +569,9 @@ class FitnessModelprograms_templates extends JModelList {
         foreach ($exercises as $exercise) {
             $exercise->id = null;
             $exercise->item_id = $item_id;
-            
-            $insert = $db->insertObject('#__fitness_events_exercises', $exercise, 'id');
+    
+            $insert = $this->insertExercise($exercise, null, $exercise->item_id, '#__fitness_events_exercises');
+
             if (!$insert) {
                 $status['success'] = 0;
                 $status['message'] = $db->stderr();
@@ -578,6 +579,28 @@ class FitnessModelprograms_templates extends JModelList {
             }
         }
         return array( 'status' => $status);
+    }
+    
+    public function insertExercise($model, $id, $item_id, $table) {
+        $helper = new FitnessHelper();
+        
+        $query = "SELECT max(a.order) FROM $table AS a WHERE 1";
+                
+        if($id) {
+            $query .= " AND  a.id='$id'";
+        }
+
+        if($item_id) {
+            $query .= " AND  a.item_id='$item_id'";
+        }
+
+        $order = FitnessHelper::customQuery($query, 0);
+
+        $model->order = (int)$order + 1;
+
+        $id = $helper->insertUpdateObj($model, $table);
+        
+        return $id;
     }
 
 

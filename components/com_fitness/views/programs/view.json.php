@@ -58,5 +58,10 @@ class FitnessViewPrograms extends JView {
         $table = '#__fitness_appointments_favourites';
         echo json_encode($helper->favourite_item($table));
     }
+    
+    function copyProgramExercises() {
+        echo json_encode($this->admin_programs_model->copyProgramExercises());
+    }
+    
    
 }

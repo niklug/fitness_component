@@ -53,7 +53,10 @@ define([
             
             this.container_el = this.$el.find("#items_container");
             
-            this.updateList();
+            var self = this;
+            _.each(app.collections.exercises.models, function(model) {
+                  self.addItem(model);
+            });
             
             this.connectDragPlugin();
             
@@ -79,18 +82,7 @@ define([
             
         },
         
-        updateList : function() {
-            var self = this;
-            var sorted = app.collections.exercises.sortBy(function(model) {
-                return parseInt(model.get('order'));
-            });
- 
-            if(sorted.length) {
-                _.each(sorted, function(model) {
-                      self.addItem(model);
-                });
-            }
-        },
+       
         
         addItem : function(model) {
             this.item = new List_item_view({el : this.container_el, model : model, readonly : this.readonly}).render(); 
@@ -188,20 +180,35 @@ define([
             this.saveItem(new_model);
         },
         
+        copyExercises : function(items) {
+            var self = this;
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'programs';
+            var task = 'copyProgramExercises';
+            var table = '';
+            data.item_id = this.model.get('id');
+            data.items = items;
+            $.AjaxCall(data, url, view, task, table, function(output){
+                app.collections.exercises.fetch({
+                    data : {item_id : self.model.get('id')},
+                    success : function (collection, response) {
+                        self.render();
+                    }
+                })
+                
+            });
+        },
+        
         onClickCopySelected : function() {
             var selected = new Array();
             $('.trash_checkbox:checked').each(function() {
                 selected.push($(this).attr('data-id'));
             });
-            var self = this;
-            var order = $(this.el).find("#exercise_table tbody tr").length
-            if(selected.length > 0) {
-                _.each(selected, function(item, key){ 
-                    order = order + 1;
-                    self.copyExercise(item, order);
-                });
-                
-            }
+            
+            var items  = selected.join(",");
+                    
+            this.copyExercises(items);
             $("#select_all,.trash_checkbox").prop("checked", false);
         },
         

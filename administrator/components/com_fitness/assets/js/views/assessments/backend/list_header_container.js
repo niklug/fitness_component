@@ -3,9 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'views/programs/select_filter_block',
-        'views/programs/backend/search_block',
-	'text!templates/programs/backend/list_header_container.html'
+        'views/assessments/select_filter_block',
+        'views/assessments/backend/search_block',
+	'text!templates/assessments/backend/list_header_container.html'
 ], function (
         $,
         _,

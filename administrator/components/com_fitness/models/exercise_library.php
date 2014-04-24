@@ -158,6 +158,9 @@ class FitnessModelExercise_library extends JModelList {
             $query .= " AND business_profile_id='$business_profile_id'";
         }
         
+        $params = JRequest::get('get');
+    
+        
         $query .= " ORDER BY name ASC";
             
         $data = FitnessHelper::customQuery($query, 1);

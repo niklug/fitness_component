@@ -644,19 +644,7 @@ class FitnessModelprograms extends JModelList {
 
         switch ($method) {
             case 'GET': // Get Item(s)
-                $query .= "SELECT  a.* ";
-                $query .= "  FROM $table AS a";
-                $query .= "  WHERE 1";
-                
-                if($item_id) {
-                    $query .= " AND a.item_id='$item_id' ";
-                }
-     
-                
-                $query .= "  ORDER BY a.order ASC";
-                
-                $data = FitnessHelper::customQuery($query, 1);
-                return $data;
+                return $this->getExercises(null, $item_id) ;
                 break;
             case 'PUT': 
                 //update
@@ -664,22 +652,7 @@ class FitnessModelprograms extends JModelList {
                 break;
             case 'POST': // Create
                 
-                $query = "SELECT max(a.order) FROM $table AS a WHERE 1";
-                
-                if($id) {
-                    $query .= " AND  a.id='$id'";
-                }
-                
-                if($item_id) {
-                    $query .= " AND  a.item_id='$item_id'";
-                }
-                
-                
-                $order = FitnessHelper::customQuery($query, 0);
-              
-                $model->order = (int)$order + 1;
-                
-                $id = $helper->insertUpdateObj($model, $table);
+                $id = $this->insertExercise($model, null, $model->item_id, $table);
                 break;
             case 'DELETE': // Delete Item
                 $id = JRequest::getVar('id', 0, '', 'INT');
@@ -693,6 +666,77 @@ class FitnessModelprograms extends JModelList {
         $model->id = $id;
 
         return $model;
+    }
+    
+    public function getExercises($id, $item_id) {
+        $table = '#__fitness_events_exercises';
+        
+        $query .= "SELECT  a.* ";
+        $query .= "  FROM $table AS a";
+        $query .= "  WHERE 1";
+        
+        if($id) {
+            $query .= " AND a.id='$id' ";
+        }
+
+        if($item_id) {
+            $query .= " AND a.item_id='$item_id' ";
+        }
+
+        $query .= "  ORDER BY a.order ASC";
+        
+        $type = 1;
+        
+        if($id) {
+            $type = 2;
+        }
+
+        return FitnessHelper::customQuery($query, $type);
+    }
+    
+    
+     public function insertExercise($model, $id, $item_id, $table) {
+        $helper = new FitnessHelper();
+        
+        $query = "SELECT max(a.order) FROM $table AS a WHERE 1";
+                
+        if($id) {
+            $query .= " AND  a.id='$id'";
+        }
+
+        if($item_id) {
+            $query .= " AND  a.item_id='$item_id'";
+        }
+
+        $order = FitnessHelper::customQuery($query, 0);
+
+        $model->order = (int)$order + 1;
+
+
+        $id = $helper->insertUpdateObj($model, $table);
+        
+        return $id;
+    }
+    
+    public function copyProgramExercises() {
+        $status['success'] = 1;
+        
+        $table = '#__fitness_events_exercises';
+        
+        $data = json_decode(JRequest::getVar('data_encoded'));
+        
+        $item_id = $data->item_id;
+        
+        $items = explode(",", $data->items);
+       
+        foreach ($items as $id) {
+            $exercise  = $this->getExercises($id, null);
+            $exercise->id = null;
+            $this->insertExercise($exercise, null, $item_id, $table);
+        }
+       
+        return array( 'status' => $status, 'data' => $items);
+        
     }
 
 

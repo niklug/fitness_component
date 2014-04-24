@@ -5,7 +5,7 @@ define([
         'app',
         'collections/programs/select_filter',
         'views/programs/select_filter',
-	'text!templates/programs/select_filter_block.html',
+	'text!templates/assessments/select_filter_block.html',
 ], function (
         $,
         _,
@@ -20,29 +20,21 @@ define([
         
         initialize : function() {
             if( 
-                app.collections.appointments 
-                && app.collections.locations
+                app.collections.locations
                 && app.collections.session_types
                 && app.collections.session_focuses
             ) {
                 this.render();
                 return;
             } 
-      
-            app.collections.appointments = new Select_filter_collection();
+
             app.collections.locations = new Select_filter_collection();
             app.collections.session_types = new Select_filter_collection();
             app.collections.session_focuses = new Select_filter_collection();
                        
             var self = this;
             $.when (
-                app.collections.appointments.fetch({
-                    data : {table : app.options.db_table_appointments},
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                }),
-                
+  
                 app.collections.locations.fetch({
                     data : {table : app.options.db_table_locations, by_business_profile : 1},
                     error: function (collection, response) {
@@ -51,7 +43,7 @@ define([
                 }),
                 
                 app.collections.session_types.fetch({
-                    data : {table : app.options.db_table_session_types},
+                    data : {table : app.options.db_table_session_types, category_id : 5},
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
@@ -81,19 +73,7 @@ define([
         loadFilters : function() {
             //console.log($(this.el));
             var element_disabled = '';
-            
-            new Select_filter_fiew({
-                model : this.model,
-                el : $(this.el).find("#appointments_filter_wrapper"),
-                collection : app.collections.appointments,
-                title : 'Appointment Type',
-                first_option_title : 'None',
-                class_name : 'dark_input_style',
-                id_name : '',
-                select_size : 12,
-                model_field : 'title',
-                element_disabled : element_disabled
-            }).render();
+
 
             if(! _.include(this.options.not_show, 'locations')) {
                 new Select_filter_fiew({
@@ -133,7 +113,7 @@ define([
                 model : this.model,
                 el : $(this.el).find("#session_type_wrapper"),
                 collection : app.collections.session_types_grouped,
-                title : 'Session Type',
+                title : 'Assessment Type',
                 first_option_title : 'None',
                 class_name : 'dark_input_style',
                 id_name : '',
@@ -166,7 +146,7 @@ define([
                 model : this.model,
                 el : $(this.el).find("#session_focus_filter_wrapper"),
                 collection : app.collections.session_focuses_grouped,
-                title : 'Session Focus',
+                title : 'Assessment Focus',
                 first_option_title : 'None',
                 class_name : 'dark_input_style',
                 id_name : '',

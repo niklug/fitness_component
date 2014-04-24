@@ -321,7 +321,7 @@ define([
             var model = new Exercise_model();
             
             var video_model = new Exercise_library_item_model({id : id});
-            
+            var self = this;
             video_model.fetch({
                 data : {state : 1},
                 success: function (video_model, response) {
@@ -333,7 +333,6 @@ define([
                         video_id : id,
                         title : video_model.get('exercise_name')
                     });
-                    var self = this;
                     model.save(null, {
                         success: function (model, response) {
                             if(app.options.exercise_id ) {
