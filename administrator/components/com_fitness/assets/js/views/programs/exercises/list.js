@@ -188,6 +188,7 @@ define([
             var task = 'copyProgramExercises';
             var table = '';
             data.item_id = this.model.get('id');
+            data.db_table = app.options.db_table_exercises;
             data.items = items;
             $.AjaxCall(data, url, view, task, table, function(output){
                 app.collections.exercises.fetch({

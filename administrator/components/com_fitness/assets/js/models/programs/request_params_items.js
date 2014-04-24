@@ -19,7 +19,8 @@ define([
             title : '',
             location : '',
             session_type : '',
-            session_focus :''
+            session_focus :'',
+            appointment_types : '1,2,3,4,6,7,8,9'// all, except Assessments
         }
     });
     return model;

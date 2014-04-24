@@ -3,8 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'views/programs/backend/list_item',
-	'text!templates/programs/backend/list.html'
+        'views/assessments/backend/list_item',
+	'text!templates/assessments/backend/list.html'
 ], function (
         $,
         _, 

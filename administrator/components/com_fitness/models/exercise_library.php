@@ -159,8 +159,31 @@ class FitnessModelExercise_library extends JModelList {
         }
         
         $params = JRequest::get('get');
-    
         
+
+        $db = JFactory::getDbo();
+
+        //get all existing table fields
+        $db->setQuery("DESCRIBE $table");
+        $db->query();
+        $fields = $db->loadResultArray();
+        //
+        
+        // filter incomming data
+        $obj = new stdClass();
+        foreach ($params as $key => $value) {
+            if($key == 'business_profile_id') {
+                continue;
+            }
+            
+            if(in_array($key, $fields)){
+                if($value) {
+                   $query .= " AND $key='$value'"; 
+                }
+            }
+        }
+        //
+       
         $query .= " ORDER BY name ASC";
             
         $data = FitnessHelper::customQuery($query, 1);

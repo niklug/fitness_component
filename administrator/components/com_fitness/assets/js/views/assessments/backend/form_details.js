@@ -38,7 +38,7 @@ define([
             var self = this;
             $.when (
                 app.collections.appointments.fetch({
-                    data : {table : app.options.db_table_appointments},
+                    data : {table : app.options.db_table_appointments, id : 5},
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
@@ -52,14 +52,14 @@ define([
                 }),
                 
                 app.collections.session_types.fetch({
-                    data : {table : app.options.db_table_session_types},
+                    data : {table : app.options.db_table_session_types, category_id : 5},
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
                 }),
                 
                 app.collections.session_focuses.fetch({
-                    data : {table : app.options.db_table_session_focuses},
+                    data : {table : app.options.db_table_session_focuses, category_id : 5},
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
@@ -122,10 +122,7 @@ define([
             // filter for "Personal Training", "Semi-Private Training","Resistance Workout", "Cardio Workout"
            
             appointments_collection.add([
-                app.collections.appointments.get(1),
-                app.collections.appointments.get(2),
-                app.collections.appointments.get(3),
-                app.collections.appointments.get(4)
+                app.collections.appointments.get(5)
             ]);
             
             new Select_element_view({

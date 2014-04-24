@@ -19,7 +19,8 @@ define([
             title : '',
             location : '',
             session_type : '',
-            session_focus :''
+            session_focus :'',
+            appointment_types : '5'// only Assessments
         }
     });
     return model;

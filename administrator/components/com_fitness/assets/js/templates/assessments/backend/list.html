@@ -15,10 +15,14 @@ var sort_title = 'Click to sort by this column';
                     <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_author" onclick="javascript:void(0)">Author Name</a></th>
 
                     <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_location" onclick="javascript:void(0)">Location</a></th>
-                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_appointment_type" onclick="javascript:void(0)">Appointment Type </a></th>
-                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_session_type" onclick="javascript:void(0)">Session Type</a></th>
-                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_session_focus" onclick="javascript:void(0)">Session Focus</a></th>
+                  
+                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_session_type" onclick="javascript:void(0)">Assessment Type</a></th>
+                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_session_focus" onclick="javascript:void(0)">Assessment Focus</a></th>
                     
+                    <th width="30">Weight (kg)</th> 
+                    <th width="30">Lean Mass (kg)</th> 
+                    <th width="30">Body Fat (%)</th> 
+
                     <% if(app.options.pr_temp_id) { %>
                     <td></td>
                     <% } %>
@@ -28,13 +32,13 @@ var sort_title = 'Click to sort by this column';
                     <th></th>
   
                     <th>
-                        Appointment
+                        
                     </th>
                     <th>
-                        Workout
+                        
                     </th>
                     <th>
-                        Event
+                        
                     </th>
                     <th><input style="margin-left:2px;" id="select_trashed" type="checkbox"/></th>
                 </tr>

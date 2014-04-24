@@ -50,7 +50,7 @@ define([
                 }),
                 
                 app.collections.session_focuses.fetch({
-                    data : {table : app.options.db_table_session_focuses},
+                    data : {table : app.options.db_table_session_focuses,  category_id : 5},
                     error: function (collection, response) {
                         alert(response.responseText);
                     }

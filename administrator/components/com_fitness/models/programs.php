@@ -115,6 +115,8 @@ class FitnessModelprograms extends JModelList {
 
                 $data->business_profile_id = JRequest::getVar('business_profile_id'); 
                 $data->current_page = JRequest::getVar('current_page'); 
+                
+                $data->appointment_types = JRequest::getVar('appointment_types'); 
 
                 $data = $this->getPrograms($table, $data);
                 
@@ -274,6 +276,10 @@ class FitnessModelprograms extends JModelList {
             if ($data->current_page  == 'my_favourites') {
                 $query .= " AND a.id IN (SELECT item_id FROM #__fitness_appointments_favourites WHERE client_id='$user_id')";
             }
+            
+            if($data->appointment_types) {
+                $query .= " AND  a.title IN ($data->appointment_types)";
+            }
         
             $query .= " ) items_total, ";
         }
@@ -397,6 +403,11 @@ class FitnessModelprograms extends JModelList {
         
         if ($data->current_page  == 'my_favourites') {
             $query .= " AND a.id IN (SELECT item_id FROM #__fitness_appointments_favourites WHERE client_id='$user_id')";
+        }
+
+
+        if($data->appointment_types) {
+            $query .= " AND  a.title IN ($data->appointment_types)";
         }
         
         $query_type = 1;
@@ -644,7 +655,7 @@ class FitnessModelprograms extends JModelList {
 
         switch ($method) {
             case 'GET': // Get Item(s)
-                return $this->getExercises(null, $item_id) ;
+                return $this->getExercises(null, $item_id, $table) ;
                 break;
             case 'PUT': 
                 //update
@@ -668,8 +679,7 @@ class FitnessModelprograms extends JModelList {
         return $model;
     }
     
-    public function getExercises($id, $item_id) {
-        $table = '#__fitness_events_exercises';
+    public function getExercises($id, $item_id, $table) {
         
         $query .= "SELECT  a.* ";
         $query .= "  FROM $table AS a";
@@ -721,16 +731,18 @@ class FitnessModelprograms extends JModelList {
     public function copyProgramExercises() {
         $status['success'] = 1;
         
-        $table = '#__fitness_events_exercises';
-        
         $data = json_decode(JRequest::getVar('data_encoded'));
+        
+        $table = $data->db_table;
         
         $item_id = $data->item_id;
         
         $items = explode(",", $data->items);
        
         foreach ($items as $id) {
-            $exercise  = $this->getExercises($id, null);
+            
+            $exercise  = $this->getExercises($id, null, $table);
+            
             $exercise->id = null;
             $this->insertExercise($exercise, null, $item_id, $table);
         }
