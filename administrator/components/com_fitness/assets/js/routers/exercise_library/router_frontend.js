@@ -320,27 +320,37 @@ define([
         add_event_exercise : function(id) {
             var model = new Exercise_model();
             
-            var video_model = app.collections.items.get(id);
+            var video_model = new Exercise_library_item_model({id : id});
             
-            model.clear();
-            
-            model.set({
-                id : app.options.exercise_id || null,
-                item_id : app.options.event_id,
-                video_id : id,
-                title : video_model.get('exercise_name')
-            });
-            var self = this;
-            model.save(null, {
-                success: function (model, response) {
-                    if(app.options.exercise_id ) {
-                        self.route_program();
-                    }
+            video_model.fetch({
+                data : {state : 1},
+                success: function (video_model, response) {
+                    model.clear();
+
+                    model.set({
+                        id : app.options.exercise_id || null,
+                        item_id : app.options.event_id,
+                        video_id : id,
+                        title : video_model.get('exercise_name')
+                    });
+                    var self = this;
+                    model.save(null, {
+                        success: function (model, response) {
+                            if(app.options.exercise_id ) {
+                                self.route_program();
+                            }
+                        },
+                        error: function (model, response) {
+                            alert(response.responseText);
+                        }
+                    });
                 },
-                error: function (model, response) {
+                error: function (collection, response) {
                     alert(response.responseText);
                 }
-            });
+            })
+            
+            
         },
         
         route_program : function() {

@@ -21,6 +21,7 @@ define([
         
         events : {
             "click #search_by_name" : "search",
+            'keypress input[type=text]': 'filterOnEnter',
             "click #clear_all" : "clearAll",
             "click #view_trash" : "onClickViewTrash",
             "click #close_trash_list" : "onClickCloseTrashList",
@@ -31,6 +32,12 @@ define([
         search : function() {
             var exercise_name = this.$el.find("#exercise_name").val();
             this.model.set({exercise_name : exercise_name});
+        },
+        
+        filterOnEnter : function(event) { 
+          if(event.which === 13) {
+            this.search();
+          }
         },
         
         clearAll : function(){

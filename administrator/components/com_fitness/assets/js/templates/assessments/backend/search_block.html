@@ -1,0 +1,115 @@
+<div style="display: inline-block; float: right;"  class="right">
+    <div id="toolbar" class="toolbar-list right">
+        <% if(app.options.pr_temp_id) { %>
+            <a title="Add Program To Multiple Appointments" id="add_pr_tepm_multiple" class="toolbar" onclick="javascript:void(0)">
+                <span  class="search_program_icon_32"> </span>
+            </a>
+            <a id="go_back" tilte="Go Back" class="toolbar" onclick="javascript:void(0)">
+                <span  class="icon-32-back"> </span>
+            </a>
+        <% } %>
+        
+        <a title="Add New" id="add_item" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-new"> </span>
+        </a>
+        
+        <a  title="Copy Selected" id="copy_selected"  class="toolbar" onclick="javascript:void(0)">
+            <span class="icon-32-save-new"> </span>
+        </a>
+        
+        <a title="Publish Workout" id="publish_workout_selected" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-publish"> </span>
+        </a>
+        
+        <a title="Unpublish Workout" id="unpublish_workout_selected" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-unpublish"> </span>
+        </a>
+        
+        <a title="Trash/Delete" id="trash_delete_selected" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-trash"> </span>
+        </a>
+    </div>
+</div>
+
+
+<div class="clr"></div>
+
+<div style="width:100%">
+    <label>Date From:</label>
+    <input id="date_from" size="10" type="text" >
+    
+    
+    <label>Date To:</label>
+    <input id="date_to" size="10" type="text" >
+    
+    <label>Client Name:</label>
+    <input id="client_name" size="20" type="text" >
+    
+    <label>Trainer Name:</label>
+    <input id="trainer_name" size="20" type="text" >
+    
+    <label>Author Name:</label>
+    <input id="created_by_name" size="20" type="text" >
+    
+    <input id="search" type="button" value="Search">
+    <input id="clear_all" type="button" value="Clear All">
+    
+    <div style="width:200px;display: inline-block;" id="business_profile_filter"></div>
+    
+    <select id="workout_filter" class="inputbox" size="1" name="workout">
+        <%
+        var selected_published = '';
+        var selected_unpublished = '';
+        var selected_all = '';
+        
+        if(frontend_published == '1') {
+            selected_published = 'selected="selected"';
+        }
+        
+        if(frontend_published == '0') {
+            selected_unpublished = 'selected="selected"';
+        }
+        
+        if(frontend_published == '2') {
+            selected_all = 'selected="selected"';
+        }
+
+        %>
+        <option <%= selected_published %> value="1">Published Workout</option>
+        <option <%= selected_unpublished %>   value="0">Unpublished Workout</option>
+        <option <%= selected_all %>   value="2">All Workouts</option>
+    </select>
+    
+    <select id="state_filter" class="inputbox" size="1" name="state">
+        <%
+        var selected_published = '';
+        var selected_unpublished = '';
+        var selected_trashed = '';
+        var selected_all = '';
+        
+        if(current_page == 'list') {
+            selected_published = 'selected="selected"';
+        }
+        
+        if(current_page == 'unpublished_list') {
+            selected_unpublished = 'selected="selected"';
+        }
+        
+        if(current_page == 'trash_list') {
+            selected_trashed = 'selected="selected"';
+        }
+        
+        if(current_page == 'all_list') {
+            selected_all = 'selected="selected"';
+        }
+
+        %>
+        <option <%= selected_published %> value="1">Published Events</option>
+        <option <%= selected_unpublished %>   value="0">Unpublished Events</option>
+        <option <%= selected_trashed %>   value="-2">Trashed Events</option>
+        <option <%= selected_all %>   value="*">All Events</option>
+    </select>
+    
+</div>
+    
+    

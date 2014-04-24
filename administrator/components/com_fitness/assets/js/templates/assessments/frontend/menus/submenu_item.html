@@ -1,0 +1,40 @@
+<div class="fitness_block_wrapper" style="height:30px;margin-top: 10px;">
+    <div class="internal_wrapper">
+        <div style="width:100%;">
+            <% if (is_favourite) {
+                var display_remove_favourite = 'inline';
+                var display_add_favourite = 'none';
+
+            } else {  
+                var display_add_favourite = 'inline';
+                var display_remove_favourite = 'none';
+            } %>
+            <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourite" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
+
+            <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
+            
+            
+            <% if((title == '3' || title == '4') && parseInt(frontend_published) && current_page == 'workout_programs') { %>
+            <a data-id="<%= id %>" style="cursor: pointer;margin-left:10px;" class="copy_item" onclick="javascript:void(0)">[COPY TO MY WORKOUTS]</a>
+            <% } %>
+            
+            
+            
+            <% if((current_page == 'my_workouts') && edit_allowed == true) { %>
+            <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="trash_item" onclick="javascript:void(0)">[TRASH]</a>
+            <% } %>
+            
+            <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="close_item" onclick="javascript:void(0)">[CLOSE]</a>
+            
+            <% if (edit_allowed) { %>
+                <a data-id="<%= id %>" style="cursor: pointer; float:right;margin-right:10px;" class="edit_item" onclick="javascript:void(0)">[EDIT]</a>
+            <% } %>
+            
+            <% if((title == '3' || title == '4') && (status == '1' || status == '9') && parseInt(frontend_published) ) { %>
+            <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="submit_to_trainer" onclick="javascript:void(0)">[SUBMIT TO TRAINER]</a>
+            <% } %>
+        </div>
+        <div class="clr"></div>
+    </div>
+    <hr class="orange_line">
+</div>

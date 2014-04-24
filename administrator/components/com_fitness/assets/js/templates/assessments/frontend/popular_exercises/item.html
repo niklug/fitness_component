@@ -1,0 +1,45 @@
+<div class="recipe_database_latest_item_wrapper" style="margin-top: 0px;">
+    <h5><%= exercise_name %></h5>
+    <div class="clr"></div>
+    EXERCISE TYPE
+    <div class="clr"></div>
+    <span class="grey_title">
+        <%
+        if(exercise_type_names) { %>
+            <%= exercise_type_names.split(',').join(', ') %>
+        <% }  else { %>
+            <%= '-' %>
+        <% } %>
+    </span>
+    
+    <div class="clr"></div>
+    BODY PART
+    <div class="clr"></div>
+    <span class="grey_title">
+        <%
+        if(body_part_names) { %>
+            <%= body_part_names.split(',').join(', ') %>
+        <% }  else { %>
+            <%= '-' %>
+        <% } %>
+    </span>
+    
+    
+    <div class="clr"></div>
+    EQUIPMENT
+    <div class="clr"></div>
+    <span class="grey_title">
+        <%
+        if(equipment_type_names) { %>
+            <%= equipment_type_names.split(',').join(', ') %>
+        <% }  else { %>
+            <%= '-' %>
+        <% } %>
+    </span>
+    
+    <br/>
+    <i>Viewed</i> <b><%= viewed %></b> <i><span class="grey_title">times</span></i>
+    <a data-id="<%= id %>" style="cursor: pointer;float:right;" class="view_item" onclick="javascript:void(0)">[view]</a>
+    <div class="clr"></div>
+</div>
+<hr>

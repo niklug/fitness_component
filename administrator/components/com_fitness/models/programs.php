@@ -663,9 +663,20 @@ class FitnessModelprograms extends JModelList {
                 $id = $helper->insertUpdateObj($model, $table);
                 break;
             case 'POST': // Create
-                $query = "SELECT max(a.order) FROM $table AS a WHERE a.item_id='$item_id'";
+                
+                $query = "SELECT max(a.order) FROM $table AS a WHERE 1";
+                
+                if($id) {
+                    $query .= " AND  a.id='$id'";
+                }
+                
+                if($item_id) {
+                    $query .= " AND  a.item_id='$item_id'";
+                }
+                
+                
                 $order = FitnessHelper::customQuery($query, 0);
-                                
+              
                 $model->order = (int)$order + 1;
                 
                 $id = $helper->insertUpdateObj($model, $table);

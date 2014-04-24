@@ -34,7 +34,7 @@
                     </tr>
                     <tr>
                         <td colspam="2">
-                            <% if(app.options.event_id) { %>
+                            <% if(app.options.event_id && state == '1') { %>
                                 <a class="add_exercise" title="" style="cursor: pointer;"  onclick="javascript:void(0)" data-id="<%= id %>" >[add to program]</a>
                                 <br/>
                             <% } %> 

@@ -1,0 +1,49 @@
+<%
+var sort_title = 'Click to sort by this column';
+%>
+<div class="fitness_block_wrapper" style="margin-top: 20px; background-color:#fff;">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <thead class="table_header" style="font-size: 12px;">
+                <tr>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_starttime" onclick="javascript:void(0)">Date</a></th>
+                    <th>Client Name</th>
+                    <th>Sent</th>
+                    <th>Confirmed</th>
+                    <th>Status</th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_trainer" onclick="javascript:void(0)">Trainer Name</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_author" onclick="javascript:void(0)">Author Name</a></th>
+
+                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_location" onclick="javascript:void(0)">Location</a></th>
+                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_appointment_type" onclick="javascript:void(0)">Appointment Type </a></th>
+                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_session_type" onclick="javascript:void(0)">Session Type</a></th>
+                    <th width="150"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_session_focus" onclick="javascript:void(0)">Session Focus</a></th>
+                    
+                    <% if(app.options.pr_temp_id) { %>
+                    <td></td>
+                    <% } %>
+                    
+                    <th></th>
+                    <th></th>
+                    <th></th>
+  
+                    <th>
+                        Appointment
+                    </th>
+                    <th>
+                        Workout
+                    </th>
+                    <th>
+                        Event
+                    </th>
+                    <th><input style="margin-left:2px;" id="select_trashed" type="checkbox"/></th>
+                </tr>
+            </thead>
+            <tbody id="items_container">
+            
+            </tbody>
+        </table>
+        <br/>
+        <div style="text-align:center;" id="pagination_container"></div>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+<div class="fitness_block_wrapper" style="margin-top: 20px;">
+    <table width="100%">
+        <tr>
+            <td width="50%" style="vertical-align: top;padding-left: 0;">
+                <div class="internal_wrapper">
+                    <h5 class="orange_text">APPOINTMENT OVERVIEW</h5>
+                    <hr class="orange_line">
+                    <table width="100%">
+                        <tbody>
+                            <tr>
+                                <td> Appointment</td>
+                                <td>
+                                    <span class="grey_title"> <%= appointment_name %> </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> Session Type</td>
+                                <td>
+                                    <span class="grey_title"> <%= session_type_name %> </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> Session Focus</td>
+                                <td>
+                                    <span class="grey_title"> <%= session_focus_name %> </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> &nbsp</td>
+                            </tr>
+                            <tr>
+                                <td> Start Date/Time</td>
+                                <td>
+                                    <div class="grey_title"> 
+                                        <div style="float:left; width:130px;"><%= moment(new Date(Date.parse(starttime))).format("ddd, D MMM  YYYY") %></div>
+                                        <div style="float:left;width:20px;"><%= moment(new Date(Date.parse(starttime))).format("HH:mm")  %></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> Finish Date/Time</td>
+                                <td>
+                                    <div class="grey_title"> 
+                                        <div style="float:left; width:130px;"><%= moment(new Date(Date.parse(endtime))).format("ddd, D MMM  YYYY") %></div>
+                                        <div style="float:left;width:20px;"><%= moment(new Date(Date.parse(endtime))).format("HH:mm")  %></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> Location</td>
+                                <td>
+                                    <span class="grey_title"> <%= location_name %> </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> Status</td>
+                                <td id="status_button_place_<%= client_item_id %>" data-appointment_id="<%= title %>" ></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+            <td style="vertical-align:top; padding-right: 0;">
+                <div class="internal_wrapper">
+                    <h5 class="orange_text">CLIENTS & TRAINERS</h5>
+                    <hr class="orange_line">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                Client Name
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= client_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Primary Trainer
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= trainer_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;">
+                                Secondary Trainers
+                            </td>
+                            <td>
+                                <br/>
+                                <span class="grey_title">
+                                    <%
+                                    _.each(secondary_trainers, function(item, key){ %>
+                                    <%=  item + " <br/>" %>
+                                    <%
+                                    })
+
+                                    %>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <% if(parseInt(frontend_published) ){ %>
+        <div class="internal_wrapper">
+            <table width="100%">
+                <tbody>
+                    <tr>
+                        <td class="left">
+                            <h5 class="orange_text">WORKOUT INSTRUCTIONS</h5>
+                        </td>
+                        <td>
+                            <a class="pdf_button" style="float:right; margin-left: 10px;" title="Save in PDF" href="javascript:void(0)" id="pdf_button"></a>
+                            <a class="email_button" style="float:right; margin-left: 10px;" title="Send by Email" href="javascript:void(0)" id="email_button"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr class="orange_line">
+            <%= decodeURIComponent(description) %>
+        </div>
+        <br/>
+        
+            <div style="width:100%" id="exercises_list"></div>
+
+    <br/>
+    <div class="internal_wrapper">
+        <div style="width:100%;" id="comments_block"></div>
+    </div>
+    <% } %>
+</div>
+
+
