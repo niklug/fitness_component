@@ -5,7 +5,9 @@ define([
         'app',
         'collections/programs/select_filter',
         'views/programs/select_element',
-	'text!templates/programs/backend/form_details.html',
+        'views/assessments/backend/form_standard_assessment',
+        'views/assessments/backend/form_bio_assessment',
+	'text!templates/assessments/backend/form_details.html',
         'jquery.timepicker'
 ], function (
         $,
@@ -14,6 +16,8 @@ define([
         app,
         Select_filter_collection,
         Select_element_view,
+        Form_standard_assessment_view,
+        Form_bio_assessment_view,
         template
     ) {
 
@@ -105,12 +109,18 @@ define([
             this.setAutoPublishWorkout();
             
             this.setAutoPublishEvent();
+            
+            if(this.model.get('session_focus')) {
+                this.loadAssessmentsForm(this.$el.find("#session_focus").find(":selected").text());
+            }
+            
             return this;
         },
         
         events : {
             "change #title" : "onChangeAppointment",
             "change #session_type" : "onChangeSessionType",
+            "change #session_focus" : "onChangeSessionFocus",
             "change #start_time" : "onChangeStarttime",
             "click #frontend_published" : "setAutoPublishWorkout",
             "click #published" : "setAutoPublishEvent",
@@ -119,11 +129,13 @@ define([
         
         loadAppointment : function() {
             var appointments_collection = new Backbone.Collection;
-            // filter for "Personal Training", "Semi-Private Training","Resistance Workout", "Cardio Workout"
+            // filter for Assessment
            
             appointments_collection.add([
                 app.collections.appointments.get(5)
             ]);
+            
+            this.model.set({title : "5"});
             
             new Select_element_view({
                 model : this.model,
@@ -132,7 +144,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : '',
                 id_name : 'title',
-                model_field : 'title'
+                model_field : 'title',
+                element_disabled :  "disabled"
             }).render();
             
             
@@ -264,6 +277,31 @@ define([
         onChangeStartDate : function(event) {
             var value  = $(event.target).val();
             $(this.el).find("#finish_date").val(value);
+        },
+        
+        onChangeSessionFocus : function(event) {
+            var value  = $(event.target).find(":selected").text();
+            
+            this.loadAssessmentsForm(value);
+        },
+        
+        loadAssessmentsForm : function(value) {
+            $("#assessment_form_wrapper").empty();
+            
+            var form = 'standard';
+            
+            if((value.toLowerCase().indexOf("bio") > -1)) {
+                form = 'bio';
+            }
+            
+            var html = new Form_standard_assessment_view({model : this.model}).render().el;
+                        
+            if(form == 'bio') {
+                html = new Form_bio_assessment_view({model : this.model}).render().el;
+            }
+            console.log(form);
+            
+            $("#assessment_form_wrapper").html(html);
         }
         
 

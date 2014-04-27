@@ -9,7 +9,7 @@ define([
         'models/assessments/item',
         'models/assessments/request_params_items',
         'models/assessments/exercises/item', 
-        'views/programs/backend/form_container',
+        'views/assessments/backend/form_container',
         'views/assessments/backend/menus/main_menu',
         'views/assessments/backend/form_details',
         'views/assessments/backend/form_trainer',
@@ -19,6 +19,7 @@ define([
         'views/assessments/backend/list_header_container',
         'views/programs/exercises/list',
         'views/programs/backend/comments_block'
+        
 ], function (
         $,
         _,
@@ -40,6 +41,7 @@ define([
         List_header_container_view,
         Exercises_list_view,
         Comments_block_view
+        
     ) {
 
     var Controller = Backbone.Router.extend({

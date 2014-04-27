@@ -6,8 +6,8 @@ define([
         'collections/programs/event_clients',
         'collections/programs/trainer_clients',
         'models/programs/event_client_item',
-        'views/programs/backend/event_client_item',
-	'text!templates/programs/backend/form_clients.html'
+        'views/assessments/backend/event_client_item',
+	'text!templates/assessments/backend/form_clients.html'
 ], function (
         $,
         _,
@@ -69,6 +69,9 @@ define([
         addItem : function(model, collection) {
             this.container_el.append(new Event_client_item_view({model : model, item_model : this.model, collection : collection}).render().el); 
             this.connectStatus(model);
+            if(collection.length) {
+                this.$el.find("#add_client").hide();
+            }
         },
         
         connectStatus : function(model) {
@@ -92,20 +95,8 @@ define([
                 data : {trainer_id : trainer_id},
                 success : function (collection, response) {
                     self.$el.find("#add_client").hide();
-                    
-                    app.collections.clients_rest = collection;
-                    
-                    _.each(added_clients, function(item){
-                        var model = app.collections.clients_rest.findWhere({client_id : item});
-                        app.collections.clients_rest.remove(model);
-                    });
-                    
-                    if(!app.collections.clients_rest.length) {
-                        return;
-                    }
- 
                     var model = new Event_client_item_model({event_id : self.model.get('id')});
-                    self.addItem(model, app.collections.clients_rest); 
+                    self.addItem(model, collection); 
                 },
                 error : function (collection, response) {
                     alert(response.responseText);

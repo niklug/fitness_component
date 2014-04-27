@@ -4,7 +4,7 @@ define([
 	'backbone',
         'app',
         'views/programs/select_element',
-	'text!templates/programs/backend/event_client_item.html'
+	'text!templates/assessments/backend/event_client_item.html'
 ], function ( $, _, Backbone, app, Select_element_view, template ) {
 
     var view = Backbone.View.extend({
@@ -80,9 +80,7 @@ define([
             this.model.save(null, {
                 success: function (model, response) {
                     self.render().el;
-                    if(app.collections.clients_rest.length - 1) {
-                        $("#add_client").show();
-                    }
+                    $("#add_client").hide();
                 },
                 error: function (model, response) {
                     alert(response.responseText);

@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/programs/backend/menus/main_menu.html'
+	'text!templates/assessments/backend/menus/main_menu.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({

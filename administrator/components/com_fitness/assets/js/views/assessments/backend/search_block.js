@@ -5,7 +5,7 @@ define([
         'app',
         'collections/programs/business_profiles',
         'views/programs/select_element',
-	'text!templates/programs/backend/search_block.html'
+	'text!templates/assessments/backend/search_block.html'
 ], function (
         $,
         _,

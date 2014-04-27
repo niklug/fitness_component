@@ -113,10 +113,10 @@
     <td class="center">
         <%
         var icon_class = 'unpublish';
-        var publish_workout_title = 'Publish Workout';
+        var publish_workout_title = 'Publish Assessment';
         if(parseInt(frontend_published) == '1') {
             icon_class = 'publish';
-            publish_workout_title = 'Unpublish Workout';
+            publish_workout_title = 'Unpublish Assessment';
         }
         %>
         <span title="<%= publish_workout_title %>"   class="jgrid"><span style="cursor:pointer;"  data-id="<%= id %>"  data-frontend_published="<%= frontend_published %>"  class="publish_workout state <%= icon_class %> " ></span></span> <br/>
