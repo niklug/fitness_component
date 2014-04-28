@@ -23,7 +23,7 @@ define([
         template:_.template(template),
         
         render: function(){
-            var data = this.model.toJSON();
+            var data = {data : this.model.toJSON()};
             //console.log(data);
             data.$ = $;
             var template = _.template(this.template(data));

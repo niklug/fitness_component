@@ -13,6 +13,9 @@ define([
         render: function(){
             var template = _.template(this.template());
             this.$el.html(template);
+            
+            $(this.el).find("#program_form").validate();
+            
             return this;
         },
     });

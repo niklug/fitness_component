@@ -6,7 +6,7 @@ define([
         'collections/exercise_library/business_profiles',
         'collections/programs/trainers',
         'views/programs/select_element',
-	'text!templates/programs/backend/form_trainer.html'
+	'text!templates/assessments/backend/form_trainer.html'
 ], function (
         $,
         _,
@@ -71,7 +71,7 @@ define([
         },
         
         events : {
-            "change #business_profile_select" : "onChangeBusinessName",
+            "change .business_profile_select" : "onChangeBusinessName",
             "change #trainer_id" : "onChangeTrainer",
         },
         
@@ -94,8 +94,8 @@ define([
                 el : $("#business_name_select"),
                 collection : business_name_collection,
                 first_option_title : '-Global Business Permission-',
-                class_name : '',
-                id_name : 'business_profile_select',
+                class_name : 'business_profile_select required ',
+                id_name : ' business_profile_id ',
                 model_field : 'business_profile_id',
                 element_disabled : element_disabled
             }).render();
@@ -131,7 +131,7 @@ define([
                 el : $("#trainer_select"),
                 collection : trainers_collection,
                 first_option_title : '-Select-',
-                class_name : '',
+                class_name : 'business_profile_select required ',
                 id_name : 'trainer_id',
                 model_field : 'trainer_id',
                 element_disabled : element_disabled

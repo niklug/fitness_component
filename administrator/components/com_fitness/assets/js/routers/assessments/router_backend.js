@@ -18,7 +18,9 @@ define([
         'views/assessments/backend/list',
         'views/assessments/backend/list_header_container',
         'views/programs/exercises/list',
-        'views/programs/backend/comments_block'
+        'views/programs/backend/comments_block',
+        
+        'jquery.validate'
         
 ], function (
         $,

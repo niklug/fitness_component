@@ -9,6 +9,8 @@ define([
         'views/assessments/backend/form_bio_assessment',
 	'text!templates/assessments/backend/form_details.html',
         'jquery.timepicker'
+
+        
 ], function (
         $,
         _,
@@ -142,7 +144,7 @@ define([
                 el : this.$el.find("#appointment_select"),
                 collection : appointments_collection,
                 first_option_title : '-Select-',
-                class_name : '',
+                class_name : ' required ',
                 id_name : 'title',
                 model_field : 'title',
                 element_disabled :  "disabled"
@@ -169,7 +171,7 @@ define([
                 el : this.$el.find("#session_type_select"),
                 collection : session_type_collection,
                 first_option_title : '-Select-',
-                class_name : '',
+                class_name : ' required ',
                 id_name : 'session_type',
                 model_field : 'session_type'
             }).render();
@@ -190,7 +192,7 @@ define([
                 el : this.$el.find("#session_focus_select"),
                 collection : session_focus_collection,
                 first_option_title : '-Select-',
-                class_name : '',
+                class_name : ' required ',
                 id_name : 'session_focus',
                 model_field : 'session_focus'
             }).render();
@@ -202,7 +204,7 @@ define([
                 el : this.$el.find("#location_select"),
                 collection : app.collections.locations,
                 first_option_title : '-Select-',
-                class_name : '',
+                class_name : ' required ',
                 id_name : 'location',
                 model_field : 'location'
             }).render();
@@ -299,7 +301,6 @@ define([
             if(form == 'bio') {
                 html = new Form_bio_assessment_view({model : this.model}).render().el;
             }
-            console.log(form);
             
             $("#assessment_form_wrapper").html(html);
         }

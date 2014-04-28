@@ -59,7 +59,7 @@ define([
                 collection : this.collection,
                 first_option_title : '-Select-',
                 class_name : 'client_id',
-                id_name : '',
+                id_name : 'client_id',
                 model_field : 'client_id',
                 element_disabled : element_disabled,
                 value_field : 'client_id',
