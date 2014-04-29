@@ -138,7 +138,8 @@ define([
                     model : model,
                     exercise_model : Exercise_model,
                     exercises_collection : Exercises_collection,
-                    readonly : readonly_exercises
+                    readonly : readonly_exercises,
+                    title : 'WORKOUT DETAILS'
                 });
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});

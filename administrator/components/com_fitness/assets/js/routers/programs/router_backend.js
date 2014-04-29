@@ -129,7 +129,8 @@ define([
                     model : model,
                     exercise_model : Exercise_model,
                     exercises_collection : Exercises_collection,
-                    choose_template : true
+                    choose_template : true,
+                    title : 'WORKOUT DETAILS'
                 });
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});

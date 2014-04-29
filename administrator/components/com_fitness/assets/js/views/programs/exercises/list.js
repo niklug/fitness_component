@@ -48,6 +48,7 @@ define([
             data.readonly = this.readonly;
             data.choose_template = this.options.choose_template || false;
             data.search_videos = this.options.search_videos || false;
+            data.title = this.options.title || false;
             
             $(this.el).html(this.template(data));
             

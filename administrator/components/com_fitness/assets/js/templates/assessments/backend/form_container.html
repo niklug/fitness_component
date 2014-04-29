@@ -21,17 +21,23 @@
         </table>
 
         <div id="assessment_form_wrapper"></div>
+        
+        <% if(id) { %>
+            <div id="workout_instuctions_wrapper"></div>
 
-        <div id="workout_instuctions_wrapper"></div>
+            <fieldset class="adminform">
+                <div id="exercises_list"></div>
+            </fieldset>
 
+            <fieldset class="adminform">
+                <legend>ASSESSMENT VIDEO</legend>
+            <div id="video_block"></div>
+            </fieldset>
 
+            <fieldset class="adminform">
+                <div id="comments_block"></div>
+            </fieldset>
 
-        <fieldset class="adminform">
-            <div id="exercises_list"></div>
-        </fieldset>
-
-        <fieldset class="adminform">
-            <div id="comments_block"></div>
-        </fieldset>
+        <% } %>
     </form>
 </div>

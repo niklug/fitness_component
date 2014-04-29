@@ -82,6 +82,8 @@ define([
                     data.endtime = data.start_date + ' ' + data.finish_time ;
                     data.owner = app.options.user_id;
                 }
+                
+                data.video = $("#video_container").attr('data-videopath');
 
 
                 self.model.set(data);

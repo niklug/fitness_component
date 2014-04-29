@@ -167,7 +167,8 @@ define([
                     exercise_model : Exercise_model,
                     exercises_collection : Exercises_collection,
                     readonly : false,
-                    search_videos : true
+                    search_videos : true,
+                    title : 'WORKOUT DETAILS'
                 });
             }
         },

@@ -65,7 +65,8 @@ define([
                 model : this.model,
                 exercise_model : Exercise_model,
                 exercises_collection : Exercises_collection,
-                readonly : true
+                readonly : true,
+                title : 'WORKOUT DETAILS'
             });
         }
 

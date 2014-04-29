@@ -14,12 +14,12 @@ define([
         'views/assessments/backend/form_details',
         'views/assessments/backend/form_trainer',
         'views/assessments/backend/form_clients',
-        'views/programs/backend/form_workout_instructions',
+        'views/assessments/backend/form_workout_instructions',
         'views/assessments/backend/list',
         'views/assessments/backend/list_header_container',
         'views/programs/exercises/list',
         'views/programs/backend/comments_block',
-        
+        'views/assessments/backend/form_video',
         'jquery.validate'
         
 ], function (
@@ -42,8 +42,8 @@ define([
         List_view,
         List_header_container_view,
         Exercises_list_view,
-        Comments_block_view
-        
+        Comments_block_view,
+        Form_video_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -84,12 +84,12 @@ define([
             if(this.routesHit > 1) {
               window.history.back();
             } else {
-              this.navigate('', {trigger:true, replace:true});t
+              this.navigate('', {trigger:true, replace:true});
             }
         },
 
         form_view : function(id) {
-            $("#main_container").html(new Form_container_view().render().el);
+            
             if(!parseInt(id)) {
                 this.load_form_view(new Item_model());
                 return;
@@ -118,6 +118,8 @@ define([
         
         load_form_view : function(model) {
             $("#header_wrapper").html(new Main_menu_view({model : model}).render().el);
+            
+            $("#main_container").html(new Form_container_view({model : model}).render().el);
 
             new Form_details_view({el : $("#details_wrapper"), model : model});
             
@@ -133,8 +135,11 @@ define([
                     model : model,
                     exercise_model : Exercise_model,
                     exercises_collection : Exercises_collection,
-                    choose_template : true
+                    choose_template : true,
+                    title : 'PHYSICAL ASSESSMENT DETAILS'
                 });
+                
+                new Form_video_view({el : $("#video_block"), model : model});
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});
             }

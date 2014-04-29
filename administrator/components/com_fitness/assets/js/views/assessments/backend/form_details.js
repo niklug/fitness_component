@@ -290,10 +290,15 @@ define([
         loadAssessmentsForm : function(value) {
             $("#assessment_form_wrapper").empty();
             
+            $("#workout_instuctions_wrapper").show();
+            $("#exercises_list").parent().show();
+            
             var form = 'standard';
             
             if((value.toLowerCase().indexOf("bio") > -1)) {
                 form = 'bio';
+                $("#workout_instuctions_wrapper").hide();
+                $("#exercises_list").parent().hide();
             }
             
             var html = new Form_standard_assessment_view({model : this.model}).render().el;

@@ -43,8 +43,8 @@ $business_profile_id = $business_profile_id['data'];
 
         'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
         'no_video_image_big' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_big.png',
-        'video_upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Exercise_Library_Videos' . DS  ?>',
-        'video_path' : 'images/Exercise_Library_Videos',
+        'video_upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Assessments_Videos' . DS  ?>',
+        'video_path' : 'images/Assessments_Videos',
         
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
         'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
