@@ -1466,3 +1466,15 @@ CREATE TABLE IF NOT EXISTS `#__fitness_pr_temp_exercises` (
   KEY `item_id` (`item_id`),
   FOREIGN KEY (item_id) REFERENCES #__fitness_programs_templates(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `#__fitness_assessments_photos` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) unsigned NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `client_comments` text NOT NULL,
+  `trainer_comments` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`),
+  FOREIGN KEY (item_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

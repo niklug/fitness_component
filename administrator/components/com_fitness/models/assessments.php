@@ -37,4 +37,6 @@ class FitnessModelassessments extends JModelList {
 
     }
     
+    
+    
 }

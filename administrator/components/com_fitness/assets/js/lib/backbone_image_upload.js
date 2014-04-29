@@ -13,13 +13,13 @@
     
     function BackboneImageUpload(options) {
     
-        window.Image_upload_model = Backbone.Model.extend({
+        var Image_upload_model = Backbone.Model.extend({
 
             defaults : options
         });
 
 
-        window.Image_upload_view = Backbone.View.extend({
+        var Image_upload_view = Backbone.View.extend({
 
             template: _.template($('#image_upload_template').html()),
 
@@ -31,19 +31,22 @@
 
             render: function(eventName) {
                 $(this.el).html(this.template(this.model.toJSON()));
+                
+                this.preview_image = $(this.el).find($('.preview_image'));
+                
                 return this;
             },
 
             events : {
                 "click .save": "save_image", 
 
-                "drop #preview_image" : "drop_image",
+                "drop .preview_image" : "drop_image",
 
                 "change #change_image": "change_image", 
 
                 "click .clear_image" : "clear_image",
 
-                "dragover #preview_image" : function(e) {
+                "dragover .preview_image" : function(e) {
                     e.preventDefault();
                 }
 
@@ -70,8 +73,8 @@
                 
                 var self = this;
                 reader.onloadend = function () {
-                    $('#preview_image').css('background-image',"url(" + reader.result +")");
-                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + self.image_name + '.' + self.filetype);
+                    self.preview_image.css('background-image',"url(" + reader.result +")");
+                    self.preview_image.attr('data-imagepath', model.get('img_path') + '/' + self.image_name + '.' + self.filetype);
                 };
                 reader.readAsDataURL(this.pictureFile);
                 return false;
@@ -97,8 +100,8 @@
                 
                 var self = this;
                 reader.onloadend = function() {
-                    $('#preview_image').css('background-image',"url(" + reader.result +")");
-                    $('#preview_image').attr('data-imagepath', model.get('img_path') + '/' + file.name);
+                    self.preview_image.css('background-image',"url(" + reader.result +")");
+                    self.preview_image.attr('data-imagepath', model.get('img_path') + '/' + file.name);
                 };
                 reader.readAsDataURL(this.pictureFile);
              
@@ -151,7 +154,7 @@
                     
                     var ajax_load_html= '<div style="width:100%;text-align:center;margin-top:80px;margin-left: 28px;"><div class="ajax_loader"></div></div>';
                     
-                    $('#preview_image').html(ajax_load_html);
+                    this.preview_image.html(ajax_load_html);
                     
                     // upload FormData object by XMLHttpRequest
                     $.ajax({
@@ -163,16 +166,22 @@
                             contentType: false
                     })
                     .done(function () {
-                            console.log(self.pictureFile.name + ' uploaded successfully !' );
-                            $('#preview_image').html('');
-                            $('#preview_image').attr('data-imagepath', self.model.get('img_path') + '/' + self.image_name + '.' + self.filetype);
-                            $('#preview_image').css('background-image',"url(" + self.model.get('base_url') + self.model.get('img_path') + '/' + self.image_name + '.' + self.filetype +")");
+                            self.onSave();
+ 
                     })
                     .fail(function (response) {
                             alert(response.responseText)
                             return false;
                     });
                 };
+            },
+            
+            onSave : function() {
+                console.log(this.pictureFile.name + ' uploaded successfully !' );
+                this.preview_image.html('');
+                this.preview_image.attr('data-imagepath', this.model.get('img_path') + '/' + this.image_name + '.' + this.filetype);
+                this.preview_image.css('background-image',"url(" + this.model.get('base_url') + this.model.get('img_path') + '/' + this.image_name + '.' + this.filetype +")");
+                this.render();
             },
 
             clear_image : function() {
@@ -212,8 +221,10 @@
                     
                 this.pictureFile = null;
                 this.model.set({"picture" : ''});
-                $('#preview_image').css('background-image',"url(" + this.model.get("default_image") +")");
-                $('#preview_image').attr('data-imagepath', '');
+                this.preview_image.css('background-image',"url(" + this.model.get("default_image") +")");
+                this.preview_image.attr('data-imagepath', '');
+                
+                this.render();
             }
 
          });

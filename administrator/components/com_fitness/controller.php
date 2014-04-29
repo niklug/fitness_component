@@ -423,6 +423,12 @@ class FitnessController extends JController
             $view -> copyProgramExercises(); 
         }
         
+        function rest_data() {
+            $view = $this -> getView('programs', 'json');
+            $view->setModel($this->getModel('programs'));
+            $view -> rest_data(); 
+        }
+        
         
         // programs templates
         function programs_templates() {
@@ -454,5 +460,8 @@ class FitnessController extends JController
             $view->setModel($this->getModel('programs_templates'));
             $view -> import_pr_temp(); 
         }
+        
+
+        
 
 }

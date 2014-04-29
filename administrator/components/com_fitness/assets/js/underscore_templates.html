@@ -465,6 +465,7 @@
     } 
     %>
     <div class="form-left-col" style="text-align:center;">
+    <% if(!picture) { %>
         <form name="image_form">
             Select & Upload New Image 
             <div class="clr"></div>
@@ -474,13 +475,18 @@
             <div class="clr"></div>
             Or drag image here
         </form>
+    <% } else { %>
+            <div style="height:65px;"></div>
+        <% } %>
         <div data-imagepath="<%= img_path + '/' + picture %>" 
-            class="recipe_database_image"
-            style=" background-image: <%= background_image %>; border:2px dashed #ccc;display: inline-block; margin: 5px;"
-            id="preview_image">
+            class="recipe_database_image preview_image"
+            style=" background-image: <%= background_image %>;display: inline-block; margin: 5px;"
+            >
         </div>
         <br/>
+        <% if(!picture) { %>
         <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+        <% } %>
         <a href="javascript:void(0)" class="clear_image">[Clear]</a>
     </div>
 

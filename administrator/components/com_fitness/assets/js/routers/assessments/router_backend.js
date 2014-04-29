@@ -20,6 +20,7 @@ define([
         'views/programs/exercises/list',
         'views/programs/backend/comments_block',
         'views/assessments/backend/form_video',
+        'views/assessments/backend/photo_block/list',
         'jquery.validate'
         
 ], function (
@@ -43,7 +44,8 @@ define([
         List_header_container_view,
         Exercises_list_view,
         Comments_block_view,
-        Form_video_view
+        Form_video_view,
+        Photo_block_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -140,6 +142,8 @@ define([
                 });
                 
                 new Form_video_view({el : $("#video_block"), model : model});
+                
+                new Photo_block_view({el : $("#photo_block"), model : model});
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});
             }

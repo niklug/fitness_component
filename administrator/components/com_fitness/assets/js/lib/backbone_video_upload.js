@@ -13,13 +13,13 @@
     
     function BackboneVideoUpload(options) {
     
-        window.Video_upload_model = Backbone.Model.extend({
+        var Video_upload_model = Backbone.Model.extend({
 
             defaults : options
         });
 
 
-        window.Video_upload_view = Backbone.View.extend({
+        var Video_upload_view = Backbone.View.extend({
 
             template: _.template($('#video_upload_template').html()),
 
