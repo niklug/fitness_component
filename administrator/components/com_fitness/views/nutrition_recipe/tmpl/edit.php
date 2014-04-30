@@ -631,7 +631,7 @@ $helper = new FitnessHelper();
             'image_name' : '<?php echo $this->item->id;?>'
 
         };
-console.log(image_upload_options);
+
         var image_upload = $.backbone_image_upload(image_upload_options); 
         image_upload.render();
         
@@ -686,7 +686,7 @@ console.log(image_upload_options);
                     
                     $("#jform_video_input").val(video_path);
                     
-                    var image_path = $("#preview_image").attr('data-imagepath');
+                    var image_path = $(".preview_image").attr('data-imagepath');
                     
                     $("#jform_image_input").val(image_path);
 

@@ -475,9 +475,8 @@
             <div class="clr"></div>
             Or drag image here
         </form>
-    <% } else { %>
-            <div style="height:65px;"></div>
-        <% } %>
+    <% }  %>
+         
         <div data-imagepath="<%= img_path + '/' + picture %>" 
             class="recipe_database_image preview_image"
             style=" background-image: <%= background_image %>;display: inline-block; margin: 5px;"
@@ -516,9 +515,7 @@
             Or drag video here
         </form>
         
-        <% } else { %>
-            <div style="height:65px;"></div>
-        <% } %>
+        <% }  %>
         
         <div 
             style="background-image: <%= background_image%>; background-repeat: no-repeat;background-size:100% 100%;margin: 5px; display: inline-block; border:2px dashed #ccc;height:<%= preview_height%>;width:<%= preview_width%>;"

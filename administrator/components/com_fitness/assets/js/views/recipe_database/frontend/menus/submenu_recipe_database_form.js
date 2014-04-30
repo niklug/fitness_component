@@ -67,7 +67,7 @@ define([
  
             data.number_serves = number_serves_field.val();
             
-            data.image = $("#preview_image").attr('data-imagepath');
+            data.image = $(".preview_image").attr('data-imagepath');
             
             data.video = $("#video_container").attr('data-videopath');
             
@@ -78,6 +78,8 @@ define([
             data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");  
 
             data.state = '1';
+            
+            console.log(data);
             
             this.model.set(data);
             

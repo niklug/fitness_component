@@ -287,7 +287,7 @@ class FitnessController extends JController {
 
 
         if($task == 'clear') {
-            $filename = $_POST['filename'];
+            $filename = $data->filename;
             unlink($upload_folder . $filename);
             echo $filename;
             return false;

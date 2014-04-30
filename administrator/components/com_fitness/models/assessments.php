@@ -37,6 +37,63 @@ class FitnessModelassessments extends JModelList {
 
     }
     
-    
+    public function assessment_photos() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        
+        $item_id = JRequest::getVar('item_id', 0, '', 'INT');
+  
+        
+        $table = '#__fitness_assessments_photos';
+        
+        
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $query = "SELECT a.* FROM $table AS a WHERE 1";
+                
+                if($id) {
+                    $query .= " AND a.id='$id'";
+                }
+                
+                if($item_id) {
+                    $query .= " AND a.item_id='$item_id'";
+                }
+                
+                $data = FitnessHelper::customQuery($query, 1);
+                
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
     
 }

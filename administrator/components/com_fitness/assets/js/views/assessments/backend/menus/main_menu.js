@@ -72,7 +72,14 @@ define([
                 
                 var data = Backbone.Syphon.serialize(this);
                 
-                data.description = encodeURIComponent(data.description);
+                var description = data.description;
+             
+                if(typeof description !== 'undefined') {
+                    description = encodeURIComponent(description);
+                } else {
+                    description = '';
+                }
+                data.description = description;
                 
                 data.starttime  = data.start_date + ' ' + data.start_time ;
             
@@ -96,7 +103,7 @@ define([
                 //start validation
                 if (!self.model.isValid()) {
                     var validate_error = self.model.validationError;
-                    console.log(validate_error);
+
                     if(validate_error == 'end_date_time') {
                         $('#finish_date').addClass("red_style_border");
                         $('#finish_time').addClass("red_style_border");

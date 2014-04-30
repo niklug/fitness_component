@@ -3,10 +3,11 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'models/assessments/assessment_photos',
 	'text!templates/assessments/backend/photo_block/item.html',
         'jquery.backbone_image_upload'
 
-], function ( $, _, Backbone, app,  template ) {
+], function ( $, _, Backbone, app, Item_model, template ) {
 
     var view = Backbone.View.extend({
         
@@ -17,11 +18,16 @@ define([
         render: function(){
             var data = {data : this.model.toJSON()};
             var template = _.template(this.template(data));
-            this.$el.append(template);
+            this.$el.html(template);
             
             this.connectImageUpload();
             
             return this;
+        },
+        
+        events: {
+            "click .save_photo" : "onClickSave",
+            "click .close_photo" : "onClickClose",
         },
         
         connectImageUpload : function() {
@@ -34,8 +40,6 @@ define([
                 var fileNameIndex = imagepath.lastIndexOf("/") + 1;
                 filename = imagepath.substr(fileNameIndex);
             }
-
-
 
             var image_upload_options = {
                 'url' : app.options.fitness_frontend_url + '&view=recipe_database&task=uploadImage&format=text',
@@ -50,11 +54,47 @@ define([
                 'image_name' : this.model.get('id')
 
             };
-            
-            console.log(image_upload_options);
 
             var image_upload = $.backbone_image_upload(image_upload_options); 
             image_upload.render();
+        },
+        
+        onClickSave : function(event) {
+            var id = $(event.target).attr('data-id');
+            
+            var model = new Item_model({
+                id : id,
+                image : $(this.el).find(".preview_image").attr('data-imagepath'),
+                description : $(this.el).find(".photo_description").val(),
+                client_comments : $(this.el).find(".photo_client_comments").val(),
+                trainer_comments : $(this.el).find(".photo_trainer_comments").val()
+            });
+            
+            model.save(null, {
+                success: function (model, response) {
+                    console.log(model);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickClose : function(event) {
+            var self = this;
+            this.model.destroy({
+                success: function (model) {
+                    self.close();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        close :function() {
+            $(this.el).unbind();
+            $(this.el).remove();
         },
 
     });

@@ -461,6 +461,12 @@ class FitnessController extends JController
             $view -> import_pr_temp(); 
         }
         
+        function assessment_photos() {
+            $view = $this -> getView('assessments', 'json');
+            $view->setModel($this->getModel('assessments'));
+            $view -> assessment_photos(); 
+        }
+        
 
         
 

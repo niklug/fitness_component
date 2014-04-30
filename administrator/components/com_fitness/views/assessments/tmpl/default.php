@@ -43,8 +43,10 @@ $business_profile_id = $business_profile_id['data'];
         'db_table_photos' : '#__fitness_assessments_photos',
         
         'default_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_image.png',
+        'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
         'upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Assessments_Images' . DS  ?>',
         'img_path' : 'images/Assessments_Images',
+
 
         'default_video_image' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_image.png',
         'no_video_image_big' : '<?php echo JURI::root();?>administrator/components/com_fitness/assets/images/no_video_big.png',

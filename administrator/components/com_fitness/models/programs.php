@@ -764,8 +764,13 @@ class FitnessModelprograms extends JModelList {
         $id = JRequest::getVar('id', 0, '', 'INT');
         
         $item_id = JRequest::getVar('item_id', 0, '', 'INT');
+  
         
         $table = JRequest::getVar('db_table');
+        
+        if(!$table) {
+            $table = $model->db_table;
+        }
         
         if(!$table) {
             throw new Exception('Error: no db_table');
