@@ -63,7 +63,9 @@ $business_profile_id = $business_profile_id['data'];
         'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
         
         
-        'business_profile_id' : '<?php echo $business_profile_id; ?>'
+        'business_profile_id' : '<?php echo $business_profile_id; ?>',
+
+        'current_view' : '<?php echo  JFactory::getApplication()->input->get('view'); ?>',
     };
     
 

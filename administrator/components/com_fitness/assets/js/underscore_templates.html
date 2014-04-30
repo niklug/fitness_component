@@ -466,7 +466,6 @@
     %>
     <div class="form-left-col" style="text-align:center;">
     <% if(!picture) { %>
-        <form name="image_form">
             Select & Upload New Image 
             <div class="clr"></div>
             <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Image]</a>
@@ -474,7 +473,6 @@
             <input type="file" name="change_image" id="change_image" style=" cursor: pointer !important; direction: ltr;font-size: 20px;margin:-22px 0 0; opacity: 0;position: relative;display: inline; right: 0;top:0px; width: 200px;"> 
             <div class="clr"></div>
             Or drag image here
-        </form>
     <% }  %>
          
         <div data-imagepath="<%= img_path + '/' + picture %>" 
@@ -505,16 +503,20 @@
     <div class="form-left-col" style="text-align:center; width:264px;display:inline-block;" id="video_container" data-videopath="<%= full_video_path %>" >
     
         <% if(!video) { %>
-        <form name="video_form">
             Select & Upload New Video 
             <div class="clr"></div>
             <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Video]</a>
             <div class="clr"></div>
-            <input type="file" name="change_video" id="change_video" style=" cursor: pointer !important; direction: ltr;font-size: 20px;margin:-22px 0 0; opacity: 0;position: relative;display: inline; right: 0;top:0px; width: 200px;"> 
+    
+            <input
+                type="file"
+                name="change_video" 
+                id="change_video" 
+                style="cursor: pointer !important; direction: ltr;font-size: 20px;margin:-22px 0 0; opacity: 0;position: relative;display: inline; right: 0;top:0px; width: 200px;"
+            > 
+            
             <div class="clr"></div>
             Or drag video here
-        </form>
-        
         <% }  %>
         
         <div 

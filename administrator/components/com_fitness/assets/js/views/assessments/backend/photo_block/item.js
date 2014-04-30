@@ -71,9 +71,6 @@ define([
             });
             
             model.save(null, {
-                success: function (model, response) {
-                    console.log(model);
-                },
                 error: function (model, response) {
                     alert(response.responseText);
                 }

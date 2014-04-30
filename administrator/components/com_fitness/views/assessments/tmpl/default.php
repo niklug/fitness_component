@@ -63,6 +63,8 @@ $business_profile_id = $business_profile_id['data'];
         'business_profile_id' : '<?php echo $business_profile_id; ?>',
         'pr_temp_id' : '<?php echo JRequest::getVar('pr_temp_id') ?>',
         'back_url' : decodeURIComponent('<?php echo JRequest::getVar('back_url') ?>'),
+        
+        'current_view' : '<?php echo  JFactory::getApplication()->input->get('view'); ?>',
     };
     
 

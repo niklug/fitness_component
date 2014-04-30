@@ -68,7 +68,6 @@ define([
                 wait: true,
                 success: function (model, response) {
                     self.addItem(model);
-                    console.log(model);
                 },
                 error: function (model, response) {
                     alert(response.responseText);
