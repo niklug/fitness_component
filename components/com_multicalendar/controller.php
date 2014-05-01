@@ -325,10 +325,13 @@ class MultiCalendarController extends JController
             $this->helper->updateAppointmentClientStatus ($event_id, $client_id, '13');
             
             //send CONFIRMED email
+            $query = "SELECT id FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
+            $client_item_id = FitnessHelper::customQuery($query, 0);
+        
             $obj = new AppointmentEmail();
              try {
                 $data_obj = new stdClass();
-                $data_obj->id = $event_id;
+                $data_obj->id = $client_item_id;
                 $data_obj->client_id = $client_id;
                 $data_obj->method = 'AppointmentConfirmed';
                 $emails  .= ' ' .$obj->processing($data_obj);

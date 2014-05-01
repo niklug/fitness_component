@@ -25,8 +25,8 @@
                 color:#ffba87 !important;
             }
             .readMore a:hover {
-                background-color:#562704 !important;
-                color: #fe720a !important;
+                background-color:#71330A !important;
+                color: #FFF !important;
             }
             body {
                 margin:0;
@@ -48,8 +48,7 @@
         </style>
     </head>
     <body>
-              
-<?php
+        <?php
         require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email_templates_data.php';
 
         $event_id = &JRequest::getVar('event_id');
@@ -103,39 +102,42 @@
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#df833e; font-weight:lighter; margin-bottom:0 !important;">APPOINTMENT CONFIRMATION!</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:27px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">PLEASE CONFIRM YOUR APPOINTMENT</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>Hi <?php echo $data->client_name;?>,</p>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi  <?php echo $data->client_name;?>,</p>
                                                                     <p>Please click 'Confirm' to secure your appointment day and time. If you are unable to attend, contact your coach  as soon as possible to avoid late cancellation penalties. </p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="29%" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><p>START DATE:<br />
+                                                                <td width="29%" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <p>START DATE:<br />
                                                                         START TIME:<br />
                                                                         LOCATION:
                                                                     </p></td>
-                                                                <td width="71%" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
+                                                                <td width="71%" style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <p><?php echo $data->start_date;?><br />
                                                                         <?php echo $data->start_time ;?><br />
                                                                         <?php echo $data->item->location_name;?>
                                                                     </p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
+                                                                <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     APPOINTMENT:<br />
                                                                     SESSION TYPE:<br />
                                                                     SESSION FOCUS:</td>
-                                                                <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
+                                                                <td style="margin:0; padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <?php echo $data->item->appointment_name;?><br />
                                                                     <?php echo $data->item->session_type_name;?><br />
                                                                     <?php echo $data->item->session_focus_name;?></td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">TRAINER NAME:</td>
-                                                                <td style="margin:0; padding:15px 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;"><?php echo $data->trainer_name;?></td>
+                                                                <td style="margin:0; padding:15px 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    TRAINER NAME:</td>
+                                                                <td style="margin:0; padding:15px 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <?php echo $data->trainer_name;?></td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -161,54 +163,40 @@
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td bgcolor="#e76708" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">What you need to know (and do) before your appointment...</h2>
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#000; font-weight:lighter; margin-bottom:0 !important;">TERMS &amp; CONDITIONS</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
                                                         <img alt="image" height="125" src="<?php echo $data->path ?>/icon6.png" width="100" border="0" vspace="0" hspace="0" /></td>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;">
-                                                        <p>Make sure you bring your workout clothes and appropriate shoes with you! You should also bring a sweat towel and water bottle to stay hydrated. <br />
-                                                            This will keep unnecessary trips to the water fountain to a minimum and reduce breaks in the workout.</p>
-                                                        <p>Don't forget to arrive 10 minutes early and warm up before your scheduled appointment time. Doing so will maximize training time with your coach!</p>
-                                                        <p>If you are scheduled for an assessment, please DO NOT perform a warm up!</p></td>
+                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#000;">
+                                                        <p>With every professional business there is a serious side...</p>
+                                                        <p>Thank you for taking the time to read, understand and appreciate how we continually maintain the highest standard of customer service to all our clients. Please help us maintain this professional standard by providing us with the following small courtesies that are detailed in our Cancelation Policy.</p></td>
                                                 </tr>
 
                                             </table>
                                         </td>
                                     </tr>
                                 </table>
-                                <!--End Of Content [row number #3]-->
-                                <!--Start Of two Content Container [row number #4]-->
-                                <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
-                                    <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom">&nbsp;</td>
-                                    </tr>
-                                </table>
-                                <!--End Of Two Column Container [row number #4]-->
-                                <!--Start Of Content [row number #5]-->
+
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td bgcolor="#e76708" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">TERMS &amp; CONDITIONS</h2>
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#000; font-weight:lighter; margin-bottom:0 !important;">CANCELLATION POLICY</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;"><p><?php echo $data->business_profile->terms_conditions;?></p></td>
+                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#000;"><p><?php echo $data->business_profile->terms_conditions;?></p></td>
                                                 </tr>
 
                                             </table>
                                         </td>
                                     </tr>
                                 </table>
-                                <!--End Of Content [row number #5]-->
-                                <!--Start Of Footer [row number #6]-->
+
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
-
-                                            <?php include __DIR__ . DS . 'bottom.php'; ?>  
+                                         <?php include __DIR__ . DS . 'bottom.php'; ?>  
+                                            

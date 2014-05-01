@@ -454,13 +454,8 @@ class AppointmentEmail extends FitnessEmail {
         }
       
         if($this->send_to == 'trainers') {
-            $client_id = $item->client_id;
-            // if confirmation email
-            if($this->layout == 'email_appointment_confirmed') {
-                $client_id = $this->data->client_id;
-            }
-        
-            $trainers_data = $this->getClientTrainers($client_id,  'all');
+ 
+            $trainers_data = $this->getClientTrainers($item->client_id,  'all');
             
             $ids = $trainers_data['data'];
         }
@@ -505,13 +500,7 @@ class AppointmentEmail extends FitnessEmail {
             if($this->layout == 'email_pdf_workout'){
                 $client_id = $this->data->client_id;
             }
-            
-            // if confirmation email
-            if($this->layout == 'email_appointment_confirmed') {
-                $event_id = $this->data->id;
-                $client_id = $this->data->client_id;
-            }
-            
+
             $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $event_id  . '&client_id=' . $client_id;
             
             $result = $this->getContentCurl($url);

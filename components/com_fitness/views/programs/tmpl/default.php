@@ -85,8 +85,8 @@ $business_profile_id = $business_profile_id['data'];
             '1' : {'label' : 'PENDING', 'class' : 'event_status_pending', 'email_alias' : ''},
             '2' : {'label' : 'ATTENDED', 'class' : 'event_status_attended', 'email_alias' : 'AppointmentAttended'}, 
             '3' : {'label' : 'CANCELLED', 'class' : 'event_status_cancelled', 'email_alias' : 'AppointmentCancelled'},
-            '4' : {'label' : 'LATE CANCEL', 'class' : 'event_status_latecancel', 'email_alias' : 'AppointmentLatecancel'},
-            '5' : {'label' : 'NO SHOW', 'class' : 'event_status_noshow', 'email_alias' : 'AppointmentNoshow'}, 
+            '4' : {'label' : 'LATE CANCEL', 'class' : 'status_fail', 'email_alias' : 'AppointmentLatecancel'},
+            '5' : {'label' : 'NO SHOW',     'class' : 'status_fail', 'email_alias' : 'AppointmentNoshow'}, 
             '13': {'label' : 'CONFIRMED',       'class' : 'event_status_scheduled',     'email_alias' : 'AppointmentConfirmed'}, 
         },
         'statuses2' : {
