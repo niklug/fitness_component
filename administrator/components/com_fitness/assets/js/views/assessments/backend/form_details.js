@@ -10,7 +10,6 @@ define([
 	'text!templates/assessments/backend/form_details.html',
         'jquery.timepicker'
 
-        
 ], function (
         $,
         _,
@@ -165,6 +164,12 @@ define([
             var session_type_collection = new Backbone.Collection;
             
             session_type_collection.add(app.collections.session_types.where({category_id : id}));
+            
+            var element_disabled = '';
+            
+            if(!this.model.isNew()) {
+                element_disabled = 'disabled';
+            }
 
             new Select_element_view({
                 model : this.model,
@@ -173,7 +178,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : ' required ',
                 id_name : 'session_type',
-                model_field : 'session_type'
+                model_field : 'session_type',
+                element_disabled :  element_disabled
             }).render();
         },
         
@@ -186,6 +192,12 @@ define([
             var session_focus_collection = new Backbone.Collection;
             
             session_focus_collection.add(app.collections.session_focuses.where({session_type_id : id}));
+            
+            var element_disabled = '';
+            
+            if(!this.model.isNew()) {
+                element_disabled = 'disabled';
+            }
 
             new Select_element_view({
                 model : this.model,
@@ -194,7 +206,8 @@ define([
                 first_option_title : '-Select-',
                 class_name : ' required ',
                 id_name : 'session_focus',
-                model_field : 'session_focus'
+                model_field : 'session_focus',
+                element_disabled :  element_disabled
             }).render();
         },
         

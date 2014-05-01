@@ -87,6 +87,7 @@ $business_profile_id = $business_profile_id['data'];
             '3' : {'label' : 'CANCELLED', 'class' : 'event_status_cancelled', 'email_alias' : 'AppointmentCancelled'},
             '4' : {'label' : 'LATE CANCEL', 'class' : 'event_status_latecancel', 'email_alias' : 'AppointmentLatecancel'},
             '5' : {'label' : 'NO SHOW', 'class' : 'event_status_noshow', 'email_alias' : 'AppointmentNoshow'}, 
+            '13': {'label' : 'CONFIRMED',       'class' : 'event_status_scheduled',     'email_alias' : 'AppointmentConfirmed'}, 
         },
         'statuses2' : {
             '1' : {'label' : 'PENDING', 'class' : 'event_status_pending', 'email_alias' : ''},
@@ -94,7 +95,8 @@ $business_profile_id = $business_profile_id['data'];
             '7' : {'label' : 'INCOMPLETE', 'class' : 'event_status_incomplete', 'email_alias' : 'ProgramIncomplete'},
             '8' : {'label' : 'NOT ATTEMPTED', 'class' : 'event_status_notattemped', 'email_alias' : 'ProgramNotattempted'},
             '9' : {'label' : 'SCHEDULED', 'class' : 'event_status_scheduled', 'email_alias' : 'ProgramSheduled'},
-            '10' : {'label' : 'ASSESSING', 'class' : 'event_status_assessing', 'email_alias' : 'ProgramAssessing'}
+            '10' : {'label' : 'ASSESSING', 'class' : 'event_status_assessing', 'email_alias' : 'ProgramAssessing'},
+            '13': {'label' : 'CONFIRMED',       'class' : 'event_status_scheduled',     'email_alias' : 'AppointmentConfirmed'}, 
         },
         'hide_image_class' : 'hideimage',
         'show_send_email' : false,

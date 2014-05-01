@@ -131,7 +131,7 @@ define([
                 el : $("#trainer_select"),
                 collection : trainers_collection,
                 first_option_title : '-Select-',
-                class_name : 'business_profile_select required ',
+                class_name : ' required ',
                 id_name : 'trainer_id',
                 model_field : 'trainer_id',
                 element_disabled : element_disabled

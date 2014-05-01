@@ -100,10 +100,17 @@ class FitnessEmail extends FitnessHelper
     
     protected function setSentEmailStatus($event_id, $client_id) {
         $db = & JFactory::getDBO();
-        $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
-        $db->setQuery($query);
-        if (!$db->query()) {
-            throw new Exception($db->stderr());
+        
+        $sql = "SELECT id FROM #__fitness_email_reminder WHERE event_id='$event_id' AND client_id='$client_id'";
+             
+        $id = FitnessHelper::customQuery($sql, 0);
+        
+        if(!$id) {
+            $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
+            $db->setQuery($query);
+            if (!$db->query()) {
+                throw new Exception($db->stderr());
+            }
         }
     }
     
@@ -382,32 +389,44 @@ class AppointmentEmail extends FitnessEmail {
                 $layout = 'email_program_assessing_t';
                 break;
             
+            case 'AppointmentConfirmed':
+                $subject = 'Appointment Confirmed';
+                $layout = 'email_appointment_confirmed';
+                break;
+            
             default:
                 break;
         }
         
         $user_id = JFactory::getUser()->id;
+       
+        if($user_id) {
+            //client changes status
+            if(self::is_client($user_id)) {
+                $send_to = 'trainers';
+            }
+       
+            //send to one client 
+            if(self::is_trainer($user_id)) {
+                $send_to = 'client';
+            }
+
+            // send to all clients
+            if(self::is_trainer($user_id) AND ($layout == 'email_reminder' OR $layout == 'email_notify')) {
+                $send_to = 'clients';
+            }
+
+            //client sends workour heself
+            if(self::is_client($user_id) AND ($layout == 'email_pdf_workout')) {
+                $send_to = 'client';
+            }
+        }
         
-        //client changes status
-        if(self::is_client($user_id)) {
+        //confirmed email
+        if($layout == 'email_appointment_confirmed') {
             $send_to = 'trainers';
         }
-        
-        
-        //send to one client 
-        if(self::is_trainer($user_id)) {
-            $send_to = 'client';
-        }
-        
-        // send to all clients
-        if(self::is_trainer($user_id) AND ($layout == 'email_reminder' OR $layout == 'email_notify')) {
-            $send_to = 'clients';
-        }
-        
-        //client sends workour heself
-        if(self::is_client($user_id) AND ($layout == 'email_pdf_workout')) {
-            $send_to = 'client';
-        }
+
 
         if($send_to) {
             $this->send_to = $send_to;
@@ -419,7 +438,10 @@ class AppointmentEmail extends FitnessEmail {
     }
 
     protected function get_recipients_ids() {
+        
         $ids = array();
+        
+        
         
         $item = $this->getAppointmentClientItem($this->data->id);
         
@@ -432,7 +454,13 @@ class AppointmentEmail extends FitnessEmail {
         }
       
         if($this->send_to == 'trainers') {
-            $trainers_data = $this->getClientTrainers($item->client_id,  'all');
+            $client_id = $item->client_id;
+            // if confirmation email
+            if($this->layout == 'email_appointment_confirmed') {
+                $client_id = $this->data->client_id;
+            }
+        
+            $trainers_data = $this->getClientTrainers($client_id,  'all');
             
             $ids = $trainers_data['data'];
         }
@@ -457,7 +485,7 @@ class AppointmentEmail extends FitnessEmail {
             $this->event_id = $this->data->id;
             
         }
-        
+
 
         $this->recipients_ids = $ids;
     }
@@ -467,6 +495,7 @@ class AppointmentEmail extends FitnessEmail {
 
         foreach ($this->recipients_ids as $recipient_id) {
             if(!$recipient_id)  continue;
+            $event_id = $this->event_id;
             $client_id = $this->item->client_id;
             
             if($this->send_to == 'clients') {
@@ -477,7 +506,13 @@ class AppointmentEmail extends FitnessEmail {
                 $client_id = $this->data->client_id;
             }
             
-            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $this->event_id  . '&client_id=' . $client_id;
+            // if confirmation email
+            if($this->layout == 'email_appointment_confirmed') {
+                $event_id = $this->data->id;
+                $client_id = $this->data->client_id;
+            }
+            
+            $url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&tpml=component&event_id=' . $event_id  . '&client_id=' . $client_id;
             
             $result = $this->getContentCurl($url);
 
@@ -488,11 +523,11 @@ class AppointmentEmail extends FitnessEmail {
     }
     
     public function processing($data) {
-       
+
         $this->setParams($data);
         
         $this->get_recipients_ids();
-    
+
         $this->generate_contents();
         
         $data = $this->send_mass_email();

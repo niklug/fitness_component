@@ -49,7 +49,7 @@ define([
               {id : '2', name: "CHEEK"},
               {id : '3', name: "PECTORAL"},
               {id : '4', name: "TRICEPS"},
-              {id : '5', name: "SUBSCAPULARIS"},
+              {id : '5', name: "SUB-SCAPULARIS"},
               {id : '6', name: "MID-AXILLARY"},
               {id : '7', name: "SUPRAILLIAC"},
               {id : '8', name: "UMBILICAL"},

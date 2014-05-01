@@ -1894,5 +1894,19 @@ class FitnessHelper extends FitnessFactory
             
             return self::customQuery($query, 2);
         }
+        
+        public function updateAppointmentClientStatus ($event_id, $client_id, $status) {
+            $db = JFactory::getDbo();
+            
+            $query = "UPDATE #__fitness_appointment_clients SET status='$status' WHERE event_id='$event_id' AND client_id='$client_id'";
+
+            $db->setQuery($query);
+
+            if (!$db->query()) {
+                throw new Exception($db->getErrorMsg());
+                JError::raiseError($db->getErrorMsg());
+            }
+
+        }
 }
 

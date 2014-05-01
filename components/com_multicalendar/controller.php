@@ -261,24 +261,31 @@ class MultiCalendarController extends JController
          */
         public function setSentEmailStatus($event_id, $client_email, $client_id) {
              $db = & JFactory::getDBO();
-             $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
-             $db->setQuery($query);
-             try {
-                $db->query();
-                return true;
+             
+             $sql = "SELECT id FROM #__fitness_email_reminder WHERE event_id='$event_id' AND client_id='$client_id'";
+             
+             $id = FitnessHelper::customQuery($sql, 0);
+                
+             if(!$id) {
+                 $query = "INSERT INTO #__fitness_email_reminder SET event_id='$event_id', client_id='$client_id', sent='1', confirmed='0'";
+                 $db->setQuery($query);
+                 try {
+                    $db->query();
+                    return true;
 
-             } catch (Exception $e) {
+                 } catch (Exception $e) {
 
-                $message = "<br/> " . 'email status not set as SET TRUE FOR event id = ' . $event_id . ' client email = ' . $client_email;
+                    $message = "<br/> " . 'email status not set as SET TRUE FOR event id = ' . $event_id . ' client email = ' . $client_email;
 
-                $message .= "<br/> <br/> <strong style='color:red'>" .$e->getMessage() . "</strong><br/>";
+                    $message .= "<br/> <br/> <strong style='color:red'>" .$e->getMessage() . "</strong><br/>";
 
-                $this->helper->sendEmail($this->administrator_email, 'email reminder error', $message);
+                    $this->helper->sendEmail($this->administrator_email, 'email reminder error', $message);
 
-                echo $message;
+                    echo $message;
 
-                return false;
-             }  
+                    return false;
+                 }  
+             }
         }
         
         
@@ -314,9 +321,26 @@ class MultiCalendarController extends JController
             if($confirm) {
                 echo("Thank you, your appointment is confirmed!");
             }
+            // update status to CONFIRMED
+            $this->helper->updateAppointmentClientStatus ($event_id, $client_id, '13');
+            
+            //send CONFIRMED email
+            $obj = new AppointmentEmail();
+             try {
+                $data_obj = new stdClass();
+                $data_obj->id = $event_id;
+                $data_obj->client_id = $client_id;
+                $data_obj->method = 'AppointmentConfirmed';
+                $emails  .= ' ' .$obj->processing($data_obj);
+            } catch (Exception $exc) {
+               echo $exc->getMessage();
+            }
+     
             
             die();
         } 
+        
+        
         
         // status
         private function inprogressStatusController($goal_type) {

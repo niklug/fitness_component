@@ -309,7 +309,7 @@ define([
            
            el_url += '&exercise_id=' + exercise_id;
            
-           el_url += '&back_url=' + encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=programs#!/form_view/' + this.model.get('id'));
+           el_url += '&back_url=' + encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=' + app.options.current_view + '#!/form_view/' + this.model.get('id'));
 
            window.location = el_url;
        },

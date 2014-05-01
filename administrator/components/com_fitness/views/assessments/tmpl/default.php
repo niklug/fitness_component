@@ -93,6 +93,7 @@ $business_profile_id = $business_profile_id['data'];
             '10': {'label' : 'CANCELLED',       'class' : 'event_status_cancelled',     'email_alias' : ''},
             '11': {'label' : 'LATE CANCEL',     'class' : 'status_fail',                'email_alias' : ''},
             '12': {'label' : 'NO SHOW',         'class' : 'status_fail',                'email_alias' : ''}, 
+            '13': {'label' : 'CONFIRMED',       'class' : 'event_status_scheduled',     'email_alias' : 'AppointmentConfirmed'}, 
         },
 
  
@@ -101,7 +102,7 @@ $business_profile_id = $business_profile_id['data'];
          setStatuses : function(item_id) {
             return  this.statuses;
         },
-        'view' : 'Assessments'
+        'view' : 'Programs'
     }
     options.status_options = status_options;
 
