@@ -69,4 +69,9 @@ class FitnessViewPrograms extends JView {
         echo json_encode($model -> rest_data());
     }
     
+    function saveAsTemplate() {
+        $model = $this -> getModel("programs");
+        echo json_encode($model -> saveAsTemplate());
+    }
+    
 }

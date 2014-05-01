@@ -552,7 +552,7 @@ class FitnessModelprograms_templates extends JModelList {
             $insert = $helper->insertUpdateObj($model, '#__dc_mv_events');
             
             if (!$insert) {
-                $status['success'] = 1;
+                $status['success'] = 0;
                 $status['message'] = $db->stderr();
                 return array( 'status' => $status);
             }

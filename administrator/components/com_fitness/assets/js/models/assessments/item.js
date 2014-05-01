@@ -18,7 +18,7 @@ define([
             location : '',
             client_id : '',
             trainer_id : '',
-            frontend_published : '2',
+            frontend_published : '0',
             owner : app.options.user_id,
             business_profile_id : app.options.business_profile_id,
             published : '1',

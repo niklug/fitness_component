@@ -110,7 +110,8 @@ define([
                 app.collections.appointments.get(1),
                 app.collections.appointments.get(2),
                 app.collections.appointments.get(3),
-                app.collections.appointments.get(4)
+                app.collections.appointments.get(4),
+                app.collections.appointments.get(5)
             ]);
             
        

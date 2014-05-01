@@ -22,6 +22,7 @@ define([
 
         events: {
             "click #save" : "onClickSave",
+            "click #save_template" : "onClickSaveTemplate",
             "click #save_close" : "onClickSaveClose",
             "click #save_new" : "onClickSaveNew",
             "click #save_copy" : "onClickSaveCopy",
@@ -186,6 +187,19 @@ define([
                 }
             });
         },
+        
+        onClickSaveTemplate : function() {
+            var id = this.model.get('id');
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'Programs';
+            var task = 'saveAsTemplate';
+            var table = '';
+            data.id = id;
+            $.AjaxCall(data, url, view, task, table, function(output){
+                //console.log(output);
+            });
+        }
 
     });
             

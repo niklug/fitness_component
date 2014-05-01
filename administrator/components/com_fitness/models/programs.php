@@ -817,5 +817,77 @@ class FitnessModelprograms extends JModelList {
         return $model;
     }
 
+    public function saveAsTemplate() {
+        $status['success'] = 1;
+        
+        $db = JFactory::getDbo();
+        
+        $helper = new FitnessHelper();
+        
+        $data = json_decode(JRequest::getVar('data_encoded'));
+        
+        $id = $data->id;
+ 
+        //copy event
+        $query = "SELECT * FROM #__dc_mv_events WHERE id='$id'";
+        
+        $event =  FitnessHelper::customQuery($query, 2);
+        
+        if($event->id) {
+            $event->id = null;
+            $event->appointment_id = $event->title;
+            $event->created_by = JFactory::getUser()->id;
+            $event->name = '';
+            $event->created = FitnessHelper::getDateCreated();
+            
+            $insert = $helper->insertUpdateObj($event, '#__fitness_programs_templates');
+            
+            if (!$insert) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+            }
+
+            $inserted_event_id = $db->insertid();
+        }
+        
+        
+        
+        //copy exercises
+        $query = "SELECT * FROM #__fitness_events_exercises WHERE item_id='$id'";
+
+        $exercises =  FitnessHelper::customQuery($query, 1);
+
+        foreach ($exercises as $exercise) {
+            $exercise->id = null;
+            $exercise->item_id = $inserted_event_id;
+            
+            $insert = $db->insertObject('#__fitness_pr_temp_exercises', $exercise, 'id');
+            if (!$insert) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+            }
+        }
+        
+        //copy clients
+
+        $query = "SELECT * FROM #__fitness_appointment_clients WHERE event_id='$id'";
+
+        $clients =  FitnessHelper::customQuery($query, 1);
+        
+        
+
+        foreach ($clients as $client) {
+            $client->id = null;
+            $client->item_id = $inserted_event_id;
+            $client->status = '1';
+            $insert = $helper->insertUpdateObj($client, '#__fitness_pr_temp_clients');
+            if (!$insert) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+            }
+        }
+
+        return array( 'status' => $status, 'data' => $inserted_event_id);
+    }
 
 }
