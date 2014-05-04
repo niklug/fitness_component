@@ -25,8 +25,8 @@
                 color:#FFA600 !important;
             }
             .readMore a:hover {
-                background-color:#562704 !important;
-                color: #FFA600 !important;
+                background-color:#3C270A !important;
+                color: #FFF !important;
             }
             body {
                 margin:0;
@@ -48,7 +48,7 @@
         </style>
     </head>
     <body>
-        <?php
+                     <?php
         require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email_templates_data.php';
 
         $event_id = &JRequest::getVar('event_id');
@@ -89,7 +89,7 @@
                                 <!--Start Of Main Content [row number #2]-->
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path  ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px;">
@@ -99,35 +99,42 @@
                                                     <td width="100%" style="padding:0 20px 0 0;" valign="top">
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">APPOINTMENT CANCELLED!</h1>	
+                                                                <td style="margin:0; padding:0 0 15px 0;"><h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">IMPROVEMENT REQUIRED!</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->client_name;?>,<br />
-                                                                        <br />
-                                                                        Your appointment has been cancelled. Please contact your trainer to reschedule. You may also schedule your own availabilities via your online client calendar!<br />
-                                                                    </p></td>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->client_name ;?>,</p>
+                                                                    <p>You have not performed as well as expected and require some improvement.                                             </p>
+                                                                    <p>You should now discuss with your trainer in what ways you can improve various aspects of your training, nutrition, mindset and lifestyle. More often than not, it is never just one thing that impedes physical results. </p>
+                                                                    <p>Please take a few moments to review your  assessment, take into account your trainers comments and action any requests or instructions.</p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <p>TRAINER NAME:</p>
                                                                     <p>START DATE: <br />
                                                                         START TIME: <br />
                                                                         LOCATION: </p>
                                                                     <p>APPOINTMENT: <br />
-                                                                        SESSION TYPE: <br />
-                                                                        SESSION FOCUS: </p>
-                                                                    <p>TRAINER NAME: </p></td>
-                                                                <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                        ASSESSMENT TYPE: <br />
+                                                                        ASSESSMENT FOCUS:</p></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <p><?php echo $data->trainer_name ;?> </p>
                                                                     <p><?php echo $data->start_date;?><br />
                                                                         <?php echo $data->start_time ;?>  <br />
                                                                         <?php echo $data->item->location_name;?> </p>
                                                                     <p><?php echo $data->item->appointment_name;?><br />
                                                                         <?php echo $data->item->session_type_name;?> <br />
-                                                                        <?php echo $data->item->session_focus_name;?> </p>
-                                                                    <p><?php echo $data->trainer_name ;?> </p></td>
+                                                                        <?php echo $data->item->session_focus_name;?> </p></td>
+                                                            </tr>
+                                                        </table>
+                                                        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                                                            <tr>
+                                                                <td class="readMore" width="160" height="22" bgcolor="#1B1B1B" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:; text-align:center;">
+                                                                    <a target="_blank" href="<?php echo $data->open_link; ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#FEA529;">CLICK HERE TO OPEN</a>
+                                                                </td>
+                                                                <td width="396">&nbsp;</td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -140,7 +147,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $data->path  ?>/borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="bottom"><img alt="" height="10" src="<?php echo $data->path ?>/borderBottom.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                 </table>
                                 <!--End Of Main Content [row number #2]-->
@@ -148,27 +155,13 @@
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td bgcolor="#FFA600" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#000; font-weight:lighter; margin-bottom:0 !important;">TERMS &amp; CONDITIONS</h2>
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#000; font-weight:lighter; margin-bottom:0 !important;">Keeping Track of your Assessments</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
-                                                    <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
-                                                        <img alt="image" height="125" src="<?php echo $data->path  ?>/icon6.png" width="100" border="0" vspace="0" hspace="0" /></td>
+                                                    <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2"><img alt="image" height="100" src="<?php echo $data->path ?>/assessment.png" width="100" border="0" vspace="0" hspace="0" /></td>
                                                     <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#333;">
-                                                        <p>With every professional business there is a serious side...</p>
-                                                        <p>Thank you for taking the time to read, understand and appreciate how we continually maintain the highest standard of customer service to all our clients. Please help us maintain this professional standard by providing us with the following small courtesies that are detailed in our Cancelation Policy.</p></td>
-                                                </tr>
-
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
-                                    <tr>
-                                        <td bgcolor="#FFA600" style="padding:20px;">
-                                            <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                <tr>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#333;"><p><?php echo $data->business_profile->terms_conditions;?></p></td>
+                                                        <p>One of the most important things you can do to continually motivate youself is to make sure you know you are achieving your results.
+                                                            <p>Keeping track of the numbers is a great motivational tool. Always compare your latest assessment to your last, or even the first assessment you ever completed!</p></td>
                                                 </tr>
 
                                             </table>
@@ -178,7 +171,7 @@
 
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path  ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
+                                        <td height="10" bgcolor="#140901" style="padding:0;" valign="top"><img alt="" height="10" src="<?php echo $data->path ?>/borderTop.png" width="620" vspace="0" hspace="0" style="margin:0;padding:0;border:0;display:block;" /></td>
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">

@@ -394,6 +394,52 @@ class AppointmentEmail extends FitnessEmail {
                 $layout = 'email_appointment_confirmed';
                 break;
             
+            // Assessment
+            case 'AssessmentAssessing':
+                $subject = 'Assessment Submitted';
+                $layout = 'email_status_assessing';
+                break;
+            
+            case 'AssessmentAssessingT':
+                $subject = 'Assessment Submitted';
+                $layout = 'email_status_assessing_t';
+                break;
+            
+            case 'AssessmentAttended':
+                $subject = 'Appointment Complete';
+                $layout = 'email_status_attended';
+                break;
+              
+            case 'AssessmentCancelled':
+                $subject = 'Assessment Cancelled';
+                $layout = 'email_status_cancelled';
+                break;
+            
+            case 'AssessmentDistinction':
+                $subject = 'Assessment Result';
+                $layout = 'email_status_distinction';
+                break;
+            
+            case 'AssessmentExcellent':
+                $subject = 'Assessment Result';
+                $layout = 'email_status_excellent';
+                break;
+            
+            case 'AssessmentFail':
+                $subject = 'Assessment Result';
+                $layout = 'email_status_fail';
+                break;
+            
+            case 'AssessmentImprove':
+                $subject = 'Assessment Result';
+                $layout = 'email_status_improve';
+                break;
+            
+            case 'AssessmentPass':
+                $subject = 'Assessment Result';
+                $layout = 'email_status_pass';
+                break;
+            
             default:
                 break;
         }

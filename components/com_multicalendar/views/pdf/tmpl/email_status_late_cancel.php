@@ -164,24 +164,20 @@
                                     </tr>
                                 </table>
 
-                                <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:#810109; margin:0 auto; text-align:left;">
+                                <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
                                         <td bgcolor="#78000D" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">CANCELLATION POLICY</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>24 hours notice is required to reschedule or cancel any training session or appointment.</p>
-                                                        <p> If less than 24 hours notice is given, FULL FEES will apply for that appointment, unless...<br />
-                                                            - your appointment time can be filled by another client.<br />
-                                                            - your appointment is able to be rescheduled to another time on the same day (availability depending).</p>
-                                                        <p>If you are late to your appointment, your appointment will still end at the scheduled time.</p>
-                                                        <p>If you do no show up to your appointment or cancel last minute, FULL FEES apply.</p>
-                                                        <p>If you are training early to mid-morning and you need to cancel or reschedule your appointment, you must do so BEFORE 3pm the preceding day to allow time to fill your appointment. Failure to do so will incur FULL SESSION FEES if you cancel too late!</p></td>
+                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#ccc;"><p><?php echo $data->business_profile->terms_conditions;?></p></td>
                                                 </tr>
 
-                                            </table></td>
+                                            </table>
+                                        </td>
                                     </tr>
                                 </table>
+                                
+                                
 
                                 <table class="darkContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>

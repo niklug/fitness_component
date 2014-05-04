@@ -305,6 +305,7 @@ define([
             
             $("#workout_instuctions_wrapper").show();
             $("#exercises_list").parent().show();
+            $("#save_template_button").show();
             
             var form = 'standard';
             
@@ -318,6 +319,7 @@ define([
                         
             if(form == 'bio') {
                 html = new Form_bio_assessment_view({model : this.model}).render().el;
+                $("#save_template_button").hide();
             }
             
             $("#assessment_form_wrapper").html(html);

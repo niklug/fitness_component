@@ -95,6 +95,6 @@ require.config({
 
     },
 
-    waitSeconds: 10
+    waitSeconds: 30
 });
 
