@@ -310,6 +310,9 @@ class FitnessHelper extends FitnessFactory
     
     public $_activity_level = array('', 'Heavy Training Day', 'Light Training Day', 'Recovery/Rest Training Day');
     //
+    
+    //ASSESSMENTS
+    const TRAINER_ASSESSMENT= '26';
 
     /**
      * Configure the Linkbar.

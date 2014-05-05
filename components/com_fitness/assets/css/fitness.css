@@ -1120,3 +1120,8 @@ td.center, th.center, .center {
     height: 32px;
     width: 32px;
 }
+
+
+.assessment_input {
+    width:30px !important;
+}

@@ -3,10 +3,10 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/programs/exercises/items',
+        'collections/assessments/exercises/items',
         'models/programs/exercises/item', 
         'views/programs/exercises/list',
-	'text!templates/programs/frontend/item.html'
+	'text!templates/assessments/frontend/item.html'
 ], function (
         $,
         _, 
@@ -27,12 +27,8 @@ define([
             data.$ = $;
             data.app = app;
             $(this.el).html(this.template(data));
-            
-            app.controller.connectStatus(this.model, this.$el);
-            
-            app.controller.connectComments(this.model, this.$el);
-            
-            this.connectExercises();
+
+            this.onRender();
             
             return this;
         },
@@ -40,6 +36,20 @@ define([
         events : {
             "click #pdf_button" : "onClickPdf",
             "click #email_button" : "onClickEmail"
+        },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                app.controller.connectStatus(self.model, self.$el);
+            
+                app.controller.connectComments(self.model, self.$el);
+            
+                self.connectExercises();
+                
+                
+                app.controller.loadAssessmentsForm(self.model.get('session_focus_name'), self.model, {readonly : true});
+            });
         },
         
         onClickPdf : function() {
@@ -66,9 +76,9 @@ define([
                 exercise_model : Exercise_model,
                 exercises_collection : Exercises_collection,
                 readonly : true,
-                title : 'WORKOUT DETAILS'
+                title : 'PHYSICAL ASSESSMENT DETAILS'
             });
-        }
+        },
 
     });
             

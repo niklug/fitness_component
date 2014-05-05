@@ -3,18 +3,19 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/programs/items',
-        'models/programs/item',
-        'models/programs/request_params_items',
-        'models/programs/favourite',
-        'views/programs/frontend/menus/submenu_list',
-        'views/programs/frontend/menus/submenu_item',
-        'views/programs/frontend/menus/submenu_form',
-        'views/programs/frontend/list',
-        'views/programs/select_filter_block',
-        'views/programs/frontend/item',
-        'views/programs/frontend/form',
-        'views/programs/backend/comments_block'
+        'collections/assessments/items',
+        'models/assessments/item',
+        'models/assessments/request_params_items',
+        'models/assessments/favourite',
+        'views/assessments/frontend/menus/submenu_list',
+        'views/assessments/frontend/menus/submenu_item',
+        'views/assessments/frontend/menus/submenu_form',
+        'views/assessments/frontend/list',
+        'views/assessments/frontend/item',
+        'views/assessments/frontend/form',
+        'views/programs/backend/comments_block',
+        'views/assessments/frontend/form_standard_assessment',
+        'views/assessments/frontend/form_bio_assessment'
         
 ], function (
         $,
@@ -29,11 +30,11 @@ define([
         Submenu_item_view,
         Submenu_form_view,
         List_view,
-        Select_filter_block_view,
         Item_view,
         Form_view,
-        Comments_block_view
-        
+        Comments_block_view,
+        Form_standard_assessment_view,
+        Form_bio_assessment_view        
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -65,14 +66,13 @@ define([
         },
 
         routes: {
-            "": "my_workouts", 
-            "!/my_workouts": "my_workouts", 
-            "!/workout_programs": "workout_programs", 
-            "!/my_favourites": "my_favourites", 
+            "": "my_progress", 
+            "!/my_progress": "my_progress", 
+            "!/self_assessments": "self_assessments", 
+            "!/assessments": "assessments", 
             "!/trash_list": "trash_list", 
             "!/item_view/:id": "item_view",
             "!/form_view/:id": "form_view",
-            "!/my_favourites" : "my_favourites",
         },
         
         back: function() {
@@ -97,20 +97,20 @@ define([
             });  
         },
         
-        my_workouts : function() {
-            app.models.request_params.set({page : 1, current_page : 'my_workouts', published : '1', frontend_published : '2',  uid : app.getUniqueId()});
+        my_progress : function() {
+            app.models.request_params.set({page : 1, current_page : 'my_progress', published : '1', frontend_published : '2',  uid : app.getUniqueId()});
             
             this.list_actions();
             
-            $("#my_workouts_link").addClass("active_link");
+            $("#my_progress_link").addClass("active_link");
         },
         
-        workout_programs : function() {
-            app.models.request_params.set({page : 1, current_page : 'workout_programs', published : '1', frontend_published : '2',  uid : app.getUniqueId()});
+        self_assessments : function() {
+            app.models.request_params.set({page : 1, current_page : 'self_assessments', published : '1', frontend_published : '2',  uid : app.getUniqueId()});
             
             this.list_actions();
             
-            $("#workout_programs_link").addClass("active_link");
+            $("#self_assessments_link").addClass("active_link");
         },
         
         trash_list : function() {
@@ -121,19 +121,17 @@ define([
             $("#my_workouts_link").addClass("active_link");
         },
         
-        my_favourites : function () {
-            app.models.request_params.set({page : 1, current_page : 'my_favourites', published : '1', uid : app.getUniqueId()});
+        assessments : function () {
+            app.models.request_params.set({page : 1, current_page : 'assessments', published : '1', frontend_published : '2', uid : app.getUniqueId()});
             
             this.list_actions();
             
-            $("#my_favourites_link").addClass("active_link");
+            $("#assessments_link").addClass("active_link");
         },
         
         
         list_actions : function () {
             $("#submenu_container").html(new Submenu_list_view({model : app.models.request_params}).render().el);
-            
-            this.connectSelectFilter();
             
             $(".menu_link").removeClass("active_link");
             
@@ -155,11 +153,6 @@ define([
         update_list : function() {
             app.models.request_params.set({ uid : app.getUniqueId()});
         },
-        
-        connectSelectFilter : function() {
-            new Select_filter_block_view({el : $("#filters_container"), model : app.models.request_params, block_width : '250px', not_show : ['locations']});
-        },
-        
         
         
         edit_allowed : function(model) {
@@ -252,12 +245,6 @@ define([
                     alert(response.responseText);
                 }
             });
-            
-            this.hideFilters();
-        },
-        
-        hideFilters : function() {
-            $("#filters_container").empty();
         },
         
         connectStatus : function(model, view) {
@@ -350,6 +337,31 @@ define([
             
             new Form_view({el : $("#main_container"), model : model});
         },
+        
+        loadAssessmentsForm : function(value, model, options) {
+            $("#assessment_form_wrapper").empty();
+            
+            $("#workout_instuctions_wrapper").show();
+            $("#exercises_list").parent().show();
+            $("#save_template_button").show();
+            
+            var form = 'standard';
+            
+            if((value.toLowerCase().indexOf("bio") > -1)) {
+                form = 'bio';
+                $("#workout_instuctions_wrapper").hide();
+                $("#exercises_list").parent().hide();
+            }
+            
+            var html = new Form_standard_assessment_view({model : model, readonly : options.readonly}).render().el;
+                        
+            if(form == 'bio') {
+                html = new Form_bio_assessment_view({model : model}).render().el;
+                $("#save_template_button").hide();
+            }
+
+            $("#assessment_form_wrapper").html(html);
+        }
 
     });
 

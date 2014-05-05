@@ -88,7 +88,14 @@ define([
                 data.trainer_id = app.collections.trainers.models[0].get('id');
             }
             
-            data.description = encodeURIComponent($('#description').val());
+            var description = $('#description').val();
+             
+            if(typeof description !== 'undefined') {
+                description = encodeURIComponent(description);
+            } else {
+                description = '';
+            }
+            data.description = description;
             
             this.model.set(data);
 

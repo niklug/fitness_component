@@ -3,9 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'models/programs/item',
-        'models/programs/event_client_item',
-	'text!templates/programs/frontend/menus/submenu_item.html'
+        'models/assessments/item',
+        'models/assessments/event_client_item',
+	'text!templates/assessments/frontend/menus/submenu_item.html'
 ], function ( $, _, Backbone, app, Item_model, Event_client_item_model, template ) {
 
     var view = Backbone.View.extend({

@@ -124,7 +124,9 @@ define([
                disabled_editor = true;
             } 
 
-            $.fitness_helper.connectEditor($(this.el), "#description", disabled_editor);
+            if(!this.model.isNew()) {
+                $.fitness_helper.connectEditor($(this.el), "#description", disabled_editor);
+            }
             
             return this;
         },

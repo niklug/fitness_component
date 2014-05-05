@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/programs/frontend/menus/main_menu.html'
+	'text!templates/assessments/frontend/menus/main_menu.html'
 ], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
@@ -23,23 +23,23 @@ define([
         },
 
         events: {
-            "click #my_favourites_link" : "onClickFavourites",
-            "click #my_workouts_link" : "onClickMyWorkouts",
-            "click #workout_programs_link" : "onClickWorkoutPrograms",
+            "click #my_progress_link" : "onClickMyProgress",
+            "click #self_assessments_link" : "onClickSelfAssessments",
+            "click #assessments_link" : "onClickAssessments",
         },
 
-        onClickFavourites : function() {
-            app.controller.navigate("!/my_favourites", true);
+        onClickMyProgress : function() {
+            app.controller.navigate("!/my_progress", true);
             return false;
         },
 
-        onClickMyWorkouts : function() {
-            app.controller.navigate("!/my_workouts", true);
+        onClickSelfAssessments : function() {
+            app.controller.navigate("!/self_assessments", true);
             return false;
         },
 
-        onClickWorkoutPrograms : function() {
-            app.controller.navigate("!/workout_programs", true);
+        onClickAssessments : function() {
+            app.controller.navigate("!/assessments", true);
             return false;
         },
         

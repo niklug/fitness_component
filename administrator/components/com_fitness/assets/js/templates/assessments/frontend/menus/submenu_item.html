@@ -1,17 +1,8 @@
 <div class="fitness_block_wrapper" style="height:30px;margin-top: 10px;">
     <div class="internal_wrapper">
         <div style="width:100%;">
-            <% if (is_favourite) {
-                var display_remove_favourite = 'inline';
-                var display_add_favourite = 'none';
 
-            } else {  
-                var display_add_favourite = 'inline';
-                var display_remove_favourite = 'none';
-            } %>
-            <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourite" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
-
-            <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
+            <a data-id="<%= id %>" style="cursor: pointer;" class="view_calender" onclick="javascript:void(0)">[VIEW ON CALENDAR]</a>
             
             
             <% if((title == '3' || title == '4') && parseInt(frontend_published) && current_page == 'workout_programs') { %>

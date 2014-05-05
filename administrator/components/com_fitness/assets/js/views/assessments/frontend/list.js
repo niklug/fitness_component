@@ -3,8 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'views/programs/frontend/list_item',
-	'text!templates/programs/frontend/list.html'
+        'views/assessments/frontend/list_item',
+	'text!templates/assessments/frontend/list.html'
 ], function (
         $,
         _, 
@@ -46,8 +46,6 @@ define([
         
         events: {
             "click .view_item" : "onClickViewItem",
-            "click .add_favourite" : "onClickAddFavourite",
-            "click .remove_favourites" : "onClickRemoveFavourite",
             
             "click .trash" : "onClickTrash",
             "click .restore" : "onClickRestore",
@@ -56,11 +54,12 @@ define([
             "click #select_all" : "onClickSelectAll",
             
             "click #sort_starttime" : "sort_starttime",
-            "click #sort_author" : "sort_author",
-            "click #sort_appointment_type" : "sort_appointment_type",
-            "click #sort_session_type" : "sort_session_type",
+            "click #sort_trainer" : "sort_trainer",
             "click #sort_session_focus" : "sort_session_focus",
             "click #sort_status" : "sort_status",
+            "click #sort_weight" : "sort_weight",
+            "click #sort_body_fat" : "sort_body_fat",
+            "click #sort_lean_mass" : "sort_lean_mass",
             
             "click #trash_selected" : "onClickTrashSelected",
             "click #delete_selected" : "onClickDeleteSelected",
@@ -92,16 +91,7 @@ define([
         clearItems : function() {
             this.container_el.empty();
         },
-        
-        onClickAddFavourite : function(event) {
-            var id = $(event.target).attr('data-id');
-            app.controller.add_favourite(id);
-        },
-        
-        onClickRemoveFavourite : function(event) {
-            var id = $(event.target).attr('data-id');
-            app.controller.remove_favourite(id);
-        },
+
         
         onClickTrash : function(event) {
             var id = $(event.target).attr('data-id');
@@ -199,24 +189,28 @@ define([
             this.model.set({sort_by : 'a.starttime', order_dirrection : 'DESC'});
         },
 
-        sort_author : function() {
-            this.model.set({sort_by : 'created_by_name', order_dirrection : 'ASC'});
-        },
-
-        sort_appointment_type : function() {
-            this.model.set({sort_by : 'appointment_name', order_dirrection : 'ASC'});
-        },
-        
-        sort_session_type : function() {
-            this.model.set({sort_by : 'session_type_name', order_dirrection : 'ASC'});
-        },
-        
         sort_session_focus : function() {
             this.model.set({sort_by : 'session_focus_name', order_dirrection : 'ASC'});
         },
         
         sort_status : function() {
             this.model.set({sort_by : 'status', order_dirrection : 'ASC'});
+        },
+        
+        sort_trainer : function() {
+            this.model.set({sort_by : 'trainer_name', order_dirrection : 'ASC'});
+        },
+        
+        sort_weight : function() {
+            this.model.set({sort_by : 'a.weight', order_dirrection : 'DESC'});
+        },
+        
+        sort_body_fat : function() {
+            this.model.set({sort_by : 'a.body_fat', order_dirrection : 'DESC'});
+        },
+        
+        sort_lean_mass : function() {
+            this.model.set({sort_by : 'a.lean_mass', order_dirrection : 'DESC'});
         },
         
         onClickSelectAll : function(event) {
