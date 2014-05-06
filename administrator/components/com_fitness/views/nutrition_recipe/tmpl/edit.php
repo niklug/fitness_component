@@ -633,10 +633,7 @@ $helper = new FitnessHelper();
         };
 
         var image_upload = $.backbone_image_upload(image_upload_options); 
-        image_upload.render();
-        
-        
-       
+     
         
         
         

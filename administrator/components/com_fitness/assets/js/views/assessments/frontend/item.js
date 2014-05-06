@@ -6,6 +6,8 @@ define([
         'collections/assessments/exercises/items',
         'models/programs/exercises/item', 
         'views/programs/exercises/list',
+        'views/assessments/frontend/form_video',
+        'views/assessments/frontend/photo_block/list',
 	'text!templates/assessments/frontend/item.html'
 ], function (
         $,
@@ -15,6 +17,8 @@ define([
         Exercises_collection,
         Exercise_model,
         Exercises_list_view,
+        Form_video_view,
+        Photo_block_view,
         template
     ) {
 
@@ -42,13 +46,16 @@ define([
             var self = this;
             $(this.el).show('0', function() {
                 app.controller.connectStatus(self.model, self.$el);
-            
-                app.controller.connectComments(self.model, self.$el);
-            
+
+                app.controller.loadAssessmentsForm(self.model.get('session_focus_name'), self.model, {readonly : true});
+                
                 self.connectExercises();
                 
+                new Form_video_view({el : $("#video_block"), model : self.model, readonly : true});
                 
-                app.controller.loadAssessmentsForm(self.model.get('session_focus_name'), self.model, {readonly : true});
+                new Photo_block_view({el : $("#photo_block"), model : self.model, readonly : true});
+                
+                app.controller.connectComments(self.model, self.$el);
             });
         },
         

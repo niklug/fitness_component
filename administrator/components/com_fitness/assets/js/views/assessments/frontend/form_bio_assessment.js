@@ -34,6 +34,13 @@ define([
             this.prioritySelect('priority_1');
             this.prioritySelect('priority_2');
             this.prioritySelect('priority_3');
+            
+            var readonly = this.options.readonly || false;
+            
+            if(readonly) {
+                $(this.el).find("input[type='text']").attr('readonly', true);
+                $(this.el).find("select").attr('disabled', true);
+            }
 
             
             return this;

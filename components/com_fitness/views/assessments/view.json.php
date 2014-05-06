@@ -12,7 +12,7 @@ if(!JSession::checkToken('get')) {
     die();
 }
 
-require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'programs.php';
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'assessments.php';
 
 
 //=======================================================
@@ -21,10 +21,12 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
 class FitnessViewAssessments extends JView {
     
     public function __construct() {
-        $this->admin_programs_model = new FitnessModelprograms();
+        $this->admin_assessments_model = new FitnessModelassessments();
     }
     
-
+    function assessment_photos() {
+        echo json_encode($this->admin_assessments_model -> assessment_photos());
+    }
     
    
 }

@@ -109,36 +109,47 @@
     </table>
     
     
-    <div id="assessment_form_wrapper">FUCK</div>
+    <div id="assessment_form_wrapper"></div>
    
     
-    <% if(parseInt(frontend_published) ){ %>
-        <div class="internal_wrapper">
-            <table width="100%">
-                <tbody>
-                    <tr>
-                        <td class="left">
-                            <h5 class="orange_text">PHYSICAL ASSESSMENT INSTRUCTIONS</h5>
-                        </td>
-                        <td>
-                            <a class="pdf_button" style="float:right; margin-left: 10px;" title="Save in PDF" href="javascript:void(0)" id="pdf_button"></a>
-                            <a class="email_button" style="float:right; margin-left: 10px;" title="Send by Email" href="javascript:void(0)" id="email_button"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr class="orange_line">
-            <%= decodeURIComponent(description) %>
-        </div>
-        <br/>
-        
-            <div style="width:100%" id="exercises_list"></div>
+    <% if(parseInt(frontend_published)  && !app.controller.is_bio_assessment(session_focus_name) ){ %>
+            <div class="internal_wrapper">
+                <table width="100%">
+                    <tbody>
+                        <tr>
+                            <td class="left">
+                                <h5 class="orange_text">PHYSICAL ASSESSMENT INSTRUCTIONS</h5>
+                            </td>
+                            <td>
+                                <a class="pdf_button" style="float:right; margin-left: 10px;" title="Save in PDF" href="javascript:void(0)" id="pdf_button"></a>
+                                <a class="email_button" style="float:right; margin-left: 10px;" title="Send by Email" href="javascript:void(0)" id="email_button"></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr class="orange_line">
+                <%= decodeURIComponent(description) %>
+            </div>
+            <br/>
 
-    <br/>
-    <div class="internal_wrapper">
-        <div style="width:100%;" id="comments_block"></div>
-    </div>
+            <div style="width:100%" id="exercises_list"></div>
     <% } %>
+    
+    <div id="video_block"></div>
+    
+    <div id="photo_block"></div>
+    
+    <% if(parseInt(frontend_published) ){ %>
+        <br/>
+        <div class="internal_wrapper">
+            <div style="width:100%;" id="comments_block"></div>
+        </div>
+    <% } %>
+    
+    <br/>
+    
+    
+    
 </div>
 
 

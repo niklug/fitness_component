@@ -1125,3 +1125,10 @@ td.center, th.center, .center {
 .assessment_input {
     width:30px !important;
 }
+
+#body_image {
+    background-image:url('../images/body_image.png');
+    background-repeat: no-repeat;
+    height: 607px;
+    width: 516px;
+}

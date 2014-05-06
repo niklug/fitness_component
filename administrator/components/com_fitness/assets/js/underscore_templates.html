@@ -465,7 +465,7 @@
     } 
     %>
     <div class="form-left-col" style="text-align:center;">
-    <% if(!picture) { %>
+    <% if(!picture && (readonly == false)) { %>
             Select & Upload New Image 
             <div class="clr"></div>
             <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Image]</a>
@@ -481,10 +481,12 @@
             >
         </div>
         <br/>
-        <% if(!picture) { %>
-        <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+        <% if(readonly == false) { %>
+            <% if(!picture) { %>
+            <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+            <% } %>
+            <a href="javascript:void(0)" class="clear_image">[Clear]</a>
         <% } %>
-        <a href="javascript:void(0)" class="clear_image">[Clear]</a>
     </div>
 
 </script>
@@ -502,7 +504,7 @@
     %>
     <div class="form-left-col" style="text-align:center; width:264px;display:inline-block;" id="video_container" data-videopath="<%= full_video_path %>" >
     
-        <% if(!video) { %>
+        <% if(!video && (readonly == false)) { %>
             Select & Upload New Video 
             <div class="clr"></div>
             <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Video]</a>
@@ -524,10 +526,12 @@
             id="preview_video">
         </div>
         <br/>
-        <% if(!video) { %>
-        <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+        <% if(readonly == false) { %>
+            <% if(!video) { %>
+            <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+            <% } %>
+            <a href="javascript:void(0)" class="clear_video">[Clear]</a>
         <% } %>
-        <a href="javascript:void(0)" class="clear_video">[Clear]</a>
     </div>
 
 </script>

@@ -26,6 +26,8 @@
             initialize: function() {
                 _.bindAll(this, 'render', 'drop_video', 'change_video', 'file_validation', 'save_video', 'clear_video', 'connectPlayer');
                 this.video_name  = this.model.get('video_name');
+                this.readonly  = this.model.get('readonly') || false;
+                this.model.set({readonly : this.readonly}); 
                 this.render();
             },
             
@@ -65,6 +67,8 @@
             drop_video : function (event) {
                 event.stopPropagation();
                 event.preventDefault();
+                
+                if(this.readonly) return;
 
                 var e = event.originalEvent;
                 // The DataTransfer object holding the data.
@@ -97,6 +101,8 @@
                 // To prevent the browser default handling of the data: 
                 // default is open as link on drop.
                 event.preventDefault();
+                
+                if(this.readonly) return;
 
                 var file = event.target.files[0];
 
@@ -137,6 +143,8 @@
             },
 
             save_video : function () {
+                if(this.readonly) return;
+                
                 var self = this;
                 if (this.videoFile) {
 
@@ -190,6 +198,8 @@
             
 
             clear_video : function() {
+                if(this.readonly) return;
+                
                 var url = this.model.get("url");
                     
                 var upload_folder = encodeURIComponent(this.model.get("upload_folder"));

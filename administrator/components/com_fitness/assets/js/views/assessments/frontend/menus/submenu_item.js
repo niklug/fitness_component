@@ -34,7 +34,7 @@ define([
         onClickClose : function() {
             var current_page = this.options.request_params_model.get('current_page');
             if(!current_page) {
-                current_page = 'my_workouts';
+                current_page = 'my_progress';
             }
             app.controller.navigate("!/" + current_page, true);
         },
@@ -55,7 +55,7 @@ define([
             var self  = this;
             model.save({published : '-2'}, {
                 success: function (model, response) {
-                    app.controller.navigate("!/my_workouts", true);
+                    app.controller.navigate("!/my_progress", true);
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -105,7 +105,7 @@ define([
                             var current_page = app.models.request_params.get('current_page');
                             
                             if(!current_page) {
-                                current_page = 'my_workouts';
+                                current_page = 'progress';
                             }
                             
                             app.controller.navigate("!/" + current_page, true);

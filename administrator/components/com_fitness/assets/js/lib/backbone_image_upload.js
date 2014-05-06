@@ -26,6 +26,11 @@
             initialize: function() {
                 _.bindAll(this, 'render', 'drop_image', 'change_image', 'file_validation', 'save_image', 'clear_image');
                 this.image_name  = this.model.get('image_name');
+                
+                this.readonly  = this.model.get('readonly') || false;
+                this.model.set({readonly : this.readonly}); 
+         
+                this.render();
             },
 
             render: function(eventName) {
@@ -56,6 +61,8 @@
             drop_image : function (event) {
                 event.stopPropagation();
                 event.preventDefault();
+                
+                if(this.readonly) return;
 
                 var e = event.originalEvent;
                 // The DataTransfer object holding the data.
@@ -82,6 +89,8 @@
             },
 
             change_image: function(event) {
+                
+                if(this.readonly) return;
                 
                 // Prevents the event from bubbling up the DOM tree.
                 event.stopPropagation();
@@ -127,6 +136,8 @@
             },
 
             save_image : function () {
+                if(this.readonly) return;
+                
                 var self = this;
                 if (this.pictureFile) {
                     // append photo into FormData object 
@@ -187,6 +198,8 @@
             },
 
             clear_image : function() {
+                if(this.readonly) return;
+                
                 var url = this.model.get("url");
                     
                 var upload_folder = encodeURIComponent(this.model.get("upload_folder"));

@@ -1,8 +1,24 @@
-<fieldset class="adminform">
-    <table border="0" width="700">
+<div class="internal_wrapper2">
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td class="left">
+                    <h5 class="orange_text">BIOSIGNATURE MODULATION</h5>
+                </td>
+                <td>
+                    <a class="pdf_button" style="float:right; margin-left: 10px;" title="Save in PDF" href="javascript:void(0)" id="pdf_button"></a>
+                    <a class="email_button" style="float:right; margin-left: 10px;" title="Send by Email" href="javascript:void(0)" id="email_button"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <hr class="orange_line">
+    <br/>
+    <table border="0" width="100%">
         <tr>
             <td width="30%" style="vertical-align: top;">
-                <h5>AGE, HEIGHT & WEIGHT</h5>
+                <h5 class="orange_text">CLIENT DETAILS</h5>
+                <hr class="orange_line">
                 <table border="0" width="100%">
                     <tr>
                         <td >AGE (years)</td>
@@ -27,7 +43,8 @@
 
             
             <td style="vertical-align: top;">
-                <h5>BIOSIGNATURE CALCULATIONS</h5>
+                <h5 class="orange_text">BIOSIGNATURE CALCULATIONS</h5>
+                <hr class="orange_line">
                 <table border="0" width="100%">
                     <tr>
                         <td>TOTAL BODY FAT (%)</td>
@@ -61,7 +78,8 @@
             
             
             <td width="30%" style="vertical-align: top;">
-                <h5>PRIORITIES</h5>
+                <h5 class="orange_text">PRIORITIES</h5>
+                <hr class="orange_line">
                 <table border="0" width="150">
                     <tr>
                         <td>1.</td>
@@ -81,10 +99,15 @@
     </table>
     
     <!-- -->
-    <h5>BODY FAT (SKIN FOLD) MEASUREMENTS</h5>
-    <table border="0" width="700">
+    <h5 class="orange_text">BODY FAT MEASUREMENTS</h5>
+    <hr class="orange_line">
+    <table border="0" width="100%">
         <tr>
-            <td width="30%" style="vertical-align: top;">
+            <td width="60%">
+                <div id="body_image"> </div>
+            </td>
+            
+            <td style="vertical-align: top;">
                 <table border="0" width="100%">
                     <tr>
                         <td >CHIN (mm)</td>
@@ -110,14 +133,6 @@
                             <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="triceps" value="<%= data.triceps %>" id="triceps">
                         </td>
                     </tr>
-                </table>
-            </td>
-            
-            
-            
-            
-            <td style="vertical-align: top;">
-                <table border="0" width="100%">
                     <tr>
                         <td>SUB-SCAPULARIS (mm)</td>
                         <td>
@@ -143,12 +158,6 @@
                             <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="umbilical" value="<%= data.umbilical %>" id="umbilical">
                         </td>
                     </tr>
-                 </table>
-            </td>
-            
-            
-            <td width="30%" style="vertical-align: top;">
-                <table border="0" width="100%">
                     <tr>
                         <td>KNEE (mm)</td>
                         <td>
@@ -181,10 +190,11 @@
     
     <!-- -->
 
-    <table border="0" width="700">
+    <table border="0" width="100%">
         <tr>
             <td  style="vertical-align: top;">
-                <h5>ANATOMICAL MEASUREMENTS</h5>
+                <h5 class="orange_text">ANATOMICAL MEASUREMENTS</h5>
+                <hr class="orange_line">
                 <table border="0" width="100%">
                     <tr>
                         <td >CHEST (cm)</td>
@@ -243,7 +253,8 @@
             
             
             <td style="vertical-align: top;">
-                <h5>TEST SCORES</h5>
+                <h5 class="orange_text">TEST SCORES</h5>
+                <hr class="orange_line">
                 <table border="0" width="100%">
                     <tr>
                         <td>BLOOD PRESSURE (mm/hg)</td>
@@ -274,4 +285,4 @@
             </td>
         </tr>
     </table>
-</fieldset>
+</div> 

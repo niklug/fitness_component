@@ -61,7 +61,7 @@ define([
             }
             //
             
-            app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id, current_page : 'my_workouts'});
+            app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id, current_page : 'my_progress'});
             app.models.request_params.bind("change", this.get_items, this);
         },
 
@@ -347,7 +347,7 @@ define([
             
             var form = 'standard';
             
-            if((value.toLowerCase().indexOf("bio") > -1)) {
+            if(this.is_bio_assessment(value)) {
                 form = 'bio';
                 $("#workout_instuctions_wrapper").hide();
                 $("#exercises_list").parent().hide();
@@ -356,11 +356,19 @@ define([
             var html = new Form_standard_assessment_view({model : model, readonly : options.readonly}).render().el;
                         
             if(form == 'bio') {
-                html = new Form_bio_assessment_view({model : model}).render().el;
+                html = new Form_bio_assessment_view({model : model, readonly : options.readonly}).render().el;
                 $("#save_template_button").hide();
             }
 
             $("#assessment_form_wrapper").html(html);
+        },
+        
+        is_bio_assessment : function(name) {
+            var result = false;
+            if((name.toLowerCase().indexOf("bio") > -1)) {
+                result = true;
+            }
+            return result;
         }
 
     });

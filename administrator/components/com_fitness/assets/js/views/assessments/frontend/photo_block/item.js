@@ -4,7 +4,7 @@ define([
 	'backbone',
         'app',
         'models/assessments/assessment_photos',
-	'text!templates/assessments/backend/photo_block/item.html',
+	'text!templates/assessments/frontend/photo_block/item.html',
         'jquery.backbone_image_upload'
 
 ], function ( $, _, Backbone, app, Item_model, template ) {
@@ -17,10 +17,21 @@ define([
         
         render: function(){
             var data = {data : this.model.toJSON()};
+            
+            this.readonly = this.options.readonly || false;
+            
+            data.readonly = this.readonly;
+            
             var template = _.template(this.template(data));
             this.$el.html(template);
-            
+
             this.connectImageUpload();
+ 
+            if(this.readonly) {
+                $(this.el).find("input, textarea").attr('readonly', true);
+   
+                this.setClientCommentsEdit(this.model);
+            }
             
             return this;
         },
@@ -28,6 +39,14 @@ define([
         events: {
             "click .save_photo" : "onClickSave",
             "click .close_photo" : "onClickClose",
+        },
+        
+        setClientCommentsEdit : function(model) {
+            if(!model.get('client_comments')) {
+                $(this.el).find(".photo_client_comments").attr('readonly', false);
+            } else {
+                $(this.el).find(".photo_client_comments").attr('readonly', true);
+            }
         },
         
         connectImageUpload : function() {
@@ -51,17 +70,18 @@ define([
                 'el' : $(this.el).find('.photo_item_wrapper'),
                 'img_path' : app.options.img_path,
                 'base_url' : app.options.base_url,
-                'image_name' : this.model.get('id')
+                'image_name' : this.model.get('id'),
+                'readonly' : this.readonly
 
             };
 
             var image_upload = $.backbone_image_upload(image_upload_options); 
-        },
+         },
         
         onClickSave : function(event) {
             var id = $(event.target).attr('data-id');
             
-            var model = new Item_model({
+            this.model = new Item_model({
                 id : id,
                 image : $(this.el).find(".preview_image").attr('data-imagepath'),
                 description : $(this.el).find(".photo_description").val(),
@@ -69,7 +89,11 @@ define([
                 trainer_comments : $(this.el).find(".photo_trainer_comments").val()
             });
             
-            model.save(null, {
+            var self = this;
+            this.model.save(null, {
+                success : function(model, response) {
+                    self.render();
+                },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
