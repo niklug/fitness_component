@@ -23,8 +23,6 @@ define([
 
         events: {
             "click .close_item" : "onClickClose",
-            "click .add_favourite" : "onClickAddFavourite",
-            "click .remove_favourite" : "onClickRemoveFavourite",
             "click .edit_item" : "onClickEditItem",
             "click .trash_item" : "onClickTrashItem",
             "click .copy_item" : "onClickCopy",
@@ -39,15 +37,7 @@ define([
             app.controller.navigate("!/" + current_page, true);
         },
 
-        onClickAddFavourite : function(event) {
-            var id = $(event.target).attr('data-id');
-            app.controller.add_favourite(id);
-        },
-        
-        onClickRemoveFavourite : function(event) {
-            var id = $(event.target).attr('data-id');
-            app.controller.remove_favourite(id);
-        },
+
         
         onClickTrashItem: function(event) {
             var id = $(event.target).attr('data-id');
@@ -97,7 +87,7 @@ define([
                     var client_item_id = model.get('client_item_id');
                     var event_client_item_model = new Event_client_item_model({id : client_item_id});
                     
-                    event_client_item_model.save({status : '10'}, {
+                    event_client_item_model.save({status : '2'}, {
                         success: function (model, response) {
                             var id = model.get('id');
                             self.sendAssessingEmail(id);
@@ -105,7 +95,7 @@ define([
                             var current_page = app.models.request_params.get('current_page');
                             
                             if(!current_page) {
-                                current_page = 'progress';
+                                current_page = 'my_progress';
                             }
                             
                             app.controller.navigate("!/" + current_page, true);

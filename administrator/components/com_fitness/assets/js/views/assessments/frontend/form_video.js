@@ -44,7 +44,7 @@ define([
         },
         
         setClientCommentsEdit : function(model) {
-            if(app.models.request_params.get('current_page') != 'assessments') {
+            if(app.options.const_trainer_assessment != this.model.get('session_type')) {
                 return;
             }
             if(!model.get('video_client_comments')) {

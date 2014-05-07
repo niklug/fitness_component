@@ -60,6 +60,7 @@ define([
                 business_profile_id = app.options.business_profile_id;
             }
             //
+
             
             app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id, current_page : 'my_progress'});
             app.models.request_params.bind("change", this.get_items, this);
@@ -71,7 +72,9 @@ define([
             "!/self_assessments": "self_assessments", 
             "!/assessments": "assessments", 
             "!/trash_list": "trash_list", 
+            
             "!/item_view/:id": "item_view",
+            
             "!/form_view/:id": "form_view",
         },
         
@@ -162,11 +165,6 @@ define([
             var created_by = model.get('owner');
             var appointment = model.get('title');
             var status = model.get('status');
-            var frontend_published = model.get('frontend_published');
-            
-            if(!frontend_published) {
-                return false;
-            }
             
             //if status ASSESSING
             if(status == '2') {
@@ -210,7 +208,7 @@ define([
             var status = model.get('status');
             
             // if ‘COMPLETE', 'INCOMPLETE' or 'NOT ATTEMPTED’,
-            if(status == '6' || status == '7' || status == '8' || status == '10') {
+            if(status == '6' || status == '7' || status == '8' || status == '2') {
                 return false;
             }
             
@@ -226,6 +224,7 @@ define([
             return access;
         },
         
+
         item_view : function(id) {
             var self = this;
             app.models.item.set({id : id});

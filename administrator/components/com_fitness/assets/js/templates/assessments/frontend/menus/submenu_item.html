@@ -3,14 +3,11 @@
         <div style="width:100%;">
 
             <a data-id="<%= id %>" style="cursor: pointer;" class="view_calender" onclick="javascript:void(0)">[VIEW ON CALENDAR]</a>
-
-            <% if((current_page == 'my_progress') && edit_allowed == true) { %>
-            <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="trash_item" onclick="javascript:void(0)">[TRASH]</a>
-            <% } %>
+           
             
             <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="close_item" onclick="javascript:void(0)">[CLOSE]</a>
             
-            <% if ((current_page == 'self_assessments') && edit_allowed) { %>
+            <% if ((app.options.const_self_assessment == session_type) && parseInt(frontend_published)) { %>
                 <a data-id="<%= id %>" style="cursor: pointer; float:right;margin-right:10px;" class="edit_item" onclick="javascript:void(0)">[EDIT]</a>
                 
                 <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="submit_to_trainer" onclick="javascript:void(0)">[SUBMIT TO TRAINER]</a>

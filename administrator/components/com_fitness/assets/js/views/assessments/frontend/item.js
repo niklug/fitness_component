@@ -46,16 +46,20 @@ define([
             var self = this;
             $(this.el).show('0', function() {
                 app.controller.connectStatus(self.model, self.$el);
+                
+                var frontend_published = self.model.get('frontend_published');
+                if(parseInt(frontend_published)) {
 
-                app.controller.loadAssessmentsForm(self.model.get('session_focus_name'), self.model, {readonly : true});
-                
-                self.connectExercises();
-                
-                new Form_video_view({el : $("#video_block"), model : self.model, readonly : true});
-                
-                new Photo_block_view({el : $("#photo_block"), model : self.model, readonly : true});
-                
-                app.controller.connectComments(self.model, self.$el);
+                    app.controller.loadAssessmentsForm(self.model.get('session_focus_name'), self.model, {readonly : true});
+
+                    self.connectExercises();
+
+                    new Form_video_view({el : $("#video_block"), model : self.model, readonly : true});
+
+                    new Photo_block_view({el : $("#photo_block"), model : self.model, readonly : true});
+
+                    app.controller.connectComments(self.model, self.$el);
+                }
             });
         },
         
