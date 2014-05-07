@@ -156,25 +156,21 @@ define([
         
         
         edit_allowed : function(model) {
-            var access = false;
+            var access = true;
 
             var user_id = app.options.user_id;
             var created_by = model.get('owner');
             var appointment = model.get('title');
             var status = model.get('status');
+            var frontend_published = model.get('frontend_published');
             
-            // if ‘COMPLETE', 'INCOMPLETE' or 'NOT ATTEMPTED’,
-            if(status == '6' || status == '7' || status == '8'  || status == '10') {
+            if(!frontend_published) {
                 return false;
             }
             
-            if(user_id == created_by) {
-                access = true;
-            }
-            
-            //'Resistance Workout' and 'Cardio Workout'
-            if(appointment == '3' || appointment == '4') {
-                access = true;
+            //if status ASSESSING
+            if(status == '2') {
+                return false;
             }
             
             return access;
@@ -322,7 +318,7 @@ define([
                     if(self.edit_allowed(model)) {
                         self.load_form_view(model);
                     } else {
-                        self.navigate("!/workout_programs", true);
+                        self.navigate("!/my_progress", true);
                     }
                 },
                 error: function (collection, response) {

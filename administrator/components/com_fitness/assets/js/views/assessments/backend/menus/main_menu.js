@@ -65,7 +65,6 @@ define([
         
         
         saveItem : function() {
-            
             var self = this;
             
             $("#program_form" ).die().live('submit', function(event) {

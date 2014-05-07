@@ -9,6 +9,8 @@ define([
         'models/programs/exercises/item', 
         'views/programs/select_element',
         'views/programs/exercises/list',
+        'views/assessments/frontend/form_video',
+        'views/assessments/frontend/photo_block/list',
 	'text!templates/programs/frontend/form.html',
         'jquery.timepicker'
 ], function (
@@ -22,6 +24,8 @@ define([
         Exercise_model,
         Select_element_view,
         Exercises_list_view,
+        Form_video_view,
+        Photo_block_view,
         template
     ) {
 
@@ -95,41 +99,51 @@ define([
             data.app = app;
             $(this.el).html(this.template(data));
             
-            app.controller.connectComments(this.model, $(this.el));
-            
-            this.connectExercises();
-            
-            this.loadAppointment();
-            
-            var category_id = this.model.get('title');
-        
-            if(category_id) {
-                this.loadSessionType(category_id);
-            }
-            
-            var session_type_id = this.model.get('session_type');
-            
-            if(session_type_id) {
-                this.loadSessionFocus(session_type_id);
-            }
-            
-            $(this.el).find("#start_date, #finish_date").datepicker({ dateFormat: "yy-mm-dd"});
-            
-            $(this.el).find("#start_time, #finish_time").timepicker({ 'timeFormat': 'H:i', 'step': 15 });
-
-            this.loadLocations();
-
-            var disabled_editor = false;
-            if(!app.controller.is_item_owner(this.model)) {
-               disabled_editor = true;
-            } 
-
-            if(!this.model.isNew()) {
-                $.fitness_helper.connectEditor($(this.el), "#description", disabled_editor);
-            }
-            
+            this.onRender();
+         
             return this;
         },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                
+                self.loadAppointment();
+                //
+                var category_id = self.model.get('title');
+
+                if(category_id) {
+                    self.loadSessionType(category_id);
+                }
+                //
+                var session_type_id = self.model.get('session_type');
+
+                if(session_type_id) {
+                    self.loadSessionFocus(session_type_id);
+                }
+                //
+                $(self.el).find("#start_date, #finish_date").datepicker({ dateFormat: "yy-mm-dd"});
+            
+                $(self.el).find("#start_time, #finish_time").timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+                //
+
+                $.fitness_helper.connectEditor($(self.el), "#description");
+
+                //
+                self.loadLocations();
+                
+                app.controller.loadAssessmentsForm(self.model.get('session_focus_name'), self.model, {readonly : false});
+
+                self.connectExercises();
+                
+                new Form_video_view({el : $("#video_block"), model : self.model, readonly : false});
+                
+                new Photo_block_view({el : $("#photo_block"), model : self.model, readonly : false});
+                
+                app.controller.connectComments(self.model, $(self.el));
+            });
+        },
+        
         
         events : {
             "click #pdf_button" : "onClickPdf",
@@ -162,26 +176,21 @@ define([
         },
 
         connectExercises : function() {
-            if(this.model.get('id')) {
-                new Exercises_list_view({
-                    el : $(this.el).find("#exercises_list"),
-                    model : this.model,
-                    exercise_model : Exercise_model,
-                    exercises_collection : Exercises_collection,
-                    readonly : false,
-                    search_videos : true,
-                    title : 'WORKOUT DETAILS'
-                });
-            }
+            new Exercises_list_view({
+                el : $(this.el).find("#exercises_list"),
+                model : this.model,
+                exercise_model : Exercise_model,
+                exercises_collection : Exercises_collection,
+                readonly : false,
+                title : 'PHYSICAL ASSESSMENT DETAILS'
+            });
         },
         
         loadAppointment : function() {
             var appointments_collection = new Backbone.Collection;
-            // clients should not be able to create 'Personal Training' or 'Semi-Private Training' appointments
-           
+          
             appointments_collection.add([
-                app.collections.appointments.get(3),
-                app.collections.appointments.get(4),
+                app.collections.appointments.get(5)
             ]);
             
             //allow edit field only for creator

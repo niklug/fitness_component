@@ -268,7 +268,7 @@ class FitnessModelprograms extends JModelList {
                 $query .= " AND a.owner='$user_id'";
             }
             
-            if(($data->current_page == 'workout_programs' OR $data->current_page == 'assessments') AND FitnessHelper::is_client($user_id)) {
+            if(($data->current_page == 'workout_programs' OR $data->current_page == 'assessments' OR $data->current_page == 'self_assessments') AND FitnessHelper::is_client($user_id)) {
                 $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
                 $query .= " AND a.owner NOT IN ('$user_id')";
             }
@@ -276,6 +276,11 @@ class FitnessModelprograms extends JModelList {
             if($data->current_page == 'assessments') {
                 $trainer_assessment = FitnessHelper::TRAINER_ASSESSMENT;
                 $query .= " AND a.session_type='$trainer_assessment'";
+            }
+            
+            if($data->current_page == 'self_assessments') {
+                $self_assessment = FitnessHelper::SELF_ASSESSMENT;
+                $query .= " AND a.session_type='$self_assessment'";
             }
             
             if ($data->current_page  == 'my_favourites') {
@@ -400,7 +405,7 @@ class FitnessModelprograms extends JModelList {
             $query .= " AND a.owner='$user_id'";
         }
         
-        if(($data->current_page == 'workout_programs' OR $data->current_page == 'assessments') AND FitnessHelper::is_client($user_id)) {
+        if(($data->current_page == 'workout_programs' OR $data->current_page == 'assessments' OR $data->current_page == 'self_assessments') AND FitnessHelper::is_client($user_id)) {
             $query .= " AND a.id IN (SELECT event_id FROM #__fitness_appointment_clients WHERE event_id=a.id AND client_id='$user_id')";
             $query .= " AND a.owner NOT IN ('$user_id')";
         }
@@ -408,6 +413,11 @@ class FitnessModelprograms extends JModelList {
         if($data->current_page == 'assessments') {
             $trainer_assessment = FitnessHelper::TRAINER_ASSESSMENT;
             $query .= " AND a.session_type='$trainer_assessment'";
+        }
+        
+        if($data->current_page == 'self_assessments') {
+            $self_assessment = FitnessHelper::SELF_ASSESSMENT;
+            $query .= " AND a.session_type='$self_assessment'";
         }
         
         if ($data->current_page  == 'my_favourites') {

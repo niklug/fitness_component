@@ -26,6 +26,8 @@ define([
             this.$el.html(template);
 
             this.connectImageUpload();
+            
+            $(this.el).find(".photo_trainer_comments").attr('readonly', true);
  
             if(this.readonly) {
                 $(this.el).find("input, textarea").attr('readonly', true);

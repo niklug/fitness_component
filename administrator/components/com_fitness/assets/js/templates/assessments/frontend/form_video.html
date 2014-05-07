@@ -31,7 +31,8 @@
                         <td>
                             <textarea style="width:100%;height;50px;" type="text" id="video_client_comments" name="video_client_comments" ><%= data.video_client_comments %></textarea>
                             
-                            <a  style="float:right;" href="javascript:void(0)" id="save_video">[Save]</a>
+                            <a  style="float:right;display:none;" href="javascript:void(0)" id="save_video">[Save]</a>
+
                         </td>
                     </tr>
                     <tr>
@@ -39,7 +40,7 @@
                             <label>Trainer Comments</label>
                         </td>
                         <td>
-                            <textarea style="width:100%;height;50px;" type="text" name="video_trainer_comments" ><%= data.video_trainer_comments %></textarea>
+                            <textarea style="width:100%;height;50px;" type="text" id="video_trainer_comments" name="video_trainer_comments" ><%= data.video_trainer_comments %></textarea>
                         </td>
                     </tr>
                 </table>

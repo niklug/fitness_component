@@ -19,10 +19,13 @@ define([
         
         render: function(){
             var data = {data : this.model.toJSON()};
+            data.app = app;
             var template = _.template(this.template(data));
             this.$el.html(template);
             
             this.readonly = this.options.readonly || false;
+            
+            $(this.el).find("#video_trainer_comments").attr('readonly', true);
             
             if(this.readonly) {
                 $(this.el).find("input, textarea").attr('readonly', true);
@@ -41,6 +44,9 @@ define([
         },
         
         setClientCommentsEdit : function(model) {
+            if(app.models.request_params.get('current_page') != 'assessments') {
+                return;
+            }
             if(!model.get('video_client_comments')) {
                 $(this.el).find("#video_client_comments").attr('readonly', false);
                 $(this.el).find("#save_video").show();
