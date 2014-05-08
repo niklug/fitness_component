@@ -1217,6 +1217,11 @@ class FitnessHelper extends FitnessFactory
         return self::customQuery($query, 2);
     }
     
+     public function getACItemByEventAndClient($event_id, $client_id) {
+        $query = "SELECT * FROM #__fitness_appointment_clients WHERE event_id='$event_id' AND client_id='$client_id'";
+        return self::customQuery($query, 2);
+    }
+    
     public function getAppointmentClientItems($event_id) {
         $query = "SELECT * FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
         return self::customQuery($query, 1);

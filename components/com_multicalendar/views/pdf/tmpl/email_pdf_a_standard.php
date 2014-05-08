@@ -21,6 +21,7 @@
             die();
         }
         include __DIR__ . DS . 'email_pdf_header.php';
+
         ?>
         <div style="width: 600px;">
             <h3 style="margin: 0; padding: 0; ">SESSION DETAILS</h3>
@@ -163,6 +164,14 @@
             </table>
         </div>
 
+        <?php
+        $status = $data->item->client_item->status;
+        //DISTINCTION, EXCELLENT, PASS, IMPROVEMENT, FAIL
+        if(!in_array($status, array('3', '4', '5', '6', '7'))) {
+            return;
+        }
+        ?>
+        <!-- RESULTS -->
         <div style="margin-top: 20px;">
             <h3 style="margin: 0; padding: 0;">MY ASSESSMENT RESULTS</h3>
             <hr style="width:100%;">
@@ -353,10 +362,10 @@
                 <hr>
                 <?php
             }
-          
-            
             ?>
         </div>
+        <!-- END RESULTS -->
+        
     </body>
 </html>
 

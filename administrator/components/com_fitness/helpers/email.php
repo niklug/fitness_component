@@ -446,12 +446,17 @@ class AppointmentEmail extends FitnessEmail {
                 break;
             //
             case 'AssessmentBio':
-                $subject = 'Assessment/Training Session';
+                $subject = 'BioSignature Results';
                 $layout = 'email_pdf_a_bio';
                 break;
             case 'AssessmentStandard':
-                $subject = 'Assessment/Training Session';
+                $subject = 'Physical Assessment Results';
                 $layout = 'email_pdf_a_standard';
+                break;
+            
+            case 'assessmentAssessing':
+                $subject = 'New Assessment Submitted';
+                $layout = 'email_pdf_a_assessing';
                 break;
             
             default:

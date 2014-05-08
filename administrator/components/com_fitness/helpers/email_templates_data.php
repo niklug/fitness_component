@@ -488,6 +488,8 @@ class EmailPdfWorkoutTemplateData extends EmailTemplateData  {
         $this->business_profile_user = $this->client_id;
         
         $this->item->photos = $this->getAssessmentPhotos($this->id);
+        
+        $this->item->client_item = $this->getACItemByEventAndClient($this->id, $this->client_id);
     }
     
    
