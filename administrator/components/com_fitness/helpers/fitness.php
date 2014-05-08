@@ -314,6 +314,7 @@ class FitnessHelper extends FitnessFactory
     //ASSESSMENTS
     const SELF_ASSESSMENT= '26';
     const TRAINER_ASSESSMENT= '25';
+    
     /**
      * Configure the Linkbar.
      */

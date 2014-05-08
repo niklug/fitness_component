@@ -121,7 +121,7 @@ define([
 
             data.id = id;
             data.view = 'Programs';
-            data.method = 'AssessmentAssessing';
+            data.method = 'AsAssessing';
             $.fitness_helper.sendEmail(data);
         },
     });

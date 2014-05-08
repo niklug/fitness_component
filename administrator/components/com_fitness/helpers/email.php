@@ -454,7 +454,7 @@ class AppointmentEmail extends FitnessEmail {
                 $layout = 'email_pdf_a_standard';
                 break;
             
-            case 'assessmentAssessing':
+            case 'AsAssessing':
                 $subject = 'New Assessment Submitted';
                 $layout = 'email_pdf_a_assessing';
                 break;
@@ -1785,8 +1785,7 @@ class CommentProgramEmail extends FitnessEmail {
         }
         
         // send except cteator
-        unset($ids[$this->comment_created_by]);
-
+        $ids = array_diff($ids, array($this->data->created_by));
         $this->recipients_ids = $ids;
     }
     
