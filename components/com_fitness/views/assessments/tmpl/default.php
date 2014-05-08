@@ -80,7 +80,9 @@ $business_profile_id = $business_profile_id['data'];
         'current_view' : '<?php echo  JFactory::getApplication()->input->get('view'); ?>',
         
         'const_trainer_assessment' : <?php echo FitnessHelper::TRAINER_ASSESSMENT; ?>,
-        'const_self_assessment' : <?php echo FitnessHelper::SELF_ASSESSMENT; ?>
+        'const_self_assessment' : <?php echo FitnessHelper::SELF_ASSESSMENT; ?>,
+        
+        'assessment_priorities' : '<?php echo json_encode(FitnessHelper::assessmentPriorities()) ?>'
     };
     
 

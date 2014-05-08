@@ -46,6 +46,11 @@ define([
             return this;
         },
         
+        events : {
+            "click #pdf_button_bio" : "onClickPdf",
+            "click #email_button_bio" : "onClickEmail"
+        },
+        
         prioritySelect : function(name) {
             var target = $(this.el).find("#" + name);
             
@@ -76,7 +81,25 @@ define([
                 id_name : name,
                 model_field : name
             }).render();
-        }
+        },
+        
+        onClickPdf : function() {
+            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_a_bio&event_id=' + this.model.get('id') + '&client_id=' + app.options.user_id;
+            $.fitness_helper.printPage(htmlPage);
+        },
+        
+        onClickEmail : function() {
+            var data = {};
+            data.url = app.options.ajax_call_url;
+            data.task = 'ajax_email';
+
+            data.id =  this.model.get('id');
+            data.client_id =  app.options.user_id;
+            data.view = 'Programs';
+            data.method = 'AssessmentBio';
+            $.fitness_helper.sendEmail(data);
+        },
+
 
     });
             

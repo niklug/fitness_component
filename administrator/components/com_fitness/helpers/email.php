@@ -331,6 +331,11 @@ class AppointmentEmail extends FitnessEmail {
                 $layout = 'email_notify';
                 break;
             
+            case 'NotifyA':
+                $subject = 'Assessment Info Available';
+                $layout = 'email_notify_a';
+                break;
+            
             case 'NotifyAssessment':
                 $subject = 'Assessment Complete';
                 $layout = 'email_notify_assessment';
@@ -439,6 +444,12 @@ class AppointmentEmail extends FitnessEmail {
                 $subject = 'Assessment Result';
                 $layout = 'email_status_pass';
                 break;
+            //
+            case 'AssessmentBio':
+                $subject = 'Assessment/Training Session';
+                $layout = 'email_pdf_a_bio';
+                break;
+            
             
             default:
                 break;
@@ -458,12 +469,12 @@ class AppointmentEmail extends FitnessEmail {
             }
 
             // send to all clients
-            if(self::is_trainer($user_id) AND ($layout == 'email_reminder' OR $layout == 'email_notify')) {
+            if(self::is_trainer($user_id) AND ($layout == 'email_reminder' OR $layout == 'email_notify' OR $layout == 'email_notify_a')) {
                 $send_to = 'clients';
             }
 
-            //client sends workour heself
-            if(self::is_client($user_id) AND ($layout == 'email_pdf_workout')) {
+            //client sends workout heself
+            if(self::is_client($user_id) AND ($layout == 'email_pdf_workout' OR $layout == 'email_pdf_a_bio')) {
                 $send_to = 'client';
             }
         }
@@ -477,6 +488,7 @@ class AppointmentEmail extends FitnessEmail {
         if($send_to) {
             $this->send_to = $send_to;
         }
+        
         
         
         $this->subject = $subject;
@@ -521,12 +533,13 @@ class AppointmentEmail extends FitnessEmail {
         }
         
         //client sends workout heself
-        if(($this->send_to == 'client') AND ($this->layout == 'email_pdf_workout')) {
+        if(($this->send_to == 'client') AND ($this->layout == 'email_pdf_workout' OR $this->layout == 'email_pdf_a_bio')) {
             $ids = array(JFactory::getUser()->id);
             $this->event_id = $this->data->id;
             
         }
-
+        
+        
 
         $this->recipients_ids = $ids;
     }
@@ -543,7 +556,7 @@ class AppointmentEmail extends FitnessEmail {
                 $client_id = $recipient_id;
             }
             
-            if($this->layout == 'email_pdf_workout'){
+            if($this->layout == 'email_pdf_workout' OR $this->layout == 'email_pdf_a_bio'){
                 $client_id = $this->data->client_id;
             }
 

@@ -225,7 +225,7 @@ define([
         },
         
         sendNotifyEmail : function(id) {
-            this.status_obj.sendEmail(id, 'Notify');
+            this.status_obj.sendEmail(id, 'NotifyA');
         },
         
         onClickView : function(event) {

@@ -1911,5 +1911,30 @@ class FitnessHelper extends FitnessFactory
             }
 
         }
+        
+        public static function assessmentPriorities() {
+              
+              $data = array(
+                  "1"  => "CHIN",
+                  "2"  => "CHEEK",
+                  "3"  => "PECTORAL",
+                  "4"  => "TRICEPS",
+                  "5"  => "SUB-SCAPULARIS",
+                  "6"  => "MID-AXILLARY",
+                  "7"  => "SUPRAILLIAC",
+                  "8"  => "UMBILICAL",
+                  "9"  => "KNEE",
+                  "10" => "CALF",
+                  "11" => "QUADRICEPS",
+                  "12" => "HAMSTRINGS"
+              );
+              
+              return $data;
+        }
+        
+        public function getAssessmentPhotos($item_id) {
+            $query = "SELECT * FROM #__fitness_assessments_photos WHERE item_id='$item_id'";
+            return self::customQuery($query, 1);
+        }
 }
 
