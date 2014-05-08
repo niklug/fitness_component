@@ -112,7 +112,7 @@ define([
             this.setAutoPublishEvent();
             
             if(this.model.get('session_focus')) {
-                this.loadAssessmentsForm(this.$el.find("#session_focus").find(":selected").text());
+                this.loadAssessmentsForm(this.model.get('session_focus_name'));
             }
             
             return this;
@@ -309,7 +309,7 @@ define([
             
             var form = 'standard';
             
-            if((value.toLowerCase().indexOf("bio") > -1)) {
+            if(app.controller.is_bio_assessment(value)) {
                 form = 'bio';
                 $("#workout_instuctions_wrapper").hide();
                 $("#exercises_list").parent().hide();

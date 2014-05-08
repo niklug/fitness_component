@@ -452,12 +452,7 @@
                 <hr>
                 <?php
             }
-                
-            
 
-            echo $html;
-            
-            
             ?>
         </div>
     </body>

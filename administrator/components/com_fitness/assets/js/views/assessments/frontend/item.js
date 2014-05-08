@@ -38,8 +38,8 @@ define([
         },
         
         events : {
-            "click #pdf_button" : "onClickPdf",
-            "click #email_button" : "onClickEmail"
+            "click #pdf_button_standard" : "onClickPdf",
+            "click #email_button_standard" : "onClickEmail"
         },
         
         onRender : function() {
@@ -64,7 +64,7 @@ define([
         },
         
         onClickPdf : function() {
-            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=' + this.model.get('id') + '&client_id=' + app.options.user_id;
+            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_a_standard&event_id=' + this.model.get('id') + '&client_id=' + app.options.user_id;
             $.fitness_helper.printPage(htmlPage);
         },
         
@@ -76,7 +76,7 @@ define([
             data.id =  this.model.get('id');
             data.client_id =  app.options.user_id;
             data.view = 'Programs';
-            data.method = 'Workout';
+            data.method = 'AssessmentStandard';
             $.fitness_helper.sendEmail(data);
         },
 

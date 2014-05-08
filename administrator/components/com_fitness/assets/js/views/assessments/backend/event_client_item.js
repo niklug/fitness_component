@@ -109,13 +109,29 @@ define([
         onClickSendEmail :function(event) {
             var id = $(event.target).attr('data-id');
             var client_id = this.model.get('client_id');
-            app.controller.sendWorkoutEmail(id, client_id);
+            
+            var session_focus = this.options.item_model.get('session_focus_name');
+            
+            var method = 'AssessmentStandard';
+            if(app.controller.is_bio_assessment(session_focus)) {
+                method = 'AssessmentBio';
+            }
+            
+            app.controller.sendWorkoutEmail(id, client_id, method);
         },
         
         onClickPdf : function(event) {
             var id = $(event.target).attr('data-id');
             var client_id = this.model.get('client_id');
-            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_workout&event_id=' + id + '&client_id=' + client_id;
+            
+            var session_focus = this.options.item_model.get('session_focus_name');
+            
+            var layout = 'email_pdf_a_standard';
+            if(app.controller.is_bio_assessment(session_focus)) {
+                layout = 'email_pdf_a_bio';
+            }
+            
+            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=' + layout + '&event_id=' + id + '&client_id=' + client_id;
             $.fitness_helper.printPage(htmlPage);
         },
 

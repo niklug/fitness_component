@@ -449,7 +449,10 @@ class AppointmentEmail extends FitnessEmail {
                 $subject = 'Assessment/Training Session';
                 $layout = 'email_pdf_a_bio';
                 break;
-            
+            case 'AssessmentStandard':
+                $subject = 'Assessment/Training Session';
+                $layout = 'email_pdf_a_standard';
+                break;
             
             default:
                 break;
@@ -474,7 +477,7 @@ class AppointmentEmail extends FitnessEmail {
             }
 
             //client sends workout heself
-            if(self::is_client($user_id) AND ($layout == 'email_pdf_workout' OR $layout == 'email_pdf_a_bio')) {
+            if(self::is_client($user_id) AND ($layout == 'email_pdf_workout' OR $layout == 'email_pdf_a_bio' OR $layout == 'email_pdf_a_standard')) {
                 $send_to = 'client';
             }
         }
@@ -533,7 +536,7 @@ class AppointmentEmail extends FitnessEmail {
         }
         
         //client sends workout heself
-        if(($this->send_to == 'client') AND ($this->layout == 'email_pdf_workout' OR $this->layout == 'email_pdf_a_bio')) {
+        if(($this->send_to == 'client') AND ($this->layout == 'email_pdf_workout' OR $this->layout == 'email_pdf_a_bio' OR $this->layout == 'email_pdf_a_standard')) {
             $ids = array(JFactory::getUser()->id);
             $this->event_id = $this->data->id;
             
@@ -556,7 +559,7 @@ class AppointmentEmail extends FitnessEmail {
                 $client_id = $recipient_id;
             }
             
-            if($this->layout == 'email_pdf_workout' OR $this->layout == 'email_pdf_a_bio'){
+            if($this->layout == 'email_pdf_workout' OR $this->layout == 'email_pdf_a_bio' OR $this->layout == 'email_pdf_a_standard'){
                 $client_id = $this->data->client_id;
             }
 

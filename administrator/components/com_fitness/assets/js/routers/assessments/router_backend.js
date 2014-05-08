@@ -288,7 +288,7 @@ define([
             });
         },
         
-        sendWorkoutEmail : function(id, client_id) {
+        sendWorkoutEmail : function(id, client_id, method) {
             var data = {};
             data.url = app.options.ajax_call_url;
             data.view = '';
@@ -298,7 +298,7 @@ define([
             data.id =  id;
             data.client_id = client_id || app.options.user_id;
             data.view = 'Programs';
-            data.method = 'Workout';
+            data.method = method;
             $.fitness_helper.sendEmail(data);
         },
         
@@ -334,6 +334,14 @@ define([
                 
             });
         },
+        
+        is_bio_assessment : function(name) {
+            var result = false;
+            if((name.toLowerCase().indexOf("bio") > -1)) {
+                result = true;
+            }
+            return result;
+        }
     });
 
     return Controller;
