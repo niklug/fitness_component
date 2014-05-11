@@ -25,10 +25,10 @@ define([
             
             this.readonly = this.options.readonly || false;
             
-            $(this.el).find("#video_trainer_comments").attr('readonly', true);
+            $(this.el).find("#video_trainer_comments").attr('disabled', true);
             
             if(this.readonly) {
-                $(this.el).find("input, textarea").attr('readonly', true);
+                $(this.el).find("input, textarea").attr('disabled', true);
                 
                 this.setClientCommentsEdit(this.model);
             }

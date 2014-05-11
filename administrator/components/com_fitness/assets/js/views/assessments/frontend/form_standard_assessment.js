@@ -32,7 +32,7 @@ define([
             var readonly = this.options.readonly || false;
             
             if(readonly) {
-                $(this.el).find("input[type='text']").attr('readonly', true);
+                $(this.el).find("input[type='text']").attr('disabled', true);
             }
             
             return this;

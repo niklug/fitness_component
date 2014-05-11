@@ -10,6 +10,7 @@
 
 // no direct access
 defined('_JEXEC') or die;
+
 ?>
 <table border="0" width="100%">
 

@@ -186,7 +186,9 @@ define([
                 exercise_model : Exercise_model,
                 exercises_collection : Exercises_collection,
                 readonly : false,
-                title : 'PHYSICAL ASSESSMENT DETAILS'
+                search_videos : true,
+                title : 'PHYSICAL ASSESSMENT DETAILS',
+                
             });
         },
         

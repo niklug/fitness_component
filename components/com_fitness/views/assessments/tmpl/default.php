@@ -100,7 +100,7 @@ $business_profile_id = $business_profile_id['data'];
         'status_button_place' : '#status_button_place_',
         'statuses' : {
             '1' : {'label' : 'PENDING',         'class' : 'event_status_pending',       'email_alias' : ''},
-            '2' : {'label' : 'ASSESSING',       'class' : 'event_status_assessing',     'email_alias' : 'AssessmentAssessing'},
+            '2': {'label' : 'LATE CANCEL',     'class' : 'status_fail',                'email_alias' : 'AppointmentLatecancel'},
             '3' : {'label' : 'DISTINCTION',     'class' : 'status_distinction',         'email_alias' : 'AssessmentDistinction'},
             '4' : {'label' : 'EXCELLENT',       'class' : 'status_pass',                'email_alias' : 'AssessmentExcellent'},
             '5' : {'label' : 'PASS',            'class' : 'status_pass',                'email_alias' : 'AssessmentPass'},
@@ -108,7 +108,7 @@ $business_profile_id = $business_profile_id['data'];
             '7' : {'label' : 'FAIL',            'class' : 'status_fail',                'email_alias' : 'AssessmentFail'},
             '8' : {'label' : 'ATTENDED',        'class' : 'status_pass',                'email_alias' : 'AppointmentAttended'},
             '9':  {'label' : 'CANCELLED',       'class' : 'event_status_cancelled',     'email_alias' : 'AppointmentCancelled'},
-            '10': {'label' : 'LATE CANCEL',     'class' : 'status_fail',                'email_alias' : 'AppointmentLatecancel'},
+            '10' : {'label' : 'ASSESSING',       'class' : 'event_status_assessing',     'email_alias' : 'AssessmentAssessing'},
             '11': {'label' : 'NO SHOW',         'class' : 'status_fail',                'email_alias' : 'AppointmentNoshow'}, 
             '12': {'label' : 'CONFIRMED',       'class' : 'event_status_scheduled',     'email_alias' : 'AppointmentConfirmed'}, 
         },

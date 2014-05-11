@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
 	<fieldset name="component"
-		label="COM_FITNESS_COMPONENT_LABEL"
-		description="COM_FITNESS_COMPONENT_DESC"
+		label="Fitness"
+		description=""
 	>
 
-        <field name="test"
-             type="radio"
-             default="1"
-             label="COM_FITNESS_TEST_LABEL"
-             description="COM_FITNESS_TEST_DESC">
-                 <option value="0">JHIDE</option>
-                 <option value="1">JSHOW</option>
-         </field>
+            
+            <field name="status_attended"
+                 type="hidden"
+                 default="1"
+             >
+             </field>
+
+
+             <field name="status_attended_name"
+                 type="hidden"
+                 default="ATTENDED"
+             >
+             </field>
+
+
+
+
 
 	</fieldset>
 
