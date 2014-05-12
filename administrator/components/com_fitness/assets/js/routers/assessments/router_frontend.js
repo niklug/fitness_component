@@ -15,7 +15,11 @@ define([
         'views/assessments/frontend/form',
         'views/programs/backend/comments_block',
         'views/assessments/frontend/form_standard_assessment',
-        'views/assessments/frontend/form_bio_assessment'
+        'views/assessments/frontend/form_bio_assessment',
+        'views/graph/graph',
+        
+        'jquery.flot',
+        'jquery.flot.time'
         
 ], function (
         $,
@@ -34,7 +38,8 @@ define([
         Form_view,
         Comments_block_view,
         Form_standard_assessment_view,
-        Form_bio_assessment_view        
+        Form_bio_assessment_view,
+        Graph_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -136,6 +141,8 @@ define([
         list_actions : function () {
             $("#submenu_container").html(new Submenu_list_view({model : app.models.request_params}).render().el);
             
+            new Graph_view({el : "#graph_container", model : app.models.request_params, head_title : 'MY GOALS & ASSESSMENTS'});
+            
             $(".menu_link").removeClass("active_link");
             
             $("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
@@ -226,6 +233,7 @@ define([
         
 
         item_view : function(id) {
+            this.removeGraph();
             var self = this;
             app.models.item.set({id : id});
             app.models.item.fetch({
@@ -240,6 +248,10 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        removeGraph : function() {
+            $("#graph_container").empty();
         },
         
         connectStatus : function(model, view) {
@@ -303,6 +315,7 @@ define([
         },
         
         form_view : function(id) {
+            this.removeGraph();
             $("#filters_container").empty();
             if(!parseInt(id)) {
                 this.load_form_view(new Item_model());

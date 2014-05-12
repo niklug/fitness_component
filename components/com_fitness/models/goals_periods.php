@@ -223,7 +223,7 @@ class FitnessModelgoals_periods extends JModelList {
     }
     
     
-    public function getUserPans($client_id, $nutrition_plan_id, $type) {
+    public function getUserPlans($client_id, $nutrition_plan_id, $type) {
         $db = JFactory::getDbo();
         $query = "SELECT a.*, 
              (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
@@ -280,7 +280,7 @@ class FitnessModelgoals_periods extends JModelList {
                 $client_id = JRequest::getVar('client_id');
 
                 if($client_id) {
-                    $plans = $this->getUserPans($client_id, $id, 'old');
+                    $plans = $this->getUserPlans($client_id, $id, 'old');
                     return $plans;
                 } 
 

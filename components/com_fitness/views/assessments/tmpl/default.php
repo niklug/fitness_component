@@ -16,9 +16,8 @@ defined('_JEXEC') or die;
     <div  id="mainmenu"></div>
     
     <div class="clr"></div>
-    <br/>
     
-    <div id="filters_container"></div>
+    <div id="graph_container" >  </div>
     
     <div class="clr"></div>
     

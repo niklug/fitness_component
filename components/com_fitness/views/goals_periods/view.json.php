@@ -56,6 +56,11 @@ class FitnessViewGoals_periods extends JView {
         $model = $this -> getModel("goals_periods");
         echo json_encode($model->onBusinessNameChange($data_encoded, $table));
     }
+    
+    function getTrainingPeriod() {
+         $helper = new FitnessHelper();
+         echo json_encode($helper->getTrainingPeriod());
+    }
 
     
 }
