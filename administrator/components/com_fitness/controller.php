@@ -83,6 +83,18 @@ class FitnessController extends JController
    		$view -> getGraphData();
 	}
         
+        function getTrainingPeriod() {
+            $view = $this -> getView('goals', 'json');
+            $view->setModel($this->getModel('goals'));
+            $view -> getTrainingPeriod(); 
+        }
+        
+        function populateGoals() {
+            $view = $this -> getView('goals', 'json');
+            $view->setModel($this->getModel('goals'));
+            $view -> populateGoals(); 
+        }
+        
         
         // Recipes
         //------------------------------------------------------

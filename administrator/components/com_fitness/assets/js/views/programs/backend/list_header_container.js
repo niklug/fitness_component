@@ -5,7 +5,11 @@ define([
         'app',
         'views/programs/select_filter_block',
         'views/programs/backend/search_block',
-	'text!templates/programs/backend/list_header_container.html'
+        'views/graph/graph',
+	'text!templates/programs/backend/list_header_container.html',
+        
+        'jquery.flot',
+        'jquery.flot.time'
 ], function (
         $,
         _,
@@ -13,6 +17,7 @@ define([
         app, 
         Select_filter_block_view,
         Search_block_view,
+        Graph_view,
         template 
     ) {
 
@@ -24,12 +29,26 @@ define([
             var template = _.template(this.template());
             this.$el.html(template);
             
-            this.connectFiltersBlock();
-            
-            this.connectSearchBlock();
+            this.onRender();
             
             return this;
         },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                self.connectFiltersBlock();
+            
+                self.connectSearchBlock();
+
+                self.connectGraph();
+            });
+        },
+        
+        connectGraph : function() {
+            new Graph_view({el : "#graph_container", model : this.model, show_client_select : true});
+        },
+
 
         connectFiltersBlock : function() {
             

@@ -18,12 +18,12 @@
             <table>
                 <tr>
                     <td>
-                        <div class="graph-container" style="width:780px;">
+                        <div class="graph-container" style="width:780px;margin: 0;">
                             <div id="placeholder" class="graph-placeholder"></div>
                         </div>
                     </td>
                     <td style="vertical-align: top;">
-                        <fieldset style="width:140px !important;">
+                        <fieldset style="width:155px !important;">
                             <legend class="grey_title">Training Period Keys</legend>
                             <div id="training_period_container"></div>
                         </fieldset>
@@ -31,5 +31,15 @@
                 </tr>
             </table>
         </div>
+        <% if(show_client_select) { %>
+        <table width="100%">
+            <tr>
+                <td width="200" id="graph_business_name_select"></td>
+                <td width="200" id="graph_trainer_select"></td>
+                <td width="200" id="graph_client_select"></td>
+                <td></td>
+            </tr>
+        </table>
+        <% } %>
     </div>
 </div>

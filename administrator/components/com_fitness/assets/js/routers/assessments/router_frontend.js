@@ -106,11 +106,12 @@ define([
         },
         
         my_progress : function() {
-            app.models.request_params.set({page : 1, current_page : 'my_progress', published : '1', frontend_published : '2',  uid : app.getUniqueId()});
-            
-            this.list_actions();
-            
+            $(".menu_link").removeClass("active_link");
+            $("#submenu_container").empty();
+            $("#main_container").html('To be developed..');           
             $("#my_progress_link").addClass("active_link");
+            this.removeGraph();
+            
         },
         
         self_assessments : function() {

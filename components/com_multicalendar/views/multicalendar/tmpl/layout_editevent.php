@@ -526,12 +526,6 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/details.inc.php' );
     ?>
-    <!-- Exicise table --> 
-    <?php
-    if (isset($event->id)) {
-        require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/exercises.inc.php' );
-    }
-    ?>
     <!-- Trainer Feedback / Comments -->
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/comments.inc.php' );

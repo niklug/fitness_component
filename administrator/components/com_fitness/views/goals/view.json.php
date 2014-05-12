@@ -72,4 +72,15 @@ class FitnessViewGoals extends JView {
 	    echo $model->checkOverlapDate($data_encoded, $table);
 	}
         
+        function getTrainingPeriod() {
+             $helper = new FitnessHelper();
+             echo json_encode($helper->getTrainingPeriod());
+        }
+        
+        function populateGoals() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'goals_periods.php';
+            $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
+            $model = new FitnessModelgoals_periods();
+            echo $model->populateGoals($data_encoded);
+        }
 }

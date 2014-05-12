@@ -181,10 +181,16 @@ class FitnessModelgoals_periods extends JModelList {
     
     public function populateGoals($data_encoded) {
         $model_backend = new FitnessModelgoals();
+        
+        $data = json_decode($data_encoded);
+        
+        $client_id = $data->client_id;
+                
+        if(!$client_id) {
+            $client_id = JFactory::getUser()->id;
+        }
 
-        $user = &JFactory::getUser();
-
-        $data = $model_backend->getGraphData($user->id, $data_encoded);
+        $data = $model_backend->getGraphData($client_id, $data_encoded);
 
         return $data; 
     }

@@ -4,6 +4,10 @@ define([
     'backbone',
     'app',
     'collections/graph/training_periods',
+    'collections/exercise_library/business_profiles',
+    'collections/programs/trainers',
+    'collections/programs/trainer_clients',
+    'views/programs/select_element',
     'text!templates/graph/graph.html',
 ], function(
         $,
@@ -11,37 +15,79 @@ define([
         Backbone,
         app,
         Periods_collection,
+        Business_profiles_collection, 
+        Trainers_collection,
+        Trainer_clients_collection,
+        Select_element_view,
         template
         ) {
 
     var view = Backbone.View.extend({
         
         initialize: function() {
-            if( 
-                app.collections.training_periods 
-            ) {
+            this.show_client_select = this.options.show_client_select || false;
+            
+            if(app.collections.training_periods && !this.show_client_select) {
                 this.render();
                 return;
+            }
+            
+            if(app.collections.training_periods && this.show_client_select) {
+                
+                if(app.collections.business_profiles && app.collections.trainers) {
+                    this.render();
+                    return;
+                }
             } 
       
             app.collections.training_periods = new Periods_collection();
+            app.collections.business_profiles = new Business_profiles_collection();
+            app.collections.trainers = new Trainers_collection();
+            
                        
             var self = this;
-            $.when (
-                app.collections.training_periods.fetch({
-                    success : function (collection, response) {
-                        //console.log(collection);
-                    },
-                    error : function (collection, response) {
-                        alert(response.responseText);
-                    }
+            
+            if(!this.show_client_select) {
+                $.when (
+                    app.collections.training_periods.fetch({
+                        success : function (collection, response) {
+                            //console.log(collection);
+                        },
+                        error : function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                ).then (function(response) {
+                    self.render();
                 })
                 
+            } else {
                 
+                $.when (
+                    app.collections.training_periods.fetch({
+                        success : function (collection, response) {
+                            //console.log(collection);
+                        },
+                        error : function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    }),
+                    
+                    app.collections.business_profiles.fetch({
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    }),
 
-            ).then (function(response) {
-                self.render();
-            })
+                    app.collections.trainers.fetch({
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                ).then (function(response) {
+                    self.render();
+                })
+            }
         },
         
         template: _.template(template),
@@ -50,6 +96,7 @@ define([
             
             var data = {};
             data.head_title = this.options.head_title || false;
+            data.show_client_select = this.show_client_select;
             $(this.el).html(this.template(data));
             
             this.onRender();
@@ -57,12 +104,134 @@ define([
             return this;
         },
         
+        events : {
+            "change #graph_business_profile_id " : "onChangeBusinessName",
+            "change #graph_trainer_id" : "onChangeTrainer",
+            "change #graph_client_id" : "onChangeClient",
+            
+        },
+        
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
                 self.getGraphData();
                 self.populateTrainingPerions();
+                
+                if(self.show_client_select) {
+                    self.connectBusinessSelect();
+                    
+                    var business_profile_id = app.options.business_profile_id;
+                    if(business_profile_id) {
+                        self.loadTrainersSelect(business_profile_id);
+                    }
+                    
+                    var trainer_id = $(self.el).find("#graph_trainer_id").val();
+                    if(trainer_id) {
+                        self.loadClientsSelect(trainer_id);
+                    }
+                    
+   
+                }
             });
+        },
+        
+        connectBusinessSelect : function() {
+            var business_name_collection = new Backbone.Collection;
+            
+            var element_disabled = '';
+            
+            if(app.options.is_trainer) {
+                business_name_collection.add(app.collections.business_profiles.where({id : app.options.business_profile_id}));
+                element_disabled = 'disabled';
+            }
+            
+            if(app.options.is_superuser) {
+                business_name_collection = app.collections.business_profiles;
+            }
+            
+             new Select_element_view({
+                model : new Backbone.Model({business_profile_id : app.options.business_profile_id}),
+                el : $(this.el).find("#graph_business_name_select"),
+                collection : business_name_collection,
+                first_option_title : '- Business profile-',
+                id_name : 'graph_business_profile_id',
+                model_field : 'business_profile_id',
+                element_disabled : element_disabled
+
+            }).render();
+        },
+        
+        onChangeBusinessName : function(event) {
+            var business_profile_id = $(event.target).val();
+            
+            this.loadTrainersSelect(business_profile_id);
+        },
+        
+        loadTrainersSelect : function(business_profile_id) {
+            var trainers_collection = new Backbone.Collection;
+            
+            trainers_collection.add(app.collections.trainers.where({business_profile_id : business_profile_id}));
+            
+            //console.log(trainers_collection);
+            
+            var element_disabled = '';
+            
+            //allow select only for trainer administrator
+            
+            if(app.options.is_simple_trainer) {
+                element_disabled = 'disabled';
+            }
+            
+            if(app.options.is_trainer && !app.options.is_trainer_administrator) {
+                this.model.set({trainer_id : app.options.user_id});
+            }
+            
+            new Select_element_view({
+                model : new Backbone.Model({trainer_id : app.options.user_id}),
+                el : $(this.el).find("#graph_trainer_select"),
+                collection : trainers_collection,
+                first_option_title : '-Select-',
+                class_name : '',
+                id_name : 'graph_trainer_id',
+                model_field : 'trainer_id',
+                element_disabled : element_disabled
+            }).render();
+        },
+        
+        onChangeTrainer : function(event) {
+            var trainer_id = $(event.target).val();
+            this.loadClientsSelect(trainer_id);
+        },
+        
+        loadClientsSelect : function(trainer_id) {
+            var self = this;
+            var trainer_clients_collection = new Trainer_clients_collection();
+            trainer_clients_collection.fetch({
+                data : {trainer_id : trainer_id},
+                success : function (collection, response) {
+                    new Select_element_view({
+                        model : new Backbone.Model({client_id : localStorage.getItem('client_id')}),
+                        el : $(self.el).find("#graph_client_select"),
+                        collection : collection,
+                        value_field : 'client_id',
+                        first_option_title : '-Select-',
+                        class_name : '',
+                        model_field : 'client_id',
+                        id_name : 'graph_client_id',
+                    }).render();
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            })
+        },
+        
+        onChangeClient : function(event) {
+            var client_id = $(event.target).val();
+            //console.log(client_id);
+            localStorage.setItem('client_id', client_id);
+            delete app.models.graph_data;
+            this.getGraphData();
         },
         
         getGraphData: function() {
@@ -72,15 +241,20 @@ define([
             } 
 
             var data = {};
-            var url = app.options.fitness_frontend_url;
+            var url = app.options.ajax_call_url;
             var view = 'goals_periods';
             var task = 'populateGoals';
             var table = '';
             var list_type = '';
             data.list_type = list_type;
+            
+            if(this.show_client_select) {
+                data.client_id = localStorage.getItem('client_id');
+            }
+            
             var self = this;
             $.AjaxCall(data, url, view, task, table, function(output) {
-                //console.log(output);
+                console.log(output);
                 app.models.graph_data = new Backbone.Model();
                 app.models.graph_data.set({data : output});
                 
@@ -89,7 +263,7 @@ define([
         },
         
         setGraphData: function(goals) {
-            console.log(goals);
+            //console.log(goals);
             var data = {};
             var primary_goals_data = this.setPrimaryGoalsGraphData(goals.primary_goals);
             $.extend(true, data, primary_goals_data);

@@ -551,8 +551,6 @@
         function personalTrainingForm() {
             $("#clients_wrapper").hide();
             $("#assessment_wrapper").hide();
-            $("#details_wrapper").show();
-            $("#exercises_wrapper").show();
             $("#comments_wrapper").show();
             //client personal
             $("#client_select_tr").show();
@@ -574,8 +572,6 @@
         function semiPrivateForm() {
             $("#clients_wrapper").show();
             $("#assessment_wrapper").hide();
-            $("#details_wrapper").show();
-            $("#exercises_wrapper").show();
             $("#comments_wrapper").show();
             //client personal
             $("#client_select_tr").hide();
@@ -606,9 +602,6 @@
             <?php if (isset($event->id)) { ?>
             $("#clients_wrapper").hide();
             $("#assessment_wrapper").show();
-
-            $("#details_wrapper").hide();
-            $("#exercises_wrapper").hide();
             $("#comments_wrapper").hide();
             //client personal
             $("#client_select_tr").show();
@@ -627,7 +620,6 @@
 
         function consultationForm() {
             semiPrivateForm();
-            $("#exercises_wrapper").hide();
             $("#comments_wrapper").hide();
         }
 
