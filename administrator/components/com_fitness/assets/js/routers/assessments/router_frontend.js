@@ -142,7 +142,24 @@ define([
         list_actions : function () {
             $("#submenu_container").html(new Submenu_list_view({model : app.models.request_params}).render().el);
             
-            new Graph_view({el : "#graph_container", model : app.models.request_params, head_title : 'MY GOALS & ASSESSMENTS'});
+            new Graph_view({
+                el : "#graph_container",
+                model : this.model,
+                show : {
+                    primary_goals : true,
+                    mini_goals : true,
+                    personal_training : false,
+                    semi_private : false,
+                    resistance_workout : false,
+                    cardio_workout : false,
+                    assessment : true,
+                    current_time : true,
+                    
+                    client_select : false,
+                    choices : false
+                },
+                style : 'dark'
+            });
             
             $(".menu_link").removeClass("active_link");
             

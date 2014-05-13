@@ -46,7 +46,24 @@ define([
         },
         
         connectGraph : function() {
-            new Graph_view({el : "#graph_container", model : this.model, show_client_select : true});
+            new Graph_view({
+                el : "#graph_container",
+                model : this.model,
+                show : {
+                    primary_goals : true,
+                    mini_goals : true,
+                    personal_training : true,
+                    semi_private : true,
+                    resistance_workout : true,
+                    cardio_workout : true,
+                    assessment : false,
+                    current_time : true,
+                    
+                    client_select : true,
+                    choices : true
+                },
+                style : ''
+            });
         },
 
 

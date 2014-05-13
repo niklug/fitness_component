@@ -25,7 +25,8 @@ define([
     var view = Backbone.View.extend({
         
         initialize: function() {
-            this.show_client_select = this.options.show_client_select || false;
+            this.show_client_select = this.options.show.client_select || false;
+            this.show = this.options.show || false;
             
             if(app.collections.training_periods && !this.show_client_select) {
                 this.render();
@@ -97,6 +98,7 @@ define([
             var data = {};
             data.head_title = this.options.head_title || false;
             data.show_client_select = this.show_client_select;
+            data.show = this.options.show;
             $(this.el).html(this.template(data));
             
             this.onRender();
@@ -130,6 +132,9 @@ define([
                         self.loadClientsSelect(trainer_id);
                     }
                     
+                    if(self.options.show.choices) {
+                        $(self.el).find("#choices").show();
+                    }
    
                 }
             });
@@ -234,6 +239,8 @@ define([
             this.getGraphData();
         },
         
+        
+        //GRAPH
         getGraphData: function() {
             if(app.models.graph_data) {
                 this.setGraphData( app.models.graph_data.get('data'));
@@ -262,17 +269,42 @@ define([
             });
         },
         
-        setGraphData: function(goals) {
+        setGraphData: function(response) {
             //console.log(goals);
             var data = {};
-            var primary_goals_data = this.setPrimaryGoalsGraphData(goals.primary_goals);
-            $.extend(true, data, primary_goals_data);
-            var mini_goals_data = this.setMiniGoalsGraphData(goals.mini_goals);
-            $.extend(true, data, mini_goals_data);
+
+            // primary goals
+            var primary_goals_data = this.setPrimaryGoalsGraphData(response.primary_goals);
+            $.extend(true,data, primary_goals_data);
+
+            // mini goals
+            var mini_goals_data = this.setMiniGoalsGraphData(response.mini_goals);
+            $.extend(true,data, mini_goals_data);
+
+            // Personal training
+            var personal_training_data = this.setAppointmentGraphData('personal_training', response.personal_training, 3);
+            $.extend(true,data, personal_training_data);
+            //console.log(personal_training_data);
+
+            // Semi-Private Training
+            var semi_private_data = this.setAppointmentGraphData('semi_private', response.semi_private, 4);
+            $.extend(true,data, semi_private_data);
+
+            // Resistance Workout
+            var resistance_workout_data = this.setAppointmentGraphData('resistance_workout', response.resistance_workout, 5);
+            $.extend(true,data, resistance_workout_data);
+
+            // Cardio Workout
+            var cardio_workout_data = this.setAppointmentGraphData('cardio_workout', response.cardio_workout, 6);
+            $.extend(true,data, cardio_workout_data);
+
+            // Assessment
+            var assessment_data = this.setAppointmentGraphData('assessment', response.assessment, 7);
+            $.extend(true,data, assessment_data);  
             this.drawGraph(data);
         },
         
-        setPrimaryGoalsGraphData: function(primary_goals) {
+        setPrimaryGoalsGraphData : function(primary_goals) {
             var data = {};
             data.primary_goals = this.x_axisDateArray(primary_goals, 2, 'deadline');
             data.client_primary = this.graphItemDataArray(primary_goals, 'client_name');
@@ -280,10 +312,11 @@ define([
             data.start_primary = this.graphItemDataArray(primary_goals, 'start_date');
             data.finish_primary = this.graphItemDataArray(primary_goals, 'deadline');
             data.status_primary = this.graphItemDataArray(primary_goals, 'status');
+
             return data;
         },
-        
-        setMiniGoalsGraphData: function(mini_goals) {
+
+        setMiniGoalsGraphData : function(mini_goals) {
             var data = {};
             data.mini_goals_start_date = this.x_axisDateArray(mini_goals, 1, 'start_date');
             data.mini_goals = this.x_axisDateArray(mini_goals, 1, 'deadline');
@@ -293,25 +326,49 @@ define([
             data.finish_mini = this.graphItemDataArray(mini_goals, 'deadline');
             data.status_mini = this.graphItemDataArray(mini_goals, 'status');
             data.training_period_colors = this.graphItemDataArray(mini_goals, 'training_period_color');
-
             return data;
         },
-        
-        x_axisDateArray: function(data, y_value, field) {
-            var x_axis_array = [];
-            for (var i = 0; i < data.length; i++) {
-                var unix_time = new Date(Date.parse(data[i][field])).getTime();
-                x_axis_array[i] = [unix_time, y_value];
-            }
-            return x_axis_array;
+
+        setAppointmentGraphData : function(type, appointment, y_axis) {
+            var data = {};
+
+            data[type + '_xaxis'] = this.x_axisDateArray(appointment, y_axis, 'starttime');
+            data[type + '_session_type'] = this.graphItemDataArray(appointment, 'session_type');
+            data[type + '_session_focus'] = this.graphItemDataArray(appointment, 'session_focus');
+            data[type + '_date'] = this.graphItemDataArray(appointment, 'starttime');
+            data[type + '_trainer'] = this.graphItemDataArray(appointment, 'trainer_name');
+            data[type + '_location'] = this.graphItemDataArray(appointment, 'location');
+            data[type + '_appointment_color'] = this.graphItemDataArray(appointment, 'color');
+
+            //console.log(data);
+            return data;      
         },
-        
-        graphItemDataArray: function(data, type) {
-            var items = [];
-            for (var i = 0; i < data.length; i++) {
+
+
+        graphItemDataArray : function graphItemDataArray(data, type) {
+            var items = []; 
+            for(var i = 0; i < data.length; i++) {
                 items[i] = data[i][type];
             }
             return items;
+        },
+
+
+        x_axisDateArray : function (data, y_value, field) {
+            var x_axis_array = []; 
+
+            for(var i = 0; i < data.length; i++) {
+                //console.log(data[i][field]);
+                var unix_time = new Date(Date.parse(data[i][field])).getTime();
+
+                //console.log(unix_time);
+
+                //var date = new Date(unix_time);
+
+                //console.log(date);
+                x_axis_array[i] = [unix_time, y_value];
+            }
+            return x_axis_array;
         },
         
         drawGraph: function(client_data) {
@@ -327,64 +384,124 @@ define([
             var end_year_next = new Date(new Date().getFullYear() + 1, 12, 0).getTime();
 
             var date = new Date();
-            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() - 60 * 59 * 24 * 1000;
-            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime() + 60 * 59 * 24 * 1000;
+            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() - 60*59*24 * 1000;
+            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime() + 60*59*24 * 1000;
+
+
+            //var start_week = 1375056000000;
+            //var end_week = 1375574400000;
+
+            var start_week = this.startAndEndOfWeek(new Date())[0];
+            var end_week = this.startAndEndOfWeek(new Date())[1];
+
+            var start_day = (new Date(date.getFullYear(), date.getMonth(),date.getDate())).getTime();
+            var end_day = (new Date(date.getFullYear(), date.getMonth(), date.getDate())).getTime() + 60*60*24 * 1000;
+            //alert(date.getDate());
+
             // END TIME SETTINGS
 
             // DATA
             // Primary Goals
+            //var d1 = [[1377993600 * 1000, 2]];
             var d1 = client_data.primary_goals;
 
-            //console.log(d1);
-
+            //console.log(markings);
+            //
             // Mini Goals
+            //var d2 = [[1320376000 * 1000, 1], [1330376000 * 1000, 1], [1340376000 * 1000, 1], [1350998400 * 1000, 1], [1374710400 * 1000, 1]];
             var d2 = client_data.mini_goals;
-            // Current Time
-            var d8 = [[current_time, 3]];
-            // Training Periods colors
+
             var training_period_colors = client_data.training_period_colors;
 
-            // Training periods 
-            var markings = [];
-            for (var i = 0; i < d2.length; i++) {
-                markings[i] = {xaxis: {from: client_data.mini_goals_start_date[i][0], to: d2[i][0]}, yaxis: {from: 0.25, to: 0.75}, color: training_period_colors[i]};
+           // Training periods 
+            var markings = []; 
+            for(var i = 0; i < d2.length; i++) {
+                markings[i] =  { xaxis: { from: client_data.mini_goals_start_date[i][0], to: d2[i][0] }, yaxis: { from: 0.25, to: 0.75 }, color: training_period_colors[i]};
             }
 
 
-            var data = [
-                {label: "Primary Goal", data: d1},
-                {label: "Mini Goal", data: d2},
-                {label: "Current Time", data: d8}
-            ];
-            // END DATA
+            var d3 = client_data.personal_training_xaxis;
 
-            // START OPTIONS
+            var d4 = client_data.semi_private_xaxis; 
+
+            var d5 = client_data.resistance_workout_xaxis;
+
+            var d6 = client_data.cardio_workout_xaxis;
+
+            var d7 = client_data.assessment_xaxis;
+
+            // Current Time
+            var d8 = [[current_time, 8]];
+            
             // base common options
             var options = {
                 xaxis: {mode: "time", timezone: "browser"},
                 yaxis: {show: false},
                 series: {
-                    lines: {show: false},
-                    points: {show: true, radius: 5, symbol: "circle", fill: true, fillColor: "#0E0704"},
+                    lines: {show: false },
+                    points: {show: true, radius: 5, symbol: "circle", fill: true, fillColor: "#FFFFFF" },
                     bars: {show: true, lineWidth: 3},
                 },
                 grid: {
-                    hoverable: true,
-                    clickable: true,
-                    backgroundColor: {
-                        colors: ["#0E0704", "#0E0704"]
-                    },
-                    markings: markings,
-                    markingsColor: "#0E0704",
-                    color: "#C0C0C0"
+                            hoverable: true,
+                            clickable: true,
+                            backgroundColor: {
+                                 colors: ["#FFFFFF", "#F0F0F0"]
+                            },
+                            markings: markings,
+                            markingsColor: "#F2F2F2"
                 },
-                legend: {show: true, margin: [0, 0], backgroundColor: "none", labelBoxBorderColor: "none"},
-                colors: [
-                    "#A3270F", // Primary Goal
-                    "#287725", // Mimi Goal
-                    "#FFB01F"// Current Time
-                ]
+                legend: {show: true, margin: [0, 0], backgroundColor : "transparent"},
+
+                colors: []
             };
+            
+            if(this.options.style == 'dark') {
+                options.grid.backgroundColor.colors =  ["#0E0704", "#0E0704"];
+                options.grid.markingsColor =  "#0E0704";
+                options.grid.color =  "#C0C0C0";
+                options.series.points.fillColor =  "#0E0704";
+            }
+
+            // set show data
+            var data = [];
+
+            if(this.show.primary_goals) {
+                data.push({label: "Primary Goal", data: d1});
+                options.colors.push("#A3270F");
+            }
+            if(this.show.mini_goals) {
+                data.push({label: "Mini Goal", data: d2});
+                options.colors.push("#287725");
+            }
+            if(this.show.personal_training) {
+                data.push({label: "Personal Training", data: d3});
+                options.colors.push(client_data.personal_training_appointment_color[0] || "#00BF32");
+            }
+            if(this.show.semi_private) {
+                data.push({label: "Semi-Private Training", data: d4});
+                options.colors.push(client_data.semi_private_appointment_color[0] || "#007F01");
+            }
+            if(this.show.resistance_workout) {
+                data.push({label: "Resistance Workout", data: d5});
+                options.colors.push(client_data.resistance_workout_appointment_color[0] || "#0070FF");
+            }
+            if(this.show.cardio_workout) {
+                data.push({label: "Cardio Workout", data: d6});
+                options.colors.push(client_data.cardio_workout_appointment_color[0] || "#E94E1B");
+            }
+            if(this.show.assessment) {
+                data.push({label: "Assessment", data: d7});
+                options.colors.push(client_data.assessment_appointment_color[0] || "#E6007E");
+            }
+            if(this.show.current_time) {
+                data.push({label: "Current Time", data: d8});
+                options.colors.push("#FFB01F");
+            }
+            //
+
+            
+            
             // year options
             var options_year_previous = {xaxis: {tickSize: [1, "month"], min: start_year_previous, max: end_year_previous}};
             $.extend(true, options_year_previous, options);
@@ -481,44 +598,79 @@ define([
                 self.plotAccordingToChoices(data, current_options);
             });
 
-            this.plotAccordingToChoices(data, current_options);
+             // TOOGLE
+            // insert checkboxes 
+            $(this.el).find("#choices").die().empty();
+            $.each(data, function(key, val) {
+                $(self.el).find("#choices").die().append(
+                    "<br/><input type='checkbox' name='" + key +
+                    "' checked='checked' id='id" + key + "'></input>" +
+                    "<label for='id" + key + "'>"
+                    + val.label + "</label>"
+                );
+            });
+            $(this.el).find("#choices").find("input").die().click(function() {
+                self.plotAccordingToChoices(data, current_options);
+            });
+            self.plotAccordingToChoices(data, current_options);
+            //END TOOGLE
+            
+            var tooltip_color = "#000";
+            
+            if(this.options.style == 'dark') {
+                tooltip_color = "#fff";
+            }
 
             $("<div id='tooltip'></div>").css({
-                position: "absolute",
-                display: "none",
-                border: "2px solid #cccccc",
-                "border-radius": "10px",
-                padding: "5px",
-                "background-color": "#fee",
-                opacity: 0.9,
-                color: "#fff",
-                "text-align": "left",
+                    position: "absolute",
+                    display: "none",
+                    border: "2px solid #cccccc",
+                    "border-radius": "10px",
+                    padding: "5px",
+                    "background-color": "#fee",
+                    opacity: 0.9,
+                    color : tooltip_color
             }).appendTo("body");
 
-            $("#placeholder").bind("plothover", function(event, pos, item) {
+            $("#placeholder").die().bind("plothover", function (event, pos, item) {
                 if (item) {
                     var data_type = item.datapoint[1];
-                    var html = "<p style=\"text-align:center;\"><b>" + item.series.label + "</b></p>";
+                    var html = "<p style=\"text-align:center;\"><b>" +  item.series.label + "</b></p>";
 
-                    switch (data_type) {
+                    switch(data_type) {
                         case 1 : // Mini Goals
-                            html += "Client: " + client_data.client_mini[item.dataIndex] + "</br>";
-                            html += "Goal: " + (client_data.goal_mini[item.dataIndex] || '') + "</br>";
-                            html += "Start: " + client_data.start_mini[item.dataIndex] + "</br>";
-                            html += "Finish: " + client_data.finish_mini[item.dataIndex] + "</br>";
-                            html += "Status: " + (self.getStatusById(client_data.status_mini[item.dataIndex]) || '') + "</br>";
+                            html +=  "Client: " +  client_data.client_mini[item.dataIndex] + "</br>";
+                            html +=  "Goal: " +  (client_data.goal_mini[item.dataIndex] || '') + "</br>";
+                            html +=  "Start: " +  client_data.start_mini[item.dataIndex] + "</br>";
+                            html +=  "Finish: " +  client_data.finish_mini[item.dataIndex] + "</br>";
+                            html +=  "Status: " +  (self.getStatusById(client_data.status_mini[item.dataIndex]) || '') + "</br>"; 
                             $("#tooltip").css("background-color", "#287725");
                             break;
                         case 2 : // Primary Goals
-                            html += "Client: " + client_data.client_primary[item.dataIndex] + "</br>";
-                            html += "Goal: " + (client_data.goal_primary[item.dataIndex] || '') + "</br>";
-                            html += "Start: " + client_data.start_primary[item.dataIndex] + "</br>";
-                            html += "Finish: " + client_data.finish_primary[item.dataIndex] + "</br>";
-                            html += "Status: " + (self.getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>";
+                            html +=  "Client: " +  client_data.client_primary[item.dataIndex] + "</br>";
+                            html +=  "Goal: " +  (client_data.goal_primary[item.dataIndex] || '') + "</br>";
+                            html +=  "Start: " +  client_data.start_primary[item.dataIndex] + "</br>";
+                            html +=  "Finish: " +  client_data.finish_primary[item.dataIndex] + "</br>";
+                            html +=  "Status: " +  (self.getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>"; 
                             $("#tooltip").css("background-color", "#A3270F");
                             break;
-                        case 3 : // Current Time
-                            html = "Current Time";
+                        case 3 : // Personal Training
+                            html =  self.setAppointmentsTooltip(html, client_data, item, 'personal_training');
+                            break;
+                        case 4 : // Semi-Private Training
+                            html =  self.setAppointmentsTooltip(html, client_data, item, 'semi_private');
+                            break;
+                        case 5 : // Resistance Workout
+                            html =  self.setAppointmentsTooltip(html, client_data, item, 'resistance_workout');
+                            break;
+                        case 6 : //  Cardio Workout
+                            html =  self.setAppointmentsTooltip(html, client_data, item, 'cardio_workout');
+                              break;
+                        case 7 : // Assessment
+                            html =  self.setAppointmentsTooltip(html, client_data, item, 'assessment');
+                            break;
+                        case 8 : // Current Time
+                            html =  "Current Time" ;
                             $("#tooltip").css("background-color", "#FFB01F");
                             break;
                         default :
@@ -526,10 +678,10 @@ define([
                     }
 
                     $("#tooltip").html(html)
-                            .css({top: item.pageY + 5, left: item.pageX + 5})
-                            .fadeIn(200);
+                        .css({top: item.pageY+5, left: item.pageX+5})
+                        .fadeIn(200);
                 } else {
-                    $("#tooltip").hide();
+                        $("#tooltip").hide();
                 }
 
             });
@@ -537,10 +689,44 @@ define([
 
         },
         
-        plotAccordingToChoices: function(data, options) {
-            if (data.length > 0) {
-                $.plot("#placeholder", data, options);
+        plotAccordingToChoices : function(data, options) {
+            var data_temp = [];
+            var colors = [];
+            $(this.el).find("#choices").die().find("input:checked").each(function () {
+                var key = $(this).attr("name");
+                if (key && data[key]) {
+                        data_temp.push(data[key]);
+                        colors.push(options.colors[key]);
+
+                }
+            });
+
+            var choosen_options = {};
+
+            $.extend(true, choosen_options, options);
+
+            choosen_options.colors = [];
+
+            choosen_options.colors = colors;
+
+            //console.log(choosen_options.colors);
+            //console.log(options.colors);
+            if (data_temp.length > 0) {
+                    $.plot("#placeholder", data_temp, choosen_options);
             }
+        },
+        
+        setAppointmentsTooltip : function(html, client_data, item, type) {
+
+           $("#tooltip").css("background-color", client_data[type + '_appointment_color'][0]);
+
+           html +=  "Session Type: " +  client_data[type + '_session_type'][item.dataIndex] + "</br>";
+           html +=  "Session Focus: " +  client_data[type + '_session_focus'][item.dataIndex] + "</br>";
+           html +=  "Date: " +  client_data[type + '_date'][item.dataIndex] + "</br></br>";
+           html +=  "Trainer: " +  client_data[type + '_trainer'][item.dataIndex] + "</br>";
+           html +=  "Location: " +  client_data[type + '_location'][item.dataIndex] + "</br>"; 
+
+           return html;
         },
         
         getStatusById: function(id) {
@@ -573,13 +759,33 @@ define([
         
         populateTrainingPerions : function() {
             var el = $(this.el).find("#training_period_container");
-            
             _.each(app.collections.training_periods.models, function(model) {
                 var color =  '<div style="float:left;margin-right:5px;width:15px; height:15px;background-color:' + model.get('color') + '" ></div>';
                 var name = '<div class="grey_title"> ' + model.get('name') + '</div>';
-                var html = color + name;
+                var html = color + name + '<div class="clr"></div>';
                 el.append(html);
             });
+        },
+        
+        startAndEndOfWeek : function(date) {
+
+          // If no date object supplied, use current date
+          // Copy date so don't modify supplied date
+          var now = date? new Date(date) : new Date();
+
+          // set time to some convenient value
+          now.setHours(0,0,0,0);
+
+          // Get the previous Monday
+          var monday = new Date(now);
+          monday.setDate(monday.getDate() - monday.getDay() + 1);
+
+          // Get next Sunday
+          var sunday = new Date(now);
+          sunday.setDate(sunday.getDate() - sunday.getDay() + 7);
+
+          // Return array of date objects
+          return [monday, sunday];
         }
 
     });

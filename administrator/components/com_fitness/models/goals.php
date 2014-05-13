@@ -620,8 +620,11 @@ class FitnessModelgoals extends JModelList {
     
     function getAppointmentsGraphData($client_id, $title) {
         $db = &JFactory::getDBo();
-        $query = "SELECT e.*, u.name AS trainer_name FROM #__dc_mv_events AS e
-            LEFT JOIN #__users AS u ON  e.trainer_id=u.id
+        $query = "SELECT 
+            e.*,
+            (SELECT name FROM #__users WHERE id=e.trainer_id) AS trainer_name, 
+            (SELECT color FROM #__fitness_categories WHERE id=e.title) AS color
+            FROM #__dc_mv_events AS e
             WHERE e.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id='$client_id')
                 AND e.title='$title' AND e.published='1'";
         $db->setQuery($query);

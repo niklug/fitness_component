@@ -1,4 +1,4 @@
-<div class="fitness_block_wrapper" style="margin-top: 20px;">
+<div class="fitness_block_wrapper" style="">
     <div class="internal_wrapper">
         <div  style="width:350px; float: left;">
         <% if(head_title) { %>
@@ -15,19 +15,19 @@
         <div class="clr"></div>
         <hr class="orange_line">
         <div class="internal_wrapper">
-            <table>
+            <table width="100%">
                 <tr>
-                    <td>
-                        <div class="graph-container" style="width:780px;margin: 0;">
-                            <div id="placeholder" class="graph-placeholder"></div>
-                        </div>
+                     <td width="140" id="choices" style="font-size: 11px;display:none;"></td>
+                    <td width="780" class="graph-container">
+                        <div id="placeholder" class="graph-placeholder"></div>
                     </td>
-                    <td style="vertical-align: top;">
-                        <fieldset style="width:155px !important;">
-                            <legend class="grey_title">Training Period Keys</legend>
+                    <td  style="vertical-align: top;">
+                        <fieldset style="width:130px !important;display:inline-block;font-size: 12px;">
+                            <legend style="font-size: 12px;">Training Period Keys</legend>
                             <div id="training_period_container"></div>
                         </fieldset>
                     </td>
+                    <td></td>
                 </tr>
             </table>
         </div>
