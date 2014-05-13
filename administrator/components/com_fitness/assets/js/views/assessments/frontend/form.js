@@ -100,6 +100,8 @@ define([
             $(this.el).html(this.template(data));
             
             this.onRender();
+            
+            $(this.el).find("#program_form").validate();
          
             return this;
         },
@@ -283,7 +285,7 @@ define([
                 el : $(this.el).find("#location_select"),
                 collection : app.collections.locations,
                 first_option_title : '-Select-',
-                class_name : 'dark_input_style',
+                class_name : 'dark_input_style required',
                 id_name : 'location',
                 model_field : 'location'
             }).render();

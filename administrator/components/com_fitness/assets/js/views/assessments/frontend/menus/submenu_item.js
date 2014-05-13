@@ -87,7 +87,7 @@ define([
                     var client_item_id = model.get('client_item_id');
                     var event_client_item_model = new Event_client_item_model({id : client_item_id});
                     
-                    event_client_item_model.save({status : '2'}, {
+                    event_client_item_model.save({status : '10'}, {
                         success: function (model, response) {
                             var id = model.get('id');
                             self.sendAssessingEmail(id);

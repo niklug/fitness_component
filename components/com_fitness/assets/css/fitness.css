@@ -1132,3 +1132,8 @@ td.center, th.center, .center {
     height: 607px;
     width: 516px;
 }
+
+
+#preview_video {
+    border: 3px solid #FFFFFF;
+}

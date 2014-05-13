@@ -131,11 +131,9 @@ define([
                     if(trainer_id) {
                         self.loadClientsSelect(trainer_id);
                     }
-                    
-                    if(self.options.show.choices) {
-                        $(self.el).find("#choices").show();
-                    }
-   
+                }
+                if(self.options.show.choices) {
+                    $(self.el).find("#choices").show();
                 }
             });
         },
@@ -326,6 +324,7 @@ define([
             data.finish_mini = this.graphItemDataArray(mini_goals, 'deadline');
             data.status_mini = this.graphItemDataArray(mini_goals, 'status');
             data.training_period_colors = this.graphItemDataArray(mini_goals, 'training_period_color');
+            data.training_period_name = this.graphItemDataArray(mini_goals, 'training_period_name');
             return data;
         },
 
@@ -333,11 +332,11 @@ define([
             var data = {};
 
             data[type + '_xaxis'] = this.x_axisDateArray(appointment, y_axis, 'starttime');
-            data[type + '_session_type'] = this.graphItemDataArray(appointment, 'session_type');
-            data[type + '_session_focus'] = this.graphItemDataArray(appointment, 'session_focus');
+            data[type + '_session_type'] = this.graphItemDataArray(appointment, 'session_type_name');
+            data[type + '_session_focus'] = this.graphItemDataArray(appointment, 'session_focus_name');
             data[type + '_date'] = this.graphItemDataArray(appointment, 'starttime');
             data[type + '_trainer'] = this.graphItemDataArray(appointment, 'trainer_name');
-            data[type + '_location'] = this.graphItemDataArray(appointment, 'location');
+            data[type + '_location'] = this.graphItemDataArray(appointment, 'location_name');
             data[type + '_appointment_color'] = this.graphItemDataArray(appointment, 'color');
 
             //console.log(data);
@@ -639,18 +638,17 @@ define([
 
                     switch(data_type) {
                         case 1 : // Mini Goals
-                            html +=  "Client: " +  client_data.client_mini[item.dataIndex] + "</br>";
+                            html +=  "Training Period: " +  (client_data.training_period_name[item.dataIndex] || '') + "</br>";
                             html +=  "Goal: " +  (client_data.goal_mini[item.dataIndex] || '') + "</br>";
-                            html +=  "Start: " +  client_data.start_mini[item.dataIndex] + "</br>";
-                            html +=  "Finish: " +  client_data.finish_mini[item.dataIndex] + "</br>";
+                            html +=  "Start: " +   moment(new Date(Date.parse(client_data.start_mini[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
+                            html +=  "Finish: " +  moment(new Date(Date.parse(client_data.finish_mini[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
                             html +=  "Status: " +  (self.getStatusById(client_data.status_mini[item.dataIndex]) || '') + "</br>"; 
                             $("#tooltip").css("background-color", "#287725");
                             break;
                         case 2 : // Primary Goals
-                            html +=  "Client: " +  client_data.client_primary[item.dataIndex] + "</br>";
-                            html +=  "Goal: " +  (client_data.goal_primary[item.dataIndex] || '') + "</br>";
-                            html +=  "Start: " +  client_data.start_primary[item.dataIndex] + "</br>";
-                            html +=  "Finish: " +  client_data.finish_primary[item.dataIndex] + "</br>";
+                            html +=  "Goal: " +  (client_data.goal_primary[item.dataIndex]  || '') + "</br>";
+                            html +=  "Start: " +  moment(new Date(Date.parse(client_data.start_primary[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
+                            html +=  "Finish: " + moment(new Date(Date.parse(client_data.finish_primary[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm")  + "</br>";
                             html +=  "Status: " +  (self.getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>"; 
                             $("#tooltip").css("background-color", "#A3270F");
                             break;
@@ -722,7 +720,7 @@ define([
 
            html +=  "Session Type: " +  client_data[type + '_session_type'][item.dataIndex] + "</br>";
            html +=  "Session Focus: " +  client_data[type + '_session_focus'][item.dataIndex] + "</br>";
-           html +=  "Date: " +  client_data[type + '_date'][item.dataIndex] + "</br></br>";
+           html +=  "Date: " +  moment(new Date(Date.parse(client_data[type + '_date'][item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br></br>";
            html +=  "Trainer: " +  client_data[type + '_trainer'][item.dataIndex] + "</br>";
            html +=  "Location: " +  client_data[type + '_location'][item.dataIndex] + "</br>"; 
 

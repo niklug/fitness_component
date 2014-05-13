@@ -72,15 +72,13 @@ define([
               
             ]);
             
-            new Select_element_view({
-                model : this.model,
-                el : target,
-                collection : collection,
-                first_option_title : '-Select-',
-                class_name : ' required',
-                id_name : name,
-                model_field : name
-            }).render();
+            var id = this.model.get(name);
+            
+            var model = collection.get(id);
+            
+            var name = model.get('name');
+            
+            target.html('<span style="color:red;">' + name + '</span>');
         },
         
         onClickPdf : function() {

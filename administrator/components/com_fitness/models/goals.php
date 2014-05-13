@@ -586,7 +586,7 @@ class FitnessModelgoals extends JModelList {
         $date->setTimezone(new DateTimeZone($config->getValue('config.offset')));
         $current_date = $date->format('Y-m-d');
         $db = &JFactory::getDBo();
-        $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, mg.start_date AS start_date, tp.color AS training_period_color, tp.name AS training_period_name
+        $query = "SELECT mg.*, u.name AS client_name, mname.name AS mini_goal_name, mg.start_date AS start_date, tp.color AS training_period_color, tp.name AS training_period_name, tp.name AS training_period_name
             FROM  #__fitness_mini_goals AS mg
             LEFT JOIN #__fitness_mini_goal_categories AS mname on mname.id=mg.mini_goal_category_id
             LEFT JOIN #__fitness_goals AS pg ON mg.primary_goal_id=pg.id
@@ -622,6 +622,9 @@ class FitnessModelgoals extends JModelList {
         $db = &JFactory::getDBo();
         $query = "SELECT 
             e.*,
+            (SELECT name FROM #__fitness_session_type WHERE id=e.session_type) AS session_type_name, 
+            (SELECT name FROM #__fitness_session_focus WHERE id=e.session_focus) AS session_focus_name, 
+            (SELECT name FROM #__fitness_locations WHERE id=e.location) AS location_name, 
             (SELECT name FROM #__users WHERE id=e.trainer_id) AS trainer_name, 
             (SELECT color FROM #__fitness_categories WHERE id=e.title) AS color
             FROM #__dc_mv_events AS e

@@ -54,6 +54,7 @@ class FitnessViewGoals extends JView
         FitnessHelper::addSubmenu('Settings', 'settings');
         
         $document = &JFactory::getDocument();
+        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'moment.min.js');
         $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
 	$document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
@@ -65,6 +66,7 @@ class FitnessViewGoals extends JView
         $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'graph.js');
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'ajax_call_function.js');
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'status_class.js');
+        
         
         
         

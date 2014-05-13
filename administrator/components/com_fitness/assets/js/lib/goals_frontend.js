@@ -200,7 +200,7 @@
                     data.finish_mini = this.graphItemDataArray(mini_goals, 'deadline');
                     data.status_mini = this.graphItemDataArray(mini_goals, 'status');
                     data.training_period_colors = this.graphItemDataArray(mini_goals, 'training_period_color');
-
+                    data.training_period_name = this.graphItemDataArray(mini_goals, 'training_period_name');
                     return data;
                 },
                 x_axisDateArray : function(data, y_value, field) {
@@ -403,18 +403,17 @@
 
                             switch(data_type) {
                                 case 1 : // Mini Goals
-                                    html +=  "Client: " +  client_data.client_mini[item.dataIndex] + "</br>";
+                                    html +=  "Training Period: " +  (client_data.training_period_name[item.dataIndex] || '') + "</br>";
                                     html +=  "Goal: " +  (client_data.goal_mini[item.dataIndex] || '') + "</br>";
-                                    html +=  "Start: " +  client_data.start_mini[item.dataIndex] + "</br>";
-                                    html +=  "Finish: " +  client_data.finish_mini[item.dataIndex] + "</br>";
+                                    html +=  "Start: " +  moment(new Date(Date.parse(client_data.start_mini[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
+                                    html +=  "Finish: " + moment(new Date(Date.parse(client_data.finish_mini[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
                                     html +=  "Status: " +  (self.getStatusById(client_data.status_mini[item.dataIndex]) || '') + "</br>"; 
                                     $("#tooltip").css("background-color", "#287725");
                                     break;
                                 case 2 : // Primary Goals
-                                    html +=  "Client: " +  client_data.client_primary[item.dataIndex] + "</br>";
                                     html +=  "Goal: " +  (client_data.goal_primary[item.dataIndex] || '') + "</br>";
-                                    html +=  "Start: " +  client_data.start_primary[item.dataIndex] + "</br>";
-                                    html +=  "Finish: " +  client_data.finish_primary[item.dataIndex] + "</br>";
+                                    html +=  "Start: " +  moment(new Date(Date.parse(client_data.start_primary[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
+                                    html +=  "Finish: " + moment(new Date(Date.parse(client_data.finish_primary[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
                                     html +=  "Status: " +  (self.getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>"; 
                                     $("#tooltip").css("background-color", "#A3270F");
                                     break;

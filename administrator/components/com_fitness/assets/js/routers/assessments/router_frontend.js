@@ -19,7 +19,8 @@ define([
         'views/graph/graph',
         
         'jquery.flot',
-        'jquery.flot.time'
+        'jquery.flot.time',
+        'jquery.validate'
         
 ], function (
         $,
@@ -72,7 +73,7 @@ define([
         },
 
         routes: {
-            "": "my_progress", 
+            "": "assessments", 
             "!/my_progress": "my_progress", 
             "!/self_assessments": "self_assessments", 
             "!/assessments": "assessments", 
