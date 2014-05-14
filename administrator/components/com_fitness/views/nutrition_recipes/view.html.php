@@ -47,7 +47,9 @@ class FitnessViewNutrition_recipes extends JView
                 $input = JFactory::getApplication()->input;
                 FitnessHelper::addSubmenu('Dashboard', 'dashboard');
                 FitnessHelper::addSubmenu('Clients', 'clients');
+                FitnessHelper::addSubmenu('Client Overview', 'client_overview');
                 FitnessHelper::addSubmenu('Client Planning', 'goals');
+                FitnessHelper::addSubmenu('Client Progress', 'client_progress');
                 FitnessHelper::addSubmenu('Assessments', 'assessments');
                 FitnessHelper::addSubmenu('Calendar', 'calendar');
                 FitnessHelper::addSubmenu('Programs', 'programs');
@@ -55,8 +57,9 @@ class FitnessViewNutrition_recipes extends JView
                 FitnessHelper::addSubmenu('Exercise Library', 'exercise_library');
                 FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
                 FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
+                FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
                 FitnessHelper::addSubmenu('Settings', 'settings');
-                
+
                 $model = $this->getModel();
                 
                 $this->assign('model', $model);

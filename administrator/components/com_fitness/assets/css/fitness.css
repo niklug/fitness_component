@@ -1,10 +1,10 @@
 .icon-48-notificationss {
-    background-image: url(../images/l_notificationss.png);
+    background-image: url('../images/l_notificationss.png');
     padding-left:60px!important;
 }
 
 .icon-48-notifications {
-    background-image: url(../images/l_notificationss.png);
+    background-image: url('../images/l_notificationss.png');
     padding-left:60px!important;
 }
 
@@ -21,43 +21,43 @@
 } 
 
 .icon-48-sessiontypes {
-      background-image: url(../images/l_sessiontypes.png);
+      background-image: url('../images/l_sessiontypes.png');
       padding-left:60px!important;
 }
 
 .icon-48-sessiontype {
-      background-image: url(../images/l_sessiontypes.png);
+      background-image: url('../images/l_sessiontypes.png');
       padding-left:60px!important;
 }
 
 
 .icon-48-categories {
-      background-image: url(../images/l_categories.png);
+      background-image: url('../images/l_categories.png');
       padding-left:60px!important;
 }
 
 .icon-48-category {
-      background-image: url(../images/l_categories.png);
+      background-image: url('../images/l_categories.png');
       padding-left:60px!important;
 }
 
 .icon-48-sessionfocuses {
-      background-image: url(../images/l_sessionfocuses.png);
+      background-image: url('../images/l_sessionfocuses.png');
       padding-left:60px!important;
 }
 
 .icon-48-sessionfocus {
-      background-image: url(../images/l_sessionfocuses.png);
+      background-image: url('../images/l_sessionfocuses.png');
       padding-left:60px!important;
 }
 
 .icon-48-goalfocuses {
-      background-image: url(../images/l_goalfocuses.png);
+      background-image: url('../images/l_goalfocuses.png');
       padding-left:60px!important;
 }
 
 .icon-48-goalfocus {
-      background-image: url(../images/l_goalfocuses.png);
+      background-image: url('../images/l_goalfocuses.png');
       padding-left:60px!important;
 }
 
@@ -107,91 +107,67 @@
 
 
 
-
-
-
-
-
-#clients_href {
+.dashboard_icon {
     background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/clients.png);
-    display: block;
-} 
-
-#goals_href {
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/goals.png);
-    display: block;
-} 
-
-#calendar_href {
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/calendar.png);
-    display: block;
-} 
-
-#programs_href {
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/programs.png);
+    height: 135px;
+    width: 150px;
     display: block;
 }
 
-#exercise_href {
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/exercise_library.png);
-    display: block;
+
+#clients_href {
+    background-image: url('../images/dashboard/clients.png');
 } 
 
-#nutrition_plans_href {
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/nutrition_plans.png);
-    display: block;
+#goals_href {
+    background-image: url('../images/dashboard/goals.png');
 } 
 
-#nutrition_diary_href {
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/nutrition_diary.png);
-    display: block;
+#progress_href {
+    background-image: url('../images/dashboard/progress.png');
 } 
 
 #assessments_href {
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/assessments.png);
-    display: block;
+    background-image: url('../images/dashboard/assessments.png');
+}
+
+
+#calendar_href {
+    background-image: url('../images/dashboard/calendar.png');
+}
+
+
+#programs_href {
+    background-image: url('../images/dashboard/programs.png');
+}
+
+#programs_tempates_href {
+    background-image: url('../images/dashboard/templates.png');
+}
+
+#exercise_href {
+    background-image: url('../images/dashboard/exercise_library.png');
+} 
+
+#nutrition_plans_href {
+    background-image: url('../images/dashboard/nutrition_plans.png');
+} 
+
+#nutrition_diary_href {
+    background-image: url('../images/dashboard/nutrition_diary.png');
 } 
 
 #nutrition_database_href{
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/recipe_database.png);
-    display: block;
+    background-image: url('../images/dashboard/nutrition_database.png');
+} 
+
+#recipe_database_href{
+    background-image: url('../images/dashboard/recipe_database.png');
 } 
 
 #settings_href {
-    background-repeat: no-repeat;
-    height: 158px;
-    width: 136px;
-    background-image: url(../images/settings.png);
-    display: block;
+    background-image: url('../images/dashboard/settings.png');
 } 
-
 
 
 #filter_from_start_date, #filter_to_start_date, #filter_from_deadline,

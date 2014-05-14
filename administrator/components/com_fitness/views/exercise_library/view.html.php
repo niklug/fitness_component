@@ -40,13 +40,16 @@ class FitnessViewExercise_library extends JView
         $input = JFactory::getApplication()->input;
         FitnessHelper::addSubmenu('Dashboard', 'dashboard');
         FitnessHelper::addSubmenu('Clients', 'clients');
+        FitnessHelper::addSubmenu('Client Overview', 'client_overview');
         FitnessHelper::addSubmenu('Client Planning', 'goals');
+        FitnessHelper::addSubmenu('Client Progress', 'client_progress');
         FitnessHelper::addSubmenu('Assessments', 'assessments');
         FitnessHelper::addSubmenu('Calendar', 'calendar');
         FitnessHelper::addSubmenu('Programs', 'programs');
         FitnessHelper::addSubmenu('Program Templates', 'programs_templates');
         FitnessHelper::addSubmenu('Nutrition Plans', 'nutrition_plans');
         FitnessHelper::addSubmenu('Nutrition Diary', 'nutrition_diaries');
+        FitnessHelper::addSubmenu('Nutrition Database', 'nutritiondatabases');
         FitnessHelper::addSubmenu('Recipe Database', 'nutrition_recipes');
         FitnessHelper::addSubmenu('Settings', 'settings');
         

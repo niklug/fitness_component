@@ -44,13 +44,16 @@ class multicalendarViewadmin extends JView
                         <ul id="submenu">
                             <li><a class="active" href="index.php?option=com_fitness&view=dashboard">Dashboard</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=clients">Clients</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=client_overview">Client Overview</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=goals">Client Planning</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=client_progress">Client Progress</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=assessments">Assessments</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=programs">Programs</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=programs_templates">Program Templates</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=exercise_library">Exercise Library</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_plans">Nutrition Plans</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_diaries">Nutrition Diary</a></li>
+                            <li><a class="active" href="index.php?option=com_fitness&view=nutritiondatabases">Nutrition Database</a></li>
                             <li><a class="active" href="index.php?option=com_fitness&view=nutrition_recipes">Recipe Database</a></li>
                             
                             <li><a class="active" href="index.php?option=com_fitness&view=settings">Settings</a></li>
