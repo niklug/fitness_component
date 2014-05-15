@@ -93,6 +93,9 @@ switch ($method) {
     case "get_semi_clients":
         $ret = get_semi_clients();
         break;
+    case "delete_event_clients":
+        $ret = delete_event_clients();
+        break;
     case "add_update_group_client":
         $ret = add_update_group_client();
         break;
@@ -308,8 +311,8 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
     //logged user
     $cid = JRequest::getVar('cid');
     $user = &JFactory::getUser($cid);
-
-
+    
+    $helper = new FitnessHelper();
 
     try {
         $is_trainer_administrator = FitnessHelper::is_trainer_administrator($user->id);
@@ -318,24 +321,22 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
         return $ret;
     }
 
-
-
-    try {
-        $trainers_group_id = FitnessHelper::getTrainersGroupIdByUser($user->id);
-    } catch (Exception $e) {
-        $ret['error'] = '"' . $e->getMessage() . '"' . ' - File: ' . $e->getFile() . ' Line: ' . $e->getLine();
-        return $ret;
-    }
-    
-    
+   
     try {
         $is_simple_trainer = FitnessHelper::is_simple_trainer($user->id);
     } catch (Exception $e) {
         $ret['error'] = '"' . $e->getMessage() . '"' . ' - File: ' . $e->getFile() . ' Line: ' . $e->getLine();
         return $ret;
     }
-
-
+    
+    try {
+        $business_profile = $helper->getBusinessProfileId($user->id);
+        
+        $business_profile_id = $business_profile['data'];
+    } catch (Exception $e) {
+        $ret['error'] = '"' . $e->getMessage() . '"' . ' - File: ' . $e->getFile() . ' Line: ' . $e->getLine();
+        return $ret;
+    }
 
 
     try {
@@ -360,12 +361,13 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
         $sql .= " LEFT JOIN #__fitness_session_type AS st ON st.id = a.session_type ";
         
         $sql .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
+        
 
         $sql .= " where a." . DC_MV_CAL_IDCAL . "=" . $calid;
 
 
         if ($is_trainer_administrator) {
-            $sql .= " AND  (bp.group_id = " . (int) $trainers_group_id;
+            $sql .= " AND  a.business_profile_id ='$business_profile_id' ";
         }
 
         $client_ids = implode($client_id, ',');
@@ -631,12 +633,6 @@ $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $tra
     } catch (Exception $e) {
         $ret['success'] = false;
         $ret['message'] = $e->getMessage();
-    }
-
-    if (JRequest::getVar('assessment_form')) {
-        $retAss = updateAssessmentData();
-        if (!$retAss['success'])
-            $ret = $retAss;
     }
 
     return $ret;
@@ -957,10 +953,15 @@ function update_exercise_field() {
 }
 
 function get_semi_clients() {
+    $status['success'] = 1;
     $event_id = JRequest::getVar("event_id");
     $db = & JFactory::getDBO();
     $query = "SELECT id, client_id, status FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
     $db->setQuery($query);
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
     $ids = $db->loadResultArray(0);
     $clients = $db->loadResultArray(1);
     $status = $db->loadResultArray(2);
@@ -974,11 +975,26 @@ function get_semi_clients() {
     return $result;
 }
 
+function delete_event_clients() {
+    $status['success'] = 1;
+    $event_id = JRequest::getVar("event_id");
+    $db = & JFactory::getDBO();
+    $query = "DELETE FROM #__fitness_appointment_clients WHERE event_id='$event_id'";
+    $db->setQuery($query);
+    if (!$db->query()) {
+        $status['success'] = 0;
+        $status['message'] = $db->stderr();
+    }
+    $result = array('status' => $status);
+    return $result;
+}
+
 /**
  * 
  * @return type
  */
 function add_update_group_client() {
+    $status['success'] = 1;
     $event_id = JRequest::getVar("event_id");
     $client_id = JRequest::getVar("client_id");
     $id = JRequest::getVar("id");
@@ -1053,61 +1069,6 @@ function set_group_client_status() {
     return $status;
 }
 
-/** insert / update assessment, foreign key events id
- * 
- * @return type
- */
-function updateAssessmentData() {
-    $ret['success'] = true;
-    $post = JRequest::get('post', '', 'POST', 'STRING', JREQUEST_ALLOWHTML);
-    $db = & JFactory::getDBO();
-    $fields = array('event_id', 'as_height', 'as_weight', 'as_age',
-        'as_body_fat', 'as_lean_mass', 'as_comments', 'ha_blood_pressure',
-        'ha_body_mass_index', 'ha_sit_reach', 'ha_lung_function',
-        'ha_aerobic_fitness', 'ha_comments', 'am_height', 'am_bicep_l',
-        'am_weight', 'am_thigh_r', 'am_waist', 'am_thigh_l', 'am_hips',
-        'am_calf_r', 'am_chest', 'am_calf_l', 'am_bicep_r', 'am_comments',
-        'bia_body_fat', 'bia_body_water', 'bia_muscle_mass', 'bia_bone_mass',
-        'bia_visceral_fat', 'bio_comments', 'bsm_height', 'bsm_weight', 'bsm_chin',
-        'bsm_check', 'bsm_pec', 'bsm_tricep', 'bsm_subscapularis', 'bsm_sum10',
-        'bsm_sum12', 'bsm_midaxillary', 'bsm_supraillac', 'bsm_umbilical',
-        'bsm_knee', 'bsm_calf', 'bsm_quadricep', 'bsm_hamstring', 'bsm_body_fat',
-        'bsm_lean_mass', 'bsm_comments', 'nutrition_protocols', 'supplementation_protocols', 'training_protocols'
-    );
-
-    $obj = new stdClass();
-
-    foreach ($post as $key => $value) {
-        if (in_array($key, $fields)) {
-            $obj->$key = trim($value);
-        }
-    }
-
-    $event_id = $post['event_id'];
-    $query = "SELECT assessment_id FROM #__fitness_assessments WHERE event_id='$event_id'";
-    $db->setQuery($query);
-    if (!$db->query()) {
-        $ret['success'] = false;
-        $ret['message'] = $db->stderr();
-        return $ret;
-    }
-    $id = $db->loadResult();
-
-
-
-    if (!$id) {
-        $insert = $db->insertObject('#__fitness_assessments', $obj, 'assessment_id');
-        if (!$insert)
-            $ret['success'] = false;
-    } else {
-        $obj->assessment_id = $id;
-        $update = $db->updateObject('#__fitness_assessments', $obj, 'assessment_id');
-        if (!$update)
-            $ret['success'] = false;
-    }
-
-    return $ret;
-}
 
 function getCategoryNameColorById($id) {
     $result['success'] = true;

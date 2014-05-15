@@ -50,11 +50,13 @@
                     var self = this;
                     this.set("trainers", {});
                     this.ajaxCall(data, url, view, task, table, function(output) {
+                        //console.log(output);
                         self.set("trainers", output);
                     });
                 },
 
                 populateSelect : function(data, target, selected_value) {
+                    //console.log(data);
                     var html = '<option  value="">-Select-</option>';
                     $.each(data, function(index, value) {
                         if(index) {
@@ -69,11 +71,18 @@
                     return html;
                 },
 
-                populateUsersSelectOnBusiness : function(task, model, business_profile_id, target, selected, user_id) {
+                populateUsersSelectOnBusiness : function(task, view, business_profile_id, target, selected, user_id) {
+                    var data = {};
+                    var url = this.get('ajax_call_url');
+                    var view = view;
+                    var task = task;
+                    var table = '';
+                    data.business_profile_id = business_profile_id;
+                    data.user_id = user_id;//current logged user
 
-                    this.getClientsByBusiness(model, business_profile_id, task, user_id);
-                    this.on('change:clients', function(model, items) {
-                        model.populateSelect(items, target, selected);
+                    var self = this;
+                    this.ajaxCall(data, url, view, task, table, function(output) {
+                        self.populateSelect(output, target, selected);
                     });
                 },
 
@@ -81,10 +90,19 @@
                     this.populateUsersSelectOnBusiness(task, model, business_profile_id, target, selected, user_id);
                 },
 
-                populateTrainersSelectOnBusiness : function(model, business_profile_id, target, selected, user_id) {
-                    this.getTrainersByBusiness(model, business_profile_id, user_id);
-                    this.on('change:trainers', function(model, items) {
-                        model.populateSelect(items, target, selected);
+                populateTrainersSelectOnBusiness : function(view, business_profile_id, target, selected, user_id) {
+                    var data = {};
+                    var url = this.get('ajax_call_url');
+                    var view = view;
+                    var task = 'onBusinessNameChange';
+                    var table = '#__fitness_business_profiles';
+                    data.business_profile_id = business_profile_id;
+                    data.user_id = user_id;//current logged user
+
+                    var self = this;
+                    this.ajaxCall(data, url, view, task, table, function(output) {
+                        //console.log(output);
+                        self.populateSelect(output, target, selected);
                     });
                 },
 

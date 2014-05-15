@@ -27,11 +27,13 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
 
 $helper = new FitnessHelper();
 
-$group_id = $helper->getTrainersGroupId();
+$business_profile = $helper->getBusinessProfileId($user->id);
+        
+$business_profile_id = $business_profile['data'];
 
-$business_profile = $helper->JErrorFromAjaxDecorator($helper->getBusinessByTrainerGroup($group_id));
+$user_id = JFactory::getUser()->id;
 
-$business_profile_id = $business_profile->id;
+$is_superuser = (bool) FitnessFactory::is_superuser($user_id);
 
 
 
@@ -396,7 +398,12 @@ userAdd:true,
 
 //npkorban
     (function($) {
+        var is_superuser = Boolean('<?php echo $is_superuser; ?>');
         
+        if(!is_superuser) {
+            $("#business_profile_id").attr('disabled', true);
+        }
+
         // connect helper class
         var helper_options = {
             'ajax_call_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',

@@ -282,82 +282,15 @@
 }
 
 
-.delete_exercise, .delete_group_client{
-    background-image: url('images/delete.png');
+ .delete_group_client{
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/cross.png");
     background-repeat: no-repeat;
-    display: block;
+    background-size: 15px auto;
+    display: inline-block;
     height: 15px;
     width: 15px;
 }
 
-.copy_exercise {
-    background-image: url('images/copy.png');
-    background-repeat: no-repeat;
-    display: block;
-    height: 20px;
-    width: 20px;
-}
-
-.trash_exercise {
-    background-image: url('images/trash.png');
-    background-repeat: no-repeat;
-    display: block;
-    height: 20px;
-    width: 20px;
-}
-
-#add_exercise {
-    background-image: url("images/add_exercise.png");
-    background-repeat: no-repeat;
-    background-size: 24px auto;
-    cursor: pointer;
-    display: block;
-    float: left;
-    height: 24px;
-    margin-right: 5px;
-    margin-top: 3px;
-    width: 24px;
-}
-
-#drag_exercise {
-    background-image: url('images/drag_arrow_.png');
-    background-repeat: no-repeat;
-    display: block;
-    height: 20px;
-    width: 20px;
-}
-
-.drag_exercise_item {
-    background-image: url('images/drag_list.png');
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    background-size: 22px auto;
-    cursor: move;
-}
-
-
-#exercise_table td {
-    border-bottom: 1px dotted #cccccc ;
-}
-
-#exercise_table, #header_exercise_table {
-    border: 1px solid #cccccc ;
-    padding: 0;
-}
-
-#header_exercise_table {
-    background-color:#BBBBBB;
-}
-
-#exercise_table th {
-  border-bottom: 1px dotted #DDDDDD;
-  border-right: 1px dotted #DDDDDD;
-  font-weight: bold !important;
-}
-
-#exercise_table td {
-     border-right: 1px dotted #DDDDDD;
-}
 
 .cleditorMain {
     height: 110px !important;
@@ -387,37 +320,6 @@
     margin-left: 10px;
 }
 
-#exercise_table_wrapper{
-    max-height: 334px;
-    overflow-y: auto;
-}
-
-
-#add_client_button {
-    background-color: #E8E8E8 ;
-    background-image: url("images/add_exercise.png");
-    background-repeat: no-repeat;
-    background-size: 24px auto;
-    border: 1px solid  	#989898 ;
-    color: #000000;
-    cursor: pointer;
-    display: block;
-    height: 23px;
-    margin-right: 5px;
-    margin-top: 3px;
-    padding: 1px;
-    text-decoration: none;
-    width: 100px;
-}
-
-#add_client_button div {
-    margin-left: 30px;
-    margin-top: 5px;
-}
-
-#assessment_wrapper .assessment_input {
-    width:60px;
-}
 
 
 

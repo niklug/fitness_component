@@ -1,4 +1,4 @@
-<div id="comments_wrapper" style="display:none;">
+<div id="comments_wrapper">
     <hr>  
     <label>  
         <span>Trainer Feedback / Comments</span>

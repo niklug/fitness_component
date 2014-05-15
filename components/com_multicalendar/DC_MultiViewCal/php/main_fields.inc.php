@@ -9,6 +9,9 @@ $user = &JFactory::getUser($cid);
 
 $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user->id));
 
+$is_superuser = (bool) FitnessFactory::is_superuser($user->id);
+
+$is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user->id);
 
 ?>
 <table border="0">
@@ -49,44 +52,6 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
                                 <select  id="session_focus" name="session_focus" class="required safe inputtext" ></select>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-            </td>
-
-
-            <td>
-                <table border="0">
-                    <tbody>
-                        <tr>
-                            <td>Business Name:</td>
-                            <td>
-                                <?php
-                                $business_profile_id = $event->business_profile_id;
-                                
-                                echo $helper->generateSelect($helper->getBusinessProfileList($user->id), 'business_profile_id', 'business_profile_id', $business_profile_id , '', true, "required safe inputtext"); ?>
-                            </td>
-                        </tr>
-                        <tr id="client_select_tr">
-                            <td>Client:</td>
-                            <td>
-                                <select style="float:left;" id="client" name="client_id" class="required safe inputtext">
-                                    <option>-Select-</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr id="trainer_select_tr">
-                            <td>Trainer:</td>
-                            <td>
-                                <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
-                            </td>
-                        </tr>
-                        <tr style="display:none;" id="trainers_select_tr">
-                            <td>Trainer:</td>
-                            <td>
-                                <select  id="trainers" name="trainer_id" class="required safe inputtext" >
-                                </select>
-                            </td>
-                        </tr>
                         <tr>
                             <td>Location:</td>
                             <td> <?php
@@ -108,6 +73,38 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
                 </table>
             </td>
 
+
+            <td style="vertical-align: top;">
+                <table border="0">
+                    <tbody>
+                        <tr>
+                            <td>Business Name:</td>
+                            <td>
+                                <?php
+                                echo $helper->generateSelect($helper->getBusinessProfileList($user->id), 'business_profile_id', 'business_profile_id', $event->business_profile_id , '', true, "required safe inputtext"); ?>
+                            </td>
+                        </tr>
+                        
+                        <?php if($event->owner) { ?>
+                        <tr>
+                            <td>Author:</td>
+                            <td>
+                                <?php echo JFactory::getUser($event->owner)->name; ?>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                        
+                        <tr id="trainer_select_tr">
+                            <td>Trainer:</td>
+                            <td>
+                                <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
+                            </td>
+                        </tr>
+                       
+                    </tbody>
+                </table>
+            </td>
+
         </tr>
     </tbody>
   </table>
@@ -119,6 +116,20 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
 
 <script type="text/javascript">
     (function($) {
+        var business_profile_id = parseInt('<?php echo $business_profile_id; ?>');
+        var user_id = '<?php echo $user->id; ?>';
+        var trainer_id = '<?php echo $event->trainer_id; ?>';
+        var is_superuser = Boolean('<?php echo $is_superuser; ?>');
+        var is_simple_trainer = Boolean('<?php echo $is_simple_trainer; ?>');
+        
+        
+        if(!is_superuser) {
+            $("#business_profile_id").val(business_profile_id);
+        }
+        
+        if(is_simple_trainer) {
+            trainer_id = user_id;
+        }
         
         // connect helper class
         var helper_options = {
@@ -126,10 +137,12 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
         }
         var fitness_helper = $.fitness_helper(helper_options);
         
-        $("#business_profile_id").on('change', function() {
+        
+        $("#business_profile_id").die().on('change', function() {
             var business_profile_id = $(this).val();
             businessLogic(business_profile_id);
         });
+        
         
         function businessLogic(business_profile_id) {
 
@@ -137,18 +150,21 @@ $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProf
                 return;
             }
             
-            // populate clients select
-            fitness_helper.populateClientsSelectOnBusiness('getClientsByBusiness', 'goals_periods', business_profile_id, '#client', '<?php echo trim($event->client_id);?>', '<?php echo $user->id;?>');
-            
-            fitness_helper.populateTrainersSelectOnBusiness('goals_periods', business_profile_id, '#trainers', '<?php echo trim($event->trainer_id) ?>', '<?php echo $user->id;?>');
+            fitness_helper.populateTrainersSelectOnBusiness('goals_periods', business_profile_id, '#trainer', trainer_id, user_id);
         }
         
-        var business_profile_id = '<?php echo $business_profile_id;?>';
-
         
-        if(business_profile_id) {
-            $("#business_profile_id").val(business_profile_id);
-            businessLogic(business_profile_id);
+        var event_business_profile_id = parseInt('<?php echo $event->business_profile_id;?>');
+        
+        
+    
+        if(!event_business_profile_id) {
+            event_business_profile_id = business_profile_id;
+        }
+        
+        if(event_business_profile_id) {
+            $("#business_profile_id").val(event_business_profile_id);
+            businessLogic(event_business_profile_id);
         }
         
     })($);

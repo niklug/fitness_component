@@ -8,13 +8,14 @@ $(document).ready(function() {
 
 </script>  
 <?php if (isset($event->id)) { ?>
-    <div id="clients_wrapper" style="display:none;">
+    <div id="clients_wrapper">
         <hr>
         <table border="0">
             <tbody id="clients_html">
 
             </tbody>
         </table>
-        <a id="add_client_button" href="javascript:void(0)"><div>Add Client</div></a>
+        <br/>
+        <a id="add_client_button" href="javascript:void(0)">[ADD CLIENT]</a>
     </div>
 <?php }   ?>

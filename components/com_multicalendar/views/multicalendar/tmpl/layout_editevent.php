@@ -42,7 +42,7 @@ function getCalendarByRange($id){
     $db 	=& JFactory::getDBO();
     //$sql = "select * from `".DC_MV_CAL."` where `".DC_MV_CAL_ID."` = " . $id;
 
-    $sql = "SELECT * FROM #__dc_mv_events LEFT JOIN #__fitness_assessments ON #__dc_mv_events.id = #__fitness_assessments.event_id WHERE #__dc_mv_events.id='$id'";
+    $sql = "SELECT * FROM #__dc_mv_events  WHERE #__dc_mv_events.id='$id'";
 
     $db->setQuery( $sql );
 
@@ -176,7 +176,6 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             
         
             //debugger;
-            $("#Description").cleditor({width:450, height:150, useCSS:true})[0].focus();
             $("#trainer_comments").cleditor({width:560, height:150, useCSS:true})[0];
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
             var arrT = [];
@@ -517,14 +516,6 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
     <!-- Add clients, Semi-Private form -->
     <?php
     require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/clients.inc.php' );
-    ?>
-    <!-- Assessment form -->
-    <?php
-    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/assessment.inc.php' );
-    ?>
-    <!-- Details, Email, Pdf -->
-    <?php
-    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/details.inc.php' );
     ?>
     <!-- Trainer Feedback / Comments -->
     <?php

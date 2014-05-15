@@ -18,6 +18,8 @@
             
             var catid = $(this).find(':selected').data('catid');
             generateFormHtml(catid);
+            
+            buildClientsSelect();
 
             $('#session_type').change(function(){
                 var catid = $('#Subject').find(':selected').data('catid');
@@ -26,17 +28,8 @@
 
             });
 
-
-           /** client onchange select
-             *  
-             */
-            $('#client').live('change', function(){
-               var client_id = $(this).val();
-               setTrainerSelect(client_id);
-            });
-
+ 
             setupSessionTypeOnLoad();
-            setTrainerSelectOnLoad();
             /**
             *  delete group client
             */
@@ -49,7 +42,7 @@
              *  
              */
             $('#add_client_button').click(function(){
-               var trainer_id = $('#trainers').val();
+               var trainer_id = $('#trainer').val();
                setClientsSelect(trainer_id);
             });
 
@@ -58,25 +51,13 @@
             $(".clients").live('change', function() {
                 updateGroupClient($(this));
             });
+            
+            $("#trainer, #business_profile_id").live('change', function() {
+                deleteEventClients();
+            });
 
 
             /********************/ 
-
-            $(".open_client_status").live('click', function() {
-                var client_status = $(this).attr('data-status');
-                var id = $(this).attr('data-id');
-                openSetClientStatusBox(client_status, id);
-            });
-
-            $(".set_client_status").live('click', function(e) {
-                var client_status = $(this).attr('data-status');
-                clientSetStatus(client_status);
-            });
-
-            $(".client_status_wrapper .hideimage").live('click', function(e) {
-                hide_client_status_wrapper();
-            });
-
         });  
 
 
@@ -86,7 +67,7 @@
             var id = this_object.closest('tr').find('select').data('id');
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
             var url = DATA_FEED_URL+ "&method=delete_group_client";
-            this_object.closest("tr").fadeOut();
+            this_object.closest("tr").remove();
             $.ajax({
                 type : "POST",
                 url : url,
@@ -113,11 +94,10 @@
             var event_id = '<?php echo $event->id; ?>';
             var client_id = this_object.find(':selected').val();
             var this_select = this_object.closest('tr').find('select');
-            var this_status_button = this_object.closest('tr').find('.open_client_status');
+            
+            this_select.attr('disabled', true);
 
-            var id = this_object.closest('tr').find('select').data('id');
-            if (!id)
-                id = '';
+            var id = this_object.closest('tr').find('select').data('id') || '';
 
             if (client_id) {
                 $.ajax({
@@ -133,8 +113,9 @@
 
                         if (response.success) {
                             this_select.attr('data-id', response.id);
-                            this_status_button.attr('data-id', response.id);
                         } else {
+                            this_select.attr('disabled', false);
+                            this_select.val('');
                             alert(response.message);
                         }
 
@@ -226,57 +207,7 @@
             });
         }
 
-      /** client onload select
-         *  npkorban
-         */
-        function setTrainerSelectOnLoad() {
-           var client_id = '<?php echo $event->client_id; ?>';
-           setTrainerSelect(client_id);
-        }
-
-       /** client select
-         *  npkorban
-         */
-        function setTrainerSelect(client_id) {
-            var user_id = '<?php echo JRequest::getVar( 'cid' );?>';
-            var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
-            var url = DATA_FEED_URL+ "&method=get_trainers";
-
-            $.ajax({
-                type : "POST",
-                url : url,
-                data : {
-                   user_id : client_id,
-                   all_trainers : true
-                },
-                dataType : 'json',
-                success : function(message) {
-                    //console.log(message);
-                    if(!message.status.success) {
-                        alert(message.status.message);
-                        return;
-                    }
-                    $('#trainer').html('<option value="" >-Select-</option>');
-                    $.each(message.data, function(index, value) {
-                        var client_id = '<?php echo $event->trainer_id; ?>';
-                        if(client_id == index) {
-                           var selected = 'selected';
-                        } else {
-                            selected = '';
-                        }
-                        if(index) {
-                            $('#trainer').append('<option ' + selected + ' value="' + index + '">' + value + '</option>');
-                        }
-                    });
-
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown)
-                {
-                    alert("error");
-                }
-            });
-        }
-
+        
         function buildClientsSelect() {
             var event_id = '<?php echo $event->id; ?>';
             var trainer_id = $('#trainers').val();
@@ -294,18 +225,13 @@
 
                     for( var i = 0; i < message.clients.length; i++) {
                         html += '<tr>';
-                        html +='<td>Client ' + (i+1) + ': </td>';
                         html +='<td>';
-
-                        html += '<select data-id="' + message.ids[i]  + '" class="inputtext clients"  name="clients[]">';
+                        html += '<select disabled="disabled" data-id="' + message.ids[i]  + '" class="inputtext clients"  name="clients[]">';
                         html += '<option  value="' + message.clients[i]  + '">' +  message.clients_name[i] + '</option>';
                         html += '</select>';
                         html +='</td>';
                         html +='<td>';
                         html += "<a href='#' data-id='" + message.ids[i] + "' class='delete_group_client'></a>";
-                        html +='</td>';
-                        html +='<td>';
-                        html += client_status_html(message.status[i], message.ids[i]);
                         html +='</td>';
                         html += '</tr>';
 
@@ -320,14 +246,42 @@
                 }
             });
         }
-
-         /** trainers select
-         *  npkorban
-         */
+        
+        function deleteEventClients() {
+            var event_id = '<?php echo $event->id; ?>';
+            var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
+            var url = DATA_FEED_URL+ "&method=delete_event_clients";
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : {
+                   event_id : event_id
+                },
+                dataType : 'json',
+                success : function(message) {
+                    $("#clients_html").empty();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert("error");
+                }
+            });
+        }
+        
+        
         function setClientsSelect(trainer_id) {
-           var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>"; 
-           var url = DATA_FEED_URL+ "&method=get_clients";
-           //console.log(trainer_id);
+            var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>"; 
+            var url = DATA_FEED_URL+ "&method=get_clients";
+           
+            var added_clients = $(".clients").map(function() {return this.value});
+           
+            var empty_select = $(".clients").last().val();
+           
+            if(empty_select == ''){
+                return;
+            }
+       
+
             $.ajax({
                 type : "POST",
                 url : url,
@@ -341,15 +295,15 @@
                         alert(response.status.message);
                         return;
                     }
-                    var number = $("#clients_html tr").length + 1;
+                    
                     var html = '';
                     html += '<tr>';
-                    html +='<td>Client ' + number + ': </td>';
                     html +='<td>';
                     html += '<select class="inputtext clients"   name="clients">';
                     html += '<option  value="">-Select-</option>';
                     $.each(response.data, function(index, value) {
-                         if(index) {
+                        
+                        if($.inArray(index, added_clients) == '-1') {
                             html += '<option  value="' + index + '">' +  value + '</option>';
                         }
                     });
@@ -360,7 +314,7 @@
                     html += "<a href='#' class='delete_group_client'></a>";
                     html +='</td>';
                     html +='<td>';
-                    html += client_status_html('1', '');
+                    html += '';
                     html +='</td>';
                     html += '</tr>';
                     $("#clients_html").append(html);
@@ -374,129 +328,6 @@
         }
 
 
-        function generateStatusBoxHtml(event_status) {
-            var catid = $('#Subject').find(':selected').data('catid');
-            if(catid == 1 || catid == 5) return  generatePrivateStatusBoxHtml(event_status);
-            return generateSemiStatusBoxHtml(event_status);
-        }
-
-
-
-        function appointmentEmailLogic(event_id, event_status, appointment_client_id){
-            
-            var send_appointment_email = $(".send_appointment_email").is(':checked');
-            var method;
-            switch(event_status) {
-                case '1' :
-                    return;
-                    break;
-                case '2' :
-                    method = 'AppointmentAttended';
-                    break;
-                case '3' :
-                   method = 'AppointmentCancelled';
-                   break;
-                case '4' :
-                   method = 'AppointmentLatecancel';
-                   break;
-                case '5' :
-                   method = 'AppointmentNoshow';
-                   break;
-                default : 
-                    return;
-                    break;
-            }
-            if(send_appointment_email) {
-                sendAppointmentStatusEmail(event_id, method, appointment_client_id);
-            }
-        }
-
-               
-        function sendAppointmentStatusEmail(id, method, appointment_client_id) {
-            var data = {};
-            var url = '<?php echo JURI::base();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
-            var view = '';
-            var task = 'ajax_email';
-            var table = '';
-
-            data.id = id;
-            data.view = 'Programs';
-            data.method = method;
-            data.appointment_client_id = appointment_client_id;
-
-
-            $.AjaxCall(data, url, view, task, table, function(output){
-                console.log(output);
-                var emails = output.split(',');
-                var message = 'Emails were sent to: ' +  "</br>";
-                $.each(emails, function(index, email) { 
-                    message += email +  "</br>";
-                });
-                $("#emais_sended").append(message);
-            });
-        }
-
-
-        /* START GROUP C STATUS */
-        function client_status_html(client_status, id) {
-             if(client_status == 1)  return '<a data-id="' + id + '" data-status="' + client_status + '" class="open_client_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
-             if(client_status == 2)  return '<a data-id="' + id + '" data-status="' + client_status + '"   class="open_client_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';
-             if(client_status == 3)  return '<a data-id="' + id + '" data-status="' + client_status + '"  class="open_client_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';
-             if(client_status == 4)  return '<a data-id="' + id + '" data-status="' + client_status + '"  class="open_client_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';
-             if(client_status == 5)  return '<a data-id="' + id + '" data-status="' + client_status + '"  class="open_client_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
-
-        }
-
-        function openSetClientStatusBox(client_status, id) {
-             $(".client_status_wrapper").attr('data-id', id);
-             $(".client_status_wrapper").show();
-
-             $(".event_status__button").show();
-             if(client_status == 1)  $(".client_status_wrapper .event_status_pending").hide();
-             if(client_status == 2)  $(".client_status_wrapper .event_status_attended").hide();
-             if(client_status == 3)  $(".client_status_wrapper .event_status_cancelled").hide();
-             if(client_status == 4)  $(".client_status_wrapper .event_status_latecancel").hide();
-             if(client_status == 5)  $(".client_status_wrapper .event_status_noshow").hide();
-         } 
-
-         function hide_client_status_wrapper() {
-             $(".client_status_wrapper").fadeOut();
-         }
-
-        function clientSetStatus(client_status) {
-            var id = $(".client_status_wrapper").attr('data-id');
-            var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
-            var url = DATA_FEED_URL+ "&method=set_group_client_status";
-            $.ajax({
-                    type : "POST",
-                    url : url,
-                    data : {
-                        client_status : client_status,
-                        id : id
-                    },
-                    dataType : 'json',
-                    success : function(response) {
-                        if(response.success) {
-                            hide_client_status_wrapper();
-
-                            $('.open_client_status[data-id="' + id +'"]').parent().html( client_status_html(client_status, id));
-
-                        } else {
-                            alert(response.message);
-                        }
-                        var event_id = '<?php echo $event->id; ?>';
-         
-                        appointmentEmailLogic(event_id, client_status, id);
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown)
-                    {
-                        alert("error");
-                    }
-            });
-        }
-
-
-         /* END GROUP USER STATUS */
 
         function generateFormHtml(form_id) {
             switch(form_id) {
@@ -534,93 +365,32 @@
 
 
 
-        function setAssessmentFields(status){
-            $("#as_height").attr('disabled', status);
-            $("#as_weight").attr('disabled', status);
-            $("#as_age").attr('disabled', status);
-            $("#as_body_fat").attr('disabled', status);
-            $("#as_lean_mass").attr('disabled', status);
-            if(status) {
-                $("#assessment_form").val('0');
-            } else {
-                $("#assessment_form").val('1');
-            }
-        }
-
-
         function personalTrainingForm() {
-            $("#clients_wrapper").hide();
-            $("#assessment_wrapper").hide();
-            $("#comments_wrapper").show();
-            //client personal
-            $("#client_select_tr").show();
-            $("#client").attr('disabled', false);
-            //trainer personal
-            $("#trainer_select_tr").show();
-            $("#trainer").attr('disabled', false);
-            //trainer semi
-            $("#trainers_select_tr").hide();
-            $("#trainers").attr('disabled', true);
 
-            //disable assessment fields
-            setAssessmentFields(true);
-            //
         }
 
 
 
         function semiPrivateForm() {
-            $("#clients_wrapper").show();
-            $("#assessment_wrapper").hide();
-            $("#comments_wrapper").show();
-            //client personal
-            $("#client_select_tr").hide();
-            $("#client").attr('disabled', true);
-            //trainer personal
-            $("#trainer_select_tr").hide();
-            $("#trainer").attr('disabled', true);
-            //trainer semi
-            $("#trainers_select_tr").show();
-            $("#trainers").attr('disabled', false);
-            buildClientsSelect();
-            //disable assessment fields
-            setAssessmentFields(true);
-            //
+
         }
 
 
         function resistanceWorkoutForm() {
-            semiPrivateForm();
+
         }
 
         function cardioWorkoutForm() {
-            semiPrivateForm();
+
         }
 
         function assessmentForm() {
 
-            <?php if (isset($event->id)) { ?>
-            $("#clients_wrapper").hide();
-            $("#assessment_wrapper").show();
-            $("#comments_wrapper").hide();
-            //client personal
-            $("#client_select_tr").show();
-            $("#client").attr('disabled', false);
-            //trainer personal
-            $("#trainer_select_tr").show();
-            $("#trainer").attr('disabled', false);
-            //trainer semi
-            $("#trainers_select_tr").hide();
-            $("#trainers").attr('disabled', true);
-            //anable assessment fields
-            setAssessmentFields(false);
-           //
-            <?php }   ?>
         }
 
         function consultationForm() {
             semiPrivateForm();
-            $("#comments_wrapper").hide();
+
         }
 
         function specialEventForm() {
@@ -772,13 +542,3 @@
             </label>  
 
             <hr>
-                  
-      <div class="client_status_wrapper">
-          <img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" >
-              <a data-status="1" class="set_client_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>
-              <a data-status="2" class="set_client_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>
-              <a data-status="3" class="set_client_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>
-              <a data-status="4" class="set_client_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>
-              <a data-status="5" class="set_client_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>
-              <input type="checkbox" checked class="send_appointment_email" name="send_appointment_email" value="1"> <span style="font-size:12px;">Send email</span>
-      </div>
