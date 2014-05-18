@@ -53,7 +53,7 @@ switch ($method) {
 
         $d1 = mktime(0, 0, 0, date("m", $d1), date("d", $d1), date("Y", $d1));
         $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2)) + 24 * 60 * 60 - 1;
-        $ret = listCalendarByRange($calid, ($d1), ($d2), $client_id, $trainer_id, $location, $appointment, $session_type, $session_focus, $business_profile_id);
+        $ret = listCalendarByRange($calid, ($d1), ($d2), $trainer_id, $location, $appointment, $session_type, $session_focus, $business_profile_id);
 
         break;
     case "update":
@@ -299,7 +299,6 @@ $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id,
 }
 
 function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointment, $session_type, $session_focus, $business_profile_id) {
-
     $ret = array();
     $ret['events'] = array();
     $ret["issort"] = true;
@@ -311,11 +310,12 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
     //logged user
     $cid = JRequest::getVar('cid');
     $user = &JFactory::getUser($cid);
+    $user_id = $user->id ;
     
     $helper = new FitnessHelper();
 
     try {
-        $is_trainer_administrator = FitnessHelper::is_trainer_administrator($user->id);
+        $is_trainer_administrator = FitnessHelper::is_trainer_administrator($user_id);
     } catch (Exception $e) {
         $ret['error'] = '"' . $e->getMessage() . '"' . ' - File: ' . $e->getFile() . ' Line: ' . $e->getLine();
         return $ret;
@@ -323,14 +323,14 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
 
    
     try {
-        $is_simple_trainer = FitnessHelper::is_simple_trainer($user->id);
+        $is_simple_trainer = FitnessHelper::is_simple_trainer($user_id);
     } catch (Exception $e) {
         $ret['error'] = '"' . $e->getMessage() . '"' . ' - File: ' . $e->getFile() . ' Line: ' . $e->getLine();
         return $ret;
     }
     
     try {
-        $business_profile = $helper->getBusinessProfileId($user->id);
+        $business_profile = $helper->getBusinessProfileId($user_id);
         
         $business_profile_id = $business_profile['data'];
     } catch (Exception $e) {
@@ -353,7 +353,7 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
         $sql .= " t.color AS color";
         
         $sql .= " FROM `" . DC_MV_CAL . "` AS a ";
-        
+
         $sql .= " LEFT JOIN #__fitness_categories AS t ON t.id = a.title ";
         
         $sql .= " LEFT JOIN #__fitness_locations AS l ON l.id = a.location ";
@@ -368,6 +368,11 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
 
         if ($is_trainer_administrator) {
             $sql .= " AND  a.business_profile_id ='$business_profile_id' ";
+        }
+        
+        // trainer can see appointment for client created by another trainer if it is his client too
+        if ($is_simple_trainer) {
+            $sql .= " AND (a.trainer_id='$user_id' OR a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN (SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)))) ";
         }
 
         $client_ids = implode($client_id, ',');
@@ -389,6 +394,7 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
         $user = &JFactory::getUser($cid);
 
         $locations = "'" . implode("','", $location) . "'";
+        
         if ($location[0]) {
             $sql .= " and a.location IN ($locations) ";
         }
@@ -445,11 +451,9 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
                 $ret['success'] = false;
                 $ret['message'] = $db->stderr();
             }
-            if ($row->client_id) {
-                $clients = $db->loadResultArray(0);
-            }
-            $clients[] = $row->client_id;
-
+            
+            $clients = $db->loadResultArray(0);
+   
             $clients = array_unique($clients);
             foreach ($clients as $client) {
                 $clients_names[] = JFactory::getUser($client)->name;
@@ -1089,11 +1093,13 @@ function getCategoryNameColorById($id) {
 function saveDragedData() {
     $ret['success'] = true;
     $post = JRequest::get('post');
+
     $starttime = $post['starttime'];
     $field = $post['field'];
     $value = $post['value'];
 
     $event_id = $post['event_id'];
+    
     $db = & JFactory::getDBO();
     $query = "SELECT id, title,  starttime FROM #__dc_mv_events WHERE id='$event_id'";
     $db->setQuery($query);
@@ -1101,38 +1107,41 @@ function saveDragedData() {
         $ret['success'] = false;
         $ret['message'] = $db->stderr();
     }
-
+    $id = $db->loadResultArray(0);
+    $id = $id[0];
     $event_name = $db->loadResultArray(1);
-    $exists = $db->loadResultArray(2);
+    $event_name = $event_name[0];
 
-
-
-    if ($exists) {
-        $query = "UPDATE #__dc_mv_events SET $field='$value' WHERE starttime='$starttime'";
-        if ($field == 'title') {
-            $query = "UPDATE #__dc_mv_events SET $field='$value' WHERE starttime='$starttime'";
+    if ($id) {
+        if ($field == 'client_id') {
+            $client_id = $value;
+            $insertGroupClient = insertGroupClient($event_id, $client_id);
+            if(!$insertGroupClient['success']) {
+                $ret['success'] = false;
+                $ret['message'] = $insertGroupClient['message'];
+            }
+            return $ret;
         }
+        
+        $query = "UPDATE #__dc_mv_events SET $field='$value' WHERE id='$id'";
+        
         $db->setQuery($query);
         if (!$db->query()) {
             $ret['success'] = false;
             $ret['message'] = $db->stderr();
+            return $ret;
         }
 
-        if (($field == 'client_id') AND !(in_array($event_name[0], array(1, 5)))) { // for all categories except Personal Training and Assessment
-            $client_id = $value;
-            $insertGroupClient = insertGroupClient($event_id, $client_id);
-        }
     } else {
         if ($field == 'title') {
             $post['title'] = $value;
 
-            insertEvent($post);
-            if (!(in_array($value, array(1, 5)))) { // for all categories except Personal Training and Assessment
-                $event_id = $db->insertid();
-                $client_id = $post['client_id'];
-                if (is_int($client_id)) {
-                    $insertGroupClient = insertGroupClient($event_id, $client_id);
-                }
+            $insert = insertEvent($post);
+            
+            if(!$insert['success']) {
+                $ret['success'] = false;
+                $ret['message'] = $insert['message'];
+                return $ret;
             }
         } else {
             $ret['success'] = false;
@@ -1152,7 +1161,6 @@ function insertGroupClient($event_id, $client_id) {
         $ret['success'] = false;
         $ret['message'] = $db->stderr();
         return $ret;
-        ;
     }
     $client = $db->loadResult();
 
@@ -1186,14 +1194,19 @@ function insertEvent($post) {
     $obj->calid = JRequest::getVar('calid');
     $obj->published = 1;
     $obj->owner = JRequest::getVar('cid');
-    $obj->status = 1;
+    $obj->business_profile_id = $post['business_profile_id'];
+
     $insert = $db->insertObject('#__dc_mv_events', $obj, 'id');
-    $db->setQuery($query);
-    if (!$insert) {
+    
+    if(!$insert) {
         $ret['success'] = false;
         $ret['message'] = $db->stderr();
-        return $ret;
     }
+    
+    $id = $db->insertid();
+    
+    $ret['data'] = $id;
+            
     return $ret;
 }
 

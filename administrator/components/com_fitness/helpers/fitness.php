@@ -799,11 +799,11 @@ class FitnessHelper extends FitnessFactory
         return $html;
     }
     
-    function generateMultipleSelect($items, $name, $id, $selected, $select, $required, $class) {
+    function generateMultipleSelect($items, $name, $id, $selected, $select, $required, $class, $size = 10) {
 
         $selected = explode(',', $selected);
-        $html = '<select size="10" id="' . $id . '" class="' . $class . '" multiple="multiple" name="' . $name . '[]">';
-        $html .= '<option>-Select-</option>';
+        $html = '<select size="' . $size . '" id="' . $id . '" class="' . $class . '" multiple="multiple" name="' . $name . '[]">';
+        $html .= '<option>-Select ' . $select . '-</option>';
         if(isset($items)) {
             foreach ($items as $item) {
                 if(in_array($item->id, $selected)){
@@ -1941,6 +1941,51 @@ class FitnessHelper extends FitnessFactory
         public function getAssessmentPhotos($item_id) {
             $query = "SELECT * FROM #__fitness_assessments_photos WHERE item_id='$item_id'";
             return self::customQuery($query, 1);
+        }
+        
+        public function select_filter($table, $user_id = null, $by_business_profile = false) {
+            $query = "SELECT * FROM $table WHERE state='1'";
+            
+            if(!$user_id) {
+                $user_id = JFactory::getUser()->id;
+            }
+
+            if($by_business_profile AND (self::is_trainer($user_id) OR self::is_client($user_id))) {
+                $business_profile_id = $this->getBusinessProfileId($user_id);
+                $business_profile_id = $business_profile_id['data'];
+                $query .= " AND business_profile_id='$business_profile_id'";
+            }
+
+            $params = JRequest::get('get');
+
+            if(is_array($params)) {
+                $db = JFactory::getDbo();
+                //get all existing table fields
+                $db->setQuery("DESCRIBE $table");
+                $db->query();
+                $fields = $db->loadResultArray();
+                //
+
+                // filter incomming data
+                $obj = new stdClass();
+                foreach ($params as $key => $value) {
+                    if($key == 'business_profile_id') {
+                        continue;
+                    }
+
+                    if(in_array($key, $fields)){
+                        if($value) {
+                           $query .= " AND $key='$value'"; 
+                        }
+                    }
+                }
+            }
+            //
+
+            $query .= " ORDER BY name ASC";
+
+            $data = FitnessHelper::customQuery($query, 1);
+            return $data;
         }
 }
 

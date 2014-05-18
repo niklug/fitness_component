@@ -156,86 +156,65 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
           <option value=""><?php echo JText::_('-Select Trainers-');?></option>
         </select>
     </div>
-    <?php
-    $locations = $helper->getLocations();
-    ?>
 
     <div  style="float:left;margin-left: 10px;">
-        <select multiple size="6" id="filter_location" name="location[]" class="inputbox" >
-                <option value=""><?php echo JText::_('-Select Locations-');?></option>
-                <?php 
-                    foreach ($locations as $location) {
-                        echo '<option value="' . $location->id . '">' . $location->name . '</option>';
-                    }
-                ?>
-        </select>
+        <?php
+        $locations = $helper->select_filter('#__fitness_locations');
+            echo $helper->generateMultipleSelect(
+                $locations,//data
+                'location',//name
+                'filter_location',//id
+                '',//selected items
+                'Locations',//title
+                false,//required
+                '',//class
+                6//size
+        ); ?>
     </div>
-        
-                
-    <?php
-    $db = JFactory::getDbo();
-    $sql = "SELECT id, name, color FROM #__fitness_categories WHERE state='1'";
-    $db->setQuery($sql);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $appointments = $db->loadObjectList();
-
-    ?>
 
     <div  style="float:left;margin-left: 10px;">
-        <select multiple size="6" id="filter_appointment" name="appointment[]" class="inputbox" >
-                <option value=""><?php echo JText::_('-Select Appointments-');?></option>
-                <?php 
-                    foreach ($appointments as $appointment) {
-                        echo '<option value="' . $appointment->id . '">' . $appointment->name . '</option>';
-                    }
-                ?>
-        </select>
+        <?php
+        $appointments = $helper->select_filter('#__fitness_categories');
+            echo $helper->generateMultipleSelect(
+                $appointments,//data
+                'appointment',//name
+                'filter_appointment',//id
+                '',//selected items
+                'Appointments',//title
+                false,//required
+                '',//class
+                6//size
+        ); ?>
     </div>
-        
-    <?php
-    $db = JFactory::getDbo();
-    $sql = "SELECT DISTINCT name FROM #__fitness_session_type WHERE state='1'";
-    $db->setQuery($sql);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $session_types = $db->loadObjectList();
-
-    ?>
 
     <div style="float:left;margin-left: 10px;">
-        <select multiple size="6" id="filter_session_type" name="session_type[]" class="inputbox" >
-                <option value=""><?php echo JText::_('-Select Session Types-');?></option>
-                <?php 
-                    foreach ($session_types as $session_type) {
-                        echo '<option value="' . $session_type->id . '">' . $session_type->name . '</option>';
-                    }
-                ?>
-        </select>
+        <?php
+        $session_types = $helper->select_filter('#__fitness_session_type');
+            echo $helper->generateMultipleSelect(
+                $session_types,//data
+                'session_type',//name
+                'filter_session_type',//id
+                '',//selected items
+                'Session Type',//title
+                false,//required
+                '',//class
+                6//size
+        ); ?>
     </div>
-        
-    <?php
-    $db = JFactory::getDbo();
-    $sql = "SELECT DISTINCT name FROM #__fitness_session_focus WHERE state='1'";
-    $db->setQuery($sql);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $session_focuses = $db->loadObjectList();
-
-    ?>
 
     <div style="float:left;margin-left: 10px;">
-        <select multiple size="6" id="filter_session_focus" name="session_focus[]" class="inputbox" >
-                <option value=""><?php echo JText::_('-Select Session Focuses-');?></option>
-                <?php 
-                    foreach ($session_focuses as $session_focus) {
-                        echo '<option value="' . $session_focus->id . '">' . $session_focus->name . '</option>';
-                    }
-                ?>
-        </select>
+        <?php
+        $session_focuses = $helper->select_filter('#__fitness_session_focus');
+            echo $helper->generateMultipleSelect(
+                $session_focuses,//data
+                'session_focus',//name
+                'filter_session_focus',//id
+                '',//selected items
+                'Session Focus',//title
+                false,//required
+                '',//class
+                6//size
+        ); ?>
     </div>
 
     <input style="margin-left: 20px;" type="button" value="Go" name="find_filtered" id="find_filtered"/>
@@ -430,7 +409,6 @@ userAdd:true,
             
             // populate clients select
             fitness_helper.populateClientsSelectOnBusiness('getClientsByBusiness', 'goals', business_profile_id, '#filter_client', '');
-            
             fitness_helper.on('change:clients', function(model, items) {
                 
                 populateDragUL(items, $("#clients_ul"), 'client_id');

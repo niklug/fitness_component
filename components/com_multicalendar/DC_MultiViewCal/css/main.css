@@ -391,3 +391,7 @@
     display: none;
   
 }
+
+.red_style_border {
+    border: 2px solid #FF0000 !important;
+}

@@ -1,7 +1,31 @@
          <input id="timezone" name="timezone" type="hidden" value="" />
          <?php
-           if (isset($event->status)) {
+           if (isset($event->id)) {
          ?>
+         <br/>
+         <hr>
+         <table width="100%">
+             <tr>
+                 <td>
+                     <label class="checkp">
+                          <input id="frontend_published" name="frontend_published" type="checkbox" value="1" <?php if (isset($event) && $event->frontend_published != "0") {
+                          echo "checked";
+                      } ?>/><span  style="font-size:11px;" class="inl">Publish Workout</span>
+                      </label> 
+                 </td>
+             <tr/>
+             <tr>
+                 <td>
+                     <label class="checkp">
+                          <input  name="published" type="checkbox" value="1" <?php if (isset($event) && $event->published != "0") {
+                          echo "checked";
+                      } ?>/><span style="font-size:11px;" class="inl">Publish Appointment</span>
+                      </label>
+                 </td>
+             </tr>
+         </table>
+
+         <br/>
          <div class="checkp">
               <input id="repeatcheckbox" name="repeatcheckbox" type="checkbox" value="1" <?php if (isset($event) && $event->rrule != "") {
               echo "checked";
@@ -12,29 +36,13 @@
             }
           ?>
           <br/>
+          
           <a href="#" id="savebtn">Save</a>
           <a href="#" id="saveclosebtn">Save/Close</a>
           <?php if(isset($event) && (JRequest::getVar("delete")=="1")){ ?>
              <a href="#" id="deletebtn">Delete</a>
           <?php } ?>  
           <a href="#" id="closebtn">Close</a>
-          <?php
-            if (isset($event->status)) {
-          ?>
-          <label class="checkp">
-              <input id="frontend_published" name="frontend_published" type="checkbox" value="1" <?php if (isset($event) && $event->frontend_published != "0") {
-              echo "checked";
-          } ?>/><span  style="font-size:11px;" class="inl">Publish Workout</span>
-          </label> 
-
-          <label class="checkp">
-              <input  name="published" type="checkbox" value="1" <?php if (isset($event) && $event->published != "0") {
-              echo "checked";
-          } ?>/><span style="font-size:11px;" class="inl">Publish Appointment</span>
-          </label> 
-          <?php
-            }
-          ?> 
       </form>  
     </div>  
     <div id="repeatsave">
@@ -114,14 +122,7 @@
         <br />  
         <br />  
     </div>  
-      <div class="event_status_wrapper">
-          <img class="hideimage " src="<?php echo JUri::base() ?>administrator/components/com_fitness/assets/images/close.png" alt="close" title="close" onclick="hide_event_status_wrapper()">
-              <a data-status="1" class="set_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>
-              <a data-status="2" class="set_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>
-              <a data-status="3" class="set_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>
-              <a data-status="4" class="set_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>
-              <a data-status="5" class="set_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>
-      </div>
+
     <a id="bbit-cs-editLink" href=""></a>  
     
 

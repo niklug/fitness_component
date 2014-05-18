@@ -55,14 +55,32 @@
             $("#trainer, #business_profile_id").live('change', function() {
                 deleteEventClients();
             });
+            
+            
 
-
+            $("#go_to_app").live('click', function() {
+                goToAppointment();
+            });
             /********************/ 
         });  
 
 
 
         // FUNCTIONS 
+        
+        function goToAppointment() {
+            var event_id = '<?php echo $event->id; ?>';
+            var appointment_id = $("#Subject").val();
+            var appointment_type = 'programs';
+            
+            if(appointment_id == '5') {
+                appointment_type = 'assessments';
+            }
+            
+            var url = '<?php echo JURI::root();?>' + 'index.php?option=com_fitness&view=' + appointment_type + '#!/item_view/' + event_id;
+            window.open(url, '_blank');
+        }
+        
         function deleteGroupClient(this_object) {
             var id = this_object.closest('tr').find('select').data('id');
             var DATA_FEED_URL = "<?php echo $datafeed?>&calid=<?php echo $_GET["calid"]?>";
@@ -366,44 +384,43 @@
 
 
         function personalTrainingForm() {
-
+            $("#comments_wrapper").hide();
         }
 
-
-
         function semiPrivateForm() {
-
+            $("#comments_wrapper").hide();
         }
 
 
         function resistanceWorkoutForm() {
-
+            $("#comments_wrapper").hide();
         }
 
         function cardioWorkoutForm() {
-
+            $("#comments_wrapper").hide();
         }
 
         function assessmentForm() {
-
+            $("#comments_wrapper").hide();
         }
 
         function consultationForm() {
-            semiPrivateForm();
-
+            $("#comments_wrapper").show();
         }
 
         function specialEventForm() {
-            consultationForm();
-         }
+            $("#comments_wrapper").show();
+        }
 
         function availableForm() {
-            consultationForm();
+            $("#comments_wrapper").show();
         }
 
         function unavailableForm() {
-            consultationForm();
+            $("#comments_wrapper").show();
         }
+        
+        
 
         function setEndInterval(form_id) {
             var endInterval;
@@ -475,7 +492,17 @@
 </style>  
 </head>  
 <body class="multicalendar calendaredition">
-    <h3 id="appointment_title">Add/Edit Appointment</h3>
+    <table width="100%">
+        <tr>
+            <td style="text-align: left;">
+                <h3 id="appointment_title">Add/Edit Appointment</h3>
+            </td>
+            <td style="text-align: right;">
+                <a style="font-size:12px;" id="go_to_app" href="javascript:void(0)">[GO TO APPOINTMENT]</a>
+            </td>
+        </tr>
+    </table>
+    
 
     <div class="infocontainer ui-widget-content" >
         <hr>

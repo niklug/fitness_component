@@ -82,6 +82,7 @@
 
                     var self = this;
                     this.ajaxCall(data, url, view, task, table, function(output) {
+                        self.set("clients", output);
                         self.populateSelect(output, target, selected);
                     });
                 },
@@ -102,6 +103,7 @@
                     var self = this;
                     this.ajaxCall(data, url, view, task, table, function(output) {
                         //console.log(output);
+                        self.set("trainers", output);
                         self.populateSelect(output, target, selected);
                     });
                 },
@@ -424,7 +426,11 @@
 
                     element.find(".cleditorMain").css('background-color', 'rgba(255, 255, 255, 0.1)');
                     
-                    element.find(selector).cleditor()[0].disable(disabled);
+                    
+                    var element = element.find(selector).cleditor()[0];
+                    if(element) {
+                        element.disable(disabled);
+                    }
                 },
             });
 

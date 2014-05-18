@@ -1921,7 +1921,6 @@
             });
             
             $("#business_profile_id").live('change', function(){
-
                 var filter_options = $("#calendar_filter_form").serialize();
                 option.url = option.url + '&' + filter_options;
                 populate();
@@ -3061,19 +3060,25 @@
          }
          
          function saveDragedData(event_id, starttime,  endtime, field, value) {
-
+             $('#business_profile_id').removeClass('red_style_border');
              //console.log(event_id + ' '  + starttime + ', ' + endtime + ', ' + field + ', ' + value);
              var url = option.url.replace('list', 'saveDragedData');
              //console.log(url);
-             var client_id =  $('#filter_client').find(':selected').val();
-             if(!client_id) client_id = '';
+             var client_id =  $('#filter_client').find(':selected').val() || '';
              //console.log(client_id);
              var trainer_id =  $('#filter_trainer').find(':selected').val();
              if(!trainer_id) trainer_id =  $('#trainer_input').val();
              //console.log(trainer_id);
              if(!trainer_id) trainer_id = '';
-             var location =  $('#filter_location').find(':selected').val();
-             if(!location) location = '';
+             var location =  $('#filter_location').find(':selected').val() || '';
+             
+             var business_profile_id = $('#business_profile_id').find(':selected').val() || null;
+             
+             if(!business_profile_id) {
+                 $('#business_profile_id').addClass('red_style_border');
+                 return;
+             }
+
              $.ajax({
                     type : "POST",
                     url : url,
@@ -3085,7 +3090,8 @@
                        value : value,
                        client_id : client_id,
                        trainer_id : trainer_id,
-                       location : location
+                       location : location,
+                       business_profile_id : business_profile_id
                     },
                     dataType : 'json',
                     success : function(response) { 
@@ -3109,7 +3115,7 @@
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown)
                     {
-                        console.log("error");
+                        console.log("error saveDragedData");
                     }
                 });
                 $(".tg-col-eventwrapper").css('cursor','default');
