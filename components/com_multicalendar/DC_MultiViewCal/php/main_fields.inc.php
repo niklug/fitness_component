@@ -112,6 +112,7 @@ $is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user->id);
 <input id="colorvalue" name="colorvalue" type="hidden" value="<?php echo isset($event)?$event->color:"" ?>" />
 <input type="hidden" id="rrule" name="rrule" value="<?php echo $event->rrule?>" size=55 />
 <input type="hidden" id="rruleType" name="rruleType" value="" size=55 />
+<input type="hidden" id="cid" name="cid" value="<?php echo JRequest::getVar('cid'); ?>" size=55 />
 
 
 <script type="text/javascript">

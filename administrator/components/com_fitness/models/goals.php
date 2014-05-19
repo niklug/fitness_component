@@ -396,7 +396,7 @@ class FitnessModelgoals extends JModelList {
         $user_id = $data->user_id;
      
         $clients =  $helper->getClientsByBusiness($business_profile_id, $user_id);
-        
+
         if(!$clients['success']) {
             $status['success'] = 0;
             $status['message'] = $clients['message'];
@@ -405,6 +405,7 @@ class FitnessModelgoals extends JModelList {
         }
         
         $result = array( 'status' => $status, 'data' => $clients['data']);
+
         
         return  json_encode($result);
 

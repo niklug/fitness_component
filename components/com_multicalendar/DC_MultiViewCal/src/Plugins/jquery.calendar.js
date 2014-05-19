@@ -3238,8 +3238,14 @@
                             event_id = $(this).attr('data-id');
                             
                             $(this).siblings('.event_tooltip').show();
-                            //console.log(e.pageX + ' ' +  e.pageY);
-                            $(this).siblings('.event_tooltip').css({ left:e.pageX,top:e.pageY});
+                            
+                            var position = $(this).offset();
+                
+                            var top = position.top - parseInt($(document).scrollTop());
+                            var left = position.left + 107;
+                                        
+                            console.log($(document).scrollTop());
+                            $(this).siblings('.event_tooltip').css({ left : left, top : top});
                         });
                         $(this).find('dl').mouseout(function(e) { 
                             $(this).siblings('.event_tooltip').hide();

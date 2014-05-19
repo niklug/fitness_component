@@ -158,7 +158,7 @@ class FitnessModeluser_group extends JModelAdmin
             }
             
             $trainers = $helper->getUsersByGroup($trainers_group_id);
-
+            
             
             if(!$trainers['success']) {
                 $result['status']['success'] = 0;

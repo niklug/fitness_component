@@ -44,6 +44,7 @@ switch ($method) {
         $d2 = js2PhpTime(JRequest::getVar("enddate"));
         $client_id = JRequest::getVar("client_id");
         $trainer_id = JRequest::getVar("trainer_id");
+        $client_id = JRequest::getVar("client_id");
         $location = JRequest::getVar("location");
         $appointment = JRequest::getVar("appointment");
         $session_type = JRequest::getVar("session_type");
@@ -53,7 +54,7 @@ switch ($method) {
 
         $d1 = mktime(0, 0, 0, date("m", $d1), date("d", $d1), date("Y", $d1));
         $d2 = mktime(0, 0, 0, date("m", $d2), date("d", $d2), date("Y", $d2)) + 24 * 60 * 60 - 1;
-        $ret = listCalendarByRange($calid, ($d1), ($d2), $trainer_id, $location, $appointment, $session_type, $session_focus, $business_profile_id);
+        $ret = listCalendarByRange($calid, ($d1), ($d2), $trainer_id, $client_id, $location, $appointment, $session_type, $session_focus, $business_profile_id);
 
         break;
     case "update":
@@ -276,7 +277,9 @@ $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id,
                     . $db->Quote($session_focus) . ", "
                     . $db->Quote($trainer_id) . ", "
                     . $db->Quote($loc) . ", "
-                    . $db->Quote($rrule) . ", " . $db->Quote($uid) . ", " . $user->id . ",1,"
+                    . $db->Quote($rrule) . ", " . $db->Quote($uid) . ", " 
+                    . $user->id 
+                    . ",1,"
                     . $db->Quote($business_profile_id) ." )";
 
             $db->setQuery($sql);
@@ -298,7 +301,7 @@ $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id,
     return $ret;
 }
 
-function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointment, $session_type, $session_focus, $business_profile_id) {
+function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $location, $appointment, $session_type, $session_focus, $business_profile_id) {
     $ret = array();
     $ret['events'] = array();
     $ret["issort"] = true;
@@ -376,7 +379,7 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $location, $appointm
         }
 
         $client_ids = implode($client_id, ',');
-
+        
 
         if ($client_id[0]) {
             $sql .= " and (a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($client_ids))) ";
@@ -509,7 +512,7 @@ function listCalendar($day, $type) {
             break;
     }
     //echo $st . "--" . $et;
-    return listCalendarByRange($st, $et, '', '', '', '', '', '', '');
+    return listCalendarByRange($st, $et, '', '', '', '', '', '', '', '');
 }
 
 function updateCalendar($id, $st, $et) {

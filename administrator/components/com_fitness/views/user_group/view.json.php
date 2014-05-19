@@ -17,6 +17,7 @@ class FitnessViewUser_group extends JView {
     
   
         function onBusinessNameChange() {
+            
             $table= JRequest::getVar('table');
             $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
             $model = $this -> getModel("user_group");

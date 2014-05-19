@@ -159,7 +159,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
     <div  style="float:left;margin-left: 10px;">
         <?php
-        $locations = $helper->select_filter('#__fitness_locations');
+        $locations = $helper->select_filter('#__fitness_locations', $user_id, $business_profile_id);
             echo $helper->generateMultipleSelect(
                 $locations,//data
                 'location',//name
@@ -409,15 +409,16 @@ userAdd:true,
             
             // populate clients select
             fitness_helper.populateClientsSelectOnBusiness('getClientsByBusiness', 'goals', business_profile_id, '#filter_client', '');
+            fitness_helper.off("change:clients");
             fitness_helper.on('change:clients', function(model, items) {
-                
+                //console.log(items);
                 populateDragUL(items, $("#clients_ul"), 'client_id');
             });
             
             
             // populate trainers select
             fitness_helper.populateTrainersSelectOnBusiness('user_group', business_profile_id, '#filter_trainer', '');
-            
+            fitness_helper.off("change:trainers");
             fitness_helper.on('change:trainers', function(model, items) {
                 populateDragUL(items, $("#trainers_ul"), 'trainer_id');
             });
@@ -426,7 +427,7 @@ userAdd:true,
         
         function populateDragUL(data, target, data_name) {
             var html = '';
-            $.each(data, function(index, value) {
+            $.each(data, function(value, index) {
                 if(index) {
                     html += '<li data-name="'  +data_name + '" data-value="' + index + '" class="drag_data" title="' + value + '" >' + value + '</li>'
                 }

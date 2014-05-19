@@ -58,7 +58,7 @@
                 populateSelect : function(data, target, selected_value) {
                     //console.log(data);
                     var html = '<option  value="">-Select-</option>';
-                    $.each(data, function(index, value) {
+                    $.each(data, function(value, index) {
                         if(index) {
                             var selected = '';
                             if(selected_value == index) {

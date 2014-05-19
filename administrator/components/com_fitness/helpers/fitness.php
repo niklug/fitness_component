@@ -661,9 +661,12 @@ class FitnessHelper extends FitnessFactory
     
     
     public function getUsersByGroup($group_id) {
+
         $db = &JFactory::getDBo();
         $query = "SELECT u.id FROM #__users AS u 
-            INNER JOIN #__user_usergroup_map AS g ON g.user_id=u.id WHERE g.group_id='$group_id' AND u.block='0'";
+            INNER JOIN #__user_usergroup_map AS g ON g.user_id=u.id WHERE g.group_id='$group_id' AND u.block='0'"
+                . " ORDER BY u.name ASC";
+        
         $db->setQuery($query);
         $ret['success'] = 1;
         if (!$db->query()) {
@@ -688,7 +691,9 @@ class FitnessHelper extends FitnessFactory
             }
         }
         
-        $ret['data'] = array_combine($clients, $clients_name);
+        $data = array_combine($clients_name, $clients);
+        
+        $ret['data'] = $data;
         
         return $ret;
     }
@@ -696,14 +701,20 @@ class FitnessHelper extends FitnessFactory
     public function getClientsByBusiness($business_profile_id, $user_id) {
             
         $db = &JFactory::getDBo();
-        $query = "SELECT DISTINCT user_id FROM #__fitness_clients WHERE business_profile_id='$business_profile_id'";
+        $query = "SELECT  c.user_id"
+                . " FROM #__fitness_clients AS c"
+                . " LEFT JOIN #__users AS u ON u.id=c.user_id"
+                . " WHERE c.business_profile_id='$business_profile_id'";
         
         $user = JFactory::getUser($user_id);
    
         // if simple trainer
         if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
-            $query .= ' AND ( primary_trainer = ' . (int) $user->id . ' OR FIND_IN_SET(' . $user->id . ' , other_trainers) ) ';
+            $query .= ' AND ( c.primary_trainer = ' . (int) $user->id . ' OR FIND_IN_SET(' . $user->id . ' , c.other_trainers) ) ';
         }
+        
+        $query .= "  ORDER BY u.name ASC ";
+        
         $db->setQuery($query);
         $ret['success'] = 1;
         if (!$db->query()) {
@@ -712,7 +723,9 @@ class FitnessHelper extends FitnessFactory
             return $ret;
         }
 
-        $clients= $db->loadResultArray(0);
+        $clients = $db->loadResultArray(0);
+        
+        
 
         if(!$clients) {
             $ret['success'] = 0;
@@ -727,7 +740,9 @@ class FitnessHelper extends FitnessFactory
             }
         }
         
-        $ret['data'] = array_combine($clients, $clients_name);
+        $data = array_combine($clients_name, $clients);
+                       
+        $ret['data'] = $data;
         
         return $ret;
     }
