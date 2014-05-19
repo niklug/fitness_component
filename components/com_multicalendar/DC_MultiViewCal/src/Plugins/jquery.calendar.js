@@ -1968,6 +1968,7 @@
         
         function sendRemindersManually(reminder_options) {
             var url = option.url.replace('list', 'sendRemindersManually') + '&' +reminder_options;
+            //console.log(url);
              $.ajax({
                     type : "POST",
                     url : url,
@@ -2034,7 +2035,6 @@
                     success: function(data) {//function(datastr) {
 						//datastr =datastr.replace(/"\\\/(Date\([0-9-]+\))\\\/"/gi, 'new $1');
                         //var data = (new Function("return " + datastr))();
-                        console.log(data);
                         if(data.error) {
                             alert(data.error);
                             return;
@@ -3243,8 +3243,6 @@
                 
                             var top = position.top - parseInt($(document).scrollTop());
                             var left = position.left + 107;
-                                        
-                            console.log($(document).scrollTop());
                             $(this).siblings('.event_tooltip').css({ left : left, top : top});
                         });
                         $(this).find('dl').mouseout(function(e) { 

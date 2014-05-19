@@ -243,7 +243,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             $( "#s_all_day_event" ).html(i18n.dcmvcal.all_day_event);
             $( "#s_location" ).html(i18n.dcmvcal.location);
             $( "#s_remark" ).html(i18n.dcmvcal.remark);
-            $("#savebtn,#saveclosebtn,#closebtn,#deletebtn" ).button();
+            $("#savebtn,#saveclosebtn,#closebtn,#deletebtn, #savecopybtn" ).button();
             $( "#savebtn" ).button( "option", "label", i18n.dcmvcal.i_save );
             $( "#closebtn" ).button( "option", "label", i18n.dcmvcal.i_close );
             $( "#deletebtn" ).button( "option", "label", i18n.dcmvcal.i_delete );
@@ -255,6 +255,18 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
             $("#saveclosebtn").click(function() { 
                 close_status = true;
                 $("#fmEdit").submit();
+            });
+            
+            $("#savecopybtn").click(function() { 
+                var id = '<?php echo $event->id ?>';
+                var data = {};
+                var url = '<?php echo JURI::base(); ?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1';
+                var view = 'Programs';
+                var task = 'copyEvent';
+                data.id = id;
+                saveCopy(data, url, view, task, function(output){
+                    console.log(output);
+                })
             });
             
             
@@ -498,6 +510,32 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
                     window.parent.$jc('#editEvent').dialog('close');
                 }
 
+            }
+            
+            function saveCopy(data, url, view, task, handleData) {
+                var data_encoded = JSON.stringify(data);
+                $.ajax({
+                    type : "POST",
+                    url : url,
+                    data : {
+                        view : view,
+                        task : task,
+                        format : 'text',
+                        data_encoded : data_encoded
+                    },
+                    dataType : 'json',
+                    success : function(response) {
+                        if(!response.status.success) {
+                            alert(response.status.message);
+                            return;
+                        }
+                        handleData(response.data);
+                    },
+                    error: function(response)
+                    {
+                       alert(response.responseText);
+                    }
+                }); 
             }
        
            

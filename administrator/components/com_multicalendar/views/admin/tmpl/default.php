@@ -21,6 +21,7 @@
 **/
 
 defined('_JEXEC') or die('Restricted access'); 
+
 require_once( JPATH_COMPONENT_SITE.'/DC_MultiViewCal/php/list.inc.php' );
 
 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
@@ -53,6 +54,7 @@ $mainframe  =& JFactory::getApplication();
 ?>
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php
+
     $cid = JRequest::getVar( 'cid', array(0), '', 'array' );
     $id = $cid[0];
     $db =& JFactory::getDBO();
@@ -75,9 +77,6 @@ $mainframe  =& JFactory::getApplication();
     if (count($rows)>0){
 	    JToolBarHelper::title(   $rows[0]->title . JText::_('COMMULTICALENDAR_TITLE_DASH_ADMIN'), "multicalendar-management" );
     }
-	JToolBarHelper::cancel( 'cancel', JText::_('Close') );
-    
-	JToolBarHelper::help( 'screen.multicalendar.admin', true );
 	
 	$language = $mainframe->getCfg('language');
 ?>
@@ -304,7 +303,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
                                             <select style="font-size: 14px; font-weight: bold;  width: 200px;" multiple size="9"  name="appointments[]" class="inputbox" >
                                                 <?php
                                                 foreach ($appointments as $appointment) {
-                                                    echo '<option value="' . $appointment->name . '">' . $appointment->name . '</option>';
+                                                    echo '<option value="' . $appointment->id . '">' . $appointment->name . '</option>';
                                                 }
                                                 ?>
                                             </select>

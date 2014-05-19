@@ -102,12 +102,15 @@
           ?>
           <br/>
           
-          <a href="#" id="savebtn">Save</a>
-          <a href="#" id="saveclosebtn">Save/Close</a>
+          <a href="javascript:void(0)" id="savebtn">Save</a>
+          <?php if($event->id) { ?>
+            <a href="javascript:void(0)" id="savecopybtn">Save as Copy</a>
+          <?php } ?>
+          <a href="javascript:void(0)" id="saveclosebtn">Save/Close</a>
           <?php if(isset($event) && (JRequest::getVar("delete")=="1")){ ?>
-             <a href="#" id="deletebtn">Delete</a>
+             <a href="javascript:void(0)" id="deletebtn">Delete</a>
           <?php } ?>  
-          <a href="#" id="closebtn">Close</a>
+          <a href="javascript:void(0)" id="closebtn">Close</a>
       </form>  
     </div>  
     <div id="repeatsave">

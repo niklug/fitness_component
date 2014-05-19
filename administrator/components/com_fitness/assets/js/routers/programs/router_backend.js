@@ -183,6 +183,8 @@ define([
         edit_allowed : function(model) {
             var access = false;
             
+            var appointment_id = model.get('title');
+            
             var created_by = model.get('owner');
             
             var trainer_id = model.get('trainer_id');
@@ -198,6 +200,11 @@ define([
             var is_superuser = app.options.is_superuser;
             
             var user_id = app.options.user_id;
+            
+            //Personal Training, Semi-Private Training, Resistance Workout, Cardio Workout only
+            if(appointment_id != '1' && appointment_id != '2' && appointment_id != '3' && appointment_id != '4') {
+                return false;
+            }
             
             
             //if simple trainer//
@@ -226,6 +233,8 @@ define([
             if(is_superuser) {
                 var access = true;
             }
+            
+            
            
             return access;
         },

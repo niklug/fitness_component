@@ -77,7 +77,7 @@
                 appointment_type = 'assessments';
             }
             
-            var url = '<?php echo JURI::root();?>' + 'index.php?option=com_fitness&view=' + appointment_type + '#!/item_view/' + event_id;
+            var url = '<?php echo JURI::base();?>' + 'administrator/index.php?option=com_fitness&view=' + appointment_type + '#!/form_view/' + event_id;
             window.open(url, '_blank');
         }
         
@@ -405,7 +405,7 @@
         }
 
         function consultationForm() {
-            $("#comments_wrapper").show();
+            $("#comments_wrapper").hide();
         }
 
         function specialEventForm() {
@@ -497,9 +497,11 @@
             <td style="text-align: left;">
                 <h3 id="appointment_title">Add/Edit Appointment</h3>
             </td>
+            <?php if($event->id) { ?>
             <td style="text-align: right;">
                 <a style="font-size:12px;" id="go_to_app" href="javascript:void(0)">[GO TO APPOINTMENT]</a>
             </td>
+            <?php } ?>
         </tr>
     </table>
     

@@ -122,7 +122,6 @@ class FitnessEmail extends FitnessHelper
     
     protected function send_mass_email() {
         $emails = array();
-
         $i = 0;
         foreach ($this->recipients_ids as $recipient_id) {
             
@@ -463,7 +462,11 @@ class AppointmentEmail extends FitnessEmail {
                 break;
         }
         
-        $user_id = JFactory::getUser()->id;
+        $user_id = $this->data->user_id;
+        
+        if(!$user_id) {
+            $user_id = JFactory::getUser()->id;
+        }
        
         if($user_id) {
             //client changes status
@@ -496,9 +499,7 @@ class AppointmentEmail extends FitnessEmail {
         if($send_to) {
             $this->send_to = $send_to;
         }
-        
-        
-        
+         
         $this->subject = $subject;
         $this->layout = $layout;
     }
@@ -506,9 +507,7 @@ class AppointmentEmail extends FitnessEmail {
     protected function get_recipients_ids() {
         
         $ids = array();
-        
-        
-        
+
         $item = $this->getAppointmentClientItem($this->data->id);
         
         $this->event_id = $item->event_id;
@@ -540,6 +539,7 @@ class AppointmentEmail extends FitnessEmail {
             $ids = $clients;
         }
         
+                
         //client sends workout heself
         if(($this->send_to == 'client') AND ($this->layout == 'email_pdf_workout' OR $this->layout == 'email_pdf_a_bio' OR $this->layout == 'email_pdf_a_standard')) {
             $ids = array(JFactory::getUser()->id);

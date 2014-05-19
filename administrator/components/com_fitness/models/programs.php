@@ -537,7 +537,10 @@ class FitnessModelprograms extends JModelList {
         
         if($event->id) {
             $event->id = null;
-            $event->owner = JFactory::getUser()->id;
+            $user_id = JFactory::getUser()->id;
+            if($user_id) {
+                $event->owner = $user_id;
+            }
             $insert = $db->insertObject('#__dc_mv_events', $event, 'id');
             
             if (!$insert) {

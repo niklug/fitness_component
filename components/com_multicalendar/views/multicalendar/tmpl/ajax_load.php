@@ -1246,7 +1246,7 @@ function sendRemindersManually() {
         return $ret;
     }
     $event_ids = $db->loadResultArray(0);
-
+    
     $obj = new AppointmentEmail();
     $ret['success'] = true;
     
@@ -1256,6 +1256,7 @@ function sendRemindersManually() {
             $data_obj = new stdClass();
             $data_obj->id = $event_id;
             $data_obj->method = 'Appointment';
+            $data_obj->user_id = JRequest::getVar('cid');
 
             $emails  .= ' ' .$obj->processing($data_obj);
         } catch (Exception $exc) {
