@@ -129,7 +129,7 @@ switch ($method) {
                     'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('comments', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), 
                     JRequest::getVar('session_type', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), JRequest::getVar('session_focus', '', 'POST', 'STRING', JREQUEST_ALLOWHTML), 
                     JRequest::getVar("trainer_id"), JRequest::getVar("Location"),  JRequest::getVar("frontend_published"),
-                    JRequest::getVar("published"), JRequest::getVar("rrule"), JRequest::getVar("rruleType"), JRequest::getVar("timezone"), JRequest::getVar("business_profile_id")
+                    JRequest::getVar("published"),  JRequest::getVar("auto_publish_workout"),  JRequest::getVar("auto_publish_event"), JRequest::getVar("rrule"), JRequest::getVar("rruleType"), JRequest::getVar("timezone"), JRequest::getVar("business_profile_id")
             );
         } else {
 
@@ -540,7 +540,7 @@ function updateCalendar($id, $st, $et) {
 
 function updateDetailedCalendar(
 $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $trainer_id, $loc, $frontend_published, 
-        $published, $rrule, $rruleType, $tz, $business_profile_id
+        $published, $auto_publish_workout, $auto_publish_event, $rrule, $rruleType, $tz, $business_profile_id
 ) {
 
     $ret = array();
@@ -568,6 +568,8 @@ $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $tra
                         . " `" . DC_MV_CAL_LOCATION . "`=" . $db->Quote($loc) . ", "
                         . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
                         . " `published`=" . $db->Quote($published) . ", "
+                        . " `auto_publish_workout`=" . $db->Quote($auto_publish_workout) . ", "
+                        . " `auto_publish_event`=" . $db->Quote($auto_publish_event) . ", "
                         . " `rrule`=" . $db->Quote($rrule) . ", "
                         . " `business_profile_id`=" . $db->Quote($business_profile_id) . " "
                         . "where `id`=" . $id;
@@ -619,6 +621,8 @@ $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $tra
                         . " `" . DC_MV_CAL_LOCATION . "`=" . $db->Quote($loc) . ", "
                         . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
                         . " `published`=" . $db->Quote($published) . ", "
+                        . " `auto_publish_workout`=" . $db->Quote($auto_publish_workout) . ", "
+                        . " `auto_publish_event`=" . $db->Quote($auto_publish_event) . ", "
                         . " `rrule`=" . $db->Quote($rrule) . ", "
                         . " `business_profile_id`=" . $db->Quote($business_profile_id) . " "
                         . "where `id`=" . $id;

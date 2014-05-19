@@ -1435,10 +1435,11 @@
             }
             //console.log(ret.join(""));
             var trainer = event[14] ?  event[14] : '';
+            var location = event[9] || '';
             var html = '';
             html += "<b> Time: </b>" + timeshow + "</br>";
             html += "<b> Event: </b>" + eventshow + "</br>";
-            html += "<b> Location: </b>" + event[9] + "</br>";
+            html += "<b> Location: </b>" + location + "</br>";
             html += "<b> Trainer: </b>" + trainer + "</br>";
             html += "<b> Clients: </b>" +  "</br>";
             //console.log(event);

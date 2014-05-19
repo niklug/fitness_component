@@ -1,4 +1,43 @@
-         <input id="timezone" name="timezone" type="hidden" value="" />
+<script type="text/javascript">
+      $(document).ready(function() {
+            $('#frontend_published').click(function(){
+               setAutoPublishWorkout();
+            });
+            
+            $('#published').click(function(){
+               setAutoPublishEvent();
+            });
+            
+            setAutoPublishWorkout();
+            setAutoPublishEvent();
+            
+            $( "#auto_publish_workout, #auto_publish_event" ).datepicker({dateFormat : 'yy-mm-dd'}); 
+      });
+      
+      
+      function setAutoPublishWorkout() {
+            var checked = $("#frontend_published").is(":checked");
+            var disabled = false;
+            if(checked) {
+                disabled = true;
+                $("#auto_publish_workout").val('');
+            }
+            $("#auto_publish_workout").attr('disabled', disabled);
+        }
+        
+        
+        function setAutoPublishEvent() {
+            var checked = $("#published").is(":checked");
+            var disabled = false;
+            if(checked) {
+                disabled = true;
+                $("#auto_publish_event").val('');
+            }
+            $("#auto_publish_event").attr('disabled', disabled);
+        }
+     
+</script>  
+        <input id="timezone" name="timezone" type="hidden" value="" />
          <?php
            if (isset($event->id)) {
          ?>
@@ -13,14 +52,40 @@
                       } ?>/><span  style="font-size:11px;" class="inl">Publish Workout</span>
                       </label> 
                  </td>
+                 <td>
+                     <table width="100%">
+                         <tr>
+                             <td width="150">
+                                 <span  style="font-size:11px;" class="inl">Auto Publish Workout on</span>
+                             </td>
+                             <td>
+                                 <input  id="auto_publish_workout" name="auto_publish_workout" type="text" value="<?php echo  $event->auto_publish_workout ?>" size="10" />
+                             </td>
+                         </tr>
+                         
+                     </table>
+                 </td>
              <tr/>
              <tr>
                  <td>
                      <label class="checkp">
-                          <input  name="published" type="checkbox" value="1" <?php if (isset($event) && $event->published != "0") {
+                          <input id="published" name="published" type="checkbox" value="1" <?php if (isset($event) && $event->published != "0") {
                           echo "checked";
                       } ?>/><span style="font-size:11px;" class="inl">Publish Appointment</span>
                       </label>
+                 </td>
+                 <td>
+                     <table width="100%">
+                         <tr>
+                             <td width="150">
+                                 <span  style="font-size:11px;" class="inl">Auto Publish Event on</span>
+                             </td>
+                             <td>
+                                 <input id="auto_publish_event" name="auto_publish_event" type="text" value="<?php echo  $event->auto_publish_event ?>" size="10" />
+                             </td>
+                         </tr>
+                         
+                     </table>
                  </td>
              </tr>
          </table>
