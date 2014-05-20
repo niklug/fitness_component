@@ -149,6 +149,7 @@ switch ($method) {
 echo json_encode($ret);
 
 function checkIfOverlappingThisEvent($id, $st, $et) {
+    return true; // changed
     $db = & JFactory::getDBO();
     $sql = "select * from `" . DC_MV_CAL . "` where id=" . $id;
 
@@ -161,6 +162,7 @@ function checkIfOverlappingThisEvent($id, $st, $et) {
 }
 
 function checkIfOverlapping($calid, $st, $et, $sub, $loc, $id) {
+    return true;//changed
     $db = & JFactory::getDBO();
     $sd = date("Y-m-d H:i:s", js2PhpTime($st));
     $ed = date("Y-m-d H:i:s", js2PhpTime($et));
@@ -519,27 +521,85 @@ function updateCalendar($id, $st, $et) {
     $ret = array();
     $db = & JFactory::getDBO();
     try {
-        if (checkIfOverlappingThisEvent($id, $st, $et)) {
-            $sql = "update `" . DC_MV_CAL . "` set"
-                    . " `" . DC_MV_CAL_FROM . "`='" . php2MySqlTime(js2PhpTime($st)) . "', "
-                    . " `" . DC_MV_CAL_TO . "`='" . php2MySqlTime(js2PhpTime($et)) . "' "
-                    . "where `id`=" . $id;
-            $db->setQuery($sql);
-            if (!$db->query()) {
-                $ret['success'] = false;
-                $ret['message'] = $db->stderr();
-            } else {
-                $ret['success'] = true;
-                $ret['message'] = 'Succefully';
-            }
-        } else
-            $ret = getMessageOverlapping();
+        $query = " SELECT title FROM #__dc_mv_events WHERE id='$id'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
+            return $ret;
+        }
+        
+        $appointment_id = $db->loadResult();
+        
+        $end_time = calculateEndTime($appointment_id, $st);
+        
+        if(!$end_time['success']) {
+            $ret['success'] = false;
+            $ret['message'] = $end_time['message'];
+            return $ret;
+        }
+       
+        $et = $end_time['data'];
+
+        $sql = "update `" . DC_MV_CAL . "` set"
+                . " `" . DC_MV_CAL_FROM . "`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+                . " `" . DC_MV_CAL_TO . "`='" . $et . "' "
+                . "where `id`=" . $id;
+        $db->setQuery($sql);
+        if (!$db->query()) {
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
+        } else {
+            $ret['success'] = true;
+            $ret['message'] = 'Succefully';
+        }
+
     } catch (Exception $e) {
         $ret['success'] = false;
         $ret['message'] = $e->getMessage();
     }
+
     return $ret;
 }
+
+function calculateEndTime($appointment_id, $st) {
+    $ret['success'] = true;
+    
+    $endInterval = setEndInterval($appointment_id);
+    
+    $date = new JDate($st);
+    $et_unix = $date->toUnix() + $endInterval * 60;
+    
+    $end_date = JFactory::getDate($et_unix);
+    
+    $et = $end_date->toFormat();
+
+    //$ret['success'] = false;
+    //$ret['message'] = print_r($st . ' ' . $end_date, true);
+    
+    $ret['data'] = $et;
+    
+    return $ret;
+    
+}
+
+function setEndInterval($id) {
+    switch($id) {
+        case '1' :
+           $endInterval = 45;
+           break;
+        case '2' :
+           $endInterval = 30;
+           break;
+        case '3' :
+           $endInterval = 45;
+           break;
+        default :
+           $endInterval = 60; 
+    }
+    return $endInterval;
+}
+
 
 function updateDetailedCalendar(
 $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $trainer_id, $loc, $frontend_published, 

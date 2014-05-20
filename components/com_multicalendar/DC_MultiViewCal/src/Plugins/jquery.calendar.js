@@ -2691,6 +2691,7 @@
                             if (data.success == true) {
                                 option.isloading = false;
                                 option.onAfterRequestData && option.onAfterRequestData(4);
+                                populate();
                             }
                             else {
                                 option.onRequestDataError && option.onRequestDataError(4, data);
