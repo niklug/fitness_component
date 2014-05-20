@@ -336,7 +336,7 @@ function initMultiViewCal(container,calendarId,config)
                     function showEditEvent(url)
                     {   
                         var width = 650;
-                        var height = 820;
+                        var height = 620;
                         try {
                         $jc("#editEvent").remove();
                         var content = '<iframe id="dailog_iframe_1305934814858" frameborder="0" style="overflow-y: auto;overflow-x: hidden;border:none;width:598px;height:'+(height-60)+'px" src="'+url+'" border="0" scrolling="auto">';

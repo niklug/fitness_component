@@ -377,7 +377,8 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $locatio
         
         // trainer can see appointment for client created by another trainer if it is his client too
         if ($is_simple_trainer) {
-            $sql .= " AND (a.trainer_id='$user_id' OR a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN (SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)))) ";
+            $sql .= " AND  a.business_profile_id ='$business_profile_id' ";
+            $sql .= " AND ((a.trainer_id is NULL OR a.trainer_id = '') OR a.trainer_id='$user_id' OR a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN (SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)))) ";
         }
 
         $client_ids = implode($client_id, ',');
@@ -521,29 +522,9 @@ function updateCalendar($id, $st, $et) {
     $ret = array();
     $db = & JFactory::getDBO();
     try {
-        $query = " SELECT title FROM #__dc_mv_events WHERE id='$id'";
-        $db->setQuery($query);
-        if (!$db->query()) {
-            $ret['success'] = false;
-            $ret['message'] = $db->stderr();
-            return $ret;
-        }
-        
-        $appointment_id = $db->loadResult();
-        
-        $end_time = calculateEndTime($appointment_id, $st);
-        
-        if(!$end_time['success']) {
-            $ret['success'] = false;
-            $ret['message'] = $end_time['message'];
-            return $ret;
-        }
-       
-        $et = $end_time['data'];
-
         $sql = "update `" . DC_MV_CAL . "` set"
                 . " `" . DC_MV_CAL_FROM . "`='" . php2MySqlTime(js2PhpTime($st)) . "', "
-                . " `" . DC_MV_CAL_TO . "`='" . $et . "' "
+                . " `" . DC_MV_CAL_TO . "`='" . php2MySqlTime(js2PhpTime($et)) . "' "
                 . "where `id`=" . $id;
         $db->setQuery($sql);
         if (!$db->query()) {
@@ -560,44 +541,6 @@ function updateCalendar($id, $st, $et) {
     }
 
     return $ret;
-}
-
-function calculateEndTime($appointment_id, $st) {
-    $ret['success'] = true;
-    
-    $endInterval = setEndInterval($appointment_id);
-    
-    $date = new JDate($st);
-    $et_unix = $date->toUnix() + $endInterval * 60;
-    
-    $end_date = JFactory::getDate($et_unix);
-    
-    $et = $end_date->toFormat();
-
-    //$ret['success'] = false;
-    //$ret['message'] = print_r($st . ' ' . $end_date, true);
-    
-    $ret['data'] = $et;
-    
-    return $ret;
-    
-}
-
-function setEndInterval($id) {
-    switch($id) {
-        case '1' :
-           $endInterval = 45;
-           break;
-        case '2' :
-           $endInterval = 30;
-           break;
-        case '3' :
-           $endInterval = 45;
-           break;
-        default :
-           $endInterval = 60; 
-    }
-    return $endInterval;
 }
 
 
@@ -789,7 +732,7 @@ function get_session_type() {
     $db->setQuery($query);
     $id = $db->loadResultArray(0);
     $name = $db->loadResultArray(1);
-    $result = array_combine($id, $name);
+    $result = array_combine($name, $id);
     return $result;
 }
 
@@ -806,7 +749,7 @@ function get_session_focus() {
     $db->setQuery($query);
     $id = $db->loadResultArray(0);
     $name = $db->loadResultArray(1);
-    $result = array_combine($id, $name);
+    $result = array_combine($name, $id);
     return $result;
 }
 
@@ -871,7 +814,13 @@ function get_trainers($user_id) {
 function get_clients() {
     $trainer_id = JRequest::getVar("trainer_id");
     $db = & JFactory::getDBO();
-    $query = "SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$trainer_id' OR FIND_IN_SET('$trainer_id' , other_trainers) AND state='1'";
+    $query = "SELECT c.user_id "
+            . " FROM #__fitness_clients AS c"
+            . " LEFT JOIN #__users AS u ON c.user_id=u.id"
+            . " WHERE c.primary_trainer='$trainer_id' "
+            . " OR FIND_IN_SET('$trainer_id' , c.other_trainers)"
+            . " AND c.state='1'"
+            . " ORDER BY u.name ASC";
     $db->setQuery($query);
     $status['success'] = 1;
     if (!$db->query()) {
@@ -894,7 +843,7 @@ function get_clients() {
         $clients_name[] = $user->name;
     }
 
-    $result = array('status' => $status, 'data' => array_combine($clients, $clients_name));
+    $result = array('status' => $status, 'data' => array_combine($clients_name, $clients));
     return $result;
 }
 

@@ -136,13 +136,11 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
 ?>
 <div id="calendar_filters"  style="clear: both;height: 80px; width: 100%;">
-    
-        
-    <form id="calendar_filter_form">
     <div class='filter-select fltrt'>
         <?php echo $helper->generateSelect($helper->getBusinessProfileList(), 'filter_business_profile_id', 'business_profile_id','' , 'Business Name', false, "inputbox"); ?>
     </div>
-
+        
+    <form id="calendar_filter_form">
     <div   style="float:left;" >
         <select multiple size="6" id="filter_client" name="client_id[]" class="inputbox">
                 <option value=""><?php echo JText::_('-Select Clients-');?></option>
@@ -158,7 +156,7 @@ if (file_exists("../components/com_multicalendar/DC_MultiViewCal/css/".$admin["c
 
     <div  style="float:left;margin-left: 10px;">
         <?php
-        $locations = $helper->select_filter('#__fitness_locations', $user_id, $business_profile_id);
+        $locations = $helper->select_filter('#__fitness_locations', $user_id, true);
             echo $helper->generateMultipleSelect(
                 $locations,//data
                 'location',//name

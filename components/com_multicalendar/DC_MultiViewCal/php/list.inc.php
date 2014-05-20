@@ -10,6 +10,8 @@ function getLocations() {
     
     $query = "SELECT *, id AS value, name AS text FROM #__fitness_locations WHERE state='1'";
     
+    $user_id = JRequest::getVar('cid');
+    
     if($user_id && FitnessHelper::is_trainer($user_id)) {
         $business_profile_id = $helper->getBusinessProfileId($user_id);
 
@@ -18,11 +20,6 @@ function getLocations() {
     }
     
     $query .= " ORDER BY name ASC";
-
-    $user_id = JRequest::getVar('cid');
-
-     
-    
 
     return FitnessHelper::customQuery($query, 1);
 }

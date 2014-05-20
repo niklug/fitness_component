@@ -285,6 +285,7 @@
                __VIEWWEEKDAYSTOTAL += __VIEWWEEKDAYS[i];
         //for dragging var
         var _dragdata;
+        var _dragdata_before_drag;
         var _dragevent;
 
         //clear DOM
@@ -1913,7 +1914,7 @@
             });
             
             $("#reset_filtered").click(function(){
-                $("#calendar_filter_form select").val('');
+                $("#calendar_filter_form select").find(":enabled").removeAttr("selected");
                 var filter_options = $("#calendar_filter_form").serialize();
                 option.url = option.url + '&' + filter_options;
                 //alert(option.url);
@@ -1967,6 +1968,7 @@
         }
         
         function sendRemindersManually(reminder_options) {
+            $("#reminder_from, #reminder_to").val('');
             var url = option.url.replace('list', 'sendRemindersManually') + '&' +reminder_options;
             //console.log(url);
              $.ajax({
@@ -1975,12 +1977,22 @@
                     dataType : 'json',
                     success : function(response) { 
                         if(response.success) {
-                            var emails = response.message.split(',');
+                            var emails = null;
+                            
+                            if(response.message) {
+                                emails = response.message.split(',');
+                            }
                             
                             var message = 'Emails were sent to: ' +  "</br>";
-                            $.each(emails, function(index, email) { 
-                                message += email +  "</br>";
-                            });
+                            
+                            if(!emails){
+                                message = 'No Emails were sent' +  "</br>";
+                            }   
+                            if(emails) {
+                                $.each(emails, function(index, email) { 
+                                    message += email +  "</br>";
+                                });
+                            }
                             $("#emais_sended").append(message);
               
                         } else {
@@ -2691,7 +2703,6 @@
                             if (data.success == true) {
                                 option.isloading = false;
                                 option.onAfterRequestData && option.onAfterRequestData(4);
-                                populate();
                             }
                             else {
                                 option.onRequestDataError && option.onRequestDataError(4, data);
@@ -3127,7 +3138,7 @@
          
          function onDragEvent(e, obj, event_id) {
              //console.log(drag_value);
-            console.log(event_id);
+            //console.log(event_id);
             var _dragdata = { type: 1, target: obj, sx: e.pageX, sy: e.pageY };
             var d = _dragdata;
             var wrapid = new Date().getTime();
@@ -3449,6 +3460,9 @@
                     _dragdata = { type: 7, target: obj, sx: e.pageX, sy: e.pageY, data: data, xa: xa, ya: ya, fdi: fdi, h: h, dp: dp, pw: pw };
                     break;
             }
+            
+            _dragdata_before_drag = _dragdata;
+
             $('body').noSelect();
         }
         function dragMove(e) {
@@ -3764,12 +3778,33 @@
                         quickadd(start, end, true, { left: e.pageX, top: e.pageY });
                         break;
                     case 4: // event moving
+                        
+                        var prev_start = _dragdata_before_drag.data[2];
+                        var prev_end = _dragdata_before_drag.data[3];
+                        
+                        var prev_date_diff = prev_end - prev_start;
+                        
+                        //console.log(prev_date_diff);
+                        
                         if (d.cpwrap) {
                             var start = DateAdd("d", d.cdi, option.vstart);
                             var end = DateAdd("d", d.cdi, option.vstart);
                             var gh = gW(d.ny, d.ny + d.h);
                             start.setHours(gh.sh, gh.sm);
-                            end.setHours(gh.eh, gh.em);
+                            
+                            
+                            //end.setHours(gh.eh, gh.em); old codding
+                            
+                            var date_diff = new Date(prev_date_diff);
+                            
+                            var date_diff_unix = Math.round(date_diff.getTime() / 1000);
+                            
+                            var start_unix = Math.round(start.getTime() / 1000);
+                            
+                            var end_unix = start_unix + date_diff_unix;
+                            
+                            var end = new Date(end_unix * 1000);
+
                             if (start.getTime() == d.data[2].getTime() && end.getTime() == d.data[3].getTime()) {
                                 d.cpwrap.remove();
                                 d.target.show();

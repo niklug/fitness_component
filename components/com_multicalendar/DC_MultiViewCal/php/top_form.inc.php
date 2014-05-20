@@ -172,7 +172,7 @@
                 success : function(message) {
                     var session_type = '<?php echo $event->session_type; ?>';
                     $('#session_type').html('<option value="" >-Select-</option>');
-                    $.each(message, function(index, value) {
+                    $.each(message, function(value, index) {
                         if(session_type == index) {
                             var selected = 'selected';
                         } else {
@@ -209,7 +209,7 @@
                 success : function(message) {
                     var session_focus = '<?php echo $event->session_focus; ?>';
                     $('#session_focus').html('<option value="" >-Select-</option>');
-                    $.each(message, function(index, value) {
+                    $.each(message, function(value, index) {
                         if(session_focus == index) {
                             var selected = 'selected';
                         } else {
@@ -319,7 +319,7 @@
                     html +='<td>';
                     html += '<select class="inputtext clients"   name="clients">';
                     html += '<option  value="">-Select-</option>';
-                    $.each(response.data, function(index, value) {
+                    $.each(response.data, function(value, index) {
                         
                         if($.inArray(index, added_clients) == '-1') {
                             html += '<option  value="' + index + '">' +  value + '</option>';

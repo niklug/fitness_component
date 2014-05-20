@@ -152,7 +152,7 @@ class FitnessModeluser_group extends JModelAdmin
             if(!FitnessHelper::is_primary_administrator($user->id) && !FitnessHelper::is_secondary_administrator($user->id) && FitnessHelper::is_trainer($user->id)) {
                 
                 
-                $result['data'] = array($user->id => $user->name);
+                $result['data'] = array($user->name => $user->id);
             
                 return  $result;
             }
