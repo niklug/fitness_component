@@ -70,6 +70,25 @@
                     $(target).html(html);
                     return html;
                 },
+                
+                populateSelectWithCollection : function(collection, target, selected_value) {
+                    //console.log(collection);
+                    var html = '<option  value="">-Select-</option>';
+                    
+                    _.each(collection.models, function (model) { 
+                        var id = model.get('id');
+                        var name = model.get('name');
+                        
+                        var selected = '';
+                        if(selected_value == id) {
+                            selected = 'selected';
+                        }
+                        html += '<option ' + selected + ' value="' + id + '">' +  name + '</option>';
+                    }, this);
+ 
+                    $(target).html(html);
+                    return html;
+                },
 
                 populateUsersSelectOnBusiness : function(task, view, business_profile_id, target, selected, user_id) {
                     var data = {};
@@ -106,6 +125,26 @@
                         self.set("trainers", output);
                         self.populateSelect(output, target, selected);
                     });
+                },
+                
+                populateTrainersSelect : function(target, selected, client_id) {
+                    var url = this.get('ajax_call_url');
+                                  
+                    var collection = Backbone.Collection.extend({
+                        url : url + '&format=text&view=programs&task=get_trainers&id=',
+                    });
+                    
+                    var trainers_collection = new collection();
+                    var self = this;
+                    trainers_collection.fetch({
+                        data : {client_id : client_id},
+                        success: function (collection, response) {
+                            self.populateSelectWithCollection(collection, target, selected);
+                        },
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
                 },
 
                 hideSelectOption : function(value, element, all_options) {

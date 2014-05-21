@@ -247,14 +247,15 @@ $calid, $st, $et, $sub, $ade, $Location
 }
 
 function addDetailedCalendar(
-$calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id, $loc, $rrule, $uid, $tz, $business_profile_id) {
+    $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus,
+        $trainer_id, $loc, $rrule, $uid, $tz, $business_profile_id
+    ) {
 
     $ret = array();
 
     $db = & JFactory::getDBO();
     $user = & JFactory::getUser(JRequest::getVar('cid'));
     try {
-        if (checkIfOverlapping($calid, $st, $et, $sub, $loc, 0)) {
             $sql = "insert into `" . DC_MV_CAL . "` (
         `" . DC_MV_CAL_IDCAL . "`,
         `" . DC_MV_CAL_TITLE . "`,
@@ -270,31 +271,43 @@ $calid, $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id,
         `business_profile_id`) values (
         
        " . $calid . ","
-                    . $db->Quote($sub) . ", '"
-                    . php2MySqlTime(js2PhpTime($st)) . "', '"
-                    . php2MySqlTime(js2PhpTime($et)) . "', "
-                    . $db->Quote($ade) . ", "
-                    . $db->Quote($dscr) . ", "
-                    . $db->Quote($session_type) . ", "
-                    . $db->Quote($session_focus) . ", "
-                    . $db->Quote($trainer_id) . ", "
-                    . $db->Quote($loc) . ", "
-                    . $db->Quote($rrule) . ", " . $db->Quote($uid) . ", " 
-                    . $user->id 
-                    . ",1,"
-                    . $db->Quote($business_profile_id) ." )";
+        . $db->Quote($sub) . ", '"
+        . php2MySqlTime(js2PhpTime($st)) . "', '"
+        . php2MySqlTime(js2PhpTime($et)) . "', "
+        . $db->Quote($ade) . ", "
+        . $db->Quote($dscr) . ", "
+        . $db->Quote($session_type) . ", "
+        . $db->Quote($session_focus) . ", "
+        . $db->Quote($trainer_id) . ", "
+        . $db->Quote($loc) . ", "
+        . $db->Quote($rrule) . ", " . $db->Quote($uid) . ", " 
+        . $user->id 
+        . ",1,"
+        . $db->Quote($business_profile_id) ." )";
 
-            $db->setQuery($sql);
-            if (!$db->query()) {
-                $ret['success'] = false;
-                $ret['message'] = $db->stderr();
-            } else {
-                $ret['success'] = true;
-                $ret['message'] = 'add success';
-                $ret['Data'] = $db->insertid();
-            }
-        } else
-            $ret = getMessageOverlapping();
+        $db->setQuery($sql);
+        if (!$db->query()) {
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
+        } else {
+            $ret['success'] = true;
+            $ret['message'] = 'add success';
+            $id = $db->insertid();
+            $ret['Data'] = $id;
+        }
+        
+        $client_id = JRequest::getVar("client_id");
+        
+        if($client_id) {
+            $helper = new FitnessHelper();
+            $table = '#__fitness_appointment_clients';
+            $data = new stdClass();
+            $data->event_id = $id;
+            $data->client_id = $client_id;
+            $helper->insertUpdateObj($data, $table);
+        }
+
+
     } catch (Exception $e) {
         $ret['success'] = false;
         $ret['message'] = $e->getMessage();
@@ -335,6 +348,13 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $locatio
     }
     
     try {
+        $is_client = FitnessHelper::is_client($user_id);
+    } catch (Exception $e) {
+        $ret['error'] = '"' . $e->getMessage() . '"' . ' - File: ' . $e->getFile() . ' Line: ' . $e->getLine();
+        return $ret;
+    }
+    
+    try {
         $business_profile = $helper->getBusinessProfileId($user_id);
         
         $business_profile_id = $business_profile['data'];
@@ -368,8 +388,8 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $locatio
         $sql .= " LEFT JOIN #__fitness_session_focus AS sf ON sf.id = a.session_focus ";
         
 
-        $sql .= " where a." . DC_MV_CAL_IDCAL . "=" . $calid;
-
+        //$sql .= " where a." . DC_MV_CAL_IDCAL . "=" . $calid;
+        $sql .= " where 1";
 
         if ($is_trainer_administrator) {
             $sql .= " AND  a.business_profile_id ='$business_profile_id' ";
@@ -379,6 +399,11 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $locatio
         if ($is_simple_trainer) {
             $sql .= " AND  a.business_profile_id ='$business_profile_id' ";
             $sql .= " AND ((a.trainer_id is NULL OR a.trainer_id = '') OR a.trainer_id='$user_id' OR a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN (SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)))) ";
+        }
+        
+        if($is_client) {
+            $sql .= " AND  a.business_profile_id ='$business_profile_id' ";
+            $sql .= " AND a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id='$user_id') ";
         }
 
         $client_ids = implode($client_id, ',');

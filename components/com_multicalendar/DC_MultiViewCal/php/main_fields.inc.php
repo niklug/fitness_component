@@ -1,19 +1,3 @@
-<?php
-require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
-
-$helper = new FitnessHelper();
-
-$cid = JRequest::getVar( 'cid' );
-    
-$user = &JFactory::getUser($cid);
-
-$business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user->id));
-
-$is_superuser = (bool) FitnessFactory::is_superuser($user->id);
-
-$is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user->id);
-
-?>
 <table border="0">
     <tbody>
         <tr>
@@ -77,13 +61,19 @@ $is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user->id);
             <td style="vertical-align: top;">
                 <table border="0">
                     <tbody>
-                        <tr>
-                            <td>Business Name:</td>
-                            <td>
-                                <?php
-                                echo $helper->generateSelect($helper->getBusinessProfileList($user->id), 'business_profile_id', 'business_profile_id', $event->business_profile_id , '', true, "required safe inputtext"); ?>
-                            </td>
-                        </tr>
+                        
+                        <?php if($is_client) { ?>
+                            <input name="business_profile_id" id="business_profile_id" type="hidden"  value="<?php echo $business_profile_id; ?>"/>
+                            <input name="client_id" id="client_id" type="hidden"  value="<?php echo $user->id; ?>"/>
+                        <?php } else { ?>
+                            <tr>
+                                <td>Business Name:</td>
+                                <td>
+                                    <?php
+                                    echo $helper->generateSelect($helper->getBusinessProfileList($user->id), 'business_profile_id', 'business_profile_id', $event->business_profile_id , '', true, "required safe inputtext"); ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
                         
                         <?php if($event->owner) { ?>
                         <tr>
@@ -122,7 +112,8 @@ $is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user->id);
         var trainer_id = '<?php echo $event->trainer_id; ?>';
         var is_superuser = Boolean('<?php echo $is_superuser; ?>');
         var is_simple_trainer = Boolean('<?php echo $is_simple_trainer; ?>');
-        
+        var is_client = Boolean('<?php echo $is_client; ?>');
+
         
         if(!is_superuser) {
             $("#business_profile_id").val(business_profile_id);
@@ -137,6 +128,13 @@ $is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user->id);
             'ajax_call_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         }
         var fitness_helper = $.fitness_helper(helper_options);
+        
+        
+        //if client logged
+        if(is_client) {
+            fitness_helper.populateTrainersSelect('#trainer', trainer_id, user_id);
+            return;
+        }
         
         
         $("#business_profile_id").die().on('change', function() {

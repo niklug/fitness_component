@@ -5,6 +5,7 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
  * 
  * @return type
  */
+
 function getLocations() { 
     $helper = new FitnessHelper();
     
@@ -12,7 +13,7 @@ function getLocations() {
     
     $user_id = JRequest::getVar('cid');
     
-    if($user_id && FitnessHelper::is_trainer($user_id)) {
+    if($user_id && (FitnessHelper::is_trainer($user_id) OR FitnessHelper::is_client($user_id))) {
         $business_profile_id = $helper->getBusinessProfileId($user_id);
 
         $business_profile_id = $business_profile_id['data'];
@@ -35,62 +36,7 @@ function getAppointments() {
     return FitnessHelper::customQuery($query, 1);
 }
 
-function getEmailPdfData($event_id) {
-   $db	= & JFactory::getDBO();
-   $query = "SELECT * FROM #__dc_mv_events WHERE id='$event_id'";
-   $db->setQuery($query);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-   $result = $db->loadObject();
-   return $result;
-}
 
-
-
-/**
- * npkorban
- * @param type $event_id
- * @param type $event_status
- * @return string
- */  
-function event_state_html($event_status) {
-    $html = '';
-    switch ($event_status) {
-        case 1:
-            $html .= '<a data-status="1" class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
-            break;
-        case 2:
-            $html .= '<a data-status="2" class="open_status event_status_attended event_status__button" href="javascript:void(0)">attended</a>';
-            break;
-        case 3:
-            $html .= '<a data-status="3" class="open_status event_status_cancelled event_status__button" href="javascript:void(0)">cancelled</a>';
-            break;
-        case 4:
-            $html .= '<a data-status="4" class="open_status event_status_latecancel event_status__button" href="javascript:void(0)">late cancel</a>';
-            break;
-        case 5:
-            $html .= '<a data-status="5" class="open_status event_status_noshow event_status__button" href="javascript:void(0)">no show</a>';
-            break;
-        default:
-            $html .= '<a data-status="1" class="open_status event_status_pending event_status__button" href="javascript:void(0)">pending</a>';
-            break;
-            break;
-    }
-
-    return $html;
-}
-
-function getExercises($item_id) {
-    $db	= & JFactory::getDBO();
-    $query = "SELECT a.* FROM #__fitness_events_exercises AS a WHERE a.item_id='$item_id' ORDER BY a.order ASC ";
-    $db->setQuery($query);
-    if(!$db->query()) {
-        JError::raiseError($db->getErrorMsg());
-    }
-    $result = $db->loadObjectList();
-    return $result;
-}
 
 //$dc_subjects = array("title 1","title 2","title 3","title 4");
 //$dc_locations = array("location 1","location 2","location 3","location 4");
@@ -155,7 +101,7 @@ if (isset($appointments)) {
         if ($i!= 0) {
             $arrayJS_list .= ', ';
         }
-        $arrayJS_list .= '"'. $appointment->name .'"';
+        $arrayJS_list .= '"'. $appointment->id .'"';
         
         $i++;
     }
@@ -173,7 +119,7 @@ if (isset($dc_locations)) {
         if ($i!= 0) {
             $arrayJS_list .= ', ';
         }
-        $arrayJS_list .= '"'. $dc_location->name .'"';
+        $arrayJS_list .= '"'. $dc_location->id .'"';
         
         $i++;
     }
@@ -195,6 +141,7 @@ function print_html($container)
 }
 function print_scripts($id,$container,$language,$style,$views,$buttons,$edition,$sample,$otherparamsvalue,$palette,$viewdefault,$numberOfMonths,$start_weekday,$notPlugin,$matches)
 {
+    
     global $JC_JQUERY_SPECIAL ;
     $mainframe = JFactory::getApplication();
     $msg = "";
@@ -290,6 +237,7 @@ function print_scripts($id,$container,$language,$style,$views,$buttons,$edition,
             $nmonths[] = (((string)$matches[12]!="new_window")?"1":"0");
             
         }
+        
         $otherparams = trim($otherparamsvalue);
         $otherparams = str_replace("\n","",$otherparams);
         $otherparams = str_replace("\r","",$otherparams);
@@ -302,6 +250,7 @@ function print_scripts($id,$container,$language,$style,$views,$buttons,$edition,
                     $newp .= ", " .$p[$i];
     
         }
+        
         $user =& JFactory::getUser();
         $db		=& JFactory::getDBO();
         $db->setQuery( 'SELECT * FROM #__dc_mv_calendars where id='.$id );
@@ -324,9 +273,14 @@ function print_scripts($id,$container,$language,$style,$views,$buttons,$edition,
             $newp .= ", palette:".$palette."";
             $newp .= ", paletteDefault:\"".$palettes[$palette]["default"]."\"";
         }
+
         global $arrayJS_list;
         $document->addScriptDeclaration($arrayJS_list);
-        $document->addScriptDeclaration("initMultiViewCal(\"".$container."\",".$id.",{viewDay:".$view[0].",viewWeek:".$view[1].",viewMonth:".$view[2].",viewNMonth:".$view[3].",viewdefault:\"".$viewdefault."\",numberOfMonths:".$numberOfMonths.",showtooltip:".$nmonths[0].",tooltipon:".$nmonths[1].",shownavigate:".$nmonths[2].",url:\"".$nmonths[3]."\",target:".$nmonths[4].",start_weekday:".$start_weekday.",language:\"".$language."\",cssStyle:\"".$style."\",edition:".$edition.",btoday:".$buttons[0].",bnavigation:".$buttons[1].",brefresh:".$buttons[2].",bnew:".$edition.",path:\"".JURI::root()."/\"".$newp."});");
+        
+        $path = JURI::root()."index.php?cid=" . $user->id . "&\"" . $newp;
+      
+        $document->addScriptDeclaration("initMultiViewCal(\"".$container."\",".$id.",{viewDay:".$view[0].",viewWeek:".$view[1].",viewMonth:".$view[2].",viewNMonth:".$view[3].",viewdefault:\"".$viewdefault."\",numberOfMonths:".$numberOfMonths.",showtooltip:".$nmonths[0].",tooltipon:".$nmonths[1].",shownavigate:".$nmonths[2].",url:\"".$nmonths[3]."\",target:".$nmonths[4].",start_weekday:".$start_weekday.",language:\"".$language."\",cssStyle:\"".$style."\",edition:".$edition.",btoday:".$buttons[0].",bnavigation:".$buttons[1].",brefresh:".$buttons[2].",bnew:".$edition.",path:\"".$path."});");
+ 
     }
     return $msg;
 }

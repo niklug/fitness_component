@@ -45,6 +45,7 @@
          <hr>
          <table width="100%">
              <tr>
+                 <?php if(!$is_client) { ?>
                  <td>
                      <label class="checkp">
                           <input id="frontend_published" name="frontend_published" type="checkbox" value="1" <?php if (isset($event) && $event->frontend_published != "0") {
@@ -52,6 +53,7 @@
                       } ?>/><span  style="font-size:11px;" class="inl">Publish Workout</span>
                       </label> 
                  </td>
+                 <?php } ?>
                  <td>
                      <table width="100%">
                          <tr>
@@ -67,6 +69,7 @@
                  </td>
              <tr/>
              <tr>
+                 <?php if(!$is_client) { ?>
                  <td>
                      <label class="checkp">
                           <input id="published" name="published" type="checkbox" value="1" <?php if (isset($event) && $event->published != "0") {
@@ -74,6 +77,7 @@
                       } ?>/><span style="font-size:11px;" class="inl">Publish Appointment</span>
                       </label>
                  </td>
+                 <?php } ?>
                  <td>
                      <table width="100%">
                          <tr>

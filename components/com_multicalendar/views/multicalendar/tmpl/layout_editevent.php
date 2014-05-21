@@ -542,6 +542,24 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
         });  
 
     </script>  
+    
+    <?php
+    require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+    $helper = new FitnessHelper();
+
+    $cid = JRequest::getVar( 'cid' );
+
+    $user = &JFactory::getUser($cid);
+
+    $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user->id));
+
+    $is_superuser = (bool) FitnessFactory::is_superuser($user->id);
+
+    $is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user->id);
+
+    $is_client = (bool) FitnessFactory::is_client($user->id);
+    ?>
        
     <!-- Top form, calendar, appointment status -->
     <?php
@@ -553,7 +571,9 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
     ?>
     <!-- Add clients, Semi-Private form -->
     <?php
-    require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/clients.inc.php' );
+    if(!$is_client) {
+        require_once( JPATH_BASE.'/components/com_multicalendar/DC_MultiViewCal/php/clients.inc.php' );
+    }
     ?>
     <!-- Trainer Feedback / Comments -->
     <?php

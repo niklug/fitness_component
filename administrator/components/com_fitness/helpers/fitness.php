@@ -883,7 +883,7 @@ class FitnessHelper extends FitnessFactory
         $db = JFactory::getDbo();
         $sql = "SELECT id AS value, name AS text FROM #__fitness_business_profiles WHERE state='1' ";
         
-        if(self::is_trainer($user_id)) {
+        if(self::is_trainer($user_id) OR self::is_client($user_id)) {
             $trainers_group_id = self::getTrainersGroupIdByUser($user_id);
             $sql .= "  AND group_id='$trainers_group_id'";
         }
