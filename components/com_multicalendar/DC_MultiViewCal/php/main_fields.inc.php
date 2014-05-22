@@ -14,6 +14,9 @@
                                     echo '<option  value="" >-Select-</option>';
   
                                     foreach ($appointments as $appointment) {
+                                        if($is_client && $helper->eventCalendarFrontendReadonly($appointment->id, $user_id)) {
+                                            continue;
+                                        }                                        
                                         echo '<option data-catid="' . $appointment->id . '" id="' . $appointment->color . '" value="' . ($appointment->id) . '" ' . ((isset($event) && trim($event->title == $appointment->id )) ? "selected" : "") . '>' . $appointment->name . '</option>';
                                     }
                                     
@@ -84,13 +87,20 @@
                         </tr>
                         <?php } ?>
                         
+                        
                         <tr id="trainer_select_tr">
                             <td>Trainer:</td>
+                            
                             <td>
-                                <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
+                                <?php if(!$is_client) { ?>
+                                    <select  id="trainer" name="trainer_id" class="required safe inputtext" ></select>
+                                <?php } else { ?>
+                                    <input name="trainer_id" id="trainer_id" type="hidden"  value="<?php echo $primary_trainer->id; ?>"/>
+                                    <?php echo $primary_trainer->name; ?>
+                                <?php } ?>
                             </td>
                         </tr>
-                       
+                        
                     </tbody>
                 </table>
             </td>
@@ -132,7 +142,7 @@
         
         //if client logged
         if(is_client) {
-            fitness_helper.populateTrainersSelect('#trainer', trainer_id, user_id);
+            fitness_helper.populateTrainersSelect('#trainer', trainer_id, user_id, 'primary_only');
             return;
         }
         

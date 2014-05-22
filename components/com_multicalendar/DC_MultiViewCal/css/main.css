@@ -385,7 +385,7 @@
     color: #000000;
     padding: 5px;
     position: fixed;
-    width: 237px;
+    width: 250px;
     z-index: 9999;
     border: 1px solid #AED0EA;
     display: none;
@@ -395,4 +395,14 @@
 
 .red_style_border {
     border: 2px solid #FF0000 !important;
+}
+
+.dark_input_style {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1) !important;
+    border: medium none !important;
+    color: #ccc !important;
+    font-size: 13px !important;
+    outline: medium none !important;
+    padding: 7px 10px !important;
+    width: 200px;
 }

@@ -1435,12 +1435,20 @@
                 ret.push($.browser.mozilla?"":"\r\n", i18n.dcmvcal.participant + ":", attendsshow);
             }
             //console.log(ret.join(""));
+            //console.log(event);
             var trainer = event[14] ?  event[14] : '';
             var location = event[9] || '';
+            var session_type = event[16] || '';
+            var session_focus = event[17] || '';
             var html = '';
             html += "<b> Time: </b>" + timeshow + "</br>";
-            html += "<b> Event: </b>" + eventshow + "</br>";
+            html += "</br>";
+            html += "<b> Appointment: </b>" + eventshow + "</br>";
+            html += "<b> Type: </b>" + session_type + "</br>";
+            html += "<b> Focus: </b>" + session_focus + "</br>";
+            html += "</br>";
             html += "<b> Location: </b>" + location + "</br>";
+            html += "</br>";
             html += "<b> Trainer: </b>" + trainer + "</br>";
             html += "<b> Clients: </b>" +  "</br>";
             //console.log(event);
@@ -3085,7 +3093,7 @@
              if(!trainer_id) trainer_id = '';
              var location =  $('#filter_location').find(':selected').val() || '';
              
-             var business_profile_id = $('#business_profile_id').find(':selected').val() || null;
+             var business_profile_id = $('#business_profile_id').val() || null;
              
              if(!business_profile_id) {
                  $('#business_profile_id').addClass('red_style_border');
@@ -3138,7 +3146,7 @@
          
          function onDragEvent(e, obj, event_id) {
              //console.log(drag_value);
-            //console.log(event_id);
+            //console.log(e);
             var _dragdata = { type: 1, target: obj, sx: e.pageX, sy: e.pageY };
             var d = _dragdata;
             var wrapid = new Date().getTime();
@@ -3311,7 +3319,20 @@
             }
         }
         function dragStart(type, e) {
+            
             var obj = $(this);
+            
+            var data = getdata(obj);
+            
+            //  restrict drag and move if not allowed depends on event type
+            if(data) {
+                var readonly = data[18];
+                if(readonly == 'true') {
+                    return false;
+                }
+            }
+            //
+            
             var source = e.srcElement || e.target;
             realsedragevent();
             var row = "";
@@ -3341,13 +3362,12 @@
                     _dragdata = { type: 2, target: obj, sx: e.pageX, sy: e.pageY, pw: parseInt(pw), xa: xa, ya: ya, h: h };
                     w = left = l = py = pw = xa = null;
                     break;
-                case "dw3":
+                case "dw3": //move
                     var evid = obj.parent().attr("id").replace("tgCol"+option.thecontainer, "");
                     var p = obj.parent();
                     var pos = p.offset();
                     var w = p.width() + 10;
                     var h = obj.height();
-                    var data = getdata(obj);
                     _dragdata = { type: 4, target: obj, sx: e.pageX, sy: e.pageY,
                         pXMin: pos.left, pXMax: pos.left + w, pw: w, h: h,
                         cdi: parseInt(evid), fdi: parseInt(evid), data: data
@@ -3355,7 +3375,6 @@
                     break;
                 case "dw4": //resize;
                     var h = obj.height();
-                    var data = getdata(obj);
                     _dragdata = { type: 5, target: obj, sx: e.pageX, sy: e.pageY, h: h, data: data };
                     break;
                 case "dw5":
@@ -3388,7 +3407,6 @@
                     }
                     var fdi = { x: di, y: 0, di: di };
                     ya.push({ s: top, e: top + h });
-                    var data = getdata(obj);
                     var dp = DateDiff("d", data[2], data[3]) + 1;
                     _dragdata = { type: 6, target: obj, sx: e.pageX, sy: e.pageY, data: data, xa: xa, ya: ya, fdi: fdi, h: h, dp: dp, pw: pw };
                     //}catch (e) {}
@@ -3455,7 +3473,6 @@
                         }
                     }
                     var fdi = { x: xi, y: yi, di: yi * 7 + xi };
-                    var data = getdata(obj);
                     var dp = DateDiff("d", data[2], data[3]) + 1;
                     _dragdata = { type: 7, target: obj, sx: e.pageX, sy: e.pageY, data: data, xa: xa, ya: ya, fdi: fdi, h: h, dp: dp, pw: pw };
                     break;

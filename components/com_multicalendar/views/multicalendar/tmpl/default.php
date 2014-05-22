@@ -51,6 +51,98 @@ $msg = print_scripts($id,$container,$language,$style,$views,$buttons,$edition,$s
 </div>
 <?php endif; ?>
 <?php echo $msg;?>
+
+
+
+<?php
+
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
+
+$business_profile = $helper->getBusinessProfileId($user->id);
+        
+$business_profile_id = $business_profile['data'];
+
+$user_id = JFactory::getUser()->id;
+
+$is_superuser = (bool) FitnessFactory::is_superuser($user_id);
+?>
+
+<div id="calendar_filters">
+    <input type="hidden" id="business_profile_id" name="filter_business_profile_id" value="<?php echo $business_profile_id ?>"/>
+    <form id="calendar_filter_form">
+        <div  style="float:left;margin-left: 1px;">
+            <?php
+            $appointments = $helper->select_filter('#__fitness_categories');
+                echo $helper->generateMultipleSelect(
+                    $appointments,//data
+                    'appointment',//name
+                    'filter_appointment',//id
+                    '',//selected items
+                    'Appointments',//title
+                    false,//required
+                    'dark_input_style',//class
+                    6//size
+            ); ?>
+        </div>
+
+        <div style="float:left;margin-left: 1px;">
+            <?php
+            $session_types = $helper->select_filter('#__fitness_session_type');
+                echo $helper->generateMultipleSelect(
+                    $session_types,//data
+                    'session_type',//name
+                    'filter_session_type',//id
+                    '',//selected items
+                    'Session Type',//title
+                    false,//required
+                    'dark_input_style',//class
+                    6//size
+            ); ?>
+        </div>
+
+        <div style="float:left;margin-left: 1px;">
+            <?php
+            $session_focuses = $helper->select_filter('#__fitness_session_focus');
+                echo $helper->generateMultipleSelect(
+                    $session_focuses,//data
+                    'session_focus',//name
+                    'filter_session_focus',//id
+                    '',//selected items
+                    'Session Focus',//title
+                    false,//required
+                    'dark_input_style',//class
+                    6//size
+            ); ?>
+        </div>
+
+        <div class="drag_area" style="float:left;margin-left: 1px;">
+            <h6 style="color:#ccc;text-align: center;padding: 5px;">Add Appointment to Calendar</h6>
+            <ul style="height: auto;">
+            <?php 
+                foreach ($appointments as $appointment) {
+                    if($helper->eventCalendarFrontendReadonly($appointment->id, $user_id)) {
+                        continue;
+                    } 
+                    echo '<li data-name="title" data-value="' . $appointment->id . '" class="drag_data" title="' . $appointment->name . '" 
+                          style="background-color:' .  $appointment->color . '">' . $appointment->name . '</li>';
+                }
+
+            ?>
+            </ul>
+
+        </div>
+
+        <div style="float:left;margin-left: 1px;padding-top: 60px;">
+            <input style="margin-left: 20px;" type="button" value="Go" name="find_filtered" id="find_filtered"/>
+            <input style="margin-left: 20px;" type="button" value="Reset" name="freset_filtered" id="reset_filtered"/>
+        </div>
+    </form>
+</div>
+
+
+
 <div class="contentpane<?php echo $this->escape($this->params->get('pageclass_sfx')); ?>">
 <?php echo print_html($container);?>
 </div>

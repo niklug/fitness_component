@@ -296,8 +296,25 @@ function addDetailedCalendar(
             $ret['Data'] = $id;
         }
         
-        $client_id = JRequest::getVar("client_id");
-        
+        $client_added = addAppointmentClient($id);
+        if(!$client_added['success']) {
+            $ret['success'] = false;
+            $ret['message'] = $client_added['message'];
+        }
+
+
+    } catch (Exception $e) {
+        $ret['success'] = false;
+        $ret['message'] = $e->getMessage();
+    }
+
+    return $ret;
+}
+
+function addAppointmentClient($id) {
+    $ret['success'] = true;
+    $client_id = JRequest::getVar("client_id");
+    try {
         if($client_id) {
             $helper = new FitnessHelper();
             $table = '#__fitness_appointment_clients';
@@ -307,12 +324,10 @@ function addDetailedCalendar(
             $helper->insertUpdateObj($data, $table);
         }
 
-
     } catch (Exception $e) {
         $ret['success'] = false;
         $ret['message'] = $e->getMessage();
     }
-
     return $ret;
 }
 
@@ -403,7 +418,7 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $locatio
         
         if($is_client) {
             $sql .= " AND  a.business_profile_id ='$business_profile_id' ";
-            $sql .= " AND a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id='$user_id') ";
+            $sql .= " AND ((a.trainer_id is NULL OR a.trainer_id = '') OR a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id='$user_id')) ";
         }
 
         $client_ids = implode($client_id, ',');
@@ -490,7 +505,9 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $locatio
                 $clients_names[] = JFactory::getUser($client)->name;
             }
             $clients_names = array_filter($clients_names);
-
+            
+      
+            $readonly = $helper->eventCalendarFrontendReadonly($row->title, $user_id);
 
             $ev = array(
                 $row->id,
@@ -509,7 +526,10 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $locatio
                 $row->owner,
                 $row->published,
                 JFactory::getUser($row->trainer_id)->name,
-                $clients_names
+                $clients_names,
+                $row->session_type_name,
+                $row->session_focus_name,
+                $readonly
             );
             $ret['events'][] = $ev;
         }
@@ -578,97 +598,104 @@ $id, $st, $et, $sub, $ade, $dscr, $comments, $session_type, $session_focus, $tra
     $db = & JFactory::getDBO();
 
     try {
-        if (checkIfOverlapping(
-                        JRequest::getVar('calid'), $st, $et, $sub, $loc, $id
-                )) {
-            if ($rruleType == "only") {
-                return addDetailedCalendar(
-                        JRequest::getVar('calid'), $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id, $loc, "", $id, $tz
-                );
-            } else if ($rruleType == "all") {
-                $sql = "update `" . DC_MV_CAL . "` set"
-                        . " `" . DC_MV_CAL_FROM . "`='" . php2MySqlTime(js2PhpTime($st)) . "', "
-                        . " `" . DC_MV_CAL_TO . "`='" . php2MySqlTime(js2PhpTime($et)) . "', "
-                        . " `" . DC_MV_CAL_TITLE . "`=" . $db->Quote($sub) . ", "
-                        . " `" . DC_MV_CAL_ISALLDAY . "`=" . $db->Quote($ade) . ", "
-                        . " `" . DC_MV_CAL_DESCRIPTION . "`=" . $db->Quote($dscr) . ", "
-                        . " `comments`=" . $db->Quote($comments) . ", "
-                        . " `session_type`=" . $db->Quote($session_type) . ", "
-                        . " `session_focus`=" . $db->Quote($session_focus) . ", "
-                        . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
-                        . " `" . DC_MV_CAL_LOCATION . "`=" . $db->Quote($loc) . ", "
-                        . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
-                        . " `published`=" . $db->Quote($published) . ", "
-                        . " `auto_publish_workout`=" . $db->Quote($auto_publish_workout) . ", "
-                        . " `auto_publish_event`=" . $db->Quote($auto_publish_event) . ", "
-                        . " `rrule`=" . $db->Quote($rrule) . ", "
-                        . " `business_profile_id`=" . $db->Quote($business_profile_id) . " "
-                        . "where `id`=" . $id;
-                $db->setQuery($sql);
-                if (!$db->query()) {
+       if ($rruleType == "only") {
+            return addDetailedCalendar(
+                    JRequest::getVar('calid'), $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id, $loc, "", $id, $tz
+            );
+        } else if ($rruleType == "all") {
+            $sql = "update `" . DC_MV_CAL . "` set"
+                    . " `" . DC_MV_CAL_FROM . "`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+                    . " `" . DC_MV_CAL_TO . "`='" . php2MySqlTime(js2PhpTime($et)) . "', "
+                    . " `" . DC_MV_CAL_TITLE . "`=" . $db->Quote($sub) . ", "
+                    . " `" . DC_MV_CAL_ISALLDAY . "`=" . $db->Quote($ade) . ", "
+                    . " `" . DC_MV_CAL_DESCRIPTION . "`=" . $db->Quote($dscr) . ", "
+                    . " `comments`=" . $db->Quote($comments) . ", "
+                    . " `session_type`=" . $db->Quote($session_type) . ", "
+                    . " `session_focus`=" . $db->Quote($session_focus) . ", "
+                    . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
+                    . " `" . DC_MV_CAL_LOCATION . "`=" . $db->Quote($loc) . ", "
+                    . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
+                    . " `published`=" . $db->Quote($published) . ", "
+                    . " `auto_publish_workout`=" . $db->Quote($auto_publish_workout) . ", "
+                    . " `auto_publish_event`=" . $db->Quote($auto_publish_event) . ", "
+                    . " `rrule`=" . $db->Quote($rrule) . ", "
+                    . " `business_profile_id`=" . $db->Quote($business_profile_id) . " "
+                    . "where `id`=" . $id;
+            $db->setQuery($sql);
+            if (!$db->query()) {
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
+            } else {
+                $ret['success'] = true;
+                $ret['message'] = 'Succefully';
+                $ret['Data'] = $id;
+                
+                $client_added = addAppointmentClient($id);
+                if(!$client_added['success']) {
                     $ret['success'] = false;
-                    $ret['message'] = $db->stderr();
-                } else {
-                    $ret['success'] = true;
-                    $ret['message'] = 'Succefully';
-                    $ret['Data'] = $id;
+                    $ret['message'] = $client_added['message'];
                 }
-            } else if (substr($rruleType, 0, 5) == "UNTIL") {
-                $sql = "select * from `" . DC_MV_CAL . "` where id=" . $id;
+            }
+        } else if (substr($rruleType, 0, 5) == "UNTIL") {
+            $sql = "select * from `" . DC_MV_CAL . "` where id=" . $id;
 
-                $db->setQuery($sql);
-                $rows = $db->loadObjectList();
-                $pre_rrule = $rows[0]->rrule;
-                //remove until
-                $tmp = explode(";UNTIL=", $pre_rrule);
-                if (count($tmp) > 1) {
-                    $pre_rrule = $tmp[0];
-                    $tmp2 = explode(";", $tmp[1]);
-                    if (count($tmp2) > 1)
-                        $pre_rrule .= ";" . $tmp2[1];
-                }
-                //add
-                $pre_rrule .= ";" . $rruleType;
-                $sql = "update `" . DC_MV_CAL . "` set"
-                        . " `rrule`=" . $db->Quote($pre_rrule) . " "
-                        . "where `id`=" . $id;
-                $db->setQuery($sql);
-                $db->query();
-                return addDetailedCalendar(
-                        JRequest::getVar('calid'), $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id, $loc, "", $id, $tz, $business_profile_id
-                );
+            $db->setQuery($sql);
+            $rows = $db->loadObjectList();
+            $pre_rrule = $rows[0]->rrule;
+            //remove until
+            $tmp = explode(";UNTIL=", $pre_rrule);
+            if (count($tmp) > 1) {
+                $pre_rrule = $tmp[0];
+                $tmp2 = explode(";", $tmp[1]);
+                if (count($tmp2) > 1)
+                    $pre_rrule .= ";" . $tmp2[1];
             }
-            else {
-                $sql = "update `" . DC_MV_CAL . "` set"
-                        . " `" . DC_MV_CAL_FROM . "`='" . php2MySqlTime(js2PhpTime($st)) . "', "
-                        . " `" . DC_MV_CAL_TO . "`='" . php2MySqlTime(js2PhpTime($et)) . "', "
-                        . " `" . DC_MV_CAL_TITLE . "`=" . $db->Quote($sub) . ", "
-                        . " `" . DC_MV_CAL_ISALLDAY . "`=" . $db->Quote($ade) . ", "
-                        . " `" . DC_MV_CAL_DESCRIPTION . "`=" . $db->Quote($dscr) . ", "
-                        . " `comments`=" . $db->Quote($comments) . ", "
-                        . " `session_type`=" . $db->Quote($session_type) . ", "
-                        . " `session_focus`=" . $db->Quote($session_focus) . ", "
-                        . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
-                        . " `" . DC_MV_CAL_LOCATION . "`=" . $db->Quote($loc) . ", "
-                        . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
-                        . " `published`=" . $db->Quote($published) . ", "
-                        . " `auto_publish_workout`=" . $db->Quote($auto_publish_workout) . ", "
-                        . " `auto_publish_event`=" . $db->Quote($auto_publish_event) . ", "
-                        . " `rrule`=" . $db->Quote($rrule) . ", "
-                        . " `business_profile_id`=" . $db->Quote($business_profile_id) . " "
-                        . "where `id`=" . $id;
-                $db->setQuery($sql);
-                if (!$db->query()) {
+            //add
+            $pre_rrule .= ";" . $rruleType;
+            $sql = "update `" . DC_MV_CAL . "` set"
+                    . " `rrule`=" . $db->Quote($pre_rrule) . " "
+                    . "where `id`=" . $id;
+            $db->setQuery($sql);
+            $db->query();
+            return addDetailedCalendar(
+                    JRequest::getVar('calid'), $st, $et, $sub, $ade, $dscr, $session_type, $session_focus, $trainer_id, $loc, "", $id, $tz, $business_profile_id
+            );
+        }
+        else {
+            $sql = "update `" . DC_MV_CAL . "` set"
+                    . " `" . DC_MV_CAL_FROM . "`='" . php2MySqlTime(js2PhpTime($st)) . "', "
+                    . " `" . DC_MV_CAL_TO . "`='" . php2MySqlTime(js2PhpTime($et)) . "', "
+                    . " `" . DC_MV_CAL_TITLE . "`=" . $db->Quote($sub) . ", "
+                    . " `" . DC_MV_CAL_ISALLDAY . "`=" . $db->Quote($ade) . ", "
+                    . " `" . DC_MV_CAL_DESCRIPTION . "`=" . $db->Quote($dscr) . ", "
+                    . " `comments`=" . $db->Quote($comments) . ", "
+                    . " `session_type`=" . $db->Quote($session_type) . ", "
+                    . " `session_focus`=" . $db->Quote($session_focus) . ", "
+                    . " `trainer_id`=" . $db->Quote($trainer_id) . ", "
+                    . " `" . DC_MV_CAL_LOCATION . "`=" . $db->Quote($loc) . ", "
+                    . " `frontend_published`=" . $db->Quote($frontend_published) . ", "
+                    . " `published`=" . $db->Quote($published) . ", "
+                    . " `auto_publish_workout`=" . $db->Quote($auto_publish_workout) . ", "
+                    . " `auto_publish_event`=" . $db->Quote($auto_publish_event) . ", "
+                    . " `rrule`=" . $db->Quote($rrule) . ", "
+                    . " `business_profile_id`=" . $db->Quote($business_profile_id) . " "
+                    . "where `id`=" . $id;
+            $db->setQuery($sql);
+            if (!$db->query()) {
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
+            } else {
+                $ret['success'] = true;
+                $ret['message'] = 'Succefully';
+                $ret['Data'] = $id;
+                
+                $client_added = addAppointmentClient($id);
+                if(!$client_added['success']) {
                     $ret['success'] = false;
-                    $ret['message'] = $db->stderr();
-                } else {
-                    $ret['success'] = true;
-                    $ret['message'] = 'Succefully';
-                    $ret['Data'] = $id;
+                    $ret['message'] = $client_added['message'];
                 }
             }
-        } else
-            $ret = getMessageOverlapping();
+        }
     } catch (Exception $e) {
         $ret['success'] = false;
         $ret['message'] = $e->getMessage();

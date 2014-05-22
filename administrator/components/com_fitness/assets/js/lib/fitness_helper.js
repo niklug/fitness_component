@@ -127,7 +127,7 @@
                     });
                 },
                 
-                populateTrainersSelect : function(target, selected, client_id) {
+                populateTrainersSelect : function(target, selected, client_id, type) {
                     var url = this.get('ajax_call_url');
                                   
                     var collection = Backbone.Collection.extend({
@@ -136,8 +136,14 @@
                     
                     var trainers_collection = new collection();
                     var self = this;
+                    
+                    var data = {client_id : client_id, type : true};
+                    if(type == 'primary_only') {
+                        data.primary_only = true;
+                    }
+                    
                     trainers_collection.fetch({
-                        data : {client_id : client_id},
+                        data : data,
                         success: function (collection, response) {
                             self.populateSelectWithCollection(collection, target, selected);
                         },

@@ -39,13 +39,12 @@
 </script>  
         <input id="timezone" name="timezone" type="hidden" value="" />
          <?php
-           if (isset($event->id)) {
+           if (isset($event->id) && !$is_client) {
          ?>
          <br/>
          <hr>
          <table width="100%">
              <tr>
-                 <?php if(!$is_client) { ?>
                  <td>
                      <label class="checkp">
                           <input id="frontend_published" name="frontend_published" type="checkbox" value="1" <?php if (isset($event) && $event->frontend_published != "0") {
@@ -53,7 +52,6 @@
                       } ?>/><span  style="font-size:11px;" class="inl">Publish Workout</span>
                       </label> 
                  </td>
-                 <?php } ?>
                  <td>
                      <table width="100%">
                          <tr>
@@ -69,7 +67,6 @@
                  </td>
              <tr/>
              <tr>
-                 <?php if(!$is_client) { ?>
                  <td>
                      <label class="checkp">
                           <input id="published" name="published" type="checkbox" value="1" <?php if (isset($event) && $event->published != "0") {
@@ -77,7 +74,6 @@
                       } ?>/><span style="font-size:11px;" class="inl">Publish Appointment</span>
                       </label>
                  </td>
-                 <?php } ?>
                  <td>
                      <table width="100%">
                          <tr>
@@ -105,14 +101,15 @@
             }
           ?>
           <br/>
-          
-          <a href="javascript:void(0)" id="savebtn">Save</a>
-          <?php if($event->id) { ?>
-            <a href="javascript:void(0)" id="savecopybtn">Save as Copy</a>
-          <?php } ?>
-          <a href="javascript:void(0)" id="saveclosebtn">Save/Close</a>
-          <?php if(isset($event) && (JRequest::getVar("delete")=="1")){ ?>
-             <a href="javascript:void(0)" id="deletebtn">Delete</a>
+          <?php  if(!$readonly_frontend) { ?>
+              <a href="javascript:void(0)" id="savebtn">Save</a>
+              <a href="javascript:void(0)" id="saveclosebtn">Save/Close</a>
+              <?php if($event->id) { ?>
+                <a href="javascript:void(0)" id="savecopybtn">Save as Copy</a>
+              <?php } ?>
+              <?php if(isset($event) && (JRequest::getVar("delete")=="1")){ ?>
+                 <a href="javascript:void(0)" id="deletebtn">Delete</a>
+              <?php } ?>  
           <?php } ?>  
           <a href="javascript:void(0)" id="closebtn">Close</a>
       </form>  

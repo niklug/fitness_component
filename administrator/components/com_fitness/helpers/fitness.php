@@ -1155,7 +1155,9 @@ class FitnessHelper extends FitnessFactory
         //get all existing table fields
         $query = "DESCRIBE $table";
         $db->setQuery($query);
-        $db->query();
+        if (!$db->query()) {
+            throw new Exception($db->stderr());
+        } 
         $fields = $db->loadResultArray();
         //
         
@@ -1827,6 +1829,14 @@ class FitnessHelper extends FitnessFactory
             return $trainers;
         }
         
+        function getPrimaryTrainer($client_id) {
+            $query = "SELECT c.primary_trainer AS id,"
+                    . " (SELECT name FROM #__users WHERE id=c.primary_trainer) name"
+                    . " FROM #__fitness_clients AS c"
+                    . " WHERE c.user_id='$client_id'";
+            return self::customQuery($query, 2);
+        }
+        
         function get_trainer_clients() {
             $trainer_id = JRequest::getVar('trainer_id', 0, '', 'INT');
             
@@ -2001,6 +2011,27 @@ class FitnessHelper extends FitnessFactory
 
             $data = FitnessHelper::customQuery($query, 1);
             return $data;
+        }
+        
+        function eventCalendarFrontendReadonly($event_id, $user_id) {
+            $readonly = false;
+            $is_client = (bool) self::is_client($user_id);
+        
+            //'Resistance Workout', 'Cardio Workout', 'Available', 'Unavailable'
+            if(!in_array($event_id, array('3', '4', '8', '9'))) {
+                $readonly = true;
+            }
+            
+            if(!$is_client) {
+                $readonly = false;
+            }
+            
+            if(!$event_id) {
+                $readonly = false;
+            }
+            
+            
+            return $readonly;
         }
 }
 

@@ -551,14 +551,22 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
     $cid = JRequest::getVar( 'cid' );
 
     $user = &JFactory::getUser($cid);
+    
+    $user_id = $user->id;
 
-    $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user->id));
+    $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user_id));
 
-    $is_superuser = (bool) FitnessFactory::is_superuser($user->id);
+    $is_superuser = (bool) FitnessFactory::is_superuser($user_id);
 
-    $is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user->id);
+    $is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user_id);
 
-    $is_client = (bool) FitnessFactory::is_client($user->id);
+    $is_client = (bool) FitnessFactory::is_client($user_id);
+    
+    $primary_trainer = $helper->getPrimaryTrainer($user_id);
+    
+    $readonly_frontend = $helper->eventCalendarFrontendReadonly($event->title, $user_id);
+ 
+
     ?>
        
     <!-- Top form, calendar, appointment status -->
