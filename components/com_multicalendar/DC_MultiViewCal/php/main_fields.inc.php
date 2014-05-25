@@ -10,11 +10,11 @@
                             <td>
                                 <?php
                                 if (isset($appointments[0])) {
-                                    echo '<select style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
+                                    echo '<select ' . $readonly_attr . ' style="float:left;" id="Subject" name="Subject" class="required safe inputtext" ">';
                                     echo '<option  value="" >-Select-</option>';
   
                                     foreach ($appointments as $appointment) {
-                                        if($is_client && $helper->eventCalendarFrontendReadonly($appointment->id, $user_id)) {
+                                        if($is_client && $helper->eventCalendarFrontendReadonly($appointment->id, $user_id) && !$readonly_frontend) {
                                             continue;
                                         }                                        
                                         echo '<option data-catid="' . $appointment->id . '" id="' . $appointment->color . '" value="' . ($appointment->id) . '" ' . ((isset($event) && trim($event->title == $appointment->id )) ? "selected" : "") . '>' . $appointment->name . '</option>';
@@ -30,20 +30,20 @@
                        <tr>
                             <td>Session Type:</td>
                             <td> 
-                                <select  id="session_type" name="session_type" class="required safe inputtext" ></select> 
+                                <select <?php echo $readonly_attr; ?> id="session_type" name="session_type" class="required safe inputtext" ></select> 
                             </td>
                         </tr>
                         <tr>
                             <td>Session Focus:</td>
                             <td> 
-                                <select  id="session_focus" name="session_focus" class="required safe inputtext" ></select>
+                                <select <?php echo $readonly_attr; ?> id="session_focus" name="session_focus" class="required safe inputtext" ></select>
                             </td>
                         </tr>
                         <tr>
                             <td>Location:</td>
                             <td> <?php
                                 if (isset($dc_locations)) {
-                                    echo '<select  id="Location" name="Location" class="required safe inputtext" >';
+                                    echo '<select ' . $readonly_attr . ' id="Location" name="Location" class="required safe inputtext" >';
                                     echo '<option>-Select-</option>';
 
                                     foreach ($dc_locations as $dc_location) {

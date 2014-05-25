@@ -255,6 +255,9 @@ function addDetailedCalendar(
 
     $db = & JFactory::getDBO();
     $user = & JFactory::getUser(JRequest::getVar('cid'));
+    $frontend_published = JRequest::getVar('frontend_published', '1');
+    $comments = JRequest::getVar('comments');
+    
     try {
             $sql = "insert into `" . DC_MV_CAL . "` (
         `" . DC_MV_CAL_IDCAL . "`,
@@ -263,11 +266,12 @@ function addDetailedCalendar(
         `" . DC_MV_CAL_TO . "`, 
         `" . DC_MV_CAL_ISALLDAY . "`,
         `" . DC_MV_CAL_DESCRIPTION . "`,
+        `comments`,
         `session_type`,
         `session_focus`,
         `trainer_id`,
         `" . DC_MV_CAL_LOCATION . "`, 
-        `rrule`,`uid`,`owner`, `published`,
+        `rrule`,`uid`,`owner`, `published`,`frontend_published`,
         `business_profile_id`) values (
         
        " . $calid . ","
@@ -276,6 +280,7 @@ function addDetailedCalendar(
         . php2MySqlTime(js2PhpTime($et)) . "', "
         . $db->Quote($ade) . ", "
         . $db->Quote($dscr) . ", "
+        . $db->Quote($comments) . ", "
         . $db->Quote($session_type) . ", "
         . $db->Quote($session_focus) . ", "
         . $db->Quote($trainer_id) . ", "
@@ -283,6 +288,7 @@ function addDetailedCalendar(
         . $db->Quote($rrule) . ", " . $db->Quote($uid) . ", " 
         . $user->id 
         . ",1,"
+        . $frontend_published . ", "
         . $db->Quote($business_profile_id) ." )";
 
         $db->setQuery($sql);
@@ -311,17 +317,40 @@ function addDetailedCalendar(
     return $ret;
 }
 
-function addAppointmentClient($id) {
+function addAppointmentClient($event_id) {
     $ret['success'] = true;
     $client_id = JRequest::getVar("client_id");
+    
     try {
         if($client_id) {
-            $helper = new FitnessHelper();
+            $db = JFactory::getDbo();
             $table = '#__fitness_appointment_clients';
             $data = new stdClass();
-            $data->event_id = $id;
+            $data->event_id = $event_id;
             $data->client_id = $client_id;
-            $helper->insertUpdateObj($data, $table);
+            
+            $query = "SELECT id FROM $table WHERE event_id='$event_id' AND client_id='$client_id'";
+            
+            $db->setQuery($query);
+            if (!$db->query()) {
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
+                return $ret;
+            }
+            
+            $event_client_id = $db->loadResult();
+            
+            if($event_client_id) {
+                $data->id = $event_client_id;
+                $insert = $db->updateObject($table, $data, 'id');
+            } else {
+                $insert = $db->insertObject($table, $data, 'id');
+            }
+            if(!$insert) {
+                $ret['success'] = false;
+                $ret['message'] = $db->stderr();
+                return $ret;
+            }
         }
 
     } catch (Exception $e) {
@@ -1202,6 +1231,23 @@ function saveDragedData() {
 
     } else {
         if ($field == 'title') {
+            
+            $helper = new FitnessHelper();
+
+            $cid = JRequest::getVar( 'cid' );
+            
+            $user = &JFactory::getUser($cid);
+
+            $user_id = $user->id;
+            
+            $is_client = (bool) FitnessFactory::is_client($user_id);
+  
+            if($is_client) {
+                $primary_trainer = $helper->getPrimaryTrainer($user_id);
+                $post['trainer_id'] = $primary_trainer->id;
+                JRequest::setVar('client_id', $user_id);
+                $post['frontend_published'] = '1';
+            }
             $post['title'] = $value;
 
             $insert = insertEvent($post);
@@ -1261,6 +1307,7 @@ function insertEvent($post) {
     $obj->title = $post['title'];
     $obj->calid = JRequest::getVar('calid');
     $obj->published = 1;
+    $obj->frontend_published = $post['frontend_published'];
     $obj->owner = JRequest::getVar('cid');
     $obj->business_profile_id = $post['business_profile_id'];
 
@@ -1272,6 +1319,13 @@ function insertEvent($post) {
     }
     
     $id = $db->insertid();
+    
+    $client_added = addAppointmentClient($id);
+    if(!$client_added['success']) {
+        $ret['success'] = false;
+        $ret['message'] = $client_added['message'];
+        return $ret;
+    }
     
     $ret['data'] = $id;
             

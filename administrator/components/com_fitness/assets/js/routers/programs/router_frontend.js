@@ -179,7 +179,7 @@ define([
                 access = true;
             }
             
-            //'Resistance Workout' and 'Cardio Workout'
+            //'Resistance Workout', 'Cardio Workout'
             if(appointment == '3' || appointment == '4') {
                 access = true;
             }

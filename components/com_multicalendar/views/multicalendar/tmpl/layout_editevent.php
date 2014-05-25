@@ -69,6 +69,35 @@ if(JRequest::getVar("id")!=""){
 $path = JURI::root(true)."/components/com_multicalendar/DC_MultiViewCal/";
 $datafeed = JURI::root()."index.php?option=com_multicalendar&task=load";
 ?>
+
+<?php
+require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$helper = new FitnessHelper();
+
+$cid = JRequest::getVar( 'cid' );
+
+$user = &JFactory::getUser($cid);
+
+$user_id = $user->id;
+
+$business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user_id));
+
+$is_superuser = (bool) FitnessFactory::is_superuser($user_id);
+
+$is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user_id);
+
+$is_client = (bool) FitnessFactory::is_client($user_id);
+
+$primary_trainer = $helper->getPrimaryTrainer($user_id);
+
+$readonly_frontend = $helper->eventCalendarFrontendReadonly($event->title, $user_id);
+
+if($readonly_frontend) {
+    $readonly_attr = 'disabled="disabled"';
+}
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
   <head>
@@ -304,6 +333,8 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
               arrs[i18n.dcmvcal.dateformat.month_index] = "mm";
               arrs[i18n.dcmvcal.dateformat.day_index] = "dd";
               var dateFormat = arrs.join(i18n.dcmvcal.dateformat.separator);
+              
+              <?php if(!$readonly_frontend) { ?>
               var dates = $( "#stpartdate, #etpartdate" ).datepicker({numberOfMonths: 1,
               dateFormat: dateFormat,
               monthNamesShort:__MonthName,
@@ -311,19 +342,21 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
               dayNamesShort:__WDAY,
               dayNamesMin:__WDAY2,
               firstDay: <?php echo (isset($_GET["weekstartday"]))?$_GET["weekstartday"]:1;?>,
-			  changeMonth: true,
-			  showOn: "button",
-			  	 		//buttonImage: "<?php echo $path; ?>css/images/cal.gif",
-			  onSelect: function( selectedDate ) {
-			  	 var option = this.id == "stpartdate" ? "minDate" : "maxDate",
-			  	 	instance = $( this ).data( "datepicker" ),
-			  	 	date = $.datepicker.parseDate(
-			  	 		instance.settings.dateFormat ||
-			  	 		$.datepicker._defaults.dateFormat,
-			  	 		selectedDate, instance.settings );
-			  	 dates.not( this ).datepicker( "option", option, date );
-			  } 
-		      }); 
+                  changeMonth: true,
+                  showOn: "button",
+                                        //buttonImage: "<?php echo $path; ?>css/images/cal.gif",
+                  onSelect: function( selectedDate ) {
+                         var option = this.id == "stpartdate" ? "minDate" : "maxDate",
+                                instance = $( this ).data( "datepicker" ),
+                                date = $.datepicker.parseDate(
+                                        instance.settings.dateFormat ||
+                                        $.datepicker._defaults.dateFormat,
+                                        selectedDate, instance.settings );
+                         dates.not( this ).datepicker( "option", option, date );
+                  } 
+              }); 
+              <?php } ?>
+              
             var cv =$("#colorvalue").val() ;
             if(cv=="") 
             { 
@@ -543,31 +576,7 @@ if (file_exists("./components/com_multicalendar/DC_MultiViewCal/language/multivi
 
     </script>  
     
-    <?php
-    require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
-
-    $helper = new FitnessHelper();
-
-    $cid = JRequest::getVar( 'cid' );
-
-    $user = &JFactory::getUser($cid);
     
-    $user_id = $user->id;
-
-    $business_profile_id = $helper->JErrorFromAjaxDecorator($helper->getBusinessProfileId($user_id));
-
-    $is_superuser = (bool) FitnessFactory::is_superuser($user_id);
-
-    $is_simple_trainer = (bool) FitnessFactory::is_simple_trainer($user_id);
-
-    $is_client = (bool) FitnessFactory::is_client($user_id);
-    
-    $primary_trainer = $helper->getPrimaryTrainer($user_id);
-    
-    $readonly_frontend = $helper->eventCalendarFrontendReadonly($event->title, $user_id);
- 
-
-    ?>
        
     <!-- Top form, calendar, appointment status -->
     <?php

@@ -201,8 +201,8 @@ define([
             
             var user_id = app.options.user_id;
             
-            //Personal Training, Semi-Private Training, Resistance Workout, Cardio Workout only
-            if(appointment_id != '1' && appointment_id != '2' && appointment_id != '3' && appointment_id != '4') {
+            //Personal Training, Semi-Private Training, Resistance Workout, Cardio Workout,“Consultation” and "Special Event”  only
+            if(appointment_id != '1' && appointment_id != '2' && appointment_id != '3' && appointment_id != '4'  && appointment_id != '6' && appointment_id != '7') {
                 return false;
             }
             

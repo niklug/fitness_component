@@ -72,12 +72,18 @@
             var event_id = '<?php echo $event->id; ?>';
             var appointment_id = $("#Subject").val();
             var appointment_type = 'programs';
+            var is_client = '<?php echo $is_client ?>';
             
             if(appointment_id == '5') {
                 appointment_type = 'assessments';
             }
             
             var url = '<?php echo JURI::base();?>' + 'administrator/index.php?option=com_fitness&view=' + appointment_type + '#!/form_view/' + event_id;
+     
+            if(parseInt(is_client)) {
+                url = '<?php echo JURI::base();?>' + 'index.php?option=com_fitness&view=' + appointment_type + '#!/item_view/' + event_id;
+            }
+
             window.open(url, '_blank');
         }
         
@@ -384,40 +390,58 @@
 
 
         function personalTrainingForm() {
-            $("#comments_wrapper").hide();
+            showCommentsBlock(false, false);
         }
 
         function semiPrivateForm() {
-            $("#comments_wrapper").hide();
+            showCommentsBlock(false, false);
         }
 
 
         function resistanceWorkoutForm() {
-            $("#comments_wrapper").hide();
+            showCommentsBlock(false, false);
         }
 
         function cardioWorkoutForm() {
-            $("#comments_wrapper").hide();
+            showCommentsBlock(false, false);
         }
 
         function assessmentForm() {
-            $("#comments_wrapper").hide();
+            showCommentsBlock(false, false);
         }
 
         function consultationForm() {
-            $("#comments_wrapper").hide();
+            showCommentsBlock(true, true);
         }
 
         function specialEventForm() {
-            $("#comments_wrapper").show();
+            showCommentsBlock(true, true);
         }
 
         function availableForm() {
-            $("#comments_wrapper").show();
+            showCommentsBlock(true, false);
         }
 
         function unavailableForm() {
-            $("#comments_wrapper").show();
+            showCommentsBlock(true, false);
+        }
+        
+        function showCommentsBlock(show, readonly) {
+            var comments_wraper = $("#comments_wrapper");
+            var  frontend_published = parseInt($("#frontend_published").val());
+            //console.log(frontend_published);
+            if(show && frontend_published) {
+                comments_wraper.show();
+            } else {
+                comments_wraper.hide();
+            }
+            if(readonly) {
+                var element = $("#trainer_comments").cleditor()[0];
+                if(element) {
+                    element.disable(true);
+                }
+            }
+                
         }
         
         
@@ -551,17 +575,17 @@
                 <div style="display: inline;float: none;margin-left: 54px;<?php if ($stparttime == '00:00') echo 'visibility:hidden;' ?>"> End Time </div>
 
                 <div> 
-                    <input MaxLength="10" class="required date" id="stpartdate" name="stpartdate" type="text" value="<?php echo $stpartdate; ?>" />
-                    <input MaxLength="7" class="required time" id="stparttime" name="stparttime" style="width:52px;" type="text" value="<?php echo $stparttime; ?>" /><span id="s_to1" class="inl">&nbsp;&nbsp;&nbsp;</span>
-                    <input MaxLength="10" class="required date" id="etpartdate" name="etpartdate" type="text" value="<?php echo $etpartdate; ?>" />
-                    <input MaxLength="7" class="required time" id="etparttime" name="etparttime" style="width:52px;" type="text" value="<?php echo $etparttime; ?>" />
+                    <input <?php echo $readonly_attr; ?>  MaxLength="10" class="required date" id="stpartdate" name="stpartdate" type="text" value="<?php echo $stpartdate; ?>" />
+                    <input <?php echo $readonly_attr; ?>  MaxLength="7" class="required time" id="stparttime" name="stparttime" style="width:52px;" type="text" value="<?php echo $stparttime; ?>" /><span id="s_to1" class="inl">&nbsp;&nbsp;&nbsp;</span>
+                    <input <?php echo $readonly_attr; ?> MaxLength="10" class="required date" id="etpartdate" name="etpartdate" type="text" value="<?php echo $etpartdate; ?>" />
+                    <input <?php echo $readonly_attr; ?> MaxLength="7" class="required time" id="etparttime" name="etparttime" style="width:52px;" type="text" value="<?php echo $etparttime; ?>" />
                     <input MaxLength="10" id="stpartdatelast" name="stpartdatelast" type="hidden" value="" />
                     <input MaxLength="10" id="etpartdatelast" name="etpartdatelast" type="hidden" value="" />
                     <input MaxLength="10" id="stparttimelast" name="stparttimelast" type="hidden" value="" />
                     <input MaxLength="10" id="etparttimelast" name="etparttimelast" type="hidden" value="" />
                     
                     <label  class="checkp">
-                        <input id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1" <?php if (isset($event) && $event->isalldayevent != 0 ) {
+                        <input <?php echo $readonly_attr; ?>  id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1" <?php if (isset($event) && $event->isalldayevent != 0 ) {
                     echo "checked";
                 } ?>/><span style="font-size:10px;font-weight:normal;" id="s_all_day_event" class="inl">All Day Event</span>
                     </label>  

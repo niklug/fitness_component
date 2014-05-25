@@ -97,9 +97,17 @@
           } ?>/><span class="inl"><span style="font-size:11px;" id="repeat1" class="inl">Repeat</span> <span id="repeatspan" class="inl"></span> <a href="#" id="repeatanchor">Edit</a></span>
           </div> 
 
-          <?php
-            }
-          ?>
+          <?php } ?>
+         
+         
+          <?php if(!$event->id && $is_client){ ?>
+         <input id="frontend_published" name="frontend_published" type="hidden" value="1" />
+          <?php } ?>
+         
+          <?php if($event->id && $is_client){ ?>
+         <input id="frontend_published" name="frontend_published" type="hidden" value="<?php echo $event->frontend_published ?>" />
+          <?php } ?>
+         
           <br/>
           <?php  if(!$readonly_frontend) { ?>
               <a href="javascript:void(0)" id="savebtn">Save</a>

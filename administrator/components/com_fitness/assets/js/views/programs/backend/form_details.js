@@ -86,6 +86,7 @@ define([
         
             if(category_id) {
                 this.loadSessionType(category_id);
+                this.showExercises(category_id);
             }
             
             var session_type_id = this.model.get('session_type');
@@ -119,13 +120,15 @@ define([
         
         loadAppointment : function() {
             var appointments_collection = new Backbone.Collection;
-            // filter for "Personal Training", "Semi-Private Training","Resistance Workout", "Cardio Workout"
+            // filter for "Personal Training", "Semi-Private Training","Resistance Workout", "Cardio Workout",“Consultation” and "Special Event”  
            
             appointments_collection.add([
                 app.collections.appointments.get(1),
                 app.collections.appointments.get(2),
                 app.collections.appointments.get(3),
-                app.collections.appointments.get(4)
+                app.collections.appointments.get(4),
+                app.collections.appointments.get(6),
+                app.collections.appointments.get(7)
             ]);
             
             new Select_element_view({
@@ -147,6 +150,16 @@ define([
             this.loadSessionType(id);
             this.setEndInterval(id);
             app.controller.deleteClients(this.model);
+            
+            this.showExercises(id);
+        },
+        
+        showExercises : function(id) {
+            var exercises_block = $("#exercises_list").parent();
+            exercises_block.show();
+            if(id == '6' || id == '7') {//“Consultation” and "Special Event”  
+                exercises_block.hide();
+            }
         },
         
         loadSessionType : function(id) {

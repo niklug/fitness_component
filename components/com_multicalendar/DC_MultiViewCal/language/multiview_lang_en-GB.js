@@ -88,7 +88,7 @@ var i18n = jQuery.extend({}, i18n || {}, {
         "loading_data":"Loading data...",
         "request_processed":"The request is being processed ...",
         "success":"Success!",
-        "are_you_sure_delete":"Are you sure to delete this event",
+        "are_you_sure_delete":"WARNING! Deleting this event will also delete the 'Workout \n Program' or ‘Assessment’ attached to this event. \n Are you sure you wish to continue?",
         "ok":"Ok",
         "cancel":"Cancel",
         "manage_the_calendar":"Manage The Calendar",
