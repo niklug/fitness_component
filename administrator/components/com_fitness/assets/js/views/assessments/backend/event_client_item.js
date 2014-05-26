@@ -31,6 +31,7 @@ define([
             "change .client_id" : "onClientSelect",
             "click .delete_event_client" : "delete",
             "click .send_workout_email" : "onClickSendEmail",
+            "click .send_to_client" : "onClickSendToClient",
             "click .pdf_button" : "onClickPdf",
         },
         
@@ -118,6 +119,12 @@ define([
             }
             
             app.controller.sendWorkoutEmail(id, client_id, method);
+        },
+        
+        onClickSendToClient : function(event) {
+            var id = $(event.target).attr('data-id');
+            var client_id = this.model.get('client_id');
+            app.controller.sendWorkoutEmail(id, client_id, 'WorkoutToClient');
         },
         
         onClickPdf : function(event) {

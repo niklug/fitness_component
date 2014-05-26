@@ -27,13 +27,20 @@ class FitnessController extends JController {
 
     public function display($tpl = null) {
         $user = JFactory::getUser();
+        
+        $view = JRequest::getVar( 'view' );
+        
+        if($view == 'appointment_confirmed') {
+            parent::display();
+            return;
+        }
 
         if ($user->guest) {
             $this->setRedirect(JRoute::_(JURI::base() . 'index.php', false));
             $this->setMessage('Login please to proceed');
             return false;
         }
-        parent::display();
+        
     }
     
     //nutrition_recipe

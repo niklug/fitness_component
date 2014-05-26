@@ -1249,6 +1249,8 @@ function saveDragedData() {
                 $post['frontend_published'] = '1';
             }
             $post['title'] = $value;
+            $post['description'] = '';
+            $post['comments'] = '';
 
             $insert = insertEvent($post);
             
@@ -1304,6 +1306,8 @@ function insertEvent($post) {
     $obj->endtime = $post['endtime'];
     $obj->trainer_id = $post['trainer_id'];
     $obj->location = $post['location'];
+    $obj->description = $post['description'];
+    $obj->comments = $post['comments'];
     $obj->title = $post['title'];
     $obj->calid = JRequest::getVar('calid');
     $obj->published = 1;

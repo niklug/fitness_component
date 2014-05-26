@@ -315,19 +315,20 @@ class MultiCalendarController extends JController
         }
         
         public function confirmEmail() {
+                        
             $event_id = base64_decode(JRequest::getVar('event_id'));
             $client_id = base64_decode(JRequest::getVar('client_id'));
             
             $already_confirmed = $this->checkConfirmedEmail($event_id, $client_id);
-            
+               
+            $redirect = JURI::root() . 'index.php?option=com_fitness&view=appointment_confirmed&event_id=' . $event_id . '&client_id=' . $client_id;
             if($already_confirmed) {
-                die("This appointment already confirmed!");
+                header("Location: $redirect");
+                die();
             }
             
             $confirm = $this->setSentConfirmEmail($event_id, $client_id);
-            if($confirm) {
-                echo("Thank you, your appointment is confirmed!");
-            }
+    
             // update status to CONFIRMED
             $this->helper->updateAppointmentClientStatus ($event_id, $client_id, '13');
             
@@ -345,10 +346,9 @@ class MultiCalendarController extends JController
             } catch (Exception $exc) {
                echo $exc->getMessage();
             }
-     
-            
+            header("Location: $redirect");
             die();
-        } 
+          } 
         
         private function checkConfirmedEmail($event_id, $client_id) {
             $query = "SELECT id FROM #__fitness_email_reminder  WHERE event_id='$event_id' AND client_id='$client_id' AND confirmed='1'";

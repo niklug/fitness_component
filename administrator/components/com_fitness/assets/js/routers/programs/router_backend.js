@@ -141,7 +141,6 @@ define([
         
         connectTextbox : function(model) {
             var appointment_id = model.get('title');
-            console.log(appointment_id);
             // “Consultation” and "Special Event”
             if(appointment_id == '6' || appointment_id == '7') {
                 new Form_appointment_details({el : $("#textbox_wrapper"), model : model});
@@ -299,7 +298,7 @@ define([
             });
         },
         
-        sendWorkoutEmail : function(id, client_id) {
+        sendWorkoutEmail : function(id, client_id, method) {
             var data = {};
             data.url = app.options.ajax_call_url;
             data.view = '';
@@ -309,7 +308,7 @@ define([
             data.id =  id;
             data.client_id = client_id || app.options.user_id;
             data.view = 'Programs';
-            data.method = 'Workout';
+            data.method = method;
             $.fitness_helper.sendEmail(data);
         },
         

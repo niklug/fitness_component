@@ -117,7 +117,17 @@
                         </tbody>
                     </table>
             </div>
-
+        
+        <?php 
+        // Special Event Or Consultation
+        if($data->item->title == '6' OR $data->item->title == '7' ) { ?>
+            <div style="width: 784px;margin-top: 20px;">
+                <h3 style="margin: 0; padding: 0;">APPOINTMENT DETAILS</h3>
+                 <div style="padding: 5px;width: 770px;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px; margin-top: 10px;">
+                    <?php echo urldecode($data->item->comments);?>
+                </div>
+            </div>
+        <?php } else { ?>
             <div style="width: 784px;margin-top: 20px;">
                 <h3 style="margin: 0; padding: 0;">WORKOUT DETAILS</h3>
                 <hr style="width:100%;">
@@ -163,6 +173,7 @@
                     </tbody>
                 </table>
             </div>
+            <?php } ?>
         </div>
     </body>
 </html>

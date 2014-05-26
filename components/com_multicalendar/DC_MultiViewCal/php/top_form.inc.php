@@ -391,39 +391,57 @@
 
         function personalTrainingForm() {
             showCommentsBlock(false, false);
+            showGoToAppointmentFrontend(true);
+            showGoToAppointmentBackend(false);
         }
 
         function semiPrivateForm() {
             showCommentsBlock(false, false);
+            showGoToAppointmentFrontend(true);
+            showGoToAppointmentBackend(false);
         }
 
 
         function resistanceWorkoutForm() {
             showCommentsBlock(false, false);
+            showGoToAppointmentFrontend(true);
+            showGoToAppointmentBackend(false);
         }
 
         function cardioWorkoutForm() {
             showCommentsBlock(false, false);
+            showGoToAppointmentFrontend(true);
+            showGoToAppointmentBackend(false);
         }
 
         function assessmentForm() {
             showCommentsBlock(false, false);
+            showGoToAppointmentFrontend(true);
+            showGoToAppointmentBackend(false);
         }
 
         function consultationForm() {
             showCommentsBlock(true, true);
+            showGoToAppointmentFrontend(false);
+            showGoToAppointmentBackend(true);
         }
 
         function specialEventForm() {
             showCommentsBlock(true, true);
+            showGoToAppointmentFrontend(false);
+            showGoToAppointmentBackend(true);
         }
 
         function availableForm() {
             showCommentsBlock(true, false);
+            showGoToAppointmentFrontend(false);
+            showGoToAppointmentBackend(false);
         }
 
         function unavailableForm() {
             showCommentsBlock(true, false);
+            showGoToAppointmentFrontend(false);
+            showGoToAppointmentBackend(false);
         }
         
         function showCommentsBlock(show, readonly) {
@@ -443,6 +461,31 @@
                 return;
             } 
             element.disable(false);  
+        }
+        
+        
+        function showGoToAppointmentFrontend(show) {
+            var is_client = '<?php echo $is_client ?>';
+            if(!is_client) {
+                return;
+            }
+            if(show) {
+                $("#go_to_app").show();
+                return;
+            }
+            $("#go_to_app").hide();
+        }
+        
+        function showGoToAppointmentBackend(show) {
+            var is_client = '<?php echo $is_client ?>';
+            if(is_client) {
+                return;
+            }
+            if(show) {
+                $("#go_to_app").show();
+                return;
+            }
+            $("#go_to_app").hide();
         }
         
         
@@ -524,7 +567,7 @@
             </td>
             <?php if($event->id) { ?>
             <td style="text-align: right;">
-                <a style="font-size:12px;" id="go_to_app" href="javascript:void(0)">[GO TO APPOINTMENT]</a>
+                <a style="font-size:12px;display:none;" id="go_to_app" href="javascript:void(0)">[GO TO APPOINTMENT]</a>
             </td>
             <?php } ?>
         </tr>
