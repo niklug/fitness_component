@@ -151,6 +151,8 @@ define([
             this.setEndInterval(id);
             app.controller.deleteClients(this.model);
             
+            app.controller.connectTextbox(this.model);
+            
             this.showExercises(id);
         },
         

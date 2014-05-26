@@ -3,7 +3,7 @@
     <label>  
         <span>Appointment Details</span>
         <textarea cols="20" id="trainer_comments" name="comments" rows="2" >
-        <?php echo isset($event)?$event->comments:""; ?>
+        <?php echo isset($event)?urldecode($event->comments):""; ?>
         </textarea>  
      </label>
     <hr>

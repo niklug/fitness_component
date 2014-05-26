@@ -118,6 +118,15 @@ define([
             }
             data.description = description;
             
+            var comments = $('#comments').val();
+             
+            if(typeof comments !== 'undefined') {
+                comments = encodeURIComponent(comments);
+            } else {
+                comments = '';
+            }
+            data.comments = comments;
+            
             this.model.set(data);
 
             

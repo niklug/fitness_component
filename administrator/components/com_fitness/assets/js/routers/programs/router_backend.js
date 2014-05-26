@@ -15,6 +15,7 @@ define([
         'views/programs/backend/form_trainer',
         'views/programs/backend/form_clients',
         'views/programs/backend/form_workout_instructions',
+        'views/programs/backend/form_appointment_details',
         'views/programs/backend/list',
         'views/programs/backend/list_header_container',
         'views/programs/exercises/list',
@@ -36,6 +37,7 @@ define([
         Form_trainer_view,
         Form_event_clients_view,
         Form_event_workout_instructions,
+        Form_appointment_details,
         List_view,
         List_header_container_view,
         Exercises_list_view,
@@ -122,7 +124,7 @@ define([
             if(model.get('id')) {
                 new Form_event_clients_view({el : $("#clients_data_wrapper"), model : model});
                 
-                new Form_event_workout_instructions({el : $("#workout_instuctions_wrapper"), model : model});
+                this.connectTextbox(model);
                 
                 new Exercises_list_view({
                     el : $("#exercises_list"),
@@ -135,6 +137,18 @@ define([
                 
                 new Comments_block_view({el : $("#comments_block"), model : model});
             }
+        },
+        
+        connectTextbox : function(model) {
+            var appointment_id = model.get('title');
+            console.log(appointment_id);
+            // “Consultation” and "Special Event”
+            if(appointment_id == '6' || appointment_id == '7') {
+                new Form_appointment_details({el : $("#textbox_wrapper"), model : model});
+                return;
+            }
+            
+            new Form_event_workout_instructions({el : $("#textbox_wrapper"), model : model});
         },
      
         get_items : function() {

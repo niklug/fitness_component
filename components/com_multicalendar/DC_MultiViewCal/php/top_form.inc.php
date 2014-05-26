@@ -435,13 +435,14 @@
             } else {
                 comments_wraper.hide();
             }
+            var element = $("#trainer_comments").cleditor()[0];
             if(readonly) {
-                var element = $("#trainer_comments").cleditor()[0];
                 if(element) {
                     element.disable(true);
                 }
-            }
-                
+                return;
+            } 
+            element.disable(false);  
         }
         
         
