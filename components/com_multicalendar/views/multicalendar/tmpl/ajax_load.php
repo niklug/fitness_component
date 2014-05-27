@@ -1391,8 +1391,47 @@ function sendRemindersManually() {
 
 function deleteEvent() {
     $ret['success'] = true;
+
     $event_id = JRequest::getVar('event_id');
+    
+    $cid = JRequest::getVar('cid');
+    $user = &JFactory::getUser($cid);
+    $user_id = $user->id;
+    
     $db = & JFactory::getDBO();
+    
+    $helper = new FitnessHelper();
+    
+    $is_client = (bool) FitnessHelper::is_client($user_id);
+
+    if($is_client) {
+        $query = "SELECT * FROM #__dc_mv_events WHERE id='$event_id'";
+        $db->setQuery($query);
+        if (!$db->query()) {
+            $ret['success'] = false;
+            $ret['message'] = $db->stderr();
+            return $ret;
+        }
+
+        $event = $db->loadObject();
+        
+        $appointment_id = $event->title;
+        
+        $created_by = $event->owner;
+
+        $readonly = $helper->eventCalendarFrontendReadonly($appointment_id, $user_id);
+        
+        //Resistance Workout,  Cardio Workout, Available, Unavailable
+        if(!$helper->eCalendarFrontendAllowDel($appointment_id, $created_by, $user_id)) {
+            return $ret;
+        }
+
+        if($readonly) {
+            return $ret;
+        }
+    }
+    
+    
     $query = "DELETE FROM #__dc_mv_events WHERE id='$event_id'";
     $db->setQuery($query);
     if (!$db->query()) {

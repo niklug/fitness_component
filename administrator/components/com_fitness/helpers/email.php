@@ -344,10 +344,7 @@ class AppointmentEmail extends FitnessEmail {
                 $subject = 'Workout/Training Session';
                 $layout = 'email_pdf_workout';
                 break;
-            case 'WorkoutToClient':
-                $subject = 'Workout/Training Session';
-                $layout = 'email_pdf_workout_to_client';
-                break;
+         
             
             //status
             case 'AppointmentAttended':
@@ -552,10 +549,9 @@ class AppointmentEmail extends FitnessEmail {
         }
         
         //trainer sends workout to client
-        if($this->layout == 'email_pdf_workout_to_client') {
+        if($this->data->to_client_only) {
             $ids = array($this->data->client_id);
             $this->event_id = $this->data->id;
-            
         }
         
         
@@ -576,7 +572,6 @@ class AppointmentEmail extends FitnessEmail {
             }
             
             if($this->layout == 'email_pdf_workout'
-                    OR $this->layout == 'email_pdf_workout_to_client'
                     OR $this->layout == 'email_pdf_a_bio'
                     OR $this->layout == 'email_pdf_a_standard'
             ){

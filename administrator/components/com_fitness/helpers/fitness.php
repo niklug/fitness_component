@@ -2013,12 +2013,12 @@ class FitnessHelper extends FitnessFactory
             return $data;
         }
         
-        function eventCalendarFrontendReadonly($event_id, $user_id) {
+        function eventCalendarFrontendReadonly($appointment_id, $user_id) {
             $readonly = false;
             $is_client = (bool) self::is_client($user_id);
         
             //'Resistance Workout', 'Cardio Workout', 'Available', 'Unavailable'
-            if(!in_array($event_id, array('3', '4', '8', '9'))) {
+            if(!in_array($appointment_id, array('3', '4', '8', '9'))) {
                 $readonly = true;
             }
             
@@ -2026,12 +2026,22 @@ class FitnessHelper extends FitnessFactory
                 $readonly = false;
             }
             
-            if(!$event_id) {
+            if(!$appointment_id) {
                 $readonly = false;
             }
             
             
             return $readonly;
+        }
+        
+        function eCalendarFrontendAllowDel($appointment_id, $created_by, $user_id) {
+             //Resistance Workout,  Cardio Workout, Available, Unavailable
+            if(($created_by != $user_id) && ($appointment_id == '3' OR $appointment_id == '4' OR $appointment_id == '8' OR $appointment_id == '9')) {
+                return false;
+            }
+            
+            
+            return true;
         }
 }
 

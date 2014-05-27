@@ -113,18 +113,35 @@ define([
             
             var session_focus = this.options.item_model.get('session_focus_name');
             
-            var method = 'AssessmentStandard';
-            if(app.controller.is_bio_assessment(session_focus)) {
-                method = 'AssessmentBio';
-            }
+            var method = this.setEmailMethod();
             
-            app.controller.sendWorkoutEmail(id, client_id, method);
+            app.controller.sendWorkoutEmail(id, client_id, method, false);
         },
         
         onClickSendToClient : function(event) {
             var id = $(event.target).attr('data-id');
             var client_id = this.model.get('client_id');
-            app.controller.sendWorkoutEmail(id, client_id, 'WorkoutToClient');
+            
+            var session_focus = this.options.item_model.get('session_focus_name');
+            
+            var method = this.setEmailMethod();
+            
+            app.controller.sendWorkoutEmail(id, client_id, method, true);
+        },
+        
+        setEmailMethod : function() {
+            var session_focus = this.options.item_model.get('session_focus_name');
+            
+            if(!session_focus) {
+                alert("Session Focus not selected!");
+                return;
+            }
+            
+            var method = 'AssessmentStandard';
+            if(app.controller.is_bio_assessment(session_focus)) {
+                method = 'AssessmentBio';
+            }
+            return method;
         },
         
         onClickPdf : function(event) {

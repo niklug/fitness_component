@@ -112,13 +112,13 @@ define([
         onClickSendEmail :function(event) {
             var id = $(event.target).attr('data-id');
             var client_id = this.model.get('client_id');
-            app.controller.sendWorkoutEmail(id, client_id, 'Workout');
+            app.controller.sendWorkoutEmail(id, client_id, 'Workout', false);
         },
         
         onClickSendToClient : function(event) {
             var id = $(event.target).attr('data-id');
             var client_id = this.model.get('client_id');
-            app.controller.sendWorkoutEmail(id, client_id, 'WorkoutToClient');
+            app.controller.sendWorkoutEmail(id, client_id, 'Workout', true);
         },
         
         onClickPdf : function(event) {

@@ -40,7 +40,7 @@ class FitnessController extends JController {
             $this->setMessage('Login please to proceed');
             return false;
         }
-        
+        parent::display();
     }
     
     //nutrition_recipe

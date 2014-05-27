@@ -115,7 +115,12 @@
               <?php if($event->id) { ?>
                 <a href="javascript:void(0)" id="savecopybtn">Save as Copy</a>
               <?php } ?>
-              <?php if(isset($event) && (JRequest::getVar("delete")=="1")){ ?>
+              <?php
+                $allow_delete = true;
+                if($is_client) {
+                    $allow_delete = $helper->eCalendarFrontendAllowDel($event->title, $event->owner, $user_id);
+                }
+                if(isset($event) && (JRequest::getVar("delete")=="1") && $allow_delete){ ?>
                  <a href="javascript:void(0)" id="deletebtn">Delete</a>
               <?php } ?>  
           <?php } ?>  

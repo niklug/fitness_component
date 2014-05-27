@@ -3170,6 +3170,7 @@
          
          
          function deleteEvent(event_id) {
+             
              var url = option.url.replace('list', 'deleteEvent');
              $.ajax({
                     type : "POST",
@@ -3248,6 +3249,7 @@
                                 onDragEvent(e, $(this), event_id);
                             }
                             var delete_event = $("#delete_event").is(':checked');
+                            
                             if(delete_event) {
                                 deleteEvent(event_id);
                             }

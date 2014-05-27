@@ -288,7 +288,7 @@ define([
             });
         },
         
-        sendWorkoutEmail : function(id, client_id, method) {
+        sendWorkoutEmail : function(id, client_id, method, to_client_only) {
             var data = {};
             data.url = app.options.ajax_call_url;
             data.view = '';
@@ -299,6 +299,7 @@ define([
             data.client_id = client_id || app.options.user_id;
             data.view = 'Programs';
             data.method = method;
+            data.to_client_only = to_client_only;
             $.fitness_helper.sendEmail(data);
         },
         
