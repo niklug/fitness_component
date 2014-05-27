@@ -91,12 +91,13 @@
          </table>
 
          <br/>
+         <!--
          <div class="checkp">
               <input id="repeatcheckbox" name="repeatcheckbox" type="checkbox" value="1" <?php if (isset($event) && $event->rrule != "") {
               echo "checked";
           } ?>/><span class="inl"><span style="font-size:11px;" id="repeat1" class="inl">Repeat</span> <span id="repeatspan" class="inl"></span> <a href="#" id="repeatanchor">Edit</a></span>
           </div> 
-
+         -->
           <?php } ?>
          
          

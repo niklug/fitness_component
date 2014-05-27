@@ -73,11 +73,15 @@ define([
         addItem : function(model) {
             
             var edit_allowed = app.controller.edit_allowed(model);
+            var show_allowed = app.controller.show_allowed(model);
             var delete_allowed = app.controller.delete_allowed(model);
             var status_change_allowed = app.controller.status_change_allowed(model);
            
             model.set({edit_allowed : edit_allowed, status_change_allowed : status_change_allowed, delete_allowed : delete_allowed});
             
+            if(!show_allowed) {
+                return false;
+            }
             
             var current_page = this.model.get('current_page');
 

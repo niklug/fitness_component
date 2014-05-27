@@ -1440,6 +1440,7 @@
             var location = event[9] || '';
             var session_type = event[16] || '';
             var session_focus = event[17] || '';
+            var is_client = event[19];
             var html = '';
             html += "<b> Time: </b>" + timeshow + "</br>";
             html += "</br>";
@@ -1450,14 +1451,17 @@
             html += "<b> Location: </b>" + location + "</br>";
             html += "</br>";
             html += "<b> Trainer: </b>" + trainer + "</br>";
-            html += "<b> Clients: </b>" +  "</br>";
-            //console.log(event);
-            $.each(event[15], function(index,  client) {
+            if(!is_client) {
+                html += "<b> Clients: </b>" +  "</br>";
+                $.each(event[15], function(index,  client) {
                 
                 if(client) {
                     html += "<div style=\"margin-left:50px;font-style:italic;\">" + client + " </div>";
                 }
             });
+            }
+            //console.log(event);
+            
             
             
             return html

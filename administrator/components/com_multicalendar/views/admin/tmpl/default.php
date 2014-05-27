@@ -97,14 +97,21 @@ $mainframe  =& JFactory::getApplication();
 	<?php echo $arrayJS_list;?>
 	
 </script>
-<?php if (JC_JQUERY_MV) {?>
-<script language='JavaScript' type='text/javascript' src='../components/com_multicalendar/DC_MultiViewCal/js/jquery-1.7.2.min.js'></script>
-<script language='JavaScript' type='text/javascript' src='../components/com_multicalendar/DC_MultiViewCal/js/jquery-ui-1.8.20.custom.min.js'></script>
-<?php 
-}
-else
+
+
+<?php
+$document =& JFactory::getDocument();
+if (JC_JQUERY_MV)
+{
+    //$document->addScript("components/com_multicalendar/DC_MultiViewCal/js/jquery-1.7.2.min.js");
+    $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
+    //$document->addScript("components/com_multicalendar/DC_MultiViewCal/js/jquery-ui-1.8.20.custom.min.js");
+    $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery-ui.js');
+} else {
+
     for ($i=0;$i<count($JC_JQUERY_SPECIAL);$i++)
-      echo "<script language='JavaScript' type='text/javascript' src='".$JC_JQUERY_SPECIAL[$i]."'></script>";
+     echo "<script language='JavaScript' type='text/javascript' src='".$JC_JQUERY_SPECIAL[$i]."'></script>";
+}
 ?>
 <script language='JavaScript' type='text/javascript' src='../components/com_multicalendar/DC_MultiViewCal/src/Plugins/underscore.js'></script>
 <script language='JavaScript' type='text/javascript' src='../components/com_multicalendar/DC_MultiViewCal/src/Plugins/rrule.js'></script>

@@ -558,7 +558,8 @@ function listCalendarByRange($calid, $sd, $ed, $trainer_id, $client_id, $locatio
                 $clients_names,
                 $row->session_type_name,
                 $row->session_focus_name,
-                $readonly
+                $readonly,
+                $is_client
             );
             $ret['events'][] = $ev;
         }

@@ -187,6 +187,20 @@ define([
             return access;
         },
         
+        show_allowed : function(model) {
+            var access = false;
+
+            var appointment = model.get('title');
+  
+            
+            //'Resistance Workout', 'Cardio Workout'
+            if(appointment == '3' || appointment == '4') {
+                access = true;
+            }
+            
+            return access;
+        },
+        
         is_item_owner : function(model) {
             var access = false;
             
@@ -242,7 +256,7 @@ define([
             app.models.item.set({id : id});
             app.models.item.fetch({
                 success: function (model, response) {
-                    model.set({edit_allowed : self.edit_allowed(model), status_change_allowed : self.status_change_allowed(model), delete_allowed : self.delete_allowed(model)});
+                    model.set({edit_allowed : self.edit_allowed(model), show_allowed : self.show_allowed(model), status_change_allowed : self.status_change_allowed(model), delete_allowed : self.delete_allowed(model)});
             
                     $("#submenu_container").html(new Submenu_item_view({model : model, request_params_model : app.models.request_params}).render().el);
 
