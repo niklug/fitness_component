@@ -23,6 +23,7 @@ $primary_goal_id = $session->get('primary_goal_id');
 $primary_goal = $this->backend_list_model->getGoal($primary_goal_id);
 
 
+
 require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'fitness.php';
 
 $helper = new FitnessHelper();
@@ -92,7 +93,9 @@ $helper = new FitnessHelper();
     
 
     <input type="hidden" name="jform_id" value="<?php echo $this->item->id;?>" />
+    <input type="hidden"  id="jform_user_id"  name="jform[user_id]" value="<?php echo $primary_goal->user_id;?>" />
     <input type="hidden" name="task" value="" />
+
     <?php echo JHtml::_('form.token'); ?>
     <div class="clr"></div>
 </form>

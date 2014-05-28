@@ -259,7 +259,7 @@ define([
             
             var self = this;
             $.AjaxCall(data, url, view, task, table, function(output) {
-                console.log(output);
+                //console.log(output);
                 app.models.graph_data = new Backbone.Model();
                 app.models.graph_data.set({data : output});
                 

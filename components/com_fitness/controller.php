@@ -210,10 +210,22 @@ class FitnessController extends JController {
     }
     
     function onBusinessNameChange() {
-            $view = $this -> getView('goals_periods', 'json');
-            $view->setModel($this->getModel('goals_periods'));
-            $view -> onBusinessNameChange();
-	}
+        $view = $this -> getView('goals_periods', 'json');
+        $view->setModel($this->getModel('goals_periods'));
+        $view -> onBusinessNameChange();
+    }
+    
+    function primary_goals() {
+        $view = $this -> getView('goals', 'json');
+        $view->setModel($this->getModel('goals'));
+        $view -> primary_goals();
+    }
+    
+    function mini_goals() {
+        $view = $this -> getView('goals', 'json');
+        $view->setModel($this->getModel('goals'));
+        $view -> mini_goals();
+    }
     
     // nutrition plan
     function nutrition_plan() {

@@ -642,6 +642,7 @@ INSERT INTO `#__fitness_training_period` (`id`, `name`, `color`) VALUES
 
 CREATE TABLE IF NOT EXISTS `#__fitness_mini_goals` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
   `primary_goal_id` int(11) unsigned NOT NULL,
   `mini_goal_category_id` int(11) NOT NULL,
   `training_period_id` int(11) NOT NULL,

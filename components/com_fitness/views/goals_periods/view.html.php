@@ -50,6 +50,9 @@ class FitnessViewGoals_periods extends JView
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.flot.js');
                 $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.flot.time.js');
                 echo '<!--[if IE]><script type="text/javascript" src="' . JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
+                
+                
+                
         
                 $document->addStyleSheet(JUri::root() . 'components/com_fitness/assets/css/fitness.css');
                 

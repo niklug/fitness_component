@@ -14,9 +14,11 @@
         
         
         filter="safehtml" /> 
-
-  
-               
+       
+       <field name="user_id" type="text" size="40" class="inputbox"
+        filter="safehtml" /> 
+       
+              
         <field name="mini_goal_category_id" type="sql" class="inputbox"
               query="SELECT id, name FROM #__fitness_mini_goal_categories WHERE state='1'"
               key_field="id"

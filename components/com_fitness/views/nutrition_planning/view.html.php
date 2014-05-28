@@ -37,7 +37,7 @@ class FitnessViewNutrition_planning extends JView
 
                 
                 $document = &JFactory::getDocument();
-                $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'moment.min.js');
+                //$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'moment.min.js');
                 $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
 
   
