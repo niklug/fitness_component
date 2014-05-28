@@ -57,9 +57,32 @@
 }
 
 .ui-dialog .ui-dialog-titlebar-close, .ui-icon-closethick {
-    width: 20px !important;
-    height: 20px !important;
+    width: 13px !important;
+    height: 13px !important;
+    background-color: transparent;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+    outline: 0;
+    display:inline-block !important;
+    outline:none;
 }
+
+
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+
+
+
+.mv_dlg.ui-dialog .ui-dialog-titlebar-close {
+  right: 5px !important;
+   border: none;
+   outline:none;
+}
+
 
 .ui-dialog .ui-dialog-titlebar-close {
     background: none !important;
@@ -76,6 +99,7 @@
     margin: 0;
     padding: 0 0 0 7px;
 }
+
 
 
 

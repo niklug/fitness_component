@@ -392,32 +392,32 @@
         function personalTrainingForm() {
             showCommentsBlock(false, false);
             showGoToAppointmentFrontend(true);
-            showGoToAppointmentBackend(false);
+            showGoToAppointmentBackend(true);
         }
 
         function semiPrivateForm() {
             showCommentsBlock(false, false);
             showGoToAppointmentFrontend(true);
-            showGoToAppointmentBackend(false);
+            showGoToAppointmentBackend(true);
         }
 
 
         function resistanceWorkoutForm() {
             showCommentsBlock(false, false);
             showGoToAppointmentFrontend(true);
-            showGoToAppointmentBackend(false);
+            showGoToAppointmentBackend(true);
         }
 
         function cardioWorkoutForm() {
             showCommentsBlock(false, false);
             showGoToAppointmentFrontend(true);
-            showGoToAppointmentBackend(false);
+            showGoToAppointmentBackend(true);
         }
 
         function assessmentForm() {
             showCommentsBlock(false, false);
             showGoToAppointmentFrontend(true);
-            showGoToAppointmentBackend(false);
+            showGoToAppointmentBackend(true);
         }
 
         function consultationForm() {
