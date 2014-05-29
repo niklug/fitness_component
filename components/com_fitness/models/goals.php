@@ -126,7 +126,38 @@ class FitnessModelGoals extends JModelList {
         
         $query .= " (SELECT name FROM #__users WHERE id=pg.user_id) client_name,";
         
-        $query .= " (SELECT name FROM #__fitness_goal_categories WHERE id=pg.goal_category_id) primary_goal_name";
+        $query .= " (SELECT name FROM #__fitness_goal_categories WHERE id=pg.goal_category_id) primary_goal_name,";
+        
+        //get total number
+        if(!$id) {
+            $query .= " (SELECT COUNT(*) FROM $table AS a ";
+
+            $query .= " WHERE 1 ";
+
+            if($client_id) {
+                $query .= " AND pg.user_id='$client_id'";
+            }
+
+            $query .= " AND pg.state='$state'";
+
+            if($list_type == 'previous') {
+                $query .= " AND ( pg.deadline < " . $db->quote($current_date);
+                $query .= " OR (pg.start_date <= " . $db->quote($current_date);
+                $query .= " AND pg.deadline > " . $db->quote($current_date) . " )) ";
+            }
+
+            if($list_type == 'current') {
+                $query .= " AND pg.deadline > " . $db->quote($current_date);
+            }
+
+            if($list_type == 'current_primary_goal') {
+                $query .= " AND pg.start_date <= " . $db->quote($current_date);
+                $query .= " AND pg.deadline > " . $db->quote($current_date);
+            }
+
+            $query .= " ) items_total ";
+        }
+        //end get total number
         
         $query .= " FROM  #__fitness_goals AS pg";
         
@@ -197,7 +228,7 @@ class FitnessModelGoals extends JModelList {
                 $data = new stdClass();
                 $data->id = $id;  
                 $data->client_id = JRequest::getVar('client_id'); 
-
+                $data->primary_goal_id = JRequest::getVar('primary_goal_id'); 
                 $data = $this->getMiniGoals($data);
                 
                 return $data;
@@ -234,6 +265,8 @@ class FitnessModelGoals extends JModelList {
         $client_id = $data->client_id;
         
         $state = $data->state ? $data->state : '1';
+        
+        $primary_goal_id = $data->primary_goal_id;
    
         $current_date = $helper->getDateCreated();
 
@@ -242,8 +275,8 @@ class FitnessModelGoals extends JModelList {
         $query = "SELECT mg.*,";
         
         $query .= " (SELECT name FROM #__users WHERE id=mg.user_id) client_name,";
-        $query .= " (SELECT name FROM #__fitness_mini_goal_categories WHERE mg.mini_goal_category_id) mini_goal_name,";
-        //$query .= " (SELECT color FROM #__fitness_training_period WHERE mg.training_period_id) training_period_color,";
+        $query .= " (SELECT name FROM #__fitness_mini_goal_categories WHERE id=mg.mini_goal_category_id) mini_goal_name,";
+        $query .= " (SELECT color FROM #__fitness_training_period WHERE id=mg.training_period_id) training_period_color,";
         $query .= " mg.start_date AS start_date,";
         $query .= " tp.color AS training_period_color,";
         $query .= " tp.name AS training_period_name";
@@ -268,6 +301,10 @@ class FitnessModelGoals extends JModelList {
         
         if($list_type == 'current') {
             $query .= " AND mg.deadline > " . $db->quote($current_date);
+        }
+        
+        if($primary_goal_id) {
+            $query .= " AND mg.primary_goal_id='$primary_goal_id'";
         }
         
         $query_type = 1;

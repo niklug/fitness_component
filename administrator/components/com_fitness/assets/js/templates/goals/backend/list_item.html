@@ -1,0 +1,84 @@
+<table width="100%">
+    <tr>
+        <td width="50%">
+            <table width="100%">
+                <tr>
+                    <td style="width:120px;">
+                        Primary Goal 
+                    </td>
+                    <td class="grey_title">
+                        <table width="100%">
+                            <tr>
+                                <td width="70%">
+                                    <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status || app.options.statuses.EVELUATING_GOAL_STATUS.id == item.status) { %>
+                                        <%= app.options.status_options.statuses[item.status].label %>
+                                    <% } else { %>
+                                        <%= item.primary_goal_name %>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if(app.options.statuses.SCHEDULED_GOAL_STATUS.id == item.status) { %>
+                                        <a data-id="" style="cursor: pointer;" class="primary_view" onclick="javascript:void(0)">[VIEW]</a>
+                                        <br/>
+                                    <% } %>
+
+
+                                    <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
+                                        <a data-id="" style="cursor: pointer;" class="primary_edit" onclick="javascript:void(0)">[EDIT]</a>
+                                        <br/><br/>
+                                        <a data-id="" style="cursor: pointer;" class="primary_submit" onclick="javascript:void(0)">[SUBMIT]</a>
+                                     <% } %>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Start Date 
+                    </td>
+                    <td class="grey_title">
+                        <%
+                        var d1 = new Date(Date.parse(item.start_date));            
+                        var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+                        %>
+                        <%= start_date %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Achieve By 
+                    </td>
+                    <td class="grey_title">
+                        <%
+                            var d2 = new Date(Date.parse(item.deadline));            
+                            var deadline = moment(d2).format("dddd, D MMMM  YYYY");      
+                        %>
+                        <%= deadline %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Status 
+                    </td>
+                    <td id="status_button_place_<%= item.id %>"  >
+   
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Goal Details 
+                    </td>
+                    <td class="grey_title">
+                        <%= item.details %>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="minigoals_wrapper" >
+        </td>
+    </tr>
+</table>
+<br/>
+<hr>
+<br/>

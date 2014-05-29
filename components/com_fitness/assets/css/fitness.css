@@ -262,7 +262,7 @@ a:hover, a:active, a:focus {
     border: 2px solid #AB4423;
 }
 
-.event_status_scheduled {
+.event_status_scheduled, .goal_status_scheduled {
     background-color: #FCF7A7 !important;
     border: 2px solid #E7AE24;
 }

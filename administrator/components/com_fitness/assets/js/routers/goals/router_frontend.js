@@ -4,13 +4,14 @@ define([
 	'backbone',
         'app',
         'collections/goals/primary_goals',
-        'collections/goals/mini_goals',
         'models/goals/request_params_primary',
         'views/graph/graph',
+        'views/goals/backend/list',
         
         'jquery.flot',
         'jquery.flot.time',
-        'jquery.validate'
+        'jquery.validate',
+        'jquery.status'
         
 ], function (
         $,
@@ -18,9 +19,9 @@ define([
         Backbone,
         app,
         Primary_goals_collection,
-        Mini_goals_collection,
         Request_params_primary_model,
-        Graph_view
+        Graph_view,
+        List_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -37,8 +38,7 @@ define([
             }
             
             app.collections.primary_goals = new Primary_goals_collection();
-            app.collections.mini_goals = new Mini_goals_collection();
-            
+
             app.models.request_params_primary = new Request_params_primary_model({client_id : app.options.client_id});
             app.models.request_params_primary.bind("change", this.get_items, this);
             
@@ -73,16 +73,6 @@ define([
                     alert(response.responseText);
                 }
             });  
-            
-            app.collections.mini_goals.fetch({
-                data : {},
-                success : function (collection, response) {
-                    console.log(collection.toJSON());
-                },
-                error : function (collection, response) {
-                    alert(response.responseText);
-                }
-            }); 
         },
 
         connectGraph : function() {
@@ -104,7 +94,22 @@ define([
                 },
                 style : 'dark'
             });
-        }
+        },
+        
+        list_view : function() {
+            $("#main_container").html(new List_view({model : app.models.request_params_primary, collection : app.collections.primary_goals}).render().el);
+            
+            app.models.pagination = $.backbone_pagination({});
+
+            app.models.pagination.bind("change:currentPage", this.set_params_model, this);
+
+            app.models.pagination.bind("change:items_number", this.set_params_model, this);
+        },
+        
+        set_params_model : function() {
+            app.collections.primary_goals.reset();
+            app.models.request_params_primary.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
+        },
 
     });
 

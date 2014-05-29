@@ -60,7 +60,8 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
             'INCOMPLETE_GOAL_STATUS' :  {id : '<?php echo FitnessHelper::INCOMPLETE_GOAL_STATUS ?>',    name : 'INCOMPLETE'},
             'EVELUATING_GOAL_STATUS' :  {id : '<?php echo FitnessHelper::EVELUATING_GOAL_STATUS ?>',    name : 'EVALUATING'},
             'INPROGRESS_GOAL_STATUS' :  {id : '<?php echo FitnessHelper::INPROGRESS_GOAL_STATUS ?>',    name : 'IN PROGRESS'},
-            'ASSESSING_GOAL_STATUS' :   {id : '<?php echo FitnessHelper::ASSESSING_GOAL_STATUS ?>',     name : 'ASSESSING'}
+            'ASSESSING_GOAL_STATUS' :   {id : '<?php echo FitnessHelper::ASSESSING_GOAL_STATUS ?>',     name : 'ASSESSING'},
+            'SCHEDULED_GOAL_STATUS' :   {id : '<?php echo FitnessHelper::SCHEDULED_GOAL_STATUS ?>',     name : 'SCHEDULED'}
         };
         
         
@@ -84,6 +85,7 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
             '<?php echo FitnessHelper::EVELUATING_GOAL_STATUS ?>'   : {'label' : statuses.EVELUATING_GOAL_STATUS.name,    'class' : 'goal_status_evaluating',    'email_alias' : ''},
             '<?php echo FitnessHelper::INPROGRESS_GOAL_STATUS ?>'   : {'label' : statuses.INPROGRESS_GOAL_STATUS.name,    'class' : 'goal_status_inprogress',    'email_alias' : ''},
             '<?php echo FitnessHelper::ASSESSING_GOAL_STATUS ?>'    : {'label' : statuses.ASSESSING_GOAL_STATUS.name,     'class' : 'goal_status_assessing',     'email_alias' : ''},
+            '<?php echo FitnessHelper::SCHEDULED_GOAL_STATUS ?>'    : {'label' : statuses.SCHEDULED_GOAL_STATUS.name,     'class' : 'goal_status_scheduled',     'email_alias' : ''},
 
         },
 

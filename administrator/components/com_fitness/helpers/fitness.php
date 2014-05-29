@@ -274,6 +274,7 @@ class FitnessHelper extends FitnessFactory
     const EVELUATING_GOAL_STATUS = '4';
     const INPROGRESS_GOAL_STATUS = '5';
     const ASSESSING_GOAL_STATUS = '6';
+    const SCHEDULED_GOAL_STATUS = '7';
 
     const ADMINISTRATOR_USERGROUP = 'Super Users';
     
