@@ -42,9 +42,13 @@ define([
         },
         
         loadItems : function() {
-           var self = this;
-            _.each(this.collection.models, function(model) {
-                self.addItem(model);
+            var id = this.model.get('id');
+            var collection = new Backbone.Collection;
+            
+            collection.add(this.collection.where({primary_goal_id : id}));
+            var self = this;
+            _.each(collection.models, function(model) {
+                 self.addItem(model);
             });
         },
         

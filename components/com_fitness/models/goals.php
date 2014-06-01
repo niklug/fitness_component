@@ -66,7 +66,7 @@ class FitnessModelGoals extends JModelList {
                 $data->order_dirrection = JRequest::getVar('order_dirrection'); 
                 $data->page = JRequest::getVar('page'); 
                 $data->limit = JRequest::getVar('limit'); 
-                $data->state = JRequest::getVar('state'); 
+                $data->state = JRequest::getVar('state', '1'); 
                 $data->list_type = JRequest::getVar('list_type'); 
                 $data->client_id = JRequest::getVar('client_id'); 
 
@@ -124,10 +124,6 @@ class FitnessModelGoals extends JModelList {
         
         $query = "SELECT pg.*,"; 
         
-        $query .= " (SELECT name FROM #__users WHERE id=pg.user_id) client_name,";
-        
-        $query .= " (SELECT name FROM #__fitness_goal_categories WHERE id=pg.goal_category_id) primary_goal_name,";
-        
         //get total number
         if(!$id) {
             $query .= " (SELECT COUNT(*) FROM $table AS a ";
@@ -155,9 +151,15 @@ class FitnessModelGoals extends JModelList {
                 $query .= " AND pg.deadline > " . $db->quote($current_date);
             }
 
-            $query .= " ) items_total ";
+            $query .= " ) items_total, ";
         }
         //end get total number
+        
+        $query .= " (SELECT name FROM #__users WHERE id=pg.user_id) client_name,";
+        
+        $query .= " (SELECT name FROM #__fitness_goal_categories WHERE id=pg.goal_category_id) primary_goal_name";
+        
+        
         
         $query .= " FROM  #__fitness_goals AS pg";
         
@@ -229,6 +231,7 @@ class FitnessModelGoals extends JModelList {
                 $data->id = $id;  
                 $data->client_id = JRequest::getVar('client_id'); 
                 $data->primary_goal_id = JRequest::getVar('primary_goal_id'); 
+                $data->state = JRequest::getVar('state', '1'); 
                 $data = $this->getMiniGoals($data);
                 
                 return $data;
@@ -264,7 +267,7 @@ class FitnessModelGoals extends JModelList {
 
         $client_id = $data->client_id;
         
-        $state = $data->state ? $data->state : '1';
+        $state = $data->state;
         
         $primary_goal_id = $data->primary_goal_id;
    

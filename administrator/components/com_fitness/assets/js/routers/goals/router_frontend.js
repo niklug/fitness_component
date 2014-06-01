@@ -3,11 +3,12 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/goals/primary_goals',
+        'collections/goals/primary_goals','collections/goals/mini_goals',
+        
         'models/goals/request_params_primary',
         'views/graph/graph',
         'views/goals/backend/list',
-        
+        'views/goals/backend/form_primary',
         'jquery.flot',
         'jquery.flot.time',
         'jquery.validate',
@@ -19,9 +20,11 @@ define([
         Backbone,
         app,
         Primary_goals_collection,
+        Mini_goals_collection,
         Request_params_primary_model,
         Graph_view,
-        List_view
+        List_view,
+        Form_primary_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -38,18 +41,24 @@ define([
             }
             
             app.collections.primary_goals = new Primary_goals_collection();
+            app.collections.mini_goals = new Mini_goals_collection();
 
             app.models.request_params_primary = new Request_params_primary_model({client_id : app.options.client_id});
             app.models.request_params_primary.bind("change", this.get_items, this);
             
+            
+            
             this.connectGraph();
             
             this.get_items();
+            this.get_minigoals();
 
         },
 
         routes: {
             "": "list_view", 
+            "!/list_view": "list_view", 
+            "!/form_primary/:id": "form_primary",
   
         },
         
@@ -63,16 +72,26 @@ define([
         
         get_items : function() {
             var params = app.models.request_params_primary.toJSON();
-            app.collections.primary_goals.reset();
             app.collections.primary_goals.fetch({
                 data : params,
                 success : function (collection, response) {
-                    //console.log(collection.toJSON());
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
                 }
             });  
+        },
+        
+        get_minigoals : function() {
+            app.collections.mini_goals.fetch({
+                wait : true,
+                data : {user_id : app.options.user_id},
+                success : function (collection, response) {
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            }); 
         },
 
         connectGraph : function() {
@@ -98,18 +117,11 @@ define([
         
         list_view : function() {
             $("#main_container").html(new List_view({model : app.models.request_params_primary, collection : app.collections.primary_goals}).render().el);
-            
-            app.models.pagination = $.backbone_pagination({});
-
-            app.models.pagination.bind("change:currentPage", this.set_params_model, this);
-
-            app.models.pagination.bind("change:items_number", this.set_params_model, this);
         },
-        
-        set_params_model : function() {
-            app.collections.primary_goals.reset();
-            app.models.request_params_primary.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
-        },
+
+        form_primary : function(id) {
+            $("#main_container").html(new Form_primary_view({collection : app.collections.primary_goals, model : this.model, id : id}).render().el);
+        }
 
     });
 

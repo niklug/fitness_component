@@ -27,7 +27,24 @@ define([
             var template = _.template(this.template(data));
             this.$el.html(template);
             
-            this.onRender();
+            if(app.collections.mini_goals) {
+                this.onRender();
+                return this;
+            }
+            app.collections.mini_goals = new Mini_goals_collection();
+            var self = this;
+            app.collections.mini_goals.fetch({
+                wait : true,
+                data : {user_id : app.options.user_id},
+                success : function (collection, response) {
+                    self.onRender();
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            }); 
+            
+            
             
             return this;
         },
@@ -37,7 +54,7 @@ define([
             $(this.el).show('0', function() {
                 self.connectStatus(self.model.get('id'), self.model.get('status'));
                 
-                self.connectMiniGoals();
+                self.loadMinigoalslist();
      
             });
         },
@@ -52,20 +69,11 @@ define([
             //status_obj.run();
         },
         
-        connectMiniGoals : function() {
-            app.collections.mini_goals = new Mini_goals_collection();
-            var self = this;
-            app.collections.mini_goals.fetch({
-                data : {primary_goal_id : this.model.get('id')},
-                success : function (collection, response) {
-                    //console.log(collection.toJSON());
-                    $(self.el).find(".minigoals_wrapper").html(new List_mini_view({collection : collection, model : self.model}).render().el);
-                },
-                error : function (collection, response) {
-                    alert(response.responseText);
-                }
-            }); 
-        },
+
+        
+        loadMinigoalslist : function() {
+            $(this.el).find(".minigoals_wrapper").html(new List_mini_view({collection : app.collections.mini_goals, model : this.model}).render().el);
+        }
         
     });
             

@@ -24,11 +24,25 @@
             
             initialize: function(){
                 this.reset();
+                
+                if(options.items_total) {
+                    this.set({items_total : options.items_total});
+                }
+                var el = $("#pagination_container");
+                
+                if(options.el) {
+                    el = options.el;
+                }
+                
                 this.bind("change:items_total", this.onChangeItemsTotal, this);
                 this.bind("change:currentPage", this.onChangeCurrentPage, this);
                 this.bind("change:items_number", this.onChangeItemsNumber, this);
-                this.pagination_view = new Pagination_view({el: $("#pagination_container"), model : this});
+                this.pagination_view = new Pagination_view({el: el, model : this});
                 
+            },
+            
+            render : function() {
+                this.pagination_view.render();
             },
             
             onChangeItemsTotal : function() {
@@ -108,7 +122,9 @@
                 var items_number = this.model.getLocalStorageItem('items_number');
                 $("#items_number").val(items_number);
                 this.addItems();
+
             },
+
 
             events: {
                 "change #items_number": "onLimitChange",

@@ -571,6 +571,7 @@
                         return false;
                     });
                 },
+                
                 onCheckOverlapDate : function() {
                     if (!this.model.get("goal_overlap")){
                         var data = {
