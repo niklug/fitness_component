@@ -43,10 +43,12 @@ define([
                     alert(response.responseText);
                 }
             }); 
-            
-            
-            
+
             return this;
+        },
+        
+        events: {
+            "click .submit_primary_goal" : "onClickSubmitPrimaryGoal"
         },
         
         onRender : function() {
@@ -69,10 +71,21 @@ define([
             //status_obj.run();
         },
         
-
-        
         loadMinigoalslist : function() {
-            $(this.el).find(".minigoals_wrapper").html(new List_mini_view({collection : app.collections.mini_goals, model : this.model}).render().el);
+             $(this.el).find(".minigoals_wrapper").html(new List_mini_view({collection : app.collections.mini_goals, model : this.model}).render().el);
+        },
+        
+        onClickSubmitPrimaryGoal : function() {
+            var self = this;
+            this.model.save({status : app.options.statuses.EVELUATING_GOAL_STATUS.id}, {
+                success: function (model, response) {
+                    app.collections.primary_goals.add(model);
+                    self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         }
         
     });

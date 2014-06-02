@@ -14,7 +14,7 @@
                         <% } %>
                     </td>
                     <td>
-                         <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
+                         <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && parseInt(item.primary_goal.minigoals_status) != '2') { %>
                             <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_mini_goal" onclick="javascript:void(0)">[EDIT]</a>
                          <% } %>
                     </td>

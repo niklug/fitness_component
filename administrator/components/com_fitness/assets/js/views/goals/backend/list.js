@@ -40,7 +40,8 @@ define([
         },
         
         events: {
-            "click #new_primary_goal" : "onClickNewPrimaryGoal"
+            "click #new_primary_goal" : "onClickNewPrimaryGoal",
+            "click .edit_primary_goal" : "onClickEditPrimaryGoal"
         },
         
         onRender : function() {
@@ -98,8 +99,13 @@ define([
         
         onClickNewPrimaryGoal : function() {
             app.controller.navigate("!/form_primary/0", true);
-        }
+        },
         
+        onClickEditPrimaryGoal : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.navigate("!/form_primary/" + id, true);
+        },
+
      
     });
             

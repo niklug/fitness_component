@@ -165,7 +165,7 @@ define([
                 this.collection.create(this.model, {
                     wait: true,
                     success: function (model, response) {
-                             if(self.save_method == 'save_close') {
+                        if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
                         }
                     },

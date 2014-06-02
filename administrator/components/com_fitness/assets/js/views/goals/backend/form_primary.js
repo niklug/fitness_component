@@ -51,14 +51,12 @@ define([
         },
 
         onClickSaveClose : function() {
-            this.unbind();
             this.save_method = 'save_close';
             this.saveItem();
         },
 
 
         onClickCancel : function() {
-            this.unbind();
             app.controller.navigate("!/list_view", true);
         },
         
@@ -178,11 +176,7 @@ define([
             result.status = false;
             return result;
         },
-        
-        unbind : function() {
-            $(this.el).unbind();
-        }
-
+ 
     });
             
     return view;

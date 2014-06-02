@@ -3,8 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/goals/backend/form_mini',
 	'text!templates/goals/backend/list_item_mini.html'
-], function ( $, _, Backbone, app, template ) {
+], function ( $, _, Backbone, app, Form_mini_view, template ) {
 
     var view = Backbone.View.extend({
         
@@ -12,6 +13,7 @@ define([
         
         render : function(){
             var data = {item : this.model.toJSON()};
+            data.item.primary_goal = this.options.primary_goal_model.toJSON();
             data.app = app;
             data.$ = $;
             var template = _.template(this.template(data));
@@ -20,6 +22,11 @@ define([
             this.connectStatus(this.model.get('id'), this.model.get('status'));
             
             return this;
+        },
+        
+        
+        events: {
+    
         },
         
         connectStatus : function(id, status) {
@@ -31,6 +38,7 @@ define([
 
             //status_obj.run();
         },
+
     });
             
     return view;

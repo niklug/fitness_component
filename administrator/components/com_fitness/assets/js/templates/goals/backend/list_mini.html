@@ -1,4 +1,17 @@
 <div class="minigoals_container"></div>
+<% if(primary_goal.status == app.options.statuses.EVELUATING_GOAL_STATUS.id) { %>
 <div style="text-align: right;">
+    <% if(parseInt(primary_goal.status) == app.options.statuses.EVELUATING_GOAL_STATUS.id && parseInt(primary_goal.minigoals_status) == '0') { %>
     <a data-id="" style="cursor: pointer;" class="new_mini_goal" onclick="javascript:void(0)">[NEW MINI GOAL]</a>
+    <% } %>
+    <% if(!parseInt(primary_goal.minigoals_status)) { %>
+        <br/>
+        <a data-id="" style="cursor: pointer;" class="finalise_mini_goals" onclick="javascript:void(0)">[FINALISE MINI GOALS]</a>
+    <% } %>
+    
+    <% if(parseInt(primary_goal.minigoals_status) == '1') { %>
+        <br/>
+        <a data-id="" style="cursor: pointer;" class="submit_mini_goals" onclick="javascript:void(0)">[SUBMIT ALL MINI GOALS]</a>
+    <% } %>
 </div>
+<% } %>

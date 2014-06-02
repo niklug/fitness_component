@@ -25,6 +25,7 @@ define([
         
         render : function () {
             var data = {};
+            data.primary_goal = this.model.toJSON();
             data.$ = $;
             data.app = app;
             $(this.el).html(this.template(data));
@@ -36,7 +37,9 @@ define([
         
         events: {
             "click .new_mini_goal" : "onClickNewMiniGoal",
-            "click .edit_mini_goal" : "onClickEditMiniGoal"
+            "click .edit_mini_goal" : "onClickEditMiniGoal",
+            "click .finalise_mini_goals" : "onClickFinalise",
+            "click .submit_mini_goals" : "onClickSubmit"
         },
         
         onRender : function() {
@@ -47,19 +50,18 @@ define([
         },
         
         loadItems : function() {
-            var id = this.model.get('id');
-            var collection = new Backbone.Collection;
-            
-            collection.add(this.collection.where({primary_goal_id : id}));
-            var self = this;
-            _.each(collection.models, function(model) {
+              var self = this;
+            _.each(this.collection.models, function(model) {
                  self.addItem(model);
             });
         },
         
         
         addItem : function(model) {
-            $(this.el).find(".minigoals_container").append(new List_item_mini_view({model : model}).render().el); 
+            var primary_goal_id = this.model.get('id');
+            if(primary_goal_id == model.get('primary_goal_id')) {
+                $(this.el).find(".minigoals_container").append(new List_item_mini_view({model : model, primary_goal_model : this.model}).render().el); 
+            }
         },
         
         clearItems : function() {
@@ -74,7 +76,39 @@ define([
             var id = $(event.target).attr('data-id');
             var primary_goal_id = this.model.get('id');
             app.controller.navigate("!/form_mini/" + id + '/' + primary_goal_id, true);
-        }
+        },
+        
+        onClickFinalise : function() {
+            var self = this;
+            this.model.save({minigoals_status : '1'}, {
+                success: function (model, response) {
+                    app.collections.primary_goals.add(model);
+                    self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickSubmit : function() {
+            var self = this;
+            this.model.save({minigoals_status : '2'}, {
+                success: function (model, response) {
+                    app.collections.primary_goals.add(model);
+
+                    //app.options.statuses.EVELUATING_GOAL_STATUS.id;
+                    //self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+
+        
+        
         
      
     });

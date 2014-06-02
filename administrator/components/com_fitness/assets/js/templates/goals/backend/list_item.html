@@ -24,9 +24,9 @@
 
 
                                     <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
-                                        <a data-id="" style="cursor: pointer;" class="primary_edit" onclick="javascript:void(0)">[EDIT]</a>
+                                        <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_primary_goal" onclick="javascript:void(0)">[EDIT]</a>
                                         <br/><br/>
-                                        <a data-id="" style="cursor: pointer;" class="primary_submit" onclick="javascript:void(0)">[SUBMIT]</a>
+                                        <a data-id="<%= item.id %>" style="cursor: pointer;" class="submit_primary_goal" onclick="javascript:void(0)">[SUBMIT]</a>
                                      <% } %>
                                 </td>
                             </tr>
