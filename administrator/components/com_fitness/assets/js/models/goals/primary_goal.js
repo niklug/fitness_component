@@ -9,6 +9,7 @@ define([
         defaults : {
             id : null,
             user_id : app.options.user_id,
+            status : '1',
             state : '1'
          },
         

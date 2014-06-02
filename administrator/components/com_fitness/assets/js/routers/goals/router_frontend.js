@@ -9,6 +9,7 @@ define([
         'views/graph/graph',
         'views/goals/backend/list',
         'views/goals/backend/form_primary',
+        'views/goals/backend/form_mini',
         'jquery.flot',
         'jquery.flot.time',
         'jquery.validate',
@@ -24,7 +25,8 @@ define([
         Request_params_primary_model,
         Graph_view,
         List_view,
-        Form_primary_view
+        Form_primary_view,
+        Form_mini_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -59,7 +61,7 @@ define([
             "": "list_view", 
             "!/list_view": "list_view", 
             "!/form_primary/:id": "form_primary",
-  
+            "!/form_mini/:id/:primary_goal_id": "form_mini",
         },
         
         back: function() {
@@ -120,7 +122,11 @@ define([
         },
 
         form_primary : function(id) {
-            $("#main_container").html(new Form_primary_view({collection : app.collections.primary_goals, model : this.model, id : id}).render().el);
+            $("#main_container").html(new Form_primary_view({collection : app.collections.primary_goals, id : id}).render().el);
+        },
+        
+        form_mini : function(id, primary_goal_id) {
+            $("#main_container").html(new Form_mini_view({collection : app.collections.mini_goals, id : id, primary_goal_id : primary_goal_id}).render().el);
         }
 
     });

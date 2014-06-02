@@ -34,6 +34,10 @@ define([
             return this;
         },
         
+        events: {
+            "click .new_mini_goal" : "onClickNewMiniGoal"
+        },
+        
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
@@ -52,9 +56,6 @@ define([
             });
         },
         
-        events: {
-
-        },
         
         addItem : function(model) {
             $(this.el).find(".minigoals_container").append(new List_item_mini_view({model : model}).render().el); 
@@ -63,6 +64,10 @@ define([
         clearItems : function() {
             $(this.el).find(".minigoals_container").empty();
         },
+        
+        onClickNewMiniGoal : function() {
+            app.controller.navigate("!/form_mini/0/" + this.model.get('id'), true);
+        }
         
      
     });
