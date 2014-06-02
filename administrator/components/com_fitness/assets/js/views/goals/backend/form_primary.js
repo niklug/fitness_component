@@ -18,32 +18,7 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
-            
-            this.model = new Model();
-            
-            if(parseInt(this.id)) {
-                this.model = this.collection.get(this.id);
-                if(this.model) {
-                    this.render();
-                    return;
-                }
-                
-                this.model = new Model({id : this.id});
-                var self = this;
-                this.model.fetch({
-                    wait : true,
-                    success: function (model, response) {
-                        self.collection.add(model);
-                        self.render();
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                })
-                return;
-            }
-            
-            this.render();
+
         },
 
         
@@ -76,12 +51,14 @@ define([
         },
 
         onClickSaveClose : function() {
+            this.unbind();
             this.save_method = 'save_close';
             this.saveItem();
         },
 
 
         onClickCancel : function() {
+            this.unbind();
             app.controller.navigate("!/list_view", true);
         },
         
@@ -200,6 +177,10 @@ define([
 
             result.status = false;
             return result;
+        },
+        
+        unbind : function() {
+            $(this.el).unbind();
         }
 
     });

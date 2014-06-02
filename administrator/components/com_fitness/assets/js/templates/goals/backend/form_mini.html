@@ -21,7 +21,7 @@
                         Start Date
                     </td>
                     <td>
-                        <input style="width:75px;"  type="text" name="start_date" id="start_date" size="6" class="required">
+                        <input style="width:75px;"  type="text" name="start_date" id="start_date" size="6" class="required" value="<%= item.start_date %>">
                     </td>
                     <td id="error_start_date" class="error_message"></td>
                 </tr>
@@ -30,7 +30,7 @@
                         Achieve By 
                     </td>
                     <td>
-                        <input style="width:75px;" type="text" name="deadline" id="deadline" size="6" class="required">
+                        <input style="width:75px;" type="text" name="deadline" id="deadline" size="6" class="required" value="<%= item.deadline %>">
                     </td>
                     <td id="error_deadline"  class="error_message"></td>
                 </tr>
@@ -42,7 +42,7 @@
                 <tr>
                     <td>Goal Details</td>
                     <td colspan="2">
-                        <textarea style="width:98%;" name="details" id="details" rows="20" cols="150" class="required"></textarea> 
+                        <textarea style="width:98%;" name="details" id="details" rows="20" cols="150" class="required" ><%= item.details %></textarea> 
                     </td>
                 </tr>
             </table>

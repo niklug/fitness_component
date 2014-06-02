@@ -312,7 +312,7 @@ class FitnessModelGoals extends JModelList {
         
         $query_type = 1;
         if($id) {
-            $query .= " AND pg.id='$id' ";
+            $query .= " AND mg.id='$id' ";
             $query_type = 2;
         }
         

@@ -21,31 +21,6 @@ define([
         
         initialize : function() {
             
-            this.model = new Model();
-            
-            if(parseInt(this.id)) {
-                this.model = this.collection.get(this.id);
-                if(this.model) {
-                    this.render();
-                    return;
-                }
-                
-                this.model = new Model({id : this.id});
-                var self = this;
-                this.model.fetch({
-                    wait : true,
-                    success: function (model, response) {
-                        self.collection.add(model);
-                        self.render();
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                })
-                return;
-            }
-            
-            this.render();
         },
 
         
@@ -98,7 +73,6 @@ define([
         loadCalendar : function(model) {
             var start_date  = model.get('start_date');
             var deadline = model.get('deadline');
-
             var min_date = new Date(Date.parse(start_date));
             var max_date = new Date(Date.parse(deadline));
             $(this.el).find("#start_date, #deadline").datepicker({ dateFormat: "yy-mm-dd", minDate: min_date, maxDate: max_date });
@@ -235,7 +209,7 @@ define([
 
             result.status = false;
             return result;
-        }
+        },
 
     });
             

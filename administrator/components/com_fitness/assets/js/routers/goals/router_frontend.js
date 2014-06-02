@@ -6,6 +6,8 @@ define([
         'collections/goals/primary_goals','collections/goals/mini_goals',
         
         'models/goals/request_params_primary',
+        'models/goals/primary_goal',
+        'models/goals/mini_goal',
         'views/graph/graph',
         'views/goals/backend/list',
         'views/goals/backend/form_primary',
@@ -23,6 +25,8 @@ define([
         Primary_goals_collection,
         Mini_goals_collection,
         Request_params_primary_model,
+        Primary_goal_model,
+        Mini_goal_model,
         Graph_view,
         List_view,
         Form_primary_view,
@@ -122,11 +126,63 @@ define([
         },
 
         form_primary : function(id) {
-            $("#main_container").html(new Form_primary_view({collection : app.collections.primary_goals, id : id}).render().el);
+            if(!parseInt(id)) {
+                this.load_form_primary(new Primary_goal_model());
+                return;
+            }
+
+            var model = app.collections.primary_goals.get(id);
+            if(model) {
+                this.load_form_primary(model);
+                return;
+            }
+
+            model = new Mini_goal_model({id : id});
+            var self = this;
+            model.fetch({
+                wait : true,
+                success: function (model, response) {
+                    app.collections.primary_goals.add(model);
+                    self.load_form_primary(model);
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        load_form_primary : function(model) {
+            $("#main_container").html(new Form_primary_view({collection : app.collections.primary_goals, model : model}).render().el);
         },
         
         form_mini : function(id, primary_goal_id) {
-            $("#main_container").html(new Form_mini_view({collection : app.collections.mini_goals, id : id, primary_goal_id : primary_goal_id}).render().el);
+            if(!parseInt(id)) {
+                this.load_form_mini(new Mini_goal_model(), primary_goal_id);
+                return;
+            }
+
+            var model = app.collections.mini_goals.get(id);
+            if(model) {
+                this.load_form_mini(model, primary_goal_id);
+                return;
+            }
+
+            model = new Mini_goal_model({id : id});
+            var self = this;
+            model.fetch({
+                wait : true,
+                success: function (model, response) {
+                    app.collections.mini_goals.add(model);
+                    self.load_form_mini(model, primary_goal_id);
+                },
+                error: function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        load_form_mini : function(model, primary_goal_id) {
+            $("#main_container").html(new Form_mini_view({collection : app.collections.mini_goals, model : model, primary_goal_id : primary_goal_id}).render().el);
         }
 
     });

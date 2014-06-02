@@ -15,8 +15,7 @@
                     </td>
                     <td>
                          <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
-                            <a data-id="" style="cursor: pointer;" class="primary_edit" onclick="javascript:void(0)">[EDIT]</a>
- 
+                            <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_mini_goal" onclick="javascript:void(0)">[EDIT]</a>
                          <% } %>
                     </td>
                 </tr>

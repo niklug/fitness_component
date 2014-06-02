@@ -35,7 +35,8 @@ define([
         },
         
         events: {
-            "click .new_mini_goal" : "onClickNewMiniGoal"
+            "click .new_mini_goal" : "onClickNewMiniGoal",
+            "click .edit_mini_goal" : "onClickEditMiniGoal"
         },
         
         onRender : function() {
@@ -67,6 +68,12 @@ define([
         
         onClickNewMiniGoal : function() {
             app.controller.navigate("!/form_mini/0/" + this.model.get('id'), true);
+        },
+        
+        onClickEditMiniGoal : function(event) {
+            var id = $(event.target).attr('data-id');
+            var primary_goal_id = this.model.get('id');
+            app.controller.navigate("!/form_mini/" + id + '/' + primary_goal_id, true);
         }
         
      
