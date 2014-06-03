@@ -61,14 +61,12 @@ define([
             var self = this;
             this.collection.once("add", function(model) {
                 app.models.pagination.set({'items_total' : model.get('items_total')});
-                
             });
             
             if(this.collection.models.length){
                 app.models.pagination.set({'items_total' : this.collection.models[0].get('items_total')});
             }
-            
-              
+
             app.models.pagination.bind("change:currentPage", this.set_params_model, this);
 
             app.models.pagination.bind("change:items_number", this.set_params_model, this);
@@ -116,7 +114,6 @@ define([
         
         onChangeListType : function(event) {
             var list_type = $(event.target).val();
-            console.log(list_type);
             app.models.request_params_primary.set({list_type : list_type,  uid : app.getUniqueId()});
         }
 

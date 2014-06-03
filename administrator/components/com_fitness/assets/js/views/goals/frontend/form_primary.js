@@ -135,6 +135,7 @@ define([
                 }
 
             }
+            
             var self = this;
 
             if (this.model.isNew()) {
@@ -143,7 +144,6 @@ define([
                     success: function (model, response) {
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
-                            app.controller.sendGoalEmail(model.get('id'), 'GoalEvaluating');
                         }
                     },
                     error: function (model, response) {

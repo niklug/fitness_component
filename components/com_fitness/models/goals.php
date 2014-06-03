@@ -68,7 +68,7 @@ class FitnessModelGoals extends JModelList {
                 $data->limit = JRequest::getVar('limit'); 
                 $data->state = JRequest::getVar('state', '1'); 
                 $data->list_type = JRequest::getVar('list_type'); 
-                $data->client_id = JRequest::getVar('client_id'); 
+                $data->user_id = JRequest::getVar('user_id'); 
 
                 $data = $this->getPrimaryGoals($data);
                 
@@ -116,7 +116,7 @@ class FitnessModelGoals extends JModelList {
        
         $list_type = $data->list_type;
         
-        $client_id = $data->client_id;
+        $user_id = $data->user_id;
    
         $current_date = $helper->getDateCreated();
 
@@ -126,29 +126,29 @@ class FitnessModelGoals extends JModelList {
         
         //get total number
         if(!$id) {
-            $query .= " (SELECT COUNT(*) FROM $table AS a ";
+            $query .= " (SELECT COUNT(*) FROM $table ";
 
             $query .= " WHERE 1 ";
 
-            if($client_id) {
-                $query .= " AND pg.user_id='$client_id'";
+            if($user_id) {
+                $query .= " AND user_id='$user_id'";
             }
 
-            $query .= " AND pg.state='$state'";
+            $query .= " AND state='$state'";
 
             if($list_type == 'previous') {
-                $query .= " AND ( pg.deadline < " . $db->quote($current_date);
-                $query .= " OR (pg.start_date <= " . $db->quote($current_date);
-                $query .= " AND pg.deadline > " . $db->quote($current_date) . " )) ";
+                $query .= " AND ( deadline < " . $db->quote($current_date);
+                $query .= " OR (start_date <= " . $db->quote($current_date);
+                $query .= " AND deadline > " . $db->quote($current_date) . " )) ";
             }
 
             if($list_type == 'current') {
-                $query .= " AND pg.deadline > " . $db->quote($current_date);
+                $query .= " AND deadline > " . $db->quote($current_date);
             }
 
             if($list_type == 'current_primary_goal') {
-                $query .= " AND pg.start_date <= " . $db->quote($current_date);
-                $query .= " AND pg.deadline > " . $db->quote($current_date);
+                $query .= " AND start_date <= " . $db->quote($current_date);
+                $query .= " AND deadline > " . $db->quote($current_date);
             }
 
             $query .= " ) items_total, ";
@@ -165,8 +165,8 @@ class FitnessModelGoals extends JModelList {
         
         $query .= " WHERE 1";
         
-        if($client_id) {
-            $query .= " AND pg.user_id='$client_id'";
+        if($user_id) {
+            $query .= " AND pg.user_id='$user_id'";
         }
         
         $query .= " AND pg.state='$state'";
@@ -206,7 +206,7 @@ class FitnessModelGoals extends JModelList {
         }
 
         $items = FitnessHelper::customQuery($query, $query_type);
-        
+         
         return $items;
     }
     
@@ -229,7 +229,7 @@ class FitnessModelGoals extends JModelList {
             case 'GET': // Get Item(s)
                 $data = new stdClass();
                 $data->id = $id;  
-                $data->client_id = JRequest::getVar('client_id'); 
+                $data->user_id = JRequest::getVar('user_id'); 
                 $data->primary_goal_id = JRequest::getVar('primary_goal_id'); 
                 $data->state = JRequest::getVar('state', '1'); 
                 $data = $this->getMiniGoals($data);
@@ -265,7 +265,7 @@ class FitnessModelGoals extends JModelList {
 
         $id = $data->id;
 
-        $client_id = $data->client_id;
+        $user_id = $data->user_id;
         
         $state = $data->state;
         
@@ -290,8 +290,8 @@ class FitnessModelGoals extends JModelList {
          
         $query .= " WHERE 1";
         
-        if($client_id) {
-            $query .= " AND mg.user_id='$client_id'";
+        if($user_id) {
+            $query .= " AND mg.user_id='$user_id'";
         }
         
         $query .= " AND mg.state='$state'";

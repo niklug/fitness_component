@@ -177,7 +177,6 @@ define([
                     success: function (model, response) {
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
-                            app.controller.sendGoalEmail(model.get('id'), 'GoalEvaluatingMini');
                         }
                     },
                     error: function (model, response) {

@@ -44,6 +44,7 @@ define([
             this.model.save({status : app.options.statuses.EVELUATING_GOAL_STATUS.id}, {
                 success: function (model, response) {
                     app.collections.mini_goals.add(model);
+                    app.controller.sendGoalEmail(model.get('id'), 'GoalEvaluatingMini');
                     self.render();
                 },
                 error: function (model, response) {

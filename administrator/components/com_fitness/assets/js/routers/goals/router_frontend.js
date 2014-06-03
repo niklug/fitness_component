@@ -51,7 +51,7 @@ define([
             app.collections.primary_goals = new Primary_goals_collection();
             app.collections.mini_goals = new Mini_goals_collection();
 
-            app.models.request_params_primary = new Request_params_primary_model({client_id : app.options.client_id});
+            app.models.request_params_primary = new Request_params_primary_model({user_id : app.options.client_id});
             app.models.request_params_primary.bind("change", this.get_items, this);
             
             
@@ -84,6 +84,7 @@ define([
             app.collections.primary_goals.fetch({
                 data : params,
                 success : function (collection, response) {
+                    //console.log(collection.toJSON());
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -92,10 +93,12 @@ define([
         },
         
         get_minigoals : function() {
+            app.collections.mini_goals.reset();
             app.collections.mini_goals.fetch({
                 wait : true,
                 data : {user_id : app.options.user_id},
                 success : function (collection, response) {
+                    //console.log(collection);
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
