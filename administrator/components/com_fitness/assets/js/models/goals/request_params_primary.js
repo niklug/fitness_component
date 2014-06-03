@@ -10,6 +10,7 @@ define([
             page : localStorage.getItem('currentPage') || 1,
             limit : localStorage.getItem('items_number') || 10,
             state : '1',
+            list_type : 'current'
             
         }
     });

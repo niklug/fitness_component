@@ -3,8 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'views/goals/backend/form_mini',
-	'text!templates/goals/backend/list_item_mini.html'
+        'views/goals/frontend/form_mini',
+	'text!templates/goals/frontend/list_item_mini.html'
 ], function ( $, _, Backbone, app, Form_mini_view, template ) {
 
     var view = Backbone.View.extend({
@@ -26,7 +26,7 @@ define([
         
         
         events: {
-    
+            "click .submit_mini_goal" : "onClickSubmit"
         },
         
         connectStatus : function(id, status) {
@@ -38,6 +38,19 @@ define([
 
             //status_obj.run();
         },
+        
+        onClickSubmit : function() {
+            var self = this;
+            this.model.save({status : app.options.statuses.EVELUATING_GOAL_STATUS.id}, {
+                success: function (model, response) {
+                    app.collections.mini_goals.add(model);
+                    self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        }
 
     });
             

@@ -3,8 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'views/goals/backend/list_item',
-	'text!templates/goals/backend/list.html'
+        'views/goals/frontend/list_item',
+	'text!templates/goals/frontend/list.html'
 ], function (
         $,
         _, 
@@ -41,7 +41,9 @@ define([
         
         events: {
             "click #new_primary_goal" : "onClickNewPrimaryGoal",
-            "click .edit_primary_goal" : "onClickEditPrimaryGoal"
+            "click .primary_view" : "onClickView",
+            "click .edit_primary_goal" : "onClickEditPrimaryGoal",
+            "change #list_type" : "onChangeListType"
         },
         
         onRender : function() {
@@ -82,7 +84,8 @@ define([
         
         
         addItem : function(model) {
-            
+            var readonly_allowed = app.controller.readonly_allowed(model);
+            model.set({readonly_allowed : readonly_allowed});
             this.container_el.append(new List_item_view({model : model}).render().el); 
             this.$el.find( "#items_container tr:odd" ).addClass('row1');
             this.$el.find( "#items_container tr:even" ).addClass('row0');
@@ -105,6 +108,17 @@ define([
             var id = $(event.target).attr('data-id');
             app.controller.navigate("!/form_primary/" + id, true);
         },
+        
+        onClickView : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.navigate("!/form_primary/" + id, true);
+        },
+        
+        onChangeListType : function(event) {
+            var list_type = $(event.target).val();
+            console.log(list_type);
+            app.models.request_params_primary.set({list_type : list_type,  uid : app.getUniqueId()});
+        }
 
      
     });

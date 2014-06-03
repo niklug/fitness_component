@@ -3,8 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'views/goals/backend/list_item_mini',
-	'text!templates/goals/backend/list_mini.html'
+        'views/goals/frontend/list_item_mini',
+	'text!templates/goals/frontend/list_mini.html'
 ], function (
         $,
         _, 
@@ -39,7 +39,7 @@ define([
             "click .new_mini_goal" : "onClickNewMiniGoal",
             "click .edit_mini_goal" : "onClickEditMiniGoal",
             "click .finalise_mini_goals" : "onClickFinalise",
-            "click .submit_mini_goals" : "onClickSubmit"
+            "click .view_mini" : "onClickView",
         },
         
         onRender : function() {
@@ -58,6 +58,8 @@ define([
         
         
         addItem : function(model) {
+            var readonly_allowed = app.controller.readonly_allowed(model);
+            model.set({readonly_allowed : readonly_allowed});
             var primary_goal_id = this.model.get('id');
             if(primary_goal_id == model.get('primary_goal_id')) {
                 $(this.el).find(".minigoals_container").append(new List_item_mini_view({model : model, primary_goal_model : this.model}).render().el); 
@@ -91,25 +93,11 @@ define([
             });
         },
         
-        onClickSubmit : function() {
-            var self = this;
-            this.model.save({minigoals_status : '2'}, {
-                success: function (model, response) {
-                    app.collections.primary_goals.add(model);
-
-                    //app.options.statuses.EVELUATING_GOAL_STATUS.id;
-                    //self.render();
-                },
-                error: function (model, response) {
-                    alert(response.responseText);
-                }
-            });
-        },
-        
-
-        
-        
-        
+        onClickView : function(event) {
+            var id = $(event.target).attr('data-id');
+            var primary_goal_id = this.model.get('id');
+            app.controller.navigate("!/form_mini/" + id + '/' + primary_goal_id, true);
+        }
      
     });
             

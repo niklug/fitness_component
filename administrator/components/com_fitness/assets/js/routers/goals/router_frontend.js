@@ -3,15 +3,16 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/goals/primary_goals','collections/goals/mini_goals',
-        
+        'collections/goals/primary_goals',
+        'collections/goals/mini_goals',
         'models/goals/request_params_primary',
         'models/goals/primary_goal',
         'models/goals/mini_goal',
         'views/graph/graph',
-        'views/goals/backend/list',
-        'views/goals/backend/form_primary',
-        'views/goals/backend/form_mini',
+        'views/goals/frontend/list',
+        'views/goals/frontend/form_primary',
+        'views/goals/frontend/form_mini',
+        'views/goals/frontend/comments_block',
         'jquery.flot',
         'jquery.flot.time',
         'jquery.validate',
@@ -30,7 +31,8 @@ define([
         Graph_view,
         List_view,
         Form_primary_view,
-        Form_mini_view
+        Form_mini_view,
+        Comments_block_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -78,6 +80,7 @@ define([
         
         get_items : function() {
             var params = app.models.request_params_primary.toJSON();
+            app.collections.primary_goals.reset();
             app.collections.primary_goals.fetch({
                 data : params,
                 success : function (collection, response) {
@@ -132,15 +135,14 @@ define([
             }
 
             var model = app.collections.primary_goals.get(id);
+
             if(model) {
                 this.load_form_primary(model);
                 return;
             }
-
-            model = new Mini_goal_model({id : id});
+            model = new Primary_goal_model({id : id});
             var self = this;
             model.fetch({
-                wait : true,
                 success: function (model, response) {
                     app.collections.primary_goals.add(model);
                     self.load_form_primary(model);
@@ -152,6 +154,8 @@ define([
         },
         
         load_form_primary : function(model) {
+            var readonly_allowed = this.readonly_allowed(model);
+            model.set({readonly_allowed : readonly_allowed});
             $("#main_container").html(new Form_primary_view({collection : app.collections.primary_goals, model : model}).render().el);
         },
         
@@ -182,8 +186,54 @@ define([
         },
         
         load_form_mini : function(model, primary_goal_id) {
+            var readonly_allowed = this.readonly_allowed(model);
+            model.set({readonly_allowed : readonly_allowed});
             $("#main_container").html(new Form_mini_view({collection : app.collections.mini_goals, model : model, primary_goal_id : primary_goal_id}).render().el);
-        }
+        },
+        
+        readonly_allowed : function(model) {
+            var access = false;
+
+            var status = model.get('status');
+
+            if(status != app.options.statuses.PENDING_GOAL_STATUS.id && status != app.options.statuses.EVELUATING_GOAL_STATUS.id) {
+                access = true;
+            }
+            
+            return access;
+        },
+        
+        connectStatus : function(id, status, el) {
+            var status_obj = $.status(app.options.status_options);
+              
+            var html =  status_obj.statusButtonHtml(id, status);
+
+            el.find("#status_button_place_" + id).html(html);
+        },
+        
+        connectComments : function(model, view, type) {
+            if(model.get('id')) {
+                new Comments_block_view({el : view.find("#comments_block"), model : model, read_only : true, type : type});
+            }
+        },
+        
+        sendGoalEmail : function(id, method) {
+            var data = {};
+            var url = app.options.fitness_frontend_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.id = id;
+            data.view = 'Goal';
+            data.method = method;
+
+            var self = this;
+            $.AjaxCall(data, url, view, task, table, function(output) {
+                console.log(output);
+            });
+        },
+
 
     });
 

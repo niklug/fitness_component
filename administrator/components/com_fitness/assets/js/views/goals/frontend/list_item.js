@@ -4,8 +4,8 @@ define([
 	'backbone',
         'app',
         'collections/goals/mini_goals',
-        'views/goals/backend/list_mini',
-	'text!templates/goals/backend/list_item.html'
+        'views/goals/frontend/list_mini',
+	'text!templates/goals/frontend/list_item.html'
 ], function (
         $,
         _,
@@ -54,7 +54,7 @@ define([
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
-                self.connectStatus(self.model.get('id'), self.model.get('status'));
+                app.controller.connectStatus(self.model.get('id'), self.model.get('status'), self.$el);
                 
                 self.loadMinigoalslist();
      

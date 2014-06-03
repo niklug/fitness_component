@@ -1,36 +1,17 @@
 <table width="100%">
     <tr>
-        <td width="50%">
+        <td width="40%" style="vertical-align: top;">
             <table width="100%">
                 <tr>
                     <td style="width:120px;">
                         Primary Goal 
                     </td>
                     <td class="grey_title">
-                        <table width="100%">
-                            <tr>
-                                <td width="70%">
-                                    <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status || app.options.statuses.EVELUATING_GOAL_STATUS.id == item.status) { %>
-                                        <%= app.options.status_options.statuses[item.status].label %>
-                                    <% } else { %>
-                                        <%= item.primary_goal_name %>
-                                    <% } %>
-                                </td>
-                                <td>
-                                    <% if(app.options.statuses.SCHEDULED_GOAL_STATUS.id == item.status) { %>
-                                        <a data-id="" style="cursor: pointer;" class="primary_view" onclick="javascript:void(0)">[VIEW]</a>
-                                        <br/>
-                                    <% } %>
-
-
-                                    <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
-                                        <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_primary_goal" onclick="javascript:void(0)">[EDIT]</a>
-                                        <br/><br/>
-                                        <a data-id="<%= item.id %>" style="cursor: pointer;" class="submit_primary_goal" onclick="javascript:void(0)">[SUBMIT]</a>
-                                     <% } %>
-                                </td>
-                            </tr>
-                        </table>
+                        <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status || app.options.statuses.EVELUATING_GOAL_STATUS.id == item.status) { %>
+                            <%= app.options.status_options.statuses[item.status].label %>
+                        <% } else { %>
+                            <%= item.primary_goal_name %>
+                        <% } %>
                     </td>
                 </tr>
                 <tr>
@@ -66,7 +47,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td style="vertical-align: top;">
                         Goal Details 
                     </td>
                     <td class="grey_title">
@@ -75,10 +56,21 @@
                 </tr>
             </table>
         </td>
-        <td class="minigoals_wrapper" >
+        <td width="10%" style="vertical-align: top;">
+            <% if(item.readonly_allowed) { %>
+                <a data-id="<%= item.id %>" style="cursor: pointer;" class="primary_view" onclick="javascript:void(0)">[VIEW]</a>
+                <br/>
+            <% } %>
+
+
+            <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
+                <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_primary_goal" onclick="javascript:void(0)">[EDIT]</a>
+                <br/><br/>
+                <a data-id="<%= item.id %>" style="cursor: pointer;" class="submit_primary_goal" onclick="javascript:void(0)">[SUBMIT]</a>
+             <% } %>
+        </td>
+        <td class="minigoals_wrapper" style="vertical-align: top;">
         </td>
     </tr>
 </table>
-<br/>
 <hr>
-<br/>

@@ -5,7 +5,7 @@ define([
         'app',
         'models/goals/primary_goal',
         'models/goals/mini_goal',
-	'text!templates/goals/backend/form_mini.html'
+	'text!templates/goals/frontend/form_mini.html'
 
 ], function (
         $,
@@ -33,7 +33,7 @@ define([
             var template = _.template(this.template(data));
             this.$el.html(template);
             
-            this.getPrimaryGoal();
+            this.onRender();
             
             return this;
         },
@@ -42,6 +42,16 @@ define([
             "click #save" : "onClickSave",
             "click #save_close" : "onClickSaveClose",
             "click #cancel" : "onClickCancel",
+        },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                app.controller.connectStatus(self.model.get('id'), self.model.get('status'), self.$el);
+                app.controller.connectComments(self.model, self.$el, 'mini');
+                self.getPrimaryGoal();
+     
+            });
         },
         
         getPrimaryGoal : function() {
@@ -167,6 +177,7 @@ define([
                     success: function (model, response) {
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
+                            app.controller.sendGoalEmail(model.get('id'), 'GoalEvaluatingMini');
                         }
                     },
                     error: function (model, response) {
