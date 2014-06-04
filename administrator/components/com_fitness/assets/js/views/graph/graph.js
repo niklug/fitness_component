@@ -29,6 +29,9 @@ define([
             this.show = this.options.show || false;
             this.reloads = this.options.reloads || false;
             this.list_type = this.options.list_type || '';
+            
+            this.business_profile_id = app.options.business_profile_id || localStorage.getItem('business_profile_id');
+            
             if(app.collections.training_periods && !this.show_client_select) {
                 this.render();
                 return;
@@ -123,7 +126,7 @@ define([
                 if(self.show_client_select) {
                     self.connectBusinessSelect();
                     
-                    var business_profile_id = app.options.business_profile_id;
+                    var business_profile_id = self.business_profile_id;
                     if(business_profile_id) {
                         self.loadTrainersSelect(business_profile_id);
                     }
@@ -145,7 +148,7 @@ define([
             var element_disabled = '';
             
             if(app.options.is_trainer) {
-                business_name_collection.add(app.collections.business_profiles.where({id : app.options.business_profile_id}));
+                business_name_collection.add(app.collections.business_profiles.where({id : this.business_profile_id}));
                 element_disabled = 'disabled';
             }
             
@@ -154,7 +157,7 @@ define([
             }
             
              new Select_element_view({
-                model : new Backbone.Model({business_profile_id : app.options.business_profile_id}),
+                model : new Backbone.Model({business_profile_id : this.business_profile_id}),
                 el : $(this.el).find("#graph_business_name_select"),
                 collection : business_name_collection,
                 first_option_title : '- Business profile-',
@@ -168,6 +171,10 @@ define([
         onChangeBusinessName : function(event) {
             var business_profile_id = $(event.target).val();
             
+            this.business_profile_id = business_profile_id;
+            
+            localStorage.setItem('business_profile_id', business_profile_id);
+   
             this.loadTrainersSelect(business_profile_id);
         },
         
@@ -186,12 +193,15 @@ define([
                 element_disabled = 'disabled';
             }
             
+            var trainer_id = localStorage.getItem('trainer_id');
+            
             if(app.options.is_trainer && !app.options.is_trainer_administrator) {
-                this.model.set({trainer_id : app.options.user_id});
+                trainer_id = app.options.user_id 
+                this.model.set({trainer_id : trainer_id});
             }
             
             new Select_element_view({
-                model : new Backbone.Model({trainer_id : app.options.user_id}),
+                model : new Backbone.Model({trainer_id : trainer_id}),
                 el : $(this.el).find("#graph_trainer_select"),
                 collection : trainers_collection,
                 first_option_title : '-Select-',
@@ -204,6 +214,11 @@ define([
         
         onChangeTrainer : function(event) {
             var trainer_id = $(event.target).val();
+            
+            this.trainer_id = trainer_id;
+            
+            localStorage.setItem('trainer_id', trainer_id);
+            
             this.loadClientsSelect(trainer_id);
         },
         
@@ -639,15 +654,15 @@ define([
                         case 1 : // Mini Goals
                             html +=  "Training Period: " +  (client_data.training_period_name[item.dataIndex] || '') + "</br>";
                             html +=  "Goal: " +  (client_data.goal_mini[item.dataIndex] || '') + "</br>";
-                            html +=  "Start: " +   moment(new Date(Date.parse(client_data.start_mini[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
-                            html +=  "Finish: " +  moment(new Date(Date.parse(client_data.finish_mini[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
+                            html +=  "Start: " +   moment(new Date(Date.parse(client_data.start_mini[item.dataIndex]))).format("ddd, D MMM  YYYY") + "</br>";
+                            html +=  "Finish: " +  moment(new Date(Date.parse(client_data.finish_mini[item.dataIndex]))).format("ddd, D MMM  YYYY") + "</br>";
                             html +=  "Status: " +  (self.getStatusById(client_data.status_mini[item.dataIndex]) || '') + "</br>"; 
                             $("#tooltip").css("background-color", "#287725");
                             break;
                         case 2 : // Primary Goals
                             html +=  "Goal: " +  (client_data.goal_primary[item.dataIndex]  || '') + "</br>";
-                            html +=  "Start: " +  moment(new Date(Date.parse(client_data.start_primary[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
-                            html +=  "Finish: " + moment(new Date(Date.parse(client_data.finish_primary[item.dataIndex]))).format("ddd, D MMM  YYYY, hh:mm")  + "</br>";
+                            html +=  "Start: " +  moment(new Date(Date.parse(client_data.start_primary[item.dataIndex]))).format("ddd, D MMM  YYYY") + "</br>";
+                            html +=  "Finish: " + moment(new Date(Date.parse(client_data.finish_primary[item.dataIndex]))).format("ddd, D MMM  YYYY")  + "</br>";
                             html +=  "Status: " +  (self.getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>"; 
                             $("#tooltip").css("background-color", "#A3270F");
                             break;

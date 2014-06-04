@@ -96,6 +96,18 @@ class FitnessController extends JController
         }
         
         
+        function primary_goals() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'goals.php';
+            $model = new FitnessModelGoals();
+            echo json_encode($model->primary_goals());
+        }
+        
+        function mini_goals() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'goals.php';
+            $model = new FitnessModelGoals();
+            echo json_encode($model->mini_goals());
+        }
+        
         // Recipes
         //------------------------------------------------------
 	function getSearchIngredients() {

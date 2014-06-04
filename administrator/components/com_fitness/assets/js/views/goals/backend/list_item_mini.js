@@ -3,8 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'views/goals/frontend/form_mini',
-	'text!templates/goals/frontend/list_item_mini.html'
+        'views/goals/backend/form_mini',
+	'text!templates/goals/backend/list_item_mini.html'
 ], function ( $, _, Backbone, app, Form_mini_view, template ) {
 
     var view = Backbone.View.extend({

@@ -1,28 +1,16 @@
 <table width="100%">
     <tr>
-        <td width="90%">
+        <td width="40%" style="vertical-align: top;">
             <table width="100%">
                 <tr>
                     <td style="width:120px;">
-                        Mini Goal 
+                        Primary Goal 
                     </td>
                     <td class="grey_title">
                         <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status || app.options.statuses.EVELUATING_GOAL_STATUS.id == item.status) { %>
                             <%= app.options.status_options.statuses[item.status].label %>
                         <% } else { %>
-                            <%= item.mini_goal_name %>
-                        <% } %>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Training Period 
-                    </td>
-                    <td class="grey_title">
-                        <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status || app.options.statuses.EVELUATING_GOAL_STATUS.id == item.status) { %>
-                            <%= app.options.status_options.statuses[item.status].label %>
-                        <% } else { %>
-                            <%= item.training_period_name %>
+                            <%= item.primary_goal_name %>
                         <% } %>
                     </td>
                 </tr>
@@ -55,11 +43,11 @@
                         Status 
                     </td>
                     <td id="status_button_place_<%= item.id %>"  >
-
+   
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td style="vertical-align: top;">
                         Goal Details 
                     </td>
                     <td class="grey_title">
@@ -68,29 +56,21 @@
                 </tr>
             </table>
         </td>
-        <td>
-             <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && parseInt(item.primary_goal.minigoals_status) != '2') { %>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_mini_goal" onclick="javascript:void(0)">[EDIT]</a>
-             <% } %>
-             
-             <% if(!parseInt(item.primary_goal.minigoals_status)) { %>
-                <br/><br/>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="delete_mini_goal" onclick="javascript:void(0)">[DELETE]</a>
-             <% } %>
-
-             <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && parseInt(item.primary_goal.minigoals_status) == '1') { %>
-                <br/><br/>
-                <a data-id="" style="cursor: pointer;" class="submit_mini_goal" onclick="javascript:void(0)">[SUBMIT]</a>
-            <% } %>
-
+        <td width="10%" style="vertical-align: top;">
             <% if(item.readonly_allowed) { %>
-                <br/><br/>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="view_mini" onclick="javascript:void(0)">[VIEW]</a>
+                <a data-id="<%= item.id %>" style="cursor: pointer;" class="primary_view" onclick="javascript:void(0)">[VIEW]</a>
+                <br/>
             <% } %>
+
+
+            <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
+                <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_primary_goal" onclick="javascript:void(0)">[EDIT]</a>
+                <br/><br/>
+                <a data-id="<%= item.id %>" style="cursor: pointer;" class="submit_primary_goal" onclick="javascript:void(0)">[SUBMIT]</a>
+             <% } %>
+        </td>
+        <td class="minigoals_wrapper" style="vertical-align: top;">
         </td>
     </tr>
 </table>
-
-<br/>
 <hr>
-

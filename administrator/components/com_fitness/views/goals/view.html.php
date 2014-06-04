@@ -56,25 +56,12 @@ class FitnessViewGoals extends JView
         FitnessHelper::addSubmenu('Settings', 'settings');
         
         $document = &JFactory::getDocument();
-        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'moment.min.js');
+        $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
         $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
-	$document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
-        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
+	
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'underscore-min.js');
         include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
-        $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.flot.js');
-        $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.flot.time.js');
-        echo '<!--[if IE]><script type="text/javascript" src="' . JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'excanvas.js"></script><![endif]-->';
-        $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'graph.js');
-        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'ajax_call_function.js');
-        $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'status_class.js');
-        
-        
-        
-        
-        $model = $this->getModel();
-                
-        $this->assign('model', $model);
+
         
 		parent::display($tpl);
 	}
@@ -91,57 +78,7 @@ class FitnessViewGoals extends JView
 		$state	= $this->get('State');
 		$canDo	= FitnessHelper::getActions($state->get('filter.category_id'));
 
-		JToolBarHelper::title(JText::_('Client Planning'), 'goals.png');
-
-        //Check if the form exists before showing the add/edit buttons
-        $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/goal';
-        if (file_exists($formPath)) {
-
-            if ($canDo->get('core.create')) {
-			    JToolBarHelper::addNew('goal.add','JTOOLBAR_NEW');
-		    }
-
-		    if ($canDo->get('core.edit') && isset($this->items[0])) {
-			    JToolBarHelper::editList('goal.edit','JTOOLBAR_EDIT');
-		    }
-
-        }
-
-		if ($canDo->get('core.edit.state')) {
-
-            if (isset($this->items[0]->state)) {
-			    JToolBarHelper::divider();
-			    JToolBarHelper::custom('goals.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
-			    JToolBarHelper::custom('goals.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
-            } else if (isset($this->items[0])) {
-                //If this component does not use state then show a direct delete button as we can not trash
-                JToolBarHelper::deleteList('', 'goals.delete','JTOOLBAR_DELETE');
-            }
-
-            if (isset($this->items[0]->state)) {
-			    JToolBarHelper::divider();
-			    JToolBarHelper::archiveList('goals.archive','JTOOLBAR_ARCHIVE');
-            }
-            if (isset($this->items[0]->checked_out)) {
-            	JToolBarHelper::custom('goals.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
-            }
-		}
-        
-        //Show trash and delete for components that uses the state field
-        if (isset($this->items[0]->state)) {
-		    if ($state->get('filter.state') == -2 && $canDo->get('core.delete')) {
-			    JToolBarHelper::deleteList('', 'goals.delete','JTOOLBAR_EMPTY_TRASH');
-			    JToolBarHelper::divider();
-		    } else if ($canDo->get('core.edit.state')) {
-			    JToolBarHelper::trash('goals.trash','JTOOLBAR_TRASH');
-			    JToolBarHelper::divider();
-		    }
-        }
-
-		if ($canDo->get('core.admin')) {
-			JToolBarHelper::preferences('com_fitness');
-		}
-
+		JToolBarHelper::title(JText::_('Client Planning (Goals)'), 'goals.png');
 
 	}
         
