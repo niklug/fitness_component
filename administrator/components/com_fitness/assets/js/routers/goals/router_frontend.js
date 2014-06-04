@@ -53,11 +53,7 @@ define([
 
             app.models.request_params_primary = new Request_params_primary_model({user_id : app.options.client_id});
             app.models.request_params_primary.bind("change", this.get_items, this);
-            
-            
-            
-            this.connectGraph();
-            
+  
             this.get_items();
             this.get_minigoals();
 
@@ -107,7 +103,7 @@ define([
         },
 
         connectGraph : function() {
-            new Graph_view({
+            this.graph = new Graph_view({
                 el : "#graph_container",
                 model : '',
                 show : {
@@ -119,15 +115,17 @@ define([
                     cardio_workout : false,
                     assessment : false,
                     current_time : true,
-                    
                     client_select : false,
                     choices : false
                 },
-                style : 'dark'
+                style : 'dark',
+                reloads : true,
+                list_type : $("#list_type").val()
             });
         },
         
         list_view : function() {
+            this.connectGraph();
             $("#main_container").html(new List_view({model : app.models.request_params_primary, collection : app.collections.primary_goals}).render().el);
         },
 

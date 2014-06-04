@@ -115,6 +115,7 @@ define([
         onChangeListType : function(event) {
             var list_type = $(event.target).val();
             app.models.request_params_primary.set({list_type : list_type,  uid : app.getUniqueId()});
+            app.controller.connectGraph();
         }
 
      

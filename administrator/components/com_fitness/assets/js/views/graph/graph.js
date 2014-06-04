@@ -27,7 +27,8 @@ define([
         initialize: function() {
             this.show_client_select = this.options.show.client_select || false;
             this.show = this.options.show || false;
-            
+            this.reloads = this.options.reloads || false;
+            this.list_type = this.options.list_type || '';
             if(app.collections.training_periods && !this.show_client_select) {
                 this.render();
                 return;
@@ -240,18 +241,16 @@ define([
         
         //GRAPH
         getGraphData: function() {
-            if(app.models.graph_data) {
+            if(app.models.graph_data && !this.reloads) {
                 this.setGraphData( app.models.graph_data.get('data'));
                 return;
             } 
-
             var data = {};
             var url = app.options.ajax_call_url;
             var view = 'goals_periods';
             var task = 'populateGoals';
             var table = '';
-            var list_type = '';
-            data.list_type = list_type;
+            data.list_type = this.list_type;
             
             if(this.show_client_select) {
                 data.client_id = localStorage.getItem('client_id');
