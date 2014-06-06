@@ -7,11 +7,7 @@
                         Primary Goal 
                     </td>
                     <td class="grey_title">
-                        <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status || app.options.statuses.EVELUATING_GOAL_STATUS.id == item.status) { %>
-                            <%= app.options.status_options.statuses[item.status].label %>
-                        <% } else { %>
-                            <%= item.primary_goal_name %>
-                        <% } %>
+                        <%= item.primary_goal_name %>
                     </td>
                 </tr>
                 <tr>
@@ -57,17 +53,37 @@
             </table>
         </td>
         <td width="10%" style="vertical-align: top;">
-            <% if(item.readonly_allowed) { %>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="primary_view" onclick="javascript:void(0)">[VIEW]</a>
-                <br/>
+            <% if(item.state != '-2') { %>
+                <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
+            <% } else { %>
+                <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
             <% } %>
 
-
-            <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_primary_goal" onclick="javascript:void(0)">[EDIT]</a>
-                <br/><br/>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="submit_primary_goal" onclick="javascript:void(0)">[SUBMIT]</a>
+            <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status  && item.state == '1') { %>
+               <br/><br/>
+                <a data-id="<%= item.id %>" style="cursor: pointer;" class="submit_primary_goal" onclick="javascript:void(0)">[FINALISE]</a>
              <% } %>
+             
+            <br/><br/>
+            <% if(item.state != '-2') { %>
+                <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= item.id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= item.id %>" class="delete_icon"></span></a>
+            <% } %>
+            
+            <br/>
+            <%
+            var icon_class = 'unpublish';
+            var publish_title = 'Publish'; 
+            if(parseInt(item.state) == '1') {
+                icon_class = 'publish';
+                publish_title = 'Unpublish'; 
+            }
+            %>
+            <% if(item.state != '-2') { %>
+            <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish_primary state <%= icon_class %> " ></span>
+            <% } %>
+
         </td>
         <td class="minigoals_wrapper" style="vertical-align: top;">
         </td>

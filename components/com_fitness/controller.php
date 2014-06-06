@@ -30,7 +30,10 @@ class FitnessController extends JController {
         
         $view = JRequest::getVar( 'view' );
         
-        if($view == 'appointment_confirmed') {
+        if(
+                $view == 'appointment_confirmed'
+                OR $view == 'ajax_email'
+        ) {
             parent::display();
             return;
         }

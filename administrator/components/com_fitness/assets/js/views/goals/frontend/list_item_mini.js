@@ -19,7 +19,7 @@ define([
             var template = _.template(this.template(data));
             this.$el.html(template);
             
-            this.connectStatus(this.model.get('id'), this.model.get('status'));
+            app.controller.connectStatus(this.model.get('id'), this.model.get('status'), this.$el);
             
             return this;
         },
@@ -28,16 +28,6 @@ define([
         events: {
             "click .submit_mini_goal" : "onClickSubmit",
             "click .delete_mini_goal" : "onClickDelete"
-        },
-        
-        connectStatus : function(id, status) {
-            var status_obj = $.status(app.options.status_options);
-              
-            var html =  status_obj.statusButtonHtml(id, status);
-
-            this.$el.find("#status_button_place_" + id).html(html);
-
-            //status_obj.run();
         },
         
         onClickSubmit : function() {

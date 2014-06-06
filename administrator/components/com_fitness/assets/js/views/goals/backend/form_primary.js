@@ -3,7 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'collections/programs/select_filter',
         'models/goals/primary_goal',
+        'views/programs/select_element',
 	'text!templates/goals/backend/form_primary.html'
 
 ], function (
@@ -11,14 +13,15 @@ define([
         _,
         Backbone,
         app,
+        Select_filter_collection,
         Model,
+        Select_element_view,
         template
     ) {
 
     var view = Backbone.View.extend({
         
         initialize : function() {
-
         },
 
         
@@ -27,6 +30,7 @@ define([
         render: function(){
             var data = {item : this.model.toJSON()};
             //console.log(data);
+            data.app = app;
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);
@@ -40,20 +44,53 @@ define([
             "click #save" : "onClickSave",
             "click #save_close" : "onClickSaveClose",
             "click #cancel" : "onClickCancel",
+            "click #finalise_primary_goal" : "onClickFinalisePrimaryGoal"
         },
         
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
-                app.controller.connectStatus(self.model.get('id'), self.model.get('status'), self.$el);
+                app.controller.connectStatus(self.model, self.$el);
                 app.controller.connectComments(self.model, $(self.el), 'primary');
                 self.loadCalendar();
-     
+                self.loadPrimaryGoals();
             });
         },
         
         loadCalendar : function() {
             $(this.el).find("#start_date, #deadline").datepicker({ dateFormat: "yy-mm-dd"});
+        },
+        
+        loadPrimaryGoals : function() {
+            if( 
+                app.collections.primary_goals_categories
+            ) {
+                this.populateGoalsSelect();
+                return;
+            } 
+            app.collections.primary_goals_categories = new Select_filter_collection();
+            var self = this;
+            app.collections.primary_goals_categories.fetch({
+                data : {table : '#__fitness_goal_categories', business_profile_id : app.options.business_profile_id},
+                success : function (collection, response) {
+                    self.populateGoalsSelect();
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        populateGoalsSelect : function() {
+            new Select_element_view({
+                model : this.model,
+                el : $(this.el).find("#primary_goal_wrapper"),
+                collection : app.collections.primary_goals_categories,
+                first_option_title : '-Select-',
+                class_name : 'filter_select',
+                id_name : 'primary_goal',
+                model_field : 'goal_category_id'
+            }).render();
         },
        
         onClickSave : function() {
@@ -92,7 +129,8 @@ define([
             this.model.set({
                     start_date : start_date_field.val(), 
                     deadline : deadline_field.val(), 
-                    details : details_field.val()
+                    details : details_field.val(),
+                    user_id : app.options.client_id
             });
             
             var overlap_start_date = this.onCheckOverlapDate('start_date');
@@ -144,6 +182,8 @@ define([
                     success: function (model, response) {
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
+                        } else if(self.save_method == 'save') {
+                            app.controller.navigate("!/primary_form/" + model.get('id'), true);
                         }
                     },
                     error: function (model, response) {
@@ -187,6 +227,20 @@ define([
             result.status = false;
             return result;
         },
+        
+        onClickFinalisePrimaryGoal : function() {
+            var self = this;
+            this.model.save({status : app.options.statuses.EVELUATING_GOAL_STATUS.id}, {
+                success: function (model, response) {
+                    app.collections.primary_goals.add(model);
+                    //app.controller.sendGoalEmail(model.get('id'), 'GoalEvaluating');
+                    app.controller.navigate("!/list_view", true)
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        }
  
     });
             

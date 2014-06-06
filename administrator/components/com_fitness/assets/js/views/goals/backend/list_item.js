@@ -54,23 +54,14 @@ define([
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
-                app.controller.connectStatus(self.model.get('id'), self.model.get('status'), self.$el);
+                app.controller.connectStatus(self.model, self.$el, 'primary');
                 
                 self.loadMinigoalslist();
      
             });
         },
         
-        connectStatus : function(id, status) {
-            var status_obj = $.status(app.options.status_options);
-              
-            var html =  status_obj.statusButtonHtml(id, status);
-
-            this.$el.find("#status_button_place_" + id).html(html);
-
-            //status_obj.run();
-        },
-        
+      
         loadMinigoalslist : function() {
              $(this.el).find(".minigoals_wrapper").html(new List_mini_view({collection : app.collections.mini_goals, model : this.model}).render().el);
         },

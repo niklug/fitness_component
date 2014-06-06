@@ -7,11 +7,7 @@
                         Mini Goal 
                     </td>
                     <td class="grey_title">
-                        <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status || app.options.statuses.EVELUATING_GOAL_STATUS.id == item.status) { %>
-                            <%= app.options.status_options.statuses[item.status].label %>
-                        <% } else { %>
-                            <%= item.mini_goal_name %>
-                        <% } %>
+                        <%= item.mini_goal_name %>
                     </td>
                 </tr>
                 <tr>
@@ -54,7 +50,7 @@
                     <td>
                         Status 
                     </td>
-                    <td id="status_button_place_<%= item.id %>"  >
+                    <td id="status_button_place_mini_<%= item.id %>"  >
 
                     </td>
                 </tr>
@@ -69,28 +65,42 @@
             </table>
         </td>
         <td>
-             <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && parseInt(item.primary_goal.minigoals_status) != '2') { %>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_mini_goal" onclick="javascript:void(0)">[EDIT]</a>
-             <% } %>
+             <% if(item.state != '-2') { %>
+                <a title="View/Edit" style="cursor: pointer;" class="view_mini " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
+            <% } else { %>
+                <a title="Restore" style="cursor: pointer;" class="restore_mini " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
+            <% } %>
              
-             <% if(!parseInt(item.primary_goal.minigoals_status)) { %>
+             <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && item.state == '1') { %>
                 <br/><br/>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="delete_mini_goal" onclick="javascript:void(0)">[DELETE]</a>
-             <% } %>
-
-             <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && parseInt(item.primary_goal.minigoals_status) == '1') { %>
-                <br/><br/>
-                <a data-id="" style="cursor: pointer;" class="submit_mini_goal" onclick="javascript:void(0)">[SUBMIT]</a>
+                <a data-id="" style="cursor: pointer;" class="submit_mini_goal" onclick="javascript:void(0)">[FINALISE]</a>
             <% } %>
 
-            <% if(item.readonly_allowed) { %>
-                <br/><br/>
-                <a data-id="<%= item.id %>" style="cursor: pointer;" class="view_mini" onclick="javascript:void(0)">[VIEW]</a>
+                
+            <br/><br/>
+            <% if(item.state != '-2') { %>
+                <a class="trash_mini" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= item.id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete_mini" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= item.id %>" class="delete_icon"></span></a>
+            <% } %>
+            
+            
+            
+            <% if(item.state != '-2') { %>
+            <%
+            var icon_class = 'unpublish';
+            var publish_title = 'Publish'; 
+            if(parseInt(item.state) == '1') {
+                icon_class = 'publish';
+                publish_title = 'Unpublish'; 
+            }
+            %>
+            <br/>
+            <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish_mini state <%= icon_class %> " ></span>
             <% } %>
         </td>
     </tr>
 </table>
 
-<br/>
 <hr>
 

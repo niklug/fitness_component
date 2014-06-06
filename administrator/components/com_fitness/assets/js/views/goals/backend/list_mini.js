@@ -17,8 +17,6 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
-
-            this.status_obj = $.status(app.options.status_options);
         },
         
         template:_.template(template),
@@ -38,8 +36,13 @@ define([
         events: {
             "click .new_mini_goal" : "onClickNewMiniGoal",
             "click .edit_mini_goal" : "onClickEditMiniGoal",
-            "click .finalise_mini_goals" : "onClickFinalise",
             "click .view_mini" : "onClickView",
+            
+            "click .trash_mini" : "onClickTrash",
+            "click .restore_mini" : "onClickRestore",
+            "click .delete_mini" : "onClickDelete",
+            
+            "click .publish_mini" : "onClickPublish",
         },
         
         onRender : function() {
@@ -80,11 +83,18 @@ define([
             app.controller.navigate("!/form_mini/" + id + '/' + primary_goal_id, true);
         },
         
-        onClickFinalise : function() {
-            var self = this;
-            this.model.save({minigoals_status : '1'}, {
+        onClickView : function(event) {
+            var id = $(event.target).attr('data-id');
+            var primary_goal_id = this.model.get('id');
+            app.controller.navigate("!/form_mini/" + id + '/' + primary_goal_id, true);
+        },
+        
+        onClickTrash : function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({state : '-2'}, {
                 success: function (model, response) {
-                    app.collections.primary_goals.add(model);
                     self.render();
                 },
                 error: function (model, response) {
@@ -93,11 +103,56 @@ define([
             });
         },
         
-        onClickView : function(event) {
+        onClickRestore : function(event) {
             var id = $(event.target).attr('data-id');
-            var primary_goal_id = this.model.get('id');
-            app.controller.navigate("!/form_mini/" + id + '/' + primary_goal_id, true);
-        }
+            var model = this.collection.get(id);
+            var self = this;
+            model.save({state : '1'}, {
+                success: function (model, response) {
+                    self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+
+        onClickDelete : function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = this.collection.get(id);
+            var self = this;
+            model.destroy({
+                success: function (model) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickPublish : function(event) {
+            var id = $(event.target).attr('data-id');
+            var state = $(event.target).attr('data-state');
+            
+            var published = 1;
+            
+            if(parseInt(state) == '1') {
+                published = 0;
+            }
+            
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({state : published}, {
+                success: function (model, response) {
+                    self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
      
     });
             

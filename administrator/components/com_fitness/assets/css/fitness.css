@@ -405,7 +405,7 @@
     margin: 5px;
 }
 
-.error_wrapper, .error {
+.error_wrapper, .error, .error_message  {
     color:red;
 }
 
@@ -992,6 +992,10 @@
     padding: 0px;
     font-size: 13px;
     border: 1px solid #cccccc;
+}
+
+.fitness_block_wrapper a {
+    color: #DA4828;
 }
 
 .fitness_wrapper h2, .fitness_block_wrapper h2 {

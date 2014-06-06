@@ -13,7 +13,7 @@
     function Status(options) {
         this.options = options;
     }
-
+    
 
     Status.prototype.run = function() {
         this.setEventListeners();
@@ -24,7 +24,6 @@
         
         if(this.options.status_button != 'status_button_not_active') {
             $("." + this.options.status_button).die().live('click', function() {
-
                 $("#" + self.options.dialog_status_wrapper).remove();
                 var item_id = $(this).attr('data-item_id');
                 var status_id = $(this).attr('data-status_id');
@@ -65,7 +64,8 @@
         this.ajaxCall(data, self.options.fitness_administration_url, 'nutrition_diary', 'updateStatus', self.options.db_table, function(output) {
             self.emailLogic(item_id, status);
             var status_button_html = self.statusButtonHtml(item_id, status);
-            $(self.options.status_button_place + '' + item_id).html(status_button_html);
+
+            $(self.options.status_button_place + item_id).html(status_button_html);
             self.closeDialog();
             
             if((self.options.set_updater !== 'undefined') && (self.options.set_updater == true)) {

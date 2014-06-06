@@ -66,9 +66,15 @@ class FitnessModelGoals extends JModelList {
                 $data->order_dirrection = JRequest::getVar('order_dirrection'); 
                 $data->page = JRequest::getVar('page'); 
                 $data->limit = JRequest::getVar('limit'); 
-                $data->state = JRequest::getVar('state', '1'); 
+                $data->status = JRequest::getVar('status'); 
+                $data->state = JRequest::getVar('state'); 
                 $data->list_type = JRequest::getVar('list_type'); 
                 $data->user_id = JRequest::getVar('user_id'); 
+                
+                $data->start_from = JRequest::getVar('start_from'); 
+                $data->start_to = JRequest::getVar('start_to'); 
+                $data->end_from = JRequest::getVar('end_from'); 
+                $data->end_to = JRequest::getVar('end_to'); 
 
                 $data = $this->getPrimaryGoals($data);
                 
@@ -111,6 +117,14 @@ class FitnessModelGoals extends JModelList {
         $order_dirrection = $data->order_dirrection;
         
         $state = $data->state;
+         
+        $status = $data->status;
+        
+        $start_from = $data->start_from ;
+        $start_to = $data->start_to ;
+        $end_from = $data->end_from ;
+        $end_to = $data->end_to ;
+        
         
         $id = $data->id;
        
@@ -134,7 +148,9 @@ class FitnessModelGoals extends JModelList {
                 $query .= " AND user_id='$user_id'";
             }
 
-            $query .= " AND state='$state'";
+            if($state != '*') {
+                $query .= " AND state='$state'";
+            }
 
             if($list_type == 'previous') {
                 $query .= " AND ( deadline < " . $db->quote($current_date);
@@ -149,6 +165,23 @@ class FitnessModelGoals extends JModelList {
             if($list_type == 'current_primary_goal') {
                 $query .= " AND start_date <= " . $db->quote($current_date);
                 $query .= " AND deadline > " . $db->quote($current_date);
+            }
+            
+            if($status) {
+                $query .= " AND status='$status'";
+            }
+            
+            if($start_from) {
+                $query .= " AND start_date >= " . $db->quote($start_from);
+            }
+            if($start_to) {
+                $query .= " AND start_date <= " . $db->quote($start_to);
+            }
+            if($end_from) {
+                $query .= " AND deadline >= " . $db->quote($end_from);
+            }
+            if($end_to) {
+                $query .= " AND deadline <= " . $db->quote($end_to);
             }
 
             $query .= " ) items_total, ";
@@ -169,7 +202,9 @@ class FitnessModelGoals extends JModelList {
             $query .= " AND pg.user_id='$user_id'";
         }
         
-        $query .= " AND pg.state='$state'";
+        if($state != '*') {
+            $query .= " AND pg.state='$state'";
+        }
 
         if($list_type == 'previous') {
             $query .= " AND ( pg.deadline < " . $db->quote($current_date);
@@ -185,6 +220,24 @@ class FitnessModelGoals extends JModelList {
             $query .= " AND pg.start_date <= " . $db->quote($current_date);
             $query .= " AND pg.deadline > " . $db->quote($current_date);
         }
+        
+        if($status) {
+            $query .= " AND pg.status='$status'";
+        }
+        
+        if($start_from) {
+            $query .= " AND pg.start_date >= " . $db->quote($start_from);
+        }
+        if($start_to) {
+            $query .= " AND pg.start_date <= " . $db->quote($start_to);
+        }
+        if($end_from) {
+            $query .= " AND pg.deadline >= " . $db->quote($end_from);
+        }
+        if($end_to) {
+            $query .= " AND pg.deadline <= " . $db->quote($end_to);
+        }
+            
         
         $query_type = 1;
         if($id) {

@@ -3,8 +3,10 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'collections/programs/select_filter',
         'models/goals/primary_goal',
         'models/goals/mini_goal',
+        'views/programs/select_element',
 	'text!templates/goals/backend/form_mini.html'
 
 ], function (
@@ -12,8 +14,10 @@ define([
         _,
         Backbone,
         app,
+        Select_filter_collection,
         Primary_goal_model,
         Model,
+        Select_element_view,
         template
     ) {
 
@@ -29,6 +33,7 @@ define([
         render: function(){
             var data = {item : this.model.toJSON()};
             //console.log(data);
+            data.app = app;
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);
@@ -42,16 +47,82 @@ define([
             "click #save" : "onClickSave",
             "click #save_close" : "onClickSaveClose",
             "click #cancel" : "onClickCancel",
+            "click #finalise_mini_goal" : "onClickFinaliseMiniGoal"
         },
         
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
-                app.controller.connectStatus(self.model.get('id'), self.model.get('status'), self.$el);
+                app.controller.connectStatus(self.model, self.$el);
                 app.controller.connectComments(self.model, self.$el, 'mini');
                 self.getPrimaryGoal();
-     
+                self.loadMiniGoals();
+                self.loadTrainingPeriods();
             });
+        },
+        
+        loadMiniGoals : function() {
+            if( 
+                app.collections.mini_goals_categories
+            ) {
+                this.populateGoalsSelect();
+                return;
+            } 
+            app.collections.mini_goals_categories = new Select_filter_collection();
+            var self = this;
+            app.collections.mini_goals_categories.fetch({
+                data : {table : '#__fitness_mini_goal_categories', business_profile_id : app.options.business_profile_id},
+                success : function (collection, response) {
+                    self.populateGoalsSelect();
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        populateGoalsSelect : function() {
+            new Select_element_view({
+                model : this.model,
+                el : $(this.el).find("#mini_goal_wrapper"),
+                collection : app.collections.mini_goals_categories,
+                first_option_title : '-Select-',
+                class_name : 'filter_select',
+                id_name : 'mini_goal',
+                model_field : 'mini_goal_category_id'
+            }).render();
+        },
+        
+        loadTrainingPeriods : function() {
+            if( 
+                app.collections.training_periods
+            ) {
+                this.populateTPSelect();
+                return;
+            } 
+            app.collections.training_periods = new Select_filter_collection();
+            var self = this;
+            app.collections.training_periods.fetch({
+                data : {table : '#__fitness_training_period', business_profile_id : app.options.business_profile_id},
+                success : function (collection, response) {
+                    self.populateTPSelect();
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        populateTPSelect : function() {
+            new Select_element_view({
+                model : this.model,
+                el : $(this.el).find("#training_period_wrapper"),
+                collection : app.collections.training_periods,
+                first_option_title : '-Select-',
+                class_name : 'filter_select',
+                id_name : 'training_period',
+                model_field : 'training_period_id'
+            }).render();
         },
         
         getPrimaryGoal : function() {
@@ -177,6 +248,8 @@ define([
                     success: function (model, response) {
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
+                        } else if(self.save_method == 'save') {
+                            app.controller.navigate("!/mini_form/" + model.get('id'), true);
                         }
                     },
                     error: function (model, response) {
@@ -216,10 +289,22 @@ define([
                     }
                 }
             }
-
             result.status = false;
             return result;
         },
+        
+        onClickFinaliseMiniGoal : function() {
+            var self = this;
+            this.model.save({status : app.options.statuses.EVELUATING_GOAL_STATUS.id}, {
+                success: function (model, response) {
+                    app.collections.mini_goals.add(model);
+                    app.controller.navigate("!/list_view", true)
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        }
 
     });
             

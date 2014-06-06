@@ -21,18 +21,27 @@ $business_profile_id = $helper->getBusinessProfileId($user_id);
 
 $business_profile_id = $business_profile_id['data'];
 ?>
+<div style="max-width:1128px;">
+    <div id="graph_container" >  </div>
 
-<div id="graph_container" >  </div>
+    <div class="clr"></div>
+    <br/>
 
-<div class="clr"></div>
+    <div id="header_wrapper"></div>
 
-<div id="list_type_wrapper"></div>
+    <div class="clr"></div>
+    <br/>
 
-<div class="clr"></div>
+    <div id="list_type_wrapper"></div>
 
-<div  id="submenu_container"></div>
+    <div class="clr"></div>
 
-<div id="main_container"></div>
+    <div  id="submenu_container"></div>
+
+    <div id="main_container" class="fitness_wrapper" style="background-color: #fff;"></div>
+
+</div>
+
 
 
 
@@ -78,7 +87,7 @@ $business_profile_id = $business_profile_id['data'];
         var status_options = {
         'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         'calendar_frontend_url' : '<?php echo JURI::root()?>administrator/index.php?option=com_multicalendar&task=load&calid=0',
-        'db_table' : '#__fitness_mini_goals',
+        'db_table' : '#__fitness_goals',
         'status_button' : 'status_button',
         'status_button_dialog' : 'status_button_dialog',
         'dialog_status_wrapper' : 'dialog_status_wrapper',

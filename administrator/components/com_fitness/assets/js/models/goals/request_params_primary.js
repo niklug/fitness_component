@@ -9,7 +9,7 @@ define([
             order_dirrection : '',
             page : localStorage.getItem('currentPage') || 1,
             limit : localStorage.getItem('items_number') || 10,
-            state : '1',
+            state : '*',
             list_type : 'current'
             
         }

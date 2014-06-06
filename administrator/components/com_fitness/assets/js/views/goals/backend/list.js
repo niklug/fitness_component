@@ -19,9 +19,6 @@ define([
         initialize : function() {
             this.collection.bind("add", this.addItem, this);
             this.collection.bind("reset", this.clearItems, this);
-            
-            this.status_obj = $.status(app.options.status_options);
-
         },
         
         template:_.template(template),
@@ -41,9 +38,15 @@ define([
         
         events: {
             "click #new_primary_goal" : "onClickNewPrimaryGoal",
-            "click .primary_view" : "onClickView",
+            "click .view" : "onClickView",
             "click .edit_primary_goal" : "onClickEditPrimaryGoal",
-            "change #list_type" : "onChangeListType"
+            "change #list_type" : "onChangeListType",
+            
+            "click .trash" : "onClickTrash",
+            "click .restore" : "onClickRestore",
+            "click .delete" : "onClickDelete",
+            
+            "click .publish_primary" : "onClickPublish",
         },
         
         onRender : function() {
@@ -116,8 +119,71 @@ define([
             var list_type = $(event.target).val();
             app.models.request_params_primary.set({list_type : list_type,  uid : app.getUniqueId()});
             app.controller.connectGraph();
-        }
+        },
+        
+        onClickTrash : function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({state : '-2'}, {
+                success: function (model, response) {
+                    self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickRestore : function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = this.collection.get(id);
+            var self = this;
+            model.save({state : '1'}, {
+                success: function (model, response) {
+                    self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
 
+        onClickDelete : function(event) {
+            var id = $(event.target).attr('data-id');
+            var model = this.collection.get(id);
+            var self = this;
+            model.destroy({
+                success: function (model) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickPublish : function(event) {
+            var id = $(event.target).attr('data-id');
+            var state = $(event.target).attr('data-state');
+                  
+            var published = 1;
+            
+            if(parseInt(state) == '1') {
+                published = 0;
+            }
+            
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({state : published}, {
+                success: function (model, response) {
+                    self.render();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
      
     });
             

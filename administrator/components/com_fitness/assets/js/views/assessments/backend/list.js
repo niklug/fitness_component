@@ -117,8 +117,6 @@ define([
         onClickTrash : function(event) {
             var id = $(event.target).attr('data-id');
             var model = this.collection.get(id);
-
-            console.log(model.toJSON());
             var self  = this;
             model.save({published : '-2'}, {
                 success: function (model, response) {

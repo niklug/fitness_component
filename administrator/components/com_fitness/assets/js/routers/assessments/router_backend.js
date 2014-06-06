@@ -338,7 +338,7 @@ define([
         
         is_bio_assessment : function(name) {
             var result = false;
-            if((name.toLowerCase().indexOf("bio") > -1)) {
+            if(name && (name.toLowerCase().indexOf("bio") > -1)) {
                 result = true;
             }
             return result;

@@ -13,6 +13,7 @@ define([
         'views/goals/backend/form_primary',
         'views/goals/backend/form_mini',
         'views/goals/backend/comments_block',
+        'views/goals/backend/search_block',
         'jquery.flot',
         'jquery.flot.time',
         'jquery.validate',
@@ -32,7 +33,8 @@ define([
         List_view,
         Form_primary_view,
         Form_mini_view,
-        Comments_block_view
+        Comments_block_view,
+        Search_block_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -150,10 +152,18 @@ define([
         },
         
         list_view : function() {
+            app.models.request_params_primary.set({page : 1, uid : app.getUniqueId()});
+            this.list_actions();
+        },
+
+        
+        list_actions : function () {
             this.connectGraph();
             if(!app.options.client_id) {
                 return;
             }
+
+            $("#header_wrapper").html(new Search_block_view({model : app.models.request_params_primary, collection : app.collections.primary_goals}).render().el);
             
             $("#main_container").html(new List_view({model : app.models.request_params_primary, collection : app.collections.primary_goals}).render().el);
         },
@@ -184,12 +194,14 @@ define([
         },
         
         load_form_primary : function(model) {
+            this.hideHeader();
             var readonly_allowed = this.readonly_allowed(model);
             model.set({readonly_allowed : readonly_allowed});
             $("#main_container").html(new Form_primary_view({collection : app.collections.primary_goals, model : model}).render().el);
         },
         
         form_mini : function(id, primary_goal_id) {
+            this.hideHeader();
             if(!parseInt(id)) {
                 this.load_form_mini(new Mini_goal_model(), primary_goal_id);
                 return;
@@ -233,12 +245,34 @@ define([
             return access;
         },
         
-        connectStatus : function(id, status, el) {
-            var status_obj = $.status(app.options.status_options);
-              
-            var html =  status_obj.statusButtonHtml(id, status);
+        connectStatus : function(model, el, type) {
 
-            el.find("#status_button_place_" + id).html(html);
+            var id = model.get('id');
+            var status = model.get('status');
+            var options = _.extend({}, app.options.status_options);
+            
+            var target = "#status_button_place_" + id;
+            
+            if(type == 'mini') {
+                options.db_table = '#__fitness_mini_goals';
+                options.status_button = 'status_button_mini';
+                options.status_button_dialog = 'status_button_dialog_mini';
+                options.status_button_place = '#status_button_place_mini_';
+                
+                target = "#status_button_place_mini_" + id;
+            }
+
+            if(id) {
+                if(app.options.statuses.PENDING_GOAL_STATUS.id == status) {
+                    options.status_button = 'status_button_not_active';
+                }
+                //console.log(options);
+                var status_obj = $.status(options);
+
+                el.find(target).html(status_obj.statusButtonHtml(id, status));
+
+                status_obj.run();
+            }
         },
         
         connectComments : function(model, view, type) {
@@ -249,7 +283,7 @@ define([
         
         sendGoalEmail : function(id, method) {
             var data = {};
-            var url = app.options.fitness_frontend_url;
+            var url = app.options.ajax_call_url;
             var view = '';
             var task = 'ajax_email';
             var table = '';
@@ -262,6 +296,14 @@ define([
             $.AjaxCall(data, url, view, task, table, function(output) {
                 console.log(output);
             });
+        },
+        
+        hideHeader : function() {
+            $("#header_wrapper").empty();
+        },
+        
+        update_list : function() {
+            app.models.request_params_primary.set({ uid : app.getUniqueId()});
         },
 
 

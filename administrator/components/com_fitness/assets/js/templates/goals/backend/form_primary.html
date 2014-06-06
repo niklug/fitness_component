@@ -5,7 +5,7 @@
                 <% if(!item.readonly_allowed) { %>
                     <h3  style="float:left;">NEW/EDIT PRIMARY GOAL</h3>
                 <% } else { %>
-                    <h3  style="float:left;">MY PRIMARY GOAL</h3>
+                    <h3  style="float:left;">PRIMARY GOAL</h3>
                 <% } %>
             </td>
             <td>
@@ -14,6 +14,9 @@
                     <a  style="cursor: pointer;float:right;margin-right:10px;" id="cancel" onclick="javascript:void(0)">[CANCEL]</a>
                     <a  style="cursor: pointer;float:right;margin-right:10px;" id="save_close" onclick="javascript:void(0)">[SAVE/CLOSE]</a>
                     <a  style="cursor: pointer;float:right;margin-right:10px;" id="save" onclick="javascript:void(0)">[SAVE]</a>
+                    <% if(item.id && item.status == app.options.statuses.PENDING_GOAL_STATUS.id) { %>
+                        <a  style="cursor: pointer;float:right;margin-right:10px;" id="finalise_primary_goal" onclick="javascript:void(0)">[FINALISE]</a>
+                    <% } %>
                 <% } else { %>
                     <a  style="cursor: pointer;float:right;margin-right:10px;" id="cancel" onclick="javascript:void(0)">[CLOSE]</a>
                 <% } %>
@@ -25,16 +28,21 @@
     <div class="internal_wrapper2">
         <form action="" id="add_goal_form">
             <table>
-                <% if(item.readonly_allowed) { %>
-                    <tr>
-                        <td style="width:120px;">
-                            Primary Goal 
-                        </td>
+                <tr>
+                    <td style="width:150px;">
+                        Primary Goal 
+                    </td>
+                    <% if(!item.readonly_allowed) { %>
+                    <td>
+                        <div id="primary_goal_wrapper" style="width:250px;"></div>
+                    </td>
+                    <% } else { %>
                         <td class="grey_title">
                             <%= item.primary_goal_name  || '-' %>
                         </td>
-                    </tr>
-                <% } %>
+                    <% } %>
+                </tr>
+                
                 <tr>
                     <td>
                         Start Date
@@ -101,8 +109,10 @@
                     <td style="vertical-align: top;">Goal Details</td>
                     <% if(!item.readonly_allowed) { %>
                     <td colspan="2">
-                        <textarea style="width:98%;" name="details" id="details" rows="20" cols="150" class="required"><%= item.details %></textarea> 
+                        <label>Please describe in as much detail as possible the results you envision for your client and what it is you wish to achieve...</label>
+                        <textarea  name="details" id="details" rows="4" cols="80" class="required"><%= item.details %></textarea> 
                     </td>
+
                     <% } else { %>
                     <td class="grey_title">
                         <%= item.details %>

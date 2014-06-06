@@ -18,7 +18,6 @@ define([
         
         initialize : function() {
 
-            this.status_obj = $.status(app.options.status_options);
         },
         
         template:_.template(template),
