@@ -175,6 +175,13 @@ define([
             }
             
             var self = this;
+            
+            var status = parseInt($(".status_button").attr('data-status_id'));
+            
+            if(status) {
+                 this.model.set({status : status});
+            }
+
 
             if (this.model.isNew()) {
                 this.collection.create(this.model, {

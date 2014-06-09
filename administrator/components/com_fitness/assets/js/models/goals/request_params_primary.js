@@ -5,8 +5,8 @@ define([
     var model = Backbone.Model.extend({
         defaults : {
             current_page: '',
-            sort_by : '',
-            order_dirrection : '',
+            sort_by : 'pg.start_date',
+            order_dirrection : 'DESC',
             page : localStorage.getItem('currentPage') || 1,
             limit : localStorage.getItem('items_number') || 10,
             state : '*',

@@ -35,7 +35,7 @@ define([
             var self = this;
             app.collections.mini_goals.fetch({
                 wait : true,
-                data : {user_id : app.options.user_id},
+                data : {user_id : app.options.client_id},
                 success : function (collection, response) {
                     self.onRender();
                 },
@@ -48,7 +48,8 @@ define([
         },
         
         events: {
-            "click .submit_primary_goal" : "onClickSubmitPrimaryGoal"
+            "click .submit_primary_goal" : "onClickSubmitPrimaryGoal",
+            "click .delete_primary_goal" : "onClickDelete"
         },
         
         onRender : function() {
@@ -78,7 +79,25 @@ define([
                     alert(response.responseText);
                 }
             });
-        }
+        },
+        
+        onClickDelete : function(event) {
+            var self = this;
+            this.model.destroy({
+                success: function (model) {
+                    app.collections.primary_goals.remove(model);
+                    self.close();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        close :function() {
+            $(this.el).unbind();
+            $(this.el).remove();
+        },
         
     });
             

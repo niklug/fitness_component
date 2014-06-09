@@ -119,7 +119,7 @@ define([
             app.collections.mini_goals.reset();
             app.collections.mini_goals.fetch({
                 wait : true,
-                data : {user_id : app.options.user_id},
+                data : {user_id :  app.options.client_id},
                 success : function (collection, response) {
                     //console.log(collection);
                 },

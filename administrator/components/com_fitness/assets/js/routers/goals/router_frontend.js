@@ -197,7 +197,11 @@ define([
 
             var status = model.get('status');
 
-            if(status != app.options.statuses.PENDING_GOAL_STATUS.id && status != app.options.statuses.EVELUATING_GOAL_STATUS.id) {
+            if(
+                    status != app.options.statuses.PENDING_GOAL_STATUS.id 
+                    && status != app.options.statuses.EVELUATING_GOAL_STATUS.id
+                    && status != app.options.statuses.ASSESSING_GOAL_STATUS.id
+            ) {
                 access = true;
             }
             

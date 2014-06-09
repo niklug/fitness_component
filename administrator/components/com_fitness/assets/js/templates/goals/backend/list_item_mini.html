@@ -15,11 +15,7 @@
                         Training Period 
                     </td>
                     <td class="grey_title">
-                        <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status || app.options.statuses.EVELUATING_GOAL_STATUS.id == item.status) { %>
-                            <%= app.options.status_options.statuses[item.status].label %>
-                        <% } else { %>
-                            <%= item.training_period_name %>
-                        <% } %>
+                         <%= item.training_period_name %>
                     </td>
                 </tr>
                 <tr>

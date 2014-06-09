@@ -656,14 +656,12 @@ define([
                             html +=  "Goal: " +  (client_data.goal_mini[item.dataIndex] || '') + "</br>";
                             html +=  "Start: " +   moment(new Date(Date.parse(client_data.start_mini[item.dataIndex]))).format("ddd, D MMM  YYYY") + "</br>";
                             html +=  "Finish: " +  moment(new Date(Date.parse(client_data.finish_mini[item.dataIndex]))).format("ddd, D MMM  YYYY") + "</br>";
-                            html +=  "Status: " +  (self.getStatusById(client_data.status_mini[item.dataIndex]) || '') + "</br>"; 
                             $("#tooltip").css("background-color", "#287725");
                             break;
                         case 2 : // Primary Goals
                             html +=  "Goal: " +  (client_data.goal_primary[item.dataIndex]  || '') + "</br>";
                             html +=  "Start: " +  moment(new Date(Date.parse(client_data.start_primary[item.dataIndex]))).format("ddd, D MMM  YYYY") + "</br>";
                             html +=  "Finish: " + moment(new Date(Date.parse(client_data.finish_primary[item.dataIndex]))).format("ddd, D MMM  YYYY")  + "</br>";
-                            html +=  "Status: " +  (self.getStatusById(client_data.status_primary[item.dataIndex]) || '') + "</br>"; 
                             $("#tooltip").css("background-color", "#A3270F");
                             break;
                         case 3 : // Personal Training

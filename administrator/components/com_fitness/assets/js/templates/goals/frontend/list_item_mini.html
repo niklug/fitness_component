@@ -73,7 +73,7 @@
                 <a data-id="<%= item.id %>" style="cursor: pointer;" class="edit_mini_goal" onclick="javascript:void(0)">[EDIT]</a>
              <% } %>
              
-             <% if(!parseInt(item.primary_goal.minigoals_status)) { %>
+             <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status) { %>
                 <br/><br/>
                 <a data-id="<%= item.id %>" style="cursor: pointer;" class="delete_mini_goal" onclick="javascript:void(0)">[DELETE]</a>
              <% } %>

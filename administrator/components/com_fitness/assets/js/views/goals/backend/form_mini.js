@@ -53,7 +53,7 @@ define([
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
-                app.controller.connectStatus(self.model, self.$el);
+                app.controller.connectStatus(self.model, self.$el, 'mini');
                 app.controller.connectComments(self.model, self.$el, 'mini');
                 self.getPrimaryGoal();
                 self.loadMiniGoals();
@@ -196,10 +196,12 @@ define([
                     start_date : start_date, 
                     deadline : deadline, 
                     details : details_field.val(),
-                    primary_goal_id : this.options.primary_goal_id
+                    primary_goal_id : this.options.primary_goal_id,
+                    user_id : app.options.client_id
                     
             });
             
+                        
             var overlap_start_date = this.onCheckOverlapDate('start_date');
             var overlap_deadline = this.onCheckOverlapDate('deadline');
      
@@ -241,6 +243,20 @@ define([
 
             }
             var self = this;
+            
+            var mini_goal_category_id = this.model.get('mini_goal_category_id');
+            var mini_goal_category_model = app.collections.mini_goals_categories.get(mini_goal_category_id)
+            var tp_id = this.model.get('training_period_id');
+            var tp_model = app.collections.training_periods.get(tp_id)
+
+            this.model.set({mini_goal_name : mini_goal_category_model.get('name'), training_period_name : tp_model.get('name')});
+            
+            var status = parseInt($(".status_button_mini").attr('data-status_id'));
+            
+            if(status) {
+                 this.model.set({status : status});
+            }
+
 
             if (this.model.isNew()) {
                 this.collection.create(this.model, {

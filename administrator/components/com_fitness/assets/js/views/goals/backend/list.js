@@ -44,8 +44,6 @@ define([
             
             "click .trash" : "onClickTrash",
             "click .restore" : "onClickRestore",
-            "click .delete" : "onClickDelete",
-            
             "click .publish_primary" : "onClickPublish",
         },
         
@@ -149,20 +147,7 @@ define([
             });
         },
 
-        onClickDelete : function(event) {
-            var id = $(event.target).attr('data-id');
-            var model = this.collection.get(id);
-            var self = this;
-            model.destroy({
-                success: function (model) {
-                    app.controller.update_list();
-                },
-                error: function (model, response) {
-                    alert(response.responseText);
-                }
-            });
-        },
-        
+       
         onClickPublish : function(event) {
             var id = $(event.target).attr('data-id');
             var state = $(event.target).attr('data-state');
