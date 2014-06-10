@@ -24,27 +24,7 @@ class FitnessModelgoals extends JModelList {
      * @since    1.6
      */
     public function __construct($config = array()) {
-        if (empty($config['filter_fields'])) {
-            $config['filter_fields'] = array(
-                                'id', 'a.id',
-                'user_id', 'a.user_id',
-                'trainer_id', 'a.trainer_id',
-                'category_id', 'a.category_id',
-                'deadline', 'a.deadline',
-                'start_date', 'a.start_date',
-                'details', 'a.details',
-                'comments', 'a.comments',
-                'status', 'a.status',
-                'state', 'a.state',
-                'created', 'a.created',
-                'modified', 'a.modified',
-                'business_name', 'business_name',
-                'u.name', 'gc.name'
 
-            );
-        }
-        
-                
         $this->helper = new FitnessHelper();
 
         parent::__construct($config);
@@ -56,247 +36,20 @@ class FitnessModelgoals extends JModelList {
      * Note. Calling getState in this method will result in recursion.
      */
     protected function populateState($ordering = null, $direction = null) {
-        // Initialise variables.
-        $app = JFactory::getApplication('administrator');
 
-        // Load the filter state.
-        $search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $this->setState('filter.search', $search);
-
-        $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
-        $this->setState('filter.state', $published);
-        
-        //Filtering start date
-        $this->setState('filter.start_date.from', $app->getUserStateFromRequest($this->context.'.filter.start_date.from', 'filter_from_start_date', '', 'string'));
-        $this->setState('filter.start_date.to', $app->getUserStateFromRequest($this->context.'.filter.start_date.to', 'filter_to_start_date', '', 'string'));
-        
-        
-        //Filtering deadline
-        $this->setState('filter.deadline.from', $app->getUserStateFromRequest($this->context.'.filter.deadline.from', 'filter_from_deadline', '', 'string'));
-        $this->setState('filter.deadline.to', $app->getUserStateFromRequest($this->context.'.filter.deadline.to', 'filter_to_deadline', '', 'string'));
-        
-        // Filter by goal category
-        $goal_category = $app->getUserStateFromRequest($this->context . '.filter.goal_category', 'filter_goal_category', '', 'string');
-        $this->setState('filter.goal_category', $goal_category);
-        
-                
-        // Filter by group
-        $group = $app->getUserStateFromRequest($this->context . '.filter.group', 'filter_group', '', 'string');
-        $this->setState('filter.group', $group);
-        
-        // Filter by business profile
-        $business_profile_id = $app->getUserStateFromRequest($this->context . '.filter.business_profile_id', 'filter_business_profile_id', '', 'string');
-        $this->setState('filter.business_profile_id', $business_profile_id);
-        
-        // Filter by goal status
-        $goal_status = $app->getUserStateFromRequest($this->context . '.filter.goal_status', 'filter_goal_status', '', 'string');
-        $this->setState('filter.goal_status', $goal_status);
-        
-        // Filter by created
-        $created = $app->getUserStateFromRequest($this->context . '.filter.created', 'filter_created', '', 'string');
-        $this->setState('filter.created', $created);
-        
-                
-        // Filter by modified
-        $modified = $app->getUserStateFromRequest($this->context . '.filter.modified', 'filter_modified', '', 'string');
-        $this->setState('filter.modified', $modified);
-
-
-        // Load the parameters.
-        $params = JComponentHelper::getParams('com_fitness');
-        $this->setState('params', $params);
-
-        // List state information.
-        parent::populateState('a.user_id', 'asc');
     }
 
-    /**
-     * Method to get a store id based on model configuration state.
-     *
-     * This is necessary because the model is used by the component and
-     * different modules that might need different sets of data or different
-     * ordering requirements.
-     *
-     * @param	string		$id	A prefix for the store id.
-     * @return	string		A store id.
-     * @since	1.6
-     */
     protected function getStoreId($id = '') {
-        // Compile the store id.
-        $id.= ':' . $this->getState('filter.search');
-        $id.= ':' . $this->getState('filter.state');
-        $id.= ':' . $this->getState('filter.goal_category');
-        $id.= ':' . $this->getState('filter.group');
-        $id.= ':' . $this->getState('filter.goal_status');
-        $id.= ':' . $this->getState('filter.created');
-        $id.= ':' . $this->getState('filter.modified');
 
-        return parent::getStoreId($id);
     }
 
-    /**
-     * Build an SQL query to load the list data.
-     *
-     * @return	JDatabaseQuery
-     * @since	1.6
-     */
     protected function getListQuery() {
-        // Create a new query object.
-        $db = $this->getDbo();
-        $query = $db->getQuery(true);
 
-        // Select the required fields from the table.
-        $query->select(
-                $this->getState(
-                        'list.select', 'a.*,  ug.title as usergroup, gc.name as goal_category_name, bp.name AS business_name'
-                )
-        );
-        $query->from('`#__fitness_goals` AS a');
-                
-        $query->leftJoin('#__users AS u ON u.id = a.user_id');
-        
-  
-        $query->leftJoin('#__user_usergroup_map AS g ON u.id = g.user_id');
-        
-        $query->leftJoin('#__usergroups AS ug ON ug.id = g.group_id');
-        
-        $query->leftJoin('#__fitness_goal_categories AS gc ON gc.id = a.goal_category_id');
-        
-        $query->leftJoin('#__fitness_clients AS c ON c.user_id = a.user_id');
-        
-        $query->leftJoin('#__fitness_business_profiles AS bp ON bp.id = c.business_profile_id');
-
-        
-          
-        if(FitnessHelper::is_primary_administrator() || FitnessHelper::is_secondary_administrator()) {
-            $trainers_group_id = FitnessHelper::getTrainersGroupId();
-            $query->where('bp.group_id = '.(int) $trainers_group_id);
-        }
-        
-        // 
-        $user = &JFactory::getUser();
-        
-        if(!FitnessHelper::is_primary_administrator() && !FitnessHelper::is_secondary_administrator() && FitnessHelper::is_trainer()) {
-            $query->where('(c.primary_trainer = ' . (int) $user->id . ' OR FIND_IN_SET(' . $user->id . ' , c.other_trainers) )');
-        }
-
-        
-        // Filter by published state
-        $published = $this->getState('filter.state');
-        if (is_numeric($published)) {
-            $query->where('a.state = '.(int) $published);
-        } else if ($published === '') {
-            $query->where('(a.state IN (0, 1))');
-        }
-
-    
-    
-        // Filter by goal category
-        $goal_category = $this->getState('filter.goal_category');
-        if (is_numeric($goal_category)) {
-            $query->where('gc.id = '.(int) $goal_category);
-        } 
-
-
-        // Filter by group
-        $group = $this->getState('filter.group');
-        if (is_numeric($group)) {
-            $query->where('g.group_id = '.(int) $group);
-        } 
-        
-        // Filter by business profile
-        $business_profile_id = $this->getState('filter.business_profile_id');
-        if (is_numeric($business_profile_id)) {
-            $query->where('c.business_profile_id = '.(int) $business_profile_id);
-        } 
-        
-        
-        // Filter by goal status
-
-        $goal_status = $this->getState('filter.goal_status');
-  
-        if ($goal_status) {
-            $query->where('a.status = ' . (int) $goal_status);
-        } 
-        
-        // Filter by created
-        $created = $this->getState('filter.created');
-        $created = $db->Quote('%' . $db->escape($created, true) . '%');
-        
-
-        if ($created) {
-            $query->where('a.created LIKE '.$created);
-        } 
-        
-        
-         // Filter by created
-        $modified = $this->getState('filter.modified');
-        $modified = $db->Quote('%' . $db->escape($modified, true) . '%');
-
-        if ($modified) {
-            $query->where('a.modified LIKE '.$modified);
-        } 
-        
-        
-
-        // Filter by search in title
-        $search = $this->getState('filter.search');
-        if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
-            } else {
-                $search = $db->Quote('%' . $db->escape($search, true) . '%');
-                $query->where('( a.user_id LIKE '.$search.'
-                    OR  gc.name LIKE '.$search.' 
-                    OR  u.username LIKE '.$search.' 
-                    OR  u.name LIKE '.$search.' 
-                             
-                 )');
-            }
-        }
-
-        
-		//Filtering deadline
-		$filter_deadline_from = $this->state->get("filter.deadline.from");
-		if ($filter_deadline_from) {
-			$query->where("a.deadline >= '".$db->escape($filter_deadline_from)."'");
-		}
-		$filter_deadline_to = $this->state->get("filter.deadline.to");
-		if ($filter_deadline_to) {
-			$query->where("a.deadline <= '".$db->escape($filter_deadline_to)."'");
-		}
-        
-
-		//Filtering start date
-		$filter_start_date_from = $this->state->get("filter.start_date.from");
-		if ($filter_start_date_from) {
-			$query->where("a.start_date >= '".$db->escape($filter_start_date_from)."'");
-		}
-		$filter_start_date_to = $this->state->get("filter.start_date.to");
-		if ($filter_deadline_to) {
-			$query->where("a.start_date <= '".$db->escape($filter_start_date_to)."'");
-		}
-
-
-        // Add the list ordering clause.
-        $orderCol = $this->state->get('list.ordering');
-        $orderDirn = $this->state->get('list.direction');
-        if ($orderCol && $orderDirn) {
-            $query->order($db->escape($orderCol . ' ' . $orderDirn));
-        }
-
-        return $query;
     }
 
     public function getItems() {
-        $items = parent::getItems();
-        
-        return $items;
     }
-    
-   
-    
-    
+
     
     private function sendEmail($recipient, $Subject, $body) {
         
@@ -815,4 +568,59 @@ class FitnessModelgoals extends JModelList {
     }
     
     
+    
+    //TRAINING PERIODIZATION
+    
+    public function training_periods() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+       
+        $model = json_decode(JRequest::getVar('model','','','',JREQUEST_ALLOWHTML));
+
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        
+        $table = '#__fitness_training_periodalization';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $data = new stdClass();
+                $mini_goal_id = JRequest::getVar('mini_goal_id'); 
+
+                $query = " SELECT a.*";
+                $query .= " FROM $table AS a";
+                $query .= " WHERE 1";
+                
+                if($mini_goal_id) {
+                    $query .= " AND a.mini_goal_id='$mini_goal_id'";
+                }
+                
+                $data = FitnessHelper::customQuery($query, 1);
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
 }

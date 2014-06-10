@@ -61,13 +61,18 @@
             </table>
         </td>
         <td>
-             <% if(item.state != '-2') { %>
+            <% if(app.options.statuses.PENDING_GOAL_STATUS.id != item.status) { %>
+                <a data-id="" style="cursor: pointer;" class="schedule_mini_goal" onclick="javascript:void(0)">[SCHEDULE]</a>
+                <br/><br/>
+            <% } %>
+            
+            <% if(item.state != '-2') { %>
                 <a title="View/Edit" style="cursor: pointer;" class="view_mini " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
             <% } else { %>
                 <a title="Restore" style="cursor: pointer;" class="restore_mini " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
             <% } %>
              
-             <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && item.state == '1') { %>
+            <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && item.state == '1') { %>
                 <br/><br/>
                 <a data-id="" style="cursor: pointer;" class="submit_mini_goal" onclick="javascript:void(0)">[FINALISE]</a>
             <% } %>

@@ -1420,3 +1420,14 @@ CREATE TABLE IF NOT EXISTS `#__fitness_assessments_photos` (
   KEY `item_id` (`item_id`),
   FOREIGN KEY (item_id) REFERENCES #__dc_mv_events(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE IF NOT EXISTS `#__fitness_training_periodalization` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `mini_goal_id` int(11) unsigned NOT NULL,
+  `period_focus` varchar(255) NOT NULL,
+  `comments` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `minigoal_id` (`mini_goal_id`),
+  FOREIGN KEY (mini_goal_id) REFERENCES #__fitness_mini_goals(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

@@ -497,6 +497,12 @@ class FitnessController extends JController
             $view -> assessment_photos(); 
         }
         
+        //TRAINING PERIODIZATION /
+        function training_periods() {
+            $view = $this -> getView('goals', 'json');
+            $view->setModel($this->getModel('goals'));
+            $view -> training_periods();
+	}
 
         
 

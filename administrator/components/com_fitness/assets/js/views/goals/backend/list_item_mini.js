@@ -27,7 +27,8 @@ define([
         
         events: {
             "click .submit_mini_goal" : "onClickSubmit",
-            "click .delete_mini_goal" : "onClickDelete"
+            "click .delete_mini_goal" : "onClickDelete",
+            "click .schedule_mini_goal" : "onClickSchedule",
         },
         
         onClickSubmit : function() {
@@ -55,6 +56,10 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        onClickSchedule : function() {
+            app.controller.navigate("!/schedule/" + this.model.get('id'), true);
         },
         
         close :function() {

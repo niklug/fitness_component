@@ -83,4 +83,9 @@ class FitnessViewGoals extends JView {
             $model = new FitnessModelgoals_periods();
             echo $model->populateGoals($data_encoded);
         }
+        
+        function training_periods() {
+            $model = $this -> getModel("goals");
+            echo json_encode($model->training_periods());
+        }
 }

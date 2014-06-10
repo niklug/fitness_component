@@ -14,6 +14,7 @@ define([
         'views/goals/backend/form_mini',
         'views/goals/backend/comments_block',
         'views/goals/backend/search_block',
+        'views/goals/backend/periodization/list',
         'jquery.flot',
         'jquery.flot.time',
         'jquery.validate',
@@ -34,7 +35,8 @@ define([
         Form_primary_view,
         Form_mini_view,
         Comments_block_view,
-        Search_block_view
+        Search_block_view,
+        Periodization_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -80,6 +82,7 @@ define([
             "!/list_view": "list_view", 
             "!/form_primary/:id": "form_primary",
             "!/form_mini/:id/:primary_goal_id": "form_mini",
+            "!/schedule/:id": "schedule",
         },
         
         back: function() {
@@ -302,9 +305,18 @@ define([
             $("#header_wrapper").empty();
         },
         
+        emptyAll : function() {
+            $("#graph_container, #main_container, #list_type, #header_wrapper").empty();
+        },
+        
         update_list : function() {
             app.models.request_params_primary.set({ uid : app.getUniqueId()});
         },
+        
+        schedule :function(id) {
+            this.emptyAll();
+            $("#main_container").html(new Periodization_view({mini_goal_id : id}).render().el);
+        }
 
 
     });
