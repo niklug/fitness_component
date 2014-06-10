@@ -59,7 +59,7 @@ define([
         },
         
         onClickSchedule : function() {
-            app.controller.navigate("!/schedule/" + this.model.get('id'), true);
+            app.controller.navigate("!/schedule/" + this.model.get('primary_goal_id') + '/' + this.model.get('id') , true);
         },
         
         close :function() {

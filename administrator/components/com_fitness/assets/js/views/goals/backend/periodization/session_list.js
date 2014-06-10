@@ -3,10 +3,10 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/goals/periodization/periods',
-        'models/goals/periodization/period',
-        'views/goals/backend/periodization/list_item',
-	'text!templates/goals/backend/periodization/list.html'
+        'collections/goals/periodization/sessions',
+        'models/goals/periodization/session',
+        'views/goals/backend/periodization/session_list_item',
+	'text!templates/goals/backend/periodization/session_list.html'
 ], function (
         $,
         _, 
@@ -41,7 +41,6 @@ define([
         
         events: {
             "click #new_period" : "onClickNewPeriod",
-            "click #back_goal" : "onClickBack",
         },
         
         onRender : function() {
@@ -82,10 +81,6 @@ define([
         onClickNewPeriod : function() {
             var model = new Period_model({ mini_goal_id : this.options.mini_goal_id});
             this.addItem(model);
-        },
-        
-        onClickBack : function() {
-            app.controller.navigate("!/form_mini/" + this.options.mini_goal_id + '/' + this.options.primary_goal_id , true);
         }
         
         

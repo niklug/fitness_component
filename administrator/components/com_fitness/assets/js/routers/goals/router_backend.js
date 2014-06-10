@@ -82,7 +82,7 @@ define([
             "!/list_view": "list_view", 
             "!/form_primary/:id": "form_primary",
             "!/form_mini/:id/:primary_goal_id": "form_mini",
-            "!/schedule/:id": "schedule",
+            "!/schedule/:id/:primary_goal_id": "schedule",
         },
         
         back: function() {
@@ -313,9 +313,9 @@ define([
             app.models.request_params_primary.set({ uid : app.getUniqueId()});
         },
         
-        schedule :function(id) {
+        schedule :function(primary_goal_id, mini_goal_id) {
             this.emptyAll();
-            $("#main_container").html(new Periodization_view({mini_goal_id : id}).render().el);
+            $("#main_container").html(new Periodization_view({mini_goal_id : mini_goal_id, primary_goal_id : primary_goal_id}).render().el);
         }
 
 

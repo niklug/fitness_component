@@ -1,0 +1,39 @@
+<div style="border: 1px dashed #CCCCCC;margin-top: 10px;">
+    <table width="100%" >
+        <tr>
+            <td width="80%">
+                <table width="100%">
+                    <tr>
+                        <td width="150">
+                            Period Focus
+                        </td>
+                        <td>
+                            <input style="width:100%;"  type="text" class="period_focus" value="<%= item.period_focus %>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Trainer Notes
+                        </td>
+                        <td>
+                            <textarea class="comments" style="width:100%;min-height:50px;"><%= item.comments %></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="vertical-align: top;">
+                <a  style="cursor: pointer;float:right;margin-right:10px;" class="delete_period" onclick="javascript:void(0)">[DELETE]</a>
+                <a  style="cursor: pointer;float:right;margin-right:10px;" class="save_period" onclick="javascript:void(0)">[SAVE]</a>
+            </td>
+        </tr>
+    </table>
+
+    <% if (item.id) { %>
+    <br/>
+    <div class="session_wrapper"></div>
+    <div style="width:100%;text-align: right;margin-top: 20px;">
+        <a style="cursor: pointer;" class="add_session" onclick="javascript:void(0)">[ADD SESSION]</a>
+    </div>
+    <% } %>
+    
+</div>
