@@ -1,39 +1,54 @@
-<div style="border: 1px dashed #CCCCCC;margin-top: 10px;">
-    <table width="100%" >
-        <tr>
-            <td width="80%">
-                <table width="100%">
-                    <tr>
-                        <td width="150">
-                            Period Focus
-                        </td>
-                        <td>
-                            <input style="width:100%;"  type="text" class="period_focus" value="<%= item.period_focus %>">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Trainer Notes
-                        </td>
-                        <td>
-                            <textarea class="comments" style="width:100%;min-height:50px;"><%= item.comments %></textarea>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td style="vertical-align: top;">
-                <a  style="cursor: pointer;float:right;margin-right:10px;" class="delete_period" onclick="javascript:void(0)">[DELETE]</a>
-                <a  style="cursor: pointer;float:right;margin-right:10px;" class="save_period" onclick="javascript:void(0)">[SAVE]</a>
-            </td>
-        </tr>
-    </table>
-
-    <% if (item.id) { %>
-    <br/>
-    <div class="session_wrapper"></div>
-    <div style="width:100%;text-align: right;margin-top: 20px;">
-        <a style="cursor: pointer;" class="add_session" onclick="javascript:void(0)">[ADD SESSION]</a>
-    </div>
+<td>
+    <% if(item.editable) { %>
+         <%
+        var start_date = '';
+        if(item.starttime) {
+            start_date = item.starttime.substring(0,10);
+        }
+        %>
+        <input style="width:75px;"  type="text" name="start_date" class="start_date required" size="6"  value="<%= start_date %>">
+    <% } else { %>
+        <%
+        var d1 = new Date(Date.parse(item.starttime));            
+        var start_date = moment(d1).format("ddd, D MMM  YYYY");      
+        %>
+        <%= start_date %>
     <% } %>
+</td>
+
+<td>
+    <% if(item.editable) { %>
+        <%
+        var start_time = '';
+        if(item.starttime) {
+            start_time = item.starttime.substring(10,16);
+        }
+        %>  
+        <input style="width:55px;"  size="5" type="text" name="start_time"  class="start_time required"  value="<%= start_time %>">
+    <% } else { %>
+        <%
+        var d1 = new Date(Date.parse(item.starttime));            
+        var start_time = moment(d1).format("HH:mm");      
+        %>
+        <%= start_time %>
+    <% } %>
+</td>
+
+<td class="appointment_select"></td>
+<td class="session_type_select"></td>
+<td class="session_focus_select"></td>
+<td class="location_select"></td>
+<td class="pr_temp_select"></td>
+<td>
     
-</div>
+    
+    
+    
+    <% if(item.editable) { %>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" class="delete_session" onclick="javascript:void(0)">[DELETE]</a>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" class="save_session" onclick="javascript:void(0)">[SAVE]</a>
+    <% } else { %>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" class="schedule_session" onclick="javascript:void(0)">[SCHEDULE]</a>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" class="edit_session" onclick="javascript:void(0)">[EDIT]</a>
+    <% } %>
+</td>

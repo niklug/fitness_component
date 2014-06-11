@@ -12,8 +12,8 @@ define([
         _, 
         Backbone, 
         app,
-        Periods_collection,
-        Period_model,
+        Sessions_collection,
+        Session_model,
         List_item_view,
         template
     ) {
@@ -32,7 +32,7 @@ define([
             data.app = app;
             $(this.el).html(this.template(data));
 
-            this.container_el = this.$el.find("#items_container");
+            this.container_el = this.$el.find(".sessions_container");
             
             this.onRender();
 
@@ -40,7 +40,7 @@ define([
         },
         
         events: {
-            "click #new_period" : "onClickNewPeriod",
+            "click .add_session" : "onClickNewSession",
         },
         
         onRender : function() {
@@ -52,11 +52,11 @@ define([
         },
         
         loadItems :function() {
-            var mini_goal_id = this.options.mini_goal_id;
-            app.collections.periods = new Periods_collection();
+            var period_id = this.model.get('id');
+            this.collection = new Sessions_collection();
             var self = this;      
-            app.collections.periods.fetch({
-                data : {mini_goal_id : mini_goal_id},
+            this.collection.fetch({
+                data : {period_id : period_id},
                 success : function (collection, response) {
                     self.populateItems();
                 },
@@ -68,19 +68,20 @@ define([
         
         populateItems : function() {
             var self = this;
-            _.each(app.collections.periods.models, function(model) {
-                self.addItem(model);
+            _.each(this.collection .models, function(model) {
+                self.addItem(model, false);
             });
         },
         
         
-        addItem : function(model) {
-            this.container_el.append(new List_item_view({collection : app.collections.periods, model : model}).render().el); 
+        addItem : function(model, editable) {
+            this.container_el.append(new List_item_view({collection : this.collection, model : model, editable : editable}).render().el); 
         },
         
-        onClickNewPeriod : function() {
-            var model = new Period_model({ mini_goal_id : this.options.mini_goal_id});
-            this.addItem(model);
+        onClickNewSession : function() {
+            var period_id = this.model.get('id');
+            var model = new Session_model({ period_id : period_id});
+            this.addItem(model, true);
         }
         
         

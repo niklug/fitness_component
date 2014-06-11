@@ -148,8 +148,7 @@ define([
                 model_field : 'title',
                 element_disabled :  "disabled"
             }).render();
-            
-            
+
         },
         
         onChangeAppointment : function(event) {

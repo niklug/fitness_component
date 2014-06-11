@@ -59,6 +59,7 @@ class FitnessViewGoals extends JView
         $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
         
         $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
+        $document->addStyleSheet( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
         $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
 	
         $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'underscore-min.js');

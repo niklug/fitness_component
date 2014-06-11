@@ -214,44 +214,9 @@ define([
         },
         
         setEndInterval : function(id) {
-            var endInterval;
-            switch(id) {
-                case '1' :
-                   endInterval = 45;
-                   break;
-                case '2' :
-                   endInterval = 30;
-                   break;
-                case '3' :
-                   endInterval = 45;
-                   break;
-                default :
-                   endInterval = 60; 
-            }
-            this.set_etparttime(endInterval);
-        },
-
-        set_etparttime : function(minutes) {
             var start_time = this.$el.find("#start_time").val();
-            if(!start_time) return;
-            var start_time = start_time.split(":");
-            var date = new Date();
-            date.setHours(start_time[0]);
-            date.setMinutes(start_time[1]);
-            var newdate = this.addMinutes(date, minutes);
-            var hours = newdate.getHours();
-            var minutes = newdate.getMinutes();
-            $("#finish_time").val(this.pad(hours) + ':' + this.pad(minutes));
-        },
-
-        addMinutes : function(inDate, inMinutes) {
-            var newdate = new Date();
-            newdate.setTime(inDate.getTime() + inMinutes * 60000);
-            return newdate;
-        },
-
-        pad : function (d) {
-            return (d < 10) ? '0' + d.toString() : d.toString();
+            var finish_time = $.fitness_helper.setAppointmentEndtime(id, start_time);
+            this.$el.find("#finish_time").val(finish_time);
         },
         
         onChangeStarttime : function() {

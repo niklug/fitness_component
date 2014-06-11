@@ -623,4 +623,61 @@ class FitnessModelgoals extends JModelList {
 
         return $model;
     }
+    
+    
+    public function training_sessions() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+       
+        $model = json_decode(JRequest::getVar('model','','','',JREQUEST_ALLOWHTML));
+
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        
+        $table = '#__fitness_training_sessions';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $data = new stdClass();
+                $period_id = JRequest::getVar('period_id'); 
+
+                $query = " SELECT a.*";
+                $query .= " FROM $table AS a";
+                $query .= " WHERE 1";
+                
+                if($period_id) {
+                    $query .= " AND a.period_id='$period_id'";
+                }
+                
+                $data = FitnessHelper::customQuery($query, 1);
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
+    
+    
+    
 }

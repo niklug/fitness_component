@@ -21,7 +21,7 @@ $business_profile_id = $helper->getBusinessProfileId($user_id);
 
 $business_profile_id = $business_profile_id['data'];
 ?>
-<div style="max-width:1128px;">
+<div style="width:100%;">
     <div id="graph_container" >  </div>
 
     <div class="clr"></div>
@@ -58,6 +58,11 @@ $business_profile_id = $business_profile_id['data'];
         'minigoals_db_table' : '#__fitness_mini_goals',
         'goals_comments_db_table' : '#__fitness_goal_comments',
         'minigoals_comments_db_table' : '#__fitness_mini_goal_comments',
+        'db_table_appointments': '#__fitness_categories',
+        'db_table_locations': '#__fitness_locations',
+        'db_table_session_types': '#__fitness_session_type',
+        'db_table_session_focuses': '#__fitness_session_focus',
+        'db_table_program_templates': '#__fitness_programs_templates',
         
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
         'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',

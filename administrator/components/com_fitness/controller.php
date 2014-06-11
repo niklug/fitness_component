@@ -503,6 +503,12 @@ class FitnessController extends JController
             $view->setModel($this->getModel('goals'));
             $view -> training_periods();
 	}
+        
+        function training_sessions() {
+            $view = $this -> getView('goals', 'json');
+            $view->setModel($this->getModel('goals'));
+            $view -> training_sessions();
+	}
 
         
 

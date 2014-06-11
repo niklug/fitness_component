@@ -3,12 +3,14 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/goals/backend/periodization/session_list',
 	'text!templates/goals/backend/periodization/list_item.html'
 ], function (
         $,
         _,
         Backbone,
         app,
+        Session_list_view,
         template
     ) {
 
@@ -22,8 +24,8 @@ define([
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);
-            
-           return this;
+            this.onRender();
+            return this;
         },
         
         events: {
@@ -34,8 +36,12 @@ define([
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
-     
+                self.loadSessionList();
             });
+        },
+        
+        loadSessionList : function() {
+            $(this.el).find(".session_wrapper").html(new Session_list_view({model : this.model}).render().el);
         },
         
         onClickDelete : function(event) {

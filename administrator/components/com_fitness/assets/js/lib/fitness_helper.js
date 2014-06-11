@@ -477,6 +477,49 @@
                         element.disable(disabled);
                     }
                 },
+                
+                
+                
+                setAppointmentEndtime : function(appointment_type_id, start_time) {
+                    var endInterval;
+                    switch(appointment_type_id) {
+                        case '1' :
+                           endInterval = 45;
+                           break;
+                        case '2' :
+                           endInterval = 30;
+                           break;
+                        case '3' :
+                           endInterval = 45;
+                           break;
+                        default :
+                           endInterval = 60; 
+                    }
+                    return this.set_etparttime(endInterval,start_time);
+                },
+
+                set_etparttime : function(minutes, start_time) {
+                    if(!start_time) return;
+                    var start_time = start_time.split(":");
+                    var date = new Date();
+                    date.setHours(start_time[0]);
+                    date.setMinutes(start_time[1]);
+                    var newdate = this.addMinutes(date, minutes);
+                    var hours = newdate.getHours();
+                    var minutes = newdate.getMinutes();
+                    var finish_time = this.pad(hours) + ':' + this.pad(minutes);
+                    return finish_time;
+                },
+
+                addMinutes : function(inDate, inMinutes) {
+                    var newdate = new Date();
+                    newdate.setTime(inDate.getTime() + inMinutes * 60000);
+                    return newdate;
+                },
+
+                pad : function (d) {
+                    return (d < 10) ? '0' + d.toString() : d.toString();
+                },
             });
 
             return new Helper_model(options);
