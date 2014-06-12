@@ -93,4 +93,9 @@ class FitnessViewGoals extends JView {
             $model = $this -> getModel("goals");
             echo json_encode($model->training_sessions());
         }
+        
+        function scheduleSession() {
+            $model = $this -> getModel("goals");
+            echo json_encode($model->scheduleSession());
+        }
 }

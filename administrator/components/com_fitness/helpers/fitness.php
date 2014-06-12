@@ -2007,8 +2007,22 @@ class FitnessHelper extends FitnessFactory
                 }
             }
             //
+            
+            $sort_by = JRequest::getVar('sort_by');
+            
+            if($sort_by) {
+                $query .= " ORDER BY $sort_by ";
+            } else {
+                $query .= " ORDER BY name ";
+            }
 
-            $query .= " ORDER BY name ASC";
+            $order = JRequest::getVar('order');
+            
+            if($order) {
+                $query .= " $order ";
+            } else {
+                $query .= "  ASC";
+            }
 
             $data = FitnessHelper::customQuery($query, 1);
             return $data;

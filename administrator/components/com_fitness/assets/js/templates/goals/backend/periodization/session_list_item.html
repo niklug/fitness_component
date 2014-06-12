@@ -34,11 +34,21 @@
     <% } %>
 </td>
 
-<td class="appointment_select"></td>
-<td class="session_type_select"></td>
-<td class="session_focus_select"></td>
-<td class="location_select"></td>
-<td class="pr_temp_select"></td>
+<td class="appointment_select">
+    <%= item.appointment_name %>
+</td>
+<td class="session_type_select">
+    <%= item.session_type_name %>
+</td>
+<td class="session_focus_select">
+    <%= item.session_focus_name %>
+</td>
+<td class="location_select">
+    <%= item.location_name %>
+</td>
+<td class="pr_temp_select">
+    <%= item.pr_temp_name || '-' %>
+</td>
 <td>
     
     

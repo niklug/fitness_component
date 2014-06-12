@@ -646,13 +646,26 @@ class FitnessModelgoals extends JModelList {
                 $data = new stdClass();
                 $period_id = JRequest::getVar('period_id'); 
 
-                $query = " SELECT a.*";
+                $query = " SELECT a.*, ";
+                
+                $query .= " (SELECT name FROM #__fitness_categories WHERE id=a.appointment_type_id) appointment_name,";
+                
+                $query .= " (SELECT name FROM #__fitness_session_type WHERE id=a.session_type) session_type_name,";
+                
+                $query .= " (SELECT name FROM #__fitness_session_focus WHERE id=a.session_focus) session_focus_name,";
+                
+                $query .= " (SELECT name FROM #__fitness_locations WHERE id=a.location) location_name,";
+                
+                $query .= " (SELECT name FROM #__fitness_programs_templates WHERE id=a.pr_temp_id) pr_temp_name";
+                
                 $query .= " FROM $table AS a";
                 $query .= " WHERE 1";
                 
                 if($period_id) {
                     $query .= " AND a.period_id='$period_id'";
                 }
+                
+                $query .= " ORDER BY a.starttime ASC";
                 
                 $data = FitnessHelper::customQuery($query, 1);
                 return $data;
@@ -678,6 +691,109 @@ class FitnessModelgoals extends JModelList {
         return $model;
     }
     
+    public function scheduleSession() {
+        $helper = new FitnessHelper();
+        $db = JFactory::getDbo();
+        $data_encoded = JRequest::getVar('data_encoded');
+        $session = json_decode($data_encoded);
+        $ret['success'] = 1;
+        
+        
+        //get trainer_id
+        try {
+            $trainer = $helper->getPrimaryTrainer($session->client_id);
+        } catch (Exception $exc) {
+            $ret['success'] = 0;
+            $ret['message'] = $exc->getMessage();
+            return array( 'status' => $ret);
+        }
+
+        //get client's business profile
+        $business_profile = $helper->getBusinessProfileId($session->client_id);
+        if(!$business_profile['success']) {
+            $ret['success'] = 0;
+            $ret['message'] = $business_profile['message'];
+            return array( 'status' => $ret);
+        }
+        $business_profile_id = $business_profile['data'];
+        
+        //insert Event
+        $session->id = null;
+        $session->description = '';
+        $session->comments = '';
+        $session->trainer_id = $trainer->id;
+        $session->business_profile_id = $business_profile_id;
+        $session->title = $session->appointment_type_id;
+        $session->published = '1';
+        $insert = $helper->insertUpdateObj($session, '#__dc_mv_events');
+        if (!$insert) {
+            $ret['success'] = 0;
+            $ret['message'] = $db->stderr();
+            return array( 'status' => $ret);
+        }
+        $inserted_event_id = $db->insertid();
+        
+        //insert client
+        $client  = new stdClass();
+        $client->id = null;
+        $client->client_id = $session->client_id;
+        $client->event_id = $inserted_event_id;
+        $client->status = '1';
+        $insert = $db->insertObject('#__fitness_appointment_clients', $client, 'id');
+        if (!$insert) {
+            $status['success'] = 1;
+            $status['message'] = $db->stderr();
+        }
+        
+        // import Program template exercises
+        $pr_temp_id = $session->pr_temp_id;
+        if($pr_temp_id) {
+            $query = "SELECT a.* FROM #__fitness_pr_temp_exercises AS a  WHERE a.item_id='$pr_temp_id'";
+            
+             try {
+                $exercises =  FitnessHelper::customQuery($query, 1);
+            } catch (Exception $exc) {
+                $ret['success'] = 0;
+                $ret['message'] = $exc->getMessage();
+                return array( 'status' => $ret);
+            }
+
+            foreach ($exercises as $exercise) {
+                $exercise->id = null;
+                $exercise->item_id = $inserted_event_id;
+
+                $insert = $this->insertExercise($exercise, null, $exercise->item_id, '#__fitness_events_exercises');
+
+                if (!$insert) {
+                    $status['success'] = 0;
+                    $status['message'] = $db->stderr();
+                    return array( 'status' => $status);
+                }
+            }
+        }
+        return array('status' => $ret, 'data' => print_r($session, true));
+    }
     
+    public function insertExercise($model, $id, $item_id, $table) {
+        $helper = new FitnessHelper();
+        
+        $query = "SELECT max(a.order) FROM $table AS a WHERE 1";
+                
+        if($id) {
+            $query .= " AND  a.id='$id'";
+        }
+
+        if($item_id) {
+            $query .= " AND  a.item_id='$item_id'";
+        }
+
+        $order = FitnessHelper::customQuery($query, 0);
+
+        $model->order = (int)$order + 1;
+
+        $id = $helper->insertUpdateObj($model, $table);
+        
+        return $id;
+    }
     
 }
