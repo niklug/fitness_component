@@ -741,8 +741,9 @@ class FitnessModelgoals extends JModelList {
         $client->status = '1';
         $insert = $db->insertObject('#__fitness_appointment_clients', $client, 'id');
         if (!$insert) {
-            $status['success'] = 1;
-            $status['message'] = $db->stderr();
+            $ret['success'] = 1;
+            $ret['message'] = $db->stderr();
+            return array( 'status' => $ret);
         }
         
         // import Program template exercises
@@ -794,6 +795,76 @@ class FitnessModelgoals extends JModelList {
         $id = $helper->insertUpdateObj($model, $table);
         
         return $id;
+    }
+    
+    public function copySessionPeriod() {
+        $helper = new FitnessHelper();
+        $db = JFactory::getDbo();
+        $data_encoded = JRequest::getVar('data_encoded');
+        $data= json_decode($data_encoded);
+        $ret['success'] = 1;
+        
+        $period_id = $data->id;
+        $advance_period = $data->advance_period;
+        
+        //copy period
+        $query = "SELECT * FROM #__fitness_training_periodalization WHERE id='$period_id'";
+        
+        try {
+            $period =  FitnessHelper::customQuery($query, 2);
+        } catch (Exception $exc) {
+            $ret['success'] = 0;
+            $ret['message'] = $exc->getMessage();
+            return array( 'status' => $ret);
+        }
+        
+        $period->id = null;
+        
+        $insert = $db->insertObject('#__fitness_training_periodalization', $period, 'id');
+        if (!$insert) {
+            $ret['success'] = 1;
+            $ret['message'] = $db->stderr();
+            return array( 'status' => $ret);
+        }
+        
+        //copy sessions
+        $new_period_id = $db->insertid();
+        $query = "SELECT a.* FROM #__fitness_training_sessions AS a  WHERE a.period_id='$period_id'";
+
+        try {
+            $sessions =  FitnessHelper::customQuery($query, 1);
+        } catch (Exception $exc) {
+            $ret['success'] = 0;
+            $ret['message'] = $exc->getMessage();
+            return array( 'status' => $ret);
+        }
+
+        foreach ($sessions as $session) {
+            $session->id = null;
+            $session->period_id = $new_period_id;
+            
+            if($advance_period) {
+                $start_date = new JDate($session->starttime);
+                $unix_start_date = $start_date->toUnix() + 24*60*60*$advance_period;
+                $advance_start_date = JFactory::getDate($unix_start_date);  
+                $session->starttime = $advance_start_date->format("Y-m-d H:i:s");
+                
+                $end_date = new JDate($session->endtime);
+                $unix_end_date = $end_date->toUnix() + 24*60*60*$advance_period;
+                $advance_end_date = JFactory::getDate($unix_end_date);  
+                $session->endtime = $advance_end_date->format("Y-m-d H:i:s");
+            }
+
+            $insert = $db->insertObject('#__fitness_training_sessions', $session, 'id');
+
+            if (!$insert) {
+                $status['success'] = 0;
+                $status['message'] = $db->stderr();
+                return array( 'status' => $status);
+            }
+        }
+        
+        return array('status' => $ret, 'data' => print_r($session, true));
     }
     
 }

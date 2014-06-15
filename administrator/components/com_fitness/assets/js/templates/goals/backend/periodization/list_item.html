@@ -1,35 +1,58 @@
 <div style="border: 1px dashed #CCCCCC;margin-top: 10px;">
-    <table width="100%" >
-        <tr>
-            <td width="80%">
-                <table width="100%">
-                    <tr>
-                        <td width="150">
-                            Period Focus
-                        </td>
-                        <td>
-                            <input style="width:100%;"  type="text" class="period_focus" value="<%= item.period_focus %>">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Trainer Notes
-                        </td>
-                        <td>
-                            <textarea class="comments" style="width:100%;min-height:50px;"><%= item.comments %></textarea>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td style="vertical-align: top;">
-                <a  style="cursor: pointer;float:right;margin-right:10px;" class="delete_period" onclick="javascript:void(0)">[DELETE]</a>
-                <a  style="cursor: pointer;float:right;margin-right:10px;" class="save_period" onclick="javascript:void(0)">[SAVE]</a>
-            </td>
-        </tr>
-    </table>
+    <div style="background-color: #dadada;">
+        <table width="100%">
+            <tr>
+                <td width="80%">
+                    <table width="100%">
+                        <tr>
+                            <td width="150">
+                                Period Focus
+                            </td>
+                            <td>
+                                <input style="width:100%;"  type="text" class="period_focus" value="<%= item.period_focus %>">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Trainer Notes
+                            </td>
+                            <td>
+                                <textarea class="comments" style="width:100%;min-height:50px;"><%= item.comments %></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="vertical-align: top;">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <a  style="cursor: pointer;" class="save_period" onclick="javascript:void(0)">[SAVE]</a>
+                            </td>
+                            <td>
+                                <a  style="cursor: pointer;" class="delete_period" onclick="javascript:void(0)">[DELETE]</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select class="advance_period">
+                                    <option value="0">-None-</option>
+                                    <option value="7">Advance All Dates by 7 Days</option>
+                                    <option value="14">Advance All Dates by 14 Days</option>
+                                    <option value="21">Advance All Dates by 21 Days</option>
+                                    <option value="28">Advance All Dates by 28 Days</option>
+                                </select>
+                            </td>
+                            <td>
+                                <a  style="cursor: pointer;" class="copy_period" onclick="javascript:void(0)">[COPY]</a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <% if (item.id) { %>
-    <br/>
     <div class="session_wrapper"></div>
     <% } %>
     

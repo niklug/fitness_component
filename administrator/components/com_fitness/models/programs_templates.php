@@ -110,6 +110,7 @@ class FitnessModelprograms_templates extends JModelList {
                 
 
                 $data->business_profile_id = JRequest::getVar('business_profile_id'); 
+                $data->client_id = JRequest::getVar('client_id');
                 $data->current_page = JRequest::getVar('current_page'); 
 
                 $data = $this->getProgramTemplate($table, $data);
@@ -221,7 +222,7 @@ class FitnessModelprograms_templates extends JModelList {
             //9
             //
 
-            //search by client name
+            // 10 search by client name
             if (!empty($data->client_name)) {
                 $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
 
@@ -231,9 +232,14 @@ class FitnessModelprograms_templates extends JModelList {
                     $query .= " AND a.id IN (SELECT  DISTINCT item_id FROM #__fitness_pr_temp_clients WHERE client_id IN ($client_ids))";
                 }
             }
-            //filter by business profile
+            // 11 filter by business profile
             if (!empty($data->business_profile_id)) {
                 $query .= " AND a.business_profile_id IN ($data->business_profile_id)";
+            }
+            
+            //12
+            if ($data->client_id) {
+                $query .= " AND a.id IN (SELECT item_id  FROM #__fitness_pr_temp_clients WHERE client_id='$data->client_id' )";
             }
 
 
@@ -300,7 +306,7 @@ class FitnessModelprograms_templates extends JModelList {
         }
         //9
 
-        ////search by client name
+        //// 10 search by client name
             if (!empty($data->client_name)) {
                 $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
 
@@ -311,9 +317,14 @@ class FitnessModelprograms_templates extends JModelList {
                 }
             }
             
-        //filter by business profile
+        // 11 filter by business profile
         if (!empty($data->business_profile_id)) {
             $query .= " AND a.business_profile_id IN ($data->business_profile_id)";
+        }
+        
+        //12
+        if ($data->client_id) {
+            $query .= " AND a.id IN (SELECT item_id  FROM #__fitness_pr_temp_clients WHERE client_id='$data->client_id' )";
         }
 
         $query_type = 1;

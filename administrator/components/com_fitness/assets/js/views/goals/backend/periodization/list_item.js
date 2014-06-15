@@ -31,6 +31,7 @@ define([
         events: {
             "click .save_period" : "onClickSave",
             "click .delete_period" : "onClickDelete",
+            "click .copy_period" : "onClickCopy",
         },
         
         onRender : function() {
@@ -107,6 +108,22 @@ define([
                 });
             }
         },
+        
+        onClickCopy : function() {
+            var id = this.model.get('id');
+            var advance_period = $(this.el).find(".advance_period").val();
+            var data = {}
+            data.id = id;
+            data.advance_period = advance_period;
+            var url = app.options.ajax_call_url;
+            var view = 'goals';
+            var task = 'copySessionPeriod';
+            var table = '';
+            var self = this;
+            $.AjaxCall(data, url, view, task, table, function(output){
+                self.collection.reset();
+            });
+         },
         
         close : function() {
             $(this.el).unbind();

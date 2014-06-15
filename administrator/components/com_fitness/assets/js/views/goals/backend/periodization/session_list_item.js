@@ -4,6 +4,7 @@ define([
 	'backbone',
         'app',
         'collections/programs/select_filter',
+        'collections/programs_templates/items',
         'views/programs/select_element',
 	'text!templates/goals/backend/periodization/session_list_item.html',
         'jquery.timepicker'
@@ -13,6 +14,7 @@ define([
         Backbone,
         app,
         Select_filter_collection,
+        Pr_temp_collection,
         Select_element_view,
         template
     ) {
@@ -72,16 +74,12 @@ define([
         },
         
         loadAppointment : function() {
-            if(app.collections.appointments) {
-                this.populateAppointment();
-                return;
-            } 
             app.collections.appointments = new Select_filter_collection();
             var self = this;
             app.collections.appointments.fetch({
                 data : {table : app.options.db_table_appointments},
                 success : function (collection, response) {
-                    self.populateAppointment();
+                    self.populateAppointment(collection);
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -89,13 +87,13 @@ define([
             });
         },
         
-        populateAppointment : function() {
+        populateAppointment : function(collection) {
             var appointments_collection = new Backbone.Collection;
             appointments_collection.add([
-                app.collections.appointments.get(1),
-                app.collections.appointments.get(2),
-                app.collections.appointments.get(3),
-                app.collections.appointments.get(4),
+                collection.get(1),
+                collection.get(2),
+                collection.get(3),
+                collection.get(4),
             ]);
             new Select_element_view({
                 model : this.model,
@@ -110,16 +108,12 @@ define([
         },
         
         loadSessionType : function(id) {
-            if(app.collections.session_types) {
-                this.populateSessionType(id);
-                return;
-            } 
             app.collections.session_types = new Select_filter_collection();
             var self = this;
             app.collections.session_types.fetch({
                 data : {table : app.options.db_table_session_types},
                 success : function (collection, response) {
-                    self.populateSessionType(id);
+                    self.populateSessionType(id, collection);
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -127,9 +121,9 @@ define([
             });
         },
         
-        populateSessionType : function(id) {
+        populateSessionType : function(id, collection) {
             var session_type_collection = new Backbone.Collection;
-            session_type_collection.add(app.collections.session_types.where({category_id : id}));
+            session_type_collection.add(collection.where({category_id : id}));
             new Select_element_view({
                 model : this.model,
                 el : $(this.el).find(".session_type_select"),
@@ -143,16 +137,12 @@ define([
         },
         
         loadSessionFocus : function(id) {
-            if(app.collections.session_focuses) {
-                this.populateSessionFocus(id);
-                return;
-            } 
             app.collections.session_focuses = new Select_filter_collection();
             var self = this;
             app.collections.session_focuses.fetch({
                 data : {table : app.options.db_table_session_focuses},
                 success : function (collection, response) {
-                    self.populateSessionFocus(id);
+                    self.populateSessionFocus(id, collection);
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -160,9 +150,9 @@ define([
             });
         },
         
-        populateSessionFocus : function(id) {
+        populateSessionFocus : function(id, collection) {
             var session_focus_collection = new Backbone.Collection;
-            session_focus_collection.add(app.collections.session_focuses.where({session_type_id : id}));
+            session_focus_collection.add(collection.where({session_type_id : id}));
             new Select_element_view({
                 model : this.model,
                 el : $(this.el).find(".session_focus_select"),
@@ -176,16 +166,12 @@ define([
         },
         
         loadLocations : function() {
-            if(app.collections.locations) {
-                this.populateLocations();
-                return;
-            } 
             app.collections.locations = new Select_filter_collection();
             var self = this;
             app.collections.locations.fetch({
                 data : {table : app.options.db_table_locations, by_business_profile : 1},
                 success : function (collection, response) {
-                    self.populateLocations();
+                    self.populateLocations(collection);
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -193,11 +179,11 @@ define([
             });
         },
         
-        populateLocations : function() {
+        populateLocations : function(collection) {
             new Select_element_view({
                 model : this.model,
                 el : $(this.el).find(".location_select"),
-                collection : app.collections.locations,
+                collection : collection,
                 first_option_title : '-Select-',
                 class_name : 'location',
                 id_name : '',
@@ -207,16 +193,13 @@ define([
         },
         
         loadProgramTemplates : function() {
-            if(app.collections.program_templates) {
-                this.populateProgramTemplates();
-                return;
-            } 
-            app.collections.program_templates = new Select_filter_collection();
+            app.collections.program_templates = new Pr_temp_collection();
             var self = this;
             app.collections.program_templates.fetch({
-                data : {table : app.options.db_table_program_templates, by_business_profile : 1, sort_by : 'created', order : 'DESC'},
+                data : {table : app.options.db_table_program_templates, client_id : app.options.client_id, sort_by : 'created', order_dirrection : 'DESC'},
                 success : function (collection, response) {
-                    self.populateProgramTemplates();
+                    //console.log(collection.toJSON());
+                    self.populateProgramTemplates(collection);
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -224,11 +207,11 @@ define([
             });
         },
         
-        populateProgramTemplates : function() {
+        populateProgramTemplates : function(collection) {
             new Select_element_view({
                 model : this.model,
                 el : $(this.el).find(".pr_temp_select"),
-                collection : app.collections.program_templates,
+                collection : collection,
                 first_option_title : '-None-',
                 class_name : 'pr_temp',
                 id_name : '',
@@ -393,15 +376,7 @@ define([
         
         onClickSchedule : function() {
             this.model.set({client_id : app.options.client_id, owner : app.options.user_id});
-            var data = this.model.toJSON()
-            var url = app.options.ajax_call_url;
-            var view = 'goals';
-            var task = 'scheduleSession';
-            var table = '';
-            console.log(data);
-            $.AjaxCall(data, url, view, task, table, function(output){
-                console.log(output);
-            });
+            app.controller.schedule_session(this.model);
         }
         
     });

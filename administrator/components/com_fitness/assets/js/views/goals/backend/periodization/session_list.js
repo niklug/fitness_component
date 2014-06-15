@@ -41,6 +41,9 @@ define([
         
         events: {
             "click .add_session" : "onClickNewSession",
+            "click .schedule_all" : "onClickScheduleAll",
+            "click .edit_all" : "onClickEditAll",
+            "click .save_all" : "onClickSaveAll",
         },
         
         onRender : function() {
@@ -68,20 +71,46 @@ define([
         
         populateItems : function() {
             var self = this;
-            _.each(this.collection .models, function(model) {
+            _.each(this.collection.models, function(model) {
                 self.addItem(model, false);
             });
         },
         
         
         addItem : function(model, editable) {
-            this.container_el.append(new List_item_view({collection : this.collection, model : model, editable : editable}).render().el); 
+            var view = new List_item_view({collection : this.collection, model : model, editable : editable});
+            app.views[view.cid] = view;
+            this.container_el.append(view.render().el); 
         },
         
         onClickNewSession : function() {
             var period_id = this.model.get('id');
             var model = new Session_model({ period_id : period_id});
             this.addItem(model, true);
+        },
+        
+        onClickScheduleAll : function() {
+            _.each(this.collection.models, function(model) {
+                app.controller.schedule_session(model);
+            });
+        },
+        
+        onClickEditAll : function() {
+            this.container_el.empty();
+            var self = this;
+            _.each(this.collection.models, function(model) {
+                self.addItem(model, true);
+            });
+        },
+        
+        onClickSaveAll : function() {
+            var self = this;
+            _.each(app.views, function(view) {
+                var editable = view.editable;
+                if(editable) {
+                    view.onClickSave();
+                }
+            });
         }
         
         

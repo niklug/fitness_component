@@ -21,7 +21,8 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
-
+            app.collections.periods = new Periods_collection();
+            app.collections.periods.bind("reset", this.onReset, this);
         },
         
         template:_.template(template),
@@ -54,7 +55,6 @@ define([
         
         loadItems :function() {
             var mini_goal_id = this.options.mini_goal_id;
-            app.collections.periods = new Periods_collection();
             var self = this;      
             app.collections.periods.fetch({
                 data : {mini_goal_id : mini_goal_id},
@@ -86,7 +86,12 @@ define([
         
         onClickBack : function() {
             app.controller.navigate("!/form_mini/" + this.options.mini_goal_id + '/' + this.options.primary_goal_id , true);
-        }
+        },
+        
+        onReset : function() {
+            this.container_el.empty();
+            this.render();
+        },
         
         
     });

@@ -316,6 +316,19 @@ define([
         schedule :function(primary_goal_id, mini_goal_id) {
             this.emptyAll();
             $("#main_container").html(new Periodization_view({mini_goal_id : mini_goal_id, primary_goal_id : primary_goal_id}).render().el);
+        },
+        
+        schedule_session : function(model) {
+            model.set({client_id : app.options.client_id, owner : app.options.user_id});
+            var data = model.toJSON();
+            var url = app.options.ajax_call_url;
+            var view = 'goals';
+            var task = 'scheduleSession';
+            var table = '';
+            //console.log(data);
+            $.AjaxCall(data, url, view, task, table, function(output){
+                console.log(output);
+            });
         }
 
 
