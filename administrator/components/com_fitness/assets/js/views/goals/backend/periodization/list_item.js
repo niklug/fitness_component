@@ -32,6 +32,10 @@ define([
             "click .save_period" : "onClickSave",
             "click .delete_period" : "onClickDelete",
             "click .copy_period" : "onClickCopy",
+            
+            "click .send_to_trainer" : "onClickSendToTrainer",
+            "click .send_to_client" : "onClickSendToClient",
+            "click .open_pdf" : "onClickOpenPdf",
         },
         
         onRender : function() {
@@ -123,7 +127,40 @@ define([
             $.AjaxCall(data, url, view, task, table, function(output){
                 self.collection.reset();
             });
-         },
+        },
+
+        onClickSendToTrainer : function() {
+            var id = this.model.get('id');
+            var client_id = app.options.client_id;
+            this.sendEmail(id, 'to_trainer');
+        },
+
+        onClickSendToClient : function() {
+            var id = this.model.get('id');
+            this.sendEmail(id, 'to_client');
+        },
+        
+        onClickOpenPdf : function() {
+            var id = this.model.get('id');
+            var client_id = app.options.client_id;
+            var htmlPage = app.options.base_url + 'index.php?option=com_multicalendar&view=pdf&tpml=component&layout=email_pdf_period&id=' + id + '&client_id=' + client_id;
+            $.fitness_helper.printPage(htmlPage);
+        },
+        
+        sendEmail : function(id, sendTo) {
+            var data = {};
+            data.url = app.options.ajax_call_url;
+            data.view = '';
+            data.task = 'ajax_email';
+            data.table = '';
+
+            data.id =  id;
+            data.client_id =  app.options.client_id;
+            data.view = 'Period';
+            data.method = 'PeriodOverview';
+            data.send_to = sendTo;
+            $.fitness_helper.sendEmail(data);
+        },
         
         close : function() {
             $(this.el).unbind();

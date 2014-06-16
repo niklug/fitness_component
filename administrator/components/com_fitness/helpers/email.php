@@ -51,6 +51,10 @@ class FitnessEmail extends FitnessHelper
             case 'NutritionDatabase':
                 return new NutritionDatabaseEmail();
                 break;
+            
+            case 'Period':
+                return new PeriodEmail();
+                break;
 
             case 'Comment':
 
@@ -1872,5 +1876,54 @@ class CommentProgramTemplateEmail extends FitnessEmail {
      
         $this->recipients_ids = $ids;
     }
+    
 
+}
+
+
+class PeriodEmail extends FitnessEmail {
+    
+    protected function setParams($data) {
+        $this->data = $data;
+        $id = $data->id;
+        
+        if (!$id) {
+            throw new Exception('Error: no Nutrition Recipe id');
+        }
+
+        switch ($data->method) {
+            case 'PeriodOverview':
+                $subject = 'TRAINING PERIOD OVERVIEW';
+                $layout = 'email_pdf_period';
+                break;
+ 
+            default:
+                break;
+        }
+        
+        $this->subject = $subject;
+
+        $this->url = JURI::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $layout . '&tpml=component&id=' . $id . '&client_id=' . $this->data->client_id;
+    }
+    
+
+    protected function get_recipients_ids() {
+        if($this->data->send_to == 'to_client') {
+            $ids = array($this->data->client_id);
+        }
+        
+        if($this->data->send_to == 'to_trainer') {
+            $trainers_data = $this->getClientTrainers($this->data->client_id,  'primary');
+            
+            if(!$trainers_data['status']['success']) {
+                throw new Exception($trainers_data['status']['message']);
+            }
+            
+            $ids = array($trainers_data['data'][0]);
+        }
+
+        
+        $this->recipients_ids = $ids;
+    }
+    
 }

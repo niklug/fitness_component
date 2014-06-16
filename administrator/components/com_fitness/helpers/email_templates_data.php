@@ -72,6 +72,10 @@ class EmailTemplateData extends FitnessHelper
             case 'ProgramTemplate':
                 return new ProgramTemplateEmailTemplateData($params);
                 break;
+            
+            case 'EmailPdfPeriod':
+                return new EmailPdfPeriod($params);
+                break;
 
             default:
                 break;
@@ -1070,9 +1074,67 @@ class ProgramTemplateEmailTemplateData extends EmailTemplateData  {
             
             $data->comment->comment_text = $comment->comment;
         }
-        
-
         return $data;
     }
+}
 
+
+class EmailPdfPeriod extends EmailTemplateData  {
+    
+    public function __construct($params) {
+        $this->id = $params['id'];
+        $this->client_id = $params['client_id'];
+        $this->layout = $params['layout'];
+    }
+    
+    protected function getItemData() {
+        $this->item = $this->getPeriod($this->id);
+        
+        $this->item->mini_goal = $this->getGoalData($this->item->mini_goal_id, 2);
+        
+        $this->item->primary_goal = $this->getGoalData($this->item->mini_goal->primary_goal_id, 1);
+        
+        $this->item->period_sessions = $this->getPeriodSessions($this->item->id);
+        
+        $this->item->primary_trainer = $this->getPrimaryTrainer($this->client_id);
+        
+        JRequest::setVar('secondary_only', 1);
+        
+        $this->item->secondary_trainers = $this->get_trainers();
+
+        $this->business_profile_user = $this->client_id;
+    }
+    
+   
+    protected function setParams() {
+        $data = new stdClass();
+        
+        $data->item = $this->item;
+   
+        $data->business_profile = $this->business_profile;
+        
+        $data->path = JUri::root() . 'components/com_multicalendar/views/pdf/tmpl/images/';
+        
+        $data->sitelink = JUri::root() . 'index.php?option=com_multicalendar&view=pdf&layout=' . $this->layout . '&goal_type=' . $this->goal_type . '&tpml=component&id=' . $this->id . '&comment_id=' . $this->comment_id;
+        
+        $data->header_image  = JUri::root() . $data->business_profile->header_image;
+        
+        $user = &JFactory::getUser($this->client_id);
+        $data->client_name = $user->name;
+        $data->client_email = $user->email;
+        
+        $date = JFactory::getDate($this->item->primary_goal->start_date);
+        $data->start_date_primary =  $date->toFormat('%A, %d %b %Y') ;
+
+        $date = JFactory::getDate($this->item->primary_goal->deadline);
+        $data->deadline_primary =  $date->toFormat('%A, %d %b %Y') ;
+        
+        $date = JFactory::getDate($this->item->mini_goal->start_date);
+        $data->start_date_mini =  $date->toFormat('%A, %d %b %Y') ;
+
+        $date = JFactory::getDate($this->item->mini_goal->deadline);
+        $data->deadline_mini =  $date->toFormat('%A, %d %b %Y') ;
+   
+        return $data;
+    }
 }

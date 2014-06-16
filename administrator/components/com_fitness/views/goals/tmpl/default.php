@@ -51,6 +51,7 @@ $business_profile_id = $business_profile_id['data'];
         'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
         'ajax_call_url': '<?php echo JURI::root(); ?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'base_url' : '<?php echo JURI::root(); ?>',
         'pending_review_text' : 'Pending Review',
         'user_name' : '<?php echo JFactory::getUser()->name;?>',
         'user_id' : '<?php echo JFactory::getUser()->id;?>',

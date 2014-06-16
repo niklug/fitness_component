@@ -2058,5 +2058,24 @@ class FitnessHelper extends FitnessFactory
             
             return true;
         }
+        
+        public function getPeriod($id) {
+            $query = " SELECT a.* FROM #__fitness_training_periodalization AS a";
+            $query .= " WHERE a.id='$id'";
+            return self::customQuery($query, 2);
+        }
+        
+        public function getPeriodSessions($period_id) {
+            $query = "SELECT a.*, ";
+            $query .= " (SELECT name FROM #__fitness_categories WHERE id=a.appointment_type_id) appointment_name,";
+            $query .= " (SELECT name FROM #__fitness_session_type WHERE id=a.session_type) session_type_name,";
+            $query .= " (SELECT name FROM #__fitness_session_focus WHERE id=a.session_focus) session_focus_name,";
+            $query .= " (SELECT name FROM #__fitness_locations WHERE id=a.location) location_name";
+            $query .= " FROM #__fitness_training_sessions AS a  ";
+            $query .= " WHERE a.period_id='$period_id'";
+            return self::customQuery($query, 1);
+        }
+        
+        
 }
 
