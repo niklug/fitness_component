@@ -257,10 +257,7 @@ define([
             var target = "#status_button_place_" + id;
             
             if(type == 'mini') {
-                options.db_table = '#__fitness_mini_goals';
-                options.status_button = 'status_button_mini';
-                options.status_button_dialog = 'status_button_dialog_mini';
-                options.status_button_place = '#status_button_place_mini_';
+                options = _.extend({}, app.options.status_options_mini);
                 
                 target = "#status_button_place_mini_" + id;
             }
@@ -280,7 +277,7 @@ define([
         
         connectComments : function(model, view, type) {
             if(model.get('id')) {
-                new Comments_block_view({el : view.find("#comments_block"), model : model, read_only : true, type : type});
+                new Comments_block_view({el : view.find("#comments_block"), model : model, read_only : false, type : type});
             }
         },
         

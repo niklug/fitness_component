@@ -197,11 +197,6 @@ class GoalStatusEmail extends FitnessEmail {
 
         switch ($data->method) {
             //primary
-            case 'GoalPenging':
-                $subject = 'New Primary Goal';
-                $layout = 'email_goal_pending';
-                $goal_type = '1';
-                break;
             case 'GoalComplete':
                 $subject = 'Primary Goal Complete';
                 $layout = 'email_goal_complete';
@@ -223,7 +218,8 @@ class GoalStatusEmail extends FitnessEmail {
                 $subject = 'Primary Goal Scheduled';
                 $layout = 'email_goal_inprogress';
                 $goal_type = '1';
-                $send_to_trainer = true;
+                $send_to_client = true;
+                $send_to_trainer = false;
                 break;
             case 'GoalAssessing':
                 $subject = 'Assess Primary Goal';
@@ -232,13 +228,15 @@ class GoalStatusEmail extends FitnessEmail {
                 $send_to_client = false;
                 $send_to_trainer = true;
                 break;
+            case 'GoalScheduled':
+                $subject = 'Primary Goal Scheduled';
+                $layout = 'email_goal_scheduled';
+                $goal_type = '1';
+                $send_to_client = true;
+                $send_to_trainer = false;
+                break;
 
             //mini
-            case 'GoalPengingMini':
-                $subject = 'New Mini Goal';
-                $layout = 'email_goal_pending_mini';
-                $goal_type = '2';
-                break;
             case 'GoalCompleteMini':
                 $subject = 'Mini Goal Complete';
                 $layout = 'email_goal_complete_mini';
@@ -260,7 +258,8 @@ class GoalStatusEmail extends FitnessEmail {
                 $subject = 'Mini Goal Scheduled';
                 $layout = 'email_goal_inprogress_mini';
                 $goal_type = '2';
-                $send_to_trainer = true;
+                $send_to_client = true;
+                $send_to_trainer = false;
                 break;
             case 'GoalAssessingMini':
                 $subject = 'Assess Mini Goal';
@@ -268,6 +267,13 @@ class GoalStatusEmail extends FitnessEmail {
                 $goal_type = '2';
                 $send_to_client = false;
                 $send_to_trainer = true;
+                break;
+            case 'GoalScheduledMini':
+                $subject = 'Mini Goal Scheduled';
+                $layout = 'email_goal_scheduled_mini';
+                $goal_type = '2';
+                $send_to_client = true;
+                $send_to_trainer = false;
                 break;
             default:
                 break;
@@ -849,14 +855,14 @@ class CommentGoalEmail extends FitnessEmail {
 
         $status = $this->item->status;
 
-        if((($status == self::EVELUATING_GOAL_STATUS)) OR (($status == self::ASSESSING_GOAL_STATUS))) {
+        if(($status == self::EVELUATING_GOAL_STATUS) OR ($status == self::ASSESSING_GOAL_STATUS) OR ($status == self::PENDING_GOAL_STATUS)) {
             return;
         }
 
         $send_to = 'all_trainers';
 
         if(self::is_trainer($this->data->created_by) OR self::is_superuser($this->data->created_by))  {
-            $send_to = 'client_and_other_trainers'; 
+            $send_to = 'to_client'; 
         }
 
         $this->send_to = $send_to;
@@ -880,15 +886,17 @@ class CommentGoalEmail extends FitnessEmail {
             $ids = array_merge($ids, $trainers_data['data']);
         }
         // trainer  makes comment
-        if($this->send_to == 'client_and_other_trainers') {
+        if($this->send_to == 'to_client') {
            //add client
             $ids[] = $this->item_user_id;
-            
+            /*
             $all_trainers = $this->getClientTrainers($this->item_user_id,  'all');
             //add client trainers, except trainer who created a comment
             $other_trainers = array_diff($all_trainers['data'], array($this->data->created_by));
             
             $ids = array_merge($ids, $other_trainers);
+             * 
+             */
         }
 
         $this->recipients_ids = $ids;
