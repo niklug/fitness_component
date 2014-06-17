@@ -107,8 +107,7 @@
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->trainer_name; ?> ,
-                                                                    </p>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <p>A new Mini Goal has been entered. Please review the details and provide additional comments, feedback or instructions:</p></td>
                                                             </tr>
                                                             <tr>
@@ -116,19 +115,22 @@
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->client_name; ?> </td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>PRIMARY GOAL: </p>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <p>PRIMARY GOAL: </p>
                                                                     <p>MINI GOAL:<br />
                                                                         START DATE: <br />
                                                                         ACCOMPLISH BY: </p></td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>
-                                                                  <?php echo $data->item->primary_goal_name ? $data->item->primary_goal_name : '-'; ?><p />
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                <p><?php echo $data->item->primary_goal_name ? $data->item->primary_goal_name : '-'; ?><p />
                                                                 <p><?php echo $data->item->category_name ? $data->item->category_name : '-'; ?><br />
                                                                     <?php echo $data->date_created; ?><br />
                                                                     <?php echo $data->deadline; ?> </td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">MINI GOAL DETAILS: </td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->item->details; ?> </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    MINI GOAL DETAILS: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
+                                                                    <?php echo $data->item->details; ?> </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">

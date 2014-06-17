@@ -22,16 +22,16 @@
                 color:#CCC;
             }
             .darkContainer a:hover {
-                color:#FFF !important;
+                color:#e76708 !important;
             }
             .readMore a:hover {
-                background-color:#5D3B01 !important;
-                color: #FFF !important;
+                background-color:#322001 !important;
+                color: #e76708 !important;
             }
             body {
                 margin:0;
                 background-color:#dddddd;
-                color:#FFA600;
+                color:#e76708;
                 font-family:Arial, Helvetica, sans-serif;
                 font-size:12px;
                 -webkit-text-size-adjust: none;
@@ -48,7 +48,7 @@
         </style>
     </head>
     <body>
-                <?php
+        <?php
         require_once JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS . 'helpers' . DS . 'email_templates_data.php';
 
         $id = &JRequest::getVar('id');
@@ -81,7 +81,7 @@
                                 <!--Start Of Company Name And Slogan [row number #1]-->
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#FFA600" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
+                                        <td bgcolor="#e76708" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
                                             <img alt="Elite Fitness Training" height="78" src="<?php echo $data->header_image  ?>" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
@@ -107,46 +107,36 @@
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Additional comments or instructions have  been posted about this  program. Please review and reply by clicking the link below:</p></td>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Additional comments, feedback or instructions have  been posted about this goal. Please review and reply by clicking the link below:</p></td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    <p>PRIMARY GOAL: </p>
-                                                                    <p>MINI GOAL:<br />
-                                                                        START DATE: <br />
-                                                                        ACCOMPLISH BY: </p></td>
+                                                                <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"> GOAL NAME: <br />
+                                                                    START DATE: <br />
+                                                                    ACCOMPLISH BY: </td>
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                <p><?php echo $data->item->primary_goal_name; ?><p />
-                                                                <p><?php echo $data->item->category_name; ?><br />
+                                                                    <?php echo $data->item->category_name; ?><br />
                                                                     <?php echo $data->date_created; ?><br />
-                                                                    <?php echo $data->deadline; ?></p> </td>
+                                                                    <?php echo $data->deadline; ?> </td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    GOAL DETAILS: </td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    <?php echo $data->item->details; ?></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">GOAL DETAILS: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->item->details; ?>  </td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    COMMENT BY: <br />
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">COMMENT BY: <br />
                                                                     DATE / TIME:</td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    <?php echo $data->comment->created_by?> <br />
-                                                                    <?php echo $data->comment->created;?> </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->comment->created_by?> <br />
+                                                                                                                                                                                                     <?php echo $data->comment->created;?></td>
                                                             </tr>
                                                             <tr>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    COMMENT: </td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
-                                                                    <?php echo $data->comment->comment_text;?></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">COMMENT: </td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->comment->comment_text;?></td>
                                                             </tr>
                                                         </table>
-                                                        <br />
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFA600; text-align:center;">
-                                                                    <a target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#FEA529;">CLICK HERE TO OPEN</a>
+                                                                <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#F00; text-align:center;">
+                                                                    <a  target="_blank" href="<?php echo $data->open_link ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#e76708;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -165,13 +155,14 @@
                                 <!--Start Of Content [row number #3]-->
                                 <table class="lightContainer" width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#FFA600" style="padding:20px;">
-                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;"><span style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#000; font-weight:lighter; margin-bottom:0 !important;">Focus on your goals and keep a strong mindset!</span></h2>
+                                        <td bgcolor="#e76708" style="padding:20px;">
+                                            <h2 style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; line-height:17pt; font-size:17px; color:#482104; font-weight:lighter; margin-bottom:0 !important;">You've set your goals... now what?</h2>
                                             <table width="580" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                 <tr>
                                                     <td width="100" style="padding:15px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;" valign="top" rowspan="2">
                                                         <img alt="image" height="100" src="<?php echo $data->path ?>/goals.png" width="100" border="0" vspace="0" hspace="0" /></td>
-                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;"><p>Get focused! Talk to your trainer about ways to improve your mindset and subsequently change your lifestyle.</p>
+                                                    <td valign="top" style="padding:10px 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#482104;">
+                                                        <p>Get focused! Talk to your trainer about ways to improve your mindset and subsequently change your lifestyle.</p>
                                                         <p>Begin by making small changes and encourage new healthy habits that will pave the way to health and fitness!</p></td>
                                                 </tr>
 
@@ -187,4 +178,4 @@
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
 
-                                            <?php include __DIR__ . DS . 'bottom.php'; ?>    
+                                        <?php include __DIR__ . DS . 'bottom.php'; ?>    

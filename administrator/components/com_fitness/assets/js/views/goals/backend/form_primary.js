@@ -71,7 +71,7 @@ define([
             app.collections.primary_goals_categories = new Select_filter_collection();
             var self = this;
             app.collections.primary_goals_categories.fetch({
-                data : {table : '#__fitness_goal_categories', business_profile_id : app.options.business_profile_id},
+                data : {table : '#__fitness_goal_categories', by_business_profile : true},
                 success : function (collection, response) {
                     self.populateGoalsSelect();
                 },

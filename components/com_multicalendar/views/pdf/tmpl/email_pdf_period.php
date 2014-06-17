@@ -238,7 +238,8 @@ function appointmentImage($id, $data) {
             break;
     }
     
-    $html = '<img src="' . $data->path . $image . '" width="50" height="50">';
+    $html = '<img style="padding:2px;" src="' . $data->path . $image . '" width="51" height="51">';
+    
 
     return $html;
 }

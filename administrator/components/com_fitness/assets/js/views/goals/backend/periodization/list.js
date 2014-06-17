@@ -42,7 +42,8 @@ define([
         
         events: {
             "click #new_period" : "onClickNewPeriod",
-            "click #back_goal" : "onClickBack",
+            "click #back_goal" : "onClickBackMinigoal",
+            "click #back_goals_list" : "onClickBackList",
         },
         
         onRender : function() {
@@ -84,8 +85,12 @@ define([
             this.addItem(model);
         },
         
-        onClickBack : function() {
+        onClickBackMinigoal : function() {
             app.controller.navigate("!/form_mini/" + this.options.mini_goal_id + '/' + this.options.primary_goal_id , true);
+        },
+        
+        onClickBackList : function() {
+            app.controller.navigate("#!/list_view", true);
         },
         
         onReset : function() {

@@ -1150,6 +1150,14 @@ width: 20px;
     width: 20px;
 }
 
+.calendar_icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-size: 16px auto;
+    background-image: url("../images/calendar_icon.png");
+}
+
 .focused_cell {
   box-shadow: 0 0 5px rgba(81, 203, 238, 1);
   padding: 3px 0px 3px 3px;

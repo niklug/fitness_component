@@ -26,11 +26,7 @@ define([
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);
-            
-            if(app.collections.mini_goals) {
-                this.onRender();
-                return this;
-            }
+
             app.collections.mini_goals = new Mini_goals_collection();
             var self = this;
             app.collections.mini_goals.fetch({

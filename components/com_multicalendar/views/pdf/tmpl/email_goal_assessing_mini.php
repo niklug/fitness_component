@@ -107,7 +107,7 @@
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi <?php echo $data->trainer_name; ?>,</p>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <p>Your clients Mini Goal has ended and is due for assessment!</p>
                                                                     <p>Please provide comments and feedback for your client and mark this goal based on your assessment with either a 'Comlete' or 'Incomplete' score.</p></td>
                                                             </tr>

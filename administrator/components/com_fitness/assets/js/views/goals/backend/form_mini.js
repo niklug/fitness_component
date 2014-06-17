@@ -47,7 +47,8 @@ define([
             "click #save" : "onClickSave",
             "click #save_close" : "onClickSaveClose",
             "click #cancel" : "onClickCancel",
-            "click #finalise_mini_goal" : "onClickFinaliseMiniGoal"
+            "click #finalise_mini_goal" : "onClickFinaliseMiniGoal",
+            "click .schedule_mini_goal" : "onClickSchedule",
         },
         
         onRender : function() {
@@ -71,7 +72,7 @@ define([
             app.collections.mini_goals_categories = new Select_filter_collection();
             var self = this;
             app.collections.mini_goals_categories.fetch({
-                data : {table : '#__fitness_mini_goal_categories', business_profile_id : app.options.business_profile_id},
+                data : {table : '#__fitness_mini_goal_categories', by_business_profile : true},
                 success : function (collection, response) {
                     self.populateGoalsSelect();
                 },
@@ -320,7 +321,11 @@ define([
                     alert(response.responseText);
                 }
             });
-        }
+        },
+        
+        onClickSchedule : function() {
+            app.controller.navigate("!/schedule/" + this.model.get('primary_goal_id') + '/' + this.model.get('id') , true);
+        },
 
     });
             

@@ -2073,6 +2073,7 @@ class FitnessHelper extends FitnessFactory
             $query .= " (SELECT name FROM #__fitness_locations WHERE id=a.location) location_name";
             $query .= " FROM #__fitness_training_sessions AS a  ";
             $query .= " WHERE a.period_id='$period_id'";
+            $query .= " ORDER BY a.starttime ASC";
             return self::customQuery($query, 1);
         }
         
