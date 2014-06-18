@@ -15,7 +15,6 @@ define([
         'views/goals/frontend/comments_block',
         'jquery.flot',
         'jquery.flot.time',
-        'jquery.validate',
         'jquery.status'
         
 ], function (

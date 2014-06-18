@@ -108,6 +108,7 @@ class FitnessModelprograms extends JModelList {
                 
                 $data->date_from = JRequest::getVar('date_from', '0'); 
                 $data->date_to = JRequest::getVar('date_to', '0'); 
+                $data->client_id = JRequest::getVar('client_id'); 
                 $data->client_name = JRequest::getVar('client_name'); 
                 $data->trainer_name = JRequest::getVar('trainer_name'); 
                 $data->created_by_name = JRequest::getVar('created_by_name'); 
@@ -218,6 +219,10 @@ class FitnessModelprograms extends JModelList {
 
             if (!empty($data->date_to)) {
                 $query .= " AND a.endtime <= '$data->date_to'";
+            }
+            
+            if($data->client_id) {
+                $query .= " AND a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($data->client_id))";
             }
 
             //search by client name
@@ -354,6 +359,10 @@ class FitnessModelprograms extends JModelList {
         
         if (!empty($data->date_to)) {
             $query .= " AND a.endtime <= '$data->date_to'";
+        }
+        
+        if($data->client_id) {
+            $query .= " AND a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($data->client_id))";
         }
         
         //search by client name

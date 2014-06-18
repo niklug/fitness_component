@@ -8,8 +8,6 @@
  */
 // no direct access
 defined('_JEXEC') or die;
-$document = &JFactory::getDocument();
-$document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
 
 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 
@@ -52,7 +50,6 @@ $business_profile_id = $business_profile_id['data'];
         'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
         'ajax_call_url': '<?php echo JURI::root(); ?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         'base_url' : '<?php echo JURI::root(); ?>',
-        'pending_review_text' : 'Pending Review',
         'user_name' : '<?php echo JFactory::getUser()->name;?>',
         'user_id' : '<?php echo JFactory::getUser()->id;?>',
         'goals_db_table' : '#__fitness_goals',

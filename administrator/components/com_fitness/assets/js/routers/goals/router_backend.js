@@ -17,7 +17,6 @@ define([
         'views/goals/backend/periodization/list',
         'jquery.flot',
         'jquery.flot.time',
-        'jquery.validate',
         'jquery.status'
         
 ], function (
