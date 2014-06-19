@@ -5,6 +5,7 @@ define([
         'app',
         'views/client_progress/backend/sub_search_item',
         'views/graph/progress_graph',
+        'views/client_progress/backend/data_item',
 	'text!templates/client_progress/backend/sub_search_container.html'
 
 ], function (
@@ -14,6 +15,7 @@ define([
         app,
         List_item_view,
         Progress_graph_view,
+        Data_item_view,
         template
     ) {
 
@@ -41,8 +43,7 @@ define([
         },
         
         events : {
-
-            "click #search_sub" : "search",
+            "click #search_sub" : "onClickSearch",
             "click #clear_sub" : "clear",
         },
         
@@ -64,19 +65,26 @@ define([
             this.container_el.append(new List_item_view({ model : model}).render().el); 
         },
         
-        search : function() {
+        onClickSearch : function() {
+            var collection = this.checkedAppointmentsCollection(this.collection.models);
+            this.connectGraph(collection);
+            
+            this.loadDataItems(collection);
+        },
+        
+        checkedAppointmentsCollection : function(original_collection) {
             var collection = new Backbone.Collection;
             
             var ids = $(this.el).find(".sub_search_item:checked").map(function(){return $(this).val();}).get();
             
-            _.each(this.collection.models, function(model) {
+            _.each(original_collection, function(model) {
                 var id =  model.get('id');
                 if(ids.indexOf(id) != '-1') {
                     collection.add(model);
                 }
             });
             
-            this.connectGraph(collection);
+            return collection;
         },
         
      
@@ -98,6 +106,16 @@ define([
         clear : function(){
 
         },
+        
+        loadDataItems : function(collection) {
+            var container = $("#main_container");
+            container.empty();
+            var self = this;
+            _.each(collection.models, function(model) {
+                container.append(new Data_item_view({ model : model}).render().el); 
+            });
+
+        }
   
     });
             
