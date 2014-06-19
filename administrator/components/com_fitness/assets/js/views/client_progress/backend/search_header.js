@@ -107,6 +107,7 @@ define([
                 }
                 
                 self.loadSessionFocus('25');
+
             });
         },
         
@@ -241,7 +242,6 @@ define([
             var client_id = this.$el.find("#client_id").val();
             var session_focus = this.$el.find("#session_focus").val();
             this.model.set({date_from : date_from, date_to : date_to, client_id : client_id, session_focus : session_focus, uid : app.getUniqueId()});
-            console.log(this.model.toJSON());
         },
         
         clearAll : function(){

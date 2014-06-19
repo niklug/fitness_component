@@ -60,7 +60,7 @@ define([
             app.collections.items.fetch({
                 data : params,
                 success : function (collection, response) {
-                    console.log(collection.toJSON());
+                    //console.log(collection.toJSON());
                 },
                 error : function (collection, response) {
                     alert(response.responseText);

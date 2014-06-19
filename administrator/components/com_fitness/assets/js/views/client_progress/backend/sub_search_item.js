@@ -22,7 +22,6 @@ define([
         
         render: function(){
             var data = {item : this.model.toJSON()};
-            console.log(data);
             data.app = app;
             data.$ = $;
             var template = _.template(this.template(data));

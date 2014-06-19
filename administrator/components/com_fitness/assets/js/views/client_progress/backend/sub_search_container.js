@@ -4,6 +4,7 @@ define([
 	'backbone',
         'app',
         'views/client_progress/backend/sub_search_item',
+        'views/graph/progress_graph',
 	'text!templates/client_progress/backend/sub_search_container.html'
 
 ], function (
@@ -12,6 +13,7 @@ define([
         Backbone,
         app,
         List_item_view,
+        Progress_graph_view,
         template
     ) {
 
@@ -63,7 +65,34 @@ define([
         },
         
         search : function() {
-
+            var collection = new Backbone.Collection;
+            
+            var ids = $(this.el).find(".sub_search_item:checked").map(function(){return $(this).val();}).get();
+            
+            _.each(this.collection.models, function(model) {
+                var id =  model.get('id');
+                if(ids.indexOf(id) != '-1') {
+                    collection.add(model);
+                }
+            });
+            
+            this.connectGraph(collection);
+        },
+        
+     
+        connectGraph : function(collection) {
+            
+            this.progress_graph = new Progress_graph_view({
+                head_title : 'BODY FAT COMPARISON CHART',
+                el : "#progress_graph_container",
+                collection : collection,
+                style : '',
+                color : "#287725",
+                data_field_x : 'starttime',
+                data_field_y : 'body_fat',
+                y_title : 'Body Fat (%)'
+            });
+            
         },
         
         clear : function(){
