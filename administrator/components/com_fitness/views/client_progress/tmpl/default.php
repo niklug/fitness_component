@@ -26,7 +26,6 @@ $business_profile_id = $business_profile_id['data'];
     <div id="progress_graph_container" class="fitness_wrapper" style="background:none;"></div>
 
     <div class="clr"></div>
-    <br/>
 
     <div id="main_container" class="fitness_wrapper" style="background:none;"></div>
 
@@ -52,6 +51,7 @@ $business_profile_id = $business_profile_id['data'];
         'db_table_locations': '#__fitness_locations',
         'db_table_session_types': '#__fitness_session_type',
         'db_table_session_focuses': '#__fitness_session_focus',
+        'db_table_photos' : '#__fitness_assessments_photos',
         
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
         'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
@@ -59,6 +59,8 @@ $business_profile_id = $business_profile_id['data'];
         'is_trainer_administrator' : '<?php echo FitnessFactory::is_trainer_administrator($user_id); ?>',
         'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
         'business_profile_id' : '<?php echo $business_profile_id; ?>',
+        'assessment_priorities' : '<?php echo json_encode(FitnessHelper::assessmentPriorities()) ?>',
+        
     };
 
     require.config({

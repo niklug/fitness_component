@@ -45,6 +45,7 @@ define([
         events : {
             "click #search_sub" : "onClickSearch",
             "click #clear_sub" : "clear",
+            "click #select_all" : "selectAll",
         },
         
         onRender : function() {
@@ -104,7 +105,8 @@ define([
         },
         
         clear : function(){
-
+            $(this.el).find(".sub_search_item").attr('checked', false);
+            $("#main_container, #progress_graph_container").empty();
         },
         
         loadDataItems : function(collection) {
@@ -115,7 +117,12 @@ define([
                 container.append(new Data_item_view({ model : model}).render().el); 
             });
 
+        },
+        
+        selectAll : function() {
+            $(this.el).find(".sub_search_item").attr('checked', true);
         }
+  
   
     });
             

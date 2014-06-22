@@ -245,19 +245,12 @@ define([
         },
         
         clearAll : function(){
+            this.collection.reset();
             var form = $("#header_wrapper");
             form.find("#session_focus, #date_from, #date_to").val('');
-            
-            this.model.set(
-                {
-                    date_from : '',
-                    date_to : '',
-                    client_id : '',
-                    session_focus : ''
-                }
-            );
+            $("#main_container, #progress_graph_container, #sub_search_wrapper").empty();
         },
-  
+        
     });
             
     return view;
