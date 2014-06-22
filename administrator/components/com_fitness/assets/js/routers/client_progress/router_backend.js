@@ -42,7 +42,7 @@ define([
             
             app.collections.items = new Items_collection();
             
-            app.models.request_params = new Request_params_items_model({published : '1', limit : '100'});
+            app.models.request_params = new Request_params_items_model({published : '1', frontend_published : '2', limit : '100'});
             app.models.request_params.bind("change", this.get_items, this);
             
             app.collections.items.on("sync", this.load_sub_search, this);

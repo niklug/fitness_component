@@ -222,7 +222,7 @@ class FitnessModelprograms extends JModelList {
             }
             
             if($data->client_id) {
-                $query .= " AND a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($data->client_id))";
+                $query .= " AND a.id IN (SELECT  event_id FROM #__fitness_appointment_clients WHERE client_id IN ($data->client_id))";
             }
 
             //search by client name
@@ -362,7 +362,7 @@ class FitnessModelprograms extends JModelList {
         }
         
         if($data->client_id) {
-            $query .= " AND a.id IN (SELECT  DISTINCT event_id FROM #__fitness_appointment_clients WHERE client_id IN ($data->client_id))";
+            $query .= " AND a.id IN (SELECT  event_id FROM #__fitness_appointment_clients WHERE client_id IN ($data->client_id))";
         }
         
         //search by client name
