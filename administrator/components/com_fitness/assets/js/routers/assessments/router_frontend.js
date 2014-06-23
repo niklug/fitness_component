@@ -123,10 +123,14 @@ define([
         },
         
         search_header : function() {
-             $("#submenu_container").html(new Search_header_view({model : app.models.request_params, collection : app.collections.items}).render().el);
+            $("#submenu_container").after('<div id="sub_search_wrapper" class="fitness_wrapper" style="padding:0;margin-bottom:10px;"></div>');  
+            
+            $("#submenu_container").html(new Search_header_view({model : app.models.request_params, collection : app.collections.items}).render().el);
         },
         
         load_sub_search : function() {
+            $("#sub_search_wrapper").after('<div id="progress_graph_container" class="fitness_wrapper" style="padding:0;"></div>'); 
+            
             $("#sub_search_wrapper").html(new Sub_search_container_view({model : app.models.request_params, collection : app.collections.items}).render().el);
         },
         
@@ -156,6 +160,8 @@ define([
         
         
         list_actions : function () {
+            $("#sub_search_wrapper, #progress_graph_container").remove();  
+            
             $("#submenu_container").html(new Submenu_list_view({model : app.models.request_params}).render().el);
             
             new Graph_view({

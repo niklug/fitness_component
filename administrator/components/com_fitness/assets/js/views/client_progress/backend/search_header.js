@@ -237,6 +237,7 @@ define([
         },
         
         search : function() {
+            $("#main_container, #progress_graph_container, #sub_search_wrapper").empty();
             var date_from = this.$el.find("#date_from").val();
             var date_to = this.$el.find("#date_to").val();
             var client_id = this.$el.find("#client_id").val();

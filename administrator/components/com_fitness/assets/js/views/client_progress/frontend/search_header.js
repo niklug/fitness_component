@@ -91,17 +91,17 @@ define([
         },
         
         search : function() {
+            $("#main_container, #progress_graph_container, #sub_search_wrapper").empty();
             var date_from = this.$el.find("#date_from").val();
             var date_to = this.$el.find("#date_to").val();
             var client_id = app.options.client_id;
             var session_focus = this.$el.find("#session_focus").val();
-            this.model.set({date_from : date_from, date_to : date_to, client_id : client_id, session_focus : session_focus, limit : 100, published : '1',  frontend_published : '2', uid : app.getUniqueId()});
+            this.model.set({current_page : '', date_from : date_from, date_to : date_to, client_id : client_id, session_focus : session_focus, limit : 100, published : '1',  frontend_published : '2', uid : app.getUniqueId()});
         },
         
         clearAll : function(){
             this.collection.reset();
-            var form = $("#header_wrapper");
-            form.find("#session_focus, #date_from, #date_to").val('');
+            $("#session_focus, #date_from, #date_to").val('');
             $("#main_container, #progress_graph_container, #sub_search_wrapper").empty();
         },
         

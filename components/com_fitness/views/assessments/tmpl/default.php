@@ -23,15 +23,6 @@ defined('_JEXEC') or die;
     
     <div  id="submenu_container"></div>
     
-    <div id="sub_search_wrapper" class="fitness_wrapper" style="background:none;"></div>
-
-    <div class="clr"></div>
-    <br/>
-    
-    <div id="progress_graph_container" class="fitness_wrapper" style="background:none;"></div>
-
-    <div class="clr"></div>
-    
     <div id="main_container"></div>
 
 </div>
