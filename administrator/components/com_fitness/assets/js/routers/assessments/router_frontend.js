@@ -18,6 +18,9 @@ define([
         'views/assessments/frontend/form_bio_assessment',
         'views/graph/graph',
         
+        'views/client_progress/frontend/search_header',
+        'views/client_progress/frontend/sub_search_container',
+        
         'jquery.flot',
         'jquery.flot.time',
         'jquery.validate'
@@ -40,7 +43,10 @@ define([
         Comments_block_view,
         Form_standard_assessment_view,
         Form_bio_assessment_view,
-        Graph_view
+        Graph_view,
+        
+        Search_header_view,
+        Sub_search_container_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -70,6 +76,7 @@ define([
             
             app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id, current_page : 'my_progress'});
             app.models.request_params.bind("change", this.get_items, this);
+            
         },
 
         routes: {
@@ -108,11 +115,19 @@ define([
         
         my_progress : function() {
             $(".menu_link").removeClass("active_link");
-            $("#submenu_container").empty();
-            $("#main_container").html('To be developed..');           
+            $("#submenu_container, #main_container").empty();        
             $("#my_progress_link").addClass("active_link");
             this.removeGraph();
             
+            this.search_header();
+        },
+        
+        search_header : function() {
+             $("#submenu_container").html(new Search_header_view({model : app.models.request_params, collection : app.collections.items}).render().el);
+        },
+        
+        load_sub_search : function() {
+            $("#sub_search_wrapper").html(new Sub_search_container_view({model : app.models.request_params, collection : app.collections.items}).render().el);
         },
         
         self_assessments : function() {
