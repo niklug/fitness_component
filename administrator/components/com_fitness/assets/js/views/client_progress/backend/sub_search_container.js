@@ -99,10 +99,21 @@ define([
                 color : "#287725",
                 data_field_x : 'starttime',
                 data_field_y : 'body_fat',
-                y_title : 'Body Fat (%)'
+                y_title : 'Body Fat (%)',
+                tooltip : true,
+                setTooltipHtml : this.setTooltipHtml
             });
-            
         },
+        
+        setTooltipHtml : function(html, model) {
+           html +=  "DATE: " +  moment(new Date(Date.parse(model.get('starttime')))).format("ddd, D MMM  YYYY, hh:mm") + "</br>";
+           html +=  "AGE (YRS): " +  model.get('age') + "</br>";
+           html +=  "WEIGHT (KG): " +  model.get('weight') + "</br>";
+           html +=  "BODY FAT (%): " +  model.get('body_fat') + "</br>";
+           html +=  "LEAN MASS (KG): " +  model.get('lean_mass') + "</br>";
+           return html;
+        },
+        
         
         clear : function(){
             $(this.el).find(".sub_search_item").attr('checked', false);

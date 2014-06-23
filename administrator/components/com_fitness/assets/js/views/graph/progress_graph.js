@@ -36,7 +36,7 @@ define([
             var self = this;
             $(this.el).show('0', function() {
                 self.setData();
-                self.drawGraph();
+                self.drawGraph(self.collection.models);
             });
         },
         
@@ -55,7 +55,7 @@ define([
         },
         
 
-        drawGraph: function() {
+        drawGraph: function(items_data) {
             var self = this;
             //TIME SETTINGS
             var current_time = new Date().getTime();
@@ -213,8 +213,40 @@ define([
 
 
             self.plotAccordingToChoices(data, current_options);
+            
+            
+            //tooltip
+            if(typeof this.options.tooltip !== "undefined" && this.options.tooltip == true) {
+                $("<div id='tooltip'></div>").css({
+                        position: "absolute",
+                        display: "none",
+                        border: "2px solid #cccccc",
+                        "border-radius": "10px",
+                        padding: "5px",
+                        "background-color": "#287725",
+                        opacity: 0.9,
+                        color : "#fff"
+                }).appendTo("body");
+
+
+                $("#placeholder").die().bind("plothover", function (event, pos, item) {
+                    if (item) {
+                        var data_type = item.datapoint[1];
+                        var model = items_data[item.dataIndex]
+                        //console.log(data);
+                        var html = '';
+                        var html =  self.options.setTooltipHtml(html, model);
+
+                        $("#tooltip").html(html)
+                            .css({top: item.pageY+5, left: item.pageX+5})
+                            .fadeIn(200);
+                    } else {
+                            $("#tooltip").hide();
+                    }
+                });
+            }
         },
-        
+
         plotAccordingToChoices : function(data, options) {
             if (data.length > 0) {
                     $.plot("#placeholder", data, options);
