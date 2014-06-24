@@ -236,7 +236,7 @@ define([
                         //console.log(data);
                         var html = '';
                         var html =  self.options.setTooltipHtml(html, model);
-
+                        $("#tooltip").css("background-color", "#287725");
                         $("#tooltip").html(html)
                             .css({top: item.pageY+5, left: item.pageX+5})
                             .fadeIn(200);

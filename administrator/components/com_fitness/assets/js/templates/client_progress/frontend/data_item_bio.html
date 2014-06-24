@@ -17,26 +17,26 @@
     <table width="100%" style="background-color: #dadada;font-size: 12px;" class="table_border">
         <thead style="color: #fff;vertical-align: bottom;">
             <tr align="center">
-                <td height="160"><div class="vertical_text">DATE</div></td>
-                <td><div class="vertical_text">AGE</div></td>
-                <td><div class="vertical_text">HEIGHT(cm)</div></td>
-                <td><div class="vertical_text">BODY FAT(%)</div></td>
-                <td><div class="vertical_text">LEAN MASS(kg)</div></td>
-                <td><div class="vertical_text">SUM 10</div></td>
-                <td><div class="vertical_text">QUADS & HUM.</div></td>
-                <td><div class="vertical_text">PRIORITIES</div></td>
-                <td><div class="vertical_text">CHIN(mm)</div></td>
-                <td><div class="vertical_text">CHEEK(mm)</div></td>
-                <td><div class="vertical_text">PECTORALS(mm)</div></td>
-                <td><div class="vertical_text">TRICEPS(mm)</div></td>
-                <td><div class="vertical_text">SUB-SCAPULARIS(mm)</div></td>
-                <td><div class="vertical_text">MID-AXILLARY(mm)</div></td>
-                <td><div class="vertical_text">SUPRASPINATUS(mm)</div></td>
-                <td><div class="vertical_text">UMBILICAL(mm)</div></td>
-                <td><div class="vertical_text">KNEE(mm)</div></td>
-                <td><div class="vertical_text">CALF (mm)</div></td>
-                <td><div class="vertical_text">QUADRICEP(mm)</div></td>
-                <td><div class="vertical_text">HAMSTRING(mm)</div></td>
+                <td width="120" height="160"><div class="vertical_text">DATE</div></td>
+                <td width="35"><div class="vertical_text">AGE</div></td>
+                <td width="35"><div class="vertical_text">HEIGHT(cm)</div></td>
+                <td width="35"><div class="vertical_text">BODY FAT(%)</div></td>
+                <td width="35"><div class="vertical_text">LEAN MASS(kg)</div></td>
+                <td width="35"><div class="vertical_text">SUM 10</div></td>
+                <td width="35"><div class="vertical_text">QUADS & HAM.</div></td>
+                <td ><div class="vertical_text">PRIORITIES</div></td>
+                <td width="35"><div class="vertical_text">CHIN(mm)</div></td>
+                <td width="35"><div class="vertical_text">CHEEK(mm)</div></td>
+                <td width="35"><div class="vertical_text">PECTORALS(mm)</div></td>
+                <td width="35"><div class="vertical_text">TRICEPS(mm)</div></td>
+                <td width="35"><div class="vertical_text">SUB-SCAPULARIS(mm)</div></td>
+                <td width="35"><div class="vertical_text">MID-AXILLARY(mm)</div></td>
+                <td width="35"><div class="vertical_text">SUPRASPINATUS(mm)</div></td>
+                <td width="35"><div class="vertical_text">UMBILICAL(mm)</div></td>
+                <td width="35"><div class="vertical_text">KNEE(mm)</div></td>
+                <td width="35"><div class="vertical_text">CALF (mm)</div></td>
+                <td width="35"><div class="vertical_text">QUADRICEP(mm)</div></td>
+                <td width="35"><div class="vertical_text">HAMSTRING(mm)</div></td>
             </tr>
         </thead>
         
@@ -45,7 +45,7 @@
                 <td>
                     <%
                     var d1 = new Date(Date.parse(item.starttime));            
-                    var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+                    var start_date = moment(d1).format("ddd, D MMM  YYYY");      
                     %>
                     <%= start_date  %>
                 </td>
