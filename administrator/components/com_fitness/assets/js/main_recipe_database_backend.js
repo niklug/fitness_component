@@ -11,8 +11,8 @@ require([
     'jqueryui',
     'backbone.syphon',
     'jquery.backbone_pagination',
-    'jquery.ajax_indicator'
-    
+    'jquery.ajax_indicator',
+    'jquery.status'    
 
 ], function($, _, Backbone, moment, app, Controller) {
     $.ajax_indicator({});

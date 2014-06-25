@@ -8,14 +8,14 @@ define([
         
         defaults : {
             id : null,
-            recipe_name : null,
-            recipe_type : null,
-            recipe_variation : null,
-            number_serves : null,
-            author : null,
-            status : null, 
-            trainer : null,
-            instructions : null
+            recipe_name : '',
+            recipe_type : '',
+            recipe_variation : '',
+            number_serves : '',
+            author : '',
+            status : '1', 
+            trainer : '',
+            instructions : ''
         },
         
         validate: function(attrs, options) {

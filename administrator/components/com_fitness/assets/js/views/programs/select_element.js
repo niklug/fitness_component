@@ -14,7 +14,11 @@ define([
             if(this.model) {
                 var selected_items = this.model.get(this.options.model_field);
                 if((typeof selected_items !== 'undefined') && selected_items) {
-                    this.selected_items = selected_items.split(',');
+                    if($.isArray(this.selected_items)) {
+                        this.selected_items = selected_items.split(',');
+                        return;
+                    }
+                    this.selected_items = selected_items;
                 }
             }
             

@@ -7,6 +7,7 @@ define([
         'models/recipe_database/recipe',
         'models/nutrition_plan/nutrition_guide/get_recipe_params',
         'views/recipe_database/backend/search_block',
+        'views/recipe_database/backend/list',
         'jwplayer', 
         'jwplayer_key',
         'jquery.validate'
@@ -20,6 +21,7 @@ define([
         Item_model,
         Request_params_items_model,
         Search_block_view,
+        List_view,
         jwplayer,
         jwplayer_key       
         
@@ -83,7 +85,7 @@ define([
             app.collections.items.fetch({
                 data : params,
                 success : function (collection, response) {
-                    //console.log(collection.toJSON());
+                    console.log(collection.toJSON());
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -91,13 +93,29 @@ define([
             });  
         },
         
-        
+        connectStatus : function(model, el) {
+            var id = model.get('id');
+            var status = model.get('status');
+            var options = _.extend({}, app.options.status_options);
+            
+            var target = "#status_button_place_" + id;
+
+            var status_obj = $.status(options);
+
+            el.find(target).html(status_obj.statusButtonHtml(id, status));
+
+            status_obj.run();
+        },
+
+        update_list : function() {
+            app.models.request_params.set({ uid : app.getUniqueId()});
+        },
         
         
         list_actions : function () {
             $("#search_block").html(new Search_block_view({model : app.models.request_params, collection : app.collections.items}).render().el);
             
-            //$("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
+            $("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
             
             app.models.pagination = $.backbone_pagination({});
 

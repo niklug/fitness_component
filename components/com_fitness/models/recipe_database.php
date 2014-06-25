@@ -70,6 +70,13 @@ class FitnessModelrecipe_database extends JModelList {
         $current_page = $data->current_page;
         
         $state = $data->state;
+        
+        $status = $data->status;
+        
+        $recipe_name = $data->recipe_name;
+        
+        $created_by_name = $data->created_by_name;
+        
 
         $user_id = $data->user_id;
 
@@ -90,7 +97,38 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         
-        $query .= " WHERE a.state='$state' ";
+        $query .= " WHERE 1 ";
+        
+        if($state != '*') {
+            $query .= " AND a.state='$state' ";
+        }
+        
+        if($status) {
+            $query .= " AND a.status='$status' ";
+        }
+        
+        if($recipe_name) {
+            $query .= " AND a.recipe_name LIKE '%$recipe_name%' ";
+        }
+        
+        //search by created_by name
+        if ($created_by_name) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$created_by_name%' ";
+
+            $owner_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($owner_ids) {
+                $query .= " AND a.created_by IN ($owner_ids)";
+            }
+        }
+        
+        if (!empty($data->date_from)) {
+            $query .= " AND a.created >= '$data->date_from'";
+        }
+        
+        if (!empty($data->date_to)) {
+            $query .= " AND a.created <= '$data->date_to'";
+        }
         
         $filter_option1 = $filter_options[0];
         if($filter_options) {
@@ -158,8 +196,38 @@ class FitnessModelrecipe_database extends JModelList {
             $query .= " LEFT JOIN #__fitness_nutrition_recipes_favourites AS mf ON mf.item_id=a.id";
         }
         
-        $query .= " WHERE a.state='$state'";
+        $query .= " WHERE 1 ";
         
+        if($state != '*') {
+            $query .= " AND a.state='$state' ";
+        }
+        
+        if($status) {
+            $query .= " AND a.status='$status' ";
+        }
+        
+        if($recipe_name) {
+            $query .= " AND a.recipe_name LIKE '%$recipe_name%' ";
+        }
+        
+        //search by created_by name
+        if ($created_by_name) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$created_by_name%' ";
+
+            $owner_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($owner_ids) {
+                $query .= " AND a.created_by IN ($owner_ids)";
+            }
+        }
+        
+        if (!empty($data->date_from)) {
+            $query .= " AND a.created >= '$data->date_from'";
+        }
+        
+        if (!empty($data->date_to)) {
+            $query .= " AND a.created <= '$data->date_to'";
+        }
         
         if($filter_options) {
             $query .= " AND ( FIND_IN_SET('$filter_option1', a.recipe_type) ";
@@ -196,7 +264,7 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         
-        $query .= "  ORDER BY a." . $sort_by . " " . $order_dirrection 
+        $query .= "  ORDER BY " . $sort_by . " " . $order_dirrection 
                 . " LIMIT $start, $limit";
 
 
@@ -369,9 +437,15 @@ class FitnessModelrecipe_database extends JModelList {
                 $data->page = JRequest::getVar('page'); 
                 $data->limit = JRequest::getVar('limit'); 
                 $data->state = JRequest::getVar('state'); 
+                $data->status = JRequest::getVar('status'); 
                 $data->filter_options = JRequest::getVar('filter_options'); 
                 $data->recipe_variations_filter_options = JRequest::getVar('recipe_variations_filter_options'); 
                 $data->current_page= JRequest::getVar('current_page'); 
+                $data->recipe_name= JRequest::getVar('recipe_name');
+                $data->created_by_name= JRequest::getVar('created_by_name');
+                $data->date_from = JRequest::getVar('date_from'); 
+                $data->date_to = JRequest::getVar('date_to'); 
+                
                 
                 $user_id = JRequest::getVar('client_id');
  

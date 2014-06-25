@@ -36,7 +36,7 @@ define([
             var template = _.template(this.template(data));
             this.$el.html(template);
             
-            this.$el.find("#start_from, #start_to, #end_from, #end_to").datepicker({ dateFormat: "yy-mm-dd"});
+            this.$el.find("#date_from, #date_to").datepicker({ dateFormat: "yy-mm-dd"});
             
             this.connectStatusFilter();
             this.connectPublishedFilter();
@@ -51,6 +51,7 @@ define([
             "click #add_item" : "onClickAddItem",
             "click #trash_delete_selected" : "onClickTrashDeleteSelected",
             "click #publish_selected" : "onClickPublish",
+            "click #unpublish_selected" : "onClickUnpublish",
             "click #search" : "search",
             'keypress input[type=text]': 'filterOnEnter',
             "click #clear_all" : "clearAll",
@@ -64,12 +65,13 @@ define([
         },
  
         search : function() {
-            var start_from = this.$el.find("#start_from").val();
-            var start_to = this.$el.find("#start_to").val();
-            var end_from = this.$el.find("#end_from").val();
-            var end_to = this.$el.find("#end_to").val();
+            var recipe_name = this.$el.find("#recipe_name").val();
+            var created_by_name = this.$el.find("#created_by_name").val();
+            
+            var date_from = this.$el.find("#date_from").val();
+            var date_to = this.$el.find("#date_to").val();
 
-            this.model.set({start_from : start_from, start_to : start_to, end_from : end_from, end_to : end_to});
+            this.model.set({recipe_name : recipe_name, created_by_name : created_by_name, date_from : date_from, date_to : date_to});
         },
         
         clearAll : function(){
@@ -79,11 +81,11 @@ define([
             form.find("#state_select").val('*');
             this.model.set(
                 {
-                    start_from : '',
-                    start_to : '',
-                    end_from : '',
-                    end_to : '',
-                    status : ''
+                    date_from : '',
+                    date_to : '',
+                    status : '',
+                    recipe_name : '',
+                    created_by_name : ''
                 }
             );
         },
@@ -106,7 +108,7 @@ define([
                 first_option_title : '-Select Status-',
                 class_name : 'filter_select',
                 id_name : 'status_select',
-                model_field : ''
+                model_field : 'status'
             }).render();
         },
         
@@ -126,7 +128,7 @@ define([
                 first_option_title : '-Published-',
                 class_name : 'filter_select',
                 id_name : 'state_select',
-                model_field : ''
+                model_field : 'state'
             }).render();
         },
         
@@ -195,8 +197,8 @@ define([
                 model : this.model,
                 el : this.$el.find("#recipe_type_wrapper"),
                 collection : collection,
-                title : 'FILTER CATEGORIES',
-                first_option_title : 'ALL CATEGORIES',
+                title : 'RECIPE TYPES',
+                first_option_title : 'ALL TYPE',
                 class_name : '',
                 id_name : '',
                 select_size : 15,
@@ -227,7 +229,7 @@ define([
                 el : this.$el.find("#recipe_variation_wrapper"),
                 collection : collection,
                 title : 'RECIPE VARIATIONS',
-                first_option_title : 'ALL VARIATIONS',
+                first_option_title : 'ALL VARIATION',
                 class_name : '',
                 id_name : '',
                 select_size : 15,
@@ -237,16 +239,18 @@ define([
         
         onClickTrashDeleteSelected : function() {
             var selected = new Array();
+            var states = new Array();
             $('.trash_checkbox:checked').each(function() {
                 selected.push($(this).attr('data-id'));
+                states.push($(this).attr('data-state'));
             });
-            
-            var current_page = this.model.get('current_page');
+
             var self = this;
             
             if(selected.length > 0) {
                 _.each(selected, function(item, key){ 
-                    if(current_page == 'trash_list') {
+                    self.trashItem(item);
+                    if(states[key] == '-2') {
                         self.deleteItem(item);
                     } else {
                        self.trashItem(item); 
@@ -260,7 +264,7 @@ define([
         trashItem : function(id) {
             var model = this.collection.get(id);
             var self  = this;
-            model.save({id : id, published : '-2'}, {
+            model.save({id : id, state : '-2'}, {
                 success: function (model, response) {
                     app.controller.update_list();
                 },
@@ -274,6 +278,67 @@ define([
             var model = this.collection.get(id);
             var self = this;
             model.destroy({
+                success: function (model, response) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        
+        onClickPublish : function() {
+            
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+            
+            var self = this;
+            
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    self.publish(item);
+                });
+            }
+            $("#select_trashed").prop("checked", false);
+        },
+        
+        publish : function(id) {
+            var model = this.collection.get(id);
+       
+            var self  = this;
+            model.save({id : id, state : '1'}, {
+                success: function (model, response) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickUnpublish : function() {
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+
+            var self = this;
+            
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    self.unpublish(item);
+                });
+            }
+            $("#select_trashed").prop("checked", false);
+        },
+        
+        unpublish : function(id) {
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({id : id, state : '0'}, {
                 success: function (model, response) {
                     app.controller.update_list();
                 },
