@@ -373,6 +373,14 @@ class FitnessController extends JController
             echo json_encode($recipe_database_model->recipes());
         }
         
+        function copyRecipe() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'recipe_database.php';
+            $recipe_database_model = new FitnessModelrecipe_database();
+            $table = JRequest::getVar('table');
+            $data_encoded = JRequest::getVar('data_encoded','','POST');
+            echo json_encode($recipe_database_model->copyRecipe($table, $data_encoded));
+        }
+        
         function select_filter() {
             $view = $this -> getView('exercise_library', 'json');
             $view->setModel($this->getModel('exercise_library'));

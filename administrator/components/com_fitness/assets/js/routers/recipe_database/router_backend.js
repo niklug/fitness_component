@@ -349,7 +349,23 @@ define([
             }
            
             return access;
-        }
+        },
+        
+        copy_recipe : function(recipe_id, update_list){
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'recipe_database';
+            var task = 'copyRecipe';
+            var table = '';
+
+            data.id = recipe_id;
+            var self = this;
+            $.AjaxCall(data, url, view, task, table, function(output) {
+                if(update_list) {
+                    self.update_list();
+                }
+            });
+        },
     
     });
 

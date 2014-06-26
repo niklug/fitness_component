@@ -79,6 +79,8 @@ define([
 
             data.state = '1';
             
+            data.business_profile_id = app.options.business_profile_id;
+            
             console.log(data);
             
             this.model.set(data);

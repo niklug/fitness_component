@@ -47,6 +47,7 @@ class FitnessModelrecipe_database extends JModelList {
     
     
     public function getRecipes($table, $data) {
+        
         $helper = $this->helper;
  
         $sort_by = $data->sort_by;
@@ -76,10 +77,25 @@ class FitnessModelrecipe_database extends JModelList {
         $recipe_name = $data->recipe_name;
         
         $created_by_name = $data->created_by_name;
-        
 
         $user_id = $data->user_id;
-
+        
+        //
+        $is_superuser = FitnessHelper::is_superuser($user_id);
+        
+        $is_simple_trainer = FitnessHelper::is_simple_trainer($user_id);
+        
+        $is_trainer_administrator = FitnessHelper::is_trainer_administrator($user_id);
+        
+        $is_simple_trainer = FitnessHelper::is_simple_trainer($user_id);
+        
+        $is_client = FitnessHelper::is_client($user_id);
+        
+        $business_profile = $helper->getBusinessProfileId($user_id);
+        
+        $business_profile_id = $business_profile['data'];
+        //
+        
         $trainers_group_id = FitnessHelper::getTrainersGroupId();
         
         $SUPERUSER_GROUP_ID = FitnessHelper::SUPERUSER_GROUP_ID;
@@ -88,7 +104,6 @@ class FitnessModelrecipe_database extends JModelList {
         
         //get total number
         $query .= " (SELECT COUNT(*) FROM #__fitness_nutrition_recipes AS a ";
-
         $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
         $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         
@@ -128,6 +143,10 @@ class FitnessModelrecipe_database extends JModelList {
         
         if (!empty($data->date_to)) {
             $query .= " AND a.created <= '$data->date_to'";
+        }
+        
+        if(!empty($data->business_profile_id)) {
+            $query .= " AND a.business_profile_id='$data->business_profile_id' ";
         }
         
         $filter_option1 = $filter_options[0];
@@ -152,20 +171,42 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         
+        if($is_client) {
+            if(($current_page == 'my_recipes') OR ($current_page == 'trash_list')) {
+                $query .= " AND a.created_by = '$user_id'";
+            } else if ($current_page == 'my_favourites') {
+                $query .= " AND mf.client_id='$user_id'";
+            } else if($current_page == 'meal_recipes') {
+                // by Business Profile 
+                $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by = '$user_id')";
+            } else {
+
+                // except recipes created  by another clients
+                $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
+                // by Business Profile 
+                $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+            }
+        }
         
-        if(($current_page == 'my_recipes') OR ($current_page == 'trash_list')) {
-            $query .= " AND a.created_by = '$user_id'";
-        } else if ($current_page == 'my_favourites') {
-            $query .= " AND mf.client_id='$user_id'";
-        } else if($current_page == 'meal_recipes') {
-            // by Business Profile 
-            $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by = '$user_id')";
-        } else {
+        /*
+         * if a 'Business Admin' or 'Simple Trainer' is logged-in, they can see Recipes created by...
+            - Super Users
+            - Any other Business Admin or Trainer (from their own business)
+        */
+        /*
+         * If a Client has created a Recipe, only his Primary/Secondary Trainer can see the Recipe
+         */
         
-            // except recipes created  by another clients
-            $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
-            // by Business Profile 
-            $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+        
+        if($is_trainer_administrator) {
+            $query .= " AND (a.business_profile_id='$business_profile_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+            
+        }
+        
+        if($is_simple_trainer) {
+            $query .= " AND (a.business_profile_id='$business_profile_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+            
+            $query .= " AND (a.created_by IN (SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id' , other_trainers)) OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by='$user_id')";
         }
 
           
@@ -187,7 +228,6 @@ class FitnessModelrecipe_database extends JModelList {
         $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite";       
                 
         $query .= " FROM  #__fitness_nutrition_recipes AS a";
-
         $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
         $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         
@@ -229,6 +269,10 @@ class FitnessModelrecipe_database extends JModelList {
             $query .= " AND a.created <= '$data->date_to'";
         }
         
+        if(!empty($data->business_profile_id)) {
+            $query .= " AND a.business_profile_id='$data->business_profile_id' ";
+        }
+        
         if($filter_options) {
             $query .= " AND ( FIND_IN_SET('$filter_option1', a.recipe_type) ";
             
@@ -248,19 +292,31 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         
-        
-        if(($current_page == 'my_recipes') OR ($current_page == 'trash_list')) {
-            $query .= " AND a.created_by = '$user_id'";
-        } else if ($current_page == 'my_favourites') {
-            $query .= " AND mf.client_id='$user_id'";
-        } else if($current_page == 'meal_recipes') {
-            // by Business Profile 
-            $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by = '$user_id')";
-        } else {
-            // except recipes created not by another clients
-            $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
-            // by Business Profile 
-            $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+        if($is_client) {
+            if(($current_page == 'my_recipes') OR ($current_page == 'trash_list')) {
+                $query .= " AND a.created_by = '$user_id'";
+            } else if ($current_page == 'my_favourites') {
+                $query .= " AND mf.client_id='$user_id'";
+            } else if($current_page == 'meal_recipes') {
+                // by Business Profile 
+                $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by = '$user_id')";
+            } else {
+                // except recipes created not by another clients
+                $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
+                // by Business Profile 
+                $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+            }
+        }
+
+        if($is_trainer_administrator) {
+            $query .= " AND (a.business_profile_id='$business_profile_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+            
+        }
+
+        if($is_simple_trainer) {
+            $query .= " AND (a.business_profile_id='$business_profile_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+            
+            $query .= " AND (a.created_by IN (SELECT user_id FROM #__fitness_clients WHERE primary_trainer='$user_id' OR FIND_IN_SET('$user_id' , other_trainers)) OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by='$user_id')";
         }
         
         
@@ -369,6 +425,10 @@ class FitnessModelrecipe_database extends JModelList {
         
         $id = $data->id;
         
+        if(!$id) {
+            throw new Exception("Error: no id");
+        }
+        
         $user = &JFactory::getUser();
 
         $recipe = $helper->getRecipeOriginalData($id);
@@ -445,6 +505,7 @@ class FitnessModelrecipe_database extends JModelList {
                 $data->created_by_name= JRequest::getVar('created_by_name');
                 $data->date_from = JRequest::getVar('date_from'); 
                 $data->date_to = JRequest::getVar('date_to'); 
+                $data->business_profile_id = JRequest::getVar('business_profile_id'); 
                 
                 
                 $user_id = JRequest::getVar('client_id');

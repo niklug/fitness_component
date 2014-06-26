@@ -52,6 +52,7 @@ define([
             "click #trash_delete_selected" : "onClickTrashDeleteSelected",
             "click #publish_selected" : "onClickPublish",
             "click #unpublish_selected" : "onClickUnpublish",
+            "click #copy_selected" : "onClickCopySelected",
             "click #search" : "search",
             'keypress input[type=text]': 'filterOnEnter',
             "click #clear_all" : "clearAll",
@@ -150,27 +151,17 @@ define([
         },
         
         loadBusinessSelect : function(collection) {
-            var business_name_collection = new Backbone.Collection;
-            
-            var element_disabled = '';
-            
-            if(app.options.is_trainer) {
-                business_name_collection.add(collection.where({id : this.business_profile_id}));
-                element_disabled = 'disabled';
-            }
-            
-            if(app.options.is_superuser) {
-                business_name_collection = collection;
+            if(!app.options.is_superuser) {
+                return;
             }
             
              new Select_element_view({
-                model : new Backbone.Model({business_profile_id : this.business_profile_id}),
+                model : this.model,
                 el : $(this.el).find("#business_profile_select"),
-                collection : business_name_collection,
+                collection : collection,
                 first_option_title : '- Business profile-',
                 id_name : 'business_profile_id',
                 model_field : 'business_profile_id',
-                element_disabled : element_disabled
 
             }).render();
         },
@@ -346,6 +337,23 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        onClickCopySelected : function() {
+            var selected = new Array();
+            var states = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+
+            var self = this;
+            
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    app.controller.copy_recipe(item, true);
+                });
+            }
+            $("#select_trashed").prop("checked", false);
         },
     });
             

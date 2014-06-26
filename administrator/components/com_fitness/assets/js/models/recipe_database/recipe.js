@@ -15,7 +15,8 @@ define([
             author : '',
             status : '1', 
             trainer : '',
-            instructions : ''
+            instructions : '',
+            business_profile_id : app.options.business_profile_id
         },
         
         validate: function(attrs, options) {
