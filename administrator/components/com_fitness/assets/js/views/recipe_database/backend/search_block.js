@@ -76,23 +76,26 @@ define([
         },
         
         clearAll : function(){
-            var form = $("#header_wrapper");
-            form.find(".filter_select").val(0);
-            form.find("input[type=text]").val('');
-            form.find("#state_select").val('*');
+            $(this.el).find("input[type=text],#business_profile_id").val('');
+            $(this.el).find(".filter_select").val(0);
+            $(this.el).find("#state_select").val('*');
             this.model.set(
                 {
                     date_from : '',
                     date_to : '',
+                    state : '*',
                     status : '',
                     recipe_name : '',
-                    created_by_name : ''
+                    created_by_name : '',
+                    filter_options : '',
+                    recipe_variations_filter_options : '',
+                    business_profile_id : ''
                 }
             );
         },
 
         onClickAddItem : function() {
-            app.controller.navigate("!/form_primary/0", true);
+            app.controller.navigate("!/form_view/0", true);
         },
         
         connectStatusFilter : function() {
@@ -188,10 +191,10 @@ define([
                 model : this.model,
                 el : this.$el.find("#recipe_type_wrapper"),
                 collection : collection,
-                title : 'RECIPE TYPES',
-                first_option_title : 'ALL TYPE',
+                title : 'RECIPE TYPE',
+                first_option_title : 'ALL TYPES',
                 class_name : '',
-                id_name : '',
+                id_name : 'recipe_type',
                 select_size : 15,
                 model_field : 'filter_options'
             }).render();  
@@ -219,10 +222,10 @@ define([
                 model : this.model,
                 el : this.$el.find("#recipe_variation_wrapper"),
                 collection : collection,
-                title : 'RECIPE VARIATIONS',
-                first_option_title : 'ALL VARIATION',
+                title : 'RECIPE VARIATION',
+                first_option_title : 'ALL VARIATIONS',
                 class_name : '',
-                id_name : '',
+                id_name : 'recipe_variation',
                 select_size : 15,
                 model_field : 'recipe_variations_filter_options'
             }).render(); 

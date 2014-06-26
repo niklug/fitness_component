@@ -4,7 +4,7 @@ define([
     'app'
 ], function ( _, Backbone, app) {
     var model = Backbone.Model.extend({
-        urlRoot : app.options.fitness_frontend_url + '&format=text&view=recipe_database&task=recipes&id=',
+        urlRoot : app.options.ajax_call_url + '&format=text&view=recipe_database&task=recipes&id=',
         
         defaults : {
             id : null,
@@ -23,10 +23,10 @@ define([
             if (!attrs.recipe_name) {
               return 'recipe_name';
             }
-            if (!attrs.recipe_type) {
+            if (!attrs.recipe_type || !parseInt(attrs.recipe_type)) {
               return 'recipe_type';
             }
-            if (!attrs.recipe_variation) {
+            if (!attrs.recipe_variation || !parseInt(attrs.recipe_variation)) {
               return 'recipe_variation';
             }
             if (!attrs.number_serves || !parseInt(attrs.number_serves)) {
