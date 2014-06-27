@@ -52,7 +52,7 @@
 
                                 %>
                                     <select multiple size="10" id="recipe_variation" name="recipe_variation[]" class="dark_input_style" style="width:200px;">
-                                        <% _.each(app.collections.recipe_types.models, function(model){
+                                        <% _.each(app.collections.recipe_variations.models, function(model){
                                             var id = model.get('id');
                                             var name = model.get('name');
                                             var selected = '';

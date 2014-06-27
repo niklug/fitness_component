@@ -994,7 +994,7 @@ class FitnessHelper extends FitnessFactory
         $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite, "; 
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_types WHERE "
-                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_types_names, ";
+                . " FIND_IN_SET(id, (SELECT recipe_type FROM $table WHERE id =a.id))) recipe_types_names, ";
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
                 . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
@@ -1015,7 +1015,7 @@ class FitnessHelper extends FitnessFactory
         $query = "SELECT a.*, ";
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_types WHERE "
-                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_types_names, ";
+                . " FIND_IN_SET(id, (SELECT recipe_type FROM $table WHERE id =a.id))) recipe_types_names, ";
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
                 . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
@@ -1490,7 +1490,7 @@ class FitnessHelper extends FitnessFactory
         $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer, ";
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_types WHERE "
-                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_types_names, ";
+                . " FIND_IN_SET(id, (SELECT recipe_type FROM $table WHERE id =a.id))) recipe_types_names, ";
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
                 . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";

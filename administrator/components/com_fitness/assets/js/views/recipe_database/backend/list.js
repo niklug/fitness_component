@@ -55,7 +55,6 @@ define([
             "click .restore" : "onClickRestore",
             "click .delete" : "onClickDelete",
             "click .view" : "onClickView",
-            "click .copy_exercise" : "onClickCopyExercise",
             "click #select_trashed" : "onClickSelectTrashed",
             
             "click .publish" : "onClickPublish",
@@ -236,7 +235,7 @@ define([
         
         onClickCopy : function(event) {
             var id = $(event.target).attr('data-id');
-            app.controller.copy_item(id);
+            app.controller.copy_recipe(id, true);
         },
        
         onClickView : function(event) {

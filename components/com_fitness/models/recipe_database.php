@@ -230,7 +230,7 @@ class FitnessModelrecipe_database extends JModelList {
         $query .= " (SELECT user_id FROM #__fitness_clients WHERE (primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AND user_id=a.created_by AND state='1') is_associated_trainer,";
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_types WHERE "
-                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_types_names, ";
+                . " FIND_IN_SET(id, (SELECT recipe_type FROM $table WHERE id =a.id))) recipe_types_names, ";
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
                 . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
@@ -403,6 +403,8 @@ class FitnessModelrecipe_database extends JModelList {
         }
         
         $user = &JFactory::getUser();
+        
+        $user_id = $user->id;
 
         $recipe = $helper->getRecipeOriginalData($id);
 
@@ -411,9 +413,13 @@ class FitnessModelrecipe_database extends JModelList {
             
         $recipe->id = null;
         $recipe->status = '1';
-        $recipe->created_by = $user->id;
+        $recipe->created_by = $user_id;
         $recipe->created = $created;
         $recipe->assessed_by = null;
+        
+        $business_profile = $helper->getBusinessProfileId($user_id);
+        $business_profile_id = $business_profile['data'];
+        $recipe->business_profile_id =  $business_profile_id;
         
         $new_recipe_id = $helper->insertUpdateObj($recipe, '#__fitness_nutrition_recipes');
         
