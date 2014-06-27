@@ -120,15 +120,7 @@ class RecipeEmailTemplateData extends EmailTemplateData  {
     
     protected function getItemData() {
         $this->item = $this->getRecipeOriginalData($this->id);
-        if($this->item->recipe_type) {
-            $recipe_types_names = $this->getRecipeNames($this->item->recipe_type);
-            foreach ($recipe_types_names as $recipe_types_name) {
-                $recipe_types_names_html .= $recipe_types_name . "<br/>";
-
-            }
-        }
-        $this->item->recipe_types_names = $recipe_types_names_html;
-        
+  
         $this->business_profile_user = $this->item->created_by;
     }
     

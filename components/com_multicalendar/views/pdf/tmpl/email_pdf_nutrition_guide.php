@@ -82,7 +82,7 @@
                             $html .= 'Recipe Type';
                             $html .= '</td>';
                             $html .= '<td>';
-                            
+                            $recipe->recipe_types_names =  explode(",", $recipe->recipe_types_names);
                             foreach ($recipe->recipe_types_names as $recipe_type_name) {
                                 $html .= $recipe_type_name . "<br/>";
                             }
@@ -95,7 +95,7 @@
                             $html .= 'Variations';
                             $html .= '</td>';
                             $html .= '<td>';
-                            
+                            $recipe->recipe_variations_names =  explode(",", $recipe->recipe_variations_names);
                             foreach ($recipe->recipe_variations_names as $recipe_variations_names) {
                                 $html .= $recipe_variations_names . "<br/>";
                             }

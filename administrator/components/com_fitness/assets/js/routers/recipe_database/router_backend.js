@@ -56,7 +56,7 @@ define([
             }
             //
             
-            app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id});
+            app.models.request_params = new Request_params_items_model({});
             app.models.request_params.bind("change", this.get_items, this);
             
      
@@ -89,7 +89,7 @@ define([
             app.collections.items.fetch({
                 data : params,
                 success : function (collection, response) {
-                    //console.log(collection.toJSON());
+                    console.log(collection.toJSON());
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -102,12 +102,17 @@ define([
             var status = model.get('status');
             var options = _.extend({}, app.options.status_options);
             
+            if(!model.get('edit_allowed')) {
+                options.status_button = 'status_button_not_active';
+            }
+            
             var target = "#status_button_place_" + id;
 
             var status_obj = $.status(options);
 
             el.find(target).html(status_obj.statusButtonHtml(id, status));
-
+            
+            
             status_obj.run();
         },
 
@@ -146,13 +151,14 @@ define([
         
         form_view : function(id) {
             if(!parseInt(id)) {
-                this.load_form_view(new Item_model());
+                this.load_form_view(new Item_model({edit_allowed : true}));
                 return;
             }
 
             var model = app.collections.items.get(id);
 
             if(model) {
+                model.set({edit_allowed : this.edit_allowed(model)});
                 this.load_form_view(model);
                 return;
             }
@@ -161,6 +167,7 @@ define([
             model.fetch({
                 wait : true,
                 success: function (model, response) {
+                    model.set({edit_allowed : self.edit_allowed(model)});
                     app.collections.items.add(model);
                     self.load_form_view(model);
                 },
@@ -174,6 +181,35 @@ define([
             $("#search_block").html(new Form_menu_view({model : model}).render().el);
             $("#main_container").html(new Form_view({collection : app.collections.items, model : model}).render().el);
         },
+        
+        edit_allowed : function(model) {
+            var access = true;
+            var is_simple_trainer = app.options.is_simple_trainer;
+            var is_trainer_administrator = app.options.is_trainer_administrator;
+            var is_superuser = app.options.is_superuser;
+            var created_by_superuser = model.get('created_by_superuser');
+            var is_associated_trainer = model.get('is_associated_trainer');
+            var created_by = model.get('created_by');
+            var user_id = app.options.user_id;
+            
+            if(!is_superuser && parseInt(created_by_superuser)) {
+                access = false;
+            }
+            
+            if(is_simple_trainer && (created_by != user_id)) {
+                access = false;
+            }
+            
+            if(is_associated_trainer) {
+                access = true;
+            }
+            
+            if(model.isNew()) {
+                access = true;
+            }
+           
+            return access;
+        }
 
         
     

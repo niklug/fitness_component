@@ -73,20 +73,30 @@ define([
             
             data.video = $("#video_container").attr('data-videopath');
             
-            data.instructions = $("#instructions").val();
-            
-            data.created_by = app.options.client_id;
 
-            data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");  
+            var instructions = $("#instructions").val();
+             
+            if(typeof instructions !== 'undefined') {
+                instructions = encodeURIComponent(instructions);
+            } else {
+                instructions = '';
+            }
+            data.instructions = instructions;
 
-            data.state = '1';
+            data.state = $('#published:checked').val() || '0';
+
+            data.status = $(".status_button").attr('data-status_id') || '1';
             
-            data.business_profile_id = app.options.business_profile_id;
-            
-            data.status = $(".status_button").attr('data-status_id');
+            if(this.model.isNew()) {
+                data.created_by = app.options.client_id;
+                
+                data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");  
+                
+                data.business_profile_id = app.options.business_profile_id;
+            }
             
             console.log(data);
-            
+              
             this.model.set(data);
             
             //validation

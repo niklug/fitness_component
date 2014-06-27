@@ -26,13 +26,12 @@ var current_page = app.models.get_recipe_params.get('current_page');
                                 <td style="vertical-align:top;">RECIPE TYPE</td>
                                 <td>
                                     <span class="grey_title">
-                                        <% 
-                                        if(typeof recipe_types_names !== 'undefined') {
-                                            _.each(recipe_types_names, function(item){ %>
+                                        <%
+                                        if(recipe_types_names) {
+                                            _.each(recipe_types_names.split(','), function(item){ %>
                                                 <%= item + "<br/>" %>
-                                            <% 
-                                            })  
-                                        }else { %> 
+                                            <% })
+                                        } else { %> 
                                             <%= '-' %>
                                         <% } %>
                                     </span>
@@ -42,13 +41,12 @@ var current_page = app.models.get_recipe_params.get('current_page');
                                 <td style="vertical-align:top;">VARIATIONS</td>
                                 <td>
                                     <span class="grey_title">
-                                        <% 
-                                        if(typeof recipe_variations_names !== 'undefined') {
-                                            _.each(recipe_variations_names, function(item){ %>
+                                        <%
+                                        if(recipe_variations_names) {
+                                            _.each(recipe_variations_names.split(','), function(item){ %>
                                                 <%= item + "<br/>" %>
-                                            <% 
-                                            })  
-                                        }else { %> 
+                                            <% })
+                                        } else { %> 
                                             <%= '-' %>
                                         <% } %>
                                     </span>
@@ -190,7 +188,7 @@ var current_page = app.models.get_recipe_params.get('current_page');
             <br>
             <h5>COOKING INSTRUCTIONS / METHOD</h5>
             <span style="width:100%" class="grey_title">
-                <%= instructions %>
+                <%= decodeURIComponent(instructions) %>
             </span>
 
             <br><br>

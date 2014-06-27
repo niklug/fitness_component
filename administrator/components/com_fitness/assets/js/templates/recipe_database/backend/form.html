@@ -123,7 +123,7 @@
                             <td colspan="2">
                                 <fieldset class="adminform">
                                     <legend>RECIPE INSTRUCTIONS / METHOD</legend>
-                                    <textarea id="instructions" style="min-height:200px;width:98%;background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);padding:5px;" name="instructions" cols="50" rows="4"><%= instructions %></textarea>
+                                    <textarea id="instructions" style="min-height:200px;width:98%;background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);padding:5px;" name="instructions" cols="50" rows="4"><%= decodeURIComponent(instructions) %></textarea>
                                 </fieldset>
                             </td>
                         </tr>

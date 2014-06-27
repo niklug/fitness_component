@@ -72,8 +72,8 @@ $business_profile_id = $business_profile_id['data'];
         
     var statuses = {
         'PENDING_RECIPE_STATUS' :     {id : '<?php echo FitnessHelper::PENDING_RECIPE_STATUS ?>',       name : 'PENDING'},
-        'APPROVED_RECIPE_STATUS':     {id : '<?php echo FitnessHelper::APPROVED_RECIPE_STATUS ?>',      name : 'COMPLETE'},
-        'NOTAPPROVED_RECIPE_STATUS' : {id : '<?php echo FitnessHelper::NOTAPPROVED_RECIPE_STATUS ?>',   name : 'INCOMPLETE'},
+        'APPROVED_RECIPE_STATUS':     {id : '<?php echo FitnessHelper::APPROVED_RECIPE_STATUS ?>',      name : 'APPROVED'},
+        'NOTAPPROVED_RECIPE_STATUS' : {id : '<?php echo FitnessHelper::NOTAPPROVED_RECIPE_STATUS ?>',   name : 'NOTAPPROVED'},
     };
     
      var status_options = {

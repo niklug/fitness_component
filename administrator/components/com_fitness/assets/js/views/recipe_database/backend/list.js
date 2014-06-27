@@ -98,6 +98,7 @@ define([
         },
         
         addItem : function(model) {
+            model.set({edit_allowed : app.controller.edit_allowed(model)});
             new List_item_view({el : this.container_el, model : model}); 
             this.$el.find( "#items_container tr:odd" ).addClass('row1');
             this.$el.find( "#items_container tr:even" ).addClass('row0');

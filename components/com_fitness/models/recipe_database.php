@@ -95,15 +95,14 @@ class FitnessModelrecipe_database extends JModelList {
         
         $business_profile_id = $business_profile['data'];
         //
-        
-        $trainers_group_id = FitnessHelper::getTrainersGroupId();
+
         
         $SUPERUSER_GROUP_ID = FitnessHelper::SUPERUSER_GROUP_ID;
         
         $query = "SELECT a.*,";
         
         //get total number
-        $query .= " (SELECT COUNT(*) FROM #__fitness_nutrition_recipes AS a ";
+        $query .= " (SELECT COUNT(*) FROM $table AS a ";
         $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
         $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         
@@ -178,13 +177,13 @@ class FitnessModelrecipe_database extends JModelList {
                 $query .= " AND mf.client_id='$user_id'";
             } else if($current_page == 'meal_recipes') {
                 // by Business Profile 
-                $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by = '$user_id')";
+                $query .= " AND (a.business_profile_id ='$business_profile_id' OR a.created_by = '$user_id')";
             } else {
 
                 // except recipes created  by another clients
                 $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
                 // by Business Profile 
-                $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+                $query .= " AND (a.business_profile_id ='$business_profile_id')";
             }
         }
         
@@ -225,9 +224,18 @@ class FitnessModelrecipe_database extends JModelList {
                    (SELECT ROUND(SUM(total_sugars),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS total_sugars,
                    (SELECT ROUND(SUM(sodium),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS sodium,";
                 
-        $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite";       
+        $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite,"; 
+        $query .= " (SELECT user_id FROM #__user_usergroup_map WHERE user_id=a.created_by AND group_id='$SUPERUSER_GROUP_ID') AS created_by_superuser,";  
+        // if recipe created by client logged associated trainer
+        $query .= " (SELECT user_id FROM #__fitness_clients WHERE (primary_trainer='$user_id' OR FIND_IN_SET('$user_id', other_trainers)) AND user_id=a.created_by AND state='1') is_associated_trainer,";
+        
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_types WHERE "
+                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_types_names, ";
+        
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
+                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
                 
-        $query .= " FROM  #__fitness_nutrition_recipes AS a";
+        $query .= " FROM  $table AS a";
         $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
         $query .= " LEFT JOIN #__usergroups AS ug ON ug.id=um.group_id";
         
@@ -299,12 +307,12 @@ class FitnessModelrecipe_database extends JModelList {
                 $query .= " AND mf.client_id='$user_id'";
             } else if($current_page == 'meal_recipes') {
                 // by Business Profile 
-                $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID' OR a.created_by = '$user_id')";
+                $query .= " AND (a.business_profile_id ='$business_profile_id' OR a.created_by = '$user_id')";
             } else {
                 // except recipes created not by another clients
                 $query .= " AND (um.group_id !='2' AND um.group_id NOT IN (SELECT id FROM #__usergroups WHERE parent_id='2'))";
                 // by Business Profile 
-                $query .= " AND (um.group_id ='$trainers_group_id' OR um.group_id ='$SUPERUSER_GROUP_ID')";
+                $query .= " AND (a.business_profile_id ='$business_profile_id')";
             }
         }
 
@@ -325,27 +333,6 @@ class FitnessModelrecipe_database extends JModelList {
 
 
         $data = FitnessHelper::customQuery($query, 1);
-
-        //recipe types
-        $i = 0;
-        foreach ($data as $recipe) {
-            if(!empty($recipe->recipe_type)) {
-                $recipe_types_names = $helper->getRecipeNames($recipe->recipe_type);
-                $data[$i]->recipe_types_names = $recipe_types_names;
-                $i++;
-            }
-        }
-        
-        //recipe variation
-        
-        $i = 0;
-        foreach ($data as $recipe) {
-            if(!empty($recipe->recipe_variation)) {
-                $recipe_variations_names = $helper->getRecipeVariationNames($recipe->recipe_variation);
-                $data[$i]->recipe_variations_names = $recipe_variations_names;
-                $i++;
-            }
-        }
 
         return $data;
     }
@@ -392,20 +379,6 @@ class FitnessModelrecipe_database extends JModelList {
 
         if(!$data->id){
             throw new Exception('error: no id');
-        }
-        
-        // recipe types name
-        if(!empty($data->recipe_type)) {
-            $recipe_types_names = $helper->getRecipeNames($data->recipe_type);
-
-            $data->recipe_types_names = $recipe_types_names;
-        }
-        
-        // recipe variations name
-        if(!empty($data->recipe_variation)) {
-            $recipe_variations_names = $helper->getRecipeVariationNames($data->recipe_variation);
-
-            $data->recipe_variations_names = $recipe_variations_names;
         }
         // recipe meals
         

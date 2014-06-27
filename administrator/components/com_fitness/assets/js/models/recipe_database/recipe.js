@@ -14,9 +14,10 @@ define([
             number_serves : '',
             author : '',
             status : '1', 
+            state : '1',
             trainer : '',
             instructions : '',
-            business_profile_id : app.options.business_profile_id
+            business_profile_id : ''
         },
         
         validate: function(attrs, options) {

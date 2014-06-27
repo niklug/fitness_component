@@ -18,13 +18,12 @@ var background_image = 'url(' + "'" + image  + "')" ;
     
     <td>
         <span>
-            <% 
+            <%
             if(item.recipe_types_names) {
-                _.each(item.recipe_types_names, function(item){ %>
+                _.each(item.recipe_types_names.split(','), function(item){ %>
                     <%= item + "<br/>" %>
-                <% 
-                })  
-            }else { %> 
+                <% })
+            } else { %> 
                 <%= '-' %>
             <% } %>
         </span>
@@ -32,13 +31,12 @@ var background_image = 'url(' + "'" + image  + "')" ;
     
     <td>
         <span>
-            <% 
+            <%
             if(item.recipe_variations_names) {
-                _.each(item.recipe_variations_names, function(item){ %>
+                _.each(item.recipe_variations_names.split(','), function(item){ %>
                     <%= item + "<br/>" %>
-                <% 
-                })  
-            }else { %> 
+                <% })
+            } else { %> 
                 <%= '-' %>
             <% } %>
         </span>
@@ -87,9 +85,13 @@ var background_image = 'url(' + "'" + image  + "')" ;
     <td>
         <% if(item.state != '-2') { %>
             <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
-        <% } else { %>
-            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
-        <% } %>
+        <% } else {
+            if(item.edit_allowed) {
+                %>
+                <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
+                <%
+            }
+        } %>
     </td>
     
     <td>
@@ -97,10 +99,12 @@ var background_image = 'url(' + "'" + image  + "')" ;
     </td>
     
     <td>
-        <% if(item.state != '-2') { %>
-            <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= item.id %>" class="trash_icon"></span></a>
-        <% } else { %>
-            <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= item.id %>" class="delete_icon"></span></a>
+        <% if(item.edit_allowed) { %>
+            <% if(item.state != '-2') { %>
+                <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= item.id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= item.id %>" class="delete_icon"></span></a>
+            <% } %>
         <% } %>
     </td>
     
@@ -113,13 +117,16 @@ var background_image = 'url(' + "'" + image  + "')" ;
             publish_title = 'Unpublish'; 
         }
         %>
-        <% if(item.state != '-2') { %>
-        <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish state <%= icon_class %> " ></span>
+        <% if(item.edit_allowed) { %>
+            <% if(item.state != '-2') { %>
+            <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish state <%= icon_class %> " ></span>
+            <% } %>
         <% } %>
-
     </td>
     
     <td class="center">
-        <input data-id="<%= item.id %>" data-state="<%= item.state %>" class="trash_checkbox" type="checkbox"/>
+        <% if(item.edit_allowed) { %>
+            <input data-id="<%= item.id %>" data-state="<%= item.state %>" class="trash_checkbox" type="checkbox"/>
+        <% } %>
     </td>
 </tr>

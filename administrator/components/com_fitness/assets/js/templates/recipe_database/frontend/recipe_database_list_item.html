@@ -27,13 +27,12 @@ var current_page = app.models.get_recipe_params.get('current_page');
                         <td style="vertical-align:top;">RECIPE TYPE</td>
                         <td>
                             <span class="grey_title">
-                                <% 
-                                if(typeof recipe_types_names !== 'undefined') {
-                                    _.each(recipe_types_names, function(item){ %>
+                                <%
+                                if(recipe_types_names) {
+                                    _.each(recipe_types_names.split(','), function(item){ %>
                                         <%= item + "<br/>" %>
-                                    <% 
-                                    })  
-                                }else { %> 
+                                    <% })
+                                } else { %> 
                                     <%= '-' %>
                                 <% } %>
                             </span>
@@ -45,12 +44,11 @@ var current_page = app.models.get_recipe_params.get('current_page');
                         <td>
                             <a data-id="<%= id %>" style="cursor: pointer;" class="show_recipe_variations" onclick="javascript:void(0)">[show]</a>
                             <span data-id="<%= id %>" style="display:none;" class="grey_title recipe_variations">
-                                <% 
-                                if(typeof recipe_variations_names !== 'undefined') {
-                                    _.each(recipe_variations_names, function(item){ %>
+                                <%
+                                if(recipe_variations_names) {
+                                    _.each(recipe_variations_names.split(','), function(item){ %>
                                         <%= item + "<br/>" %>
-                                    <% 
-                                    })  
+                                    <% })
                                 } else { %> 
                                     <%= '-' %>
                                 <% } %>

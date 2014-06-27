@@ -45,6 +45,8 @@ class FitnessViewRecipe_database extends JView
                 $document->addStyleSheet(JUri::root() . 'components/com_fitness/assets/css/fitness.css');
                 
                 $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
+                
+                $document->addStyleSheet(JURI::root() . 'administrator/components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'jquery.cleditor.css');
 
 		parent::display($tpl);
 	}

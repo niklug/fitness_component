@@ -64,15 +64,24 @@ define([
         
             this.$el.html(template);
             
-            this.connectImageUpload();
-            this.connectVideoUpload();
-            
-            if(this.model.get('id')) {
-                this.connect_item_description();
-                this.connectComments();
-            }
-            
+            this.onRender();
+
             return this;
+        },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                self.connectImageUpload();
+                self.connectVideoUpload();
+
+                if(self.model.get('id')) {
+                    self.connect_item_description();
+                    self.connectComments();
+                }
+                
+                $.fitness_helper.connectEditor($(self.el), "#instructions", false);
+            });
         },
         
         connect_item_description : function() {

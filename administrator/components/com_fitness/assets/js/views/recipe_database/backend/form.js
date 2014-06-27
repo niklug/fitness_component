@@ -24,12 +24,14 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
+            this.edit_allowed = this.model.get('edit_allowed');
         },
 
         template:_.template(template),
         
         render : function(){
             var data = this.model.toJSON();
+            console.log(this.model.toJSON());
             data.$ = $;
             data.app = app;
             var template = _.template(this.template(data));
@@ -56,6 +58,17 @@ define([
                 }
                 
                 app.controller.connectStatus(self.model, $(self.el));
+                
+                $(self.el).find("#instructions").cleditor({width:'100%', height:150, useCSS:true})[0];
+                
+                if(!self.edit_allowed) {
+                    $(self.el).find("#recipe_name, #number_serves, #published").attr('disabled', 'disabled');
+                    
+                    var element = $(self.el).find("#instructions").cleditor()[0];
+                    if(element) {
+                        element.disable(true);
+                    }
+                }
             });
         },
         
@@ -67,7 +80,7 @@ define([
                 'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
                 'db_table' : '#__fitness_nutrition_recipes_meals',
                 'parent_view' : '',
-                'read_only' : false,
+                'read_only' : !this.edit_allowed,
                 'ingredient_model' : 'recipe_database'
             }
             var item_description_html = $.itemDescription(item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', 0).run();
@@ -80,7 +93,7 @@ define([
                 'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : app.options.recipe_comments_db_table,
-                'read_only' : false,
+                'read_only' : !this.edit_allowed,
                 'anable_comment_email' : false
             }
             var comments = $.comments(comment_options, comment_options.item_id, 0);
@@ -114,8 +127,8 @@ define([
                 'el' : $('#image_upload_content'),
                 'img_path' : app.options.img_path,
                 'base_url' : app.options.base_url,
-                'image_name' : this.model.get('id')
-
+                'image_name' : this.model.get('id'),
+                'readonly' : !this.edit_allowed,
             };
 
             var image_upload = $.backbone_image_upload(image_upload_options); 
@@ -142,8 +155,8 @@ define([
                 'el' : $('#video_upload_content'),
                 'video_path' : app.options.video_path,
                 'base_url' : app.options.base_url,
-                'video_name' : this.model.get('id')
-
+                'video_name' : this.model.get('id'),
+                'readonly' : !this.edit_allowed,
             };
 
             var video_upload = $.backbone_video_upload(video_upload_options); 
@@ -168,6 +181,10 @@ define([
         },
         
         loadRecipeTypesSelect : function(collection) {
+            var element_disabled = '';
+            if(!this.edit_allowed ) {
+                element_disabled = 'disabled';
+            }
             new Select_filter_fiew({
                 model : this.model,
                 el : this.$el.find("#recipe_type_wrapper"),
@@ -177,7 +194,8 @@ define([
                 class_name : '',
                 id_name : 'recipe_type',
                 select_size : 15,
-                model_field : 'recipe_type'
+                model_field : 'recipe_type',
+                element_disabled : element_disabled
             }).render();  
         },
         
@@ -199,6 +217,10 @@ define([
         },
         
         loadRecipeVariationsSelect : function(collection) {
+            var element_disabled = '';
+            if(!this.edit_allowed ) {
+                element_disabled = 'disabled';
+            }
             new Select_filter_fiew({
                 model : this.model,
                 el : this.$el.find("#recipe_variation_wrapper"),
@@ -208,7 +230,8 @@ define([
                 class_name : '',
                 id_name : 'recipe_variation',
                 select_size : 15,
-                model_field : 'recipe_variation'
+                model_field : 'recipe_variation',
+                element_disabled : element_disabled
             }).render(); 
         },
         

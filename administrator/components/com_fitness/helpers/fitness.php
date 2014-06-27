@@ -974,6 +974,7 @@ class FitnessHelper extends FitnessFactory
     }
     
     public function getRecipe($id, $state) {
+        $table = '#__fitness_nutrition_recipes';
         $user = &JFactory::getUser();
         $user_id = $user->id;
         
@@ -990,9 +991,15 @@ class FitnessHelper extends FitnessFactory
                    (SELECT ROUND(SUM(total_sugars),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS total_sugars,
                    (SELECT ROUND(SUM(sodium),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS sodium,";
         
-        $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite ";       
+        $query .= " (SELECT id FROM #__fitness_nutrition_recipes_favourites WHERE item_id=a.id AND client_id='$user_id') AS is_favourite, "; 
         
-        $query .=  " FROM #__fitness_nutrition_recipes AS a"
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_types WHERE "
+                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_types_names, ";
+        
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
+                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
+        
+        $query .=  " FROM $table AS a"
                 . " "
                 . "WHERE a.id='$id' ";
                // . "AND a.state='$state'";
@@ -1003,10 +1010,17 @@ class FitnessHelper extends FitnessFactory
     }
     
     public function getRecipeOriginalData($id) {
+        $table = '#__fitness_nutrition_recipes';
 
-        $query = "SELECT a.* ";
+        $query = "SELECT a.*, ";
+        
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_types WHERE "
+                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_types_names, ";
+        
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
+                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
 
-        $query .=  " FROM #__fitness_nutrition_recipes AS a"
+        $query .=  " FROM $table AS a"
                
                 . " WHERE a.id='$id' "
                 . " AND a.state='1'";
@@ -1469,36 +1483,24 @@ class FitnessHelper extends FitnessFactory
     }
     
     public function getExampleDayMealRecipes($meal_id) {
+        $table = '#__fitness_nutrition_recipes';
         $query = "SELECT r.*, a.*, r.number_serves AS number_serves, r.id AS id,";
                     
         $query .= " (SELECT name FROM #__users WHERE id=a.created_by) author,";
-        $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer ";
+        $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer, ";
+        
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_types WHERE "
+                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_types_names, ";
+        
+        $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
+                . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
         
         $query .= "  FROM #__fitness_nutrition_plan_example_day_meal_recipes AS r ";
-        $query .= " LEFT JOIN  #__fitness_nutrition_recipes AS a ON a.id=r.original_recipe_id";
+        $query .= " LEFT JOIN  $table AS a ON a.id=r.original_recipe_id";
         $query .= " WHERE r.meal_id='$meal_id'";
         
         $data = self::customQuery($query, 1);
-        
-        //recipe types
-        $i = 0;
-        foreach ($data as $recipe) {
-            if(!empty($recipe->recipe_type)) {
-                $recipe_types_names = $this->getRecipeNames($recipe->recipe_type);
-                $data[$i]->recipe_types_names = $recipe_types_names;
-                $i++;
-            }
-        }
-        
-        //recipe variation
-        $i = 0;
-        foreach ($data as $recipe) {
-            if(!empty($recipe->recipe_variation)) {
-                $recipe_variations_names = $this->getRecipeVariationNames($recipe->recipe_variation);
-                $data[$i]->recipe_variations_names = $recipe_variations_names;
-                $i++;
-            }
-        }
+
 
         $i = 0;
         foreach ($data as $recipe) {

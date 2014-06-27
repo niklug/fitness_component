@@ -1,12 +1,14 @@
 <div id="toolbar" class="toolbar-list">
     <ul>
         <% if(parseInt(id)) { %>
-            <li id="toolbar-apply" class="button">
-                <a id="save" class="toolbar" onclick="javascript:void(0)">
-                    <span  class="icon-32-apply"> </span>
-                    Save
-                </a>
-            </li>
+            <% if(edit_allowed) { %>
+                <li id="toolbar-apply" class="button">
+                    <a id="save" class="toolbar" onclick="javascript:void(0)">
+                        <span  class="icon-32-apply"> </span>
+                        Save
+                    </a>
+                </li>
+            <% } %>
          <% } else { %>
             <li id="toolbar-apply" class="button">
                 <a id="save" class="toolbar" onclick="javascript:void(0)">
@@ -18,31 +20,35 @@
             
             
         <% if(parseInt(id)) { %>
-            <li id="toolbar-save" class="button">
-                <a id="save_close" class="toolbar" onclick="javascript:void(0)">
-                    <span  class="icon-32-save"> </span>
-                    Save & Close
-                </a>
-            </li>
+            <% if(edit_allowed) { %>
+                <li id="toolbar-save" class="button">
+                    <a id="save_close" class="toolbar" onclick="javascript:void(0)">
+                        <span  class="icon-32-save"> </span>
+                        Save & Close
+                    </a>
+                </li>
+            <% } %>
             <li id="toolbar-save-new" class="button">
                 <a  id="save_copy"  class="toolbar" onclick="javascript:void(0)">
                     <span class="icon-32-save-new"> </span>
                     Save As Copy
                 </a>
             </li>
-            
-            <li id="toolbar-save-new" class="button">
-                <a  id="save_new"  class="toolbar" onclick="javascript:void(0)">
-                    <span class="icon-32-save-new"> </span>
-                    Save & New
-                </a>
-            </li>
+            <% if(edit_allowed) { %>
+                <li id="toolbar-save-new" class="button">
+                    <a  id="save_new"  class="toolbar" onclick="javascript:void(0)">
+                        <span class="icon-32-save-new"> </span>
+                        Save & New
+                    </a>
+                </li>
+            <% } %>
             <li id="toolbar-cancel" class="button">
                 <a id="cancel"  class="toolbar" onclick="javascript:void(0)">
                     <span class="icon-32-cancel"> </span>
                     Close
                 </a>
             </li>
+            
          <% } else { %>
             <li id="toolbar-cancel" class="button">
                 <a id="cancel"  class="toolbar" onclick="javascript:void(0)">
