@@ -92,7 +92,7 @@ define([
                 data.status = '1';
             }
             
-            console.log(data);
+            //console.log(data);
             
             this.model.set(data);
             
@@ -125,22 +125,28 @@ define([
             
             var id = this.model.get('id');
             var self = this;
-            this.model.save(null, {
+            app.collections.recipes.create(this.model, {
                 success: function (model, response) {
-                    if(self.save_method == 'save') {
-                        self.controller.navigate("");
-                        self.controller.navigate("!/edit_recipe/" + model.get('id'), true);
-                    } else if(self.save_method == 'save_close') {
-                        self.controller.navigate("!/nutrition_recipe/" + model.get('id'), true);
-                    } else if(self.save_method == 'save_new') {
-                        self.controller.navigate("");
-                        self.controller.navigate("!/edit_recipe/0", true);
-                    } else {
-                        self.controller.navigate("!/my_recipes", true);
-                    }
-                    if(!id) {
-                        self.email_new_recipe(model.get('id'));
-                    }
+                    app.collections.recipes.reset();
+                    app.collections.recipes.fetch({
+                        data : app.models.get_recipe_params.toJSON(),
+                        success: function (collection, response) {
+                            if(self.save_method == 'save') {
+                                self.controller.navigate("");
+                                self.controller.navigate("!/edit_recipe/" + model.get('id'), true);
+                            } else if(self.save_method == 'save_close') {
+                                self.controller.navigate("!/nutrition_recipe/" + model.get('id'), true);
+                            } else if(self.save_method == 'save_new') {
+                                self.controller.navigate("");
+                                self.controller.navigate("!/edit_recipe/0", true);
+                            } else {
+                                self.controller.navigate("!/my_recipes", true);
+                            }
+                        },
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    }); 
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -148,26 +154,7 @@ define([
             });
         },
         
-        email_new_recipe : function(id) {
-            var data = {};
-            var url = app.options.fitness_frontend_url;
-            var view = '';
-            var task = 'ajax_email';
-            var table = '';
-
-            data.id = id;
-            data.view = 'NutritionRecipe';
-            data.method = 'NewRecipe';
-            $.AjaxCall(data, url, view, task, table, function(output){
-                //console.log(output);
-                var emails = output.split(',');
-                var message = 'Emails were sent to: ' +  "</br>";
-                $.each(emails, function(index, email) { 
-                    message += email +  "</br>";
-                });
-                $("#emais_sended").append(message);
-           });
-        },
+        
     });
             
     return view;

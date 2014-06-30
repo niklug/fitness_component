@@ -657,22 +657,19 @@ class EmailPdfRecipe extends EmailTemplateData  {
                 
         $this->item = $recipe;
         
-        if($this->item->recipe_type) {
-            $recipe_types_names = $this->getRecipeNames($this->item->recipe_type);
-            
-            foreach ($recipe_types_names as $recipe_types_name) {
-                $recipe_types_names_html .= $recipe_types_name . "<br/>";
+        $this->item->recipe_types_names = split(",", $this->item->recipe_types_names);
+        foreach ($this->item->recipe_types_names as $recipe_types_name) {
+            $recipe_types_names_html .= $recipe_types_name . "<br/>";
 
-            }
         }
         $this->item->recipe_types_names = $recipe_types_names_html;
+        
+        //
+        
+        $this->item->recipe_variation_names = split(",", $this->item->recipe_variation_names);
+        foreach ($this->item->recipe_variation_names as $recipe_variation_name) {
+            $recipe_variation_names_html .= $recipe_variation_name . "<br/>";
 
-        if($this->item->recipe_variation) {
-            $recipe_variation_names = $this->getRecipeVariationNames($this->item->recipe_variation);
-            foreach ($recipe_variation_names as $recipe_variation_name) {
-                $recipe_variation_names_html .= $recipe_variation_name . "<br/>";
-
-            }
         }
         $this->item->recipe_variation_names = $recipe_variation_names_html;
         
@@ -683,7 +680,6 @@ class EmailPdfRecipe extends EmailTemplateData  {
         $nutrition_recipes_model = new FitnessModelnutrition_recipes();
         
         $this->item->status_html = $nutrition_recipes_model->status_html($this->item->id, $this->item->status, 'status_button');
-        
     }
     
         

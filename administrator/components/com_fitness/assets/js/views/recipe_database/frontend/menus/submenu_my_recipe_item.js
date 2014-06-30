@@ -33,6 +33,7 @@ define([
             "click .trash_recipe" : "onClickTrashRecipe",
             "click .edit_recipe" : "onClickEditRecipe",
             "click .add_diary" : "onClickAddDiary",
+            "click .submit_recipe" : "onClickSubmit",
         },
 
         onClickCloseRecipe : function() {
@@ -82,6 +83,28 @@ define([
         onClickAddDiary : function(event) {
             var id = $(event.target).attr('data-id');
             this.controller.navigate("!/add_diary/" + id, true);
+        },
+        
+        onClickSubmit : function(event) {
+            var id = $(event.target).attr('data-id');
+            var data = {};
+            var url = app.options.fitness_frontend_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.id = id;
+            data.view = 'NutritionRecipe';
+            data.method = 'NewRecipe';
+            $.AjaxCall(data, url, view, task, table, function(output){
+                //console.log(output);
+                var emails = output.split(',');
+                var message = 'Emails were sent to: ' +  "</br>";
+                $.each(emails, function(index, email) { 
+                    message += email +  "</br>";
+                });
+                $("#emais_sended").append(message);
+           });
         },
     });
             

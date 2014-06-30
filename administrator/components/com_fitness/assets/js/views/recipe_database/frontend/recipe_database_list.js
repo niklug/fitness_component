@@ -124,7 +124,7 @@ define([
                 el : this.$el.find("#recipe_variations_filter_wrapper"),
                 collection : collection,
                 title : 'RECIPE VARIATION',
-                first_option_title : '-ALL VARIATIONS',
+                first_option_title : 'ALL VARIATIONS',
                 class_name : ' dark_input_style ',
                 id_name : 'recipe_variation',
                 select_size : 12,

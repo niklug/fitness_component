@@ -77,7 +77,10 @@ define([
             
             app.collections.recipes = new Recipes_collection();
             
-            app.models.get_recipe_params = new Request_params_recipes_model();
+            
+            var current_page = localStorage.getItem('recipes_current_page');
+                    
+            app.models.get_recipe_params = new Request_params_recipes_model({current_page : current_page});
             
             app.models.get_recipe_params.bind("change", this.get_database_recipes, this);
             
@@ -91,6 +94,8 @@ define([
             app.collections.ingredients = new Ingredients_collection();
             app.models.request_params_ingredients = new Request_params_ingredients_model();
             app.models.request_params_ingredients.bind("change", this.get_ingredients, this);
+            
+            
         },
 
         routes: {
@@ -153,6 +158,7 @@ define([
             $("#my_favourites_link").addClass("active_link");
 
             app.models.get_recipe_params.set({page : 1, current_page : 'my_favourites', state : 1, uid : app.getUniqueId()});
+            localStorage.setItem('recipes_current_page', 'my_favourites');
         },
 
         my_recipes : function () {
@@ -162,6 +168,8 @@ define([
             
             app.models.get_recipe_params.set({page : 1, current_page : 'my_recipes', filter_options : '',  recipe_variations_filter_options : '', state : 1, uid : app.getUniqueId()});
             
+            localStorage.setItem('recipes_current_page', 'my_recipes');
+            
             $("#my_recipes_link").addClass("active_link");
         },
         
@@ -169,6 +177,8 @@ define([
             this.recipe_pages_actions();
             
             app.models.get_recipe_params.set({page : 1,current_page : 'recipe_database', state : 1, filter_options : '',  recipe_variations_filter_options : '', uid : app.getUniqueId()});
+            
+            localStorage.setItem('recipes_current_page', 'recipe_database');
             
             $("#recipe_database_link").addClass("active_link");
         },
@@ -179,6 +189,8 @@ define([
             $("#recipe_submenu").html(new Submenu_trash_list_view().render().el);
             
             app.models.get_recipe_params.set({page : 1, current_page : 'trash_list', state : '-2', filter_options : '',  recipe_variations_filter_options : '', uid : app.getUniqueId()});
+            
+            localStorage.setItem('recipes_current_page', 'recipe_database');
             
             $("#my_recipes_link").addClass("active_link");
         },

@@ -22,16 +22,16 @@
                 color:#CCC;
             }
             .darkContainer a:hover {
-                color:#FFA600 !important;
+                color:#6633FF !important;
             }
             .readMore a:hover {
-                background-color:#5D3B01 !important;
-                color: #FFA600 !important;
+                background-color:#200E54 !important;
+                color: #FFF !important;
             }
             body {
                 margin:0;
                 background-color:#dddddd;
-                color:#FFA600;
+                color:#6633FF;
                 font-family:Arial, Helvetica, sans-serif;
                 font-size:12px;
                 -webkit-text-size-adjust: none;
@@ -77,7 +77,7 @@
                                 <!--Start Of Company Name And Slogan [row number #1]-->
                                 <table width="620" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:0 auto; text-align:left;">
                                     <tr>
-                                        <td bgcolor="#FFA600" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
+                                        <td bgcolor="#6633FF" style="padding:25px 20px; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:20pt; color:#482104; font-weight:lighter;">
                                             <img alt="Elite Fitness Training" height="78" src="<?php echo $data->header_image ?>" width="404" style="border:0; display:block; alignment-adjust: after-edge; float: right;" />
                                         </td>
                                     </tr>
@@ -97,13 +97,13 @@
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td style="margin:0; padding:0 0 15px 0;">
-                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">RECIPE SUBMITTED</h1>	
+                                                                    <h1 style="padding:0; margin:0; font-family:Arial, Helvetica, sans-serif; font-size:30px; line-height:33pt; color:#FFF; font-weight:lighter; margin-bottom:0 !important;">RECIPE ASSESSMENT REQUIRED</h1>	
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>A new recipe has been submitted by your client! Please review the recipe and provide feedback...</p></td>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>A new recipe has been submitted! Please review the recipe and provide feedback...</p></td>
                                                             </tr>
                                                             <tr>
                                                                 <td width="29%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">RECIPE NAME: </td>
@@ -111,7 +111,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">RECIPE TYPE:</td>
-                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->item->recipe_types_names;?></td>
+                                                                <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><?php echo $data->item->recipe_types_names;?> </td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">DATE CREATED: <br /></td>
@@ -125,7 +125,7 @@
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
                                                                 <td class="readMore" width="160" height="22" bgcolor="#241002" valign="middle" style="padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:100%; color:#FFA600; text-align:center;">
-                                                                    <a target="_blank" href="<?php echo $data->open_link; ?>" style="display:block; text-decoration:none; height:22px; line-height:22px; color:#FFA600;">CLICK HERE TO OPEN</a>
+                                                                    <a target="_blank" href="<?php echo $data->open_link; ?>"  style="display:block; text-decoration:none; height:22px; line-height:22px; color:#6633FF;">CLICK HERE TO OPEN</a>
                                                                 </td>
                                                                 <td width="396">&nbsp;</td>
                                                             </tr>
@@ -147,4 +147,5 @@
                                     </tr>
                                     <tr>
                                         <td bgcolor="#140901" style="padding:10px 20px 15px 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#df833e;">
-                                            <?php include __DIR__ . DS . 'bottom.php'; ?>                                          
+                                            <?php include __DIR__ . DS . 'bottom.php'; ?>  
+                                            
