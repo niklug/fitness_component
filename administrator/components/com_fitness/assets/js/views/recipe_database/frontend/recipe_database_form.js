@@ -5,6 +5,7 @@ define([
         'app',
         'collections/nutrition_plan/nutrition_guide/recipe_types',
         'collections/nutrition_plan/nutrition_guide/recipe_variations',
+        'views/exercise_library/select_filter',
 	'text!templates/recipe_database/frontend/recipe_database_form.html',
         'jquery.itemDescription',
         'jquery.backbone_image_upload',
@@ -16,6 +17,7 @@ define([
         app,
         Recipe_types_collection,
         Recipe_variations_collection, 
+        Select_filter_fiew,
         template 
     ) {
 
@@ -23,35 +25,7 @@ define([
         
         initialize : function() {
             this.controller = app.routers.recipe_database;
-            app.collections.recipe_types = new Recipe_types_collection();
-            app.collections.recipe_variations = new Recipe_variations_collection();
-            var self = this;
-            
-            $.when(
-                app.collections.recipe_types.fetch({
-                    wait : true,
-                    success: function (collection, response) {
-                        //console.log(response);
-                    },
-                    error: function (model, response) {
-                        alert(response.responseText);
-                    }
-                })
-
-            ,
-                app.collections.recipe_variations.fetch({
-                    wait : true,
-                    success: function (collection, response) {
-                        //console.log(response);
-                    },
-                    error: function (model, response) {
-                        alert(response.responseText);
-                    }
-                })
-
-            ).then(function() {
-                self.render();
-            });
+            this.render();
         },
 
         template:_.template(template),
@@ -80,8 +54,25 @@ define([
                     self.connectComments();
                 }
                 
-                $.fitness_helper.connectEditor($(self.el), "#instructions", false);
+                self.connectEditor($(self.el), "#instructions", false);
+                
+                self.connectRecipeTypesFilter();
+                self.connectRecipeVariationsFilter();
             });
+        },
+        
+        connectEditor : function(element, selector, disabled) {
+            element.find(selector).cleditor({width:'98%', height:300, useCSS:true})[0];
+
+            element.find("iframe").contents().find("body").css('color', '#fff');
+
+            element.find(".cleditorMain").css('background-color', 'rgba(255, 255, 255, 0.1)');
+
+
+            var element = element.find(selector).cleditor()[0];
+            if(element) {
+                element.disable(disabled);
+            }
         },
         
         connect_item_description : function() {
@@ -114,8 +105,6 @@ define([
             $("#comments_wrapper").html(comments_html);
         },
 
-
-        
         connectImageUpload : function() {
             var imagepath = '';
             if(this.model.get('id')) {
@@ -172,6 +161,72 @@ define([
             };
 
             var video_upload = $.backbone_video_upload(video_upload_options); 
+        },
+        
+        
+        connectRecipeTypesFilter : function() {
+            if(app.collections.recipe_types) {
+                this.loadRecipeTypesSelect(app.collections.recipe_types );
+                return;
+            }
+            var self = this;
+            app.collections.recipe_types = new Recipe_types_collection();
+            app.collections.recipe_types.fetch({
+                success : function (collection, response) {
+                    self.loadRecipeTypesSelect(collection);
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        loadRecipeTypesSelect : function(collection) {
+            
+            new Select_filter_fiew({
+                model : this.model,
+                el : this.$el.find("#recipe_type_wrapper"),
+                collection : collection,
+                title : 'RECIPE TYPE',
+                first_option_title : '-select-',
+                class_name : ' dark_input_style ',
+                id_name : 'recipe_type',
+                select_size : 17,
+                model_field : 'recipe_type',
+                element_disabled : ''
+            }).render();  
+        },
+        
+        connectRecipeVariationsFilter : function() {
+            if(app.collections.recipe_variations) {
+                this.loadRecipeVariationsSelect(app.collections.recipe_variations );
+                return;
+            }
+            var self = this;
+            app.collections.recipe_variations = new Recipe_variations_collection();
+            app.collections.recipe_variations.fetch({
+                success : function (collection, response) {
+                    self.loadRecipeVariationsSelect(collection);
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        loadRecipeVariationsSelect : function(collection) {
+            new Select_filter_fiew({
+                model : this.model,
+                el : this.$el.find("#recipe_variation_wrapper"),
+                collection : collection,
+                title : 'RECIPE VARIATION',
+                first_option_title : '-select-',
+                class_name : ' dark_input_style ',
+                id_name : 'recipe_variation',
+                select_size : 17,
+                model_field : 'recipe_variation',
+                element_disabled : ''
+            }).render(); 
         },
 
         close :function() {

@@ -120,6 +120,9 @@ define([
             app.collections.recipes.reset();
             app.collections.recipes.fetch({
                 data : app.models.get_recipe_params.toJSON(),
+                success: function (collection, response) {
+                    //console.log(collection);
+                },
                 error: function (collection, response) {
                     alert(response.responseText);
                 }
@@ -183,7 +186,7 @@ define([
         recipe_pages_actions : function () {
             this.common_actions();
 
-            $("#recipe_main_container").html(new Recipe_database_list_view({collection : app.collections.recipes}).render().el);
+            $("#recipe_main_container").html(new Recipe_database_list_view({collection : app.collections.recipes, model : app.models.get_recipe_params}).render().el);
 
             app.models.pagination = $.backbone_pagination({});
 
@@ -199,52 +202,65 @@ define([
         },
 
         nutrition_recipe : function(id) {
-            var self = this;
-            app.models.recipe.fetch({
-                wait : true,
-                data : {id : id},
-                success: function (model, response) {
-                    model.set({edit_allowed : self.edit_allowed(model)});
-                    $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
-                    self.load_recipe_submenu();
-                    var video_path = model.get('video');
-                    $.fitness_helper.loadVideoPlayer(video_path, app, 340, 640, 'recipe_video');
-                },
-                error: function (collection, response) {
-                    alert(response.responseText);
-                }
-            }); 
+            this.item_view(id, true);
         },
         
         nutrition_database_recipe : function(id) {
+            this.item_view(id, false);
+       },
+       
+       item_view : function(id, load_submenu) {
+            if(!parseInt(id)) {
+                alert('Error: no ID');
+                return;
+            }
+            
+            var model = app.collections.recipes.get(id);
+
+            if(model) {
+                this.load_item_view(model, load_submenu);
+                return;
+            }
+            model = new Recipe_model({id : id});
+            
             var self = this;
-            app.models.recipe.fetch({
+           
+            model.fetch({
                 wait : true,
-                data : {id : id},
                 success: function (model, response) {
-                    model.set({edit_allowed : self.edit_allowed(model)});
-                    $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
-                    var video_path = model.get('video');
-                    $.fitness_helper.loadVideoPlayer(video_path, app, 340, 640, 'recipe_video');
+                    app.collections.recipes.add(model);
+                    self.load_item_view(model, load_submenu);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
                 }
             }); 
        },
+       
+       load_item_view : function(model, load_submenu) {
+            model.set({edit_allowed : this.edit_allowed(model)});
+           
+            if(load_submenu) {
+                this.load_recipe_submenu(model);
+            }
+            
+            $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
+            var video_path = model.get('video');
+            $.fitness_helper.loadVideoPlayer(video_path, app, 340, 640, 'recipe_video');
+       },
 
-        load_recipe_submenu : function() {
+        load_recipe_submenu : function(model) {
             var current_page = app.models.get_recipe_params.get('current_page');
             if(current_page == 'my_recipes') {
-                $("#recipe_submenu").html(new Submenu_my_recipe_item_view({model : app.models.recipe}).render().el);
+                $("#recipe_submenu").html(new Submenu_my_recipe_item_view({model : model}).render().el);
             } else if(current_page == 'recipe_database') {
-                $("#recipe_submenu").html(new Submenu_recipe_database_item_view({model : app.models.recipe}).render().el);
+                $("#recipe_submenu").html(new Submenu_recipe_database_item_view({model : model}).render().el);
             } else if (current_page == 'my_favourites') {
-                $("#recipe_submenu").html(new Submenu_my_favourites_view({model : app.models.recipe}).render().el);
+                $("#recipe_submenu").html(new Submenu_my_favourites_view({model : model}).render().el);
             } else if (current_page == 'trash_list') {
-                $("#recipe_submenu").html(new Submenu_trash_item_view({model : app.models.recipe}).render().el);
+                $("#recipe_submenu").html(new Submenu_trash_item_view({model : model}).render().el);
             } else if (current_page == 'add_diary') {
-                $("#recipe_submenu").html(new Submenu_add_diary_view({model : app.models.recipe}).render().el);
+                $("#recipe_submenu").html(new Submenu_add_diary_view({model : model}).render().el);
             } 
         },
                
@@ -256,20 +272,27 @@ define([
         },
         
         edit_recipe : function(id) {
-            $("#recipe_submenu").html(new Submenu_edit_recipe_view({model : app.models.recipe}).render().el);
-            
             if(!parseInt(id)) {
-                new EditRecipeContainer_view({el : $("#recipe_main_container"), model : new Recipe_model()});
+                this.load_form_view(new Recipe_model());
                 return;
             }
+
+            var model = app.collections.recipes.get(id);
+
+            if(model) {
+                this.load_form_view(model);
+                return;
+            }
+            model = new Recipe_model({id : id});
             
             var self = this;
-            app.models.recipe.fetch({
+           
+            model.fetch({
                 wait : true,
-                data : {id : id},
                 success: function (model, response) {
+                    app.collections.recipes.add(model);
                     if(self.edit_allowed(model)) {
-                        new EditRecipeContainer_view({el : $("#recipe_main_container"), model : model});
+                        self.load_form_view(model);
                     } else {
                         self.navigate("!/my_recipes", true);
                     }
@@ -278,6 +301,11 @@ define([
                     alert(response.responseText);
                 }
             }); 
+        },
+        
+        load_form_view : function(model) {
+            $("#recipe_submenu").html(new Submenu_edit_recipe_view({collection : app.collections.recipes, model : model}).render().el);
+            new EditRecipeContainer_view({el : $("#recipe_main_container"), model : model});
         },
         
         nutrition_database : function () {
@@ -320,7 +348,7 @@ define([
                 data : {id : id},
                 success: function (model, response) {
                     $("#recipe_main_container").html(new Recipe_item_view({model : model}).render().el);
-                    self.load_recipe_submenu();
+                    self.load_recipe_submenu(model);
                     var video_path = model.get('video');
                     $.fitness_helper.loadVideoPlayer(video_path, app, 340, 640, 'recipe_video');
                 },

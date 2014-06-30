@@ -234,6 +234,7 @@ class FitnessModelrecipe_database extends JModelList {
         
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
                 . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
+        
                 
         $query .= " FROM  $table AS a";
         $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";
@@ -333,6 +334,13 @@ class FitnessModelrecipe_database extends JModelList {
 
 
         $data = FitnessHelper::customQuery($query, 1);
+        
+        $i = 0;
+        foreach ($data as $recipe) {
+            $recipe_meals = $helper->getRecipeMeals($recipe->id);
+            $data[$i]->recipe_meals = $recipe_meals;
+            $i++;
+        }
 
         return $data;
     }

@@ -91,6 +91,7 @@ define([
             var self = this;
             this.model.destroy({
                 success: function (model) {
+                    app.collections.recipes.remove(model);
                     self.close();
                 },
                 error: function (model, response) {

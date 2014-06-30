@@ -28,49 +28,33 @@ define([
             this.controller = app.routers.nutrition_plan;
             this.collection.bind("add", this.addRecipeItem, this);
             this.collection.bind("reset", this.clearRecipeItems, this);
-
         },
 
         render:function () {
             $(this.el).html(this.template());
             this.container_el = this.$el.find(".recipes_list");
-            
+
+            this.onRender();
+
+            return this;
+        },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                self.connectRecipeTypesFilter();
+                self.connectRecipeVariationsFilter();
+                self.loadListItems();
+            });
+        },
+        
+        loadListItems : function() {
             var self = this;
             if(this.collection.length) {
                 _.each(this.collection.models, function(model) {
                     self.addRecipeItem(model);
                 });
             }
-           
-            
-            if(app.collections.recipe_types && app.collections.recipe_variations) {
-                this.connectFilters();
-                return this;
-            }
-
-                
-            app.collections.recipe_types = new Recipe_types_collection();
-            app.collections.recipe_variations = new Recipe_variations_collection();
-            
-            var self = this;
-            $.when (
-                app.collections.recipe_types.fetch({
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                }),
-                
-                app.collections.recipe_variations.fetch({
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                })
- 
-            ).then (function(response) {
-                self.connectFilters();
-            })
-
-            return this;
         },
         
         addRecipeItem : function(model) {
@@ -84,31 +68,69 @@ define([
         clearRecipeItems : function() {
             this.container_el.empty();
         },
-        
-        connectFilters : function() {
-            new Select_filter_fiew({
-                model : app.models.get_recipe_params,
-                el : this.$el.find("#recipe_database_filter_wrapper"),
-                collection : app.collections.recipe_types,
-                title : 'FILTER CATEGORIES',
-                first_option_title : 'ALL CATEGORIES',
-                class_name : 'dark_input_style',
-                id_name : '',
-                select_size : 17,
-                model_field : 'filter_options'
-            }).render();
 
+        connectRecipeTypesFilter : function() {
+            if(app.collections.recipe_types) {
+                this.loadRecipeTypesSelect(app.collections.recipe_types );
+                return;
+            }
+            var self = this;
+            app.collections.recipe_types = new Recipe_types_collection();
+            app.collections.recipe_types.fetch({
+                success : function (collection, response) {
+                    self.loadRecipeTypesSelect(collection);
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        loadRecipeTypesSelect : function(collection) {
             new Select_filter_fiew({
-                model : app.models.get_recipe_params,
+                model : this.model,
+                el : this.$el.find("#recipe_database_filter_wrapper"),
+                collection : collection,
+                title : 'RECIPE TYPE',
+                first_option_title : 'ALL TYPES',
+                class_name : ' dark_input_style ',
+                id_name : 'recipe_type',
+                select_size : 17,
+                model_field : 'filter_options',
+                element_disabled : ''
+            }).render();  
+        },
+        
+        connectRecipeVariationsFilter : function() {
+            if(app.collections.recipe_variations) {
+                this.loadRecipeVariationsSelect(app.collections.recipe_variations );
+                return;
+            }
+            var self = this;
+            app.collections.recipe_variations = new Recipe_variations_collection();
+            app.collections.recipe_variations.fetch({
+                success : function (collection, response) {
+                    self.loadRecipeVariationsSelect(collection);
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        loadRecipeVariationsSelect : function(collection) {
+            new Select_filter_fiew({
+                model : this.model,
                 el : this.$el.find("#recipe_variations_filter_wrapper"),
-                collection : app.collections.recipe_variations,
-                title : 'RECIPE VARIATIONS',
-                first_option_title : 'ALL VARIATIONS',
-                class_name : 'dark_input_style',
-                id_name : '',
+                collection : collection,
+                title : 'RECIPE VARIATION',
+                first_option_title : '-ALL VARIATIONS',
+                class_name : ' dark_input_style ',
+                id_name : 'recipe_variation',
                 select_size : 12,
-                model_field : 'recipe_variations_filter_options'
-            }).render();
+                model_field : 'recipe_variations_filter_options',
+                element_disabled : ''
+            }).render(); 
         },
 
     });
