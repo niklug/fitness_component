@@ -197,7 +197,6 @@ class FitnessModelminigoal extends JModelAdmin
 
         $plan_data = $helper->goalToPlanDecorator($obj);
         $helper->addNutritionPlan($plan_data);
-        
     }
 
 }

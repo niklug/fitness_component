@@ -108,6 +108,12 @@ class FitnessController extends JController
             echo json_encode($model->mini_goals());
         }
         
+        function addPlan() {
+            $view = $this -> getView('goals', 'json');
+            $view->setModel($this->getModel('goals'));
+            $view -> addPlan(); 
+        }
+        
         // Recipes
         //------------------------------------------------------
 	function getSearchIngredients() {

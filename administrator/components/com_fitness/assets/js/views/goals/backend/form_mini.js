@@ -263,6 +263,7 @@ define([
                 this.collection.create(this.model, {
                     wait: true,
                     success: function (model, response) {
+                        self.addPlan(model);
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
                         } else if(self.save_method == 'save') {
@@ -276,6 +277,7 @@ define([
             } else {
                 this.model.save(null, {
                     success: function (model, response) {
+                        self.addPlan(model);
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
                         }
@@ -326,6 +328,19 @@ define([
         onClickSchedule : function() {
             app.controller.navigate("!/schedule/" + this.model.get('primary_goal_id') + '/' + this.model.get('id') , true);
         },
+        
+        addPlan : function(model) {
+            var data = model.toJSON();
+            var url = app.options.ajax_call_url;
+            var view = 'goals';
+            var task = 'addPlan';
+            var table = '';
+
+            var self = this;
+            $.AjaxCall(data, url, view, task, table, function(output) {
+                console.log(output);
+            });
+        }
 
     });
             

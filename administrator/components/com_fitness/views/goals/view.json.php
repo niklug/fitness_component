@@ -3,6 +3,13 @@
 defined('_JEXEC') or die('Restricted access');
 // import Joomla view library
 jimport('joomla.application.component.view');
+if(!JSession::checkToken('get')) {
+    $status['success'] = 0;
+    $status['message'] = JText::_('JINVALID_TOKEN');
+    $result = array( 'status' => $status);
+    echo  json_encode($result);
+    die();
+}
 
 //=======================================================
 // AJAX View
@@ -10,7 +17,6 @@ jimport('joomla.application.component.view');
 class FitnessViewGoals extends JView {
     
 	function setGoalStatus() {
-            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 	    $goal_id = JRequest::getVar('goal_id');
             $goal_status_id = JRequest::getVar('goal_status_id');
             $goal_type = JRequest::getVar('goal_type');
@@ -23,21 +29,18 @@ class FitnessViewGoals extends JView {
         
         // clients view
         function getUsersByGroup() {
-            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 	    $user_group = JRequest::getVar('user_group');
             $model = $this -> getModel("goals");
 	    echo $model->getUsersByGroup($user_group);
 	}
         
         function getUsersByBusiness() {
-            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 	    $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
             $model = $this -> getModel("goals");
 	    echo $model->getUsersByBusiness($data_encoded);
 	}
         
         function getClientsByBusiness() {
-            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 	    $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
             $model = $this -> getModel("goals");
 	    echo $model->getClientsByBusiness($data_encoded);
@@ -46,7 +49,6 @@ class FitnessViewGoals extends JView {
         
         // programs view
         function setFrontendPublished() {
-            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
             $event_id = JRequest::getVar('event_id');
 	    $status = JRequest::getVar('status');
             $model = $this -> getModel("goals");
@@ -55,7 +57,6 @@ class FitnessViewGoals extends JView {
         
         // Goals Graph
         function getGraphData() {
-            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
             $client_id = JRequest::getVar('client_id');
             $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
 	    $status = JRequest::getVar('status');
@@ -65,7 +66,6 @@ class FitnessViewGoals extends JView {
         
         // Goal view
         function checkOverlapDate() {
-            JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
             $table= JRequest::getVar('table');
             $data_encoded = JRequest::getVar('data_encoded','','POST','STRING',JREQUEST_ALLOWHTML);
             $model = $this -> getModel("goals");
@@ -102,5 +102,10 @@ class FitnessViewGoals extends JView {
         function copySessionPeriod() {
             $model = $this -> getModel("goals");
             echo json_encode($model->copySessionPeriod());
+        }
+        
+        function addPlan() {
+            $model = $this -> getModel("goals");
+            echo json_encode($model->addPlan());
         }
 }

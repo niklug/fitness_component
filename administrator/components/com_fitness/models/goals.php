@@ -867,4 +867,31 @@ class FitnessModelgoals extends JModelList {
         return array('status' => $ret, 'data' => print_r($session, true));
     }
     
+    
+    public function addPlan() {
+        $helper = new FitnessHelper();
+        $db = JFactory::getDbo();
+        $data_encoded = JRequest::getVar('data_encoded');
+        $goal = json_decode($data_encoded);
+        
+        $ret['success'] = 1;
+
+        $helper = new FitnessHelper();
+        $obj = new stdClass();
+        $obj->id = $goal->id;
+        $obj->primary_goal_id = $goal->primary_goal_id;
+        $obj->start_date = $goal->start_date;
+        $obj->deadline = $goal->deadline;
+
+        try {
+            $plan_data = $helper->goalToPlanDecorator($obj);
+            $helper->addNutritionPlan($plan_data);
+        } catch (Exception $exc) {
+            $ret['success'] = 0;
+            $ret['message'] = $exc->getMessage();
+            return array( 'status' => $ret);
+        }
+
+        return array('status' => $ret, 'data' => print_r($plan_data, true));
+    }
 }
