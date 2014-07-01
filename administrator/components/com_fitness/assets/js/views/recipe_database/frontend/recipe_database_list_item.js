@@ -22,6 +22,9 @@ define([
             var template = _.template(this.template(data));
             this.$el.html(template);
             this.favourite_recipe_model = new Favourite_recipe_model({id : this.model.get('id')})
+            
+            this.controller.connectStatus(this.model, $(this.el));
+            
             return this;
         },
 

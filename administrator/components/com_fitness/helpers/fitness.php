@@ -292,6 +292,7 @@ class FitnessHelper extends FitnessFactory
     const PENDING_RECIPE_STATUS = '1';
     const APPROVED_RECIPE_STATUS = '2';
     const NOTAPPROVED_RECIPE_STATUS = '3';
+    const ASSESSING_RECIPE_STATUS = '4';
     //
     
    //Activity Level

@@ -13,6 +13,7 @@ require([
     'backbone.syphon',
     'jquery.backbone_pagination',
     'jquery.ajax_indicator',
+    'jquery.status',
     'jquery.cleditor'
     
 

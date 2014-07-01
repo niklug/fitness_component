@@ -3,7 +3,11 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/recipe_database/frontend/recipe_database_item.html'
+	'text!templates/recipe_database/frontend/recipe_database_item.html',
+        'jqueryui',
+        'jquery.flot',
+        'jquery.flot.pie',
+        'jquery.drawPie'
         
 ], function ( $, _, Backbone, app, template ) {
 
@@ -22,14 +26,23 @@ define([
             var template = _.template(this.template(data));
             this.$el.html(template);
             
-            this.connectComments();
-
+            this.onRender();
+            
             return this;
         },
 
         events: {
             "click #pdf_button_recipe" : "onClickPdf",
             "click #email_button_recipe" : "onClickEmail",
+        },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                self.connectComments();
+                self.controller.connectStatus(self.model, $(self.el));
+                self.setPieGraph();
+            });
         },
 
         onClickPdf : function(event) {
@@ -64,6 +77,20 @@ define([
             }
             var comments_html = $.comments(comment_options, comment_options.item_id, 0).run();
             this.$el.find("#comments_wrapper").html(comments_html);
+        },
+        
+        setPieGraph : function() {
+            var data = [
+                {label: "Protein:", data: [[1, this.model.get('protein')]]},
+                {label: "Carbs:", data: [[1, this.model.get('carbs')]]},
+                {label: "Fat:", data: [[1, this.model.get('fats')]]}
+            ];
+
+            var container = $(this.el).find("#placeholder_targets");
+
+            var pie_graph = $.drawPie(data, container, {'no_percent_label' : false});
+            
+            pie_graph.draw(); 
         },
 
         

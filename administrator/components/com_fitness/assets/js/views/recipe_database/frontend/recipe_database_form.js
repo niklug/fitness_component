@@ -58,6 +58,8 @@ define([
                 
                 self.connectRecipeTypesFilter();
                 self.connectRecipeVariationsFilter();
+                
+                self.controller.connectStatus(self.model, $(self.el));
             });
         },
         

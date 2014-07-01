@@ -96,15 +96,20 @@ define([
             data.id = id;
             data.view = 'NutritionRecipe';
             data.method = 'NewRecipe';
+            var self  = this
             $.AjaxCall(data, url, view, task, table, function(output){
                 //console.log(output);
-                var emails = output.split(',');
-                var message = 'Emails were sent to: ' +  "</br>";
-                $.each(emails, function(index, email) { 
-                    message += email +  "</br>";
-                });
-                $("#emais_sended").append(message);
-           });
+            });
+           
+           this.model.save({status : app.options.statuses.ASSESSING_RECIPE_STATUS.id}, {
+                success: function (model, response) {
+                    app.collections.recipes.add(model);
+                    self.controller.navigate("!/my_recipes", true);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
     });
             

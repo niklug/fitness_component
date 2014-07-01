@@ -12,7 +12,7 @@ var current_page = app.models.get_recipe_params.get('current_page');
         <div class="" style="margin-top: 0px;">
             <table width="100%">
                 <tr>
-                    <td width="40%">
+                    <td width="40%" style="vertical-align:top;">
                         <table  width="100%">
                             <tr>
                                 <td width="40%">RECIPE NAME</td>
@@ -70,11 +70,7 @@ var current_page = app.models.get_recipe_params.get('current_page');
                             </tr>
                             <tr>
                                 <td>STATUS</td>
-                                <td>
-                                    <span class="grey_title">
-                                         <%= $.fitness_helper.setRecipeStatus(status) %>
-                                    </span>
-                                </td>
+                                <td id="status_button_place_<%= id %>"  ></td>
                             </tr>
                             <tr>
                                 <td>ASSESSED BY</td>
@@ -86,7 +82,12 @@ var current_page = app.models.get_recipe_params.get('current_page');
                             </tr>
                         </table>
                     </td>
-                    <td width="30%" ></td>
+                    <td width="30%" style="text-align:center; vertical-align:top;">
+                        <div class="pie-container">
+                            <div id="placeholder_targets" class="placeholder_pie"></div>
+                        </div>
+                    </td>
+                    
                     <td width="30%" style="text-align:center; vertical-align:top;">
                         <div class="recipe_database_image" style="display: inline-block;background-image: <%= background_image %>"></div>
                         <div class="clr"></div>

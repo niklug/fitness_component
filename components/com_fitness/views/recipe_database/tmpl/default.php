@@ -67,6 +67,48 @@ $business_profile_id = $business_profile_id['data'];
         
         'business_profile_id' : '<?php echo $business_profile_id; ?>',
     };
+    
+    //status options
+        
+    var statuses = {
+        'PENDING_RECIPE_STATUS' :     {id : '<?php echo FitnessHelper::PENDING_RECIPE_STATUS ?>',       name : 'PENDING'},
+        'APPROVED_RECIPE_STATUS':     {id : '<?php echo FitnessHelper::APPROVED_RECIPE_STATUS ?>',      name : 'APPROVED'},
+        'NOTAPPROVED_RECIPE_STATUS' : {id : '<?php echo FitnessHelper::NOTAPPROVED_RECIPE_STATUS ?>',   name : 'NOTAPPROVED'},
+        'ASSESSING_RECIPE_STATUS' : {id : '<?php echo FitnessHelper::ASSESSING_RECIPE_STATUS ?>',   name : 'ASSESSING'},
+    };
+    
+     var status_options = {
+        'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+        'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
+        'db_table' : '#__fitness_nutrition_recipes',
+        'status_button' : 'status_button',
+        'status_button_dialog' : 'status_button_dialog',
+        'dialog_status_wrapper' : 'dialog_status_wrapper',
+        'dialog_status_template' : '#dialog_status_template',
+        'status_button_template' : '#status_button_template',
+        'status_button_place' : '#status_button_place_',
+
+        'statuses' : {
+            '<?php echo FitnessHelper::PENDING_RECIPE_STATUS ?>' : {'label' :       statuses.PENDING_RECIPE_STATUS.name,        'class' : 'recipe_status_pending',      'email_alias' : ''},
+            '<?php echo FitnessHelper::APPROVED_RECIPE_STATUS ?>' : {'label' :      statuses.APPROVED_RECIPE_STATUS.name,       'class' : 'recipe_status_approved',     'email_alias' : ''}, 
+            '<?php echo FitnessHelper::NOTAPPROVED_RECIPE_STATUS ?>' : {'label' :   statuses.NOTAPPROVED_RECIPE_STATUS.name,    'class' : 'recipe_status_notapproved',  'email_alias' : ''},
+            '<?php echo FitnessHelper::ASSESSING_RECIPE_STATUS ?>' : {'label' :   statuses.ASSESSING_RECIPE_STATUS.name,    'class' : 'goal_status_assessing',  'email_alias' : ''}
+        },
+
+        'statuses2' : {},
+        'close_image' : '<?php echo JUri::root() ?>administrator/components/com_fitness/assets/images/close.png',
+        'hide_image_class' : 'hideimage',
+        'show_send_email' : true,
+        setStatuses : function(item_id) {
+            return this.statuses;
+        },
+        'set_updater' : true,
+        'user_id' : '<?php echo JFactory::getUser()->id;?>',
+        'view' : 'NutritionRecipe'
+    }
+    
+    options.statuses = statuses;
+    options.status_options = status_options;
 
         
     //requireJS options

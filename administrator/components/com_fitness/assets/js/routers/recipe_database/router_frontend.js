@@ -381,7 +381,23 @@ define([
             }
            
             return access;
-        }
+        },
+        
+        connectStatus : function(model, el) {
+            var id = model.get('id');
+            var status = model.get('status');
+            var options = _.extend({}, app.options.status_options);
+            
+            options.status_button = 'status_button_not_active';
+            
+            var target = "#status_button_place_" + id;
+
+            var status_obj = $.status(options);
+
+            el.find(target).html(status_obj.statusButtonHtml(id, status));
+            
+            //status_obj.run();
+        },
     
     });
 

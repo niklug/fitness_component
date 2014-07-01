@@ -6,11 +6,11 @@
                     <td width="55%">
                         <table width="100%">
                             <tr>
-                                <td width="200">
+                                <td >
                                     RECIPE NAME
                                 </td>
                                 <td>
-                                    <input class="dark_input_style" value="<%= recipe_name || '' %>" style="width:250px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
+                                    <input class="dark_input_style" value="<%= recipe_name || '' %>" style="width:257px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
                                 </td>
                             </tr>
                             <tr>
@@ -61,9 +61,7 @@
                                 <td>
                                     STATUS
                                 </td>
-                                <td>
-                                    <%= $.fitness_helper.setRecipeStatus(status) %>
-                                </td>
+                                <td id="status_button_place_<%= id %>"  ></td>
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -92,12 +90,6 @@
                                 </td>
                             </tr>
                             <% } %>
-                            <tr>
-                                <td colspan="2">
-                                    <h5>COOKING INSTRUCTIONS / METHOD</h5>
-                                    <textarea id="instructions" style="min-height:400px;width:98%;background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);padding:5px;" name="instructions" cols="50" rows="4"><%= decodeURIComponent(instructions) %></textarea>
-                                </td>
-                            </tr>
                         </table>
                     </td>
                 </tr>
@@ -105,10 +97,13 @@
         </form>
         <% if(id) { %>
             <br/>
-            <hr class="orange_line">
             <div id="item_descriptions"></div>
+            
+            <br/>
+            <h5>COOKING INSTRUCTIONS / METHOD</h5>
+            <textarea id="instructions" style="min-height:300px;width:98%;background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);padding:5px;" name="instructions" cols="50" rows="4"><%= decodeURIComponent(instructions) %></textarea>
+
             <br>
-            <hr class="orange_line">
             <div id="comments_wrapper" style="width:99%"></div>
             <div class="clr"></div>
             <br/>

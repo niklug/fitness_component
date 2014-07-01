@@ -74,6 +74,7 @@ $business_profile_id = $business_profile_id['data'];
         'PENDING_RECIPE_STATUS' :     {id : '<?php echo FitnessHelper::PENDING_RECIPE_STATUS ?>',       name : 'PENDING'},
         'APPROVED_RECIPE_STATUS':     {id : '<?php echo FitnessHelper::APPROVED_RECIPE_STATUS ?>',      name : 'APPROVED'},
         'NOTAPPROVED_RECIPE_STATUS' : {id : '<?php echo FitnessHelper::NOTAPPROVED_RECIPE_STATUS ?>',   name : 'NOTAPPROVED'},
+        'ASSESSING_RECIPE_STATUS' : {id : '<?php echo FitnessHelper::ASSESSING_RECIPE_STATUS ?>',   name : 'ASSESSING'},
     };
     
      var status_options = {
@@ -90,7 +91,8 @@ $business_profile_id = $business_profile_id['data'];
         'statuses' : {
             '<?php echo FitnessHelper::PENDING_RECIPE_STATUS ?>' : {'label' :       statuses.PENDING_RECIPE_STATUS.name,        'class' : 'recipe_status_pending',      'email_alias' : ''},
             '<?php echo FitnessHelper::APPROVED_RECIPE_STATUS ?>' : {'label' :      statuses.APPROVED_RECIPE_STATUS.name,       'class' : 'recipe_status_approved',     'email_alias' : 'Approved'}, 
-            '<?php echo FitnessHelper::NOTAPPROVED_RECIPE_STATUS ?>' : {'label' :   statuses.NOTAPPROVED_RECIPE_STATUS.name,    'class' : 'recipe_status_notapproved',  'email_alias' : 'NotApproved'}
+            '<?php echo FitnessHelper::NOTAPPROVED_RECIPE_STATUS ?>' : {'label' :   statuses.NOTAPPROVED_RECIPE_STATUS.name,    'class' : 'recipe_status_notapproved',  'email_alias' : 'NotApproved'},
+            '<?php echo FitnessHelper::ASSESSING_RECIPE_STATUS ?>' : {'label' :   statuses.ASSESSING_RECIPE_STATUS.name,    'class' : 'goal_status_assessing',  'email_alias' : ''}
         },
 
         'statuses2' : {},

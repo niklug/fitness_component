@@ -92,6 +92,10 @@ define([
                 data.status = '1';
             }
             
+            if(this.model.get('status') == app.options.statuses.APPROVED_RECIPE_STATUS.id) {
+                data.status = app.options.statuses.PENDING_RECIPE_STATUS.id;
+            }
+            
             //console.log(data);
             
             this.model.set(data);

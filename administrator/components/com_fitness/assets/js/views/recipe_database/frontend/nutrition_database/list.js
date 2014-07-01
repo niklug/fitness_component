@@ -12,6 +12,7 @@ define([
         initialize : function() {
             this.collection.bind("add", this.addItem, this);
             this.collection.bind("reset", this.clearItems, this);
+            app.models.pagination = $.backbone_pagination({});
         },
 
         
@@ -26,6 +27,7 @@ define([
 
         events: {
             "click .search_ingredients" : "onClickSearch",
+            "keypress #search_field": "filterOnEnter",
             "click .clear" : "onClickClear",
         },
         
@@ -39,6 +41,12 @@ define([
         clearItems : function() {
             this.container_el.empty();
             app.models.pagination.set({'items_total' : 0});
+        },
+        
+        filterOnEnter : function(event) { 
+            if(event.which === 13) {
+                this.onClickSearch();
+            }
         },
 
         onClickSearch : function() {

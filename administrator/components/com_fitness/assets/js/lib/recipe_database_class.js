@@ -228,9 +228,13 @@
     //////////////////////////////
 
     RecipeDatabase.prototype.set_converted_value = function(value, field_id) {
+        var specific_gravity_field = $("#jform_specific_gravity");
+        
+        specific_gravity_field.removeClass("red_style_border");
+        
         var specific_gravity_grams = $("#specific_gravity_grams").val();
         if(!specific_gravity_grams) {
-            alert('Set up Specific Gravity field first!');
+            specific_gravity_field.addClass("red_style_border");
             return;
         }
         var convertedValue = (value / 100) * specific_gravity_grams;
