@@ -19,39 +19,9 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
     <!-- OVERVIEW -->
     <div id="overview_wrapper" class="block" style="display:none;">
         <div id="nutrition_focus_wrapper"></div>
-        <div class="fitness_block_wrapper" style="min-height:150px;margin: 2px;">
-            <div  style="width:400px; float: left;">
-                <h3>MY GOALS & TRAINING PERIODS</h3>
-            </div>
-            <div  style="width:500px; float:right; text-align: right;margin-top: 4px;margin-right: 20px;">
-                <a id="whole" href="javascript:void(0)">[All Goals]</a>
-                <a  id="by_year_previous" href="javascript:void(0)">[Previous Year]</a>
-                <a  id="by_year" href="javascript:void(0)">[Current Year]</a>
-                <a  id="by_year_next" href="javascript:void(0)">[Next Year]</a>
-                <a  id="by_month" href="javascript:void(0)">[Current Month]</a>
-            </div>
-            <div class="clr"></div>
-            <hr class="orange_line">
-            <div class="internal_wrapper">
-                <table>
-                    <tr>
-                        <td>
-                            <div class="graph-container" style="width:780px;">
-                                <div id="placeholder" class="graph-placeholder"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <fieldset style="width:140px !important;">
-                                <legend class="grey_title">Training Period Keys</legend>
-                                <?php echo $this->goals_periods_model->getTrainingPeriods();?>
-                            </fieldset>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-        </div>
-     </div>
+        <br/>
+        <div id="graph_container"></div>
+    </div>
     
     <!-- TARGETS -->
     <div id="targets_wrapper" class="block" style="display:none;">

@@ -29,7 +29,9 @@ define([
         'views/nutrition_plan/nutrition_guide/example_day',
         'views/nutrition_plan/nutrition_guide/example_day_meal',
         'views/nutrition_plan/nutrition_guide/add_recipe',
-        'views/nutrition_plan/nutrition_guide/shopping_list'
+        'views/nutrition_plan/nutrition_guide/shopping_list',
+        'views/graph/graph'
+
 ], function (
         $,
         _,
@@ -61,8 +63,10 @@ define([
         Example_day_view,
         Example_day_meal_view,
         Example_day_add_recipe_view,
-        Shopping_list_view
+        Shopping_list_view,
+        Graph_view
     ) {
+
 
     var Controller = Backbone.Router.extend({
         
@@ -120,7 +124,7 @@ define([
                  $("#overview_wrapper").show();
                  $("#overview_link").addClass("active_link");
                  // connect Graph from Goals frontend logic
-                 $.goals_frontend(app.options);
+                 this.connectGraph();
                  var id = app.models.nutrition_plan.get('id');
                  app.models.nutrition_plan.fetch({
                     data: {id : id},
@@ -135,7 +139,29 @@ define([
                  });
                  
             },
-
+            
+            connectGraph : function() {
+                this.graph = new Graph_view({
+                    el : "#graph_container",
+                    model : '',
+                    show : {
+                        primary_goals : true,
+                        mini_goals : true,
+                        personal_training : false,
+                        semi_private : false,
+                        resistance_workout : false,
+                        cardio_workout : false,
+                        assessment : false,
+                        current_time : true,
+                        client_select : false,
+                        choices : false
+                    },
+                    style : 'dark',
+                    reloads : true,
+                    list_type : false
+                });
+            },
+        
             targets: function () {
                  this.no_active_plan_action();
                  this.common_actions();

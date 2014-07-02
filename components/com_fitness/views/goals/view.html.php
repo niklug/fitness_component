@@ -42,8 +42,6 @@ class FitnessViewGoals extends JView {
         $document = &JFactory::getDocument();
 
         $document->addscript(JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
-
-        $document->addscript(JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS . 'assets' . DS . 'js' . DS . 'lib' . DS . 'underscore-min.js');
         
         include_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'assets' . DS . 'js' . DS . 'underscore_templates.html';
 
