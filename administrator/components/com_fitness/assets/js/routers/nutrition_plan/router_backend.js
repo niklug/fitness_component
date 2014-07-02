@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/nutrition_plan/nutrition_plans',
+        'collections/nutrition_plan/items',
         'collections/nutrition_plan/targets',
         'collections/nutrition_plan/supplements/protocols',
         'collections/nutrition_plan/nutrition_guide/menu_plans',
@@ -15,7 +15,7 @@ define([
         'models/nutrition_plan/target',
         'models/nutrition_plan/nutrition_guide/menu_plan',
         'models/nutrition_plan/nutrition_guide/example_day_meal',
-        'models/nutrition_plan/nutrition_guide/get_recipe_params',
+        'models/nutrition_plan/request_params',
         'views/nutrition_plan/overview',
         'views/nutrition_plan/target_block',
         'views/nutrition_plan/macronutrients',
@@ -30,14 +30,16 @@ define([
         'views/nutrition_plan/nutrition_guide/example_day_meal',
         'views/nutrition_plan/nutrition_guide/add_recipe',
         'views/nutrition_plan/nutrition_guide/shopping_list',
-        'views/graph/graph'
+        'views/graph/graph',
+        'views/nutrition_plan/backend/list',
+        'views/nutrition_plan/backend/search_header'
 
 ], function (
         $,
         _,
         Backbone,
         app, 
-        Nutrition_plans_collection,
+        Items_collection,
         Targets_collection,
         Protocols_collection,
         Menu_plans_collection,
@@ -45,11 +47,11 @@ define([
         Add_meal_recipes_collection,
         Nutrition_database_categories_collection,
         Shopping_list_ingredients_collection,
-        Nutrition_plan_model,
+        Item_model,
         Target_model,
         Menu_plan_model,
         Example_day_meal_model,
-        Get_recipe_params_model,
+        Request_params_model,
         Overview_view,
         Target_block_view,
         Macronutrients_view,
@@ -64,31 +66,47 @@ define([
         Example_day_meal_view,
         Example_day_add_recipe_view,
         Shopping_list_view,
-        Graph_view
+        Graph_view,
+        List_view,
+        Search_header_view
     ) {
 
 
     var Controller = Backbone.Router.extend({
         
             initialize: function(){
+                //unique id
+                app.getUniqueId = function() {
+                    return new Date().getUTCMilliseconds();
+                }
 
-                app.models.nutrition_plan = new Nutrition_plan_model({'id' : app.options.item_id});
+                app.models.item = new Item_model({});
                 
-                app.collections.nutrition_plans = new Nutrition_plans_collection();
+                app.collections.items = new Items_collection();
                 
                 app.collections.targets = new Targets_collection({'id' : app.options.item_id});
+                
+                //business logic
+                var business_profile_id = null;
+                if(!app.options.is_superuser) {
+                    business_profile_id = app.options.business_profile_id;
+                }
+                app.options.client_id = localStorage.getItem('client_id');
                 //
-                app.models.get_recipe_params = new Get_recipe_params_model();
+                app.models.request_params = new Request_params_model({client_id : app.options.client_id, business_profile_id : business_profile_id});
                 
                 app.collections.add_meal_recipes = new Add_meal_recipes_collection(); 
                 
-                app.models.get_recipe_params.bind("change", this.get_database_recipes, this);
+                app.models.request_params.bind("change", this.get_items, this);
+                
+                this.onClientChange();
 
             },
         
             routes: {
-                "": "overview", 
-                "!/": "overview", 
+                "": "list_view", 
+                "!/": "list_view", 
+                "!/list_view": "list_view", 
                 "!/overview": "overview", 
                 "!/targets": "targets", 
                 "!/macronutrients": "macronutrients", 
@@ -104,6 +122,61 @@ define([
                 "!/close": "close", 
             },
             
+            onClientChange : function() {
+                var self = this;
+                $("#client_id").die().live('change', function() {
+                    var client_id = $(this).val();
+                    app.options.client_id = client_id;
+                    localStorage.setItem('client_id', client_id);
+                    app.models.request_params.set({client_id : client_id});
+                    self.navigate("!/list_view", true);
+                });
+            },
+            
+            get_items : function() {
+                var params = app.models.request_params.toJSON();
+                app.collections.items.reset();
+                app.collections.items.fetch({
+                    data : params,
+                    success : function (collection, response) {
+                        console.log(collection.toJSON());
+                    },
+                    error : function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });  
+            },
+
+            list_view : function() {
+                //show all
+                app.models.request_params.set({page : 1,  state : '*', uid : app.getUniqueId()});
+
+                this.list_actions();
+            },
+
+            list_actions : function () {
+                $("#header_wrapper").html(new Search_header_view({model : app.models.request_params, collection : app.collections.items}).render().el);
+
+                $("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
+
+                app.models.pagination = $.backbone_pagination({});
+
+                app.models.pagination.bind("change:currentPage", this.set_params_model, this);
+
+                app.models.pagination.bind("change:items_number", this.set_params_model, this);
+            },
+
+            set_params_model : function() {
+                app.collections.items.reset();
+                app.models.request_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
+            },
+
+        
+        
+        
+        
+        
+            ///
             get_database_recipes : function() {
                 app.collections.add_meal_recipes.reset();
                 //console.log(app.models.get_recipe_params.toJSON());

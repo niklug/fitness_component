@@ -361,5 +361,288 @@ class FitnessModelnutrition_plans extends JModelList {
             }
         }
     }
+    
+    
+    
+    public function nutrition_plans() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model','','','',JREQUEST_ALLOWHTML));
+         
+
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        
+        $table = '#__fitness_nutrition_plan';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $data = new stdClass();
+                $data->id = $id;  
+                $data->sort_by = JRequest::getVar('sort_by'); 
+                $data->order_dirrection = JRequest::getVar('order_dirrection'); 
+                $data->page = JRequest::getVar('page'); 
+                $data->limit = JRequest::getVar('limit'); 
+                $data->state = JRequest::getVar('state'); 
+                
+                $data->active_start_from = JRequest::getVar('active_start_from', '0'); 
+                $data->active_start_to = JRequest::getVar('active_start_to', '0'); 
+                $data->active_finish_from = JRequest::getVar('active_finish_from', '0'); 
+                $data->active_finish_to = JRequest::getVar('active_finish_to', '0'); 
+                
+                $data->force_active = JRequest::getVar('force_active'); 
+                $data->primari_goal = JRequest::getVar('primari_goal'); 
+                $data->mini_goal = JRequest::getVar('mini_goal'); 
+                $data->nutrition_focus = JRequest::getVar('nutrition_focus'); 
+                
+                $data->client_id = JRequest::getVar('client_id'); 
+                $data->client_name = JRequest::getVar('client_name'); 
+                $data->trainer_name = JRequest::getVar('trainer_name'); 
+                $data->created_by_name = JRequest::getVar('created_by_name'); 
+                
+
+                $data->business_profile_id = JRequest::getVar('business_profile_id'); 
+
+
+                $data = $this->getPlans($table, $data);
+                
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                 break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
+    
+    
+    public function getPlans($table, $data) {
+        
+        $page = $data->page;
+        
+        $limit = $data->limit;
+        
+        $start = ($page - 1) * $limit;
+        
+        $sort_by = $data->sort_by;
+        
+        $order_dirrection = $data->order_dirrection;
+        
+        $id = $data->id;
+        
+        $db = JFactory::getDbo();
+        
+        $query = "SELECT a.*,";
+        
+        //get total number
+        if(!$id) {
+            $query .= " (SELECT COUNT(*) FROM $table AS a ";
+
+            $query .= " WHERE 1 ";
+
+            if($data->client_id) {
+                $query .= " AND a.client_id='$data->client_id'";
+            }
+
+            if($data->trainer_id) {
+                $query .= " AND a.trainer_id='$data->trainer_id'";
+            }
+
+            //search by client name
+            if (!empty($data->client_name)) {
+                $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
+
+                $client_ids = FitnessHelper::customQuery($sql, 0);
+
+                if($client_ids) {
+                    $query .= " AND a.client_id IN ($client_ids)";
+                }
+            }
+
+            //search by trainer name
+            if (!empty($data->trainer_name)) {
+                $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->trainer_name%' ";
+
+                $trainer_ids = FitnessHelper::customQuery($sql, 0);
+
+                if($trainer_ids) {
+                    $query .= " AND a.trainer_id IN ($trainer_ids)";
+                }
+            }
+
+            if (!empty($data->active_start_from)) {
+                $query .= " AND a.active_start >= '$data->active_start_from'";
+            }
+
+            if (!empty($data->active_start_to)) {
+                $query .= " AND a.active_start <= '$data->active_start_to'";
+            }
+
+            if (!empty($data->active_finish_from)) {
+                $query .= " AND a.active_finish >= '$data->active_finish_from'";
+            }
+
+            if (!empty($data->active_finish_to)) {
+                $query .= " AND a.active_finish <= '$data->active_finish_to'";
+            }
+
+            if($data->force_active) {
+                $query .= " AND a.force_active='$data->force_active'";
+            }
+
+            if($data->primari_goal) {
+                $query .= " AND a.primari_goal='$data->primari_goal'";
+            }
+
+            if($data->mini_goal) {
+                $query .= " AND a.mini_goal='$data->mini_goal'";
+            }
+
+            if($data->nutrition_focus) {
+                $query .= " AND a.nutrition_focus='$data->nutrition_focus'";
+            }
+
+            if($data->state AND $data->state !='*') {
+                $query .= " AND a.state='$data->state'";
+            }
+            
+            $query .= " ) items_total, ";
+        }
+        //end get total number
+
+        $query .= "
+             (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
+             mgn.name AS mini_goal_name,
+             nf.name AS nutrition_focus_name,
+             (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name,
+             (SELECT name FROM #__users WHERE id=a.client_id) client_name,
+             (SELECT calories FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") calories,
+             (SELECT protein FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") protein,
+             (SELECT fats FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") fats,
+             (SELECT carbs FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") carbs
+                         
+            FROM $table AS a
+                
+            LEFT JOIN #__fitness_goals AS gc ON gc.id = a.primary_goal
+            LEFT JOIN #__fitness_goal_categories AS gn ON gn.id = gc.goal_category_id
+            
+            LEFT JOIN #__fitness_mini_goals AS mgc ON mgc.id = a.mini_goal
+            LEFT JOIN #__fitness_mini_goal_categories AS mgn ON mgn.id = mgc.mini_goal_category_id
+            
+
+            LEFT JOIN #__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus
+
+            WHERE 1";
+        
+        if($data->client_id) {
+            $query .= " AND a.client_id='$data->client_id'";
+        }
+        
+        if($data->trainer_id) {
+            $query .= " AND a.trainer_id='$data->trainer_id'";
+        }
+        
+        //search by client name
+        if (!empty($data->client_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
+
+            $client_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($client_ids) {
+                $query .= " AND a.client_id IN ($client_ids)";
+            }
+        }
+        
+        //search by trainer name
+        if (!empty($data->trainer_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->trainer_name%' ";
+
+            $trainer_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($trainer_ids) {
+                $query .= " AND a.trainer_id IN ($trainer_ids)";
+            }
+        }
+        
+        if (!empty($data->active_start_from)) {
+            $query .= " AND a.active_start >= '$data->active_start_from'";
+        }
+
+        if (!empty($data->active_start_to)) {
+            $query .= " AND a.active_start <= '$data->active_start_to'";
+        }
+        
+        if (!empty($data->active_finish_from)) {
+            $query .= " AND a.active_finish >= '$data->active_finish_from'";
+        }
+        
+        if (!empty($data->active_finish_to)) {
+            $query .= " AND a.active_finish <= '$data->active_finish_to'";
+        }
+            
+        if($data->force_active) {
+            $query .= " AND a.force_active='$data->force_active'";
+        }
+        
+        if($data->primari_goal) {
+            $query .= " AND a.primari_goal='$data->primari_goal'";
+        }
+        
+        if($data->mini_goal) {
+            $query .= " AND a.mini_goal='$data->mini_goal'";
+        }
+        
+        if($data->nutrition_focus) {
+            $query .= " AND a.nutrition_focus='$data->nutrition_focus'";
+        }
+        
+        if($data->state AND $data->state !='*') {
+            $query .= " AND a.state='$data->state'";
+        }
+        
+        $query_type = 1;
+        
+        if($id) {
+            $query .= " AND a.id='$id' ";
+            $query_type = 2;
+        }
+        
+        
+        if($sort_by) {
+            $query .= " ORDER BY " . $sort_by;
+        }
+        
+        if($order_dirrection && $sort_by) {
+            $query .=  " " . $order_dirrection;
+        }
+        
+        if($limit) {
+            $query .= " LIMIT $start, $limit";
+        }
+
+        $items = FitnessHelper::customQuery($query, $query_type);
+        
+        return  $items;
+    }
 
 }

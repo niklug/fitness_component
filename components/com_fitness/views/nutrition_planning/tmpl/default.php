@@ -89,7 +89,6 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'base_url' : '<?php echo JURI::root();?>',
             'ajax_call_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
-            'pending_review_text' : 'Pending Review',
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
             'user_id' : '<?php echo JFactory::getUser()->id;?>',
             'goals_db_table' : '#__fitness_goals',
@@ -102,8 +101,6 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
             'example_day_meal_comments_db_table' : '#__fitness_nutrition_plan_example_day_meal_comments',
             
             'client_id' : '<?php echo JFactory::getUser()->id;?>',
-            
-            'user_name' : '<?php echo JFactory::getUser()->name;?>',
             
             'item_id' : '<?php echo  $nutrition_plan_id?>',
             'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',

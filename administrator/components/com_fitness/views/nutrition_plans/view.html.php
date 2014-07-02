@@ -57,9 +57,14 @@ class FitnessViewNutrition_plans extends JView
             $this->assign('model', $model);
 
             $document = &JFactory::getDocument();
-            $document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
-            $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
-            $document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'ajax_call_function.js');
+            
+            $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
+                
+            include_once JPATH_COMPONENT_ADMINISTRATOR . DS .'assets'. DS .'js'. DS . 'underscore_templates.html';
+
+           //$document -> addscript( JUri::base() . 'components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquery.js');
+            //$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'jquerynoconflict.js');
+            //$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'ajax_call_function.js');
             
             $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
                     parent::display($tpl);
@@ -78,7 +83,7 @@ class FitnessViewNutrition_plans extends JView
 		$canDo	= FitnessHelper::getActions($state->get('filter.category_id'));
 
 		JToolBarHelper::title(JText::_('COM_FITNESS_TITLE_NUTRITION_PLANS'), 'nutrition_plans.png');
-
+                /*
         //Check if the form exists before showing the add/edit buttons
         $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/nutrition_plan';
         if (file_exists($formPath)) {
@@ -123,6 +128,8 @@ class FitnessViewNutrition_plans extends JView
 		if ($canDo->get('core.admin')) {
 			JToolBarHelper::preferences('com_fitness');
 		}
+                 * 
+                 */
 
 
 	}
