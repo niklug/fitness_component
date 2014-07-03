@@ -15,8 +15,14 @@
         <%= moment(new Date(Date.parse(item.active_finish))).format("ddd, D MMM  YYYY") %>
     </td>
     
-    <td>
-        
+    <td class="center">
+        <%
+        var icon_class_active = 'unpublish';
+        if(item.id == item.active_plan_id) {
+            icon_class_active = 'publish';
+        }
+        %>
+        <span  class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>"  class=" state <%= icon_class_active %> " ></span></span> <br/>
     </td>
     
     <td class="center">
@@ -42,7 +48,7 @@
     </td>
     
     <td class="center">
-     
+        <a data-id="<%= item.id %>" class="email_button" href="javascript:void(0)" title="Send Email"></a>
     </td>
     
     <td>

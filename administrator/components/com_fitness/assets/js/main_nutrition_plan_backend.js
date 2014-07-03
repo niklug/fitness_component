@@ -27,9 +27,9 @@ require([
     Backbone.emulateHTTP = true ;
     Backbone.emulateJSON = true;
 
-    app.routers.controller = new Controller();
+    app.controller = new Controller();
   
-   Backbone.history.start();
+    Backbone.history.start();
    
 
 });

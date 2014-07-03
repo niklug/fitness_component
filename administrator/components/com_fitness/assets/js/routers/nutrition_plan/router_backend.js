@@ -554,7 +554,11 @@ define([
                         alert(response.responseText);
                     }
                 })
-             }
+             },
+             
+            update_list : function() {
+                app.models.request_params.set({ uid : app.getUniqueId()});
+            },
 
         });
 

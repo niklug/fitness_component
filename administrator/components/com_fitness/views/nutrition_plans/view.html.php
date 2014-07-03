@@ -67,6 +67,7 @@ class FitnessViewNutrition_plans extends JView
             //$document -> addscript( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'js'. DS . 'lib' . DS . 'ajax_call_function.js');
             
             $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
+            $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
                     parent::display($tpl);
 	}
 

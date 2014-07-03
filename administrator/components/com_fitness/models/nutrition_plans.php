@@ -396,6 +396,7 @@ class FitnessModelnutrition_plans extends JModelList {
                 $data->active_finish_from = JRequest::getVar('active_finish_from', '0'); 
                 $data->active_finish_to = JRequest::getVar('active_finish_to', '0'); 
                 
+                $data->active_plan = JRequest::getVar('active_plan'); 
                 $data->force_active = JRequest::getVar('force_active'); 
                 $data->primari_goal = JRequest::getVar('primari_goal'); 
                 $data->mini_goal = JRequest::getVar('mini_goal'); 
@@ -506,7 +507,7 @@ class FitnessModelnutrition_plans extends JModelList {
                 $query .= " AND a.active_finish <= '$data->active_finish_to'";
             }
 
-            if($data->force_active) {
+            if ($data->force_active != '' AND $data->force_active != '*') {
                 $query .= " AND a.force_active='$data->force_active'";
             }
 
@@ -522,7 +523,7 @@ class FitnessModelnutrition_plans extends JModelList {
                 $query .= " AND a.nutrition_focus='$data->nutrition_focus'";
             }
 
-            if($data->state AND $data->state !='*') {
+            if($data->state != '' AND $data->state != '*') {
                 $query .= " AND a.state='$data->state'";
             }
             
@@ -600,7 +601,7 @@ class FitnessModelnutrition_plans extends JModelList {
             $query .= " AND a.active_finish <= '$data->active_finish_to'";
         }
             
-        if($data->force_active) {
+        if ($data->force_active != '' AND $data->force_active != '*') {
             $query .= " AND a.force_active='$data->force_active'";
         }
         
@@ -615,8 +616,8 @@ class FitnessModelnutrition_plans extends JModelList {
         if($data->nutrition_focus) {
             $query .= " AND a.nutrition_focus='$data->nutrition_focus'";
         }
-        
-        if($data->state AND $data->state !='*') {
+
+        if($data->state != '' AND $data->state != '*') {
             $query .= " AND a.state='$data->state'";
         }
         
@@ -640,9 +641,17 @@ class FitnessModelnutrition_plans extends JModelList {
             $query .= " LIMIT $start, $limit";
         }
 
-        $items = FitnessHelper::customQuery($query, $query_type);
+        $data = FitnessHelper::customQuery($query, $query_type);
         
-        return  $items;
+        $i = 0;
+        foreach ($data as $item) {
+            $active_plan_id = $this->getUserActivePlanId($item->client_id);
+            $data[$i]->active_plan_id = $active_plan_id;
+            $i++;
+        }
+        
+
+        return  $data;
     }
 
 }

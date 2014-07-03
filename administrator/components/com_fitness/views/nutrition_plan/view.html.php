@@ -45,6 +45,7 @@ class FitnessViewNutrition_plan extends JView
                 $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
 		
                 
+                
                 // connect backend list model
                 require_once JPATH_COMPONENT_ADMINISTRATOR . DS .  'models' . DS . 'nutrition_plans.php';
                 $backend_list_model  = new FitnessModelnutrition_plans();

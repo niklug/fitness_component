@@ -42,6 +42,7 @@ define([
             "click #sort_trainer" : "sort_trainer",
             "click #sort_active_start" : "sort_active_start",
             "click #sort_active_finish" : "sort_active_finish",
+            "click #sort_active_plan" : "sort_active_plan",
             "click #sort_force_active" : "sort_force_active",
             "click #sort_primary_goal" : "sort_primary_goal",
             "click #sort_mini_goal" : "sort_mini_goal",
@@ -50,10 +51,10 @@ define([
 
             "click .view" : "onClickView",
             
-            "click #select_trashed" : "onClickSelectAll",
+            "click #select_all_checkbox" : "onClickSelectAll",
             
             "click .publish" : "onClickPublish",
-            
+            "click .email_button" : "onClickSendEmail",
         },
         
         onRender : function() {
@@ -102,8 +103,12 @@ define([
             this.model.set({sort_by : 'active_finish', order_dirrection : 'DESC'});
         },
         
+        sort_active_plan : function() {
+            this.model.set({sort_by : 'a.active_plan', order_dirrection : 'DESC'});
+        },
+        
         sort_force_active : function() {
-            this.model.set({sort_by : 'a.force_active', order_dirrection : 'ASC'});
+            this.model.set({sort_by : 'a.force_active', order_dirrection : 'DESC'});
         },
         
         sort_primary_goal : function() {
@@ -119,14 +124,14 @@ define([
         },
         
         sort_state : function() {
-            this.model.set({sort_by : 'a.state', order_dirrection : 'ASC'});
+            this.model.set({sort_by : 'a.state', order_dirrection : 'DESC'});
         },
  
         onClickSelectAll : function(event) {
-            $(".trash_checkbox").prop("checked", false);
+            $(".item_checkbox").prop("checked", false);
 
             if($(event.target).attr("checked")) {
-                $(".trash_checkbox").prop("checked", true);
+                $(".item_checkbox").prop("checked", true);
             }
         },
         
@@ -149,6 +154,24 @@ define([
                 error: function (model, response) {
                     alert(response.responseText);
                 }
+            });
+        },
+        
+        onClickSendEmail : function(event) {
+            var id = $(event.target).attr('data-id');
+            
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.id = id;
+            data.view = 'NutritionPlan';
+            data.method = 'Notify';
+
+            $.AjaxCall(data, url, view, task, table, function(output){
+                console.log(output);
             });
         },
     });
