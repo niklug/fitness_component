@@ -643,13 +643,28 @@ class FitnessModelnutrition_plans extends JModelList {
 
         $data = FitnessHelper::customQuery($query, $query_type);
         
-        $i = 0;
-        foreach ($data as $item) {
-            $active_plan_id = $this->getUserActivePlanId($item->client_id);
-            $data[$i]->active_plan_id = $active_plan_id;
-            $i++;
-        }
+        $helper = new FitnessHelper();
         
+        if(!$id) {
+            $i = 0;
+            foreach ($data as $item) {
+                $active_plan_id = $this->getUserActivePlanId($item->client_id);
+                $data[$i]->active_plan_id = $active_plan_id;
+                
+                $client_trainers = $helper->get_client_trainers_names($item->client_id);
+
+                $data[$i]->secondary_trainers = $client_trainers;
+            
+                $i++;
+            }
+        } else {
+            $active_plan_id = $this->getUserActivePlanId($data->client_id);
+            $data->active_plan_id = $active_plan_id;
+            
+            $client_trainers = $helper->get_client_trainers_names($data->client_id);
+
+            $data->secondary_trainers = $client_trainers;
+        }
 
         return  $data;
     }

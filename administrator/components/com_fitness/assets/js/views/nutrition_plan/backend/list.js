@@ -174,6 +174,11 @@ define([
                 console.log(output);
             });
         },
+        
+        onClickView : function(event) {
+            var id = $(event.target).attr('data-id');
+            app.controller.navigate("!/overview/" + id, true);
+        }
     });
             
     return view;

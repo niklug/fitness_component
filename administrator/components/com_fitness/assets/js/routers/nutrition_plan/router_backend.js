@@ -11,7 +11,7 @@ define([
         'collections/recipe_database/recipes',
         'collections/nutrition_plan/nutrition_guide/nutrition_database_categories',
         'collections/nutrition_plan/nutrition_guide/shopping_list_ingredients',
-	'models/nutrition_plan/nutrition_plan',
+	'models/nutrition_plan/item',
         'models/nutrition_plan/target',
         'models/nutrition_plan/nutrition_guide/menu_plan',
         'models/nutrition_plan/nutrition_guide/example_day_meal',
@@ -32,7 +32,8 @@ define([
         'views/nutrition_plan/nutrition_guide/shopping_list',
         'views/graph/graph',
         'views/nutrition_plan/backend/list',
-        'views/nutrition_plan/backend/search_header'
+        'views/nutrition_plan/backend/search_header',
+        'views/nutrition_plan/backend/overview_container'
 
 ], function (
         $,
@@ -68,7 +69,8 @@ define([
         Shopping_list_view,
         Graph_view,
         List_view,
-        Search_header_view
+        Search_header_view,
+        Overview_container_view
     ) {
 
 
@@ -107,7 +109,7 @@ define([
                 "": "list_view", 
                 "!/": "list_view", 
                 "!/list_view": "list_view", 
-                "!/overview": "overview", 
+                "!/overview/:id": "overview", 
                 "!/targets": "targets", 
                 "!/macronutrients": "macronutrients", 
                 "!/supplements": "supplements", 
@@ -170,6 +172,37 @@ define([
                 app.collections.items.reset();
                 app.models.request_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
             },
+            
+            overview : function(id) {
+                $("#header_wrapper").empty();
+                
+                $(".plan_menu_link").removeClass("active_link");
+                
+                var model = app.collections.items.get(id);
+                
+                if(model) {
+                    this.load_overview(model);
+                    return;
+                }
+                model = new Item_model({id : id});
+                var self = this;
+                model.fetch({
+                    success: function (model, response) {
+                        app.collections.items.add(model);
+                        self.load_overview(model);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            
+ 
+                
+            },
+            
+            load_overview : function(model) {
+                $("#main_container").html(new Overview_container_view({model : model}).render().el);
+            },
 
         
         
@@ -191,7 +224,7 @@ define([
                 });  
             },
 
-            overview: function () {
+            overview_old: function () {
                  this.no_active_plan_action();
                  this.common_actions();
                  $("#overview_wrapper").show();
@@ -516,7 +549,7 @@ define([
             
             common_actions : function() {
                 $(".block").hide();
-                $(".plan_menu_link").removeClass("active_link")
+                $(".plan_menu_link").removeClass("active_link");
             },
             
             no_active_plan_action : function() {
