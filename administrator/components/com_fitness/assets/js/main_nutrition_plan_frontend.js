@@ -16,7 +16,8 @@ require([
     'jqueryui',
     'backbone.syphon',
     'jquery.backbone_pagination',
-    'jquery.ajax_indicator'
+    'jquery.ajax_indicator',
+    'jquery.cleditor'
     
 
 ], function($, _, Backbone, moment, app, Controller, Main_menu_view) {

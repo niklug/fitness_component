@@ -12,6 +12,7 @@ define([
         'collections/nutrition_plan/nutrition_guide/nutrition_database_categories',
         'collections/nutrition_plan/nutrition_guide/shopping_list_ingredients',
 	'models/nutrition_plan/item',
+        'models/nutrition_plan/item_overview',
         'models/nutrition_plan/target',
         'models/nutrition_plan/nutrition_guide/menu_plan',
         'models/nutrition_plan/nutrition_guide/example_day_meal',
@@ -49,6 +50,7 @@ define([
         Nutrition_database_categories_collection,
         Shopping_list_ingredients_collection,
         Item_model,
+        Item_overview_model,
         Target_model,
         Menu_plan_model,
         Example_day_meal_model,
@@ -184,7 +186,7 @@ define([
                     this.load_overview(model);
                     return;
                 }
-                model = new Item_model({id : id});
+                model = new Item_overview_model({id : id});
                 var self = this;
                 model.fetch({
                     success: function (model, response) {

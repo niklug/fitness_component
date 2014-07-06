@@ -455,6 +455,14 @@ class FitnessModelnutrition_plans extends JModelList {
         
         $query = "SELECT a.*,";
         
+        $query .= " pg.start_date AS start_date_primary,";
+        
+        $query .= " pg.deadline AS deadline_primary,";
+        
+        $query .= " mg.start_date AS start_date_mini,";
+        
+        $query .= " mg.deadline AS deadline_mini,";
+        
         //get total number
         if(!$id) {
             $query .= " (SELECT COUNT(*) FROM $table AS a ";
@@ -535,6 +543,7 @@ class FitnessModelnutrition_plans extends JModelList {
              (SELECT name FROM #__fitness_goal_categories WHERE id=gc.goal_category_id) primary_goal_name,
              mgn.name AS mini_goal_name,
              nf.name AS nutrition_focus_name,
+             (SELECT name FROM #__fitness_training_period WHERE id=mg.training_period_id) training_period_name,
              (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name,
              (SELECT name FROM #__users WHERE id=a.client_id) client_name,
              (SELECT calories FROM #__fitness_nutrition_plan_targets WHERE nutrition_plan_id = a.id AND type="  . $db->quote('heavy') .  ") calories,
@@ -549,9 +558,12 @@ class FitnessModelnutrition_plans extends JModelList {
             
             LEFT JOIN #__fitness_mini_goals AS mgc ON mgc.id = a.mini_goal
             LEFT JOIN #__fitness_mini_goal_categories AS mgn ON mgn.id = mgc.mini_goal_category_id
-            
 
             LEFT JOIN #__fitness_nutrition_focus AS nf ON nf.id = a.nutrition_focus
+            
+            LEFT JOIN #__fitness_goals AS pg ON pg.id = a.primary_goal
+            
+            LEFT JOIN #__fitness_mini_goals AS mg ON mg.id = a.mini_goal
 
             WHERE 1";
         

@@ -18,7 +18,8 @@ require([
     'jquery.nutritionPlan',
     'jquery.macronutrientTargets',
     'jquery.status',
-    'jquery.ajax_indicator'
+    'jquery.ajax_indicator',
+    'jquery.cleditor'
     
 
 ], function($, _, Backbone, moment, app, Controller) {
