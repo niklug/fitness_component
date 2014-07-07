@@ -29,8 +29,9 @@ define([
             this.protocol_id = this.model.get('id');
 
             if(this.protocol_id ){ 
+                var self = this;
                 this.supplements_collection.fetch({
-                    data: {nutrition_plan_id : app.options.nutrition_plan_id, protocol_id : this.protocol_id},
+                    data: {nutrition_plan_id : self.options.nutrition_plan_id, protocol_id : this.protocol_id},
                     error: function (model, response) {
                         alert(response.responseText);
                     }
@@ -59,7 +60,7 @@ define([
 
         connectComments : function() {
             var comment_options = {
-                'item_id' : this.model.get('nutrition_plan_id'),
+                'item_id' : this.options.nutrition_plan_id,
                 'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : '#__fitness_nutrition_plan_supplements_comments',
@@ -69,8 +70,6 @@ define([
             };
 
             var comments = $.comments(comment_options, comment_options.item_id, this.model.get('id'));
-            
-            console.log(comments);
             
             var comments_html = comments.run();
 
@@ -140,7 +139,7 @@ define([
 
 
         onClickAddSupplement : function(event) {
-            app.views.supplement = new Supplement_view({collection : this.supplements_collection, model : new Supplement_model({protocol_id : this.model.get('id')}) }); 
+            app.views.supplement = new Supplement_view({collection : this.supplements_collection, model : new Supplement_model({protocol_id : this.model.get('id')}), nutrition_plan_id : this.options.nutrition_plan_id }); 
             this.supplements_list_el.append(app.views.supplement.render().el );
         }
     });

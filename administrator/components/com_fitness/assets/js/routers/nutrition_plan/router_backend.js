@@ -17,24 +17,28 @@ define([
         'models/nutrition_plan/nutrition_guide/menu_plan',
         'models/nutrition_plan/nutrition_guide/example_day_meal',
         'models/nutrition_plan/request_params',
+        'models/nutrition_plan/supplements/protocol',
         'views/nutrition_plan/overview',
         'views/nutrition_plan/target_block',
         'views/nutrition_plan/macronutrients',
-        'views/nutrition_plan/supplements/frontend/protocols',
+        'views/nutrition_plan/supplements/backend/protocols',
         'views/nutrition_plan/information',
         'views/nutrition_plan/archive_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_list_menu',
-        'views/nutrition_plan/nutrition_guide/frontend/menu_plan_list',
+        'views/nutrition_plan/nutrition_guide/backend/menu_plan_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_header',
         'views/nutrition_plan/nutrition_guide/example_day_menu',
         'views/nutrition_plan/nutrition_guide/example_day',
         'views/nutrition_plan/nutrition_guide/example_day_meal',
         'views/nutrition_plan/nutrition_guide/add_recipe',
         'views/nutrition_plan/nutrition_guide/shopping_list',
+        'views/nutrition_plan/supplements/backend/protocols_wrapper',
+        'views/nutrition_plan/supplements/backend/protocol',
         'views/graph/graph',
         'views/nutrition_plan/backend/list',
         'views/nutrition_plan/backend/search_header',
-        'views/nutrition_plan/backend/overview_container'
+        'views/nutrition_plan/backend/overview_container',
+        'views/nutrition_plan/backend/menus/main_menu'
 
 ], function (
         $,
@@ -55,6 +59,7 @@ define([
         Menu_plan_model,
         Example_day_meal_model,
         Request_params_model,
+        Protocol_model,
         Overview_view,
         Target_block_view,
         Macronutrients_view,
@@ -69,10 +74,13 @@ define([
         Example_day_meal_view,
         Example_day_add_recipe_view,
         Shopping_list_view,
+        Protocols_wrapper_view,
+        Protocol_view,
         Graph_view,
         List_view,
         Search_header_view,
-        Overview_container_view
+        Overview_container_view,
+        Main_menu_view
     ) {
 
 
@@ -112,16 +120,17 @@ define([
                 "!/": "list_view", 
                 "!/list_view": "list_view", 
                 "!/overview/:id": "overview", 
-                "!/targets": "targets", 
-                "!/macronutrients": "macronutrients", 
-                "!/supplements": "supplements", 
-                "!/nutrition_guide": "nutrition_guide", 
+                "!/targets/:id": "targets", 
+                "!/macronutrients/:id": "macronutrients", 
+                "!/supplements/:id": "supplements", 
+                "!/add_supplement_protocol/:id": "add_supplement_protocol",
+                "!/nutrition_guide/:id": "nutrition_guide", 
                 "!/menu_plan/:id": "menu_plan", 
                 "!/example_day/:id": "example_day", 
                 "!/add_example_day_meal/:id": "add_example_day_meal", 
-                "!/shopping_list": "shopping_list", 
+                "!/shopping_list/:id": "shopping_list", 
                 "!/add_meal_recipe/:meal_id": "add_meal_recipe",
-                "!/information": "information", 
+                "!/information/:id": "information", 
                 "!/archive": "archive", 
                 "!/close": "close", 
             },
@@ -143,7 +152,7 @@ define([
                 app.collections.items.fetch({
                     data : params,
                     success : function (collection, response) {
-                        console.log(collection.toJSON());
+                        //console.log(collection.toJSON());
                     },
                     error : function (collection, response) {
                         alert(response.responseText);
@@ -176,8 +185,6 @@ define([
             },
             
             overview : function(id) {
-                $("#header_wrapper").empty();
-                
                 $(".plan_menu_link").removeClass("active_link");
                 
                 var model = app.collections.items.get(id);
@@ -197,18 +204,46 @@ define([
                         alert(response.responseText);
                     }
                 });
-            
- 
-                
             },
             
             load_overview : function(model) {
+                this.loadMainMenu(model.get('id'));
                 $("#main_container").html(new Overview_container_view({model : model}).render().el);
             },
+            
+            loadMainMenu : function(id) {
+                $("#header_wrapper").html(new Main_menu_view({nutrition_plan_id : id}).render().el);
+            },
 
+            update_list : function() {
+                app.models.request_params.set({ uid : app.getUniqueId()});
+            },
         
-        
-        
+            supplements: function (id) {
+                $("#header_wrapper").empty();
+                this.common_actions();
+                this.loadMainMenu(id);
+                $("#supplements_link").addClass("active_link");
+
+                app.collections.protocols = new Protocols_collection();
+                var self = this;
+                app.collections.protocols.fetch({
+                    data: {nutrition_plan_id : id},
+                    success: function(collection) {
+                        $("#main_container").html(new Protocols_view({collection : collection, nutrition_plan_id : id}).render().el);
+                    },
+                    error: function(collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            
+            add_supplement_protocol : function(id) {
+                app.views.protocol = new Protocol_view({model : new Protocol_model({nutrition_plan_id : id}), collection : app.collections.protocols}); 
+                   $("#protocol_list").append(app.views.protocol.render().el );
+            },
+            
+            
         
         
             ///
@@ -272,6 +307,8 @@ define([
             },
         
             targets: function () {
+                //TODO 
+                return;
                  this.no_active_plan_action();
                  this.common_actions();
                  $("#targets_wrapper").show();
@@ -311,6 +348,8 @@ define([
             },
             
             macronutrients: function () {
+                //TODO 
+                return;
                  this.no_active_plan_action();
                  this.common_actions();
                  $("#macronutrients_wrapper").show();
@@ -345,26 +384,11 @@ define([
                 $("#macronutrients_comments_wrapper").html(comments_html);
             },
             
-            supplements: function () {
-                 this.no_active_plan_action();
-                 this.common_actions();
-                 $("#supplements_wrapper").show();
-                 $("#supplements_link").addClass("active_link");
-
-                 app.collections.protocols = new Protocols_collection(); 
-                 var id = app.models.nutrition_plan.get('id');
-                 app.collections.protocols.fetch({
-                    data: {nutrition_plan_id : id},
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                 });
-                 
-                 app.views.protocols = new Protocols_view({model : app.models.nutrition_plan, collection : app.collections.protocols}); 
-                 $("#supplements_wrapper").html(app.views.protocols.render().el);
-            },
+            
             
             nutrition_guide: function () {
+                //TODO 
+                return;
                 this.no_active_plan_action();
                 this.common_actions();
                 $("#nutrition_guide_wrapper").show();
@@ -391,6 +415,8 @@ define([
             },
             
             menu_plan: function (id) {
+                //TODO 
+                return;
                 app.models.menu_plan = new Menu_plan_model();
                 
                 if(parseInt(id)) {
@@ -416,6 +442,8 @@ define([
             },
             
             example_day : function(example_day_id) {
+                //TODO 
+                return;
                 app.collections.example_day_meals = new Example_day_meals_collection(); 
                 var id = app.models.nutrition_plan.get('id');
                 var menu_id = app.models.menu_plan.get('id');
@@ -437,12 +465,16 @@ define([
             },
             
             add_example_day_meal : function(example_day_id) {
+                //TODO 
+                return;
                 var menu_id = app.models.menu_plan.get('id');
                 app.views.example_day_meal = new Example_day_meal_view({model : new Example_day_meal_model({'example_day_id' : example_day_id, 'menu_id' : menu_id}), collection : app.collections.example_day_meals}); 
                 $("#example_day_meal_list").append(app.views.example_day_meal.render().el );
             },
             
             shopping_list : function() {
+                //TODO 
+                return;
                 var menu_id = app.models.menu_plan.get('id');
                 app.collections.nutrition_database_categories = new Nutrition_database_categories_collection();
                 app.collections.shopping_list_ingredients = new Shopping_list_ingredients_collection();
@@ -486,6 +518,8 @@ define([
             },
             
             add_meal_recipe : function(meal_id) {
+                //TODO 
+                return;
                 this.get_database_recipes();
                 
                 var meal_model = app.collections.example_day_meals.get({id : meal_id});
@@ -499,11 +533,15 @@ define([
             },
             
             set_recipes_model : function() {
+                //TODO 
+                return;
                 app.collections.add_meal_recipes.reset();
                 app.models.get_recipe_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
             },
      
             information: function () {
+                //TODO 
+                return;
                  this.no_active_plan_action();
                  this.common_actions();
                  $("#information_wrapper").show();
@@ -524,6 +562,8 @@ define([
             },
                     
             archive: function () {
+                //TODO 
+                return;
                  this.common_actions();
                  $("#archive_wrapper").show();
                  $("#archive_focus_link").addClass("active_link");
@@ -543,6 +583,8 @@ define([
             },
                     
             close: function() {
+                //TODO 
+                return;
                  this.no_active_plan_action();
                  $("#close_tab").hide();
                  app.models.nutrition_plan.set({id : app.options.item_id});
@@ -550,6 +592,7 @@ define([
             },
             
             common_actions : function() {
+                $("#header_wrapper").empty();
                 $(".block").hide();
                 $(".plan_menu_link").removeClass("active_link");
             },
@@ -563,6 +606,8 @@ define([
            
            
            copy_menu_plan : function(id) {
+               //TODO 
+                return;
                 app.models.menu_plan = new Menu_plan_model();
                 var self = this;
                 app.models.menu_plan.set({id : id});
@@ -591,9 +636,7 @@ define([
                 })
              },
              
-            update_list : function() {
-                app.models.request_params.set({ uid : app.getUniqueId()});
-            },
+            
 
         });
 

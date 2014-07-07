@@ -4,7 +4,7 @@ define([
 	'backbone',
         'app',
         'views/nutrition_plan/backend/menus/overview_menu',
-        'views/nutrition_plan/backend/menus/main_menu',
+        
         'views/nutrition_plan/backend/client_trainers_block',
         'views/nutrition_plan/backend/goals_periods_block',
         'views/nutrition_plan/backend/nutrition_focus_block',
@@ -15,7 +15,7 @@ define([
         Backbone,
         app,
         Form_menu_view,
-        Main_menu_view, 
+        
         Client_trainers_block_view,
         Goals_periods_block_view,
         Nutrition_focus_block_view,
@@ -39,7 +39,6 @@ define([
             var self = this;
             $(this.el).show('0', function() {
                 self.loadFormMenu();
-                self.loadMainMenu();
                 self.loadClientTrainersBlock();
                 self.loadGoalsPeriodsBlock();
                 self.loadNutritionFocusBlock();
@@ -48,10 +47,6 @@ define([
         
         loadFormMenu : function() {
             $(this.el).find("#form_menu").html(new Form_menu_view({model : this.model}).render().el);
-        },
-        
-        loadMainMenu : function() {
-            $(this.el).find("#plan_menu").html(new Main_menu_view({model : this.model}).render().el);
             $("#overview_link").addClass("active_link");
         },
         

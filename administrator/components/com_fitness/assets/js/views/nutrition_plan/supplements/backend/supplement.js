@@ -54,6 +54,8 @@ define([
         onClickSaveSupplement : function(event) {
             event.preventDefault();
             var data = Backbone.Syphon.serialize(this);
+            
+            data.nutrition_plan_id = this.options.nutrition_plan_id;
 
             this.model.set(data);
 

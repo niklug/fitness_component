@@ -8,6 +8,10 @@ define([
 
     var view = Backbone.View.extend({
         
+        initialize : function() {
+            this.id = this.options.nutrition_plan_id;
+        },
+        
         template:_.template(template),
             
         render: function(){
@@ -28,27 +32,27 @@ define([
         },
 
         onClickOverview : function() {
-            app.controller.navigate("!/overview/" + this.model.get('id'), true);
+            app.controller.navigate("!/overview/" + this.id, true);
         },
 
         onClickTargets : function() {
-            app.controller.navigate("!/targets", true);
+            app.controller.navigate("!/targets/" + this.id, true);
         },
 
         onClickMacronutrients : function() {
-            app.controller.navigate("!/macronutrients", true);
+            app.controller.navigate("!/macronutrients/" + this.id, true);
         },
 
         onClickSupplements : function() {
-            app.controller.navigate("!/supplements", true);
+            app.controller.navigate("!/supplements/" + this.id, true);
         },
 
         onClickNutrition_guide : function() {
-            app.controller.navigate("!/nutrition_guide", true);
+            app.controller.navigate("!/nutrition_guide/" + this.id, true);
         },
 
         onClickInformation : function() {
-            app.controller.navigate("!/information", true);
+            app.controller.navigate("!/information/" + this.id, true);
         },
 
         onClickArchive_focus : function() {
