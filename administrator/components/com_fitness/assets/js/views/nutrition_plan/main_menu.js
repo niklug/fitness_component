@@ -14,7 +14,6 @@ define([
 
         initialize: function(){
             this.render();
-            this.controller = app.routers.nutrition_plan;
         },
 
         render: function(){
@@ -35,35 +34,35 @@ define([
         },
 
         onClickOverview : function() {
-            this.controller.navigate("!/overview", true);
+            app.controller.navigate("!/overview", true);
         },
 
         onClickTargets : function() {
-            this.controller.navigate("!/targets", true);
+            app.controller.navigate("!/targets", true);
         },
 
         onClickMacronutrients : function() {
-            this.controller.navigate("!/macronutrients", true);
+            app.controller.navigate("!/macronutrients", true);
         },
 
         onClickSupplements : function() {
-            this.controller.navigate("!/supplements", true);
+            app.controller.navigate("!/supplements", true);
         },
 
         onClickNutrition_guide : function() {
-            this.controller.navigate("!/nutrition_guide", true);
+            app.controller.navigate("!/nutrition_guide", true);
         },
 
         onClickInformation : function() {
-            this.controller.navigate("!/information", true);
+            app.controller.navigate("!/information", true);
         },
 
         onClickArchive_focus : function() {
-            this.controller.navigate("!/archive", true);
+            app.controller.navigate("!/archive", true);
         },
 
         onClickClose : function() {
-            this.controller.navigate("!/close", true);
+            app.controller.navigate("!/close", true);
         }
 
     });

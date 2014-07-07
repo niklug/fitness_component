@@ -10,10 +10,6 @@ define([
         
         template:_.template(template),
 
-        initialize: function(){
-            this.controller = app.routers.nutrition_plan;
-        },
-
         render:function () {
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
@@ -28,13 +24,13 @@ define([
             $(".example_day_link").removeClass("active");
             var day = $(event.target).attr('data-id');
             $(event.target).addClass("active");
-            this.controller.navigate("!/example_day/" + day, true);
+            app.controller.navigate("!/example_day/" + day + "/" + this.options.nutrition_plan_id, true);
         },
         
         onChooseShoopingList:function (event) {
             $(".example_day_link").removeClass("active");
             $(event.target).addClass("active");
-            this.controller.navigate("!/shopping_list", true);
+            app.controller.navigate("!/shopping_list", true);
         }
 
     });

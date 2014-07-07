@@ -25,7 +25,6 @@ define([
         template:_.template(template),
 
         initialize : function() {
-            this.controller = app.routers.nutrition_plan;
             this.collection.bind("add", this.addRecipeItem, this);
             this.collection.bind("reset", this.clearRecipeItems, this);
         },

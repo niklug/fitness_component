@@ -67,10 +67,10 @@ define([
                 this.$el.find(".number_serves").addClass("red_style_border");
                 return false;
             }
-
+            
             app.models.original_recipe.set(this.model.toJSON());
             
-            app.models.original_recipe.set({nutrition_plan_id : app.options.item_id});
+            app.models.original_recipe.set({nutrition_plan_id : this.options.nutrition_plan_id});
             
             var menu_id = app.models.menu_plan.get('id');
 

@@ -16,8 +16,6 @@ define([
         initialize: function(){
             _.bindAll(this, 'onClickSaveMeal', 'onClickDeleteMeal','close', 'render', 'addRecipe');
             
-            this.controller = app.routers.nutrition_plan;
-            
             this.model.on("destroy", this.close, this);
 
             app.collections.meal_recipes = new Meal_recipes_collection();
@@ -54,7 +52,7 @@ define([
         connectComments : function() {
             var meal_id = this.model.get('id');
             var comment_options = {
-                'item_id' : app.options.item_id,
+                'item_id' : this.options.nutrition_plan_id,
                 'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : app.options.example_day_meal_comments_db_table,
@@ -147,7 +145,7 @@ define([
         },
 
         onClickAddMealRecipe : function() {
-            this.controller.navigate("!/add_meal_recipe/" + this.model.get('id'), true);
+            app.controller.navigate("!/add_meal_recipe/" + this.model.get('id') + '/' + this.options.nutrition_plan_id, true);
         },
 
         close :function() {

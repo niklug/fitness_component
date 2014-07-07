@@ -11,10 +11,6 @@ define([
         
         template:_.template(template),
 
-        initialize: function(){
-            this.controller = app.routers.nutrition_plan;
-        },
-
         render:function () {
             $(this.el).html(this.template(this.model.toJSON()));
             

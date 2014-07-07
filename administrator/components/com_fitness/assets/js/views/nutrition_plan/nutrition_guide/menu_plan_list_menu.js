@@ -10,10 +10,6 @@ define([
         
         template:_.template(template),
 
-        initialize: function(){
-            this.controller = app.routers.nutrition_plan;
-        },
-
         render: function(){
             var template = _.template(this.template());
             this.$el.html(template);
@@ -25,7 +21,7 @@ define([
         },
 
         onClickCreateMenu : function() {
-            this.controller.navigate("!/menu_plan/0", true);
+            app.controller.navigate("!/menu_plan/0/" + this.options.nutrition_plan_id, true);
         },
     });
             

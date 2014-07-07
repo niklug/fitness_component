@@ -26,7 +26,7 @@ require([
     Backbone.emulateHTTP = true ;
     Backbone.emulateJSON = true;
 
-    app.routers.nutrition_plan = new Controller();
+    app.controller = new Controller();
   
     app.views.main_menu = new Main_menu_view();
     

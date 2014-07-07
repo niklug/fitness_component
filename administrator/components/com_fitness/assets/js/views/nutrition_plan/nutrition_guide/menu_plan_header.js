@@ -10,10 +10,6 @@ define([
         
         template:_.template(template),
 
-        initialize: function(){
-            this.controller = app.routers.nutrition_plan;
-        },
-
         render: function(){
             var data = this.model.toJSON();
             data.$ = $;
@@ -33,6 +29,7 @@ define([
             event.preventDefault();
             var data = Backbone.Syphon.serialize(this);
             data.created_by = app.options.client_id;
+            data.nutrition_plan_id = this.options.nutrition_plan_id;
             
             if(typeof app.options.is_backend !== 'undefined' && app.options.is_backend == true) {
                 data.status = 1;
@@ -69,8 +66,7 @@ define([
                     wait: true,
                     success: function (model, response) {
                         var id = model.get('id');
-                        app.routers.nutrition_plan.navigate("!/menu_plan/" + id, true);
-                        console.log(app.options.is_trainer);
+                        app.controller.navigate("!/menu_plan/" + id + "/" + self.options.nutrition_plan_id, true);
                         if(app.options.is_trainer) {
                             self.send_status_email(model.get('id'), 'menu_plan_pending');
                         }
@@ -88,7 +84,7 @@ define([
                 this.model.save(null, {
                     success: function (model, response) {
                         var id = model.get('id');
-                        app.routers.nutrition_plan.navigate("!/menu_plan/" + id, true);
+                        app.controller.navigate("!/menu_plan/" + id + "/" + self.options.nutrition_plan_id, true);
                     },
                     error: function (model, response) {
                         alert(response.responseText);
@@ -124,7 +120,7 @@ define([
         onClickDelete : function(event) {
             this.model.destroy( {
                 success: function (model, response) {
-                    app.routers.nutrition_plan.navigate("!/nutrition_guide", true);
+                    app.controller.navigate("!/nutrition_guide/" +  this.options.nutrition_plan_id, true);
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -133,7 +129,7 @@ define([
         },
         
         onClickClose : function() {
-            app.routers.nutrition_plan.navigate("!/nutrition_guide", true);
+            app.controller.navigate("!/nutrition_guide/" + this.options.nutrition_plan_id, true);
         },
         
         onClickSubmit : function() {
@@ -145,7 +141,7 @@ define([
             var self = this;
             this.model.save(null, {
                 success: function (model, response) {
-                    app.routers.nutrition_plan.navigate("!/nutrition_guide", true);
+                    app.controller.navigate("!/nutrition_guide", true);
                     if(app.options.is_client) {
                         self.send_status_email(model.get('id'), 'menu_plan_submitted');
                     }

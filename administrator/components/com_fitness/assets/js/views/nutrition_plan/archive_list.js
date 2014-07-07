@@ -25,7 +25,7 @@ define([
             var id = $(event.target).attr('data-id');
             this.model.set({id : id});
             $("#close_tab").show();
-            app.routers.nutrition_plan.navigate("!/overview", true);
+            app.controller.navigate("!/overview", true);
         },
     });
             

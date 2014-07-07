@@ -10,10 +10,6 @@ define([
         
         template:_.template(template),
 
-        initialize: function(){
-            this.controller = app.routers.nutrition_plan;
-        },
-
         render: function(){
             var template = _.template(this.template({items : this.collection.toJSON(), $ : $}));
             this.$el.html(template);
@@ -29,7 +25,7 @@ define([
 
         onClickPreview : function(event) {
             var id = $(event.target).attr('data-id');
-            this.controller.navigate("!/menu_plan/" + id, true);
+            app.controller.navigate("!/menu_plan/" + id + "/" + this.options.nutrition_plan_id, true);
         },
         onClickDelete : function(event) {
             var id = $(event.target).attr('data-id');
@@ -50,7 +46,7 @@ define([
         
         onClickCopy : function(event) {
             var id = $(event.target).attr('data-id');
-            this.controller.copy_menu_plan(id);
+            app.controller.copy_menu_plan(id);
         }
     });
             

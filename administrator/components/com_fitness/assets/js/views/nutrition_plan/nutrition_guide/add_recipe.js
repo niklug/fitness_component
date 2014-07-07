@@ -25,7 +25,6 @@ define([
         template:_.template(template),
 
         initialize : function() {
-            this.controller = app.routers.nutrition_plan;
             _.bindAll(this, 'render',  'addRecipeItem', 'clearRecipeItems');
             this.collection.bind("reset", this.clearRecipeItems, this);
             this.collection.bind("add", this.addRecipeItem, this);
@@ -69,7 +68,7 @@ define([
         addRecipeItem : function(model) {
             var meal_id = this.model.get('id');
             model.set({'meal_id' : meal_id});
-            app.views.recipe_item_view = new Add_recipe_item_view({collection : this.collection, model : model}); 
+            app.views.recipe_item_view = new Add_recipe_item_view({nutrition_plan_id : this.options.nutrition_plan_id, collection : this.collection, model : model}); 
             this.container_el.append( app.views.recipe_item_view.render().el );
 
             app.models.pagination.set({'items_total' : model.get('items_total')});
@@ -84,7 +83,7 @@ define([
         },
 
         onCancelViewRecipe :function (event) {
-            this.controller.navigate("!/example_day/" + this.model.get('example_day_id'), true);
+            app.controller.navigate("!/example_day/" + this.model.get('example_day_id') + "/" + this.options.nutrition_plan_id, true);
         },
 
         connectFilters : function() {

@@ -16,20 +16,12 @@ define([
         
         template:_.template(template),
 
-        initialize : function() {
-
-        },
         render:function () {
             var data = this.model.toJSON();
             data.$ = $;
             $(this.el).append(this.template(data));
             return this;
         },
-
-        events: {
-
-        },
-
     });
             
     return view;
