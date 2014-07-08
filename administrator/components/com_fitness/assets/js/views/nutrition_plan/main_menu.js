@@ -50,7 +50,8 @@ define([
         },
 
         onClickNutrition_guide : function() {
-            app.controller.navigate("!/nutrition_guide", true);
+            var id = app.models.nutrition_plan.get('id');
+            app.controller.navigate("!/nutrition_guide/" + id, true);
         },
 
         onClickInformation : function() {

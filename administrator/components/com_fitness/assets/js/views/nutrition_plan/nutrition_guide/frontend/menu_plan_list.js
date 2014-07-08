@@ -23,7 +23,7 @@ define([
 
         onClickPreview : function(event) {
             var id = $(event.target).attr('data-id');
-            app.controller.navigate("!/menu_plan/" + id, true);
+            app.controller.navigate("!/menu_plan/" + id + "/" + this.options.nutrition_plan_id, true);
         },
         
         onClickCopy : function(event) {

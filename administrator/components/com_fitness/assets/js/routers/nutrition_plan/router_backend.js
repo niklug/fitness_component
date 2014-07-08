@@ -356,35 +356,41 @@ define([
                 });  
             },
             
+            copy_menu_plan : function(id) {
+                app.models.menu_plan = new Menu_plan_model();
+                var self = this;
+                app.models.menu_plan.set({id : id});
+                app.models.menu_plan.fetch({
+                    wait : true,
+                    success: function (model, response) {
+                        model.set({
+                            id : null, 
+                            created_by : app.options.user_id,
+                            submit_date : null,
+                            status : '4',
+                            assessed_by : null,
+                        });
+                        model.save(null, {
+                            success: function (model, response) {
+                                self.nutrition_guide();
+                            },
+                            error: function (model, response) {
+                                alert(response.responseText);
+                            }
+                        });
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                })
+             },
+            
             
             
         
         
             ///
-            
-
-            overview_old: function () {
-                 this.no_active_plan_action();
-                 this.common_actions();
-                 $("#overview_wrapper").show();
-                 $("#overview_link").addClass("active_link");
-                 // connect Graph from Goals frontend logic
-                 this.connectGraph();
-                 var id = app.models.nutrition_plan.get('id');
-                 app.models.nutrition_plan.fetch({
-                    data: {id : id},
-                    wait : true,
-                    success : function(model, response) {
-                        var overview_view = new Overview_view({model : model});
-                        $("#nutrition_focus_wrapper").html(overview_view.render().el);
-                    },
-                    error: function (collection, response) {
-                        //alert(response.responseText);
-                    }
-                 });
-                 
-            },
-            
+           
             connectGraph : function() {
                 this.graph = new Graph_view({
                     el : "#graph_container",
@@ -411,7 +417,6 @@ define([
             targets: function () {
                 //TODO 
                 return;
-                 this.no_active_plan_action();
                  this.common_actions();
                  $("#targets_wrapper").show();
                  $("#targets_link").addClass("active_link");
@@ -452,7 +457,6 @@ define([
             macronutrients: function () {
                 //TODO 
                 return;
-                 this.no_active_plan_action();
                  this.common_actions();
                  $("#macronutrients_wrapper").show();
                  $("#macronutrients_link").addClass("active_link");
@@ -485,60 +489,7 @@ define([
                 var comments_html = comments.run();
                 $("#macronutrients_comments_wrapper").html(comments_html);
             },
-            
-            /*
-            menu_plan: function (id) {
-                //TODO 
-                return;
-                app.models.menu_plan = new Menu_plan_model();
-                
-                if(parseInt(id)) {
-                    app.models.menu_plan = app.collections.menu_plans.get(id);
-                }
-                   
-                app.views.menu_plan_header = new Menu_plan_header_view({model : app.models.menu_plan, collection : app.collections.menu_plans});
-                 
-                $("#nutrition_guide_header").html(app.views.menu_plan_header.render().el);
-                
-                
-                
-                $( "#start_date" ).datepicker({ dateFormat: "yy-mm-dd",  minDate : -5});
-                
-                if(parseInt(id)) {
-                    app.views.example_day_menu = new Example_day_menu_view({model : app.models.menu_plan});
-                    $("#nutrition_guide_container").html(app.views.example_day_menu.render().el);
-                }
-                //on default
-                this.example_day(1);
-                $(".example_day_link").first().addClass("active");
-
-            },
-            
-            example_day : function(example_day_id) {
-                //TODO 
-                return;
-                app.collections.example_day_meals = new Example_day_meals_collection(); 
-                var id = app.models.nutrition_plan.get('id');
-                var menu_id = app.models.menu_plan.get('id');
-                app.collections.example_day_meals.fetch({
-                    data: {
-                        nutrition_plan_id : id,
-                        menu_id : menu_id,
-                        example_day_id : example_day_id
-                    },
-                    success: function (collection, response) {
-                        //console.log(response);
-                    },
-                    error: function (model, response) {
-                        alert(response.responseText);
-                    }
-                });
-                
-                $('#example_day_wrapper').html(new Example_day_view({collection : app.collections.example_day_meals, 'example_day_id' : example_day_id}).render().el);
-            },
-            */
-            
-            
+           
             
             shopping_list : function() {
                 //TODO 
@@ -590,7 +541,6 @@ define([
             information: function () {
                 //TODO 
                 return;
-                 this.no_active_plan_action();
                  this.common_actions();
                  $("#information_wrapper").show();
                  $("#information_link").addClass("active_link");
@@ -633,7 +583,6 @@ define([
             close: function() {
                 //TODO 
                 return;
-                 this.no_active_plan_action();
                  $("#close_tab").hide();
                  app.models.nutrition_plan.set({id : app.options.item_id});
                  this.overview();
@@ -644,45 +593,10 @@ define([
                 $(".block").hide();
                 $(".plan_menu_link").removeClass("active_link");
             },
-            
-            no_active_plan_action : function() {
-                if(!app.options.item_id) {
-                    alert('Please contact your trainer immediately regarding your current Nutrition Plan!');
-                    return false;
-                }
-           },
+
            
            
-           copy_menu_plan : function(id) {
-               //TODO 
-                return;
-                app.models.menu_plan = new Menu_plan_model();
-                var self = this;
-                app.models.menu_plan.set({id : id});
-                app.models.menu_plan.fetch({
-                    wait : true,
-                    success: function (model, response) {
-                        model.set({
-                            id : null, 
-                            created_by : app.options.user_id,
-                            submit_date : null,
-                            status : '4',
-                            assessed_by : null,
-                        });
-                        model.save(null, {
-                            success: function (model, response) {
-                                self.nutrition_guide();
-                            },
-                            error: function (model, response) {
-                                alert(response.responseText);
-                            }
-                        });
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                })
-             },
+           
              
             
 
