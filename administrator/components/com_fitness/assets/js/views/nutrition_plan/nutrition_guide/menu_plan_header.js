@@ -120,7 +120,7 @@ define([
         onClickDelete : function(event) {
             this.model.destroy( {
                 success: function (model, response) {
-                    app.controller.navigate("!/nutrition_guide/" +  this.options.nutrition_plan_id, true);
+                    app.controller.navigate("!/nutrition_guide/" +  self.options.nutrition_plan_id, true);
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -141,10 +141,7 @@ define([
             var self = this;
             this.model.save(null, {
                 success: function (model, response) {
-                    app.controller.navigate("!/nutrition_guide", true);
-                    if(app.options.is_client) {
-                        self.send_status_email(model.get('id'), 'menu_plan_submitted');
-                    }
+                    app.controller.navigate("!/nutrition_guide/" + self.options.nutrition_plan_id, true);
                 },
                 error: function (model, response) {
                     alert(response.responseText);

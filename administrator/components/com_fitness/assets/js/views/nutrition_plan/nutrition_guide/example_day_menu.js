@@ -16,7 +16,7 @@ define([
         },
 
         events:{
-            "click .example_day_link": "onChooseDay",
+            "click .menu_day": "onChooseDay",
             "click .shopping_list": "onChooseShoopingList"
         },
 
@@ -30,7 +30,7 @@ define([
         onChooseShoopingList:function (event) {
             $(".example_day_link").removeClass("active");
             $(event.target).addClass("active");
-            app.controller.navigate("!/shopping_list", true);
+            app.controller.navigate("!/shopping_list/" + this.options.nutrition_plan_id, true);
         }
 
     });

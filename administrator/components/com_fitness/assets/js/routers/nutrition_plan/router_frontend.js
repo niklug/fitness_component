@@ -97,7 +97,7 @@ define([
                 "!/menu_plan/:id/:nutrition_plan_id": "menu_plan", 
                 "!/example_day/:id/:nutrition_plan_id": "example_day", 
                 "!/add_example_day_meal/:id/:nutrition_plan_id": "add_example_day_meal", 
-                "!/shopping_list": "shopping_list", 
+                "!/shopping_list/:id": "shopping_list", 
                 "!/add_meal_recipe/:meal_id/:nutrition_plan_id": "add_meal_recipe",
                 "!/information": "information", 
                 "!/archive": "archive", 
@@ -333,12 +333,11 @@ define([
                 $("#example_day_meal_list").append(app.views.example_day_meal.render().el );
             },
             
-            shopping_list : function() {
+            shopping_list : function(id) {
                 var menu_id = app.models.menu_plan.get('id');
                 app.collections.nutrition_database_categories = new Nutrition_database_categories_collection();
                 app.collections.shopping_list_ingredients = new Shopping_list_ingredients_collection();
-                var id = app.models.nutrition_plan.get('id');
-                
+               
                 $.when(
                 
                 app.collections.nutrition_database_categories.fetch({

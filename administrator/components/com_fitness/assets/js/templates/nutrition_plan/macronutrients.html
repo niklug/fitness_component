@@ -14,7 +14,7 @@
     <h3>ALLOWED PROTEINS</h3>
     <hr class="orange_line">
     <div class="internal_wrapper">
-        <%= allowed_proteins %>
+        <%= decodeURIComponent(allowed_proteins) %>
     </div>
 </div>
 
@@ -24,7 +24,7 @@
     <h3>ALLOWED FATS</h3>
     <hr class="orange_line">
     <div class="internal_wrapper">
-        <%= allowed_fats %>
+        <%= decodeURIComponent(allowed_fats) %>
     </div>
 </div>
 
@@ -34,7 +34,7 @@
     <h3>ALLOWED CARBOHYDRATES</h3>
     <hr class="orange_line">
     <div class="internal_wrapper">
-        <%= allowed_carbs %>
+        <%= decodeURIComponent(allowed_carbs) %>
     </div>
 </div>
 
@@ -44,7 +44,7 @@
     <h3>ALLOWED LIQUIDS</h3>
     <hr class="orange_line">
     <div class="internal_wrapper">
-        <%= allowed_liquids %>
+        <%= decodeURIComponent(allowed_liquids) %>
     </div>
 </div>
 
@@ -54,6 +54,6 @@
     <h3>OTHER RECOMMENDATIONS / INSTRUCTIONS</h3>
     <hr class="orange_line">
     <div class="internal_wrapper">
-        <%= other_recommendations %>
+        <%= decodeURIComponent(other_recommendations) %>
     </div>
 </div>

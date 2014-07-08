@@ -21,9 +21,9 @@ define([
         'models/nutrition_plan/nutrition_guide/get_recipe_params',
         'views/nutrition_plan/overview',
         'views/nutrition_plan/target_block',
-        'views/nutrition_plan/macronutrients',
+        'views/nutrition_plan/backend/macronutrients',
         'views/nutrition_plan/supplements/backend/protocols',
-        'views/nutrition_plan/information',
+        'views/nutrition_plan/backend/information',
         'views/nutrition_plan/archive_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_list_menu',
         'views/nutrition_plan/nutrition_guide/backend/menu_plan_list',
@@ -384,7 +384,118 @@ define([
                     }
                 })
              },
+             
+             macronutrients : function (id) {
+                this.common_actions();
+
+                var model = app.collections.items.get(id);
+                
+                if(model) {
+                    this.load_macronutrients(model);
+                    return;
+                }
+                model = new Item_model({id : id});
+                var self = this;
+                model.fetch({
+                    success: function (model, response) {
+                        app.collections.items.add(model);
+                        self.load_macronutrients(model);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+
+            load_macronutrients : function(model) {
+                this.loadMainMenu(model.get('id'));
+                
+                $("#macronutrients_link").addClass("active_link");
+                
+                var macronutrients_view = new Macronutrients_view({model : model});
+                     
+                $("#main_container").html(macronutrients_view.render().el);
+            },
             
+            information: function (id) {
+                this.common_actions();
+                var model = app.collections.items.get(id);
+                
+                if(model) {
+                    this.load_information(model);
+                    return;
+                }
+                model = new Item_model({id : id});
+                var self = this;
+                model.fetch({
+                    success: function (model, response) {
+                        app.collections.items.add(model);
+                        self.load_information(model);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            
+            load_information: function(model) {
+                this.loadMainMenu(model.get('id'));
+                
+                $("#information_link").addClass("active_link");
+                
+                var information_view = new Information_view({model : model});
+                        
+                $("#main_container").html(information_view.render().el);
+            },
+
+            shopping_list : function(id) {
+                var menu_id = app.models.menu_plan.get('id');
+                app.collections.nutrition_database_categories = new Nutrition_database_categories_collection();
+                app.collections.shopping_list_ingredients = new Shopping_list_ingredients_collection();
+                
+                $.when(
+                
+                app.collections.nutrition_database_categories.fetch({
+                    wait : true,
+                    success: function (collection, response) {
+                        //console.log(response);
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                })
+                
+                ,
+                
+                app.collections.shopping_list_ingredients.fetch({
+                    wait : true,
+                    data: {
+                        nutrition_plan_id : id,
+                        menu_id : menu_id
+                    },
+                    success: function (collection, response) {
+                        //console.log(response);
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                })
+                
+                ).then(function() {
+                    $('#example_day_wrapper').html(new Shopping_list_view({
+                        categories_collection : app.collections.nutrition_database_categories, 
+                        ingredients_collection : app.collections.shopping_list_ingredients,
+                        model : app.models.menu_plan
+                    }).render().el);
+                });
+            },
+
+            
+            common_actions : function() {
+                $("#header_wrapper, #nutrition_guide_header").empty();
+                $(".block").hide();
+                $(".plan_menu_link").removeClass("active_link");
+            },
             
             
         
@@ -453,152 +564,7 @@ define([
                 $("#targets_comments_wrapper").html(comments_html);
 
             },
-            
-            macronutrients: function () {
-                //TODO 
-                return;
-                 this.common_actions();
-                 $("#macronutrients_wrapper").show();
-                 $("#macronutrients_link").addClass("active_link");
-               
-                 var id = app.models.nutrition_plan.get('id');
-                 app.models.nutrition_plan.fetch({
-                    data: {id : id},
-                    wait : true,
-                    success : function(model, response) {
-                        var macronutrients_view = new Macronutrients_view({model : model});
-                        
-                        $("#macronutrients_container").html(macronutrients_view.render().el);
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                 });
-                 // connect comments
-                 var comment_options = {
-                    'item_id' :  id,
-                    'fitness_administration_url' : app.options.fitness_frontend_url,
-                    'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                    'db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
-                    'read_only' : true,
-                    'anable_comment_email' : true,
-                    'comment_method' : 'MacrosComment'
-                }
-                var comments = $.comments(comment_options, comment_options.item_id, 1);
 
-                var comments_html = comments.run();
-                $("#macronutrients_comments_wrapper").html(comments_html);
-            },
-           
-            
-            shopping_list : function() {
-                //TODO 
-                return;
-                var menu_id = app.models.menu_plan.get('id');
-                app.collections.nutrition_database_categories = new Nutrition_database_categories_collection();
-                app.collections.shopping_list_ingredients = new Shopping_list_ingredients_collection();
-                var id = app.models.nutrition_plan.get('id');
-                
-                $.when(
-                
-                app.collections.nutrition_database_categories.fetch({
-                    wait : true,
-                    success: function (collection, response) {
-                        //console.log(response);
-                    },
-                    error: function (model, response) {
-                        alert(response.responseText);
-                    }
-                })
-                
-                ,
-                
-                app.collections.shopping_list_ingredients.fetch({
-                    wait : true,
-                    data: {
-                        nutrition_plan_id : id,
-                        menu_id : menu_id
-                    },
-                    success: function (collection, response) {
-                        //console.log(response);
-                    },
-                    error: function (model, response) {
-                        alert(response.responseText);
-                    }
-                })
-                
-                ).then(function() {
-                    $('#example_day_wrapper').html(new Shopping_list_view({
-                        categories_collection : app.collections.nutrition_database_categories, 
-                        ingredients_collection : app.collections.shopping_list_ingredients,
-                        model : app.models.menu_plan
-                    }).render().el);
-                });
-            },
-            
-            
-     
-            information: function () {
-                //TODO 
-                return;
-                 this.common_actions();
-                 $("#information_wrapper").show();
-                 $("#information_link").addClass("active_link");
-                 var id = app.models.nutrition_plan.get('id');
-                 app.models.nutrition_plan.fetch({
-                    data: {id : id},
-                    wait : true,
-                    success : function(model, response) {
-                        var information_view = new Information_view({model : model});
-                        
-                        $("#information_wrapper").html(information_view.render().el);
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                 });
-            },
-                    
-            archive: function () {
-                //TODO 
-                return;
-                 this.common_actions();
-                 $("#archive_wrapper").show();
-                 $("#archive_focus_link").addClass("active_link");
-
-                 app.collections.nutrition_plans.fetch({
-                    data: {id : app.options.item_id, client_id : app.options.client_id},
-                    wait : true,
-                    success : function(collection, response) {
-                        var archive_list_view = new Archive_list_view({model : app.models.nutrition_plan, collection : collection});
-                        
-                        $("#archive_wrapper").html(archive_list_view.render().el);
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                 });
-            },
-                    
-            close: function() {
-                //TODO 
-                return;
-                 $("#close_tab").hide();
-                 app.models.nutrition_plan.set({id : app.options.item_id});
-                 this.overview();
-            },
-            
-            common_actions : function() {
-                $("#header_wrapper, #nutrition_guide_header").empty();
-                $(".block").hide();
-                $(".plan_menu_link").removeClass("active_link");
-            },
-
-           
-           
-           
-             
-            
 
         });
 
