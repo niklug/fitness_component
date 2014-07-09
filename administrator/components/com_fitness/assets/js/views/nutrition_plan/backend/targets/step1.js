@@ -55,6 +55,7 @@ define([
         events : {
             "click #search_assessments" : "search_assessments",
             "click #clear_assessments" : "clear_assessments",
+            "change .assessment_item" : "onSelectAssessment",
         },
         
         get_assessments : function() {
@@ -94,7 +95,7 @@ define([
         },
         
         onLoadAssessments : function(collection) {
-            console.log(collection.toJSON());
+            //console.log(collection.toJSON());
             $(this.el).find("#assessments_list_wrapper").empty();
             
             var self = this;
@@ -108,6 +109,16 @@ define([
         addItem : function(model) {
             $(this.el).find("#assessments_list_wrapper").append(new Step1_assessment_item_view({model : model}).render().el);
         },
+        
+        onSelectAssessment : function(event) {
+            var id = $(event.target).val();
+            var  assessment_model = app.collections.assessments.get(id);
+            
+            $(this.el).find("#step1_age").val(assessment_model.get('age'));
+            $(this.el).find("#step1_height").val(assessment_model.get('height'));
+            $(this.el).find("#step1_weight").val(assessment_model.get('weight'));
+            $(this.el).find("#step1_body_fat").val(assessment_model.get('body_fat'));
+        }
     });
             
     return view;

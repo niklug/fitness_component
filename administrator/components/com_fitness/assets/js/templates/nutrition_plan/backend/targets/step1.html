@@ -10,13 +10,119 @@
                 <a title="" style="cursor: pointer;display: inline-block;margin-left:10px;" id="clear_assessments" onclick="javascript:void(0)">[CLEAR]</a>
                 <div class="clr"></div>
                 <br/>
-                <table width="80%" id="assessments_list_wrapper">
-                    
+                <table width="80%" id="assessments_list_wrapper"></table>
+                
+                <hr>
+                
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <b>GENDER</b> <br/>
+                            <input checked="checked" type="radio" name="step1_sex" id="step1_male" value="1"> Male <br/>
+                            <input type="radio" name="step1_sex" id="step1_female" value="0">Female <br/>
+                        </td>
+                        
+                        <td>
+                            <b>AGE</b> <br/>
+                            <input type="text" maxlength="2" size="2" name="step1_age" id="step1_age"> 
+                            Years
+                        </td>
+                        
+                        <td>
+                            <b>HEIGHT</b> <br/>
+                            <input type="text" maxlength="5" size="5" name="step1_height" id="step1_height"> 
+                            cm
+                        </td>
+                        
+                        <td>
+                            <b>WEIGHT</b> <br/>
+                            <input type="text" maxlength="5" size="5" name="step1_weight" id="step1_weight"> 
+                            kg
+                        </td>
+                        
+                    </tr>
                 </table>
                 
+                <hr>
+                
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <b>FORMULA</b>
+                            <div class="clr"></div>
+                            <br/>
+                            <input checked="checked" type="radio" name="step1_formula" id="step1_formula_1" value="1">
+                            Athletes Formula (best for lean people)
+                            
+                            <div class="clr"></div>
+                            <br/>
+                            
+                            <input type="radio" name="step1_formula" id="step1_formula_2" value="1">
+                            Lean Mass Formula (best if overweight)<br/>
+                        </td>
+                        
+                        <td>
+                            <b>EXERCISE LEVEL</b> <br/>
+                            <select id="cm-activity" name="cm-activity">
+                                <option value="1.0">Basal Metabolic Rate</option>
+                                <option class="hilite" value="1.2">No exercise (desk job/couch potato)</option>
+                                <option value="1.375" selected="selected">3 times/week</option>
+                                <option class="hilite" value="1.4187">4 times/week</option>
+                                <option value="1.4625">5 times/week</option>
+                                <option class="hilite" value="1.5063">6 times/week</option>
+                                <option class="hilite" value="1.550">5 times/week (*intense)</option>
+                                <option value="1.6375">Every day</option>
+                                <option class="hilite" value="1.725">Every day (*intense) or twice daily</option>
+                                <option value="1.9">Daily exercise + physical job</option>
+                            </select>
+                            
+                            <div class="clr"></div>
+                            <br/>
+                            
+                            <b>CURRENT BODY FAT</b> <br/>
+                            <input type="text" maxlength="5" size="5" name="step1_body_fat" id="step1_body_fat"> 
+                            %
+                        </td>
+                    </tr>
+                </table>
             </td>
-            <td>
-
+            <td style="vertical-align: bottom;text-align: center;">
+                <div style="width: 200px;height: 50px;border:1px #000 solid; display: inline-block;">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                           <b>BMR</b>  
+                                        </td>
+                                        <td>
+                                            <input type="text" maxlength="5" size="5" name="step1_bmr" id="step1_bmr">
+                                        </td>
+                                        <td>
+                                            calories/day
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                           <b>TDEE</b>  
+                                        </td>
+                                        <td>
+                                            <input type="text" maxlength="5" size="5" name="step1_tdee" id="step1_tdee">
+                                        </td>
+                                        <td>
+                                            calories/day
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="clr"></div>
+                <br/><br/>
+                <input style="float: right;" id="step1_claculate" type="button" value="CALCULATE TDEE">
             </td>
         </tr>
     </table>
