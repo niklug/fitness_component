@@ -50,6 +50,8 @@ define([
             
             data.nutrition_focus = nutrition_focus_field.val();
             
+            data.force_active = $("#force_active").is(":checked");
+            
 
             var trainer_comments = $("#trainer_comments").val();
              

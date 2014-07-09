@@ -1,0 +1,24 @@
+<td>
+    <input type="radio" name="assessment_item" class="assessment_item" value="<%= item.id %>">
+</td>
+
+<td>
+    <%= moment(new Date(Date.parse(item.starttime))).format("ddd, D MMM  YYYY") %>
+</td>
+
+<td>
+    <%= item.age + ' yrs' %>
+</td>
+
+<td>
+    <%= item.height + ' cm' %>
+</td>
+
+<td>
+    <%= item.weight + ' kg' %>
+</td>
+
+<td>
+    <%= item.body_fat + ' %' %>
+</td>
+

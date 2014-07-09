@@ -4,7 +4,6 @@ define([
 	'backbone',
         'app',
         'collections/nutrition_plan/items',
-        'collections/nutrition_plan/targets',
         'collections/nutrition_plan/supplements/protocols',
         'collections/nutrition_plan/nutrition_guide/menu_plans',
         'collections/nutrition_plan/nutrition_guide/example_day_meals',
@@ -39,7 +38,8 @@ define([
         'views/nutrition_plan/backend/list',
         'views/nutrition_plan/backend/search_header',
         'views/nutrition_plan/backend/overview_container',
-        'views/nutrition_plan/backend/menus/main_menu'
+        'views/nutrition_plan/backend/menus/main_menu',
+        'views/nutrition_plan/backend/targets/targets_container'
 
 ], function (
         $,
@@ -47,7 +47,6 @@ define([
         Backbone,
         app, 
         Items_collection,
-        Targets_collection,
         Protocols_collection,
         Menu_plans_collection,
         Example_day_meals_collection,
@@ -82,7 +81,8 @@ define([
         List_view,
         Search_header_view,
         Overview_container_view,
-        Main_menu_view
+        Main_menu_view,
+        Targets_container_view
     ) {
 
 
@@ -97,8 +97,6 @@ define([
                 app.models.item = new Item_model({});
                 
                 app.collections.items = new Items_collection();
-                
-                app.collections.targets = new Targets_collection({'id' : app.options.item_id});
                 
                 //business logic
                 var business_profile_id = null;
@@ -489,7 +487,36 @@ define([
                     }).render().el);
                 });
             },
-
+            
+            targets: function (id) {
+                this.common_actions();
+                
+                this.loadMainMenu(id);
+     
+                var model = app.collections.items.get(id);
+                
+                if(model) {
+                    this.loadTragers(model);
+                    return;
+                }
+                model = new Item_model({id : id});
+                var self = this;
+                model.fetch({
+                    success: function (model, response) {
+                        app.collections.items.add(model);
+                        self.loadTragers(model);
+                    },
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            
+            loadTragers : function(model) {
+                $("#targets_link").addClass("active_link");
+                
+                $("#main_container").html(new Targets_container_view({model : model}).render().el);
+            },
             
             common_actions : function() {
                 $("#header_wrapper, #nutrition_guide_header").empty();
@@ -500,70 +527,6 @@ define([
             
         
         
-            ///
-           
-            connectGraph : function() {
-                this.graph = new Graph_view({
-                    el : "#graph_container",
-                    model : '',
-                    show : {
-                        primary_goals : true,
-                        mini_goals : true,
-                        personal_training : false,
-                        semi_private : false,
-                        resistance_workout : false,
-                        cardio_workout : false,
-                        assessment : false,
-                        current_time : true,
-                        client_select : false,
-                        choices : false
-                    },
-                    style : 'dark',
-                    reloads : true,
-                    list_type : false,
-                    head_title : 'MY GOALS & TRAINING PERIODS'
-                });
-            },
-        
-            targets: function () {
-                //TODO 
-                return;
-                 this.common_actions();
-                 $("#targets_wrapper").show();
-                 $("#targets_link").addClass("active_link");
-                 var id = app.models.nutrition_plan.get('id');
-                 
-                 app.collections.targets.fetch({
-                    data: {id : id, client_id : app.options.client_id},
-                    wait : true,
-                    success : function(collection, response) {
-                        $("#targets_container").empty();
-                        _.each(collection.models, function(model) {
-                            var target_block_view = new Target_block_view({model : model});
-                            $("#targets_container").append(target_block_view.render().el);
-                        });
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                 });
-
-                 // connect comments
-                 var comment_options = {
-                    'item_id' :  id,
-                    'fitness_administration_url' : app.options.fitness_frontend_url,
-                    'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                    'db_table' :  '#__fitness_nutrition_plan_targets_comments',
-                    'read_only' : true,
-                    'anable_comment_email' : true,
-                    'comment_method' : 'TargetsComment'
-                }
-                var comments =  $.comments(comment_options, comment_options.item_id, 0);
-
-                var comments_html = comments.run();
-                $("#targets_comments_wrapper").html(comments_html);
-
-            },
 
 
         });
