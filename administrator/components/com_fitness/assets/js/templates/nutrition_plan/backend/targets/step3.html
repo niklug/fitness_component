@@ -1,1 +1,62 @@
-step3
+<div class="fitness_block_wrapper">
+    <table width="100%">
+        <tr> 
+            <td style="vertical-align: top; width:25%;">
+                <b>COMMON PROFILES</b>
+                <div class="clr"></div><br/>
+                <select size="8" id="common_profiles" name="common_profiless" multiple="">
+                    <option selected="selected" id="cdr-iifym" data-name="iifym">FLEXIBLE (IIFYM)</option>
+                    <option data-fat="25" data-protein="25" data-carbs="50" data-name="moderate">TEXTBOOK</option>
+                    <option data-fat="20" data-protein="40" data-carbs="40" data-name="moderate-ii">BODY BUILDER</option>
+                    <option data-fat="30" data-protein="30" data-carbs="40" data-name="zone-diet">ZONE DIET</option>
+                    <option data-fat="15" data-protein="25" data-carbs="60" data-name="low-fat">LOW FAT</option>
+                    <option data-fat="35" data-protein="40" data-carbs="25" data-name="low-carb">LOW CARB</option>
+                    <option data-fat="65" data-protein="30" data-carbs="5" data-name="very-low-carb">KETOGENIC (ATKINS)</option>
+                    <option data-fat="" data-protein="" data-carbs="" data-name="very-low-carb">CUSTOM RATIOS</option>
+                </select>
+            </td>
+            <td style="vertical-align: top;width:35%;">
+                <b>PROTEIN</b> (4 calories per gram)
+                <div class="clr"></div>
+                <input type="radio"  name="step3_protein" class="step3_protein" value="1">1.00 grams per lb. of lean mass 
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_protein"  value="1.15">1.15 grams per lb. of lean mass
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_protein"  value="1.25">1.25 grams per lb. of lean mass
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_protein"  value="">
+                Custom
+                <input type="text" maxlength="8" size="8"  id="step3_protein_custom" value=""> 
+                grams per lb. of lean mass
+                
+                <div class="clr"></div>
+                <br/>
+                
+                <b>FATS</b> (9 calories per gram)
+                <div class="clr"></div>
+                <input type="radio"  name="step3_protein" class="step3_fats" value="0.35">0.35 grams per lb. of lean mass
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_fats"  value="0.40">0.40 grams per lb. of lean mass
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_fats"  value="0.45">0.45 grams per lb. of lean mass
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_fats"  value="">
+                Custom
+                <input type="text" maxlength="8" size="8"  id="step3_fats_custom" value=""> 
+                grams per lb. of lean mass
+                
+                <div class="clr"></div>
+                <br/>
+                <b>CARBOHYDRATES</b> (9 calories per gram)
+                <div class="clr"></div>
+                Carbohydrates are calculated based on the
+                calories remaining after calories from protein
+                and fat have been subtracted from the TDEE.
+            </td>
+            
+            <td style="vertical-align: bottom;">
+                <input style="float: right;" id="step3_claculate" type="button" value="CALCULATE">
+            </td>
+        </tr>
+    </table>
+</div>
