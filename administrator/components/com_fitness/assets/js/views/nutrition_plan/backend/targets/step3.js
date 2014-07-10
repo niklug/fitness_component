@@ -17,6 +17,7 @@ define([
         template:_.template(template),
             
         render: function(){
+            console.log(this.model.toJSON());
             var template = _.template(this.template());
             this.$el.html(template);
             
