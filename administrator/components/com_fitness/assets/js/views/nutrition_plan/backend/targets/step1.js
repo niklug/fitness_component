@@ -56,6 +56,7 @@ define([
             "click #search_assessments" : "search_assessments",
             "click #clear_assessments" : "clear_assessments",
             "change .assessment_item" : "onSelectAssessment",
+            "click #step1_claculate" : "onCalculate",
         },
         
         get_assessments : function() {
@@ -75,23 +76,39 @@ define([
         },
         
         search_assessments : function() {
-            var date_from = this.$el.find("#date_from").val();
-            var date_to = this.$el.find("#date_to").val();
+            this.clearSearchValidation();
+            
+            var date_from_field =  $(this.el).find("#date_from");
+            var date_to_field = $(this.el).find("#date_to");
+            
+            var date_from = date_from_field.val();
+            var date_to = date_to_field.val();
+ 
+            if(!date_from) {
+                date_from_field.addClass("red_style_border");
+                return;
+            }
+            
+            if(!date_to) {
+                date_to_field.addClass("red_style_border");
+                return;
+            }
+            
             app.models.request_params_assessments.set({
                 date_from : date_from,
                 date_to : date_to,
+                uid : app.getUniqueId()
             });
         },
         
         clear_assessments : function(){
+            this.clearSearchValidation();
             $(this.el).find("#assessments_list_wrapper").empty();
             $(this.el).find("#date_from, #date_to").val('');
-            app.models.request_params_assessments.set(
-                {
-                    date_from : '',
-                    date_to : '',
-                }
-            );
+        },
+        
+        clearSearchValidation : function() {
+            $(this.el).find("#date_from, #date_to").removeClass("red_style_border");
         },
         
         onLoadAssessments : function(collection) {
@@ -118,7 +135,106 @@ define([
             $(this.el).find("#step1_height").val(assessment_model.get('height'));
             $(this.el).find("#step1_weight").val(assessment_model.get('weight'));
             $(this.el).find("#step1_body_fat").val(assessment_model.get('body_fat'));
-        }
+        },
+        
+        onCalculate : function() {
+            var sex = $(this.el).find("input[name=step1_sex]:checked").val();
+            var formula = $(this.el).find("input[name=step1_formula]:checked").val();
+            
+            this.age = $(this.el).find("#step1_age").val();
+            this.height = $(this.el).find("#step1_height").val();
+            this.weight = $(this.el).find("#step1_weight").val();
+            this.body_fat = $(this.el).find("#step1_body_fat").val();
+            this.exercise_level = $(this.el).find("#exercise_level").find(":selected").val();
+            
+            if(!this.validate()) {
+                return;
+            }
+            
+            var BMR = this.calculate_BMR(sex, formula);
+            var TDEE = BMR * this.exercise_level;
+            
+            $(this.el).find("#step1_bmr").val(BMR.toFixed(2) );
+            $(this.el).find("#step1_tdee").val(TDEE.toFixed(2) );
+        },
+        
+        calculate_BMR : function(sex, formula) {
+            if(sex == 'male' && formula == 'lean' ) {
+                return this.calculate_BMR_male_lean();
+            }
+            
+            if(sex == 'male' && formula == 'overweight' ) {
+                return this.calculate_BMR_male_overweight();
+            }
+            
+            if(sex == 'female'  && formula == 'lean'  ) {
+                return this.calculate_BMR_female_lean();
+            }
+            
+            if(sex == 'female'  && formula == 'overweight'  ) {
+                return this.calculate_BMR_female_overweight();
+            }
+        },
+        
+        calculate_BMR_male_lean : function() {
+            var BMR = 10*this.weight + 6.25*this.height - 5*this.age + 5;
+            return BMR;
+        },
+        
+        calculate_BMR_male_overweight : function() {
+            var BMR = 370 + (21.6*this.weight * ((100 - this.body_fat)/100));
+            return BMR;
+        },
+        
+        calculate_BMR_female_lean : function() {
+            var BMR = 10*this.weight + 6.25*this.height - 5*this.age - 161;
+            return BMR;
+        },
+        
+        calculate_BMR_female_overweight : function() {
+            return this.calculate_BMR_male_overweight();
+        },
+        
+        validate : function() {
+            var age_field =  $(this.el).find("#step1_age");
+            
+            var height_field = $(this.el).find("#step1_height");
+            
+            var weight_field = $(this.el).find("#step1_weight");
+            
+            var body_fat_field =  $(this.el).find("#step1_body_fat");
+            
+            $(this.el).find("#step1_age, #step1_height, #step1_weight, #step1_body_fat").removeClass("red_style_border");
+            
+            if(!this.digits(age_field.val())) {
+                age_field.addClass("red_style_border");
+                return false;
+            }
+            
+            if(!this.number(height_field.val())) {
+                height_field.addClass("red_style_border");
+                return false;
+            }
+            
+            if(!this.number(weight_field.val())) {
+                weight_field.addClass("red_style_border");
+                return false;
+            }
+            
+            if(!this.number(body_fat_field.val())) {
+                body_fat_field.addClass("red_style_border");
+                return false;
+            }
+            return true;
+        },
+        
+        digits: function(value) {
+            return /^\d+$/.test(value);
+        },
+        
+        number: function(value) {
+            return  /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value);
+        },
     });
             
     return view;

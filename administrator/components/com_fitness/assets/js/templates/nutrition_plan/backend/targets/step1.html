@@ -18,8 +18,9 @@
                     <tr>
                         <td>
                             <b>GENDER</b> <br/>
-                            <input checked="checked" type="radio" name="step1_sex" id="step1_male" value="1"> Male <br/>
-                            <input type="radio" name="step1_sex" id="step1_female" value="0">Female <br/>
+                            <input checked="checked" type="radio" name="step1_sex" id="step1_male" value="male"> Male 
+                            <div class="clr"></div>
+                            <input type="radio" name="step1_sex" id="step1_female" value="female">Female <br/>
                         </td>
                         
                         <td>
@@ -51,19 +52,19 @@
                             <b>FORMULA</b>
                             <div class="clr"></div>
                             <br/>
-                            <input checked="checked" type="radio" name="step1_formula" id="step1_formula_1" value="1">
+                            <input checked="checked" type="radio" name="step1_formula" id="step1_formula_1" value="lean">
                             Athletes Formula (best for lean people)
                             
                             <div class="clr"></div>
                             <br/>
                             
-                            <input type="radio" name="step1_formula" id="step1_formula_2" value="1">
+                            <input type="radio" name="step1_formula" id="step1_formula_2" value="overweight">
                             Lean Mass Formula (best if overweight)<br/>
                         </td>
                         
                         <td>
                             <b>EXERCISE LEVEL</b> <br/>
-                            <select id="cm-activity" name="cm-activity">
+                            <select id="exercise_level" name="exercise_level">
                                 <option value="1.0">Basal Metabolic Rate</option>
                                 <option class="hilite" value="1.2">No exercise (desk job/couch potato)</option>
                                 <option value="1.375" selected="selected">3 times/week</option>
@@ -87,7 +88,7 @@
                 </table>
             </td>
             <td style="vertical-align: bottom;text-align: center;">
-                <div style="width: 200px;height: 50px;border:1px #000 solid; display: inline-block;">
+                <div style="width: 200px;height: auto;border:1px #000 solid; display: inline-block;">
                     <table width="100%">
                         <tr>
                             <td>
