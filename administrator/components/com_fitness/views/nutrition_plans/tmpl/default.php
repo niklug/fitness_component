@@ -40,6 +40,7 @@ $business_profile_id = $business_profile_id['data'];
 
             'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
             'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
+            'business_profile_id' : '<?php echo $business_profile_id; ?>',
         };
 
 //status class

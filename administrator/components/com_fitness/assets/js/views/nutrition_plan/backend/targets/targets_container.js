@@ -35,7 +35,8 @@ define([
         },
         
         loadStep1 : function() {
-            $(this.el).find("#step1_wrapper").html(new Step1_view({model : this.model}).render().el);
+            app.views.targets_step1 = new Step1_view({model : this.model});
+            $(this.el).find("#step1_wrapper").html(app.views.targets_step1.render().el);
         }
 
    

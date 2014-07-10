@@ -3,8 +3,8 @@
         <tr>
             <td width="70%">
                 <b style="float:left;">SELECT ASSESSMENT RESULTS</b>
-                <input style="float:left;margin-left: 10px;" id="date_from" size="13" type="text" placeholder="Date From" >
-                <input style="float:left;margin-left: 10px;" id="date_to" size="13" type="text" placeholder="Date To" >
+                <input style="float:left;margin-left: 10px;" id="date_from" size="15" type="text" placeholder="Date From" >
+                <input style="float:left;margin-left: 10px;" id="date_to" size="15" type="text" placeholder="Date To" >
 
                 <a title="" style="cursor: pointer;display: inline-block;margin-left:10px;" id="search_assessments" onclick="javascript:void(0)">[SEARCH]</a>
                 <a title="" style="cursor: pointer;display: inline-block;margin-left:10px;" id="clear_assessments" onclick="javascript:void(0)">[CLEAR]</a>
@@ -31,13 +31,13 @@
                         
                         <td>
                             <b>HEIGHT</b> <br/>
-                            <input type="text" maxlength="5" size="5" name="step1_height" id="step1_height"> 
+                            <input type="text" maxlength="8" size="8" name="step1_height" id="step1_height"> 
                             cm
                         </td>
                         
                         <td>
                             <b>WEIGHT</b> <br/>
-                            <input type="text" maxlength="5" size="5" name="step1_weight" id="step1_weight"> 
+                            <input type="text" maxlength="8" size="8" name="step1_weight" id="step1_weight"> 
                             kg
                         </td>
                         
@@ -53,13 +53,27 @@
                             <div class="clr"></div>
                             <br/>
                             <input checked="checked" type="radio" name="step1_formula" id="step1_formula_1" value="lean">
-                            Athletes Formula (best for lean people)
+                            <span title="&lt;p&gt;The Mifflin-St Jeor formula is touted by that American Dietetic Association as the most accurate method for TDEE Calculation.&lt;P&gt;This formula bases protein needs off of total mass and is best suited for athletes or those with lower body fat levels. Overweight individuals should not use this formula as it will give them too much protein and strip them of carbohydrates in the final calcualtions.&lt;/p&gt;
+                                &lt;p&gt;&lt;P&gt;&lt;br /&gt;
+                                &lt;strong&gt;How to calculate for Men&lt;/strong&gt;&lt;br /&gt;
+                                10 x weight (kg) + 6.25 x height (cm) &ndash; 5 x age (y) + 5&lt;br /&gt;
+                                &lt;P&gt;&lt;br /&gt;
+                                &lt;strong&gt;How to calculate for Women&lt;/strong&gt;&lt;br /&gt;
+                                10 x weight (kg) + 6.25 x height (cm) &ndash; 5 x age (y) &ndash; 161&lt;/p&gt;
+                                " class="formula">Athletes Formula (best for lean people)
+                            </span>
                             
                             <div class="clr"></div>
                             <br/>
                             
                             <input type="radio" name="step1_formula" id="step1_formula_2" value="overweight">
-                            Lean Mass Formula (best if overweight)<br/>
+                            <span title="&lt;p&gt;A variation of the Mifflin-St Jeor equation which is more accurate for those who are who know their body fat percentage. This formula will base your protein needs off of your lean mass rather than your total mass. Ideal for those that have higher levels of body fat. Idea for those that are overweight.&lt;br /&gt;
+                                &lt;P&gt;&lt;br /&gt;
+                                &lt;strong&gt;Calculations are the same for both Men &amp; Women&lt;/strong&gt;&lt;br /&gt;
+                                21.6 * Lean Body Mass (kg) + 370&lt;/p&gt;
+                                " class="formula">Lean Mass Formula (best if overweight)
+                            </span>
+                            <br/>
                         </td>
                         
                         <td>
@@ -81,14 +95,14 @@
                             <br/>
                             
                             <b>CURRENT BODY FAT</b> <br/>
-                            <input type="text" maxlength="5" size="5" name="step1_body_fat" id="step1_body_fat"> 
+                            <input type="text" maxlength="8" size="8" name="step1_body_fat" id="step1_body_fat"> 
                             %
                         </td>
                     </tr>
                 </table>
             </td>
             <td style="vertical-align: bottom;text-align: center;">
-                <div style="width: 200px;height: auto;border:1px #000 solid; display: inline-block;">
+                <div style="width: 250px;height: auto;border:1px #000 solid; display: inline-block;">
                     <table width="100%">
                         <tr>
                             <td>
@@ -98,7 +112,7 @@
                                            <b>BMR</b>  
                                         </td>
                                         <td>
-                                            <input type="text" maxlength="5" size="5" name="step1_bmr" id="step1_bmr">
+                                            <input type="text" maxlength="8" size="8" name="step1_bmr" id="step1_bmr">
                                         </td>
                                         <td>
                                             calories/day
@@ -109,7 +123,7 @@
                                            <b>TDEE</b>  
                                         </td>
                                         <td>
-                                            <input type="text" maxlength="5" size="5" name="step1_tdee" id="step1_tdee">
+                                            <input type="text" maxlength="8" size="8" name="step1_tdee" id="step1_tdee">
                                         </td>
                                         <td>
                                             calories/day

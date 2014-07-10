@@ -1,1 +1,61 @@
-step2
+<div class="fitness_block_wrapper">
+    <table width="100%">
+        <tr>
+            <td style="vertical-align: top;">
+                <b>FAT LOSS</b> <br/>
+                <input type="text" maxlength="8" size="8"  id="step2_fat_loss" value="<%= item.step2_fat_loss %>"> 
+                <div class="clr"></div>
+                calories/day
+
+                <div class="clr"></div>
+                <br/>
+                <input type="radio" name="step2_fat_loss_radio" value="1190">Suggested (15%) 
+                <div class="clr"></div>
+                <input type="radio" name="step2_fat_loss_radio" value="1120">Aggressive (20%)
+                <div class="clr"></div>
+                <input type="radio" name="step2_fat_loss_radio" value="1056">Reckless (25%)
+            </td>
+            
+            <td style="vertical-align: top;">
+                <b>MAINTAIN </b> <br/>
+                <input type="text" maxlength="8" size="8" id="step2_maintain" value="<%= item.step2_maintain %>"> 
+                <div class="clr"></div>
+                calories/day
+
+                <div class="clr"></div>
+                <br/>
+                <input type="radio" name="step2_maintain_radio" value="">Same as TDEE 
+            </td>
+            
+            <td style="vertical-align: top;">
+                <b>BULKING</b> <br/>
+                <input type="text" maxlength="8" size="8"  id="step2_bulking" value="<%= item.step2_bulking %>"> 
+                <div class="clr"></div>
+                calories/day
+
+                <div class="clr"></div>
+                <br/>
+                <input type="radio"  name="step2_bulking_radio" value="1470">Cautious (5%) 
+                <div class="clr"></div>
+                <input type="radio" name="step2_bulking_radio" value="1540">Text Book (10%)
+                <div class="clr"></div>
+                <input type="radio" name="step2_bulking_radio" value="1610">Aggressive (15%)
+            </td>
+            
+            <td style="vertical-align: top;">
+                <b>CUSTOM </b> <br/>
+                <input type="text" maxlength="8" size="8" id="step2_custom" > 
+                <div class="clr"></div>
+                calories/day
+
+                <div class="clr"></div>
+                <br/>
+                <input type="radio" name="step2_custom_radio" value="other">Enter Your Own
+            </td>
+            
+            <td style="vertical-align: bottom;">
+                <input style="float: right;" id="step2_claculate" type="button" value="SAVE & CONTINUE">
+            </td>
+        </tr>
+    </table>
+</div>

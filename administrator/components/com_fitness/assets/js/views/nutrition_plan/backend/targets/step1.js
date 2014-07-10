@@ -6,6 +6,7 @@ define([
         'collections/assessments/items',
         'models/assessments/request_params_items',
         'views/nutrition_plan/backend/targets/step1_assessment_item',
+        'views/nutrition_plan/backend/targets/step2',
 	'text!templates/nutrition_plan/backend/targets/step1.html'
 ], function (
         $,
@@ -15,6 +16,7 @@ define([
         Assessments_collection,
         Request_params_assessments_model,
         Step1_assessment_item_view,
+        Step2_view,
         template
     ) {
 
@@ -23,6 +25,11 @@ define([
         template:_.template(template),
         
         initialize: function(){
+            $(document).tooltip({
+                content: function () {
+                    return $(this).prop('title');
+                }
+            });
             app.collections.assessments = new Assessments_collection();
             
             app.models.request_params_assessments = new Request_params_assessments_model({
@@ -138,8 +145,8 @@ define([
         },
         
         onCalculate : function() {
-            var sex = $(this.el).find("input[name=step1_sex]:checked").val();
-            var formula = $(this.el).find("input[name=step1_formula]:checked").val();
+            this.sex = $(this.el).find("input[name=step1_sex]:checked").val();
+            this.formula = $(this.el).find("input[name=step1_formula]:checked").val();
             
             this.age = $(this.el).find("#step1_age").val();
             this.height = $(this.el).find("#step1_height").val();
@@ -151,11 +158,13 @@ define([
                 return;
             }
             
-            var BMR = this.calculate_BMR(sex, formula);
-            var TDEE = BMR * this.exercise_level;
+            this.BMR = this.calculate_BMR(this.sex, this.formula);
+            this.TDEE = this.BMR * this.exercise_level;
             
-            $(this.el).find("#step1_bmr").val(BMR.toFixed(2) );
-            $(this.el).find("#step1_tdee").val(TDEE.toFixed(2) );
+            $(this.el).find("#step1_bmr").val(this.BMR.toFixed(0) );
+            $(this.el).find("#step1_tdee").val(this.TDEE.toFixed(0) );
+            
+            this.goStep2();
         },
         
         calculate_BMR : function(sex, formula) {
@@ -221,7 +230,8 @@ define([
                 return false;
             }
             
-            if(!this.number(body_fat_field.val())) {
+            
+            if(!this.number(body_fat_field.val()) && this.formula != 'lean') {
                 body_fat_field.addClass("red_style_border");
                 return false;
             }
@@ -235,6 +245,26 @@ define([
         number: function(value) {
             return  /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value);
         },
+        
+        goStep2 : function() {
+            $("#step2_fieldset").show();
+            
+            var Targets_model = Backbone.Model.extend({ });
+            
+            app.models.targets = new Targets_model({
+                sex : this.sex,
+                formula : this.formula,
+                age : this.age,
+                height : this.height,
+                weight : this.weight,
+                body_fat : this.body_fat,
+                exercise_level : this.exercise_level,
+                BMR : this.BMR,
+                TDEE : this.TDEE     
+            });
+
+            $("#step2_wrapper").html(new Step2_view({model : app.models.targets}).render().el);
+        }
     });
             
     return view;

@@ -17,7 +17,11 @@ define([
         template:_.template(template),
             
         render: function(){
-            var template = _.template(this.template());
+            this.calcutateFieldsValues();
+            
+            var data = {item : this.model.toJSON()};
+            console.log(data);
+            var template = _.template(this.template(data));
             this.$el.html(template);
             
             this.onRender();
@@ -31,6 +35,15 @@ define([
 
             });
         },
+        
+        calcutateFieldsValues : function() {
+            var TDEE = this.model.get('TDEE');
+            this.model.set({
+                step2_fat_loss : (TDEE - (TDEE * 15/100)).toFixed(0),
+                step2_maintain : TDEE.toFixed(0),
+                step2_bulking : (TDEE + (TDEE * 10/100)).toFixed(0),
+            });
+        }
    
     });
             
