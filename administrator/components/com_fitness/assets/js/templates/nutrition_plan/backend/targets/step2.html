@@ -18,13 +18,13 @@
             
             <td style="vertical-align: top;">
                 <b>MAINTAIN </b> <br/>
-                <input type="text" maxlength="8" size="8" id="step2_maintain" value="<%= item.step2_maintain %>"> 
+                <input type="text" maxlength="8" size="8"  id="step2_maintain" value="<%= item.step2_maintain %>"> 
                 <div class="clr"></div>
                 calories/day
 
                 <div class="clr"></div>
                 <br/>
-                <input type="radio" name="step2_radio" value="0">Same as TDEE 
+                <input checked="checked" type="radio" class="step2_maintain"  name="step2_radio" value="0">Same as TDEE 
             </td>
             
             <td style="vertical-align: top;">
@@ -44,13 +44,13 @@
             
             <td style="vertical-align: top;">
                 <b>CUSTOM </b> <br/>
-                <input type="text" maxlength="8" size="8" id="step2_custom" > 
+                <input type="text" maxlength="8" size="8" id="step2_custom"  > 
                 <div class="clr"></div>
                 calories/day
 
                 <div class="clr"></div>
                 <br/>
-                <input type="radio" name="step2_radio" value="other">Enter Your Own
+                <input type="radio" name="step2_radio" class="step2_custom"   value="other">Enter Your Own
             </td>
             
             <td style="vertical-align: bottom;">

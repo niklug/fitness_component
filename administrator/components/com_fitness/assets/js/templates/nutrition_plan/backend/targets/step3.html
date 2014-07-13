@@ -5,26 +5,27 @@
                 <b>COMMON PROFILES</b>
                 <div class="clr"></div><br/>
                 <select size="8" id="common_profiles" name="common_profiless" multiple="">
-                    <option selected="selected" id="cdr-iifym" data-name="iifym">FLEXIBLE (IIFYM)</option>
-                    <option data-fat="25" data-protein="25" data-carbs="50" data-name="moderate">TEXTBOOK</option>
-                    <option data-fat="20" data-protein="40" data-carbs="40" data-name="moderate-ii">BODY BUILDER</option>
-                    <option data-fat="30" data-protein="30" data-carbs="40" data-name="zone-diet">ZONE DIET</option>
-                    <option data-fat="15" data-protein="25" data-carbs="60" data-name="low-fat">LOW FAT</option>
-                    <option data-fat="35" data-protein="40" data-carbs="25" data-name="low-carb">LOW CARB</option>
-                    <option data-fat="65" data-protein="30" data-carbs="5" data-name="very-low-carb">KETOGENIC (ATKINS)</option>
-                    <option data-fat="" data-protein="" data-carbs="" data-name="very-low-carb">CUSTOM RATIOS</option>
+                    <option selected="selected" id="common_profiles_iifym" data-name="iifym">FLEXIBLE (IIFYM)</option>
+                    <option data-fat="25" data-protein="25" data-carbs="50" data-name="textbook">TEXTBOOK</option>
+                    <option data-fat="20" data-protein="40" data-carbs="40" data-name="body_builder">BODY BUILDER</option>
+                    <option data-fat="30" data-protein="30" data-carbs="40" data-name="zone_diet">ZONE DIET</option>
+                    <option data-fat="15" data-protein="25" data-carbs="60" data-name="low_fat">LOW FAT</option>
+                    <option data-fat="35" data-protein="40" data-carbs="25" data-name="low_carb">LOW CARB</option>
+                    <option data-fat="65" data-protein="30" data-carbs="5" data-name="ketogenic">KETOGENIC (ATKINS)</option>
+                    <option data-fat="" data-protein="" data-carbs="" data-name="custom_ratios">CUSTOM RATIOS</option>
                 </select>
             </td>
-            <td style="vertical-align: top;width:35%;">
+            
+            <td style="vertical-align: top;width:35%;display:none;" id="iifym_block">
                 <b>PROTEIN</b> (4 calories per gram)
                 <div class="clr"></div>
-                <input type="radio"  name="step3_protein" class="step3_protein" value="1">1.00 grams per lb. of lean mass 
+                <input checked="checked" type="radio"  name="step3_protein" class="step3_protein" value="2.2046">2.2 grams per kg of body weight 
                 <div class="clr"></div>
-                <input type="radio" name="step3_protein" class="step3_protein"  value="1.15">1.15 grams per lb. of lean mass
+                <input type="radio" name="step3_protein" class="step3_protein"  value="2.5352">2.53 grams per kg of body weight
                 <div class="clr"></div>
-                <input type="radio" name="step3_protein" class="step3_protein"  value="1.25">1.25 grams per lb. of lean mass
+                <input type="radio" name="step3_protein" class="step3_protein"  value="2.7557">2.75 grams per kg of body weight
                 <div class="clr"></div>
-                <input type="radio" name="step3_protein" class="step3_protein"  value="">
+                <input type="radio" name="step3_protein" class="step3_protein"  value="custom">
                 Custom
                 <input type="text" maxlength="8" size="8"  id="step3_protein_custom" value=""> 
                 grams per lb. of lean mass
@@ -34,24 +35,48 @@
                 
                 <b>FATS</b> (9 calories per gram)
                 <div class="clr"></div>
-                <input type="radio"  name="step3_protein" class="step3_fats" value="0.35">0.35 grams per lb. of lean mass
+                <input checked="checked" type="radio"  name="step3_fats" class="step3_fats" value="0.7716">0.77 grams per kg of body weight
                 <div class="clr"></div>
-                <input type="radio" name="step3_protein" class="step3_fats"  value="0.40">0.40 grams per lb. of lean mass
+                <input type="radio" name="step3_fats" class="step3_fats"  value="0.8818">0.88 grams per kg of body weight
                 <div class="clr"></div>
-                <input type="radio" name="step3_protein" class="step3_fats"  value="0.45">0.45 grams per lb. of lean mass
-                <div class="clr"></div>
-                <input type="radio" name="step3_protein" class="step3_fats"  value="">
+                <input type="radio" name="step3_fats" class="step3_fats"  value="0.9920">0.99 grams per kg of body weight               <div class="clr"></div>
+                <input type="radio" name="step3_fats" class="step3_fats"  value="custom">
                 Custom
                 <input type="text" maxlength="8" size="8"  id="step3_fats_custom" value=""> 
                 grams per lb. of lean mass
                 
                 <div class="clr"></div>
                 <br/>
-                <b>CARBOHYDRATES</b> (9 calories per gram)
+                <b>CARBOHYDRATES</b> (4 calories per gram)
                 <div class="clr"></div>
                 Carbohydrates are calculated based on the
                 calories remaining after calories from protein
                 and fat have been subtracted from the TDEE.
+            </td>
+            
+            <td style="vertical-align: top;width:35%;display:none;" id="other_common_profiles_block">
+                <table width="100%">
+                    <td>
+                        <b>PROTEIN</b>
+                        <div class="clr"></div>
+                        <input type="text" maxlength="8" size="8" id="step3_protein" > 
+                        %
+                    </td>
+                    
+                    <td>
+                        <b>FATS</b>
+                        <div class="clr"></div>
+                        <input type="text" maxlength="8" size="8" id="step3_fats" > 
+                        %
+                    </td>
+                    
+                    <td>
+                        <b>CARBS</b>
+                        <div class="clr"></div>
+                        <input type="text" maxlength="8" size="8" id="step3_carbs" > 
+                        %
+                    </td>
+                </table>
             </td>
             
             <td style="vertical-align: bottom;">

@@ -56,7 +56,42 @@ define([
         },
         
         onCalculate : function() {
+            this.setCalories();
             this.goStep3();
+        },
+        
+        setCalories : function() {
+            var fat_loss_checked =  $(this.el).find(".step2_fat_loss").is(':checked');
+            
+            var maintain_checked =  $(this.el).find(".step2_maintain").is(':checked');
+
+            var bulking_checked =  $(this.el).find(".step2_bulking").is(':checked');
+            
+            var custom_checked =  $(this.el).find(".step2_custom").is(':checked');
+            
+            var calories;
+            
+            if(fat_loss_checked) {
+                calories = $(this.el).find("#step2_fat_loss").val();
+                this.model.set({step4_calories : calories});
+            }
+            
+            if(maintain_checked) {
+                calories = $(this.el).find("#step2_maintain").val();
+                this.model.set({step4_calories : calories});
+            }
+            
+            if(bulking_checked) {
+                calories = $(this.el).find("#step2_bulking").val();
+                this.model.set({step4_calories : calories});
+            }
+            
+            if(custom_checked) {
+                calories = $(this.el).find("#step2_custom").val();
+                this.model.set({step4_calories : calories});
+            }
+            
+            //console.log(this.model.get('step4_calories'));
         },
         
         goStep3 : function() {
