@@ -23,5 +23,9 @@ class FitnessViewNutrition_plans extends JView {
         echo json_encode($model->nutrition_plans());
     }
 
+    function nutrition_plan_targets() {
+        $model = $this -> getModel("nutrition_plans");
+        echo json_encode($model->nutrition_plan_targets());
+    }
     
 }

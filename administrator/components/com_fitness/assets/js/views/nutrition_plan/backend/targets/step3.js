@@ -20,7 +20,8 @@ define([
             
         render: function(){
             //console.log(this.model.toJSON());
-            var template = _.template(this.template());
+            var data = {item : this.model.toJSON()};
+            var template = _.template(this.template(data));
             this.$el.html(template);
             
             this.onRender();
@@ -31,7 +32,15 @@ define([
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
+                if(self.model.get('id')) {
+                    self.setChosenValues();
+                }
+                
                 self.setLayout($(self.el).find("#common_profiles"));
+                
+                if(self.model.get('calories') != '0') {
+                    self.showStep4(self.model);
+                }
             });
         },
         
@@ -114,10 +123,39 @@ define([
         },
         
         goStep4 : function() {
+            var common_profiles =  $(this.el).find("#common_profiles").find(":selected").attr('data-name');
+            
+            this.model.set({
+                common_profiles : common_profiles,
+            });
+            
+            var self = this;
+            this.model.save(null, {
+                success: function (model, response) {
+                    self.showStep4(model);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        showStep4 : function(model) {
             $("#step4_fieldset").show();
 
             $("#step4_wrapper").html(new Step4_view({model : this.model}).render().el);
         },
+        
+        setChosenValues : function() {
+            var common_profiles = this.model.get('common_profiles');
+            
+            if(common_profiles) {
+                $('#common_profiles option').attr('selected', false);
+
+                $('#common_profiles option[data-name="' + common_profiles + '"]').attr('selected', true);
+            }
+
+        }
    
     });
             

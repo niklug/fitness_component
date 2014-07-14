@@ -19,16 +19,18 @@ define([
         template:_.template(template),
         
         initialize: function(){
-            this.TDEE = this.model.get('TDEE');
+            this.TDEE = parseInt(this.model.get('TDEE'));
+            
         },
             
         render: function(){
             this.calcutateFieldsValues();
+            console.log(this.model.toJSON());
             
             var data = {item : this.model.toJSON()};
             var template = _.template(this.template(data));
             this.$el.html(template);
-            
+
             this.onRender();
             
             return this;
@@ -37,7 +39,13 @@ define([
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
-
+                if(self.model.get('id')) {
+                    self.setChosenValues();
+                }
+                
+                if(self.model.get('common_profiles')) {
+                    self.showStep3(self.model);
+                }
             });
         },
         
@@ -50,13 +58,13 @@ define([
         calcutateFieldsValues : function() {
             this.model.set({
                 step2_fat_loss : (this.TDEE - (this.TDEE * 15/100)).toFixed(0),
-                step2_maintain : this.TDEE.toFixed(0),
+                step2_maintain : this.TDEE,
                 step2_bulking : (this.TDEE + (this.TDEE * 10/100)).toFixed(0),
+                
             });
         },
         
         onCalculate : function() {
-            this.setCalories();
             this.goStep3();
         },
         
@@ -95,13 +103,27 @@ define([
         },
         
         goStep3 : function() {
-            $("#step3_fieldset").show();
+            this.setCalories();
             
             this.model.set({
-                intensity : $(this.el).find("input[name=step2_radio]:checked").val()
+                intensity : $(this.el).find("input[name=step2_radio]:checked").val(),
+                step2_custom : $(this.el).find("#step2_custom").val()
             });
 
-            $("#step3_wrapper").html(new Step3_view({model : this.model}).render().el);
+            var self = this;
+            this.model.save(null, {
+                success: function (model, response) {
+                    self.showStep3(model);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        showStep3 : function(model) {
+            $("#step3_fieldset").show();
+            $("#step3_wrapper").html(new Step3_view({model : model}).render().el);
         },
         
         onSelectFatLossPercent : function(event) {
@@ -115,6 +137,10 @@ define([
             var value = this.TDEE + (this.TDEE * percent/100);
             $(this.el).find("#step2_bulking").val(value.toFixed(0));
         },
+        
+        setChosenValues : function() {
+            $(this.el).find(".step2_intensity[value=" + this.model.get('intensity') + "]").prop('checked',true);
+        }
    
     });
             

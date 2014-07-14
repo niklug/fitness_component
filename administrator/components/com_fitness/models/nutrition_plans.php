@@ -680,5 +680,67 @@ class FitnessModelnutrition_plans extends JModelList {
 
         return  $data;
     }
+    
+    public function nutrition_plan_targets() {
+            
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model','','','',JREQUEST_ALLOWHTML));
+
+        $id = JRequest::getVar('id', 0, '', 'INT');
+        $nutrition_plan_id = JRequest::getVar('nutrition_plan_id', 0, '', 'INT');
+        
+        $table = '#__fitness_nutrition_plan_targets';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                
+                $query = "SELECT a.* ";
+                
+                $query .= " FROM $table AS a";
+                
+                $query .= " WHERE 1";
+
+                $query_type = 1;
+        
+                if($id) {
+                    $query .= " AND a.id='$id' ";
+                    $query_type = 2;
+                }
+                
+                if($nutrition_plan_id) {
+                    $query .= " AND a.nutrition_plan_id='$nutrition_plan_id' ";
+                    $query_type = 2;
+                }
+                
+                $data = FitnessHelper::customQuery($query, $query_type);
+                
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                 break;
+            case 'DELETE': // Delete Item
+                 $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
 
 }

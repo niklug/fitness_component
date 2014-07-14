@@ -31,6 +31,10 @@ define([
             return this;
         },
         
+        events : {
+            "click #step4_reset" : "onReset",
+        },
+        
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
@@ -39,6 +43,8 @@ define([
                 } else {
                     self.setFields();
                 }
+                
+                self.saveData();
             });
         },
         //
@@ -72,7 +78,7 @@ define([
         },
         
         setFatGrams : function() {
-            var value = ((this.TDEE * this.model.get('fat_percent')) / 4).toFixed(0);
+            var value = ((this.TDEE * this.model.get('fat_percent')) / 9).toFixed(0);
             $(this.el).find("#step4_fat_grams").val(value);
         },
         
@@ -216,6 +222,37 @@ define([
             $(this.el).find("#step4_carbs_percent").val(value);
             
             return value;
+        },
+        
+        onReset : function() {
+            var id = this.model.get('nutrition_plan_id');
+            this.model.destroy({
+                success: function (model, response) {
+                    app.controller.navigate("");
+                    app.controller.navigate("!/targets/" + id, true);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        saveData : function() {
+            this.model.set({
+                calories : this.TDEE,
+                protein : $("#step4_protein_grams").val(),
+                fats : $("#step4_fat_grams").val(),
+                carbs : $("#step4_carbs_grams").val(),
+            });
+            
+            var self = this;
+            this.model.save(null, {
+                success: function (model, response) {
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         }
         
         

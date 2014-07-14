@@ -18,26 +18,26 @@
                     <tr>
                         <td>
                             <b>GENDER</b> <br/>
-                            <input checked="checked" type="radio" name="step1_sex" id="step1_male" value="male"> Male 
+                            <input checked="checked" type="radio" name="step1_gender" id="step1_gender_male" value="male"> Male 
                             <div class="clr"></div>
-                            <input type="radio" name="step1_sex" id="step1_female" value="female">Female <br/>
+                            <input type="radio" name="step1_gender" id="step1_gender_female" value="female">Female <br/>
                         </td>
                         
                         <td>
                             <b>AGE</b> <br/>
-                            <input type="text" maxlength="2" size="2" name="step1_age" id="step1_age"> 
+                            <input type="text" maxlength="2" size="2" name="step1_age" id="step1_age" value="<%= item.age %>"> 
                             Years
                         </td>
                         
                         <td>
                             <b>HEIGHT</b> <br/>
-                            <input type="text" maxlength="8" size="8" name="step1_height" id="step1_height"> 
+                            <input type="text" maxlength="8" size="8" name="step1_height" id="step1_height" value="<%= item.height %>"> 
                             cm
                         </td>
                         
                         <td>
                             <b>WEIGHT</b> <br/>
-                            <input type="text" maxlength="8" size="8" name="step1_weight" id="step1_weight"> 
+                            <input type="text" maxlength="8" size="8" name="step1_weight" id="step1_weight" value="<%= item.weight %>"> 
                             kg
                         </td>
                         
@@ -52,7 +52,7 @@
                             <b>FORMULA</b>
                             <div class="clr"></div>
                             <br/>
-                            <input checked="checked" type="radio" name="step1_formula" id="step1_formula_1" value="lean">
+                            <input checked="checked" type="radio" name="step1_formula" id="step1_formula_lean" value="lean">
                             <span title="&lt;p&gt;The Mifflin-St Jeor formula is touted by that American Dietetic Association as the most accurate method for TDEE Calculation.&lt;P&gt;This formula bases protein needs off of total mass and is best suited for athletes or those with lower body fat levels. Overweight individuals should not use this formula as it will give them too much protein and strip them of carbohydrates in the final calcualtions.&lt;/p&gt;
                                 &lt;p&gt;&lt;P&gt;&lt;br /&gt;
                                 &lt;strong&gt;How to calculate for Men&lt;/strong&gt;&lt;br /&gt;
@@ -66,7 +66,7 @@
                             <div class="clr"></div>
                             <br/>
                             
-                            <input type="radio" name="step1_formula" id="step1_formula_2" value="overweight">
+                            <input type="radio" name="step1_formula" id="step1_formula_overweight" value="overweight">
                             <span title="&lt;p&gt;A variation of the Mifflin-St Jeor equation which is more accurate for those who are who know their body fat percentage. This formula will base your protein needs off of your lean mass rather than your total mass. Ideal for those that have higher levels of body fat. Idea for those that are overweight.&lt;br /&gt;
                                 &lt;P&gt;&lt;br /&gt;
                                 &lt;strong&gt;Calculations are the same for both Men &amp; Women&lt;/strong&gt;&lt;br /&gt;
@@ -95,7 +95,7 @@
                             <br/>
                             
                             <b>CURRENT BODY FAT</b> <br/>
-                            <input type="text" maxlength="8" size="8" name="step1_body_fat" id="step1_body_fat"> 
+                            <input type="text" maxlength="8" size="8" name="step1_body_fat" id="step1_body_fat" value="<%= item.body_fat %>"> 
                             %
                         </td>
                     </tr>
@@ -112,7 +112,7 @@
                                            <b>BMR</b>  
                                         </td>
                                         <td>
-                                            <input type="text" maxlength="8" size="8" name="step1_bmr" id="step1_bmr">
+                                            <input type="text" maxlength="8" size="8" name="step1_bmr" id="step1_bmr" value="<%= item.BMR %>">
                                         </td>
                                         <td>
                                             calories/day
@@ -123,7 +123,7 @@
                                            <b>TDEE</b>  
                                         </td>
                                         <td>
-                                            <input type="text" maxlength="8" size="8" name="step1_tdee" id="step1_tdee">
+                                            <input type="text" maxlength="8" size="8" name="step1_tdee" id="step1_tdee" value="<%= item.TDEE %>">
                                         </td>
                                         <td>
                                             calories/day

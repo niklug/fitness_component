@@ -94,6 +94,10 @@ class FitnessController extends JController {
         $view -> nutrition_targets(); 
     }
     
+    function nutrition_plan_targets() {
+        echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_targets());
+    }
+    
     function saveIngredient() {
         $table = JRequest::getVar('table');
         $ingredient_encoded = JRequest::getVar('ingredient_encoded');

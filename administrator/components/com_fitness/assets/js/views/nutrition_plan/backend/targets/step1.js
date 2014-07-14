@@ -44,7 +44,9 @@ define([
         },
             
         render: function(){
-            var template = _.template(this.template());
+            var data = {item : this.model.toJSON()};
+            //console.log(data);
+            var template = _.template(this.template(data));
             this.$el.html(template);
             
             this.onRender();
@@ -56,6 +58,15 @@ define([
             var self = this;
             $(this.el).show('0', function() {
                 self.$el.find("#date_from, #date_to").datepicker({ dateFormat: "yy-mm-dd"});
+                
+                if(self.model.get('id')) {
+                    self.setChosenValues();
+                }
+                
+                if(self.model.get('step2_fat_loss')) {
+                    self.showStep2(self.model);
+                }
+                
             });
         },
         
@@ -145,7 +156,7 @@ define([
         },
         
         onCalculate : function() {
-            this.sex = $(this.el).find("input[name=step1_sex]:checked").val();
+            this.gender = $(this.el).find("input[name=step1_gender]:checked").val();
             this.formula = $(this.el).find("input[name=step1_formula]:checked").val();
             
             this.age = $(this.el).find("#step1_age").val();
@@ -158,7 +169,7 @@ define([
                 return;
             }
             
-            this.BMR = this.calculate_BMR(this.sex, this.formula);
+            this.BMR = this.calculate_BMR(this.gender, this.formula);
             this.TDEE = this.BMR * this.exercise_level;
             
             $(this.el).find("#step1_bmr").val(this.BMR.toFixed(0) );
@@ -167,20 +178,20 @@ define([
             this.goStep2();
         },
         
-        calculate_BMR : function(sex, formula) {
-            if(sex == 'male' && formula == 'lean' ) {
+        calculate_BMR : function(gender, formula) {
+            if(gender == 'male' && formula == 'lean' ) {
                 return this.calculate_BMR_male_lean();
             }
             
-            if(sex == 'male' && formula == 'overweight' ) {
+            if(gender == 'male' && formula == 'overweight' ) {
                 return this.calculate_BMR_male_overweight();
             }
             
-            if(sex == 'female'  && formula == 'lean'  ) {
+            if(gender == 'female'  && formula == 'lean'  ) {
                 return this.calculate_BMR_female_lean();
             }
             
-            if(sex == 'female'  && formula == 'overweight'  ) {
+            if(gender == 'female'  && formula == 'overweight'  ) {
                 return this.calculate_BMR_female_overweight();
             }
         },
@@ -247,23 +258,41 @@ define([
         },
         
         goStep2 : function() {
-            $("#step2_fieldset").show();
-            
-            var Targets_model = Backbone.Model.extend({ });
-            
-            app.models.targets = new Targets_model({
-                sex : this.sex,
+            this.model.set({
+                gender : this.gender,
                 formula : this.formula,
                 age : this.age,
                 height : this.height,
                 weight : this.weight,
                 body_fat : this.body_fat,
                 exercise_level : this.exercise_level,
-                BMR : this.BMR,
-                TDEE : this.TDEE     
+                BMR : this.BMR.toFixed(0),
+                TDEE : this.TDEE.toFixed(0)     
             });
-
-            $("#step2_wrapper").html(new Step2_view({model : app.models.targets}).render().el);
+            //console.log(this.model.toJSON());
+            var self = this;
+            this.model.save(null, {
+                success: function (model, response) {
+                    self.showStep2(model);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        showStep2 : function(model) {
+            //console.log(model.toJSON());
+            $("#step2_fieldset").show();
+            $("#step2_wrapper").html(new Step2_view({model : model}).render().el);
+        },
+        
+        setChosenValues : function() {
+            $(this.el).find("#step1_gender_" + this.model.get('gender')).prop('checked',true);
+            
+            $(this.el).find("#step1_formula_" + this.model.get('formula')).prop('checked',true);
+            
+            $(this.el).find("#exercise_level").val(this.model.get('exercise_level'));
         }
     });
             

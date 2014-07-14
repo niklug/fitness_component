@@ -19,11 +19,9 @@ define([
         'models/nutrition_plan/supplements/protocol',
         'models/nutrition_plan/nutrition_guide/get_recipe_params',
         'views/nutrition_plan/overview',
-        'views/nutrition_plan/target_block',
         'views/nutrition_plan/backend/macronutrients',
         'views/nutrition_plan/supplements/backend/protocols',
         'views/nutrition_plan/backend/information',
-        'views/nutrition_plan/archive_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_list_menu',
         'views/nutrition_plan/nutrition_guide/backend/menu_plan_list',
         'views/nutrition_plan/nutrition_guide/menu_plan_header',
@@ -62,11 +60,9 @@ define([
         Protocol_model,
         Get_recipe_params_model,
         Overview_view,
-        Target_block_view,
         Macronutrients_view,
         Protocols_view,
         Information_view,
-        Archive_list_view,
         Menu_plan_list_menu_view,
         Menu_plan_list_view,
         Menu_plan_header_view,
@@ -492,30 +488,56 @@ define([
                 this.common_actions();
                 
                 this.loadMainMenu(id);
-     
-                var model = app.collections.items.get(id);
                 
-                if(model) {
-                    this.loadTragers(model);
+                var self = this;
+                
+                app.models.target = new Target_model({nutrition_plan_id : id});
+     
+                app.models.item = app.collections.items.get(id);
+                
+                if(app.models.item) {
+                    app.models.target.fetch({
+                        data : {nutrition_plan_id : id},
+                        success : function (model, response) {
+                            self.loadTragers(app.models.item);
+                        },
+                        error : function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+
                     return;
                 }
-                model = new Item_model({id : id});
-                var self = this;
-                model.fetch({
-                    success: function (model, response) {
-                        app.collections.items.add(model);
-                        self.loadTragers(model);
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
+                
+                app.models.item = new Item_model({id : id});
+  
+                $.when(
+                
+                    app.models.item.fetch({
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                
+                ,
+                
+                    app.models.target.fetch({
+                        data : {nutrition_plan_id : id},
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                
+                ).then(function() {
+                    app.collections.items.add(app.models.item);
+                    self.loadTragers(app.models.target);
                 });
             },
             
             loadTragers : function(model) {
                 $("#targets_link").addClass("active_link");
                 
-                $("#main_container").html(new Targets_container_view({model : model}).render().el);
+                $("#main_container").html(new Targets_container_view({model : app.models.target, item_model : app.models.item}).render().el);
             },
             
             common_actions : function() {
