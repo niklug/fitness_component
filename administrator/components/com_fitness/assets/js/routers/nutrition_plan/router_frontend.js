@@ -4,7 +4,6 @@ define([
 	'backbone',
         'app',
         'collections/nutrition_plan/nutrition_plans',
-        'collections/nutrition_plan/targets',
         'collections/nutrition_plan/supplements/protocols',
         'collections/nutrition_plan/nutrition_guide/menu_plans',
         'collections/nutrition_plan/nutrition_guide/example_day_meals',
@@ -38,7 +37,6 @@ define([
         Backbone,
         app, 
         Nutrition_plans_collection,
-        Targets_collection,
         Protocols_collection,
         Menu_plans_collection,
         Example_day_meals_collection,
@@ -75,8 +73,6 @@ define([
                 app.models.nutrition_plan = new Nutrition_plan_model({'id' : app.options.item_id});
                 
                 app.collections.nutrition_plans = new Nutrition_plans_collection();
-                
-                app.collections.targets = new Targets_collection({'id' : app.options.item_id});
                 //
                 app.models.get_recipe_params = new Get_recipe_params_model();
                 
@@ -164,28 +160,34 @@ define([
             },
         
             targets: function () {
-                 this.no_active_plan_action();
-                 this.common_actions();
-                 $("#targets_wrapper").show();
-                 $("#targets_link").addClass("active_link");
-                 var id = app.models.nutrition_plan.get('id');
+                this.no_active_plan_action();
+                this.common_actions();
+                $("#targets_wrapper").show();
+                $("#targets_link").addClass("active_link");
                  
-                 app.collections.targets.fetch({
-                    data: {id : id, client_id : app.options.client_id},
-                    wait : true,
-                    success : function(collection, response) {
-                        $("#targets_container").empty();
-                        _.each(collection.models, function(model) {
-                            var target_block_view = new Target_block_view({model : model});
-                            $("#targets_container").append(target_block_view.render().el);
-                        });
+                var id = app.models.nutrition_plan.get('id');
+                
+                app.models.target = new Target_model({nutrition_plan_id : id});
+                var self = this;
+                app.models.target.fetch({
+                    data : {nutrition_plan_id : id},
+                    success : function (model, response) {
+                        self.loadTragers();
                     },
-                    error: function (collection, response) {
+                    error : function (collection, response) {
                         alert(response.responseText);
                     }
-                 });
-
-                 // connect comments
+                })
+            },
+            
+            loadTragers : function() {
+                $("#targets_container").empty();
+                
+                $("#targets_container").html(new Target_block_view({model : app.models.target, item_model : app.models.nutrition_plan}).render().el);
+                
+                var id = app.models.nutrition_plan.get('id');
+                
+                // connect comments
                  var comment_options = {
                     'item_id' :  id,
                     'fitness_administration_url' : app.options.fitness_frontend_url,
@@ -199,7 +201,6 @@ define([
 
                 var comments_html = comments.run();
                 $("#targets_comments_wrapper").html(comments_html);
-
             },
             
             macronutrients: function () {

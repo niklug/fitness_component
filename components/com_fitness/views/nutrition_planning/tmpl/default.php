@@ -27,13 +27,6 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
     <div id="targets_wrapper" class="block" style="display:none;">
         <div id="targets_container" class="fitness_block_wrapper" style="min-height: 300px;">
         </div>
-        <div class="clr"></div>
-        <br/>
-        <div id="targets_comments_wrapper" style="width:100%"></div>
-        <div class="clr"></div>
-        <br/>
-        <input id="add_comment_0" class="" type="button" value="Add Comment" >
-        <div class="clr"></div>
     </div>
 
     <!-- MACRONUTRIENTS -->

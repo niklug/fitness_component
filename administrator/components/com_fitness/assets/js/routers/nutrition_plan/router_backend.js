@@ -499,7 +499,7 @@ define([
                     app.models.target.fetch({
                         data : {nutrition_plan_id : id},
                         success : function (model, response) {
-                            self.loadTragers(app.models.item);
+                            self.loadTragers();
                         },
                         error : function (collection, response) {
                             alert(response.responseText);
@@ -530,11 +530,11 @@ define([
                 
                 ).then(function() {
                     app.collections.items.add(app.models.item);
-                    self.loadTragers(app.models.target);
+                    self.loadTragers();
                 });
             },
             
-            loadTragers : function(model) {
+            loadTragers : function() {
                 $("#targets_link").addClass("active_link");
                 
                 $("#main_container").html(new Targets_container_view({model : app.models.target, item_model : app.models.item}).render().el);

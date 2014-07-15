@@ -3,9 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'routers/nutrition_plan/router',
 	'text!templates/nutrition_plan/archive_list.html'
-], function ( $, _, Backbone, app, controller, template ) {
+], function ( $, _, Backbone, app, template ) {
 
     var view = Backbone.View.extend({
 

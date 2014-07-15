@@ -95,7 +95,9 @@ class FitnessController extends JController {
     }
     
     function nutrition_plan_targets() {
-        echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_targets());
+        require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'nutrition_plans.php';
+        $this->admin_nutrition_plans_model = new FitnessModelnutrition_plans();
+        echo json_encode($this->admin_nutrition_plans_model->nutrition_plan_targets());
     }
     
     function saveIngredient() {

@@ -339,6 +339,19 @@ class FitnessModelnutrition_plans extends JModelList {
     public function getUserActivePlanId($client_id) {
         $current_date = $this->getCurrentDate();
         $db = JFactory::getDBO();
+        $sql = "SELECT id, force_active, created  FROM #__fitness_nutrition_plan  WHERE 
+            client_id='$client_id'
+            AND state='1'
+        ";
+        
+        $result1 = FitnessHelper::customQuery($sql, 1);
+        
+        foreach ($result1 as $item) {
+            if($item->force_active == '1') {
+                return $item->id;
+            }
+        }
+        
         $query = "SELECT id, force_active, created  FROM #__fitness_nutrition_plan  WHERE 
             " . $db->quote($current_date) . "
             BETWEEN CONCAT(active_start, " . $db->quote(' 00:00:00') . ") AND CONCAT(active_finish, " . $db->quote(' 23:59:59') . ")
@@ -346,16 +359,13 @@ class FitnessModelnutrition_plans extends JModelList {
             AND state='1'
         ";
         
-        $result = FitnessHelper::customQuery($query, 1);
+        $result2 = FitnessHelper::customQuery($query, 1);
         
-        foreach ($result as $item) {
-            if($item->force_active == '1') {
-                return $item->id;
-            }
+        foreach ($result2 as $item) {
             $created[] = $item->created;
         }
         
-        foreach ($result as $item) {
+        foreach ($result2 as $item) {
             if($item->created == max($created)) {
                 return $item->id;
             }

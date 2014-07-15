@@ -22,27 +22,6 @@ define([
             },
             
             setTargetData : function() {
-                var activity_level;
-                var type = this.model.get('type');
-                
-                var tite_container = this.$el.find(".title");
-                
-                if(type == 'heavy') {
-                    activity_level = '1';
-                    tite_container.text('Heavy Training Day');
-                    tite_container.css('color', '#AD0C0C');
-                }
-                if(type == 'light') {
-                    activity_level = '2';
-                    tite_container.text('Light Training Day');
-                    tite_container.css('color', '#0D7F22');
-                }
-                if(type == 'rest') {
-                    activity_level = '3';
-                    tite_container.text('Recovery / Rest Day');
-                    tite_container.css('color', '#223FAA');
-                }
-
                 var data = [
                     {label: "Protein:", data: [[1, this.model.get('protein')]]},
                     {label: "Carbs:", data: [[1, this.model.get('carbs')]]},
