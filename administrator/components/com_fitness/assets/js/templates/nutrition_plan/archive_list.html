@@ -11,22 +11,13 @@
                     END DATE 
                 </th>
                 <th>
+                    PRIMARY GOAL 
+                </th>
+                <th>
                     MINI GOAL 
                 </th>
                 <th>
                     NUTRITION FOCUS 
-                </th>
-                <th>
-                    CALS
-                </th>
-                <th>
-                   PRO %
-                </th>
-                <th>
-                    FAT %
-                </th>
-                <th>
-                    CARBS %
                 </th>
                 <th>
                     TRAINER
@@ -40,12 +31,9 @@
                     <tr>
                         <td><%=  moment(item.active_start).format("ddd, D MMM  YYYY") %></td>
                         <td><%=  moment(item.active_finish).format("ddd, D MMM  YYYY") %></td>
+                        <td><%= item.primary_goal_name %></td>
                         <td><%= item.mini_goal_name %></td>
                         <td><%= item.nutrition_focus_name %></td>
-                        <td><%= item.calories %></td>
-                        <td><%= item.protein %></td>
-                        <td><%= item.fats %></td>
-                        <td><%= item.carbs %></td>
                         <td><%= item.trainer_name %></td>
                         <td><a  href="javascript:void(0)"><span data-id="<%= item.id %>"close_tab class="preview"></span></a></td>
                     </tr>
