@@ -27,8 +27,8 @@
                 <div class="clr"></div>
                 <input type="radio" name="step3_protein" class="step3_protein"  value="custom">
                 Custom
-                <input type="text" maxlength="8" size="8"  id="step3_protein_custom" value=""> 
-                grams per lb. of lean mass
+                <input type="text" maxlength="8" size="8"  id="step3_protein_custom" value="<%= item.step3_protein_custom %>"> 
+                grams per kg of body weight
                 
                 <div class="clr"></div>
                 <br/>
@@ -42,8 +42,8 @@
                 <input type="radio" name="step3_fats" class="step3_fats"  value="0.9920">0.99 grams per kg of body weight               <div class="clr"></div>
                 <input type="radio" name="step3_fats" class="step3_fats"  value="custom">
                 Custom
-                <input type="text" maxlength="8" size="8"  id="step3_fats_custom" value=""> 
-                grams per lb. of lean mass
+                <input type="text" maxlength="8" size="8"  id="step3_fats_custom" value="<%= item.step3_fats_custom %>"> 
+                grams per kg of body weight
                 
                 <div class="clr"></div>
                 <br/>
@@ -85,3 +85,4 @@
         </tr>
     </table>
 </div>
+

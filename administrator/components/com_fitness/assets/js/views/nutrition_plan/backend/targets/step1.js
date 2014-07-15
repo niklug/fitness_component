@@ -164,6 +164,8 @@ define([
             this.weight = $(this.el).find("#step1_weight").val();
             this.body_fat = $(this.el).find("#step1_body_fat").val();
             this.exercise_level = $(this.el).find("#exercise_level").find(":selected").val();
+            this.exercise_level_water = $(this.el).find("#exercise_level").find(":selected").attr('data-water');
+            this.climate = $(this.el).find("#climate").find(":selected").val();
             
             if(!this.validate()) {
                 return;
@@ -266,8 +268,10 @@ define([
                 weight : this.weight,
                 body_fat : this.body_fat,
                 exercise_level : this.exercise_level,
+                exercise_level_water : this.exercise_level_water,
                 BMR : this.BMR.toFixed(0),
-                TDEE : this.TDEE.toFixed(0)     
+                TDEE : this.TDEE.toFixed(0),
+                climate : this.climate
             });
             //console.log(this.model.toJSON());
             var self = this;
@@ -293,6 +297,8 @@ define([
             $(this.el).find("#step1_formula_" + this.model.get('formula')).prop('checked',true);
             
             $(this.el).find("#exercise_level").val(this.model.get('exercise_level'));
+            
+            $(this.el).find("#climate").val(this.model.get('climate'));
         }
     });
             

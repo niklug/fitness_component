@@ -43,7 +43,7 @@ define([
                 } else {
                     self.setFields();
                 }
-                
+                self.setWater();
                 self.saveData();
             });
         },
@@ -243,6 +243,7 @@ define([
                 protein : $("#step4_protein_grams").val(),
                 fats : $("#step4_fat_grams").val(),
                 carbs : $("#step4_carbs_grams").val(),
+                water : $("#step4_water").val()
             });
             
             var self = this;
@@ -253,6 +254,20 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        setWater : function() {
+            var climate_variable = this.model.get('climate');
+            var activity_level = this.model.get('exercise_level_water');
+            var body_weight = this.model.get('weight');
+            
+            var water = (((body_weight * 0.67) + (body_weight * activity_level)) / 0.029) + climate_variable;
+            
+            water = (parseInt(water)).toFixed(0);
+            
+            //WATER = ((("Body Weight" x "0.67(kg)") + ("Body Weight" x "Activity Level" )) / 0.029) + climate_variable
+            
+            $(this.el).find("#step4_water").val(water);
         }
         
         

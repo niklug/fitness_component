@@ -888,6 +888,7 @@ FOREIGN KEY (trainer_id) REFERENCES #__users(id) ON DELETE CASCADE,
 FOREIGN KEY (mini_goal) REFERENCES #__fitness_mini_goals(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
+
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_targets` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nutrition_plan_id` int(11) unsigned NOT NULL,
@@ -897,10 +898,33 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_targets` (
   `protein` float NOT NULL,
   `fats` float NOT NULL,
   `carbs` float NOT NULL,
+  `gender` varchar(10) NOT NULL,
+  `age` int(2) NOT NULL,
+  `height` int(10) NOT NULL,
+  `weight` int(10) NOT NULL,
+  `formula` varchar(10) NOT NULL,
+  `step2_fat_loss` varchar(10) NOT NULL,
+  `step2_maintain` varchar(10) NOT NULL,
+  `step2_bulking` varchar(10) NOT NULL,
+  `step2_custom` varchar(10) NOT NULL,
+  `exercise_level` varchar(20) NOT NULL,
+  `exercise_level_water` varchar(10) NOT NULL,
+  `body_fat` varchar(10) NOT NULL,
+  `climate` varchar(15) NOT NULL,
+  `BMR` varchar(10) NOT NULL,
+  `TDEE` varchar(10) NOT NULL,
+  `intensity` varchar(10) NOT NULL,
+  `common_profiles` varchar(20) NOT NULL,
+  `step3_protein` varchar(10) NOT NULL,
+  `step3_protein_custom` varchar(10) NOT NULL,
+  `step3_fats` varchar(10) NOT NULL,
+  `step3_fats_custom` varchar(10) NOT NULL,
+  `step4_calories` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nutrition_plan_id` (`nutrition_plan_id`),
   FOREIGN KEY (nutrition_plan_id) REFERENCES #__fitness_nutrition_plan(id) ON DELETE CASCADE,
-) ENGINE=InnoDB;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
 
 
 CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_ingredients` (

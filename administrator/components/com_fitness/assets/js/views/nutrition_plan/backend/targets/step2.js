@@ -25,7 +25,7 @@ define([
             
         render: function(){
             this.calcutateFieldsValues();
-            console.log(this.model.toJSON());
+            //console.log(this.model.toJSON());
             
             var data = {item : this.model.toJSON()};
             var template = _.template(this.template(data));

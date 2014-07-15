@@ -79,16 +79,16 @@
                         <td>
                             <b>EXERCISE LEVEL</b> <br/>
                             <select id="exercise_level" name="exercise_level">
-                                <option value="1.0">Basal Metabolic Rate</option>
-                                <option class="hilite" value="1.2">No exercise (desk job/couch potato)</option>
-                                <option value="1.375" selected="selected">3 times/week</option>
-                                <option class="hilite" value="1.4187">4 times/week</option>
-                                <option value="1.4625">5 times/week</option>
-                                <option class="hilite" value="1.5063">6 times/week</option>
-                                <option class="hilite" value="1.550">5 times/week (*intense)</option>
-                                <option value="1.6375">Every day</option>
-                                <option class="hilite" value="1.725">Every day (*intense) or twice daily</option>
-                                <option value="1.9">Daily exercise + physical job</option>
+                                <option data-water="0" value="1.0">Basal Metabolic Rate</option>
+                                <option data-water="0.5" class="hilite" value="1.2">No exercise (desk job/couch potato)</option>
+                                <option data-water="0.56" value="1.375" selected="selected">3 times/week</option>
+                                <option data-water="0.56" class="hilite" value="1.4187">4 times/week</option>
+                                <option data-water="0.62" value="1.4625">5 times/week</option>
+                                <option data-water="0.62" class="hilite" value="1.5063">6 times/week</option>
+                                <option data-water="0.68" class="hilite" value="1.550">5 times/week (*intense)</option>
+                                <option data-water="0.68" value="1.6375">Every day</option>
+                                <option data-water="0.75" class="hilite" value="1.725">Every day (*intense) or twice daily</option>
+                                <option data-water="0.75" value="1.9">Daily exercise + physical job</option>
                             </select>
                             
                             <div class="clr"></div>
@@ -97,6 +97,15 @@
                             <b>CURRENT BODY FAT</b> <br/>
                             <input type="text" maxlength="8" size="8" name="step1_body_fat" id="step1_body_fat" value="<%= item.body_fat %>"> 
                             %
+                            
+                            <div class="clr"></div>
+                            <br/>
+                            <b>CLIMATE</b> <br/>
+                            <select id="climate">
+                                <option value="0">Temporate</option>
+                                <option value="473.1764">Tropical</option>
+                                <option value="236.5882" >Cold</option>
+                            </select>
                         </td>
                     </tr>
                 </table>

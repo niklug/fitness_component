@@ -37,8 +37,8 @@ define([
                 }
                 
                 self.setLayout($(self.el).find("#common_profiles"));
-                
-                if(self.model.get('calories') != '0') {
+
+                if(self.model.get('calories') && self.model.get('calories') != '0') {
                     self.showStep4(self.model);
                 }
             });
@@ -127,6 +127,10 @@ define([
             
             this.model.set({
                 common_profiles : common_profiles,
+                step3_protein : $(this.el).find(".step3_protein:checked").val(),
+                step3_fats : $(this.el).find(".step3_fats:checked").val(),
+                step3_protein_custom : $(this.el).find("#step3_protein_custom").val(),
+                step3_fats_custom : $(this.el).find("#step3_fats_custom").val()
             });
             
             var self = this;
@@ -151,10 +155,13 @@ define([
             
             if(common_profiles) {
                 $('#common_profiles option').attr('selected', false);
-
                 $('#common_profiles option[data-name="' + common_profiles + '"]').attr('selected', true);
             }
-
+            
+            if(common_profiles == 'iifym') {
+                $(this.el).find(".step3_protein[value='" + this.model.get('step3_protein') + "']").prop('checked',true);
+                $(this.el).find(".step3_fats[value='" + this.model.get('step3_fats') + "']").prop('checked',true);
+            }
         }
    
     });
