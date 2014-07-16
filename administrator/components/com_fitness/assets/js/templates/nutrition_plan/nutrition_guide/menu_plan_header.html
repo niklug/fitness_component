@@ -34,8 +34,8 @@
                     <% } %>
                     
                     
-                    <td width="50">
-                        <span class="orange_text">DATE:</span>
+                    <td>
+                        <span class="orange_text">MENU DATE:</span>
                     </td>
                     <td>
                         <%
@@ -60,7 +60,15 @@
                         <%
                           if(submitted == false) {
                         %>
-                            <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[SAVE]</a>
+                        
+                            <%
+                            if(parseInt(id)) {
+                            %>
+                                <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[SAVE]</a>
+                            <% } else { %>
+                                <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[CONTINUE]</a>
+                            <% } %>
+                            
                         <% } %>
                             
                             

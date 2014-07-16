@@ -118,6 +118,7 @@ define([
         },
         
         onClickDelete : function(event) {
+            var self = this;
             this.model.destroy( {
                 success: function (model, response) {
                     app.controller.navigate("!/nutrition_guide/" +  self.options.nutrition_plan_id, true);

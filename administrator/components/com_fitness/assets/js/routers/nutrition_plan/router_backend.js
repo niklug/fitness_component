@@ -270,6 +270,7 @@ define([
             },
             
             menu_plan: function (id, nutrition_plan_id) {
+                $("#main_container").empty();
                 app.models.menu_plan = new Menu_plan_model();
                 
                 if(parseInt(id)) {
@@ -285,10 +286,12 @@ define([
                 if(parseInt(id)) {
                     app.views.example_day_menu = new Example_day_menu_view({model : app.models.menu_plan, nutrition_plan_id : nutrition_plan_id});
                     $("#main_container").html(app.views.example_day_menu.render().el);
-                }
-                //on default
+                    
+                    //on default
                 this.example_day(1, nutrition_plan_id);
                 $(".example_day_link").first().addClass("active");
+                }
+                
 
             },
             
