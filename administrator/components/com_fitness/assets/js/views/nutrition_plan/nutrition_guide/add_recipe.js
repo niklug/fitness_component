@@ -25,14 +25,16 @@ define([
         template:_.template(template),
 
         initialize : function() {
-            _.bindAll(this, 'render',  'addRecipeItem', 'clearRecipeItems');
+            _.bindAll(this, 'render',  'addItem', 'clearRecipeItems');
             this.collection.bind("reset", this.clearRecipeItems, this);
-            this.collection.bind("add", this.addRecipeItem, this);
+            this.collection.bind("add", this.addItem, this);
         },
 
         render:function () {
             $(this.el).html(this.template());
             this.container_el = this.$el.find(".example_day_meal_recipes_list");
+            
+            this.loadItems();
 
             if(app.collections.recipe_types && app.collections.recipe_variations) {
                 this.connectFilters();
@@ -63,15 +65,28 @@ define([
 
             return this;
         },
+        
+        loadItems : function() {
+            var self = this;
+            if(this.collection.length) {
+                _.each(this.collection.models, function(model) {
+                    self.addItem(model);
+                });
+            }
+        },
 
 
-        addRecipeItem : function(model) {
-            var meal_id = this.model.get('id');
-            model.set({'meal_id' : meal_id});
-            app.views.recipe_item_view = new Add_recipe_item_view({nutrition_plan_id : this.options.nutrition_plan_id, collection : this.collection, model : model}); 
+        addItem : function(model) {
+            app.views.recipe_item_view = new Add_recipe_item_view({
+                example_day_id : this.options.example_day_id,
+                nutrition_plan_id : this.options.nutrition_plan_id,
+                collection : this.collection,
+                model : model
+            }); 
             this.container_el.append( app.views.recipe_item_view.render().el );
 
             app.models.pagination.set({'items_total' : model.get('items_total')});
+            console.log(app.models.pagination);
         },
 
         clearRecipeItems : function() {
@@ -83,7 +98,8 @@ define([
         },
 
         onCancelViewRecipe :function (event) {
-            app.controller.navigate("!/example_day/" + this.model.get('example_day_id') + "/" + this.options.nutrition_plan_id, true);
+            $(".add_recipe").show();
+            $(".add_recipe_container").hide();
         },
 
         connectFilters : function() {

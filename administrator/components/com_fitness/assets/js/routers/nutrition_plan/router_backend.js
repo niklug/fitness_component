@@ -6,19 +6,14 @@ define([
         'collections/nutrition_plan/items',
         'collections/nutrition_plan/supplements/protocols',
         'collections/nutrition_plan/nutrition_guide/menu_plans',
-        'collections/nutrition_plan/nutrition_guide/example_day_meals',
-        'collections/recipe_database/recipes',
         'collections/nutrition_plan/nutrition_guide/nutrition_database_categories',
         'collections/nutrition_plan/nutrition_guide/shopping_list_ingredients',
 	'models/nutrition_plan/item',
         'models/nutrition_plan/item_overview',
         'models/nutrition_plan/target',
         'models/nutrition_plan/nutrition_guide/menu_plan',
-        'models/nutrition_plan/nutrition_guide/example_day_meal',
         'models/nutrition_plan/request_params',
         'models/nutrition_plan/supplements/protocol',
-        'models/nutrition_plan/nutrition_guide/get_recipe_params',
-        'views/nutrition_plan/overview',
         'views/nutrition_plan/backend/macronutrients',
         'views/nutrition_plan/supplements/backend/protocols',
         'views/nutrition_plan/backend/information',
@@ -27,12 +22,9 @@ define([
         'views/nutrition_plan/nutrition_guide/menu_plan_header',
         'views/nutrition_plan/nutrition_guide/example_day_menu',
         'views/nutrition_plan/nutrition_guide/example_day',
-        'views/nutrition_plan/nutrition_guide/example_day_meal',
         'views/nutrition_plan/nutrition_guide/add_recipe',
         'views/nutrition_plan/nutrition_guide/shopping_list',
-        'views/nutrition_plan/supplements/backend/protocols_wrapper',
         'views/nutrition_plan/supplements/backend/protocol',
-        'views/graph/graph',
         'views/nutrition_plan/backend/list',
         'views/nutrition_plan/backend/search_header',
         'views/nutrition_plan/backend/overview_container',
@@ -47,19 +39,14 @@ define([
         Items_collection,
         Protocols_collection,
         Menu_plans_collection,
-        Example_day_meals_collection,
-        Add_meal_recipes_collection,
         Nutrition_database_categories_collection,
         Shopping_list_ingredients_collection,
         Item_model,
         Item_overview_model,
         Target_model,
         Menu_plan_model,
-        Example_day_meal_model,
         Request_params_model,
         Protocol_model,
-        Get_recipe_params_model,
-        Overview_view,
         Macronutrients_view,
         Protocols_view,
         Information_view,
@@ -68,12 +55,9 @@ define([
         Menu_plan_header_view,
         Example_day_menu_view,
         Example_day_view,
-        Example_day_meal_view,
         Example_day_add_recipe_view,
         Shopping_list_view,
-        Protocols_wrapper_view,
         Protocol_view,
-        Graph_view,
         List_view,
         Search_header_view,
         Overview_container_view,
@@ -99,23 +83,15 @@ define([
                 if(!app.options.is_superuser) {
                     business_profile_id = app.options.business_profile_id;
                 }
+
                 app.options.client_id = localStorage.getItem('client_id');
                 //
                 app.models.request_params = new Request_params_model({client_id : app.options.client_id, business_profile_id : business_profile_id});
                 
-                app.collections.add_meal_recipes = new Add_meal_recipes_collection(); 
-                
                 app.models.request_params.bind("change", this.get_items, this);
                 
                 this.onClientChange();
-                
-                //
-                app.models.get_recipe_params = new Get_recipe_params_model();
-                
-                app.collections.add_meal_recipes = new Add_meal_recipes_collection(); 
-                
-                app.models.get_recipe_params.bind("change", this.get_database_recipes, this);
-
+ 
             },
         
             routes: {
@@ -132,7 +108,6 @@ define([
                 "!/example_day/:id/:menu_id/:nutrition_plan_id": "example_day", 
                 "!/add_example_day_meal/:id/:nutrition_plan_id": "add_example_day_meal", 
                 "!/shopping_list/:id": "shopping_list", 
-                "!/add_meal_recipe/:meal_id/:nutrition_plan_id": "add_meal_recipe",
                 "!/information/:id": "information", 
                 "!/archive": "archive", 
                 "!/close": "close", 
@@ -356,21 +331,14 @@ define([
 
                 this.load_menu_plan_content(menu_id, nutrition_plan_id);
                 
-                $('#example_day_wrapper').html(new Example_day_view({'example_day_id' : example_day_id, nutrition_plan_id : nutrition_plan_id}).render().el);
+                $('#example_day_wrapper').html(new Example_day_view({'example_day_id' : example_day_id, menu_id : menu_id,  nutrition_plan_id : nutrition_plan_id}).render().el);
             },
 
-            add_example_day_meal : function(example_day_id, nutrition_plan_id) {
-                var menu_id = app.models.menu_plan.get('id');
-                app.views.example_day_meal = new Example_day_meal_view({nutrition_plan_id : nutrition_plan_id, model : new Example_day_meal_model({'example_day_id' : example_day_id, 'menu_id' : menu_id, nutrition_plan_id : nutrition_plan_id}), collection : app.collections.example_day_meals}); 
-                $("#example_day_meal_list").append(app.views.example_day_meal.render().el );
-            },
-            
+               
             add_meal_recipe : function(meal_id, nutrition_plan_id) {
                 this.get_database_recipes();
-                
-                var meal_model = app.collections.example_day_meals.get({id : meal_id});
 
-                $('#example_day_wrapper').html(new Example_day_add_recipe_view({nutrition_plan_id : nutrition_plan_id, collection : app.collections.add_meal_recipes, model : meal_model}).render().el);
+                $('#example_day_wrapper').html(new Example_day_add_recipe_view({nutrition_plan_id : nutrition_plan_id, collection : app.collections.add_meal_recipes}).render().el);
                 
                 app.models.pagination = $.backbone_pagination({});
                 
@@ -378,24 +346,8 @@ define([
                 app.models.pagination.bind("change:items_number", this.set_recipes_model, this);
             },
             
-            set_recipes_model : function() {
-                app.collections.add_meal_recipes.reset();
-                app.models.get_recipe_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
-            },
             
-            get_database_recipes : function() {
-                app.collections.add_meal_recipes.reset();
-                //console.log(app.models.get_recipe_params.toJSON());
-                app.collections.add_meal_recipes.fetch({
-                    data : app.models.get_recipe_params.toJSON(),
-                    success : function(collection, response) {
-                        //console.log(collection.models.length);
-                    },
-                    error: function (model, response) {
-                        alert(response.responseText);
-                    }
-                });  
-            },
+
             
             copy_menu_plan : function(id) {
                 app.models.menu_plan = new Menu_plan_model();
