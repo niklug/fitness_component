@@ -24,7 +24,7 @@ define([
             $(".example_day_link").removeClass("active");
             var day = $(event.target).attr('data-id');
             $(event.target).addClass("active");
-            app.controller.navigate("!/example_day/" + day + "/" + this.options.nutrition_plan_id, true);
+            app.controller.navigate("!/example_day/" + day + "/" + this.model.get('id') + '/' + this.options.nutrition_plan_id, true);
         },
         
         onChooseShoopingList:function (event) {

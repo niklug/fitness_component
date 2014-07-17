@@ -1,17 +1,1 @@
-<%
-var submitted = false;
-if((menu_plan.status == 2) || (menu_plan.status == 3) || (menu_plan.status == 5)) {
-    submitted = true;
-}
-%>
-
-
-
-
-
-<div id="example_day_meal_list"></div>
-<div class="clr"></div>
-<% if(submitted == false) { %>
-    <a style="cursor: pointer;float:right;margin-right:10px;" id="add_meal" onclick="javascript:void(0)">[NEW MEAL]</a>
-<% } %>
-<div class="clr"></div>
+<div style="border:1px #ccc dashed;text-align: center;padding: 2px;" class="add_recipe">click to add new recipe</div>

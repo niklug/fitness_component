@@ -129,7 +129,7 @@ define([
                 "!/add_supplement_protocol/:id": "add_supplement_protocol",
                 "!/nutrition_guide/:id": "nutrition_guide", 
                 "!/menu_plan/:id/:nutrition_plan_id": "menu_plan", 
-                "!/example_day/:id/:nutrition_plan_id": "example_day", 
+                "!/example_day/:id/:menu_id/:nutrition_plan_id": "example_day", 
                 "!/add_example_day_meal/:id/:nutrition_plan_id": "add_example_day_meal", 
                 "!/shopping_list/:id": "shopping_list", 
                 "!/add_meal_recipe/:meal_id/:nutrition_plan_id": "add_meal_recipe",
@@ -251,32 +251,71 @@ define([
                 this.loadMainMenu(id);
                 $("#nutrition_guide_link").addClass("active_link");
                 
+                if (app.collections.menu_plans
+                        && app.collections.menu_plans.models[0]
+                        && app.collections.menu_plans.models[0].get('nutrition_plan_id') == id
+                    ) {
+                    this.load_nutrition_guide(id);
+                    return;
+                }
+                
+                var self = this;
                 app.collections.menu_plans = new Menu_plans_collection(); 
                 app.collections.menu_plans.fetch({
                     data: {nutrition_plan_id : id},
                     success: function (collection, response) {
-                        app.views.menu_plan_list = new Menu_plan_list_view({collection : collection, nutrition_plan_id : id});
-                        $("#main_container").html(app.views.menu_plan_list.render().el);
+                        self.load_nutrition_guide(id);
                     },
-                    
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            
+            load_nutrition_guide : function(id) {
+                app.views.menu_plan_list_menu = new Menu_plan_list_menu_view({nutrition_plan_id : id});
+                $("#nutrition_guide_header").html(app.views.menu_plan_list_menu.render().el);
+                app.views.menu_plan_list = new Menu_plan_list_view({collection : app.collections.menu_plans, nutrition_plan_id : id});
+                $("#main_container").html(app.views.menu_plan_list.render().el);
+            },
+            
+            menu_plan: function (id, nutrition_plan_id) {
+                if (app.collections.menu_plans
+                        && app.collections.menu_plans.models[0]
+                        && app.collections.menu_plans.models[0].get('nutrition_plan_id') == nutrition_plan_id
+                    ) {
+                    this.load_menu_plan(id, nutrition_plan_id);
+                    return;
+                }
+                
+                var self = this;
+                app.collections.menu_plans = new Menu_plans_collection(); 
+                app.collections.menu_plans.fetch({
+                    data: {nutrition_plan_id : nutrition_plan_id},
+                    success: function (collection, response) {
+                        self.load_menu_plan(id, nutrition_plan_id);
+                    },
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
                  });
-                 
-                 app.views.menu_plan_list_menu = new Menu_plan_list_menu_view({nutrition_plan_id : id});
-                 
-                 $("#nutrition_guide_header").html(app.views.menu_plan_list_menu.render().el);
             },
             
-            menu_plan: function (id, nutrition_plan_id) {
+            load_menu_plan: function (id, nutrition_plan_id) {
+                this.loadMainMenu(nutrition_plan_id);
+                $("#nutrition_guide_link").addClass("active_link");
                 $("#main_container").empty();
+                if(parseInt(id)) {
+                    this.example_day(1, id, nutrition_plan_id);
+                    $(".example_day_link").first().addClass("active");
+                }
+            },
+            
+            load_menu_plan_content : function (id, nutrition_plan_id) {
                 app.models.menu_plan = new Menu_plan_model();
-                
                 if(parseInt(id)) {
                     app.models.menu_plan = app.collections.menu_plans.get(id);
                 }
-                   
                 app.views.menu_plan_header = new Menu_plan_header_view({model : app.models.menu_plan, collection : app.collections.menu_plans, nutrition_plan_id : nutrition_plan_id});
                  
                 $("#nutrition_guide_header").html(app.views.menu_plan_header.render().el);
@@ -286,35 +325,40 @@ define([
                 if(parseInt(id)) {
                     app.views.example_day_menu = new Example_day_menu_view({model : app.models.menu_plan, nutrition_plan_id : nutrition_plan_id});
                     $("#main_container").html(app.views.example_day_menu.render().el);
-                    
-                    //on default
-                this.example_day(1, nutrition_plan_id);
-                $(".example_day_link").first().addClass("active");
                 }
-                
-
             },
             
-            example_day : function(example_day_id, nutrition_plan_id) {
-                app.collections.example_day_meals = new Example_day_meals_collection(); 
-                var menu_id = app.models.menu_plan.get('id');
-                 app.collections.example_day_meals.fetch({
-                    data: {
-                        nutrition_plan_id : nutrition_plan_id,
-                        menu_id : menu_id,
-                        example_day_id : example_day_id
-                    },
+            example_day : function(example_day_id, menu_id, nutrition_plan_id) {
+                    if (app.collections.menu_plans
+                        && app.collections.menu_plans.models[0]
+                        && app.collections.menu_plans.models[0].get('nutrition_plan_id') == nutrition_plan_id
+                    ) {
+                    this.load_example_day(example_day_id, menu_id, nutrition_plan_id);
+                    return;
+                }
+                
+                var self = this;
+                app.collections.menu_plans = new Menu_plans_collection(); 
+                app.collections.menu_plans.fetch({
+                    data: {nutrition_plan_id : nutrition_plan_id},
                     success: function (collection, response) {
-                        //console.log(response);
+                        self.load_example_day(example_day_id, menu_id, nutrition_plan_id);
                     },
-                    error: function (model, response) {
+                    error: function (collection, response) {
                         alert(response.responseText);
                     }
                 });
-                $('#example_day_wrapper').html(new Example_day_view({collection : app.collections.example_day_meals, 'example_day_id' : example_day_id, nutrition_plan_id : nutrition_plan_id}).render().el);
             },
             
-            
+            load_example_day : function(example_day_id, menu_id, nutrition_plan_id) {
+                this.loadMainMenu(nutrition_plan_id);
+                $("#nutrition_guide_link").addClass("active_link");
+
+                this.load_menu_plan_content(menu_id, nutrition_plan_id);
+                
+                $('#example_day_wrapper').html(new Example_day_view({'example_day_id' : example_day_id, nutrition_plan_id : nutrition_plan_id}).render().el);
+            },
+
             add_example_day_meal : function(example_day_id, nutrition_plan_id) {
                 var menu_id = app.models.menu_plan.get('id');
                 app.views.example_day_meal = new Example_day_meal_view({nutrition_plan_id : nutrition_plan_id, model : new Example_day_meal_model({'example_day_id' : example_day_id, 'menu_id' : menu_id, nutrition_plan_id : nutrition_plan_id}), collection : app.collections.example_day_meals}); 
