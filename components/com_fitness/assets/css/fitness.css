@@ -344,7 +344,7 @@ a:hover, a:active, a:focus {
 }
 
 .orange_text {
-    color: #BC4A26;
+    color: #BC4A26 !important;
 }
 
 .fitness_wrapper .pagination {

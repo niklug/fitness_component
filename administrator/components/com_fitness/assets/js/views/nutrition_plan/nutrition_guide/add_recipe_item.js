@@ -70,7 +70,10 @@ define([
             
             app.models.original_recipe.set(this.model.toJSON());
             
-            app.models.original_recipe.set({nutrition_plan_id : this.options.nutrition_plan_id});
+            app.models.original_recipe.set({
+                example_day_id : this.options.example_day_id,
+                nutrition_plan_id : this.options.nutrition_plan_id
+            });
             
             var menu_id = app.models.menu_plan.get('id');
 
@@ -89,6 +92,7 @@ define([
             app.models.original_recipe.save(null, {
                 success: function (model, response) {
                     //console.log(response);
+                    app.collections.example_day_recipes.add(model);
                 },
                 error: function (model, response) {
                     alert(response.responseText);

@@ -1496,7 +1496,7 @@ class FitnessHelper extends FitnessFactory
         $query .=  " (SELECT GROUP_CONCAT(name) FROM #__fitness_recipe_variations WHERE "
                 . " FIND_IN_SET(id, (SELECT recipe_variation FROM $table WHERE id =a.id))) recipe_variations_names ";
         
-        $query .= "  FROM #__fitness_nutrition_plan_example_day_meal_recipes AS r ";
+        $query .= "  FROM #__fitness_nutrition_plan_recipes AS r ";
         $query .= " LEFT JOIN  $table AS a ON a.id=r.original_recipe_id";
         $query .= " WHERE r.meal_id='$meal_id'";
         

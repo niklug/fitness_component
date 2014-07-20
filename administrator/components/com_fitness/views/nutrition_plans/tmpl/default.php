@@ -25,6 +25,7 @@ $business_profile_id = $business_profile_id['data'];
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'base_url' : '<?php echo JURI::root();?>',
+            'relative_url' : '<?php echo JURI::base();?>',
             'ajax_call_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'user_name' : '<?php echo $user->name;?>',
             'user_id' : '<?php echo $user_id;?>',
@@ -41,6 +42,7 @@ $business_profile_id = $business_profile_id['data'];
             'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
             'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
             'business_profile_id' : '<?php echo $business_profile_id; ?>',
+            'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
         };
 
 //status class

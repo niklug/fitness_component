@@ -314,8 +314,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 $query .= " WHERE  recipe_id='$data->recipe_id'";
             }
             
-            if($data->meal_id) {
-                $query .= " AND  meal_id='$data->meal_id'";
+            if($data->example_day_id) {
+                $query .= " AND  example_day_id='$data->example_day_id'";
             }
             
             if($data->type) {
@@ -335,68 +335,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return json_encode($result);      
         }
         
-        
-        public function savePlanMeal($meal_encoded, $table) {
-            $ret['success'] = 1;
-            $db = JFactory::getDbo();
-            
-            $meal = json_decode($meal_encoded);
-            
-            if($meal->id) {
-                $insert = $db->updateObject($table, $meal, 'id');
-            } else {
-                $insert = $db->insertObject($table, $meal, 'id');
-            }
-
-            if (!$insert) {
-                $ret['success'] = false;
-                $ret['message'] = $db->stderr();
-            }
-            
-            
-            $inserted_id = $db->insertid();
-            if(!$inserted_id) {
-                $inserted_id = $meal->id;
-            }
-            //$ret['success'] = 0;
-            
-            //$ret['message'] = print_r($ingredient, true);
-            
-            $result = array('status' => $ret, 'inserted_id' => $inserted_id);
-            
-            return json_encode($result);     
-        }
-        
-        public function deletePlanMeal($id, $table) {
-            $ret['success'] = 1;
-            $db = JFactory::getDbo();
-            $query = "DELETE FROM $table WHERE id='$id'";
-            $db->setQuery($query);
-            if(!$db->query()) {
-                $ret['success'] = 0;
-                $ret['message'] =  $db->getErrorMsg();
-            }
-            $result = array('status' => $ret, 'id' => $id);
-            
-            return json_encode($result);  
-        }
-        
-        
-        public function populatePlanMeal($nutrition_plan_id, $table) {
-            $ret['success'] = 1;
-            $db = JFactory::getDbo();
-            $query = "SELECT * FROM $table WHERE nutrition_plan_id='$nutrition_plan_id'";
-            $db->setQuery($query);
-            if(!$db->query()) {
-                $ret['success'] = 0;
-                $ret['message'] =  $db->getErrorMsg();
-            }
-            $data = $db->loadObjectList();
-
-            $result = array('status' => $ret, 'data' => $data);
-            
-            return json_encode($result);      
-        }
         
         
         public function savePlanComment($data_encoded, $table) {
@@ -526,8 +464,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 if($obj->menu_id) {
                     $data->menu_id = $obj->menu_id;
                 }
-                if($obj->meal_id) {
-                    $data->meal_id = $obj->meal_id;
+                if($obj->example_day_id) {
+                    $data->example_day_id = $obj->example_day_id;
                 }
                 if($obj->recipe_id_created) {
                     $data->recipe_id = $obj->recipe_id_created;
@@ -740,71 +678,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return $model;
         }
         
-        
-        public function nutrition_plan_example_day_meal() {
-
-            $method = JRequest::getVar('_method');
-            
-            if(!$method) {
-                $method = $_SERVER['REQUEST_METHOD'];
-            }
-            
-                       
-            $model = json_decode(JRequest::getVar('model'));
-            
-                        
-            $table = '#__fitness_nutrition_plan_example_day_meals';
-            
-            $helper = new FitnessHelper();
-            
-            switch ($method) {
-                case 'GET': // Get Item(s)
-                    
-                    $id = JRequest::getVar('id');
-                    $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
-                    $example_day_id = JRequest::getVar('example_day_id');
-                    $menu_id = JRequest::getVar('menu_id');
-                    
-                    $query = "SELECT * FROM $table WHERE 1";
-                    
-                    if($id) {
-                        $query .= " AND id='$id'";
-                    }
-                    if($nutrition_plan_id) {
-                        $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
-                    }
-                    if($example_day_id) {
-                        $query .= " AND example_day_id='$example_day_id'";
-                    }
-                    if($menu_id) {
-                        $query .= " AND menu_id='$menu_id'";
-                    }
-                    
-                    $items = FitnessHelper::customQuery($query, 1);
-                    return $items;
-                    break;
-                case 'PUT': // Update
-                    $id = $helper->insertUpdateObj($model, $table);
-                    break;
-                case 'POST': // Create
-                    $id = $helper->insertUpdateObj($model, $table);
-                    break;
-                case 'DELETE': // Delete Item
-                    $id = str_replace('/', '', $_GET['id']);
-                    $id = $helper->deleteRow($id, $table);
-                    break;
-
-                default:
-                    break;
-            }
-   
-            $model->id = $id;
-            
-            return $model;
-        }
-        
-
-        
+                
         public function getRecipeTypes() {
 
             $helper = new FitnessHelper();
@@ -830,7 +704,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
        
             $model = json_decode(JRequest::getVar('model'));
 
-            $table = '#__fitness_nutrition_plan_example_day_meal_recipes';
+            $table = '#__fitness_nutrition_plan_example_day_recipes';
             $ingredients_table = '#__fitness_nutrition_plan_example_day_ingredients';
             $ingredients_table_WHERE = 'recipe_id=r.id';
             
@@ -839,9 +713,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
             
             switch ($method) {
                 case 'GET': // Get Item(s)
-                    
-                    $meal_id = JRequest::getVar('meal_id');
-                    if(!$meal_id) return;
+                    $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
+                    $example_day_id = JRequest::getVar('example_day_id');
+                    if(!$example_day_id) return;
                     
                     $query = "SELECT * FROM $table WHERE 1";
                     
@@ -866,8 +740,14 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $query .= " FROM $table AS r ";
                     $query .= " LEFT JOIN  #__fitness_nutrition_recipes AS a ON a.id=r.original_recipe_id";
                     
-                    if($meal_id) {
-                        $query .= " WHERE meal_id='$meal_id'";
+                    $query .= " WHERE 1";
+                    
+                    if($nutrition_plan_id) {
+                        $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+                    }
+                    
+                    if($example_day_id) {
+                        $query .= " AND example_day_id='$example_day_id'";
                     }
 
                     $data = FitnessHelper::customQuery($query, 1);
@@ -878,24 +758,13 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     //update
                     $item_id = str_replace('/', '', $_GET['id']);
                         if($item_id) {
-                            $obj = new stdClass();
-                            $obj->id = $item_id;
-                            $obj->original_recipe_id = $model->original_recipe_id;
-                            $obj->meal_id = $model->meal_id;
-                            $obj->number_serves = $model->number_serves_new;
-                            $obj->description = $model->description;
-
-                            $id = $helper->insertUpdateObj($obj, $table);
+                            $model->id = $item_id;
+                            $id = $helper->insertUpdateObj($model, $table);
                         }
                     break;
                 case 'POST': // Create
 
-                    $obj = new stdClass();
-                    $obj->original_recipe_id = $model->original_recipe_id;
-                    $obj->meal_id = $model->meal_id;
-                    $obj->number_serves = $model->number_serves_new;
-
-                    $id = $helper->insertUpdateObj($obj, $table);
+                    $id = $helper->insertUpdateObj($model, $table);
 
                     if($id) {
                         $ingredient_obj = new stdClass();

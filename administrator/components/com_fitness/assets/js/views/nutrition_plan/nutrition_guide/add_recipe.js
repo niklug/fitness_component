@@ -94,7 +94,8 @@ define([
         },
 
         events:{
-            "click .cancel_add_recipe": "onCancelViewRecipe"
+            "click .cancel_add_recipe": "onCancelViewRecipe",
+            
         },
 
         onCancelViewRecipe :function (event) {
@@ -127,7 +128,8 @@ define([
                 model_field : 'recipe_variations_filter_options'
             }).render();
         },
-
+        
+        
     });
             
     return view;

@@ -994,7 +994,7 @@
     border: 1px solid #cccccc;
 }
 
-.fitness_block_wrapper a {
+.fitness_block_wrapper a, .fitness_block_wrapper a:visited,  .fitness_block_wrapper a:link  {
     color: #DA4828;
 }
 
@@ -1286,3 +1286,4 @@ width: 20px;
     cursor: default;
     padding-right: 17px;
 }
+
