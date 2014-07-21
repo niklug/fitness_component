@@ -28,35 +28,42 @@
                 if(options.items_total) {
                     this.set({items_total : options.items_total});
                 }
-                var el = $("#pagination_container");
+                this.container = $("#pagination_container");
                 
                 if(options.el) {
-                    el = options.el;
+                    this.container = options.el;
                 }
                 
                 this.bind("change:items_total", this.onChangeItemsTotal, this);
                 this.bind("change:currentPage", this.onChangeCurrentPage, this);
                 this.bind("change:items_number", this.onChangeItemsNumber, this);
-                this.pagination_view = new Pagination_view({el: el, model : this});
+                
+                this.render_pagination_view();
                 
             },
             
             render : function() {
-                this.pagination_view.render();
+                this.render_pagination_view();
             },
             
             onChangeItemsTotal : function() {
                 
-                this.pagination_view.render();
+                this.render_pagination_view();
             }, 
             
             onChangeCurrentPage : function() {
-                this.pagination_view.render();
+                this.render_pagination_view();
             },
             
             onChangeItemsNumber : function() {
-                this.pagination_view.render();
-            },            
+                this.render_pagination_view();
+            },   
+            
+            render_pagination_view : function() {
+                this.pagination_view = new Pagination_view({model : this});
+                
+                this.container.html(this.pagination_view.render().el);
+            },
 
             checkLocalStorage : function() {
                 if(typeof(Storage)==="undefined") {
@@ -88,7 +95,7 @@
             tagName: "li",
             template: _.template($("#template-page").html()),
             events: {
-                "click #a-page-item": "onPageClick",
+                "click .a-page-item": "onPageClick",
                 
             },
             onPageClick: function(event) {
@@ -120,18 +127,18 @@
                 var template = _.template($("#backbone_pagination_template").html(), variables);
                 this.$el.html(template);
                 var items_number = this.model.getLocalStorageItem('items_number');
-                $("#items_number").val(items_number);
+                $(this.el).find(".items_number").val(items_number);
                 this.addItems();
-
+                return this;
             },
 
 
             events: {
-                "change #items_number": "onLimitChange",
-                "click #next_pag": "onClickNext",
-                "click #prev_pag": "onClickPrev",
-                "click #first_pag": "onClickFirst",
-                "click #last_pag": "onClickLast",
+                "change .items_number": "onLimitChange",
+                "click .next_pag": "onClickNext",
+                "click .prev_pag": "onClickPrev",
+                "click .first_pag": "onClickFirst",
+                "click .last_pag": "onClickLast",
             },
             
             onLimitChange: function(event) {
@@ -201,7 +208,7 @@
                 var pages = parseInt(this.getPages());
 
                 if (pages > 1) {
-                    $("#ul-pagination li").remove();
+                    $(this.el).find(".ul-pagination li").remove();
                     
                     var start_page = 1;
                     var end_page = pages;
@@ -223,7 +230,7 @@
                         var pageClass = '';
                         if(currentPage == i) pageClass = 'active_link';
                         var pageItem = new Pagination_page_view({pageIndex: i, pageClass: pageClass, model : this.model});
-                        $("#ul-pagination").append(pageItem.render().el);
+                        $(this.el).find(".ul-pagination").append(pageItem.render().el);
                     }
                 }
             },

@@ -38,20 +38,20 @@
 
 <!-- PAGINATION -->
 <script type="text/template" id="backbone_pagination_template">
-    <div id="bac_nav">
+    <div class="bac_nav">
         <% if(currentPage > 1) { %>
-            <a id="first_pag" title="First Page" href="javascript:void(0)">START</a>&#32; &#108;
-            <a id="prev_pag" title="Previous Page" href="javascript:void(0)">PREV</a>
+            <a class="first_pag" title="First Page" href="javascript:void(0)">START</a>&#32; &#108;
+            <a class="prev_pag" title="Previous Page" href="javascript:void(0)">PREV</a>
         <% } %>
-        <ul id="ul-pagination"></ul>
+        <ul class="ul-pagination"></ul>
         <% if(currentPage <  pages) { %>
-            <a id="next_pag" title="Next Page" href="javascript:void(0)">NEXT</a>&#32;&#108;
-            <a id="last_pag" title="Last Page" href="javascript:void(0)">END</a>
+            <a class="next_pag" title="Next Page" href="javascript:void(0)">NEXT</a>&#32;&#108;
+            <a class="last_pag" title="Last Page" href="javascript:void(0)">END</a>
         <% } %>
     </div>
     <div style="width:100%;text-align: center;">
         Display # 
-        <select style="float:none;" name="items_number" id="items_number">
+        <select style="float:none;" name="items_number" class="items_number">
             <option value="2">2</option>
             <option value="5">5</option>
             <option selected="selected" value="10">10</option>
@@ -62,7 +62,7 @@
 </script>
 
 <script id="template-page" type="text/template">
-    <a id="a-page-item" class="<%= pageClass %>" href="javascript:void(0)"><%= pageNumber %></a>
+    <a class=" a-page-item <%= pageClass %>" href="javascript:void(0)"><%= pageNumber %></a>
 </script>
 <!-- END PAGINATION -->
 

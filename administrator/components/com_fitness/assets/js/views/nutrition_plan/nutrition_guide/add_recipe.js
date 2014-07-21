@@ -66,6 +66,12 @@ define([
             return this;
         },
         
+        events:{
+            "click .search_recipes": "search",
+            "click .clear_search": "clear",
+            'keypress input[type=text]': 'filterOnEnter',
+        },
+        
         loadItems : function() {
             var self = this;
             if(this.collection.length) {
@@ -84,28 +90,15 @@ define([
                 model : model
             }); 
             this.container_el.append( app.views.recipe_item_view.render().el );
-
-            app.models.pagination.set({'items_total' : model.get('items_total')});
-            console.log(app.models.pagination);
-        },
+         },
 
         clearRecipeItems : function() {
             this.container_el.empty();
         },
-
-        events:{
-            "click .cancel_add_recipe": "onCancelViewRecipe",
-            
-        },
-
-        onCancelViewRecipe :function (event) {
-            $(".add_recipe").show();
-            $(".add_recipe_container").hide();
-        },
-
+        
         connectFilters : function() {
             new Select_filter_fiew({
-                model : app.models.get_recipe_params,
+                model : this.options.recipe_params_model,
                 el : this.$el.find("#recipe_database_filter_wrapper"),
                 collection : app.collections.recipe_types,
                 title : 'FILTER CATEGORIES',
@@ -117,7 +110,7 @@ define([
             }).render();
 
             new Select_filter_fiew({
-                model : app.models.get_recipe_params,
+                model : this.options.recipe_params_model,
                 el : this.$el.find("#recipe_variations_filter_wrapper"),
                 collection : app.collections.recipe_variations,
                 title : 'RECIPE VARIATIONS',
@@ -129,6 +122,29 @@ define([
             }).render();
         },
         
+        search : function() {
+            var recipe_name = this.$el.find(".recipe_name").val();
+            this.options.recipe_params_model.set({
+                recipe_name : recipe_name,
+                page : "1"
+            });
+        },
+
+        
+        filterOnEnter : function(event) { 
+          if(event.which === 13) {
+            this.search();
+          }
+        },
+        
+        clear : function() {
+            $(this.el).find(".recipe_name").val('');
+            this.options.recipe_params_model.set(
+                {
+                    recipe_name : '',
+                }
+            );
+        }
         
     });
             

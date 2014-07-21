@@ -3,9 +3,22 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'collections/recipe_database/recipes',
         'models/nutrition_plan/nutrition_guide/example_day_recipe',
+        'models/nutrition_plan/nutrition_guide/get_recipe_params',
+        'views/nutrition_plan/nutrition_guide/add_recipe',
 	'text!templates/nutrition_plan/nutrition_guide/example_day_recipe.html',
-], function ( $, _, Backbone, app, Example_day_recipe_model, template ) {
+], function (
+        $,
+        _,
+        Backbone, 
+        app, 
+        Recipes_collection,
+        Example_day_recipe_model,
+        Get_recipe_params_model,
+        Example_day_add_recipe_view,
+        template 
+    ) {
 
     var view = Backbone.View.extend({
         
@@ -13,6 +26,12 @@ define([
         
         initialize : function() {
             this.edit_mode();
+            
+            this.recipe_params_model =  new Get_recipe_params_model();
+                
+            app.collections.recipes = app.collections.recipes || new Recipes_collection(); 
+
+            this.recipe_params_model.bind("change", this.get_database_recipes, this);
         },
 
         render : function () {
@@ -31,10 +50,13 @@ define([
             "click .view_recipe" : "onClickViewRecipe",
             "click .edit_recipe" : "onClickEdit",
             "click .copy_recipe" : "onClickCopy",
+            
+            "click .add_recipe" : "onClickAddRecipe",
+            "click .cancel_add_recipe": "onCancelViewRecipe",
         },
+        
 
         onClickSaveClose : function() {
-            
             var description_field = this.$el.find('.recipe_description');
             var time_field = this.$el.find('.recipe_time');
             var comments_field = this.$el.find('.recipe_comments');
@@ -117,17 +139,75 @@ define([
         onClickCopy : function() {
             var model = new Example_day_recipe_model(this.model.toJSON());
             model.set({id : null, menu_id : this.options.menu_id});
-            console.log(app.collections.example_day_recipes.toJSON());
             var self = this;
             app.collections.example_day_recipes.create(model, {
                 success : function (model, response) {
-                    console.log(app.collections.example_day_recipes.toJSON());
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
             });
         },
+        
+        onClickAddRecipe : function() {
+            $(this.el).find(".add_recipe").hide();
+            
+            if(!parseInt(app.collections.recipes.length)) {
+                this.get_database_recipes();
+            }
+            
+            $(this.el).find(".add_recipe_container").show().html(new Example_day_add_recipe_view({
+                example_day_id : this.options.example_day_id,
+                menu_id : this.options.menu_id,
+                nutrition_plan_id : this.options.nutrition_plan_id,
+                collection : app.collections.recipes,
+                recipe_params_model : this.recipe_params_model
+            }).render().el);
+            
+            this.connectPagination(app.collections.recipes);
+
+        },
+        
+        connectPagination : function(collection) {
+            this.pagination_model = $.backbone_pagination({el : $(this.el).find(".pagination_container")});
+            var self = this;
+            collection.once("add", function(model) {
+                self.pagination_model.set({'items_total' : model.get('items_total')});
+            });
+            
+            if(collection.models.length){
+                this.pagination_model.set({'items_total' : collection.models[0].get('items_total')});
+            }
+            
+            this.pagination_model.bind("change:currentPage", this.set_recipes_model, this);
+            this.pagination_model.bind("change:items_number", this.set_recipes_model, this);
+        },
+        
+        set_recipes_model : function() {
+            app.collections.recipes.reset();
+            this.recipe_params_model.set({"page" : this.pagination_model.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
+        },
+        
+        onCancelViewRecipe :function () {
+            $(this.el).find(".add_recipe_container").hide().empty();
+            $(this.el).find(".add_recipe").show();
+        },
+        
+        get_database_recipes : function() {
+            app.collections.recipes.reset();
+            var self = this;
+            app.collections.recipes.fetch({
+                data : self.recipe_params_model.toJSON(),
+                success : function(collection, response) {
+                    //console.log(collection.toJSON());
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });  
+        },
+        
+        
 
 
         close :function() {

@@ -464,9 +464,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 if($obj->menu_id) {
                     $data->menu_id = $obj->menu_id;
                 }
-                if($obj->example_day_id) {
-                    $data->example_day_id = $obj->example_day_id;
-                }
                 if($obj->recipe_id_created) {
                     $data->recipe_id = $obj->recipe_id_created;
                 }
@@ -765,6 +762,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 case 'POST': // Create
 
                     $id = $helper->insertUpdateObj($model, $table);
+                    
+                    //var_dump($model);
+                    //die();
 
                     if($id) {
                         $ingredient_obj = new stdClass();
@@ -772,12 +772,16 @@ class FitnessModelnutrition_plan extends JModelAdmin
                         $ingredient_obj->menu_id = $model->menu_id;
                         $ingredient_obj->recipe_id = $model->original_recipe_id;
                         $ingredient_obj->recipe_id_created = $id;
+                        
+                        if(!$model->number_serves_new) {
+                            $model->number_serves_new = $model->number_serves;
+                        }
+                        
                         $ingredient_obj->number_serves = $model->number_serves_new;
                         $ingredient_obj->number_serves_recipe = $model->number_serves;
                         $ingredient_obj_encoded = json_encode($ingredient_obj);
 
-                        $ingredient_table = '#__fitness_nutrition_plan_example_day_ingredients';
-                        $this->importRecipe($ingredient_obj_encoded, $ingredient_table);
+                        $this->importRecipe($ingredient_obj_encoded, $ingredients_table);
                     }
                     break;
                 case 'DELETE': // Delete Item

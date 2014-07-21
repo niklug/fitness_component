@@ -88,16 +88,22 @@ define([
             this.$el.find(".number_serves_wrapper, .recipe_details").hide();
             this.$el.find(".view_add_recipe").show();
 
-
+            var self = this;
             app.models.original_recipe.save(null, {
                 success: function (model, response) {
                     //console.log(response);
-                    app.collections.example_day_recipes.add(model);
+                    self.onAddRecipeSuccess(model);
+                    
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
             });
+        },
+        
+        onAddRecipeSuccess : function(model) {
+            $(this.el).closest(".add_recipe_container").hide().empty();
+            app.collections.example_day_recipes.add(model);
         }
 
     });
