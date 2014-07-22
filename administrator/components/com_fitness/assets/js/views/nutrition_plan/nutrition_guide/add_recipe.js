@@ -34,6 +34,8 @@ define([
             $(this.el).html(this.template());
             this.container_el = this.$el.find(".example_day_meal_recipes_list");
             
+            this.connectPagination();
+            
             this.loadItems();
 
             if(app.collections.recipe_types && app.collections.recipe_variations) {
@@ -90,6 +92,8 @@ define([
                 model : model
             }); 
             this.container_el.append( app.views.recipe_item_view.render().el );
+            
+            
          },
 
         clearRecipeItems : function() {
@@ -139,12 +143,41 @@ define([
         
         clear : function() {
             $(this.el).find(".recipe_name").val('');
+            $(this.el).find(".filter_select").val(0);
             this.options.recipe_params_model.set(
                 {
                     recipe_name : '',
+                    filter_options : '0',
+                    recipe_variations_filter_options : '0',
+                    status : '', 
+                    page : '1',
+                    state : '1',
+                    sort_by : 'recipe_name',
+                    uid : app.getUniqueId() 
                 }
             );
-        }
+        },
+        
+        connectPagination : function() {
+            this.pagination_model = $.backbone_pagination({el : $(this.el).find(".pagination_container")});
+            var self = this;
+            this.collection.once("add", function(model) {
+                self.pagination_model.set({'items_total' : model.get('items_total')});
+            });
+            
+            if(this.collection.models.length){
+                this.pagination_model.set({'items_total' : this.collection.models[0].get('items_total')});
+            }
+            
+            this.pagination_model.bind("change:currentPage", this.set_recipes_model, this);
+            this.pagination_model.bind("change:items_number", this.set_recipes_model, this);
+        },
+        
+        set_recipes_model : function() {
+            app.collections.recipes.reset();
+            this.options.recipe_params_model.set({"page" : this.pagination_model.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
+        },
+  
         
     });
             
