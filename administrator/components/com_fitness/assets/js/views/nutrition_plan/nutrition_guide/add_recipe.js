@@ -75,6 +75,7 @@ define([
         },
         
         loadItems : function() {
+            //console.log(this.collection.toJSON());
             var self = this;
             if(this.collection.length) {
                 _.each(this.collection.models, function(model) {

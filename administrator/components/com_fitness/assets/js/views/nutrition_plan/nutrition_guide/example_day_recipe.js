@@ -72,8 +72,9 @@ define([
             var self = this;
             this.model.save(null, {
                 success : function (model, response) {
-                    self.model.set({edit_mode : false});
-                    self.render();
+                    app.collections.example_day_recipes.reset();
+                    //self.model.set({edit_mode : false});
+                    //self.render();
                 },
                 error: function (model, response) {
                     alert(response.responseText);

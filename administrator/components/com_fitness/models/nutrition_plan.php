@@ -712,6 +712,8 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 case 'GET': // Get Item(s)
                     $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
                     $example_day_id = JRequest::getVar('example_day_id');
+                    $sort_by = JRequest::getVar('sort_by');
+                    $order_dirrection = JRequest::getVar('order_dirrection');
                     if(!$example_day_id) return;
                     
                     $query = "SELECT * FROM $table WHERE 1";
@@ -745,6 +747,14 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     
                     if($example_day_id) {
                         $query .= " AND example_day_id='$example_day_id'";
+                    }
+                    
+                    if($sort_by) {
+                        $query .= "  ORDER BY " . $sort_by;
+                    }
+                    
+                    if($order_dirrection) {
+                        $query .=  " " . $order_dirrection;
                     }
 
                     $data = FitnessHelper::customQuery($query, 1);

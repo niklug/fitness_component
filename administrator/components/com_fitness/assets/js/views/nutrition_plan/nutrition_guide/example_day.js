@@ -29,6 +29,7 @@ define([
             app.collections.example_day_recipes = new Example_day_recipes_collection();
             
             app.collections.example_day_recipes.bind("add", this.addItem, this);
+            app.collections.example_day_recipes.bind("reset", this.getExampleDayRecipes, this);
             
             this.getExampleDayRecipes();
             
@@ -52,11 +53,13 @@ define([
         },
 
         getExampleDayRecipes : function() {
+            $("#recipes_list_container").empty();
             var self = this;
             app.collections.example_day_recipes.fetch({
                 data: {
                     nutrition_plan_id : this.options.nutrition_plan_id,
-                    example_day_id : this.options.example_day_id
+                    example_day_id : this.options.example_day_id,
+                    sort_by : 'time'
                 },
                 success : function(collection, response) {
                     //console.log(collection.toJSON());
@@ -86,11 +89,9 @@ define([
         
         onClickAddRecipe : function(event) {
             var container = $(event.target);
-            
             if(!parseInt(app.collections.recipes.length)) {
                 this.get_database_recipes();
             }
-            
             container.parent().html(new Example_day_add_recipe_view({
                 example_day_id : this.options.example_day_id,
                 menu_id : this.options.menu_id,
