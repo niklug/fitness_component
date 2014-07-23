@@ -92,7 +92,7 @@ define([
             if(!parseInt(app.collections.recipes.length)) {
                 this.get_database_recipes();
             }
-            container.parent().html(new Example_day_add_recipe_view({
+            container.closest( ".add_recipe_container" ).html(new Example_day_add_recipe_view({
                 example_day_id : this.options.example_day_id,
                 menu_id : this.options.menu_id,
                 nutrition_plan_id : this.options.nutrition_plan_id,
