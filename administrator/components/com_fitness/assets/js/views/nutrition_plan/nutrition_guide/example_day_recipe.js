@@ -3,14 +3,18 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'collections/nutrition_plan/nutrition_guide/menu_descriptions',
         'models/nutrition_plan/nutrition_guide/example_day_recipe',
+        'views/programs/select_element',
 	'text!templates/nutrition_plan/nutrition_guide/example_day_recipe.html',
 ], function (
         $,
         _,
         Backbone, 
         app, 
+        Menu_descriptions_collection,
         Example_day_recipe_model,
+        Select_element_view,
         template 
     ) {
 
@@ -30,6 +34,9 @@ define([
             data.menu_plan = app.models.menu_plan.toJSON();
             $(this.el).html(this.template( data ));
             $(this.$el.find('.recipe_time')).timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+            
+            this.loadDescriptions();
+            
             return this;
         },
 
@@ -50,7 +57,7 @@ define([
             description_field.removeClass("red_style_border");
             time_field.removeClass("red_style_border");
             
-            var description = description_field.val();
+            var description = description_field.find(":selected").val();
             var time = time_field.val();
             var comments = comments_field.val();
             
@@ -138,6 +145,40 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        loadDescriptions : function() {
+            var collection = Menu_descriptions_collection;
+            var description_id = this.model.get('description');
+            
+            if(description_id) {
+                var model = collection.get(description_id);
+                
+                if(model) {
+                    var name = model.get('name');
+                    var image = model.get('image');
+
+                    if(image) {
+                        this.$el.find(".description_image").css('background-image', 'url(' + image + ')');
+                    }
+                    this.$el.find(".description_select").html(name);
+                }
+            }
+            
+            if(this.model.get('edit_mode')) {
+                new Select_element_view({
+                    model : this.model,
+                    el : this.$el.find(".description_select"),
+                    collection : collection,
+                    first_option_title : '-Select-',
+                    class_name : 'recipe_description',
+                    id_name : 'description',
+                    model_field : 'description',
+                    element_disabled :  ""
+                }).render();
+            }
+
+            
         },
         
         close :function() {
