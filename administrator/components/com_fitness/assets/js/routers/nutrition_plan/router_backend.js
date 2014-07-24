@@ -331,7 +331,7 @@ define([
 
                 this.load_menu_plan_content(menu_id, nutrition_plan_id);
                 
-                $('#example_day_wrapper').html(new Example_day_view({'example_day_id' : example_day_id, menu_id : menu_id,  nutrition_plan_id : nutrition_plan_id}).render().el);
+                $('#example_day_wrapper').html(new Example_day_view({model : app.models.menu_plan, 'example_day_id' : example_day_id, menu_id : menu_id,  nutrition_plan_id : nutrition_plan_id}).render().el);
             },
 
                

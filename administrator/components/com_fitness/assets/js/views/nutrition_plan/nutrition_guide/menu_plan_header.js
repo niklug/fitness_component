@@ -3,18 +3,23 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/status/index',
 	'text!templates/nutrition_plan/nutrition_guide/menu_plan_header.html'
-], function ( $, _, Backbone, app, template ) {
+], function ( $, _, Backbone, app, Status_view, template ) {
 
     var view = Backbone.View.extend({
         
         template:_.template(template),
 
         render: function(){
+            this.is_submitted();
             var data = this.model.toJSON();
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.html(template);
+            
+            this.connectStatus(this.model);
+            
             return this;
         },
 
@@ -24,6 +29,16 @@ define([
             "click #close_menu_plan" : "onClickClose",
             "click #submit_menu_plan" : "onClickSubmit",
         },
+        
+        is_submitted : function() {
+            var is_submitted = false;
+            var status = this.model.get('status');
+            if(parseInt(this.model.get('id')) && ((status == 2) || (status == 3) || (status == 5))) {
+                is_submitted = true;
+            }
+            this.model.set({is_submitted : is_submitted});
+        },
+        
         
         onClickSave : function(event) {
             event.preventDefault();
@@ -148,7 +163,15 @@ define([
                     alert(response.responseText);
                 }
             });
-        }
+        },
+        
+        connectStatus : function(model) {
+            app.options.menu_status_options.button_not_active = true;
+            $(this.el).find(".status_container").html(new Status_view({
+                model : model,
+                settings : app.options.menu_status_options
+            }).render().el);
+        },
     });
             
     return view;

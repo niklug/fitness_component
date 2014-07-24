@@ -1,10 +1,4 @@
 <div class="fitness_block_wrapper" style="">
-    <%
-    var submitted = false;
-    if(parseInt(id) && ((status == 2) || (status == 3) || (status == 5))) {
-        submitted = true;
-    }
-    %>
     <div class="internal_wrapper">
         <form>
             <table width="100%">
@@ -14,7 +8,7 @@
                     </td>
                     <td>
                         <%
-                          if(submitted == false) {
+                          if(is_submitted == false) {
                         %>
                             <input class="required dark_input_style" type="text"  name="name"  id="menu_name" value="<%= name %>" style="width:300px;">
                         <% } else { %>
@@ -22,24 +16,18 @@
                         <% } %>
                     </td>
                     
-                    <%
-                      if(submitted == true) {
-                    %>
-                    <td width="70">
-                        <span class="orange_text">STATUS</span>
+                    <td width="100">
+                        <span class="orange_text">STATUS:</span>
                     </td>
-                    <td width="120">
-                        <%= $.fitness_helper.setMenuPlanStatus(status) %>
-                    </td>
-                    <% } %>
                     
+                    <td class="status_container"></td>
                     
                     <td>
                         <span class="orange_text">MENU DATE:</span>
                     </td>
                     <td>
                         <%
-                          if(submitted == false) {
+                          if(is_submitted == false) {
                         %>
                             <input style="width:70px;" readonly type="text" name="start_date" id="start_date" value="<%= start_date %>"  class="required dark_input_style"/>
                         <% } else { %>
@@ -52,13 +40,13 @@
                         <a style="cursor: pointer;float:right;margin-right:10px;" id="close_menu_plan" onclick="javascript:void(0)">[CLOSE]</a>
                         
                         <%
-                          if(parseInt(id) && submitted == false) {
+                          if(parseInt(id) && is_submitted == false) {
                         %>
                             <a style="cursor: pointer;float:right;margin-right:10px;" id="delete_menu_plan" onclick="javascript:void(0)">[DELETE]</a>
                         <% } %>
                         
                         <%
-                          if(submitted == false) {
+                          if(is_submitted == false) {
                         %>
                         
                             <%
@@ -73,7 +61,7 @@
                             
                             
                         <%
-                          if(parseInt(id) && submitted == false) {
+                          if(parseInt(id) && is_submitted == false) {
                         %>
                             <a style="cursor: pointer;float:right;margin-right:10px;" id="submit_menu_plan" onclick="javascript:void(0)">[SUBMIT]</a>
                         <% } %>

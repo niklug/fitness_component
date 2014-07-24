@@ -25,6 +25,7 @@ define([
 
         render : function () {
             var data = { item : this.model.toJSON()};
+            data.menu_plan_model = this.options.menu_plan_model.toJSON();
             data.$ = $;
             data.menu_plan = app.models.menu_plan.toJSON();
             $(this.el).html(this.template( data ));
@@ -112,6 +113,10 @@ define([
             
             if(!description || !time) {
                 edit_mode = true;
+            }
+            
+            if(this.options.menu_plan_model.get('is_submitted')) {
+                edit_mode = false;
             }
 
             this.model.set({edit_mode : edit_mode});

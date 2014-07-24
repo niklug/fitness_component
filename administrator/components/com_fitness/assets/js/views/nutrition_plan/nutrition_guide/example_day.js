@@ -43,7 +43,8 @@ define([
         template : _.template(template),
 
         render: function(){
-            $(this.el).html(this.template({ }));
+            var data = {menu_plan_model : this.model.toJSON()};
+            $(this.el).html(this.template(data));
             return this;
         },
         
@@ -83,6 +84,7 @@ define([
                 example_day_id : this.options.example_day_id,
                 menu_id : this.options.menu_id,
                 model : model,
+                menu_plan_model : this.model,
                 collection : app.collections.example_day_recipes
             }).render().el);
         },
