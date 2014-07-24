@@ -19,7 +19,6 @@ define([
         initialize : function() {
             this.collection.bind("add", this.addItem, this);
             this.collection.bind("reset", this.clearItems, this);
-            this.status_obj = $.status(app.options.status_options);
         },
         
         template:_.template(template),

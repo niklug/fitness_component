@@ -77,6 +77,26 @@ $business_profile_id = $business_profile_id['data'];
         }
         
         options.status_options = status_options;
+        //
+        
+        var menu_status_options = {
+            'statuses' : {
+                '1' : {'label' : 'PENDING', 'class' : 'menu_plan_status_pending', 'email_alias' : ''}, 
+                '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : 'menu_plan_approved'},
+                '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : ''},
+                '4' : {'label' : 'IN PROGRESS', 'class' : 'status_inprogress', 'email_alias' : ''},
+                '5' : {'label' : 'SUBMITTED', 'class' : 'status_submitted', 'email_alias' : ''}, 
+                '6' : {'label' : 'RESUBMIT', 'class' : 'status_fail', 'email_alias' : ''}
+            },
+            statuses2 : {},
+              'show_send_email' : true,
+            setStatuses : function() {
+                return this.statuses;
+            },
+            view : 'MenuPlan',
+        }
+        
+        options.menu_status_options = menu_status_options;
         
         
         //requireJS options

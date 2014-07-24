@@ -17,7 +17,6 @@ require([
     'jquery.backbone_pagination',
     'jquery.nutritionPlan',
     'jquery.macronutrientTargets',
-    'jquery.status',
     'jquery.ajax_indicator',
     'jquery.cleditor'
     

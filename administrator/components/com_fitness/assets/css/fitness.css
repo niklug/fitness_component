@@ -545,7 +545,7 @@
 }
 
 
-#dialog_status_wrapper {
+#dialog_status_wrapper, .dialog_status_wrapper {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
     border-radius: 5px 5px 5px 5px;
@@ -559,7 +559,7 @@
 
 }
 
-#dialog_status_wrapper a{
+#dialog_status_wrapper a, .dialog_status_wrapper a{
     margin: 5px;
 }
 

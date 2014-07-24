@@ -12,54 +12,8 @@
                 <th>COPY</th>
                 <th style="text-align: center;">DELETE</th>
             </thead>
-            <tbody>
-            <% _.each(items, function(item){ %>
-                <tr class="">
-                    <td width="">
-                        <%= moment(new Date(Date.parse(item.start_date))).format("ddd, D MMM  YY")  %>
-                    </td>
-                    <td>
-                        <%= item.name %>
-                    </td>
-                    <td>
-                        <%= item.created_by_name %>
-                    </td>
-                    <td id="status_button_place_<%= item.id %>">
-                        <%= $.fitness_helper.setMenuPlanStatus(item.status, item.id) %>
-                    </td>
-                    <td>
-                        <% if(item.submit_date != '0000-00-00') { %>
-                                <%= moment(new Date(Date.parse(item.submit_date))).format("ddd, D MMM  YY") %>
-                        <% } else { %>
-                                <%= '-' %>
-                        <% } %>
-                    </td>
-                    <td>
-                        <%= item.assessed_by_name || '-' %>
-                    </td>
-                    <td class="center">
-                        <a class="preview " data-id="<%= item.id %>" onclick="javascript:void(0)" style="cursor: pointer;">
-                           
-                        </a>    
-                    </td>
-                    
-                    
-                    <td class="center">
-                         <% if(item.status != '1' && item.status != '') { %>
-                         <a title="Copy Menu Plan" style="cursor: pointer;display: inline-block" class="copy_menu_plan" onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="copy_icon"></span></a>
-                         <% } %>
-                    </td>
-                    
-    
-                    <td style="text-align: center;">
-                        <a class="delete " data-id="<%= item.id %>" onclick="javascript:void(0)" style="cursor: pointer;">
-                            [X]
-                        </a>    
-                    </td>
-                </tr>
-            <% 
-            })  
-            %>
+            <tbody id="items_container">
+            
             </tbody>
         </table>
     </div>
