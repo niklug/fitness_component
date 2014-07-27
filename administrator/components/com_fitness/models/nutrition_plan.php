@@ -714,50 +714,15 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $example_day_id = JRequest::getVar('example_day_id');
                     $sort_by = JRequest::getVar('sort_by');
                     $order_dirrection = JRequest::getVar('order_dirrection');
-                    if(!$example_day_id) return;
                     
-                    $query = "SELECT * FROM $table WHERE 1";
+                    $obj = new stdClass();
                     
-                    if($id) {
-                        $query .= " AND id='$id'";
-                    }
-                               
-                    $query = "SELECT r.*, a.*, r.number_serves AS number_serves, r.id AS id,";
-                    
-                    $query .= " (SELECT name FROM #__users WHERE id=a.created_by) author,";
-                    $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer,";
-                    
-                    $query .= " (SELECT ROUND(SUM(protein),2) FROM "    . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS protein,
-                       (SELECT ROUND(SUM(fats),2) FROM "                . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS fats,
-                       (SELECT ROUND(SUM(carbs),2) FROM "               . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS carbs,
-                       (SELECT ROUND(SUM(calories),2) FROM "            . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS calories,
-                       (SELECT ROUND(SUM(energy),2) FROM "              . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS energy,
-                       (SELECT ROUND(SUM(saturated_fat),2) FROM "       . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS saturated_fat,
-                       (SELECT ROUND(SUM(total_sugars),2) FROM "        . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS total_sugars,
-                       (SELECT ROUND(SUM(sodium),2) FROM "              . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS sodium";
-        
-                    $query .= " FROM $table AS r ";
-                    $query .= " LEFT JOIN  #__fitness_nutrition_recipes AS a ON a.id=r.original_recipe_id";
-                    
-                    $query .= " WHERE 1";
-                    
-                    if($nutrition_plan_id) {
-                        $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
-                    }
-                    
-                    if($example_day_id) {
-                        $query .= " AND example_day_id='$example_day_id'";
-                    }
-                    
-                    if($sort_by) {
-                        $query .= "  ORDER BY " . $sort_by;
-                    }
-                    
-                    if($order_dirrection) {
-                        $query .=  " " . $order_dirrection;
-                    }
+                    $obj->nutrition_plan_id = $nutrition_plan_id;
+                    $obj->example_day_id = $example_day_id;
+                    $obj->sort_by = $sort_by;
+                    $obj->order_dirrection = $order_dirrection;
 
-                    $data = FitnessHelper::customQuery($query, 1);
+                    $data = $this->getNutritionGuideRecipes($obj);
 
                     return $data;
                     break;
@@ -772,9 +737,6 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 case 'POST': // Create
 
                     $id = $helper->insertUpdateObj($model, $table);
-                    
-                    //var_dump($model);
-                    //die();
 
                     if($id) {
                         $ingredient_obj = new stdClass();
@@ -792,6 +754,17 @@ class FitnessModelnutrition_plan extends JModelAdmin
                         $ingredient_obj_encoded = json_encode($ingredient_obj);
 
                         $this->importRecipe($ingredient_obj_encoded, $ingredients_table);
+                        
+                        $obj = new stdClass();
+                        $obj->id = $id;
+                        $obj->nutrition_plan_id = $model->nutrition_plan_id;
+                        $obj->example_day_id = $model->example_day_id;
+                        $obj->sort_by = 'time';
+                        $obj->order_dirrection = 'ASC';
+
+                        $data = $this->getNutritionGuideRecipes($obj);
+                        
+                        return $data;
                     }
                     break;
                 case 'DELETE': // Delete Item
@@ -806,6 +779,71 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $model->id = $id;
             
             return $model;
+        }
+        
+        public function getNutritionGuideRecipes($data) {
+            $id = $data->id;
+            $nutrition_plan_id = $data->nutrition_plan_id;
+            $example_day_id = $data->example_day_id;;
+            $sort_by =$data->sort_by;
+            $order_dirrection = $data->order_dirrection;
+            
+            $table = '#__fitness_nutrition_plan_example_day_recipes';
+            $ingredients_table = '#__fitness_nutrition_plan_example_day_ingredients';
+            $ingredients_table_WHERE = 'recipe_id=r.id';
+            
+            if(!$example_day_id) return;
+
+            $query = "SELECT * FROM $table WHERE 1";
+
+            if($id) {
+                $query .= " AND id='$id'";
+            }
+
+            $query = "SELECT r.*, a.*, r.number_serves AS number_serves, r.id AS id,";
+
+            $query .= " (SELECT name FROM #__users WHERE id=a.created_by) author,";
+            $query .= " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer,";
+
+            $query .= " (SELECT ROUND(SUM(protein),2) FROM "    . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS protein,
+               (SELECT ROUND(SUM(fats),2) FROM "                . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS fats,
+               (SELECT ROUND(SUM(carbs),2) FROM "               . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS carbs,
+               (SELECT ROUND(SUM(calories),2) FROM "            . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS calories,
+               (SELECT ROUND(SUM(energy),2) FROM "              . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS energy,
+               (SELECT ROUND(SUM(saturated_fat),2) FROM "       . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS saturated_fat,
+               (SELECT ROUND(SUM(total_sugars),2) FROM "        . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS total_sugars,
+               (SELECT ROUND(SUM(sodium),2) FROM "              . $ingredients_table . "  WHERE " . $ingredients_table_WHERE . ") AS sodium";
+
+            $query .= " FROM $table AS r ";
+            $query .= " LEFT JOIN  #__fitness_nutrition_recipes AS a ON a.id=r.original_recipe_id";
+
+            $query .= " WHERE 1";
+
+            if($nutrition_plan_id) {
+                $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+            }
+
+            if($example_day_id) {
+                $query .= " AND example_day_id='$example_day_id'";
+            }
+
+            if($sort_by) {
+                $query .= "  ORDER BY " . $sort_by;
+            }
+
+            if($order_dirrection) {
+                $query .=  " " . $order_dirrection;
+            }
+            
+            $query_type = 1;
+            
+            if($id) {
+                $query_type = 2;
+            }
+
+            $data = FitnessHelper::customQuery($query, $query_type);
+            
+            return $data;
         }
         
         

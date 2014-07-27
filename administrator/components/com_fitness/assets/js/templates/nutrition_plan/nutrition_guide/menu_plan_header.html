@@ -16,11 +16,13 @@
                         <% } %>
                     </td>
                     
-                    <td width="100">
-                        <span class="orange_text">STATUS:</span>
-                    </td>
-                    
-                    <td class="status_container"></td>
+                    <% if(parseInt(id)) { %>
+                        <td width="100">
+                            <span class="orange_text">STATUS:</span>
+                        </td>
+
+                        <td class="status_container"></td>
+                    <% } %>
                     
                     <td>
                         <span class="orange_text">MENU DATE:</span>

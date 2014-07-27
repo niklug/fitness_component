@@ -41,15 +41,15 @@ define([
         },
 
         events: {
-            "click .save_close_recipe" : "onClickSaveClose",
-            "click .delete_recipe" : "onClickDeleteRecipe",
+            "click .save_close_recipe" : "saveItem",
+            "click .delete_recipe" : "deleteItem",
             "click .view_recipe" : "onClickViewRecipe",
             "click .edit_recipe" : "onClickEdit",
             "click .copy_recipe" : "onClickCopy",
         },
         
 
-        onClickSaveClose : function() {
+        saveItem : function() {
             var description_field = this.$el.find('.recipe_description');
             var time_field = this.$el.find('.recipe_time');
             var comments_field = this.$el.find('.recipe_comments');
@@ -80,9 +80,10 @@ define([
             var self = this;
             this.model.save(null, {
                 success : function (model, response) {
-                    app.collections.example_day_recipes.reset();
-                    //self.model.set({edit_mode : false});
-                    //self.render();
+                    self.model.set({edit_mode : false});
+                    self.render();
+                    app.collections.example_day_recipes.sort();
+                    app.views.example_day.loadItems();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -90,7 +91,7 @@ define([
             });
         }, 
 
-        onClickDeleteRecipe : function() {
+        deleteItem : function() {
             var self = this;
             this.model.destroy({
                 success: function (model) {
@@ -113,6 +114,10 @@ define([
         },
         
         edit_mode : function() {
+            if(this.model.get('edit_mode')) {
+                return true;
+            }
+            
             var edit_mode = false;
             
             var description = this.model.get('description');

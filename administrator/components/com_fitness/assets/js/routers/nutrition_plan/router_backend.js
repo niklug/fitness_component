@@ -283,6 +283,8 @@ define([
                 if(parseInt(id)) {
                     this.example_day(1, id, nutrition_plan_id);
                     $(".example_day_link").first().addClass("active");
+                } else {
+                    this.load_menu_plan_content(id, nutrition_plan_id);
                 }
             },
             
@@ -291,6 +293,7 @@ define([
                 if(parseInt(id)) {
                     app.models.menu_plan = app.collections.menu_plans.get(id);
                 }
+                
                 app.views.menu_plan_header = new Menu_plan_header_view({model : app.models.menu_plan, collection : app.collections.menu_plans, nutrition_plan_id : nutrition_plan_id});
                  
                 $("#nutrition_guide_header").html(app.views.menu_plan_header.render().el);
@@ -304,6 +307,7 @@ define([
             },
             
             example_day : function(example_day_id, menu_id, nutrition_plan_id) {
+                
                     if (app.collections.menu_plans
                         && app.collections.menu_plans.models[0]
                         && app.collections.menu_plans.models[0].get('nutrition_plan_id') == nutrition_plan_id
@@ -326,12 +330,15 @@ define([
             },
             
             load_example_day : function(example_day_id, menu_id, nutrition_plan_id) {
+                
                 this.loadMainMenu(nutrition_plan_id);
                 $("#nutrition_guide_link").addClass("active_link");
 
                 this.load_menu_plan_content(menu_id, nutrition_plan_id);
                 
-                $('#example_day_wrapper').html(new Example_day_view({model : app.models.menu_plan, 'example_day_id' : example_day_id, menu_id : menu_id,  nutrition_plan_id : nutrition_plan_id}).render().el);
+                app.views.example_day = new Example_day_view({model : app.models.menu_plan, 'example_day_id' : example_day_id, menu_id : menu_id,  nutrition_plan_id : nutrition_plan_id});
+                
+                $('#example_day_wrapper').html(app.views.example_day.render().el);
             },
 
                

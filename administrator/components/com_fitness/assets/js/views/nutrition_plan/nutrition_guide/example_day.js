@@ -38,6 +38,8 @@ define([
             app.collections.recipes = app.collections.recipes || new Recipes_collection(); 
 
             this.recipe_params_model.bind("change", this.get_database_recipes, this);
+            
+            app.views.example_day_recipe= {};
         },
         
         template : _.template(template),
@@ -51,6 +53,10 @@ define([
         events: {
             "click .add_recipe" : "onClickAddRecipe",
             "click .cancel_add_recipe": "onCancelViewRecipe",
+            
+            "click #edit_all": "onClickEditAll",
+            "click #save_all": "onClickSaveAll",
+            "click #delete_all": "onClickDeleteAll",
         },
 
         getExampleDayRecipes : function() {
@@ -71,22 +77,27 @@ define([
             });
         },
         
-        loadItems : function(collection) {
+        loadItems : function() {
+            $(this.el).find("#recipes_list_container").empty();
             var self = this;
-            _.each(collection.models, function(model) {
+            _.each(app.collections.example_day_recipes.models, function(model) {
                 self.addItem(model);
             });
         },
         
         addItem : function(model) {
-            $(this.el).find("#recipes_list_container").append(new Example_day_recipe_view({
+            var view = new Example_day_recipe_view({
                 nutrition_plan_id : this.options.nutrition_plan_id,
                 example_day_id : this.options.example_day_id,
                 menu_id : this.options.menu_id,
                 model : model,
                 menu_plan_model : this.model,
                 collection : app.collections.example_day_recipes
-            }).render().el);
+            });
+            
+            app.views.example_day_recipe[view.cid] = view;
+            
+            $(this.el).find("#recipes_list_container").append(view.render().el);
         },
         
         onClickAddRecipe : function(event) {
@@ -120,6 +131,27 @@ define([
                     alert(response.responseText);
                 }
             });  
+        },
+        
+        onClickEditAll : function() {
+            $(this.el).find("#recipes_list_container").empty();
+            var self = this;
+            _.each(app.collections.example_day_recipes.models, function(model) {
+                model.set({edit_mode  : true});
+                self.addItem(model);
+            });
+        },
+        
+        onClickSaveAll : function() {
+            _.each(app.views.example_day_recipe, function(view) {
+                view.saveItem();
+            })
+        },
+        
+        onClickDeleteAll : function() {
+            _.each(app.views.example_day_recipe, function(view) {
+                view.deleteItem();
+            })
         },
 
             

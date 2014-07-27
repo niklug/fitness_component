@@ -34,12 +34,10 @@ define([
         },
 
         onClickPreview : function(event) {
-            var id = $(event.target).attr('data-id');
+            var id = this.model.get('id');
             app.controller.navigate("!/menu_plan/" + id + "/" + this.options.nutrition_plan_id, true);
         },
         onClickDelete : function(event) {
-            var id = $(event.target).attr('data-id');
-            this.model = this.collection.get(id);
             this.model.destroy({
                 success : function() {
                     $(event.target).parent().parent().fadeOut();
@@ -58,8 +56,8 @@ define([
             }).render().el);
         },
         
-        onClickCopy : function(event) {
-            var id = $(event.target).attr('data-id');
+        onClickCopy : function() {
+            var id = this.model.get('id');
             app.controller.copy_menu_plan(id);
         }
     });
