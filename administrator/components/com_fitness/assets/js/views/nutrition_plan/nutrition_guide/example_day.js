@@ -57,6 +57,7 @@ define([
             "click #edit_all": "onClickEditAll",
             "click #save_all": "onClickSaveAll",
             "click #delete_all": "onClickDeleteAll",
+            "click #copy_all_button": "onClickCopyAll",
         },
 
         getExampleDayRecipes : function() {
@@ -78,6 +79,7 @@ define([
         },
         
         loadItems : function() {
+            app.views.example_day_recipe= {};
             $(this.el).find("#recipes_list_container").empty();
             var self = this;
             _.each(app.collections.example_day_recipes.models, function(model) {
@@ -134,6 +136,7 @@ define([
         },
         
         onClickEditAll : function() {
+            app.views.example_day_recipe= {};
             $(this.el).find("#recipes_list_container").empty();
             var self = this;
             _.each(app.collections.example_day_recipes.models, function(model) {
@@ -153,7 +156,29 @@ define([
                 view.deleteItem();
             })
         },
+        
+        onClickCopyAll : function() {
+            var example_day_id = $(this.el).find("#copy_all_to option:selected").val();
+            
+            if(!example_day_id) {
+                return;
+            }
 
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = '';
+            var task = 'copyExampleDay';
+            var table = '';
+
+            data.view = 'nutrition_plan';
+            data.nutrition_plan_id = this.options.nutrition_plan_id;
+            data.current_example_day_id = this.options.example_day_id;
+            data.example_day_id = example_day_id;
+            var self = this;
+            $.AjaxCall(data, url, view, task, table, function(output) {
+                console.log(output);
+            });
+        }
             
     });
             

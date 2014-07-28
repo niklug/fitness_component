@@ -194,6 +194,12 @@ class FitnessViewNutrition_plan extends JView {
         $model = $this -> getModel("nutrition_plan");
         echo json_encode($model->shopping_list_ingredients());
     }
+    
+    function copyExampleDay() {
+        $data_encoded = JRequest::getVar('data_encoded');
+        $model = $this -> getModel("nutrition_plan");
+        echo json_encode($model->copyExampleDay($data_encoded));
+    }
 
     
 }

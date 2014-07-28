@@ -273,6 +273,12 @@ class FitnessController extends JController
             $view -> getShoppingItemData();
 	}
         
+        function copyExampleDay() {
+            $view = $this -> getView('nutrition_plan', 'json');
+            $view->setModel($this->getModel('nutrition_plan'));
+            $view -> copyExampleDay();
+        }
+        
         function nutrition_plans() {
             $view = $this -> getView('nutrition_plans', 'json');
             $view->setModel($this->getModel('nutrition_plans'));
@@ -284,6 +290,8 @@ class FitnessController extends JController
             $view->setModel($this->getModel('nutrition_plans'));
             $view -> nutrition_plan_targets();
 	}
+        
+        
         
         // nutrition diary
         
@@ -548,5 +556,5 @@ class FitnessController extends JController
             $view -> copySessionPeriod();
 	}
         
-
+        
 }

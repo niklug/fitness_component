@@ -1005,4 +1005,73 @@ class FitnessModelnutrition_plan extends JModelAdmin
             return $html;
         }
         
+        public function copyExampleDay($data_encoded) {
+            $obj = json_decode($data_encoded);
+            $nutrition_plan_id = $obj->nutrition_plan_id;
+            $current_example_day_id = $obj->current_example_day_id;
+            $example_day_id = $obj->example_day_id;
+            
+            $status['success'] = 1;
+            
+            $db = & JFactory::getDBO();
+            //copy recipes
+            $query = "SELECT * FROM #__fitness_nutrition_plan_example_day_recipes";
+            $query .= " WHERE 1";
+            $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+            $query .= " AND example_day_id='$current_example_day_id'";
+            
+            try {
+                $recipes = FitnessHelper::customQuery($query, 1);
+            } catch (Exception $e) {
+                $status['success'] = 0;
+                $status['message'] = '"' . $e->getMessage() . '"';
+                return array( 'status' => $status);
+            }
+            
+            foreach ($recipes as $recipe) {
+                $original_recipe_id = $recipe->id;
+                $recipe->id = null; 
+                $recipe->example_day_id = $example_day_id;
+                $insert = $db->insertObject('#__fitness_nutrition_plan_example_day_recipes', $recipe, 'id');
+                if (!$insert) {
+                    throw new Exception($db->getErrorMsg());
+                    $status['success'] = false;
+                    $status['message'] = $db->stderr();
+                    return array( 'status' => $status);
+                }
+                
+                $inserted_recipe_id = $db->insertid();
+                //copy recipes ingredients
+                $query1 = "SELECT * FROM #__fitness_nutrition_plan_example_day_ingredients";
+                $query1 .= " WHERE 1";
+                $query1 .= " AND recipe_id='$original_recipe_id'";
+                
+                try {
+                    $ingredients = FitnessHelper::customQuery($query1, 1);
+                } catch (Exception $e) {
+                    $status['success'] = 0;
+                    $status['message'] = '"' . $e->getMessage() . '"';
+                    return array( 'status' => $status);
+                }
+                
+                foreach ($ingredients as $ingredient) {
+                    $ingredient->id = null; 
+                    $ingredient->recipe_id = $inserted_recipe_id;
+                    $insert = $db->insertObject('#__fitness_nutrition_plan_example_day_ingredients', $ingredient, 'id');
+                    if (!$insert) {
+                        throw new Exception($db->getErrorMsg());
+                        $status['success'] = false;
+                        $status['message'] = $db->stderr();
+                        return array( 'status' => $status);
+                    }
+                }
+                //end copy recipes ingredients
+            }
+            //end copy recipes
+     
+            $data = $items;
+    
+            return array('status' => $status, 'data' => $data);
+        }
+        
 }
