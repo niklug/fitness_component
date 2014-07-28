@@ -102,7 +102,10 @@ define([
         },
         
         onAddRecipeSuccess : function(model) {
-            $(this.el).closest(".add_recipe_container").html('<div class="add_recipe" style="color:#4f4f4f;padding:5px;width:100%;height:100%;">click to add new recipe</div>');
+            if(this.options.keep_open == false) {
+                $(this.el).closest(".add_recipe_container").html('<div class="add_recipe" style="color:#4f4f4f;padding:5px;width:100%;height:100%;">click to add new recipe</div>');
+            }
+            
             app.collections.example_day_recipes.add(model);
         }
 

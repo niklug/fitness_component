@@ -52,8 +52,8 @@ define([
         
         events: {
             "click .add_recipe" : "onClickAddRecipe",
+            "click #open_recipes" : "onClickOpenRecipes",
             "click .cancel_add_recipe": "onCancelViewRecipe",
-            
             "click #edit_all": "onClickEditAll",
             "click #save_all": "onClickSaveAll",
             "click #delete_all": "onClickDeleteAll",
@@ -112,7 +112,8 @@ define([
                 menu_id : this.options.menu_id,
                 nutrition_plan_id : this.options.nutrition_plan_id,
                 collection : app.collections.recipes,
-                recipe_params_model : this.recipe_params_model
+                recipe_params_model : this.recipe_params_model,
+                keep_open : false
             }).render().el);
         },
         
@@ -176,8 +177,23 @@ define([
             data.example_day_id = example_day_id;
             var self = this;
             $.AjaxCall(data, url, view, task, table, function(output) {
-                console.log(output);
+                //console.log(output);
             });
+        },
+        
+        onClickOpenRecipes : function() {
+            var container = $(this.el).find(".add_recipe");
+            if(!parseInt(app.collections.recipes.length)) {
+                this.get_database_recipes();
+            }
+            container.closest( ".add_recipe_container" ).html(new Example_day_add_recipe_view({
+                example_day_id : this.options.example_day_id,
+                menu_id : this.options.menu_id,
+                nutrition_plan_id : this.options.nutrition_plan_id,
+                collection : app.collections.recipes,
+                recipe_params_model : this.recipe_params_model,
+                keep_open : true
+            }).render().el);
         }
             
     });

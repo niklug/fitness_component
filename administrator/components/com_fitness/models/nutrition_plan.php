@@ -735,9 +735,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
                         }
                     break;
                 case 'POST': // Create
-
+                    
                     $id = $helper->insertUpdateObj($model, $table);
-
+                    
                     if($id) {
                         $ingredient_obj = new stdClass();
                         $ingredient_obj->nutrition_plan_id = $model->nutrition_plan_id;
@@ -764,6 +764,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
 
                         $data = $this->getNutritionGuideRecipes($obj);
                         
+                                    
                         return $data;
                     }
                     break;
@@ -818,6 +819,10 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $query .= " LEFT JOIN  #__fitness_nutrition_recipes AS a ON a.id=r.original_recipe_id";
 
             $query .= " WHERE 1";
+            
+            if($id) {
+                $query .= " AND r.id='$id'";
+            }
 
             if($nutrition_plan_id) {
                 $query .= " AND nutrition_plan_id='$nutrition_plan_id'";

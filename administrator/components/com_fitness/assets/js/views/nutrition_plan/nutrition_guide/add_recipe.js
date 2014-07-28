@@ -90,7 +90,8 @@ define([
                 example_day_id : this.options.example_day_id,
                 nutrition_plan_id : this.options.nutrition_plan_id,
                 collection : this.collection,
-                model : model
+                model : model,
+                keep_open : this.options.keep_open
             }); 
             this.container_el.append( app.views.recipe_item_view.render().el );
             
