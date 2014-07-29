@@ -48,10 +48,11 @@ define([
 
         render: function(){
             var data = {menu_plan_model : this.model.toJSON()};
+            data.example_day_id = this.options.example_day_id;
             $(this.el).html(this.template(data));
             
             this.connectDailyTargets();
-            
+            this.connectComments();
             return this;
         },
         
@@ -207,7 +208,23 @@ define([
                 model : this.model,
                 collection : app.collections.example_day_recipes
             }).render().el);
-        }
+        },
+        
+        connectComments : function() {
+            var comment_options = {
+                'item_id' : this.options.menu_id,
+                'fitness_administration_url' : app.options.ajax_call_url,
+                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
+                'db_table' : '#__fitness_nutrition_plan_example_day_comments',
+                'read_only' : false,
+                'anable_comment_email' : false,
+                'comment_method' : ''
+            }
+            var comments = $.comments(comment_options, comment_options.item_id, this.options.example_day_id);
+
+            var comments_html = comments.run();
+            $(this.el).find("#comments_wrapper").html(comments_html);
+        },
             
     });
             

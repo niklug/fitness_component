@@ -30,7 +30,7 @@ define([
         onChooseShoopingList:function (event) {
             $(".example_day_link").removeClass("active");
             $(event.target).addClass("active");
-            app.controller.navigate("!/shopping_list/" + this.options.nutrition_plan_id, true);
+            app.controller.navigate("!/shopping_list/" + this.options.nutrition_plan_id + "/" + this.model.get('id'), true);
         }
 
     });

@@ -16,6 +16,16 @@ define([
         
         initialize : function() {
             this.collection.bind("add", this.calculateTotals, this);
+            this.collection.bind("remove", this.calculateTotals, this);
+            this.collection.bind("reset", this.calculateTotals, this);
+            
+            this.model.set({
+                calories_amount : '0',
+                protein_amount : '0',
+                fats_amount : '0',
+                carbs_amount : '0',
+                total_sugars_amount : '0'
+            });
         },
         
         template : _.template(template),

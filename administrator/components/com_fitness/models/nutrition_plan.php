@@ -454,7 +454,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
             $ingredients = $db->loadObjectList();
             
             $coef = $obj->number_serves / $obj->number_serves_recipe;
-            
+
 
             foreach ($ingredients as $ingredient) {
                 $data = new stdClass();
@@ -480,6 +480,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 $data->saturated_fat = $ingredient->saturated_fat * $coef;
                 $data->total_sugars = $ingredient->total_sugars * $coef;
                 $data->sodium = $ingredient->sodium * $coef;
+
                 
                 $insert = $db->insertObject($table, $data, 'id');
                 if (!$insert) {

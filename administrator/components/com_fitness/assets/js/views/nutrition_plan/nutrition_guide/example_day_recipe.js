@@ -141,7 +141,7 @@ define([
         
         onClickCopy : function() {
             var model = new Example_day_recipe_model(this.model.toJSON());
-            model.set({id : null, menu_id : this.options.menu_id});
+            model.set({id : null, menu_id : this.options.menu_id, number_serves_new : '1'});
             var self = this;
             app.collections.example_day_recipes.create(model, {
                 success : function (model, response) {
