@@ -711,6 +711,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
             switch ($method) {
                 case 'GET': // Get Item(s)
                     $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
+                    $menu_id = JRequest::getVar('menu_id');
                     $example_day_id = JRequest::getVar('example_day_id');
                     $sort_by = JRequest::getVar('sort_by');
                     $order_dirrection = JRequest::getVar('order_dirrection');
@@ -718,6 +719,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $obj = new stdClass();
                     
                     $obj->nutrition_plan_id = $nutrition_plan_id;
+                    $obj->menu_id = $menu_id;
                     $obj->example_day_id = $example_day_id;
                     $obj->sort_by = $sort_by;
                     $obj->order_dirrection = $order_dirrection;
@@ -758,6 +760,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                         $obj = new stdClass();
                         $obj->id = $id;
                         $obj->nutrition_plan_id = $model->nutrition_plan_id;
+                        $obj->menu_id = $model->menu_id;
                         $obj->example_day_id = $model->example_day_id;
                         $obj->sort_by = 'time';
                         $obj->order_dirrection = 'ASC';
@@ -785,6 +788,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
         public function getNutritionGuideRecipes($data) {
             $id = $data->id;
             $nutrition_plan_id = $data->nutrition_plan_id;
+            $menu_id = $data->menu_id;
             $example_day_id = $data->example_day_id;;
             $sort_by =$data->sort_by;
             $order_dirrection = $data->order_dirrection;
@@ -826,6 +830,10 @@ class FitnessModelnutrition_plan extends JModelAdmin
 
             if($nutrition_plan_id) {
                 $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+            }
+            
+            if($menu_id) {
+                $query .= " AND menu_id='$menu_id'";
             }
 
             if($example_day_id) {

@@ -1204,7 +1204,7 @@ CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_example_day_meals` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
-CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_recipes` (
+CREATE TABLE IF NOT EXISTS `#__fitness_nutrition_plan_example_day_recipes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `original_recipe_id` int(255) unsigned NOT NULL,
   `meal_id` int(10) unsigned NOT NULL,

@@ -3,9 +3,18 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'models/nutrition_plan/target',
         'views/status/index',
 	'text!templates/nutrition_plan/nutrition_guide/menu_plan_header.html'
-], function ( $, _, Backbone, app, Status_view, template ) {
+], function ( 
+        $,
+        _, 
+        Backbone,
+        app,
+        Target_model,
+        Status_view,
+        template
+    ) {
 
     var view = Backbone.View.extend({
         
@@ -77,24 +86,19 @@ define([
             //
             var self = this;
             if (this.model.isNew()) {
-                this.collection.create(this.model, {
-                    wait: true,
-                    success: function (model, response) {
-                        var id = model.get('id');
-                        app.controller.navigate("!/menu_plan/" + id + "/" + self.options.nutrition_plan_id, true);
-                        if(app.options.is_trainer) {
-                            self.send_status_email(model.get('id'), 'menu_plan_pending');
-                        }
-                        
-                        if(app.options.is_client) {
-                            self.send_status_email(model.get('id'), 'menu_plan_inprogress');
-                        }
-                        
+                app.models.target = new Target_model({nutrition_plan_id : this.options.nutrition_plan_id});
+                var self = this;
+                app.models.target.fetch({
+                    data : {nutrition_plan_id : this.options.nutrition_plan_id},
+                    success : function (model, response) {
+                        //console.log(model);
+                        self.createItem(model);
                     },
-                    error: function (model, response) {
+                    error : function (collection, response) {
                         alert(response.responseText);
                     }
-                })
+                });
+
             } else {
                 this.model.save(null, {
                     success: function (model, response) {
@@ -106,8 +110,35 @@ define([
                     }
                 });
             }
+        },
+        
+        createItem : function(model) {
+            this.model.set({
+                protein : model.get('protein'),
+                fats : model.get('fats'),
+                carbs : model.get('carbs'),
+                calories : model.get('calories'),
+            });
             
-            
+            var self = this;
+            this.collection.create(this.model, {
+                wait: true,
+                success: function (model, response) {
+                    var id = model.get('id');
+                    app.controller.navigate("!/menu_plan/" + id + "/" + self.options.nutrition_plan_id, true);
+                    if(app.options.is_trainer) {
+                        self.send_status_email(model.get('id'), 'menu_plan_pending');
+                    }
+
+                    if(app.options.is_client) {
+                        self.send_status_email(model.get('id'), 'menu_plan_inprogress');
+                    }
+
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            })
         },
         
         send_status_email : function(id, method) {

@@ -8,6 +8,7 @@ define([
         'models/nutrition_plan/nutrition_guide/get_recipe_params',
         'views/nutrition_plan/nutrition_guide/example_day_recipe',
         'views/nutrition_plan/nutrition_guide/add_recipe',
+        'views/nutrition_plan/nutrition_guide/daily_targets',
 	'text!templates/nutrition_plan/nutrition_guide/example_day.html',
         'jquery.timepicker'
 ], function ( 
@@ -20,6 +21,7 @@ define([
         Get_recipe_params_model,
         Example_day_recipe_view,
         Example_day_add_recipe_view,
+        Daily_targets_view,
         template
     ) {
 
@@ -47,6 +49,9 @@ define([
         render: function(){
             var data = {menu_plan_model : this.model.toJSON()};
             $(this.el).html(this.template(data));
+            
+            this.connectDailyTargets();
+            
             return this;
         },
         
@@ -66,6 +71,7 @@ define([
             app.collections.example_day_recipes.fetch({
                 data: {
                     nutrition_plan_id : this.options.nutrition_plan_id,
+                    menu_id : this.options.menu_id,
                     example_day_id : this.options.example_day_id,
                     sort_by : 'time'
                 },
@@ -193,6 +199,13 @@ define([
                 collection : app.collections.recipes,
                 recipe_params_model : this.recipe_params_model,
                 keep_open : true
+            }).render().el);
+        },
+        
+        connectDailyTargets : function() {
+            $(this.el).find("#daily_targets_wrapper").html(new Daily_targets_view({
+                model : this.model,
+                collection : app.collections.example_day_recipes
             }).render().el);
         }
             

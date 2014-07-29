@@ -11,7 +11,7 @@
 <td class="status_container"></td>
 
 <td>
-    <% if(item.submit_date != '0000-00-00') { %>
+    <% if(typeof item.submit_date !== "undefined"  && item.submit_date != '0000-00-00') { %>
             <%= moment(new Date(Date.parse(item.submit_date))).format("ddd, D MMM  YY") %>
     <% } else { %>
             <%= '-' %>

@@ -24,7 +24,7 @@ define([
 
         initialize : function() {
             _.bindAll(this, 'render',  'onClickViewRecipe', 'onClickEnterServes');
-            app.models.original_recipe = new Add_original_recipe_model();
+            
         },
         render:function () {
             var data = this.model.toJSON();
@@ -61,6 +61,7 @@ define([
         },
 
         onClickEnterServes : function() {
+            app.models.original_recipe = new Add_original_recipe_model();
             var number_serves = parseInt(this.$el.find(".number_serves").val());
             this.$el.find(".number_serves").removeClass("red_style_border");
             if(!number_serves) {
