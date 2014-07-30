@@ -12,8 +12,10 @@ $business_profile_id = $helper->getBusinessProfileId($user_id);
 $business_profile_id = $business_profile_id['data'];
 
 ?>
-
-<div id="header_wrapper"></div>
+<div id="graph_container"></div>
+<div class="clr"></div>
+<br/>
+<div id="header_wrapper" ></div>
 <div class="clr"></div>
 <div id="nutrition_guide_header"></div>
 <div class="clr"></div>
@@ -83,10 +85,10 @@ $business_profile_id = $business_profile_id['data'];
             'statuses' : {
                 '1' : {'label' : 'PENDING', 'class' : 'menu_plan_status_pending', 'email_alias' : ''}, 
                 '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : 'menu_plan_approved'},
-                '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : ''},
-                '4' : {'label' : 'IN PROGRESS', 'class' : 'status_inprogress', 'email_alias' : ''},
+                '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : 'menu_plan_notapproved'},
+                '4' : {'label' : 'IN PROGRESS', 'class' : 'status_inprogress', 'email_alias' : 'menu_plan_inprogress'},
                 '5' : {'label' : 'SUBMITTED', 'class' : 'status_submitted', 'email_alias' : ''}, 
-                '6' : {'label' : 'RESUBMIT', 'class' : 'status_fail', 'email_alias' : ''}
+                '6' : {'label' : 'RESUBMIT', 'class' : 'status_fail', 'email_alias' : 'menu_plan_resubmit'}
             },
             statuses2 : {},
               'show_send_email' : true,

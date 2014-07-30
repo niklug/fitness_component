@@ -3,9 +3,6 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/exercise_library/business_profiles',
-        'collections/programs/trainers',
-        'collections/programs/trainer_clients',
         'views/programs/select_element',
 	'text!templates/nutrition_plan/backend/search_header.html'
 
@@ -14,9 +11,6 @@ define([
         _,
         Backbone,
         app,
-        Business_profiles_collection, 
-        Trainers_collection,
-        Trainer_clients_collection,
         Select_element_view,
         template
     ) {
@@ -24,35 +18,7 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
-            this.business_profile_id = app.options.business_profile_id || localStorage.getItem('business_profile_id');
-            
-            if(app.collections.business_profiles && app.collections.trainers) {
-                this.render();
-                return;
-            }
-            
-            app.collections.business_profiles = new Business_profiles_collection();
-            app.collections.trainers = new Trainers_collection();
-            
-            var self = this;
-            
-            $.when (
-                app.collections.business_profiles.fetch({
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                }),
-
-                app.collections.trainers.fetch({
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                })
-            ).then (function(response) {
-                self.render();
-            })
-
-
+            this.render();
         },
 
         
@@ -72,9 +38,6 @@ define([
         },
         
         events : {
-            "change #business_profile_id " : "onChangeBusinessName",
-            "change #trainer_id" : "onChangeTrainer",
-            "change #client_id" : "onChangeClient",
             "click #search" : "search",
             "click #clear_all" : "clearAll",
             "click #publish_selected" : "onClickPublishAll",
@@ -85,135 +48,14 @@ define([
             var self = this;
             $(this.el).show('0', function() {
                 self.$el.find("#active_start_from, #active_start_to, #active_finish_from, #active_finish_to").datepicker({ dateFormat: "yy-mm-dd"});
-                
-                self.connectBusinessSelect();
-                    
-                var business_profile_id = self.business_profile_id;
-                if(business_profile_id) {
-                    self.loadTrainersSelect(business_profile_id);
-                }
-
-                var trainer_id = $(self.el).find("#trainer_id").val();
-                if(trainer_id) {
-                    self.loadClientsSelect(trainer_id);
-                }
-                
-                //self.connectActivePlanFilter();
-                
+               
                 self.connectForceActiveFilter();
                 
                 self.connectPublishedFilter();
                 
             });
         },
-        
-        connectBusinessSelect : function() {
-            var business_name_collection = new Backbone.Collection;
-            var element_disabled = '';
-            
-            if(app.options.is_trainer) {
-                business_name_collection.add(app.collections.business_profiles.where({id : this.business_profile_id}));
-                element_disabled = 'disabled';
-            }
-            
-            if(app.options.is_superuser) {
-                business_name_collection = app.collections.business_profiles;
-            }
-            new Select_element_view({
-                model : new Backbone.Model({business_profile_id : this.business_profile_id}),
-                el : $(this.el).find("#business_name_select"),
-                collection : business_name_collection,
-                first_option_title : '- Business Profile-',
-                id_name : 'business_profile_id',
-                model_field : 'business_profile_id',
-                element_disabled : element_disabled
-
-            }).render();
-        },
-        
-        onChangeBusinessName : function(event) {
-            var business_profile_id = $(event.target).val();
-            
-            this.business_profile_id = business_profile_id;
-            
-            localStorage.setItem('business_profile_id', business_profile_id);
-   
-            this.loadTrainersSelect(business_profile_id);
-            $("#client_id").val('');
-        },
-        
-        loadTrainersSelect : function(business_profile_id) {
-            var trainers_collection = new Backbone.Collection;
-            
-            trainers_collection.add(app.collections.trainers.where({business_profile_id : business_profile_id}));
-            
-            //console.log(trainers_collection);
-            
-            var element_disabled = '';
-            
-            //allow select only for trainer administrator
-            
-            if(app.options.is_simple_trainer) {
-                element_disabled = 'disabled';
-            }
-            
-            var trainer_id = localStorage.getItem('trainer_id');
-            
-            if(app.options.is_trainer && !app.options.is_trainer_administrator) {
-                trainer_id = app.options.user_id 
-                this.model.set({trainer_id : trainer_id});
-            }
-            
-            new Select_element_view({
-                model : new Backbone.Model({trainer_id : trainer_id}),
-                el : $(this.el).find("#trainer_select"),
-                collection : trainers_collection,
-                first_option_title : '-Trainer-',
-                class_name : '',
-                id_name : 'trainer_id',
-                model_field : 'trainer_id',
-                element_disabled : element_disabled
-            }).render();
-        },
-        
-        onChangeTrainer : function(event) {
-            var trainer_id = $(event.target).val();
-            
-            this.trainer_id = trainer_id;
-            
-            localStorage.setItem('trainer_id', trainer_id);
-            
-            this.loadClientsSelect(trainer_id);
-        },
-        
-        loadClientsSelect : function(trainer_id) {
-            var self = this;
-            var trainer_clients_collection = new Trainer_clients_collection();
-            trainer_clients_collection.fetch({
-                data : {trainer_id : trainer_id},
-                success : function (collection, response) {
-                    new Select_element_view({
-                        model : new Backbone.Model({client_id : localStorage.getItem('client_id')}),
-                        el : $(self.el).find("#client_select"),
-                        collection : collection,
-                        value_field : 'client_id',
-                        first_option_title : '-Client-',
-                        class_name : '',
-                        model_field : 'client_id',
-                        id_name : 'client_id',
-                    }).render();
-                },
-                error : function (collection, response) {
-                    alert(response.responseText);
-                }
-            })
-        },
-        
-        onChangeClient : function(event) {
-            var client_id = $(event.target).val();
-            localStorage.setItem('client_id', client_id);
-        },
-        
+                
         search : function() {
             var active_start_from = this.$el.find("#active_start_from").val();
             var active_start_to = this.$el.find("#active_start_to").val();
@@ -223,6 +65,7 @@ define([
             var trainer_id = this.$el.find("#trainer_id").val();
             var client_id = this.$el.find("#client_id").val();
             var force_active = this.$el.find("#force_active_select").val();
+            var client_name = this.$el.find("#client_name").val();
 
             this.model.set({
                 active_start_from : active_start_from,
@@ -232,7 +75,8 @@ define([
                 business_profile_id : business_profile_id,
                 trainer_id : trainer_id,
                 client_id : client_id,
-                force_active : force_active
+                force_active : force_active,
+                client_name : client_name
             });
         },
         
@@ -249,7 +93,8 @@ define([
                     trainer_id : '',
                     client_id : '',
                     status : '',
-                    force_active : ''
+                    force_active : '',
+                    client_name : ''
                 }
             );
         },

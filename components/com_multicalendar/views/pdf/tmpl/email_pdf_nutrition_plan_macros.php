@@ -131,27 +131,27 @@
                 <h3 style="margin: 0; padding: 0;">MACRONUTRIENT DETAILS</h3>
                 <hr style="width:100%;">
                     
-                <h4>ALLOWED PROTEINS</h4>
+                <h4>PROTEINS</h4>
                 <div style="width: 790px;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px;padding:5px;">
                     <?php echo $data->item->allowed_proteins; ?>
                 </div>
                 
-                <h4>ALLOWED FATS</h4>
+                <h4>FATS</h4>
                 <div style="width: 790px;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px;padding:5px;">
                     <?php echo $data->item->allowed_fats; ?>
                 </div>
                 
-                <h4>ALLOWED CARBOHYDRATES</h4>
+                <h4>CARBOHYDRATES</h4>
                 <div style="width: 790px;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px;padding:5px;">
                     <?php echo $data->item->allowed_carbs; ?>
                 </div>
                 
-                <h4>ALLOWED LIQUIDS</h4>
+                <h4>LIQUIDS</h4>
                 <div style="width: 790px;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px;padding:5px;">
                     <?php echo $data->item->allowed_liquids; ?>
                 </div>
                 
-                <h4>OTHER RECOMMENDATIONS / INSTRUCTIONS</h4>
+                <h4>OTHER RECOMMENDATIONS</h4>
                 <div style="width: 790px;background-color: #ffffff;border: 2px solid #000000; border-radius: 10px;padding:5px;">
                     <?php echo $data->item->other_recommendations; ?>
                 </div>

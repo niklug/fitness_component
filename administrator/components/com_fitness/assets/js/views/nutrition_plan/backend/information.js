@@ -31,7 +31,7 @@ define([
         },
         
         connectEditor : function(target) {
-            $(this.el).find(target).cleditor({width:'100%', height:150, useCSS:true})[0];
+            $(this.el).find(target).cleditor({width:'100%', height:500, useCSS:true})[0];
         },
         
         loadFormMenu : function() {

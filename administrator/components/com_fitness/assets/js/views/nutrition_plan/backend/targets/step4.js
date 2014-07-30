@@ -176,7 +176,7 @@ define([
         },
         
         setFatCalories_iifym : function() {
-            var value = (this.setFatGrams_iifym() * 4).toFixed(0);
+            var value = (this.setFatGrams_iifym() * 9).toFixed(0);
             
             $(this.el).find("#step4_fat_calories").val(value);
             
@@ -257,9 +257,9 @@ define([
         },
         
         setWater : function() {
-            var climate_variable = this.model.get('climate');
-            var activity_level = this.model.get('exercise_level_water');
-            var body_weight = this.model.get('weight');
+            var climate_variable = parseFloat(this.model.get('climate'));
+            var activity_level = parseFloat(this.model.get('exercise_level_water'));
+            var body_weight = parseFloat(this.model.get('weight'));
             
             var water = (((body_weight * 0.67) + (body_weight * activity_level)) / 0.029) + climate_variable;
             

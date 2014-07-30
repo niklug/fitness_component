@@ -1288,3 +1288,8 @@ width: 20px;
     padding-right: 17px;
 }
 
+.page_container_width {
+    min-width:960px;
+    max-width:1000px;
+}
+

@@ -133,34 +133,34 @@
         <field name="allowed_proteins" type="editor" buttons="true"
         class="inputbox" height="150"
         filter="safehtml"
-        label="ALLOWED PROTEINS"
+        label="PROTEINS"
         description=""  /> 
         
                 
         <field name="allowed_fats" type="editor" buttons="true"
         class="inputbox" height="150"
         filter="safehtml"
-        label="ALLOWED FATS"
+        label="FATS"
         description=""  /> 
         
                 
         <field name="allowed_carbs" type="editor" buttons="true"
         class="inputbox" height="150"
         filter="safehtml"
-        label="ALLOWED CARBOHYDRATES"
+        label="CARBOHYDRATES"
         description=""  /> 
         
                 
         <field name="allowed_liquids" type="editor" buttons="true"
         class="inputbox" height="150"
         filter="safehtml"
-        label="ALLOWED LIQUIDS"
+        label="LIQUIDS"
         description=""  /> 
         
         <field name="other_recommendations" type="editor" buttons="true"
         class="inputbox" height="150"
         filter="safehtml"
-        label="OTHER RECOMMENDATIONS / INSTRUCTIONS"
+        label="OTHER RECOMMENDATIONS"
         description=""  /> 
         
 

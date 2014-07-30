@@ -29,7 +29,8 @@ define([
         'views/nutrition_plan/backend/search_header',
         'views/nutrition_plan/backend/overview_container',
         'views/nutrition_plan/backend/menus/main_menu',
-        'views/nutrition_plan/backend/targets/targets_container'
+        'views/nutrition_plan/backend/targets/targets_container',
+        'views/graph/graph',
 
 ], function (
         $,
@@ -62,7 +63,8 @@ define([
         Search_header_view,
         Overview_container_view,
         Main_menu_view,
-        Targets_container_view
+        Targets_container_view,
+        Graph_view
     ) {
 
 
@@ -115,7 +117,7 @@ define([
             
             onClientChange : function() {
                 var self = this;
-                $("#client_id").die().live('change', function() {
+                $("#graph_client_id").die().live('change', function() {
                     var client_id = $(this).val();
                     app.options.client_id = client_id;
                     localStorage.setItem('client_id', client_id);
@@ -146,6 +148,8 @@ define([
             },
 
             list_actions : function () {
+                this.connectGraph();
+                
                 $("#header_wrapper").html(new Search_header_view({model : app.models.request_params, collection : app.collections.items}).render().el);
 
                 $("#main_container").html(new List_view({model : app.models.request_params, collection : app.collections.items}).render().el);
@@ -163,6 +167,7 @@ define([
             },
             
             overview : function(id) {
+                this.common_actions();
                 $(".plan_menu_link").removeClass("active_link");
                 
                 var model = app.collections.items.get(id);
@@ -567,16 +572,33 @@ define([
             },
             
             common_actions : function() {
-                $("#header_wrapper, #nutrition_guide_header").empty();
+                $("#header_wrapper, #nutrition_guide_header, #graph_container").empty();
                 $(".block").hide();
                 $(".plan_menu_link").removeClass("active_link");
             },
             
             
-        
-        
-
-
+            connectGraph : function() {
+                this.graph = new Graph_view({
+                    el : "#graph_container",
+                    model : app.models.request_params,
+                    show : {
+                        primary_goals : true,
+                        mini_goals : true,
+                        personal_training : false,
+                        semi_private : false,
+                        resistance_workout : false,
+                        cardio_workout : false,
+                        assessment : false,
+                        current_time : true,
+                        client_select : true,
+                        choices : true
+                    },
+                    style : '',
+                    reloads : false,
+                    list_type : ''
+                });
+            },
         });
 
     return Controller;

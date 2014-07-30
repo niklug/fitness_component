@@ -1,4 +1,4 @@
-<div class="fitness_block_wrapper" style="">
+<div class="fitness_block_wrapper page_container_width"  style="padding-right:10px;border:1px solid #000">
     <div class="internal_wrapper">
         <form>
             <table width="100%">
@@ -10,14 +10,14 @@
                         <%
                           if(is_submitted == false) {
                         %>
-                            <input class="required dark_input_style" type="text"  name="name"  id="menu_name" value="<%= name %>" style="width:300px;">
+                            <input class="required dark_input_style" type="text"  name="name"  id="menu_name" value="<%= name %>" style="width:250px;">
                         <% } else { %>
                         <b><%= name.toUpperCase() %></b>
                         <% } %>
                     </td>
                     
                     <% if(parseInt(id)) { %>
-                        <td width="100">
+                        <td width="50">
                             <span class="orange_text">STATUS:</span>
                         </td>
 
@@ -31,7 +31,7 @@
                         <%
                           if(is_submitted == false) {
                         %>
-                            <input style="width:70px;" readonly type="text" name="start_date" id="start_date" value="<%= start_date %>"  class="required dark_input_style"/>
+                            <input style="width:80px;" readonly type="text" name="start_date" id="start_date" value="<%= start_date %>"  class="required dark_input_style"/>
                         <% } else { %>
                             <%= moment(new Date(Date.parse(start_date))).format("ddd, D MMM  YY")  %>
                         <% } %>
