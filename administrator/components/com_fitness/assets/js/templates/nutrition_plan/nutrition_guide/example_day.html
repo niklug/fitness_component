@@ -2,6 +2,7 @@
     
 </div>
 
+<% if(menu_plan_model.status != '2' && menu_plan_model.status != '3') { %>
 <div id="edit_bar" style="background-color:#fff;border:1px solid #000;padding: 10px">
     <a style="margin-left: 5px;" id="edit_all" href="javascript:void(0)" >[EDIT ALL]</a>
     <a style="margin-left: 5px;" id="save_all" href="javascript:void(0)" >[SAVE ALL]</a>
@@ -25,6 +26,8 @@
 
 <div class="clr"></div>
 </br>
+<% } %>
+
 
 <% if(!menu_plan_model.is_submitted) { %>
 <div style="border:1px #ccc dashed;text-align: center;margin-bottom: 10px;

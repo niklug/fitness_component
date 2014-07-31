@@ -39,6 +39,7 @@ define([
         
         events : {
             "click #search" : "search",
+            'keypress input[type=text]': 'filterOnEnter',
             "click #clear_all" : "clearAll",
             "click #publish_selected" : "onClickPublishAll",
             "click #unpublish_selected" : "onClickUnpublishAll",
@@ -55,7 +56,13 @@ define([
                 
             });
         },
-                
+        
+        filterOnEnter : function(event) { 
+          if(event.which === 13) {
+            this.search();
+          }
+        },
+                        
         search : function() {
             var active_start_from = this.$el.find("#active_start_from").val();
             var active_start_to = this.$el.find("#active_start_to").val();
@@ -81,7 +88,7 @@ define([
         },
         
         clearAll : function(){
-            $(this.el).find("#business_profile_id, #trainer_id, #client_id, #state_select, #force_active_select").val('');
+            $(this.el).find("#business_profile_id, #trainer_id, #client_id, #state_select, #force_active_select, #client_name").val('');
             $(this.el).find("#active_start_from, #active_start_to, #active_finish_from, #active_finish_to").val('');
             this.model.set(
                 {

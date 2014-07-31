@@ -141,6 +141,7 @@ define([
             },
 
             list_view : function() {
+                this.common_actions();
                 //show all
                 app.models.request_params.set({page : 1,  state : '*', uid : app.getUniqueId()});
 

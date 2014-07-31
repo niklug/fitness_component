@@ -495,8 +495,6 @@ class FitnessModelnutrition_plans extends JModelList {
 
                 if($client_ids) {
                     $query .= " AND a.client_id IN ($client_ids)";
-                } else {
-                    $query .= " AND a.client_id='$client_ids'";
                 }
             }
 
@@ -595,8 +593,6 @@ class FitnessModelnutrition_plans extends JModelList {
 
             if($client_ids) {
                 $query .= " AND a.client_id IN ($client_ids)";
-            } else {
-                $query .= " AND a.client_id='$client_ids'";
             }
         }
         

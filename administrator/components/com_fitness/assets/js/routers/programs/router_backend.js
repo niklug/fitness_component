@@ -68,7 +68,11 @@ define([
             }
             //
             
-            app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id});
+            this.onClientChange();
+
+            app.options.client_id = localStorage.getItem('client_id');
+            
+            app.models.request_params = new Request_params_items_model({business_profile_id : business_profile_id, client_id : app.options.client_id});
             app.models.request_params.bind("change", this.get_items, this);
         },
 
@@ -82,8 +86,19 @@ define([
             if(this.routesHit > 1) {
               window.history.back();
             } else {
-              this.navigate('', {trigger:true, replace:true});t
+              this.navigate('', {trigger:true, replace:true});
             }
+        },
+        
+        onClientChange : function() {
+            var self = this;
+            $("#graph_client_id").die().live('change', function() {
+                var client_id = $(this).val();
+                app.options.client_id = client_id;
+                localStorage.setItem('client_id', client_id);
+                app.models.request_params.set({client_id : client_id});
+                self.navigate("!/list_view", true);
+            });
         },
 
         form_view : function(id) {
