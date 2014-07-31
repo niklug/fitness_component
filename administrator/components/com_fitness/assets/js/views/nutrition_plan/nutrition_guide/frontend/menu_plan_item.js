@@ -5,7 +5,7 @@ define([
         'app',
         'models/nutrition_plan/nutrition_guide/menu_plan',
         'views/status/index',
-	'text!templates/nutrition_plan/nutrition_guide/backend/menu_plan_item.html'
+	'text!templates/nutrition_plan/nutrition_guide/frontend/menu_plan_item.html'
 ], function (
         $,
         _,
@@ -31,7 +31,6 @@ define([
 
         events: {
             "click .preview" : "onClickPreview",
-            "click .delete" : "onClickDelete",
             "click .copy_menu_plan" : "onClickCopy",
         },
 
@@ -39,19 +38,9 @@ define([
             var id = this.model.get('id');
             app.controller.navigate("!/menu_plan/" + id + "/" + this.options.nutrition_plan_id, true);
         },
-        onClickDelete : function(event) {
-            this.model.destroy({
-                success : function() {
-                    $(event.target).parent().parent().fadeOut();
-                },
-                error : function(response) {
-                    alert(response.responseText);
-                }
-            });
-        },
         
         connectStatus : function(model) {
-            app.options.menu_status_options.button_not_active = false;
+            app.options.menu_status_options.button_not_active = true;
             $(this.el).find(".status_container").html(new Status_view({
                 model : model,
                 settings : app.options.menu_status_options

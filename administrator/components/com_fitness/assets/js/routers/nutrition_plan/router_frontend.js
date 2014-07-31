@@ -6,14 +6,12 @@ define([
         'collections/nutrition_plan/nutrition_plans',
         'collections/nutrition_plan/supplements/protocols',
         'collections/nutrition_plan/nutrition_guide/menu_plans',
-        'collections/nutrition_plan/nutrition_guide/example_day_meals',
         'collections/recipe_database/recipes',
         'collections/nutrition_plan/nutrition_guide/nutrition_database_categories',
         'collections/nutrition_plan/nutrition_guide/shopping_list_ingredients',
 	'models/nutrition_plan/nutrition_plan',
         'models/nutrition_plan/target',
         'models/nutrition_plan/nutrition_guide/menu_plan',
-        'models/nutrition_plan/nutrition_guide/example_day_meal',
         'models/nutrition_plan/nutrition_guide/get_recipe_params',
         'views/nutrition_plan/overview',
         'views/nutrition_plan/target_block',
@@ -26,7 +24,6 @@ define([
         'views/nutrition_plan/nutrition_guide/menu_plan_header',
         'views/nutrition_plan/nutrition_guide/example_day_menu',
         'views/nutrition_plan/nutrition_guide/example_day',
-        'views/nutrition_plan/nutrition_guide/example_day_meal',
         'views/nutrition_plan/nutrition_guide/add_recipe',
         'views/nutrition_plan/nutrition_guide/shopping_list',
         'views/graph/graph'
@@ -39,14 +36,12 @@ define([
         Nutrition_plans_collection,
         Protocols_collection,
         Menu_plans_collection,
-        Example_day_meals_collection,
         Add_meal_recipes_collection,
         Nutrition_database_categories_collection,
         Shopping_list_ingredients_collection,
         Nutrition_plan_model,
         Target_model,
         Menu_plan_model,
-        Example_day_meal_model,
         Get_recipe_params_model,
         Overview_view,
         Target_block_view,
@@ -59,7 +54,6 @@ define([
         Menu_plan_header_view,
         Example_day_menu_view,
         Example_day_view,
-        Example_day_meal_view,
         Example_day_add_recipe_view,
         Shopping_list_view,
         Graph_view
@@ -114,25 +108,25 @@ define([
                 });  
             },
 
-            overview: function () {
-                 this.no_active_plan_action();
-                 this.common_actions();
-                 $("#overview_wrapper").show();
-                 $("#overview_link").addClass("active_link");
-                 // connect Graph from Goals frontend logic
-                 this.connectGraph();
-                 var id = app.models.nutrition_plan.get('id');
-                 app.models.nutrition_plan.fetch({
-                    data: {id : id},
-                    wait : true,
-                    success : function(model, response) {
-                        var overview_view = new Overview_view({model : model});
+            overview: function (id) {
+                this.no_active_plan_action();
+                this.common_actions();
+                $("#overview_wrapper").show();
+                $("#overview_link").addClass("active_link");
+                // connect Graph from Goals frontend logic
+                this.connectGraph();
+                var id = app.models.nutrition_plan.get('id');
+                app.models.nutrition_plan.fetch({
+                    data: {id: id},
+                    wait: true,
+                    success: function(model, response) {
+                        var overview_view = new Overview_view({model: model});
                         $("#nutrition_focus_wrapper").html(overview_view.render().el);
                     },
-                    error: function (collection, response) {
+                    error: function(collection, response) {
                         //alert(response.responseText);
                     }
-                 });
+                });
                  
             },
             
@@ -452,36 +446,6 @@ define([
                 }
            },
            
-           
-           copy_menu_plan : function(id) {
-                app.models.menu_plan = new Menu_plan_model();
-                var self = this;
-                app.models.menu_plan.set({id : id});
-                app.models.menu_plan.fetch({
-                    wait : true,
-                    success: function (model, response) {
-                        model.set({
-                            id : null, 
-                            created_by : app.options.user_id,
-                            submit_date : null,
-                            status : '4',
-                            assessed_by : null,
-                        });
-                        model.save(null, {
-                            success: function (model, response) {
-                                self.nutrition_guide();
-                            },
-                            error: function (model, response) {
-                                alert(response.responseText);
-                            }
-                        });
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                })
-             }
-
         });
 
     return Controller;

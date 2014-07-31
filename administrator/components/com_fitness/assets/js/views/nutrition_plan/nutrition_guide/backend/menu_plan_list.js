@@ -46,7 +46,7 @@ define([
         },
         
         addItem : function(model) {
-            this.container_el.append(new List_item_view({nutrition_plan_id : this.options.nutrition_plan_id, model : model}).render().el); 
+            this.container_el.append(new List_item_view({nutrition_plan_id : this.options.nutrition_plan_id, model : model, collection : this.collection}).render().el); 
         },
         
         clearItems : function() {

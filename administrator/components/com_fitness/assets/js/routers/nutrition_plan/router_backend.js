@@ -360,38 +360,6 @@ define([
                 app.models.pagination.bind("change:currentPage", this.set_recipes_model, this);
                 app.models.pagination.bind("change:items_number", this.set_recipes_model, this);
             },
-            
-            
-
-            
-            copy_menu_plan : function(id) {
-                app.models.menu_plan = new Menu_plan_model();
-                var self = this;
-                app.models.menu_plan.set({id : id});
-                app.models.menu_plan.fetch({
-                    wait : true,
-                    success: function (model, response) {
-                        model.set({
-                            id : null, 
-                            created_by : app.options.user_id,
-                            submit_date : null,
-                            status : '4',
-                            assessed_by : null,
-                        });
-                        model.save(null, {
-                            success: function (model, response) {
-                                self.nutrition_guide();
-                            },
-                            error: function (model, response) {
-                                alert(response.responseText);
-                            }
-                        });
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                })
-             },
              
              macronutrients : function (id) {
                 this.common_actions();

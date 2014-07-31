@@ -99,6 +99,29 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
             'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
             'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
         };
+
+        
+        //
+        var menu_status_options = {
+            'statuses' : {
+                '1' : {'label' : 'PENDING', 'class' : 'menu_plan_status_pending', 'email_alias' : ''}, 
+                '2' : {'label' : 'APPROVED', 'class' : 'recipe_status_approved', 'email_alias' : 'menu_plan_approved'},
+                '3' : {'label' : 'NOT APPROVED', 'class' : 'recipe_status_notapproved', 'email_alias' : 'menu_plan_notapproved'},
+                '4' : {'label' : 'IN PROGRESS', 'class' : 'status_inprogress', 'email_alias' : 'menu_plan_inprogress'},
+                '5' : {'label' : 'SUBMITTED', 'class' : 'status_submitted', 'email_alias' : ''}, 
+                '6' : {'label' : 'RESUBMIT', 'class' : 'status_fail', 'email_alias' : 'menu_plan_resubmit'}
+            },
+            statuses2 : {},
+              'show_send_email' : true,
+            setStatuses : function() {
+                return this.statuses;
+            },
+            view : 'MenuPlan',
+        }
+        
+        options.menu_status_options = menu_status_options;
+        
+        
         
         
         //requireJS options

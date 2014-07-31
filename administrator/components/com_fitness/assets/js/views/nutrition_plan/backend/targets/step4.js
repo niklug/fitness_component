@@ -243,7 +243,11 @@ define([
                 protein : $("#step4_protein_grams").val(),
                 fats : $("#step4_fat_grams").val(),
                 carbs : $("#step4_carbs_grams").val(),
-                water : $("#step4_water").val()
+                water : $("#step4_water").val(),
+                
+                step4_protein_percent : $("#step4_protein_percent").val(),
+                step4_fat_percent : $("#step4_fat_grams").val(),
+                step4_carbs_percent : $("#step4_carbs_percent").val(),
             });
             
             var self = this;
