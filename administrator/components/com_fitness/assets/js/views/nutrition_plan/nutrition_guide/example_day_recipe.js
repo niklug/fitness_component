@@ -176,7 +176,7 @@ define([
                     el : this.$el.find(".description_select"),
                     collection : collection,
                     first_option_title : '-Select-',
-                    class_name : 'recipe_description',
+                    class_name : 'recipe_description ',
                     id_name : 'description',
                     model_field : 'description',
                     element_disabled :  ""

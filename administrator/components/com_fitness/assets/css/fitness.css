@@ -965,7 +965,6 @@
 
 .recipe_database_item_wrapper{
     margin-bottom: 10px;
-    border:1px solid #000;
 }
 
 #jform_allowed_proteins-lbl, #jform_allowed_fats-lbl, #jform_allowed_carbs-lbl, #jform_allowed_liquids-lbl, #jform_other_recommendations-lbl, #jform_trainer_comments-lbl, #jform_information-lbl{
@@ -1293,3 +1292,15 @@ width: 20px;
     max-width:1000px;
 }
 
+.example_day_menu_wrapper {
+    background-color:#d2d2d2;
+}
+
+#daily_targets_container {
+    background-color:#fff;
+}
+
+#nutrition_guide_menu li, .recipe_database_item_wrapper,
+.example_day_edit_bar, .add_recipe_container {
+    background-color:#fff;
+}

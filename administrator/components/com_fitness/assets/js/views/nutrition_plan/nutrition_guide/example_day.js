@@ -216,10 +216,15 @@ define([
                 'fitness_administration_url' : app.options.ajax_call_url,
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : '#__fitness_nutrition_plan_example_day_comments',
-                'read_only' : false,
+                'read_only' : true,
                 'anable_comment_email' : false,
                 'comment_method' : ''
             }
+            
+            if(app.options.is_backend) {
+                comment_options.read_only = false;
+            }
+            
             var comments = $.comments(comment_options, comment_options.item_id, this.options.example_day_id);
 
             var comments_html = comments.run();

@@ -87,7 +87,7 @@ define([
                 "!/supplements/:id": "supplements", 
                 "!/nutrition_guide/:id": "nutrition_guide", 
                 "!/menu_plan/:id/:nutrition_plan_id": "menu_plan", 
-                "!/example_day/:id/:nutrition_plan_id": "example_day", 
+                "!/example_day/:id/:menu_id/:nutrition_plan_id": "example_day", 
                 "!/add_example_day_meal/:id/:nutrition_plan_id": "add_example_day_meal", 
                 "!/shopping_list/:id": "shopping_list", 
                 "!/add_meal_recipe/:meal_id/:nutrition_plan_id": "add_meal_recipe",
