@@ -46,7 +46,7 @@ class FitnessViewNutrition_planning extends JView
                 $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
                 $document->addStyleSheet(JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
                 
-                $document->addStyleSheet(JURI::base() . 'components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'jquery.cleditor.css');
+                $document->addStyleSheet(JURI::root() . 'components' . DS . 'com_fitness' . DS . 'assets' . DS . 'css' . DS . 'jquery.cleditor.css');
                 
                          // connect list nutrition_diaryform model
                 require_once JPATH_COMPONENT_SITE . DS .  'models' . DS . 'nutrition_diaryform.php';

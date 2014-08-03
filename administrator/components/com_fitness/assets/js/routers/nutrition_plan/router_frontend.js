@@ -111,12 +111,12 @@ define([
             },
 
             overview: function (id) {
-                this.no_active_plan_action();
+                this.common_actions(id);
+                if(!this.no_active_plan_action(id)) return;
                 if(!id) {
                     id = app.options.item_id;
                 }
-               
-                this.common_actions(id);
+
                 $("#overview_link").addClass("active_link");
                 // connect Graph from Goals frontend logic
                 this.connectGraph();
@@ -162,8 +162,9 @@ define([
             },
         
             targets: function (id) {
-                this.no_active_plan_action();
                 this.common_actions(id);
+                if(!this.no_active_plan_action(id)) return;
+                
                 $("#targets_link").addClass("active_link");
                 
                 app.models.target = new Target_model({nutrition_plan_id : id});
@@ -199,8 +200,9 @@ define([
             },
             
             macronutrients: function (id) {
-                 this.no_active_plan_action();
-                 this.common_actions(id);
+                this.common_actions(id);
+                if(!this.no_active_plan_action(id)) return;
+                 
                  $("#macronutrients_link").addClass("active_link");
 
                  app.models.nutrition_plan.fetch({
@@ -232,8 +234,9 @@ define([
             },
             
             supplements: function (id) {
-                 this.no_active_plan_action();
-                 this.common_actions(id);
+                this.common_actions(id);
+                 if(!this.no_active_plan_action(id)) return;
+                 
                  $("#supplements_link").addClass("active_link");
 
                  app.collections.protocols = new Protocols_collection(); 
@@ -250,8 +253,9 @@ define([
             },
             
             nutrition_guide: function (id) {
-                this.no_active_plan_action();
                 this.common_actions();
+                if(!this.no_active_plan_action(id)) return;
+                
                 $("#nutrition_guide_link").addClass("active_link");
                 
                 if (app.collections.menu_plans
@@ -436,9 +440,9 @@ define([
             },
      
             information: function (id) {
-                 this.no_active_plan_action();
-                 this.common_actions(id);
-                 $("#information_wrapper").show();
+                this.common_actions(id);
+                 if(!this.no_active_plan_action(id)) return;
+
                  $("#information_link").addClass("active_link");
                  app.models.nutrition_plan.fetch({
                     data: {id : id},
@@ -446,7 +450,7 @@ define([
                     success : function(model, response) {
                         var information_view = new Information_view({model : model});
                         
-                        $("#information_wrapper").html(information_view.render().el);
+                        $("#main_container").html(information_view.render().el);
                     },
                     error: function (collection, response) {
                         alert(response.responseText);
@@ -456,8 +460,6 @@ define([
                     
             archive: function (id) {
                 this.common_actions(id);
-                 
-                 $("#archive_wrapper").show();
                  $("#archive_focus_link").addClass("active_link");
 
                  app.collections.nutrition_plans.fetch({
@@ -466,7 +468,7 @@ define([
                     success : function(collection, response) {
                         var archive_list_view = new Archive_list_view({model : app.models.nutrition_plan, collection : collection});
                         
-                        $("#archive_wrapper").html(archive_list_view.render().el);
+                        $("#main_container").html(archive_list_view.render().el);
                     },
                     error: function (collection, response) {
                         alert(response.responseText);
@@ -475,7 +477,7 @@ define([
             },
                     
             close: function() {
-                 this.no_active_plan_action();
+                 if(!this.no_active_plan_action(app.options.item_id)) return;
                  app.models.nutrition_plan.set({id : app.options.item_id});
                  app.controller.navigate("!/overview/" + app.options.item_id, true);
             },
@@ -493,11 +495,15 @@ define([
                 }
             },
             
-            no_active_plan_action : function() {
+            no_active_plan_action : function(id) {
+                if(!app.options.item_id && id) {
+                    return true;
+                }
                 if(!app.options.item_id) {
                     alert('Please contact your trainer immediately regarding your current Nutrition Plan!');
                     return false;
                 }
+                return true;
            },
            
         });
