@@ -22,9 +22,8 @@ define([
 
         viewPlan : function(event) {
             var id = $(event.target).attr('data-id');
-            this.model.set({id : id});
-            $("#close_tab").show();
-            app.controller.navigate("!/overview", true);
+            //console.log(id);
+            app.controller.navigate("!/overview/" + id, true);
         },
     });
             

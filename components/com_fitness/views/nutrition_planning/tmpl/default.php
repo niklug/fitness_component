@@ -11,67 +11,14 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
 
 <div style="opacity: 1;" class="fitness_wrapper">
     <h2>NUTRITION PLAN</h2>
-    
-    <div id="plan_menu"></div>
-    
+    <div id="header_wrapper" ></div>
+    <div class="clr"></div>
+    <div id="nutrition_guide_header"></div>
+    <div class="clr"></div>
+    <div id="main_container"></div>
+    <div class="clr"></div>
     <br/>
-    
-    <!-- OVERVIEW -->
-    <div id="overview_wrapper" class="block" style="display:none;">
-        <div id="nutrition_focus_wrapper"></div>
-        <br/>
-        <div id="graph_container"></div>
-    </div>
-    
-    <!-- TARGETS -->
-    <div id="targets_wrapper" class="block" style="display:none;">
-        <div id="targets_container" class="fitness_block_wrapper" style="min-height: 300px;">
-        </div>
-    </div>
-
-    <!-- MACRONUTRIENTS -->
-    <div id="macronutrients_wrapper" class="block" style="display:none;">
-        <div id="macronutrients_container"></div>
-
-        <div class="clr"></div>
-        <br/>
-        <div id="macronutrients_comments_wrapper" style="width:100%"></div>
-        <div class="clr"></div>
-        <br/>
-        <input id="add_comment_1" class="" type="button" value="Add Comment" >
-        <div class="clr"></div>
-        
-    </div>
-    
-    <!-- SUPPLEMENTS -->
-    <div id="supplements_wrapper" class="block" style="display:none;">
-
-    </div>
-
-    <!-- NUTRITION GUIDE -->
-    
-    <div id="nutrition_guide_wrapper" class="block " style="display:none;">
-
-        <div id="nutrition_guide_header" ></div>
-
-        <div id="nutrition_guide_container" class=""></div>
-        
-    </div>
-    
-    <!-- INFORMATION -->
-    <div id="information_wrapper" class="block" style="display:none;">
-        
-    </div>
-    
-    <!-- ARCHIVE -->
-    <div id="archive_wrapper" class="block" style="display:none;">
-
-    </div>
-    
-    
-    <div id="close_wrapper" class="block" style="display:none;">
-        
-    </div>
+    <div id="graph_container"></div>
  
 </div>
 

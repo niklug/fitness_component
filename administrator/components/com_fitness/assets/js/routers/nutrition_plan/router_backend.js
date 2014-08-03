@@ -313,8 +313,7 @@ define([
             },
             
             example_day : function(example_day_id, menu_id, nutrition_plan_id) {
-                
-                    if (app.collections.menu_plans
+                if (app.collections.menu_plans
                         && app.collections.menu_plans.models[0]
                         && app.collections.menu_plans.models[0].get('nutrition_plan_id') == nutrition_plan_id
                     ) {

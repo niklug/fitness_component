@@ -5,7 +5,6 @@ require([
     'moment',
     'app',
     'routers/nutrition_plan/router_frontend',
-    'views/nutrition_plan/main_menu',
     'jquery.AjaxCall',
     'jquery.comments',
     'jquery.fitness_helper',
@@ -20,16 +19,14 @@ require([
     'jquery.cleditor'
     
 
-], function($, _, Backbone, moment, app, Controller, Main_menu_view) {
+], function($, _, Backbone, moment, app, Controller) {
     $.ajax_indicator({});
     $.fitness_helper = $.fitness_helper(app.options);
     Backbone.emulateHTTP = true ;
     Backbone.emulateJSON = true;
 
     app.controller = new Controller();
-  
-    app.views.main_menu = new Main_menu_view();
-    
+
     Backbone.history.start();
 
 });

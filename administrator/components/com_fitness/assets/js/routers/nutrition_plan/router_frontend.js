@@ -26,7 +26,8 @@ define([
         'views/nutrition_plan/nutrition_guide/example_day',
         'views/nutrition_plan/nutrition_guide/add_recipe',
         'views/nutrition_plan/nutrition_guide/shopping_list',
-        'views/graph/graph'
+        'views/graph/graph',
+        'views/nutrition_plan/main_menu'
 
 ], function (
         $,
@@ -56,7 +57,8 @@ define([
         Example_day_view,
         Example_day_add_recipe_view,
         Shopping_list_view,
-        Graph_view
+        Graph_view,
+        Main_menu_view
     ) {
 
 
@@ -79,18 +81,18 @@ define([
             routes: {
                 "": "overview", 
                 "!/": "overview", 
-                "!/overview": "overview", 
-                "!/targets": "targets", 
-                "!/macronutrients": "macronutrients", 
-                "!/supplements": "supplements", 
+                "!/overview/:id": "overview", 
+                "!/targets/:id": "targets", 
+                "!/macronutrients/:id": "macronutrients", 
+                "!/supplements/:id": "supplements", 
                 "!/nutrition_guide/:id": "nutrition_guide", 
                 "!/menu_plan/:id/:nutrition_plan_id": "menu_plan", 
                 "!/example_day/:id/:nutrition_plan_id": "example_day", 
                 "!/add_example_day_meal/:id/:nutrition_plan_id": "add_example_day_meal", 
                 "!/shopping_list/:id": "shopping_list", 
                 "!/add_meal_recipe/:meal_id/:nutrition_plan_id": "add_meal_recipe",
-                "!/information": "information", 
-                "!/archive": "archive", 
+                "!/information/:id": "information", 
+                "!/archive/:id": "archive", 
                 "!/close": "close", 
             },
             
@@ -110,24 +112,30 @@ define([
 
             overview: function (id) {
                 this.no_active_plan_action();
-                this.common_actions();
-                $("#overview_wrapper").show();
+                if(!id) {
+                    id = app.options.item_id;
+                }
+               
+                this.common_actions(id);
                 $("#overview_link").addClass("active_link");
                 // connect Graph from Goals frontend logic
                 this.connectGraph();
-                var id = app.models.nutrition_plan.get('id');
                 app.models.nutrition_plan.fetch({
                     data: {id: id},
                     wait: true,
                     success: function(model, response) {
                         var overview_view = new Overview_view({model: model});
-                        $("#nutrition_focus_wrapper").html(overview_view.render().el);
+                        $("#main_container").html(overview_view.render().el);
                     },
                     error: function(collection, response) {
                         //alert(response.responseText);
                     }
                 });
                  
+            },
+            
+            loadMainMenu : function(id) {
+                $("#header_wrapper").html(new Main_menu_view({nutrition_plan_id : id}).render().el);
             },
             
             connectGraph : function() {
@@ -153,20 +161,17 @@ define([
                 });
             },
         
-            targets: function () {
+            targets: function (id) {
                 this.no_active_plan_action();
-                this.common_actions();
-                $("#targets_wrapper").show();
+                this.common_actions(id);
                 $("#targets_link").addClass("active_link");
-                 
-                var id = app.models.nutrition_plan.get('id');
                 
                 app.models.target = new Target_model({nutrition_plan_id : id});
                 var self = this;
                 app.models.target.fetch({
                     data : {nutrition_plan_id : id},
                     success : function (model, response) {
-                        self.loadTragers();
+                        self.loadTragers(id);
                     },
                     error : function (collection, response) {
                         alert(response.responseText);
@@ -174,12 +179,8 @@ define([
                 })
             },
             
-            loadTragers : function() {
-                $("#targets_container").empty();
-                
-                $("#targets_container").html(new Target_block_view({model : app.models.target, item_model : app.models.nutrition_plan}).render().el);
-                
-                var id = app.models.nutrition_plan.get('id');
+            loadTragers : function(id) {
+                $("#main_container").html(new Target_block_view({model : app.models.target, item_model : app.models.nutrition_plan}).render().el);
                 
                 // connect comments
                  var comment_options = {
@@ -197,20 +198,18 @@ define([
                 $("#targets_comments_wrapper").html(comments_html);
             },
             
-            macronutrients: function () {
+            macronutrients: function (id) {
                  this.no_active_plan_action();
-                 this.common_actions();
-                 $("#macronutrients_wrapper").show();
+                 this.common_actions(id);
                  $("#macronutrients_link").addClass("active_link");
-               
-                 var id = app.models.nutrition_plan.get('id');
+
                  app.models.nutrition_plan.fetch({
                     data: {id : id},
                     wait : true,
                     success : function(model, response) {
                         var macronutrients_view = new Macronutrients_view({model : model});
                         
-                        $("#macronutrients_container").html(macronutrients_view.render().el);
+                        $("#main_container").html(macronutrients_view.render().el);
                     },
                     error: function (collection, response) {
                         alert(response.responseText);
@@ -232,14 +231,13 @@ define([
                 $("#macronutrients_comments_wrapper").html(comments_html);
             },
             
-            supplements: function () {
+            supplements: function (id) {
                  this.no_active_plan_action();
-                 this.common_actions();
-                 $("#supplements_wrapper").show();
+                 this.common_actions(id);
                  $("#supplements_link").addClass("active_link");
 
                  app.collections.protocols = new Protocols_collection(); 
-                 var id = app.models.nutrition_plan.get('id');
+  
                  app.collections.protocols.fetch({
                     data: {nutrition_plan_id : id},
                     error: function (collection, response) {
@@ -248,78 +246,127 @@ define([
                  });
                  
                  app.views.protocols = new Protocols_view({model : app.models.nutrition_plan, collection : app.collections.protocols}); 
-                 $("#supplements_wrapper").html(app.views.protocols.render().el);
+                 $("#main_container").html(app.views.protocols.render().el);
             },
             
             nutrition_guide: function (id) {
                 this.no_active_plan_action();
                 this.common_actions();
-                $("#nutrition_guide_wrapper").show();
                 $("#nutrition_guide_link").addClass("active_link");
                 
-                app.collections.menu_plans = new Menu_plans_collection(); 
+                if (app.collections.menu_plans
+                        && app.collections.menu_plans.models[0]
+                        && app.collections.menu_plans.models[0].get('nutrition_plan_id') == id
+                    ) {
+                    this.load_nutrition_guide(id);
+                    return;
+                }
                 
+                var self = this;
+                app.collections.menu_plans = new Menu_plans_collection(); 
                 app.collections.menu_plans.fetch({
                     data: {nutrition_plan_id : id},
-                    
                     success: function (collection, response) {
-                        app.views.menu_plan_list = new Menu_plan_list_view({collection : collection, nutrition_plan_id : id});
-                        $("#nutrition_guide_container").html(app.views.menu_plan_list.render().el);
+                        self.load_nutrition_guide(id);
                     },
-                    
+                    error: function (collection, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            
+            load_nutrition_guide : function(id) {
+                app.views.menu_plan_list_menu = new Menu_plan_list_menu_view({nutrition_plan_id : id});
+                $("#nutrition_guide_header").html(app.views.menu_plan_list_menu.render().el);
+                app.views.menu_plan_list = new Menu_plan_list_view({collection : app.collections.menu_plans, nutrition_plan_id : id});
+                $("#main_container").html(app.views.menu_plan_list.render().el);
+            },
+            
+            menu_plan: function (id, nutrition_plan_id) {
+                if (app.collections.menu_plans
+                        && app.collections.menu_plans.models[0]
+                        && app.collections.menu_plans.models[0].get('nutrition_plan_id') == nutrition_plan_id
+                    ) {
+                    this.load_menu_plan(id, nutrition_plan_id);
+                    return;
+                }
+                
+                var self = this;
+                app.collections.menu_plans = new Menu_plans_collection(); 
+                app.collections.menu_plans.fetch({
+                    data: {nutrition_plan_id : nutrition_plan_id},
+                    success: function (collection, response) {
+                        self.load_menu_plan(id, nutrition_plan_id);
+                    },
                     error: function (collection, response) {
                         alert(response.responseText);
                     }
                  });
-                 
-                 app.views.menu_plan_list_menu = new Menu_plan_list_menu_view({nutrition_plan_id : id});
-                 
-                 $("#nutrition_guide_header").html(app.views.menu_plan_list_menu.render().el);
             },
             
-            menu_plan: function (id, nutrition_plan_id) {
+            load_menu_plan: function (id, nutrition_plan_id) {
+                this.loadMainMenu(nutrition_plan_id);
+                $("#nutrition_guide_link").addClass("active_link");
+                $("#main_container").empty();
+                if(parseInt(id)) {
+                    this.example_day(1, id, nutrition_plan_id);
+                    $(".example_day_link").first().addClass("active");
+                } else {
+                    this.load_menu_plan_content(id, nutrition_plan_id);
+                }
+            },
+            
+            load_menu_plan_content : function (id, nutrition_plan_id) {
                 app.models.menu_plan = new Menu_plan_model();
-                
                 if(parseInt(id)) {
                     app.models.menu_plan = app.collections.menu_plans.get(id);
                 }
-                   
+                
                 app.views.menu_plan_header = new Menu_plan_header_view({model : app.models.menu_plan, collection : app.collections.menu_plans, nutrition_plan_id : nutrition_plan_id});
                  
                 $("#nutrition_guide_header").html(app.views.menu_plan_header.render().el);
-                
-                
-                
+
                 $( "#start_date" ).datepicker({ dateFormat: "yy-mm-dd",  minDate : -5});
                 
                 if(parseInt(id)) {
                     app.views.example_day_menu = new Example_day_menu_view({model : app.models.menu_plan, nutrition_plan_id : nutrition_plan_id});
-                    $("#nutrition_guide_container").html(app.views.example_day_menu.render().el);
+                    $("#main_container").html(app.views.example_day_menu.render().el);
                 }
-                //on default
-                this.example_day(1, nutrition_plan_id);
-                $(".example_day_link").first().addClass("active");
-
             },
             
-            example_day : function(example_day_id, nutrition_plan_id) {
-                app.collections.example_day_meals = new Example_day_meals_collection(); 
-                var menu_id = app.models.menu_plan.get('id');
-                app.collections.example_day_meals.fetch({
-                    data: {
-                        nutrition_plan_id : nutrition_plan_id,
-                        menu_id : menu_id,
-                        example_day_id : example_day_id
-                    },
+            example_day : function(example_day_id, menu_id, nutrition_plan_id) {
+                if (app.collections.menu_plans
+                        && app.collections.menu_plans.models[0]
+                        && app.collections.menu_plans.models[0].get('nutrition_plan_id') == nutrition_plan_id
+                    ) {
+                    this.load_example_day(example_day_id, menu_id, nutrition_plan_id);
+                    return;
+                }
+                
+                var self = this;
+                app.collections.menu_plans = new Menu_plans_collection(); 
+                app.collections.menu_plans.fetch({
+                    data: {nutrition_plan_id : nutrition_plan_id},
                     success: function (collection, response) {
-                        //console.log(response);
+                        self.load_example_day(example_day_id, menu_id, nutrition_plan_id);
                     },
-                    error: function (model, response) {
+                    error: function (collection, response) {
                         alert(response.responseText);
                     }
                 });
+            },
+            
+            load_example_day : function(example_day_id, menu_id, nutrition_plan_id) {
+                this.loadMainMenu(nutrition_plan_id);
+                $("#nutrition_guide_link").addClass("active_link");
+
+                this.load_menu_plan_content(menu_id, nutrition_plan_id);
                 
-                $('#example_day_wrapper').html(new Example_day_view({collection : app.collections.example_day_meals, 'example_day_id' : example_day_id, nutrition_plan_id : nutrition_plan_id}).render().el);
+                app.views.example_day = new Example_day_view({model : app.models.menu_plan, 'example_day_id' : example_day_id, menu_id : menu_id,  nutrition_plan_id : nutrition_plan_id});
+                
+                $('#example_day_wrapper').html(app.views.example_day.render().el);
+                
+                $('.example_day_link[data-id=' + example_day_id + ']').addClass("active");
             },
             
             add_example_day_meal : function(example_day_id, nutrition_plan_id) {
@@ -388,12 +435,11 @@ define([
                 app.models.get_recipe_params.set({"page" : app.models.pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10});
             },
      
-            information: function () {
+            information: function (id) {
                  this.no_active_plan_action();
-                 this.common_actions();
+                 this.common_actions(id);
                  $("#information_wrapper").show();
                  $("#information_link").addClass("active_link");
-                 var id = app.models.nutrition_plan.get('id');
                  app.models.nutrition_plan.fetch({
                     data: {id : id},
                     wait : true,
@@ -408,8 +454,9 @@ define([
                  });
             },
                     
-            archive: function () {
-                 this.common_actions();
+            archive: function (id) {
+                this.common_actions(id);
+                 
                  $("#archive_wrapper").show();
                  $("#archive_focus_link").addClass("active_link");
 
@@ -429,14 +476,21 @@ define([
                     
             close: function() {
                  this.no_active_plan_action();
-                 $("#close_tab").hide();
                  app.models.nutrition_plan.set({id : app.options.item_id});
-                 this.overview();
+                 app.controller.navigate("!/overview/" + app.options.item_id, true);
             },
             
-            common_actions : function() {
+            common_actions : function(id) {
+                $("#main_container, #header_wrapper, #nutrition_guide_header, #graph_container").empty();
+                this.loadMainMenu(id);
                 $(".block").hide();
-                $(".plan_menu_link").removeClass("active_link")
+                $(".plan_menu_link").removeClass("active_link");
+                
+                $("#close_tab").show();
+
+                if(id == app.options.item_id) {
+                    $("#close_tab").hide();
+                }
             },
             
             no_active_plan_action : function() {
