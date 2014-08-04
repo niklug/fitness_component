@@ -24,10 +24,11 @@ define([
             },
             
             setTargetData : function() {
+                console.log(this.model.toJSON());
                 var data = [
-                    {label: "Protein:", data: [[1, this.model.get('protein')]]},
-                    {label: "Carbs:", data: [[1, this.model.get('carbs')]]},
-                    {label: "Fat:", data: [[1, this.model.get('fats')]]}
+                    {label: "Protein:", data: [[1, this.model.get('step4_protein_percent')]]},
+                    {label: "Carbs:", data: [[1, this.model.get('step4_carbs_percent')]]},
+                    {label: "Fat:", data: [[1, this.model.get('step4_fat_percent')]]}
                 ];
 
                 var container = this.$el.find(".placeholder_pie");

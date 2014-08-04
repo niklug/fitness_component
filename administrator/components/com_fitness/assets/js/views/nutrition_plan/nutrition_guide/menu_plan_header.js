@@ -24,6 +24,7 @@ define([
             this.is_submitted();
             var data = this.model.toJSON();
             data.$ = $;
+            data.app = app;
             var template = _.template(this.template(data));
             this.$el.html(template);
             
@@ -118,6 +119,8 @@ define([
                 fats : model.get('fats'),
                 carbs : model.get('carbs'),
                 calories : model.get('calories'),
+                created_by : app.options.user_id,
+                created_by_name : app.options.user_name,
             });
             
             var self = this;

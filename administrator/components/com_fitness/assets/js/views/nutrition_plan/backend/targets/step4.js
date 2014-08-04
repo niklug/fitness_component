@@ -146,7 +146,20 @@ define([
                 step3_protein = $("#step3_protein_custom").val();
             }
             
-            var value = (step3_protein * this.weight).toFixed(0);
+            var formula = this.model.get('formula');
+            
+            var koef = this.weight;
+            
+            if(formula == 'overweight') {
+                var weight = parseFloat(this.model.get('weight'));
+                var body_fat = parseFloat(this.model.get('body_fat'));
+                
+                var lean_mass = weight - (weight * body_fat/100);
+                
+                koef = lean_mass;
+            }
+            
+            var value = (step3_protein * koef).toFixed(0);
             
             $(this.el).find("#step4_protein_grams").val(value);
             
@@ -194,7 +207,7 @@ define([
         
         setFatPercent_iifym : function() {
             var value = (this.setFatCalories_iifym() / this.TDEE * 100).toFixed(0);
-            
+            //console.log(value);
             $(this.el).find("#step4_fat_percent").val(value);
             
             return value;
@@ -246,7 +259,7 @@ define([
                 water : $("#step4_water").val(),
                 
                 step4_protein_percent : $("#step4_protein_percent").val(),
-                step4_fat_percent : $("#step4_fat_grams").val(),
+                step4_fat_percent : $("#step4_fat_percent").val(),
                 step4_carbs_percent : $("#step4_carbs_percent").val(),
             });
             

@@ -1,3 +1,11 @@
+<% 
+var value_label = 'grams per kg of body weight';
+
+if(item.formula == 'overweight') {
+    value_label = 'grams per kg of lean mass';
+}
+
+%>
 <div class="fitness_block_wrapper">
     <table width="100%">
         <tr> 
@@ -19,31 +27,31 @@
             <td style="vertical-align: top;width:35%;display:none;" id="iifym_block">
                 <b>PROTEIN</b> (4 calories per gram)
                 <div class="clr"></div>
-                <input checked="checked" type="radio"  name="step3_protein" class="step3_protein" value="2.2046">2.2 grams per kg of body weight 
+                <input checked="checked" type="radio"  name="step3_protein" class="step3_protein" value="1.54322">1.5 <%= value_label %>
                 <div class="clr"></div>
-                <input type="radio" name="step3_protein" class="step3_protein"  value="2.5352">2.53 grams per kg of body weight
+                <input type="radio" name="step3_protein" class="step3_protein"  value="1.76368">1.75 <%= value_label %>
                 <div class="clr"></div>
-                <input type="radio" name="step3_protein" class="step3_protein"  value="2.7557">2.75 grams per kg of body weight
+                <input type="radio" name="step3_protein" class="step3_protein"  value="1.98414">2 <%= value_label %>
                 <div class="clr"></div>
                 <input type="radio" name="step3_protein" class="step3_protein"  value="custom">
                 Custom
                 <input type="text" maxlength="8" size="8"  id="step3_protein_custom" value="<%= item.step3_protein_custom %>"> 
-                grams per kg of body weight
+                <%= value_label %>
                 
                 <div class="clr"></div>
                 <br/>
                 
                 <b>FATS</b> (9 calories per gram)
                 <div class="clr"></div>
-                <input checked="checked" type="radio"  name="step3_fats" class="step3_fats" value="0.7716">0.77 grams per kg of body weight
+                <input checked="checked" type="radio"  name="step3_fats" class="step3_fats" value="0.66138">0.66 <%= value_label %>
                 <div class="clr"></div>
-                <input type="radio" name="step3_fats" class="step3_fats"  value="0.8818">0.88 grams per kg of body weight
+                <input type="radio" name="step3_fats" class="step3_fats"  value="0.77161">0.77 <%= value_label %>
                 <div class="clr"></div>
-                <input type="radio" name="step3_fats" class="step3_fats"  value="0.9920">0.99 grams per kg of body weight               <div class="clr"></div>
+                <input type="radio" name="step3_fats" class="step3_fats"  value="0.88184">0.88 <%= value_label %>               <div class="clr"></div>
                 <input type="radio" name="step3_fats" class="step3_fats"  value="custom">
                 Custom
                 <input type="text" maxlength="8" size="8"  id="step3_fats_custom" value="<%= item.step3_fats_custom %>"> 
-                grams per kg of body weight
+                <%= value_label %>
                 
                 <div class="clr"></div>
                 <br/>

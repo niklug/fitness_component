@@ -44,13 +44,13 @@
                         <a style="cursor: pointer;float:right;margin-right:10px;" id="close_menu_plan" onclick="javascript:void(0)">[CLOSE]</a>
                         
                         <%
-                          if(parseInt(id) && is_submitted == false) {
+                          if((app.options.is_backend && status == '5') || (parseInt(id) && is_submitted == false)) {
                         %>
                             <a style="cursor: pointer;float:right;margin-right:10px;" id="delete_menu_plan" onclick="javascript:void(0)">[DELETE]</a>
                         <% } %>
                         
                         <%
-                          if(is_submitted == false) {
+                          if((app.options.is_backend && status == '5') || is_submitted == false) {
                         %>
                         
                             <%

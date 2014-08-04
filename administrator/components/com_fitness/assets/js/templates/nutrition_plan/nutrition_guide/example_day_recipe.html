@@ -24,7 +24,7 @@
                 </td>
                 <td></td>
                 <td width="200">
-                    <% if(!menu_plan_model.is_submitted) { %>
+                    <% if((app.options.is_backend && menu_plan_model.status == '5') || !menu_plan_model.is_submitted) { %>
                         <% if(item.edit_mode) { %>
                             <a style="float:right;margin-right: 5px;" class="orange_text delete_recipe" href="javascript:void(0)" title="">[DELETE]</a>
                             <a style="float:right;margin-right: 5px;"  class="orange_text save_close_recipe" href="javascript:void(0)" title="">[SAVE]</a>

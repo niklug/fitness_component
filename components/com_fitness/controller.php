@@ -100,6 +100,11 @@ class FitnessController extends JController {
         echo json_encode($this->admin_nutrition_plans_model->nutrition_plan_targets());
     }
     
+    function copyExampleDay() {
+        $data_encoded = JRequest::getVar('data_encoded');
+        echo json_encode($this->admin_nutrition_plan_model ->copyExampleDay($data_encoded));
+    }
+    
     function saveIngredient() {
         $table = JRequest::getVar('table');
         $ingredient_encoded = JRequest::getVar('ingredient_encoded');
