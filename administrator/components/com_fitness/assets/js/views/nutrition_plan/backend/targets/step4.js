@@ -74,6 +74,7 @@ define([
         //
         setProteinGrams : function() {
             var value = ((this.TDEE * this.model.get('protein_percent')) / 4).toFixed(0);
+            console.log(this.model.get('protein_percent'));
             $(this.el).find("#step4_protein_grams").val(value);
         },
         
@@ -173,7 +174,20 @@ define([
                 step3_fat = $("#step3_fats_custom").val();
             }
             
-            var value = (step3_fat * this.weight).toFixed(0);
+            var formula = this.model.get('formula');
+            
+            var koef = this.weight;
+            
+            if(formula == 'overweight') {
+                var weight = parseFloat(this.model.get('weight'));
+                var body_fat = parseFloat(this.model.get('body_fat'));
+                
+                var lean_mass = weight - (weight * body_fat/100);
+                
+                koef = lean_mass;
+            }
+            
+            var value = (step3_fat * koef).toFixed(0);
             
             $(this.el).find("#step4_fat_grams").val(value);
             

@@ -254,7 +254,7 @@ define([
             },
             
             nutrition_guide: function (id) {
-                this.common_actions();
+                this.common_actions(id);
                 if(!this.no_active_plan_action(id)) return;
                 
                 $("#nutrition_guide_link").addClass("active_link");

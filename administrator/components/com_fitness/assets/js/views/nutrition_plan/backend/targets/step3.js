@@ -59,6 +59,10 @@ define([
             if(value == 'iifym') {
                 $(this.el).find("#iifym_block").show();
                 $(this.el).find("#other_common_profiles_block").hide();
+            } else if(value == 'custom_ratios') {
+                $(this.el).find("#iifym_block").hide();
+                $(this.el).find("#other_common_profiles_block").show();
+                this.preFillFieldsCustom(field);
             } else {
                 $(this.el).find("#iifym_block").hide();
                 $(this.el).find("#other_common_profiles_block").show();
@@ -78,6 +82,18 @@ define([
             this.model.set({
                 protein_percent : protein/100,
                 fat_percent : fat/100,
+                carbs_percent : carbs/100,
+            });
+        },
+        
+        preFillFieldsCustom : function(field) {
+            var protein = parseFloat($(this.el).find("#step3_protein").val());
+            var fats =  parseFloat($(this.el).find("#step3_fats").val());
+            var carbs =  parseFloat($(this.el).find("#step3_carbs").val());
+
+            this.model.set({
+                protein_percent : protein/100,
+                fat_percent : fats/100,
                 carbs_percent : carbs/100,
             });
         },
@@ -125,6 +141,7 @@ define([
         goStep4 : function() {
             var common_profiles =  $(this.el).find("#common_profiles").find(":selected").attr('data-name');
             
+            
             this.model.set({
                 common_profiles : common_profiles,
                 step3_protein : $(this.el).find(".step3_protein:checked").val(),
@@ -133,9 +150,25 @@ define([
                 step3_fats_custom : $(this.el).find("#step3_fats_custom").val()
             });
             
+            if(common_profiles == 'custom_ratios') {
+                var protein = parseFloat($(this.el).find("#step3_protein").val());
+                var fats =  parseFloat($(this.el).find("#step3_fats").val());
+                var carbs =  parseFloat($(this.el).find("#step3_carbs").val());
+                
+                this.model.set({
+                    step3_protein : protein,
+                    step3_fats : fats,
+                    step3_carbs : carbs,
+                    protein_percent : protein/100,
+                    fat_percent : fats/100,
+                    carbs_percent : carbs/100,
+                });
+            }
+            
             var self = this;
             this.model.save(null, {
                 success: function (model, response) {
+                    //console.log(model.toJSON());
                     self.showStep4(model);
                 },
                 error: function (model, response) {

@@ -24,7 +24,7 @@ define([
             },
             
             setTargetData : function() {
-                console.log(this.model.toJSON());
+                //console.log(this.model.toJSON());
                 var data = [
                     {label: "Protein:", data: [[1, this.model.get('step4_protein_percent')]]},
                     {label: "Carbs:", data: [[1, this.model.get('step4_carbs_percent')]]},
