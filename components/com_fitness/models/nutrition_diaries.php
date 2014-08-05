@@ -506,8 +506,20 @@ class FitnessModelNutrition_diaries extends JModelList {
                 
                 $data = FitnessHelper::customQuery($query, $query_method);
                 
-                if($id) {
-                    $data->secondary_trainers = $helper->get_client_trainers_names($data->client_id, 'secondary');
+
+                if(!$id) {
+                    $i = 0;
+                    foreach ($data as $item) {
+                        $client_trainers = $helper->get_client_trainers_names($data->client_id, 'secondary');
+
+                        $data[$i]->secondary_trainers = $client_trainers;
+
+                        $i++;
+                    }
+                } else {
+                    $client_trainers = $helper->get_client_trainers_names($data->client_id, 'secondary');
+
+                    $data->secondary_trainers = $client_trainers;
                 }
 
                 return $data;

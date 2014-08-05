@@ -17,6 +17,9 @@ define([
         render: function(){
             var template = _.template(this.template());
             this.$el.html(template);
+            
+            this.setCalendar();
+            
             return this;
         },
 
@@ -24,38 +27,62 @@ define([
             "click #next" : "onClickNext",
             "click #cancel" : "onClickCancel",
         },
+        
+        setCalendar : function() {
+            var self = this;
+            $(this.el).find("#entry_date").datepicker({ dateFormat: "yy-mm-dd",  minDate : -5, beforeShowDay: self.disableDays});
+        },
+        
+        disableDays : function(date) {
+            var disabledDays = app.models.diary_days.toJSON();
+            var calendar_date = moment(date).format("YYYY-MM-DD");
+            var result =  [true];
+            if(_.contains(disabledDays, calendar_date)) {
+                result =  [false];
+            }
+            return result
+        },
 
         onClickNext : function() {
+            var entry_date_field = $(this.el).find('#entry_date');
+            
             var self  = this;
-            $("#create_item_form" ).die().live('submit', function(event) {
-                event.preventDefault();
-                var data = Backbone.Syphon.serialize(this);
-                data.nutrition_plan_id = self.active_plan_data.id;
-                data.client_id = self.active_plan_data.client_id;
-                data.trainer_id = self.active_plan_data.trainer_id;
-                data.goal_category_id = self.active_plan_data.mini_goal;
-                data.nutrition_focus = self.active_plan_data.nutrition_focus;
-                data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
-                data.state = '1';
-                
-                self.model.set(data);
-                
-                if (!self.model.isValid()) {
-                    alert(self.model.validationError);
+            var data = {};
+            data.entry_date = entry_date_field.val();
+            data.nutrition_plan_id = this.active_plan_data.id;
+            data.client_id = this.active_plan_data.client_id;
+            data.trainer_id = this.active_plan_data.trainer_id;
+            data.goal_category_id = this.active_plan_data.mini_goal;
+            data.nutrition_focus = this.active_plan_data.nutrition_focus;
+            data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
+            data.state = '1';
+
+            this.model.set(data);
+            
+            entry_date_field.removeClass("red_style_border");
+
+
+            if (!this.model.isValid()) {
+                var validate_error = this.model.validationError;
+
+                if(validate_error == 'entry_date') {
+                    entry_date_field.addClass("red_style_border");
+                    return false;
+                } else {
+                    alert(this.model.validationError);
                     return false;
                 }
+            }
 
-                self.model.save(null, {
-                    success: function (model, response) {
-                        app.controller.navigate("!/item_view/" + model.get('id'), true);
-                    },
-                    error: function (model, response) {
-                        alert(response.responseText);
-                    }
-                });
+            this.model.save(null, {
+                success: function (model, response) {
+                    app.controller.navigate("!/item_view/" + model.get('id'), true);
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
             });
-             
-            $("#create_item_form").submit();
+
         },
 
         onClickCancel : function() {

@@ -3,6 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'models/nutrition_plan/target',
+        'views/diary/frontend/target_block',
 	'text!templates/diary/frontend/item.html',
         'jquery.validate',
         'jqueryui',
@@ -21,6 +23,8 @@ define([
         _,
         Backbone,
         app,
+        Target_model,
+        Target_block_view,
         template 
     ) {
 
@@ -28,9 +32,6 @@ define([
         
         initialize : function() {
             this.active_plan_data = app.models.active_plan_data.toJSON();
-            this.heavy_target = this.collection.findWhere({type : 'heavy'}).toJSON();
-            this.light_target = this.collection.findWhere({type : 'light'}).toJSON();
-            this.rest_target = this.collection.findWhere({type : 'rest'}).toJSON();
         },
         
         template : _.template(template),
@@ -38,58 +39,40 @@ define([
         render : function () {
             var data = this.model.toJSON();
             data.active_plan_data = this.active_plan_data;
-            data.heavy_target = this.heavy_target;
-            data.light_target = this.light_target;
-            data.rest_target = this.rest_target;
             data.$ = $;
             $(this.el).html(this.template(data));
             
-            this.setTarget();
+            this.connectTargets(this.active_plan_data.id);
             
-            this.connectMealsBlock();
+            //this.connectMealsBlock();
             
             return this;
         },
         
-        setTarget : function() {
-            this.activity_level = this.model.get('activity_level');
-
-            $('#jform_activity_level' + (parseInt(this.activity_level) - 1)).prop('checked',true);
-
-            this.setTargetData(this.activity_level);
-        },
-
-        setTargetData : function(activity_level) {
-            var activity_data;
-            if(activity_level == '1') activity_data = this.heavy_target;
-            if(activity_level == '2') activity_data = this.light_target;
-            if(activity_level == '3') activity_data = this.rest_target;
-
-            var calories = activity_data.calories;
-            var water = activity_data.water;
-
-            $("#calories_value").html(calories);
-            $("#water_value").html(water);
-
-            $("#pie_td, .calories_td").css('visibility', 'visible');
-
-
-            //console.log(activity_data);
-            var data = [
-                {label: "Protein:", data: [[1, activity_data.protein]]},
-                {label: "Carbs:", data: [[1, activity_data.carbs]]},
-                {label: "Fat:", data: [[1, activity_data.fats]]}
-            ];
-
-            var container = $("#placeholder_targets");
-
-            var targets_pie = $.drawPie(data, container, {'no_percent_label' : false});
-
-            targets_pie.draw(); 
+        connectTargets : function(id) {
+            if(app.models.target) {
+                this.loadTargets(id);
+                return;
+            }
+            
+            app.models.target = new Target_model({nutrition_plan_id : id});
+            var self = this;
+            app.models.target.fetch({
+                data : {nutrition_plan_id : id},
+                success : function (model, response) {
+                    self.loadTargets(id);
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            })
         },
         
+        loadTargets : function(id) {
+            $(this.el).find("#targets_wrapper").html(new Target_block_view({model : app.models.target, item_model : app.models.active_plan_data}).render().el);
+        },
+
         connectMealsBlock : function() {
-            
             this.item = this.model.toJSON();
             var submitted = false;
             if (this.item.submit_date && (this.item.submit_date != '0000-00-00 00:00:00')) {

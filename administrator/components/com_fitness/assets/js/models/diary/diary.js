@@ -36,6 +36,10 @@ define([
             if (!attrs.created) {
               return 'No Date created';
             }
+            
+            if (!attrs.entry_date) {
+              return 'entry_date';
+            }
         }
     });
     

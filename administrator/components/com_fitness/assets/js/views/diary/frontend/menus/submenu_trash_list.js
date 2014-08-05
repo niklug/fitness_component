@@ -48,6 +48,7 @@ define([
             var self = this;
             this.model.destroy({
                 success: function (model, response) {
+                    app.collections.items.remove(model);
                     self.hide_items(id);
                 },
                 error: function (model, response) {

@@ -18,56 +18,9 @@ if(_.contains(['2', '3', '4'], status)) {
             </td>
         </tr>
         <tr>
-            <td   width="40%">
+            <td>
                 <div class="fitness_block_wrapper" style="min-height:250px;">
-                    <h3>MY TRAINERS</h3>
-                    <hr class="orange_line">
-                    <div class="internal_wrapper">
-                        <table width="100%">
-                            <tr>
-                                <td>
-                                    Client Name
-                                </td>
-                                <td>
-                                    <span class="grey_title">
-                                        <%= client_name %>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Primary Trainer
-                                </td>
-                                <td>
-                                    <span class="grey_title">
-                                        <%= trainer_name %>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="vertical-align:top;">
-                                    Secondary Trainers
-                                </td>
-                                <td>
-                                    <br/>
-                                    <span class="grey_title">
-                                        <%
-                                        _.each(secondary_trainers, function(item, key){ %>
-                                            <%=  item + " <br/>" %>
-                                        <%
-                                        })
-
-                                        %>
-                                    </span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </td>
-            <td   >
-                <div class="fitness_block_wrapper" style="min-height:250px;">
-                    <h3>MY DIARY ENTRY DETAILS</h3>
+                    <h3>DIARY ENTRY DETAILS</h3>
                     <hr class="orange_line">
                     <div class="internal_wrapper">
                         <table width="100%">
@@ -141,6 +94,54 @@ if(_.contains(['2', '3', '4'], status)) {
                     </div>
                 </div>
             </td>
+            <td   width="40%">
+                <div class="fitness_block_wrapper" style="min-height:250px;">
+                    <h3>TRAINERS</h3>
+                    <hr class="orange_line">
+                    <div class="internal_wrapper">
+                        <table width="100%">
+                            <tr>
+                                <td>
+                                    Client Name
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%= client_name %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Primary Trainer
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%= trainer_name %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align:top;">
+                                    Secondary Trainers
+                                </td>
+                                <td>
+                                    <br/>
+                                    <span class="grey_title">
+                                        <%
+                                        _.each(secondary_trainers, function(item, key){ %>
+                                            <%=  item + " <br/>" %>
+                                        <%
+                                        })
+
+                                        %>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+            
         </tr>
 
 
@@ -305,7 +306,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                         <tr>
                                             <td></td>
                                             <td>
-                                                <%= active_plan_data.trainer_comments %>
+                                                <%= decodeURIComponent(active_plan_data.trainer_comments) %>
                                             </td>
                                         </tr>
                                     </table> 
@@ -338,45 +339,9 @@ if(_.contains(['2', '3', '4'], status)) {
 
 
         <tr>
-            <td     colspan="2">
-                <div class="fitness_block_wrapper" style="height: 310px;">
-                    <h3>TODAY’S MACRONUTRIENT & CALORIE TARGETS</h3>
-                    <hr class="orange_line">
-                    <div class="internal_wrapper">
-                        <table width="100%">
-                            <tr>
-                                <td>
-                                    <h6>WHAT IS YOUR ACTIVITY LEVEL FOR TODAY?</h6>
-                                    <fieldset id="jform_activity_level" class="radio inputbox">
-                                        <input class="activity_level required" name="jform[activity_level]" id="jform_activity_level0" type="radio"  value="1" >
-                                        <label for="jform_activity_level0" >Heavy Training Day</label>
-                                        <input class="activity_level required" name="jform[activity_level]" id="jform_activity_level1"  type="radio" value="2" >
-                                        <label for="jform_activity_level1" >Light Training Day</label>
-                                        <input class="activity_level required" name="jform[activity_level]" id="jform_activity_level2"  type="radio" value="3" >
-                                        <label  for="jform_activity_level2" >Recovery/Rest Day</label>
-                                    </fieldset>
-                                </td>
+            <td     colspan="2" >
+                <div  id="targets_wrapper" class="fitness_block_wrapper">
 
-                                <td id="pie_td" style="visibility: hidden;" class="center">
-                                    <div class="pie-container">
-                                        <h6 style="margin-top:10px;margin-bottom: 5px">MACRONUTRIENT RATIOS</h6>
-                                        <div id="placeholder_targets" class="placeholder_pie"></div>
-                                    </div>
-                                </td>
-
-                                <td class="center calories_td"  style="visibility: hidden;">
-                                    <h6 style="margin-top:50px;">TARGET CALORIE INTAKE</h6> 
-                                    <div id="calories_value" style="line-height: 80px;font-size: 48px; color:#00983A; font-weight: bold;"></div>
-                                    <div  style="font-size: 22px; color:#00983A;font-weight: bold; height: 40px;"> calories</div>
-                                </td>
-                                <td class="center calories_td"  style="visibility: hidden;">
-                                    <h6 style="margin-top:50px;">TARGET WATER INTAKE</h6>
-                                    <div id="water_value" style="line-height: 80px;font-size:48px; color:#3F9EEB; font-weight: bold;"></div>
-                                    <div style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">millilitres</div>
-                                </td>
-                            </tr>
-                        </table> 
-                    </div>
                 </div>
             </td>
         </tr>

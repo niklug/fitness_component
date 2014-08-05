@@ -173,7 +173,7 @@ define([
                 app.models.target.fetch({
                     data : {nutrition_plan_id : id},
                     success : function (model, response) {
-                        self.loadTragers(id);
+                        self.loadTargets(id);
                     },
                     error : function (collection, response) {
                         alert(response.responseText);
@@ -181,7 +181,7 @@ define([
                 })
             },
             
-            loadTragers : function(id) {
+            loadTargets : function(id) {
                 $("#main_container").html(new Target_block_view({model : app.models.target, item_model : app.models.nutrition_plan}).render().el);
                 
                 // connect comments
