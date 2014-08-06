@@ -99,7 +99,7 @@ define([
             app.collections.items.fetch({
                 data : app.models.request_params_diaries.toJSON(),
                 success: function (collection, response) {
-                    //console.log(collection);
+                    console.log(collection);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -111,7 +111,7 @@ define([
         list_view : function() {
             $("#submenu_container").html(new Submenu_list_view().render().el);
             
-            app.models.request_params_diaries.set({page : 1, current_page : 'list',  state : 1});
+            app.models.request_params_diaries.set({page : 1, current_page : 'list',  state : 1, uid : app.getUniqueId()});
             
             this.list_actions();
         },
@@ -140,7 +140,7 @@ define([
         },
         
         create_item : function() {
-            $("#submenu_container").html(new Submenu_form_view({model : new Diary_model()}).render().el);
+            $("#submenu_container").html(new Submenu_form_view({collection : app.collections.items, model : new Diary_model()}).render().el);
             $("#main_container").empty();
         },
         

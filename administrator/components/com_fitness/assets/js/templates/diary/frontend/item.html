@@ -1,6 +1,6 @@
 <%
 var submitted = false;
-if (submit_date && (submit_date != '0000-00-00 00:00:00')) {
+if (item.submit_date && (item.submit_date != '0000-00-00 00:00:00')) {
     submitted = true;
 }
 var scored = false;
@@ -34,12 +34,12 @@ if(_.contains(['2', '3', '4'], status)) {
                                             var d1 = new Date(Date.parse(entry_date));            
                                             var entry_date = moment(d1).format("ddd, D MMM  YYYY"); 
                                     %>
-                                            <%= entry_date%> 
-                                             <input value="<%= entry_date %>" style="width:70px;" readonly type="hidden" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
+                                            <%= item.entry_date%> 
+                                             <input value="<%= item.entry_date %>" style="width:70px;" readonly type="hidden" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
                                     <%
                                        /* } else {
                                     %>
-                                        <input value="<%= entry_date %>" style="width:70px;" readonly type="text" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
+                                        <input value="<%= item.entry_date %>" style="width:70px;" readonly type="text" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
                                     <%
                                         }
                                     */%>
@@ -53,7 +53,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                 <td>
                                     <span class="grey_title">
                                     <%
-                                        var d2 = new Date(Date.parse(created));            
+                                        var d2 = new Date(Date.parse(item.created));            
                                         var created = moment(d2).format("ddd, D MMM  YYYY HH:mm");    
                                     %>
                                     <%= created || '-' %>
@@ -68,7 +68,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                     <span class="grey_title">
                                     <%
                                         if (submitted) {
-                                            var d3 = new Date(Date.parse(submit_date));    
+                                            var d3 = new Date(Date.parse(item.submit_date));    
                                             var submit_date = moment(d3).format("ddd, D MMM  YYYY HH:mm");    
                                         } else {
                                             submit_date = '-';
@@ -85,7 +85,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                 <td>
                                     <span class="grey_title">
                                     <%=
-                                        assessed_by_name || '-'
+                                        item.assessed_by_name || '-'
                                     %>
                                     </span>
                                 </td>
@@ -106,7 +106,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <%= client_name %>
+                                        <%= item.client_name %>
                                     </span>
                                 </td>
                             </tr>
@@ -116,7 +116,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                 </td>
                                 <td>
                                     <span class="grey_title">
-                                        <%= trainer_name %>
+                                        <%= item.trainer_name %>
                                     </span>
                                 </td>
                             </tr>
@@ -128,7 +128,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                     <br/>
                                     <span class="grey_title">
                                         <%
-                                        _.each(secondary_trainers, function(item, key){ %>
+                                        _.each(item.secondary_trainers, function(item, key){ %>
                                             <%=  item + " <br/>" %>
                                         <%
                                         })
@@ -299,7 +299,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                             </td>
                                             <td>
                                                 <span class="grey_title">
-                                                    <%= nutrition_focus_name %>
+                                                    <%= item.nutrition_focus_name %>
                                                 </span>
                                             </td>
                                         </tr>
@@ -316,7 +316,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                         <tr>
                                             <td>
                                                 <%
-                                                if(trainer_comments) {
+                                                if(item.trainer_comments) {
                                                 %>
                                                    'Trainer Comments'
                                                 <%
@@ -325,7 +325,7 @@ if(_.contains(['2', '3', '4'], status)) {
 
                                             </td>
                                             <td>
-                                                <%= trainer_comments %>
+                                                <%= item.trainer_comments %>
                                             </td>
                                         </tr>
                                     </table>
@@ -348,19 +348,8 @@ if(_.contains(['2', '3', '4'], status)) {
 
         <tr>
             <td   colspan="2">
-                <div class="fitness_block_wrapper" style="min-height: 300px;">
-                    <h3>TODAY’S NUTRITION ENTRY</h3>
-                    <hr class="orange_line">
-                    <div class="internal_wrapper">
-                        <div class="clr"></div>
-                            <div id="meals_wrapper"></div>
-                            <div class="clr"></div>
-                            <hr>
-                            <% if(!submitted) { %>
-                                <input style="display:none;" type="button" id="add_plan_meal" value="NEW MEAL">
-                            <% } %>
-                        <div class="clr"></div>
-                    </div>
+                <div id="meal_entries_wrapper"  class="fitness_block_wrapper" style="min-height: 300px;">
+                    
                 </div>
             </td>
         </tr>

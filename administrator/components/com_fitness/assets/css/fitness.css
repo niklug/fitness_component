@@ -1304,3 +1304,17 @@ width: 20px;
 .example_day_edit_bar, .add_recipe_container {
     background-color:#fff;
 }
+
+.add_area {
+    border:1px #ccc dashed;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.add_area div {
+    color:#4f4f4f;
+    padding:5px;
+    width:100%;
+    height:100%;
+    cursor:pointer;
+}

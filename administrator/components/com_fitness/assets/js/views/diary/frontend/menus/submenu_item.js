@@ -28,7 +28,7 @@ define([
 
         onClickClose : function() {
             app.controller.navigate("!/list_view", true);
-            app.views.diary.close();
+            
         },
         
         onClickDelete : function() {

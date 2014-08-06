@@ -5,6 +5,7 @@ define([
         'app',
         'models/nutrition_plan/target',
         'views/diary/frontend/target_block',
+        'views/diary/frontend/meal_entries_block',
 	'text!templates/diary/frontend/item.html',
         'jquery.validate',
         'jqueryui',
@@ -13,7 +14,7 @@ define([
         'jquery.flot.pie',
         'jquery.drawPie',
         'jquery.nutritionMeal',
-        'jquery.calculateSummary',
+        //'jquery.calculateSummary',
         'jquery.macronutrientTargets',
         'jquery.timepicker',
         'jquery.gredient_graph',
@@ -25,6 +26,7 @@ define([
         app,
         Target_model,
         Target_block_view,
+        Meal_entries_block,
         template 
     ) {
 
@@ -37,12 +39,14 @@ define([
         template : _.template(template),
 
         render : function () {
-            var data = this.model.toJSON();
+            var data = {item : this.model.toJSON()};
             data.active_plan_data = this.active_plan_data;
             data.$ = $;
             $(this.el).html(this.template(data));
             
             this.connectTargets(this.active_plan_data.id);
+            
+            this.connectMealEntries();
             
             //this.connectMealsBlock();
             
@@ -73,6 +77,7 @@ define([
         },
 
         connectMealsBlock : function() {
+            return;
             this.item = this.model.toJSON();
             var submitted = false;
             if (this.item.submit_date && (this.item.submit_date != '0000-00-00 00:00:00')) {
@@ -191,7 +196,17 @@ define([
             delete this.macronutrient_targets_rest;
             delete this.plan_comments;
 
-        }
+        },
+        
+        connectMealEntries : function() {
+            this.loadMealEntries();
+        },
+        
+        loadMealEntries : function() {
+            
+            $(this.el).find("#meal_entries_wrapper").html(new Meal_entries_block({model : this.model, plan_model : app.models.active_plan_data}).render().el);
+        },
+
  
     });
             
