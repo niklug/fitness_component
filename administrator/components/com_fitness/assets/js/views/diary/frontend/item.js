@@ -203,8 +203,8 @@ define([
         },
         
         loadMealEntries : function() {
-            
-            $(this.el).find("#meal_entries_wrapper").html(new Meal_entries_block({model : this.model, plan_model : app.models.active_plan_data}).render().el);
+            app.views.meal_entries_block = new Meal_entries_block({model : this.model, plan_model : app.models.active_plan_data});
+            $(this.el).find("#meal_entries_wrapper").html(app.views.meal_entries_block.render().el);
         },
 
  

@@ -4,6 +4,8 @@ define([
 	'backbone',
         'app',
         'collections/diary/diaries',
+        'collections/diary/meal_entries',
+        'collections/diary/diary_meals',
         'models/diary/request_params_diaries',
         'models/diary/diary',
         'models/diary/active_plan_data',
@@ -21,6 +23,8 @@ define([
         Backbone,
         app,
         Diaries_collection,
+        Meal_entries_collection,
+        Diary_meals_collection,
         Request_params_diaries_model,
         Diary_model,
         Active_plan_data_model,
@@ -53,15 +57,6 @@ define([
 
             //active plan data
             app.models.active_plan_data = new Active_plan_data_model();
-            app.models.active_plan_data.fetch({
-                data : {client_id : app.options.client_id},
-                success : function (model, response) {
-                    //console.log(model.toJSON());
-                },
-                error : function (model, response) {
-                    alert(response.responseText);
-                }
-            });
             
             
             //diary days
@@ -74,7 +69,10 @@ define([
                 error : function (model, response) {
                     alert(response.responseText);
                 }
-            })
+            });
+            
+            app.collections.meal_entries = new Meal_entries_collection();
+            app.collections.diary_meals = new Diary_meals_collection();
 
         },
 
@@ -99,7 +97,7 @@ define([
             app.collections.items.fetch({
                 data : app.models.request_params_diaries.toJSON(),
                 success: function (collection, response) {
-                    console.log(collection);
+                    //console.log(collection);
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -140,29 +138,73 @@ define([
         },
         
         create_item : function() {
-            $("#submenu_container").html(new Submenu_form_view({collection : app.collections.items, model : new Diary_model()}).render().el);
-            $("#main_container").empty();
-        },
-        
-        item_view : function(id) {
-            var model = app.collections.items.get(id);
-            
-            if(model) {
-                this.load_item_view(model);
-                return;
-            }
-            
-            app.models.diary = new Diary_model({id : id});
-            var self = this;
-            app.models.diary.fetch({
+            app.models.active_plan_data.fetch({
+                data : {client_id : app.options.client_id},
                 success : function (model, response) {
-                    app.collections.items.add(model);
-                    self.load_item_view(model);
+                    $("#submenu_container").html(new Submenu_form_view({collection : app.collections.items, model : new Diary_model()}).render().el);
+                    $("#main_container").empty();
                 },
-                error: function (collection, response) {
+                error : function (model, response) {
                     alert(response.responseText);
                 }
             });
+            
+            
+        },
+        
+        item_view : function(id) {
+            app.models.diary = new Diary_model({id : id});
+            var self = this;
+            $.when(
+
+                    app.models.diary.fetch({
+                        success : function (model, response) {
+                            app.collections.items.add(model);
+                        },
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                    
+                    ,
+
+                    app.models.active_plan_data.fetch({
+                        data : {client_id : app.options.client_id},
+                        success : function (model, response) {
+                            //console.log(model.toJSON());
+                        },
+                        error : function (model, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                            
+                    ,
+                    
+                    app.collections.meal_entries.fetch({
+                        data : {diary_id : id},
+                        success: function (collection, response) {
+                            //console.log(collection.toJSON());
+                        },
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                    
+                    ,
+                    
+                    app.collections.diary_meals.fetch({
+                        data : {diary_id : id},
+                        success: function (collection, response) {
+                            //console.log(collection.toJSON());
+                        },
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                
+                ).then(function() {
+                    self.load_item_view(app.models.diary);
+                });
         },
         
         load_item_view : function(model) {

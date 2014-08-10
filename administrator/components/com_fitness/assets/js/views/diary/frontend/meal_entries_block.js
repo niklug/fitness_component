@@ -3,7 +3,6 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/diary/meal_entries',
         'models/diary/meal_entry',
         'views/diary/frontend/meal_entry_item',
 	'text!templates/diary/frontend/meal_entries_block.html'
@@ -12,7 +11,6 @@ define([
         _,
         Backbone,
         app,
-        Meal_entries_collection,
         Meal_entry_model,
         Meal_entry_item_view,
         template 
@@ -20,18 +18,6 @@ define([
 
     var view = Backbone.View.extend({
             initialize: function(){
-                app.collections.meal_entries = new Meal_entries_collection();
-                app.collections.meal_entries.bind("add", this.addItem, this);
-                app.collections.meal_entries.bind("reset", this.clearItems, this);
-                app.collections.meal_entries.fetch({
-                    data : {diary_id : this.model.get('id')},
-                    success: function (collection, response) {
-                        //console.log(collection.toJSON());
-                    },
-                    error: function (collection, response) {
-                        alert(response.responseText);
-                    }
-                });
 
             },
             
@@ -44,6 +30,8 @@ define([
                 this.$el.html(template);
                 
                 this.container_el = $(this.el).find("#meals_wrapper" );
+                
+                this.loadItems();
 
                 return this;
             },
@@ -60,6 +48,14 @@ define([
                     model : new Meal_entry_model({diary_id : this.model.get('id')}),
                     plan_model : this.options.plan_model
                 }).render().el);
+            },
+            
+            loadItems : function() {
+                this.clearItems();
+                var self = this;
+                _.each(app.collections.meal_entries.models, function(model) {
+                    self.addItem(model);
+                });
             },
             
             addItem : function(model) {

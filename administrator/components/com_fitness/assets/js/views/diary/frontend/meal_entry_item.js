@@ -3,8 +3,8 @@ define([
 	'underscore',
 	'backbone',
         'app',
-        'collections/diary/meal_entries',
-        'models/diary/meal_entry',
+        'models/diary/diary_meal',
+        'views/diary/frontend/diary_meal_item',
 	'text!templates/diary/frontend/meal_entry_item.html',
         'jquery.timepicker'
 ], function (
@@ -12,34 +12,36 @@ define([
         _,
         Backbone,
         app,
-        Meal_entries_collection,
-        Meal_entry_model,
+        Diary_meal_model,
+        Diary_meal_item_view,
         template 
     ) {
 
     var view = Backbone.View.extend({
             initialize: function(){
-                
             },
             
             template:_.template(template),
             
             render: function(){
                 var data = {item : this.model.toJSON()};
-                console.log(this.model.toJSON());
+                //console.log(this.model.toJSON());
                 var template = _.template(this.template(data));
                 this.$el.html(template);
                 
                 $(this.el).find('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
+                
+                this.populateDiaryMeals();
 
                 return this;
             },
             
             events : {
                 "click .save_meal_entry" : "onClickSave",
-                "click .delete_meal_entry" : "onClickClose"
+                "click .delete_meal_entry" : "onClickClose",
+                "click .create_meal" : "onClickCreateMeal"
             },
-            
+
             onClickSave :function(event) {
                 var container = $(event.target);
                 
@@ -78,13 +80,16 @@ define([
                     success: function (model, response) {
                         app.collections.meal_entries.add(model);
                         self.addHtml(container);
+                        
+                        app.collections.meal_entries.sort();
+                        app.views.meal_entries_block.loadItems();
                     },
                     error: function (model, response) {
                         alert(response.responseText);
                     }
                 });
             },
-            
+
             onClickClose : function(event) {
                 if(this.model.isNew()) {
                     var container = $(event.target);
@@ -107,6 +112,35 @@ define([
                 container.closest( ".add_meal_entry_container" ).html('<div class="add_meal_entry">click to create a new entry</div>');
             },
             
+            onClickCreateMeal : function() {
+                var model = new Diary_meal_model({
+                    nutrition_plan_id : this.model.get('nutrition_plan_id'),
+                    diary_id : this.model.get('diary_id'),
+                    meal_entry_id :  this.model.get('id'),
+                    edit_mode : true
+                });
+                
+                this.addDiaryMealItem(model);
+            },
+            
+            addDiaryMealItem : function(model) {
+                $(this.el).find(".diary_meals_wrapper").append(new Diary_meal_item_view({model : model}).render().el);
+            },
+            
+            populateDiaryMeals : function() {
+                var self = this;
+                _.each(app.collections.diary_meals.models, function(model) {
+                    self.addDiaryMeal(model);
+                });
+                
+            },
+            
+            addDiaryMeal : function(model) {
+                if(model.get('meal_entry_id') == this.model.get('id')) {
+                    this.addDiaryMealItem(model);
+                }
+            },
+
             close :function() {
                 $(this.el).unbind();
                 $(this.el).remove();

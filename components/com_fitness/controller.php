@@ -518,6 +518,12 @@ class FitnessController extends JController {
         $view -> meal_entries(); 
     }
     
+    function diary_meals() {
+        $view = $this -> getView('nutrition_diaries', 'json');
+        $view->setModel($this->getModel('nutrition_diaries'));
+        $view -> diary_meals(); 
+    }
+    
     function updateDiary() {
         $view = $this -> getView('nutrition_diaries', 'json');
         $view->setModel($this->getModel('nutrition_diaries'));

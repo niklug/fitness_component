@@ -1,0 +1,23 @@
+<table width="100%">
+    <tr>
+        <td width="100">
+            <% if(item.edit_mode) { %>
+            <label class="orange_text" style="font-weight:bold;">DESCRIPTION: </label>
+            <% } else { %>
+            <div style="width:75px;height:75px;background-size: 75px 75px;" class="description_image"></div>
+            <% } %>
+        </td>
+        <td width="300" class="description_select" style="text-transform:uppercase;font-weight:bold;">
+
+        </td>
+        <td>
+            <% if(item.edit_mode) { %>
+                <a onclick="javascript:void(0)" class="cancel_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[CANCEL]</a>
+                <a onclick="javascript:void(0)" class="save_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[SAVE & ENTER]</a>
+            <% } else { %>
+                <a onclick="javascript:void(0)" class="delete_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[DELETE]</a>
+                <a onclick="javascript:void(0)" class="edit_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[EDIT]</a>
+            <% } %>
+        </td>
+    </tr>
+</table>
