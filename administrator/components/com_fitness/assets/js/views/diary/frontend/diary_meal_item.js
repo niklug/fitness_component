@@ -4,7 +4,9 @@ define([
 	'backbone',
         'app',
         'collections/nutrition_plan/nutrition_guide/menu_descriptions',
+        'models/diary/meal_ingredient',
         'views/programs/select_element',
+        'views/diary/frontend/meal_ingredient_item',
 	'text!templates/diary/frontend/diary_meal_item.html'
 ], function (
         $,
@@ -12,7 +14,9 @@ define([
         Backbone,
         app,
         Menu_descriptions_collection,
+        Meal_ingredient_model,
         Select_element_view,
+        Meal_ingredient_item_view,
         template 
     ) {
 
@@ -29,7 +33,9 @@ define([
                 var template = _.template(this.template(data));
                 this.$el.html(template);
                 
-                this.loadDescriptions();
+                this.loadDescription();
+                
+                this.populateMealIngredients();
                 
                 return this;
             },
@@ -39,6 +45,8 @@ define([
                 "click .edit_diary_meal" : "onClickEdit",
                 "click .cancel_diary_meal" : "onClickCancel",
                 "click .delete_diary_meal" : "onClickDelete",
+                
+                "click .add_meal_ingredient" : "onClickAddMealIngredient",
             },
             
             onClickSave :function() {
@@ -115,7 +123,7 @@ define([
                 this.model.set({edit_mode : edit_mode});
             },
             
-            loadDescriptions : function() {
+            loadDescription : function() {
                 var collection = Menu_descriptions_collection;
                 var description_id = this.model.get('description');
 
@@ -152,6 +160,28 @@ define([
                 this.render();
             },
             
+            populateMealIngredients : function() {
+                var self = this;
+                _.each(app.collections.meal_ingredients.models, function(model) {
+                    self.addMealIngredientItem(model);
+                });
+            },     
+            
+            addMealIngredientItem : function(model) {
+                if(model.get('meal_id') == this.model.get('id')) {
+                    $(this.el).find(".meal_ingredients_wrapper").append(new Meal_ingredient_item_view({model : model}).render().el);
+                }
+            },
+            
+            onClickAddMealIngredient : function() {
+                var model = new Meal_ingredient_model({
+                    nutrition_plan_id : this.model.get('nutrition_plan_id'),
+                    diary_id  : this.model.get('diary_id '),
+                    meal_entry_id  : this.model.get('meal_entry_id '),
+                    meal_id : this.model.get('id')
+                });
+                this.addMealIngredientItem(model);                
+            },
 
             close :function() {
                 $(this.el).unbind();

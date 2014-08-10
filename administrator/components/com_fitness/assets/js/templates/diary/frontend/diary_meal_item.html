@@ -12,12 +12,43 @@
         </td>
         <td>
             <% if(item.edit_mode) { %>
-                <a onclick="javascript:void(0)" class="cancel_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[CANCEL]</a>
-                <a onclick="javascript:void(0)" class="save_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[SAVE & ENTER]</a>
+            <a onclick="javascript:void(0)" class="cancel_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[CANCEL]</a>
+            <a onclick="javascript:void(0)" class="save_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[SAVE & ENTER]</a>
             <% } else { %>
-                <a onclick="javascript:void(0)" class="delete_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[DELETE]</a>
-                <a onclick="javascript:void(0)" class="edit_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[EDIT]</a>
+            <a onclick="javascript:void(0)" class="delete_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[DELETE]</a>
+            <a onclick="javascript:void(0)" class="edit_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[EDIT]</a>
             <% } %>
         </td>
     </tr>
 </table>
+
+<br/>
+<div class="ingredients_wrapper">
+    <table class="meal_table" width="100%">
+        <thead>
+            <tr>
+                <th class="ingredient_title">MEAL ITEMS</th>
+                <th>QUANTITY</th>
+                <th class="ingredient_cell">PRO</th>
+                <th class="ingredient_cell">FAT</th>
+                <th class="ingredient_cell">CARB</th>
+                <th class="ingredient_cell">CALS</th>
+                <th class="ingredient_cell">ENRG (kJ)</th>
+                <th class="ingredient_cell">FAT, SAT</th>
+                <th class="ingredient_cell">SUG</th>
+                <th class="ingredient_cell">SOD (mg)</th>
+
+                <th class="ingredient_cell_delete"></th>
+
+            </tr>
+        </thead>
+        <tbody class="meal_ingredients_wrapper">
+
+        </tbody>
+
+    </table>
+    
+    <div class="clr"></div>
+    <br/>
+    <a onclick="javascript:void(0)" class="add_meal_ingredient" style="cursor: pointer;">[ADD ITEM]</a>
+</div>

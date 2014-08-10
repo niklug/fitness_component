@@ -686,4 +686,85 @@ class FitnessModelNutrition_diaries extends JModelList {
 
         return $model;
     }
+    
+    
+    public function meal_ingredients() {
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $id = JRequest::getVar('id', 0, '', 'INT');
+
+        $table = '#__fitness_nutrition_diary_ingredients';
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+                $nutrition_plan_id = JRequest::getVar('nutrition_plan_id'); 
+                $diary_id = JRequest::getVar('diary_id'); 
+                $meal_entry_id = JRequest::getVar('meal_entry_id'); 
+                $meal_id = JRequest::getVar('meal_id'); 
+                
+                $query .= "SELECT a.* FROM $table AS a";
+                
+                $query .= " WHERE 1 ";
+   
+                if($id) {
+                    $query .= " AND a.id='$id' ";
+                }
+                
+                if($nutrition_plan_id) {
+                    $query .= " AND a.nutrition_plan_id='$nutrition_plan_id' ";
+                }
+                
+                if($diary_id) {
+                    $query .= " AND a.diary_id='$diary_id' ";
+                }
+                
+                if($meal_entry_id) {
+                    $query .= " AND a.meal_entry_id='$meal_entry_id' ";
+                }
+                
+                if($meal_id) {
+                    $query .= " AND a.meal_id='$meal_id' ";
+                }
+
+               
+                $query_method = 1;
+                
+                if($id) {
+                    $query_method = 2;
+                }
+                
+                $data = FitnessHelper::customQuery($query, $query_method);
+
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
+    
+    
 }

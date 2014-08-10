@@ -6,6 +6,7 @@ define([
         'collections/diary/diaries',
         'collections/diary/meal_entries',
         'collections/diary/diary_meals',
+        'collections/diary/meal_ingredients',
         'models/diary/request_params_diaries',
         'models/diary/diary',
         'models/diary/active_plan_data',
@@ -25,6 +26,7 @@ define([
         Diaries_collection,
         Meal_entries_collection,
         Diary_meals_collection,
+        Meal_ingredients_collection,
         Request_params_diaries_model,
         Diary_model,
         Active_plan_data_model,
@@ -73,7 +75,7 @@ define([
             
             app.collections.meal_entries = new Meal_entries_collection();
             app.collections.diary_meals = new Diary_meals_collection();
-
+            app.collections.meal_ingredients = new Meal_ingredients_collection();
         },
 
         routes: {
@@ -193,6 +195,18 @@ define([
                     ,
                     
                     app.collections.diary_meals.fetch({
+                        data : {diary_id : id},
+                        success: function (collection, response) {
+                            //console.log(collection.toJSON());
+                        },
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    })
+                            
+                    ,
+                    
+                    app.collections.meal_ingredients.fetch({
                         data : {diary_id : id},
                         success: function (collection, response) {
                             //console.log(collection.toJSON());

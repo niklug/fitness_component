@@ -463,7 +463,7 @@ td.center, th.center, .center {
 }
 
 
-.fitness_wrapper .meal_name_input {
+.fitness_wrapper .ingredient_name_input {
     width:300px;
     font-size: 12px;
     background-color: #fff;
@@ -472,7 +472,7 @@ td.center, th.center, .center {
 }
 
 .fitness_wrapper .number_input , .fitness_wrapper .meal_quantity_input, .fitness_wrapper .totals_row input, .fitness_wrapper .water, .fitness_wrapper .previous_water{
-    width: 43px;
+    width: 32px;
     font-size: 10px;
     background-color: #fff;
     color:#000;
