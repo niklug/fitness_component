@@ -464,7 +464,7 @@ td.center, th.center, .center {
 
 
 .fitness_wrapper .ingredient_name_input {
-    width:300px;
+    width:270px;
     font-size: 12px;
     background-color: #fff;
     color:#000;
@@ -552,7 +552,7 @@ td.center, th.center, .center {
 .fitness_wrapper #select_meal_form, .fitness_wrapper .select_meal_form{
     background-color: #FFFFFF;
     height: auto;
-    margin-top: 21px;
+    margin-top: 0px;
     position: absolute;
     min-width: 392px;
     border: 1px solid #cccccc;

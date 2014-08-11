@@ -22,12 +22,27 @@ define([
 
     var view = Backbone.View.extend({
             initialize: function(){
+                this.collection.bind("sync", this.render, this);
+                this.collection.bind("remove", this.render, this);
+
+                this.model.set({
+                    protein_totals : '0',
+                    fats_totals : '0',
+                    carbs_totals : '0',
+                    calories_totals : '0',
+                    energy_totals : '0',
+                    saturated_fat_totals : '0',
+                    total_sugars_totals : '0',
+                    sodium_totals : '0',
+                });
+                
                 this.edit_mode();
             },
             
             template:_.template(template),
             
             render: function(){
+                this.calculateTotals();
                 var data = {item : this.model.toJSON()};
                 //console.log(this.model.toJSON());
                 var template = _.template(this.template(data));
@@ -162,25 +177,52 @@ define([
             
             populateMealIngredients : function() {
                 var self = this;
-                _.each(app.collections.meal_ingredients.models, function(model) {
+                _.each(this.collection.models, function(model) {
                     self.addMealIngredientItem(model);
                 });
             },     
             
             addMealIngredientItem : function(model) {
-                if(model.get('meal_id') == this.model.get('id')) {
-                    $(this.el).find(".meal_ingredients_wrapper").append(new Meal_ingredient_item_view({model : model}).render().el);
-                }
+                model.set({edit_mode : this.edit_mode()});
+                $(this.el).find(".meal_ingredients_wrapper").append(new Meal_ingredient_item_view({model : model, collection : this.collection}).render().el);
             },
             
             onClickAddMealIngredient : function() {
                 var model = new Meal_ingredient_model({
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),
-                    diary_id  : this.model.get('diary_id '),
-                    meal_entry_id  : this.model.get('meal_entry_id '),
+                    diary_id  : this.model.get('diary_id'),
+                    meal_entry_id  : this.model.get('meal_entry_id'),
                     meal_id : this.model.get('id')
                 });
                 this.addMealIngredientItem(model);                
+            },
+            
+            calculateTotals : function() {
+                //console.log(this.collection.toJSON());
+                var protein_totals = this.getCollectionNameAmount('protein');
+                var fats_totals = this.getCollectionNameAmount('fats');
+                var carbs_totals = this.getCollectionNameAmount('carbs');
+                var calories_totals = this.getCollectionNameAmount('calories');
+                var energy_totals = this.getCollectionNameAmount('energy');
+                var saturated_fat_totals = this.getCollectionNameAmount('saturated_fat');
+                var total_sugars_totals = this.getCollectionNameAmount('total_sugars');
+                var sodium_totals = this.getCollectionNameAmount('sodium');
+
+                this.model.set({
+                    protein_totals : protein_totals,
+                    fats_totals : fats_totals,
+                    carbs_totals : carbs_totals,
+                    calories_totals : calories_totals,
+                    energy_totals : energy_totals,
+                    saturated_fat_totals : saturated_fat_totals,
+                    total_sugars_totals : total_sugars_totals,
+                    sodium_totals : sodium_totals,
+                });
+            },
+            
+            getCollectionNameAmount : function( name) {
+                var value =  this.collection.reduce(function(memo, value) { return parseFloat(memo) + parseFloat(value.get(name)) }, 0);
+                return value.toFixed(2);
             },
 
             close :function() {

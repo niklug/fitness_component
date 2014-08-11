@@ -59,6 +59,11 @@ class FitnessController extends JController {
         
         echo $this->admin_nutrition_recipe_model->getIngredientData($id);
     }
+    
+    function nutrition_database_ingredients() {
+        echo json_encode($this->admin_nutrition_recipe_model->nutrition_database_ingredients());
+    }
+
 
     function saveMeal() {
         $ingredient_encoded = JRequest::getVar('ingredient_encoded');

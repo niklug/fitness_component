@@ -392,7 +392,7 @@
 #select_meal_form, .select_meal_form{
     background-color: #FFFFFF;
     height: auto;
-    margin-top: 21px;
+    margin-top: 0px;
     position: absolute;
     min-width: 392px;
     border: 1px solid #cccccc;

@@ -24,6 +24,11 @@ class FitnessViewNutrition_recipe extends JView {
 	    echo $model->getIngredientData($id);
 	}
         
+        function nutrition_database_ingredients() {
+            $model = $this -> getModel("nutrition_recipe");
+	    echo json_encode($model->nutrition_database_ingredients());
+	}
+        
         function saveMeal() {
 	    $ingredient_encoded = JRequest::getVar('ingredient_encoded');
             $model = $this -> getModel("nutrition_recipe");

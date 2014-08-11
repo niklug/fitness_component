@@ -1,14 +1,14 @@
 <td>
     <% if(item.edit_mode) { %>
-        <input readonly  size="60" type="text"  class="ingredient_name_input dark_input_style" value="<%= item.meal_name %>">
+        <input   size="50" type="text"  class="ingredient_name_input dark_input_style" value="<%= item.meal_name %>">
     <% } else { %>
         <%= item.meal_name %>
     <% } %>
 </td>
 
-<td>
+<td width="150">
     <% if(item.edit_mode) { %>
-        <input  size="5" type="text"  class="ingredient_quantity_input number_input dark_input_style"  value="<%= item.quantity %>">
+    <input data-id="<%= item.id %>"  size="5" type="text"  class="ingredient_quantity_input number_input dark_input_style"  value="<%= item.quantity %>">
     <% } else { %>
         <%= item.quantity %>
     <% } %>
@@ -73,12 +73,14 @@
 
 <td>
     <% if(item.edit_mode) { %>
-        <input readonly size="5" type="text"  class="ingredient_total_sodium number_input dark_input_style" value="<%= item.sodium %>">
+        <input readonly size="5" type="text"  class="ingredient_sodium number_input dark_input_style" value="<%= item.sodium %>">
     <% } else { %>
         <%= item.sodium %>
     <% } %>
 </td>
 
 <td class="ingredient_cell_delete">
-    <a href="javascript:void(0)" class="delete_meal delete_meal_ingredient" title="delete"></a>
+    <% if(item.edit_mode) { %>
+        <a href="javascript:void(0)" class="delete_meal delete_meal_ingredient" title="delete"></a>
+    <% } %>
 </td>

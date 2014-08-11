@@ -19,8 +19,8 @@ define([
               return 'No meal_entry_id';
             }
             
-            if (!attrs.menu_id) {
-              return 'No menu_id';
+            if (!attrs.meal_id) {
+              return 'No meal_id';
             }
 
         }

@@ -45,10 +45,46 @@
         <tbody class="meal_ingredients_wrapper">
 
         </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <% if(item.edit_mode) { %>
+                        <a onclick="javascript:void(0)" class="add_meal_ingredient" style="cursor: pointer;">[ADD ITEM]</a>
+                    <% } %>
+                </td>
+                <td>
+                    <b>TOTALS</b>
+                </td>
+                <td class="protein_totals">
+                    <%= item.protein_totals %>
+                </td>
+                <td class="fats_totals">
+                    <%= item.fats_totals %>
+                </td>
+                <td class="carbs_totals">
+                    <%= item.carbs_totals %>
+                </td>
+                <td class="calories_totals">
+                    <%= item.calories_totals %>
+                </td>
+                <td class="energy_totals">
+                    <%= item.energy_totals %>
+                </td>
+                <td class="saturated_fat_totals">
+                    <%= item.saturated_fat_totals %>
+                </td>
+                <td class="total_sugars_totals">
+                    <%= item.total_sugars_totals %>
+                </td>
+                <td class="sodium_totals">
+                    <%= item.sodium_totals %>
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
 
     </table>
-    
-    <div class="clr"></div>
-    <br/>
-    <a onclick="javascript:void(0)" class="add_meal_ingredient" style="cursor: pointer;">[ADD ITEM]</a>
 </div>
+
+<div class="clr"></div>
+<br/>

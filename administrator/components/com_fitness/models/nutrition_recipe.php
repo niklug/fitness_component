@@ -173,6 +173,73 @@ class FitnessModelnutrition_recipe extends JModelAdmin
             return json_encode($result);      
         }
         
+        public function nutrition_database_ingredients() {
+            $method = JRequest::getVar('_method');
+
+            if(!$method) {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+
+            $model = json_decode(JRequest::getVar('model'));
+
+            $id = JRequest::getVar('id', 0, '', 'INT');
+
+            $table = '#__fitness_nutrition_database';
+
+            $helper = new FitnessHelper();
+
+            switch ($method) {
+                case 'GET': // Get Item(s)
+                    $search_text = JRequest::getVar('search_text'); 
+                    $search_text_array = preg_split("/[\s,]+/", $search_text);
+            
+
+                    $query .= "SELECT a.* FROM $table AS a";
+
+                    $query .= " WHERE 1 ";
+
+                    if($id) {
+                        $query .= " AND a.id='$id' ";
+                    }
+                    
+                    foreach ($search_text_array as $search_text_part) {
+                        $query .= "  AND a.ingredient_name LIKE '%$search_text_part%'  ";
+                    }
+
+                    $query .= " AND a.state='1'";
+
+   
+                    $query_method = 1;
+
+                    if($id) {
+                        $query_method = 2;
+                    }
+
+                    $data = FitnessHelper::customQuery($query, $query_method);
+
+                    return $data;
+                    break;
+                case 'PUT': 
+                    //update
+                    $id = $helper->insertUpdateObj($model, $table);
+                    break;
+                case 'POST': // Create
+                    $id = $helper->insertUpdateObj($model, $table);
+                    break;
+                case 'DELETE': // Delete Item
+                    $id = JRequest::getVar('id', 0, '', 'INT');
+                    $id = $helper->deleteRow($id, $table);
+                    break;
+
+                default:
+                    break;
+            }
+
+            $model->id = $id;
+
+            return $model;
+        }
+        
         public function saveMeal($ingredient_encoded) {
             $ret['success'] = 1;
             $db = JFactory::getDbo();

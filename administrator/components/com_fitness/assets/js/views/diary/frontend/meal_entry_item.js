@@ -3,6 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'collections/diary/meal_ingredients',
         'models/diary/diary_meal',
         'views/diary/frontend/diary_meal_item',
 	'text!templates/diary/frontend/meal_entry_item.html',
@@ -12,6 +13,7 @@ define([
         _,
         Backbone,
         app,
+        Meal_ingredients_collection,
         Diary_meal_model,
         Diary_meal_item_view,
         template 
@@ -124,7 +126,10 @@ define([
             },
             
             addDiaryMealItem : function(model) {
-                $(this.el).find(".diary_meals_wrapper").append(new Diary_meal_item_view({model : model}).render().el);
+                var models = app.collections.meal_ingredients.where({meal_id : model.get('id')});
+                var collection = new Meal_ingredients_collection(models);
+                //console.log(collection);
+                $(this.el).find(".diary_meals_wrapper").append(new Diary_meal_item_view({model : model, collection : collection}).render().el);
             },
             
             populateDiaryMeals : function() {
