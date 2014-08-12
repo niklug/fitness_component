@@ -62,6 +62,8 @@ define([
                 "click .delete_diary_meal" : "onClickDelete",
                 
                 "click .add_meal_ingredient" : "onClickAddMealIngredient",
+                "click .save_as_recipe" : "onClickSaveAsRecipe",
+
             },
             
             onClickSave :function() {
@@ -112,6 +114,11 @@ define([
             },
 
             onClickCancel : function(event) {
+                if(this.model.isNew()) {
+                    this.close();
+                    return;
+                }
+                
                 this.model.set({edit_mode : false});
                 this.render();
             },
@@ -223,6 +230,10 @@ define([
             getCollectionNameAmount : function( name) {
                 var value =  this.collection.reduce(function(memo, value) { return parseFloat(memo) + parseFloat(value.get(name)) }, 0);
                 return value.toFixed(2);
+            },
+            
+            onClickSaveAsRecipe : function() {
+                console.log('save as recipe');
             },
 
             close :function() {

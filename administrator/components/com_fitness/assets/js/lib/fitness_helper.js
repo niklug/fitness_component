@@ -415,28 +415,17 @@
                     var task = 'importRecipe';
 
                     data.nutrition_plan_id = app.options.add_diary_options.nutrition_plan_id;
+                    data.diary_id = app.options.add_diary_options.diary_id;
+                    data.meal_entry_id = app.options.add_diary_options.meal_entry_id;
                     data.meal_id = app.options.add_diary_options.meal_id;
                     data.type = app.options.add_diary_options.type;
-                    data.parent_view = app.options.add_diary_options.parent_view;
-
-                    if(data.parent_view == 'nutrition_diary_frontend'){
-                        data.db_table =  '#__fitness_nutrition_diary_ingredients';
-                    }
-
-                    if(data.parent_view == 'nutrition_plan_backend'){
-                        data.db_table = '#__fitness_nutrition_plan_ingredients';
-                    }
-
+                    
+                    data.db_table =  '#__fitness_nutrition_diary_ingredients';
+                    //console.log(data);
                     var table = data.db_table;
-
                     this.ajaxCall(data, url, view, task, table, function(output){
-                        window.parent.resetBody();
-                        window.parent.nutrition_meal.run();
-
-                        var elem = window.parent.document.getElementById("recipes_list_wrapper");
-                        elem.parentNode.removeChild(elem);
-                        
-                        
+                        //console.log(output);                       
+                        window.location = decodeURIComponent(app.options.add_diary_options.back_url);
                         
                    });
                 },

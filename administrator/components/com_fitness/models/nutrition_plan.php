@@ -452,6 +452,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 $ret['message'] =  $db->getErrorMsg();
             }
             $ingredients = $db->loadObjectList();
+
             
             $coef = $obj->number_serves / $obj->number_serves_recipe;
 
@@ -461,9 +462,23 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 if($obj->nutrition_plan_id) {
                     $data->nutrition_plan_id = $obj->nutrition_plan_id;
                 }
+                if($obj->diary_id) {
+                    $data->diary_id = $obj->diary_id;
+                }
+                
+                if($obj->meal_entry_id) {
+                    $data->meal_entry_id = $obj->meal_entry_id;
+                }
+                
+                if($obj->meal_id) {
+                    $data->meal_id = $obj->meal_id;
+                }
+                
+                
                 if($obj->menu_id) {
                     $data->menu_id = $obj->menu_id;
                 }
+                
                 if($obj->recipe_id_created) {
                     $data->recipe_id = $obj->recipe_id_created;
                 }
@@ -490,7 +505,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                 }
             }
 
-            $result = array('status' => $ret);
+            $result = array('status' => $ret, 'data'  => $data);
             
             return $result;     
         }

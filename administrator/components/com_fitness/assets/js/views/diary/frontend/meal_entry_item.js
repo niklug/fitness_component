@@ -41,7 +41,9 @@ define([
             events : {
                 "click .save_meal_entry" : "onClickSave",
                 "click .delete_meal_entry" : "onClickClose",
-                "click .create_meal" : "onClickCreateMeal"
+                "click .create_meal" : "onClickCreateMeal",
+                "click .add_meal_from_database" : "onClickCreateMealFromDatabase"
+                
             },
 
             onClickSave :function(event) {
@@ -144,6 +146,35 @@ define([
                 if(model.get('meal_entry_id') == this.model.get('id')) {
                     this.addDiaryMealItem(model);
                 }
+            },
+            
+            onClickCreateMealFromDatabase : function() {
+                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' + this.model.get('diary_id'));
+                
+                var model = new Diary_meal_model({
+                    nutrition_plan_id : this.model.get('nutrition_plan_id'),
+                    diary_id : this.model.get('diary_id'),
+                    meal_entry_id :  this.model.get('id'),
+                    description : '0'
+                });
+
+                model.save(null, {
+                    success: function (model, response) {
+                        var url = app.options.base_url_relative + 'index.php?option=com_fitness&view=recipe_database';
+                        url += '&nutrition_plan_id=' + model.get('nutrition_plan_id');
+                        url += '&diary_id=' + model.get('diary_id');
+                        url += '&meal_entry_id=' + model.get('meal_entry_id');
+                        url += '&meal_id=' + model.get('id');
+                        url += '&back_url=' + back_url;
+                        url += '#!/my_recipes';
+                        window.location = url;
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+
+                
             },
 
             close :function() {
