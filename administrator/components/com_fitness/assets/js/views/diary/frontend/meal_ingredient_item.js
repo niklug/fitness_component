@@ -4,6 +4,7 @@ define([
 	'backbone',
         'app',
         'collections/diary/nutrition_database_ingredients',
+        'collections/diary/meal_ingredients',
         'views/diary/frontend/ingredients_search_results',
 	'text!templates/diary/frontend/meal_ingredient_item.html'
 ], function (
@@ -12,6 +13,7 @@ define([
         Backbone,
         app,
         Nutrition_database_ingredients_collection,
+        Meal_ingredients_collection,
         Ingredients_search_results_view,
         template 
     ) {
@@ -20,7 +22,9 @@ define([
             tagName : "tr",
         
             initialize: function(){
-                this.ingredients_collection = new Nutrition_database_ingredients_collection();
+                if(!app.collections.nutrition_database_ingredients) {
+                    app.collections.nutrition_database_ingredients = new Nutrition_database_ingredients_collection();
+                }
                 this.search_results_view = new Ingredients_search_results_view();
 
                 this.edit_mode();
@@ -69,7 +73,6 @@ define([
             },
             
             onInputName : function(event) {
-                var typingTimer;
                 var search_text = $(event.target).val();
                 
                 this.search_results_view.close();
@@ -77,32 +80,50 @@ define([
                 $(event.target).parent().append(
                     this.search_results_view.render().el
                 );
-                
-                clearTimeout(typingTimer);
+
                 var self = this;
                 if (search_text) {
-                    typingTimer = setTimeout(
-                        function() {
-                            self.ingredients_collection.fetch({
-                                data : {search_text : search_text},
-                                success: function (collection, response) {
-                                    //console.log(collection);
-                                    self.populateSearchContainer(collection);
-                                },
-                                error: function (collection, response) {
-                                    alert(response.responseText);
-                                }
-                            }); 
+                    if(app.collections.nutrition_database_ingredients.length) {
+                        self.populateSearchContainer(app.collections.nutrition_database_ingredients, search_text);
+                        return;
+                    }
+
+                    app.collections.nutrition_database_ingredients.fetch({
+                        //data : {search_text : search_text},
+                        success: function (collection, response) {
+                            //console.log(collection);
+                            self.populateSearchContainer(collection, search_text);
                         },
-                        self.options.doneTypingInterval
-                    );
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    }); 
                 }
             },
             
-            populateSearchContainer : function(collection) {
+            populateSearchContainer : function(collection, search_text) {
+                var search_parts_array = search_text.split(/[\s,]+/);
+                var all_models = [];
+                _.each(search_parts_array, function(search_text) {
+                    var models = collection.filter(function(model) {
+                        var ingredient_name = model.get('ingredient_name');
+
+                        if(!search_text) {
+                            return false;
+                        }
+                        return (ingredient_name.indexOf(search_text) > -1);
+                    });
+                    
+                    all_models = all_models.concat(models);
+                });
+
+                var collection = new Meal_ingredients_collection(all_models);
+                
                 $(this.el).find(".results_count").html('Search returned ' + collection.length + ' ingredients.');
                 
                 var select_field =  $(this.el).find(".ingredients_results");
+                
+                select_field.empty();
                 
                 var self = this;
                 _.each(collection.models, function(model) {
@@ -117,7 +138,7 @@ define([
             
             onChooseIngredient : function(event) {
                 var id = $(event.target).val();
-                this.ingredient_model = this.ingredients_collection.get(id);
+                this.ingredient_model = app.collections.nutrition_database_ingredients.get(id);
                 $(this.el).find(".ingredient_name_input").val(this.ingredient_model.get('ingredient_name'));
                 this.search_results_view.close();
                 
@@ -143,13 +164,13 @@ define([
                     return;
                 }
                 
-                if(this.ingredients_collection.get(inredient_id)) {
-                    this.onSetQuantity(this.ingredients_collection.get(inredient_id), quantity);
+                if(app.collections.nutrition_database_ingredients.get(inredient_id)) {
+                    this.onSetQuantity(app.collections.nutrition_database_ingredients.get(inredient_id), quantity);
                     return;
                 }
 
                 var self = this;
-                this.ingredients_collection.fetch({
+                app.collections.nutrition_database_ingredients.fetch({
                     success: function (collection, response) {
                         var model = collection.get(inredient_id);
                         self.onSetQuantity(model, quantity);
@@ -164,7 +185,6 @@ define([
                 var ingredient = model.toJSON();
                 var calculatedIngredient = this.calculatedIngredientItems(ingredient, quantity);
                 this.model.set(calculatedIngredient);
-                console.log(this.model.toJSON());
                 
                 if (!this.model.isValid()) {
                     var validate_error = this.model.validationError;
