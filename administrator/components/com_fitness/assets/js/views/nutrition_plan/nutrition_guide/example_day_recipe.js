@@ -47,6 +47,8 @@ define([
             "click .view_recipe" : "onClickViewRecipe",
             "click .edit_recipe" : "onClickEdit",
             "click .copy_recipe" : "onClickCopy",
+            
+            "click .add_to_diary" : "onClickAddToDiary",
         },
         
 
@@ -182,8 +184,17 @@ define([
                     element_disabled :  ""
                 }).render();
             }
+        },
+        
+        onClickAddToDiary : function() {
+            var number_serves = this.model.get('number_serves');
+            var data = {};
+            data.recipe_id = this.model.get('original_recipe_id');
+            data.number_serves = number_serves;
 
-            
+            data.number_serves_recipe = this.model.get('number_serves');
+            data.type = 'nutrition_plan';
+            $.fitness_helper.add_diary(data, app);
         },
         
         close :function() {

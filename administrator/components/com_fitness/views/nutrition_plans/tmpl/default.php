@@ -23,6 +23,16 @@ $business_profile_id = $business_profile_id['data'];
 
 
 <script type="text/javascript">
+    var add_diary_options = {
+        'nutrition_plan_id' : '<?php echo JRequest::getVar('nutrition_plan_id'); ?>',
+        'diary_id' : '<?php echo JRequest::getVar('diary_id'); ?>',
+        'meal_entry_id' : '<?php echo JRequest::getVar('meal_entry_id'); ?>',
+        'meal_id' : '<?php echo JRequest::getVar('meal_id'); ?>',
+        'type' : '<?php echo JRequest::getVar('type'); ?>',
+        'parent_view' : '<?php echo JRequest::getVar('parent_view');?>',
+        'back_url' : '<?php echo JRequest::getVar('back_url');?>'
+    };
+    
     var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
@@ -79,6 +89,7 @@ $business_profile_id = $business_profile_id['data'];
         }
         
         options.status_options = status_options;
+        options.add_diary_options = add_diary_options;
         //
         
         var menu_status_options = {

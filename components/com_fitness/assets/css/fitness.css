@@ -1182,7 +1182,7 @@ td.center, th.center, .center {
     margin-top: 10px;
 }
 
-.add_area div {
+.add_area .add_recipe {
     color:#4f4f4f;
     padding:5px;
     width:100%;

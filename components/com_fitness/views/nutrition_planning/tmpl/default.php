@@ -24,11 +24,23 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
 
 
 <script type="text/javascript">
+    
+    var add_diary_options = {
+        'nutrition_plan_id' : '<?php echo JRequest::getVar('nutrition_plan_id'); ?>',
+        'diary_id' : '<?php echo JRequest::getVar('diary_id'); ?>',
+        'meal_entry_id' : '<?php echo JRequest::getVar('meal_entry_id'); ?>',
+        'meal_id' : '<?php echo JRequest::getVar('meal_id'); ?>',
+        'type' : '<?php echo JRequest::getVar('type'); ?>',
+        'parent_view' : '<?php echo JRequest::getVar('parent_view');?>',
+        'back_url' : '<?php echo JRequest::getVar('back_url');?>'
+    };
+    
     var options = {
             'fitness_frontend_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
             'calendar_frontend_url' : '<?php echo JURI::root()?>index.php?option=com_multicalendar&task=load&calid=0',
             'base_url' : '<?php echo JURI::root();?>',
             'ajax_call_url' : '<?php echo JURI::root();?>index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
+            'relative_url' : '<?php echo JURI::base();?>',
             'user_name' : '<?php echo JFactory::getUser()->name;?>',
             'user_id' : '<?php echo JFactory::getUser()->id;?>',
             'goals_db_table' : '#__fitness_goals',
@@ -45,6 +57,7 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
             'item_id' : '<?php echo  $nutrition_plan_id?>',
             'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
             'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
+            'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
         };
 
         
@@ -67,7 +80,7 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
         }
         
         options.menu_status_options = menu_status_options;
-        
+        options.add_diary_options = add_diary_options;
         
         
         

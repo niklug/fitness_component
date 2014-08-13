@@ -421,6 +421,10 @@
                     data.type = app.options.add_diary_options.type;
                     
                     data.db_table =  '#__fitness_nutrition_diary_ingredients';
+                    
+                    if(data.type == 'nutrition_plan') {
+                        data.db_table =  '#__fitness_nutrition_plan_example_day_ingredients';
+                    }
                     //console.log(data);
                     var table = data.db_table;
                     this.ajaxCall(data, url, view, task, table, function(output){
