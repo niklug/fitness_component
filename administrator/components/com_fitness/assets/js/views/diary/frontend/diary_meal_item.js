@@ -7,6 +7,7 @@ define([
         'models/diary/meal_ingredient',
         'views/programs/select_element',
         'views/diary/frontend/meal_ingredient_item',
+        'views/diary/frontend/save_as_recipe',
 	'text!templates/diary/frontend/diary_meal_item.html'
 ], function (
         $,
@@ -17,6 +18,7 @@ define([
         Meal_ingredient_model,
         Select_element_view,
         Meal_ingredient_item_view,
+        Save_as_recipe_view,
         template 
     ) {
 
@@ -233,7 +235,7 @@ define([
             },
             
             onClickSaveAsRecipe : function() {
-                console.log('save as recipe');
+                $(this.el).find(".save_as_recipe_container").html(new Save_as_recipe_view({model : this.model}).render().el);
             },
 
             close :function() {

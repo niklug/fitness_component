@@ -363,7 +363,6 @@ class FitnessModelNutrition_diaries extends JModelList {
         $data = json_decode($data_encoded);
 
         $meal_id = $data->meal_id;
-        $type = $data->type;
         
         $user = &JFactory::getUser();
 
@@ -398,7 +397,7 @@ class FitnessModelNutrition_diaries extends JModelList {
         
         // get recipe meals
         try {
-            $recipe_meals = $helper->getDiaryIngredients($meal_id, $type);
+            $recipe_meals = $helper->getDiaryIngredients($meal_id, '');
         } catch (Exception $e) {
             $status['success'] = 0;
             $status['message'] = '"' . $e->getMessage() . '"';

@@ -1,4 +1,4 @@
-<?php
+recipe_types_names<?php
 /**
  * @version     1.0.0
  * @package     com_fitness
@@ -666,12 +666,12 @@ class EmailPdfRecipe extends EmailTemplateData  {
         
         //
         
-        $this->item->recipe_variation_names = split(",", $this->item->recipe_variation_names);
-        foreach ($this->item->recipe_variation_names as $recipe_variation_name) {
+        $this->item->recipe_variations_names = split(",", $this->item->recipe_variations_names);
+        foreach ($this->item->recipe_variations_names as $recipe_variation_name) {
             $recipe_variation_names_html .= $recipe_variation_name . "<br/>";
 
         }
-        $this->item->recipe_variation_names = $recipe_variation_names_html;
+        $this->item->recipe_variations_names = $recipe_variation_names_html;
         
         $this->business_profile_user = $this->item->created_by;
         

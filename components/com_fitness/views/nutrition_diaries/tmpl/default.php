@@ -8,6 +8,13 @@
  */
 // no direct access
 defined('_JEXEC') or die;
+$user_id = JFactory::getUser()->id;
+
+$helper = new FitnessHelper();
+
+$business_profile_id = $helper->getBusinessProfileId($user_id);
+
+$business_profile_id = $business_profile_id['data'];
 ?>
 
 <div style="opacity: 1;" class="fitness_wrapper">
@@ -38,6 +45,7 @@ defined('_JEXEC') or die;
         'back_url' : decodeURIComponent('<?php echo JRequest::getVar('back_url') ?>'),
         
         'current_view' : '<?php echo  JFactory::getApplication()->input->get('view'); ?>',
+        'business_profile_id' : '<?php echo $business_profile_id; ?>',
     };
 
         

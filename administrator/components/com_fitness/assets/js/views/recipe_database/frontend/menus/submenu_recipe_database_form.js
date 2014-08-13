@@ -100,6 +100,8 @@ define([
             
             this.model.set(data);
             
+            //console.log(this.model.toJSON());
+            
             //validation
             recipe_name_field.removeClass("red_style_border");
             recipe_type_field.removeClass("red_style_border");
@@ -131,6 +133,7 @@ define([
             var self = this;
             app.collections.recipes.create(this.model, {
                 success: function (model, response) {
+                    console.log(model.toJSON());
                     app.collections.recipes.reset();
                     app.collections.recipes.fetch({
                         data : app.models.get_recipe_params.toJSON(),

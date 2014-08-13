@@ -1063,6 +1063,10 @@ class FitnessHelper extends FitnessFactory
     public function getDiaryIngredients($meal_id, $type) {
 
         $query = "SELECT * FROM #__fitness_nutrition_diary_ingredients WHERE meal_id='$meal_id' AND type='$type'";
+        
+        if($type) {
+            $query = " AND type='$type'";
+        }
 
         return  self::customQuery($query, 1);
     }

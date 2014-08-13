@@ -227,13 +227,7 @@ define([
                 return;
             }
             
-            var model = app.collections.recipes.get(id);
-
-            if(model) {
-                this.load_item_view(model, load_submenu);
-                return;
-            }
-            model = new Recipe_model({id : id});
+            var model = new Recipe_model({id : id});
             
             var self = this;
            
@@ -289,13 +283,7 @@ define([
                 return;
             }
 
-            var model = app.collections.recipes.get(id);
-
-            if(model) {
-                this.load_form_view(model);
-                return;
-            }
-            model = new Recipe_model({id : id});
+            var model = new Recipe_model({id : id});
             
             var self = this;
            

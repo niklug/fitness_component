@@ -155,14 +155,7 @@ define([
                 return;
             }
 
-            var model = app.collections.items.get(id);
-
-            if(model) {
-                model.set({edit_allowed : this.edit_allowed(model)});
-                this.load_form_view(model);
-                return;
-            }
-            model = new Item_model({id : id});
+            var model = new Item_model({id : id});
             var self = this;
             model.fetch({
                 wait : true,

@@ -5,6 +5,14 @@ $trainer_id =  $this->active_plan_data->trainer_id;
 
 $nutrition_plan_id = $this->active_plan_data->id;
 
+$user_id = JFactory::getUser()->id;
+
+$helper = new FitnessHelper();
+
+$business_profile_id = $helper->getBusinessProfileId($user_id);
+
+$business_profile_id = $business_profile_id['data'];
+
 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
 
 ?>
@@ -58,6 +66,7 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
             'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
             'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
             'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
+            'business_profile_id' : '<?php echo $business_profile_id; ?>',
         };
 
         

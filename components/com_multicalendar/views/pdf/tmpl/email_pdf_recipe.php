@@ -47,7 +47,7 @@
                                             Variations 
                                         </td>
                                         <td>
-                                            <?php echo $data->item->recipe_variation_names ?>
+                                            <?php echo $data->item->recipe_variations_names ?>
                                         </td>
                                     </tr>
                                     <tr>
