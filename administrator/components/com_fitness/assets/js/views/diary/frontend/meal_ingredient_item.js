@@ -73,6 +73,7 @@ define([
                 this.model.destroy({
                     success: function (model, response) {
                         self.collection.remove(model);
+                        app.collections.meal_ingredients.remove(model);
                         self.close();
                     },
                     error: function (model, response) {
@@ -192,6 +193,7 @@ define([
                 this.model.save(null, {
                     success: function (model, response) {
                         self.collection.add(model);
+                        app.collections.meal_ingredients.add(model);
                         self.render();
                     },
                     error: function (model, response) {

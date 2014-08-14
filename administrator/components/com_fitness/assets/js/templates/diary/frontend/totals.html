@@ -1,0 +1,319 @@
+<%
+var submitted = false;
+if (item.submit_date && (item.submit_date != '0000-00-00 00:00:00')) {
+    submitted = true;
+}
+var scored = false;
+if(_.contains(['2', '3', '4'], status)) {
+    scored = true;
+}
+
+var score_hidden, score_display_none;
+ if(!scored) {
+        score_hidden = 'visibility: hidden;';
+        score_display_none = 'display:none'
+ }
+%>
+<div class="fitness_block_wrapper" style="min-height: 440px;">
+    <h3>TODAYS TOTALS</h3>
+    <hr class="orange_line">
+    <div class="internal_wrapper">
+        <div  style="float:left; width:300px;<%= score_hidden %>">
+            <div class="score_pie_container pie-container">
+                <h6 style="text-align: center;">MACRONUTRIENT TOTALS</h6>
+                <div id="placeholder_scope" class="placeholder_pie"></div>
+            </div>
+            <div class="clr"></div>
+
+            <table style="text-align: left;margin-top: 70px;margin-left: 40px;" width="250">
+                <tr>
+                    <td> <h6>CALORIE TOTAL</h6></td>
+                    <td id="calories_total" style="line-height: 45px;font-size: 28px;color:#008313;font-weight: bold;">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>WATER TOTAL</h6></td>
+                    <td id="water_total" style="font-size: 28px;color:#009FE3;font-weight: bold;"></td>
+                </tr>
+            </table>
+        </div>
+        <div style="float:right; font-size: 10px;width: 500px;">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>PRO</th>
+                        <th>FAT</th>
+                        <th>CARB</th>
+                        <th>CALS</th>
+                        <th>ENRG (kJ)</th>
+                        <th>FAT, SAT</th>
+                        <th>SUG</th>
+                        <th>SOD (mg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="150">
+                            <b style="color:#009FE3;">DAILY TARGET (grams)</b>
+                        </td>
+                        <td>
+                            <div id="daily_target_protein_grams">
+                                <%= item.daily_target_protein_grams %>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="daily_target_fats_grams" >
+                                <%= item.daily_target_fats_grams %>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="daily_target_carbs_grams">
+                                <%= item.daily_target_carbs_grams %>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="150">
+                            <b style="color:#147F1D;">DAILY TOTAL (grams)</b>
+                        </td>
+                        <td>
+                            <div id="daily_protein_grams">
+                                <%= item.daily_protein_grams %>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="daily_fats_grams">
+                                <%= item.daily_fats_grams %>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="daily_carbs_grams">
+                                <%= item.daily_carbs_grams %>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div id="daily_saturated_fat_grams">
+                                <%= item.daily_saturated_fat_grams %>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="daily_total_sugars_grams">
+                                <%= item.daily_total_sugars_grams %>
+                            </div>
+                        </td>
+                        <td>
+                            <div  id="daily_sodium_grams" >
+                                <%= item.daily_sodium_grams %>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td width="150">
+                            <b style="color:#E0230C;">VARIANCE (grams)</b>
+                        </td>
+                        <td>
+                            <div id="variance_protein_grams"></div>
+                        </td>
+                        <td>
+                            <div id="variance_fats_grams"></div>
+                        </td>
+                        <td>
+                            <div id="variance_carbs_grams"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td width="150">
+                            <b style="color:#009FE3;">DAILY TARGET (%)</b>
+                        </td>
+                        <td>
+                            <div id="daily_target_protein_percents"></div>
+                        </td>
+                        <td>
+                            <div id="daily_target_fats_percents"></div>
+                        </td>
+                        <td>
+                            <div id="daily_target_carbs_percents"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            
+                            <b style="color:#147F1D;">DAILY TOTAL (%)</b>
+                        </td>
+                        <td>
+                            <div id="daily_protein_percents"></div>
+                        </td>
+                        <td>
+                            <div id="daily_fats_percents"></div>
+                        </td>
+                        <td>
+                            <div id="daily_carbs_percents"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <b style="color:#E0230C;">VARIANCE (%)</b>
+                        </td>
+                        <td>
+                            <div id="variance_protein_percents"></div>
+                        </td>
+                        <td>
+                            <div id="variance_fats_percents"></div>
+                        </td>
+                        <td>
+                            <div id="variance_carbs_percents"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td><b style="color:#009FE3;">DAILY TARGET (cals/kj)</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div id="daily_target_calories"></div>
+                        </td>
+                        <td>
+                            <div id="daily_target_energy"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><b style="color:#147F1D;">DAILY TOTAL (cals/kj)</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div id="daily_calories"></div>
+                        </td>
+                        <td>
+                            <div id="daily_energy"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><b style="color:#E0230C;">VARIANCE (cals/kj)</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div id="variance_calories"></div>
+                        </td>
+                        <td>
+                            <div id="variance_energy"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><b style="color:#E0230C;">VARIANCE (% cals/kj)</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div id="variance_calories_percents"></div>
+                        </td>
+                        <td>
+                            <div id="variance_energy_percents"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td><b  style="color:#009FE3;">DAILY TARGET WATER (ml)</b></td>
+                        <td>
+                            <div id="daily_target_water"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><b  style="color:#147F1D;">DAILY TOTAL WATER (ml)</b></td>
+                        <td>
+                            <div id="daily_total_water"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td><b style="color:#E0230C;">VARIANCE (WATER) (ml)</b></td>
+                        <td>
+                            <div id="variance_daily_total_water"></div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+  
