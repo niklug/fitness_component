@@ -121,10 +121,23 @@ define([
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),
                     diary_id : this.model.get('diary_id'),
                     meal_entry_id :  this.model.get('id'),
+                    description : '0',
                     edit_mode : true
                 });
+
+                //console.log(model.toJSON());
                 
-                this.addDiaryMealItem(model);
+                var self = this;
+                
+                model.save(null, {
+                    success: function (model, response) {
+                        //console.log(model.toJSON());
+                        self.addDiaryMealItem(model);
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
             },
             
             addDiaryMealItem : function(model) {

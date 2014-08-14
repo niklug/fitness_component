@@ -22,12 +22,21 @@ define([
             tagName : "tr",
         
             initialize: function(){
-                if(!app.collections.nutrition_database_ingredients) {
-                    app.collections.nutrition_database_ingredients = new Nutrition_database_ingredients_collection();
-                }
                 this.search_results_view = new Ingredients_search_results_view();
 
                 this.edit_mode();
+                
+                if(!app.collections.nutrition_database_ingredients) {
+                    app.collections.nutrition_database_ingredients = new Nutrition_database_ingredients_collection();
+                        app.collections.nutrition_database_ingredients.fetch({
+                        //data : {search_text : search_text},
+                        success: function (collection, response) {
+                        },
+                        error: function (collection, response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
             },
             
             template:_.template(template),
@@ -83,30 +92,21 @@ define([
 
                 var self = this;
                 if (search_text) {
-                    if(app.collections.nutrition_database_ingredients.length) {
-                        self.populateSearchContainer(app.collections.nutrition_database_ingredients, search_text);
-                        return;
-                    }
-
-                    app.collections.nutrition_database_ingredients.fetch({
-                        //data : {search_text : search_text},
-                        success: function (collection, response) {
-                            //console.log(collection);
-                            self.populateSearchContainer(collection, search_text);
-                        },
-                        error: function (collection, response) {
-                            alert(response.responseText);
-                        }
-                    }); 
+                    this.populateSearchContainer(app.collections.nutrition_database_ingredients, search_text);
                 }
             },
             
             populateSearchContainer : function(collection, search_text) {
+                var select_field =  $(this.el).find(".ingredients_results");
+                select_field.html('');
                 var search_parts_array = search_text.split(/[\s,]+/);
                 var all_models = [];
                 _.each(search_parts_array, function(search_text) {
                     var models = collection.filter(function(model) {
                         var ingredient_name = model.get('ingredient_name');
+                        
+                        ingredient_name = ingredient_name.toLowerCase();
+                        search_text = search_text.toLowerCase();
 
                         if(!search_text) {
                             return false;
@@ -120,11 +120,7 @@ define([
                 var collection = new Meal_ingredients_collection(all_models);
                 
                 $(this.el).find(".results_count").html('Search returned ' + collection.length + ' ingredients.');
-                
-                var select_field =  $(this.el).find(".ingredients_results");
-                
-                select_field.empty();
-                
+
                 var self = this;
                 _.each(collection.models, function(model) {
                     select_field.append(
