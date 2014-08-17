@@ -17,7 +17,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template());
+            var data = {};
+            data.app = app;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             return this;
         },
@@ -27,6 +29,8 @@ define([
             "click #my_recipes_link" : "onClickMy_recipes",
             "click #recipe_database_link" : "onClickRecipe_database",
             "click #nutrition_database_link" : "onClickNutrition_database",
+            "click #back_to_diary_link" : "onClickBackToDiary",
+            
         },
 
         onClickFavourites : function() {
@@ -47,6 +51,10 @@ define([
         onClickNutrition_database : function() {
             this.controller.navigate("!/nutrition_database", true);
             return false;
+        },
+        
+        onClickBackToDiary : function() {
+            window.location = decodeURIComponent(app.options.add_diary_options.back_url);
         },
         
         hide : function() {

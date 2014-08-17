@@ -39,6 +39,7 @@ define([
             $(this.el).html(this.template(data));
             
             this.setVarianceGrams();
+            this.setVariancePercents();
             
             return this;
         },
@@ -151,6 +152,10 @@ define([
     
         calculateVariancePercents : function(variance, target) {
             return this.round_2_sign((variance / target) * 100);
+        },
+        
+        setVariancePercents : function() {
+            
         }
         
 

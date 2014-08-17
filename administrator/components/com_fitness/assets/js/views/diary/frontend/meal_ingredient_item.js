@@ -20,6 +20,7 @@ define([
 
     var view = Backbone.View.extend({
             tagName : "tr",
+
         
             initialize: function(){
                 this.search_results_view = new Ingredients_search_results_view();
@@ -42,10 +43,15 @@ define([
             template:_.template(template),
             
             render: function(){
+                
                 var data = {item : this.model.toJSON()};
                 //console.log(this.model.toJSON());
                 var template = _.template(this.template(data));
                 this.$el.html(template);
+                
+                if(!this.edit_mode()) {
+                    this.$el.addClass('table_border_top_dark');
+                }
 
                 return this;
             },
@@ -94,13 +100,17 @@ define([
                 var self = this;
                 if (search_text) {
                     this.populateSearchContainer(app.collections.nutrition_database_ingredients, search_text);
+                } else {
+                    this.search_results_view.close();
                 }
             },
             
             populateSearchContainer : function(collection, search_text) {
+                
                 var select_field =  $(this.el).find(".ingredients_results");
                 select_field.html('');
                 var search_parts_array = search_text.split(/[\s,]+/);
+                /*
                 var all_models = [];
                 _.each(search_parts_array, function(search_text) {
                     var models = collection.filter(function(model) {
@@ -112,13 +122,42 @@ define([
                         if(!search_text) {
                             return false;
                         }
+
                         return (ingredient_name.indexOf(search_text) > -1);
                     });
                     
                     all_models = all_models.concat(models);
                 });
+                */
+
+                //
+                var all_models = [];
+                _.each(collection.models, function(model) {
+                    var flag = true;
+
+                    
+                    _.each(search_parts_array, function(search_text) {
+                        var ingredient_name = model.get('ingredient_name');
+                        ingredient_name = ingredient_name.toLowerCase();
+                        search_text = search_text.toLowerCase();
+                        var position = ingredient_name.indexOf(search_text);
+                        model.set({position : position});
+                        if(ingredient_name.indexOf(search_text) == -1) {
+                            flag = false;
+                        }
+                    });
+                    
+                    if(flag) {
+                        all_models = all_models.concat(model);
+                    }
+
+                });
 
                 var collection = new Meal_ingredients_collection(all_models);
+
+                var sorted_collection = _.sortBy(collection.models, function(model){ return  parseInt(model.get('position')); });
+                
+                collection = new Meal_ingredients_collection(sorted_collection);
                 
                 $(this.el).find(".results_count").html('Search returned ' + collection.length + ' ingredients.');
 
@@ -129,9 +168,8 @@ define([
                     );
                 });
                 
-                select_field.find(":odd").css("background-color", "#F0F0EE")
-                
-            },
+                select_field.find(":odd").css("background-color", "#F0F0EE");
+             },
             
             onChooseIngredient : function(event) {
                 var id = $(event.target).val();
@@ -153,6 +191,12 @@ define([
             },
             
             onChangeQuantity : function(event) {
+                var ingredient_name = $(this.el).find(".ingredient_name_input").val();
+                
+                if(!ingredient_name){
+                    return;
+                }
+                
                 var quantity = $(event.target).val();
                 var inredient_id = $(event.target).attr('data-id');
                 
@@ -192,8 +236,7 @@ define([
                 var self = this;
                 this.model.save(null, {
                     success: function (model, response) {
-                        self.collection.add(model);
-                        app.collections.meal_ingredients.add(model);
+                        
                         self.render();
                     },
                     error: function (model, response) {

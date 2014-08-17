@@ -121,6 +121,13 @@ define([
                     return;
                 }
                 
+                var description = this.model.get('description');
+
+                if(!parseInt(description)) {
+                    this.onClickDelete();
+                    return;
+                }
+                
                 this.model.set({edit_mode : false});
                 this.render();
             },
@@ -201,9 +208,13 @@ define([
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),
                     diary_id  : this.model.get('diary_id'),
                     meal_entry_id  : this.model.get('meal_entry_id'),
-                    meal_id : this.model.get('id')
+                    meal_id : this.model.get('id'),
+                    
                 });
-                this.addMealIngredientItem(model);                
+                
+                this.collection.add(model);
+                app.collections.meal_ingredients.add(model);
+                this.addMealIngredientItem(model);
             },
             
             calculateTotals : function() {
