@@ -222,7 +222,7 @@ define([
         setVarianceCalories : function() {
             var variance_calories_element = $(this.el).find("#variance_calories");
             
-            this.variance_calories = this.daily_totals_calories - this.daily_target_calories;
+            this.variance_calories = this.round_2_sign(this.daily_totals_calories - this.daily_target_calories);
             
             variance_calories_element.html(this.variance_calories);
             
