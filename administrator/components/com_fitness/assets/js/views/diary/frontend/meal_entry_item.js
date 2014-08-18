@@ -50,9 +50,11 @@ define([
             },
             
             scrollTo : function() {
+                var scrollTo = localStorage.getItem('scrollTo');
                 if(this.model.get('id')){
-                    $('body').scrollTo('#' + app.options.scrollTo);
+                    $('body').scrollTo('#' + scrollTo);
                 }
+                localStorage.setItem('scrollTo', '');
             },
         
             
@@ -180,7 +182,8 @@ define([
             },
             
             onClickCreateMealFromDatabase : function() {
-                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries&scrollTo=meal_entry_' + this.model.get('id') + '#!/item_view/' + this.model.get('diary_id'));
+                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' + this.model.get('diary_id'));
+                localStorage.setItem('scrollTo', 'meal_entry_' + this.model.get('id'));
                 
                 var model = new Diary_meal_model({
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),
@@ -207,7 +210,9 @@ define([
             },
             
             onClickCreateMealFromPlans : function() {
-                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries&scrollTo=meal_entry_' + this.model.get('id') + '#!/item_view/' + this.model.get('diary_id'));
+                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' + this.model.get('diary_id'));
+                
+                localStorage.setItem('scrollTo', 'meal_entry_' + this.model.get('id'));
                 
                 var model = new Diary_meal_model({
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),
