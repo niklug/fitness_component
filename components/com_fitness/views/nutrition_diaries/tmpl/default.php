@@ -46,6 +46,8 @@ $business_profile_id = $business_profile_id['data'];
         
         'current_view' : '<?php echo  JFactory::getApplication()->input->get('view'); ?>',
         'business_profile_id' : '<?php echo $business_profile_id; ?>',
+        
+        'scrollTo' : '<?php echo JRequest::getVar('scrollTo') ?>',
     };
 
         

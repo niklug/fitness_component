@@ -15,7 +15,9 @@ define([
         },
 
         render: function(){
-            var template = _.template(this.template());
+            var data = {};
+            data.app = app;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             return this;
         },
@@ -29,6 +31,7 @@ define([
             "click #information_link" : "onClickInformation",
             "click #archive_focus_link" : "onClickArchive_focus",
             "click #close_tab" : "onClickClose",
+            "click #back_to_diary_link" : "onClickBackToDiary",
         },
 
         onClickOverview : function() {
@@ -62,7 +65,11 @@ define([
 
         onClickClose : function() {
             app.controller.navigate("!/close", true);
-        }
+        },
+        
+        onClickBackToDiary : function() {
+            window.location = decodeURIComponent(app.options.add_diary_options.back_url);
+        },
 
     });
             

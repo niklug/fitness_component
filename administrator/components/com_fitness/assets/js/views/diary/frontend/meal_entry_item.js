@@ -7,7 +7,8 @@ define([
         'models/diary/diary_meal',
         'views/diary/frontend/diary_meal_item',
 	'text!templates/diary/frontend/meal_entry_item.html',
-        'jquery.timepicker'
+        'jquery.timepicker',
+        'jquery.scrollTo'
 ], function (
         $,
         _,
@@ -34,9 +35,26 @@ define([
                 $(this.el).find('.meal_time').timepicker({ 'timeFormat': 'H:i', 'step': 15 });
                 
                 this.populateDiaryMeals();
+                
+                this.onRender();
 
                 return this;
             },
+            
+            onRender : function() {
+                var self = this;
+                $(this.el).show('0', function() {
+                    self.scrollTo();
+                });
+          
+            },
+            
+            scrollTo : function() {
+                if(this.model.get('id')){
+                    $('body').scrollTo('#' + app.options.scrollTo);
+                }
+            },
+        
             
             events : {
                 "click .save_meal_entry" : "onClickSave",
@@ -162,7 +180,7 @@ define([
             },
             
             onClickCreateMealFromDatabase : function() {
-                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' + this.model.get('diary_id'));
+                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries&scrollTo=meal_entry_' + this.model.get('id') + '#!/item_view/' + this.model.get('diary_id'));
                 
                 var model = new Diary_meal_model({
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),
@@ -189,7 +207,7 @@ define([
             },
             
             onClickCreateMealFromPlans : function() {
-                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' + this.model.get('diary_id'));
+                var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries&scrollTo=meal_entry_' + this.model.get('id') + '#!/item_view/' + this.model.get('diary_id'));
                 
                 var model = new Diary_meal_model({
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),

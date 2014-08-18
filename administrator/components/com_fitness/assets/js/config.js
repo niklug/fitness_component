@@ -56,6 +56,11 @@ require.config({
             exports: 'jquery.tableDnD'
         },
         
+        'jquery.scrollTo': {
+            deps: ['jquery'],
+            exports: 'jquery.scrollTo'
+        },
+        
     },
     paths: {
         jquery: 'lib/jquery',
@@ -91,7 +96,8 @@ require.config({
         'jquery.gredient_graph' : 'lib/gredient_graph',
         'jquery.tableDnD' : 'lib/jquery.tablednd',
         'jquery.ajax_indicator' : 'lib/ajax_indicator',
-        'jquery.cleditor' : 'lib/jquery.cleditor'
+        'jquery.cleditor' : 'lib/jquery.cleditor',
+        'jquery.scrollTo' : 'lib/jquery.scrollTo.min'
 
     },
 
