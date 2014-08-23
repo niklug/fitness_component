@@ -62,7 +62,6 @@ define([
             },
             
             scrollToTarget : function(target) {
-                console.log(target);
                 $('body').scrollTo(target);
             },
         
@@ -114,8 +113,8 @@ define([
                         app.collections.meal_entries.add(model);
                         self.addHtml(container);
                         
-                        app.collections.meal_entries.sort();
-                        app.views.meal_entries_block.loadItems();
+                        //app.collections.meal_entries.sort();
+                        //app.views.meal_entries_block.loadItems();
  
                     },
                     error: function (model, response) {

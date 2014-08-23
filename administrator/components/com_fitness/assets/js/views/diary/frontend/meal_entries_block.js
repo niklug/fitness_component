@@ -18,7 +18,7 @@ define([
 
     var view = Backbone.View.extend({
             initialize: function(){
-
+                app.collections.meal_entries.bind("add", this.onAddModel, this);
             },
             
             template:_.template(template),
@@ -51,6 +51,7 @@ define([
             },
             
             loadItems : function() {
+                app.collections.meal_entries.sort();
                 this.clearItems();
                 var self = this;
                 _.each(app.collections.meal_entries.models, function(model) {
@@ -68,6 +69,10 @@ define([
             clearItems : function() {
                 this.container_el.empty();
             },
+            
+            onAddModel : function(model) {
+                this.addItem(model);
+            }
         });
             
     return view;
