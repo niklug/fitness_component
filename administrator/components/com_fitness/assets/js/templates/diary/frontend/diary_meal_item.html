@@ -13,9 +13,15 @@
         <td>
             <% if(item.edit_mode) { %>
             <a onclick="javascript:void(0)" class="cancel_diary_meal" style="cursor: pointer;float:right;margin-right:10px;"> [DELETE]</a>
+                <% if(parseInt(item.description)) { %>ss
+                    <a onclick="javascript:void(0)" class="copy_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[COPY]</a>
+                <% } %>
             <a onclick="javascript:void(0)" class="save_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[SAVE & ENTER]</a>
             <% } else { %>
             <a onclick="javascript:void(0)" class="delete_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[DELETE]</a>
+            <% if(parseInt(item.description)) { %>
+                <a onclick="javascript:void(0)" class="copy_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[COPY]</a>
+            <% } %>
             <a onclick="javascript:void(0)" class="edit_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[EDIT]</a>
             <% } %>
         </td>

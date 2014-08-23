@@ -826,4 +826,50 @@ class FitnessModelNutrition_diaries extends JModelList {
         
         return $result;
     }
+    
+    public function copyDiaryMeal($data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = new FitnessHelper();
+        
+        $data = json_decode($data_encoded);
+        
+        $meal_id = $data->id;
+        
+        if(!$meal_id) {
+            throw new Exception("Error: no meal_id");
+        }
+        
+        
+        $diary_meals_table = '#__fitness_nutrition_diary_meals';
+        
+        $ingredients_table = '#__fitness_nutrition_diary_ingredients';
+
+        
+        $query2 = " SELECT * FROM $diary_meals_table WHERE id='$meal_id'";
+        
+        $diary_meal = FitnessHelper::customQuery($query2, 2);
+      
+            
+        $diary_meal->id = null;
+        $diary_meal->meal_entry_id = $diary_meal->meal_entry_id;
+        $new_meal_id = $helper->insertUpdateObj($diary_meal, $diary_meals_table);
+
+        $query3 = " SELECT * FROM $ingredients_table WHERE meal_id='$meal_id'";
+
+        $ingredients = FitnessHelper::customQuery($query3, 1);
+
+        foreach ($ingredients as $ingredient) {
+            $ingredient->id = null;
+            $ingredient->meal_entry_id = $diary_meal->meal_entry_id;
+            $ingredient->meal_id = $new_meal_id;
+            $helper->insertUpdateObj($ingredient, $ingredients_table);
+        }
+        
+        //
+
+        $result = array( 'status' => $status, 'data' => $diary_meal);
+        
+        return $result;
+    }
 }

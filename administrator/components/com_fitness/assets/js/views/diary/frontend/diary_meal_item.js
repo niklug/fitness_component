@@ -59,6 +59,7 @@ define([
             
             events : {
                 "click .save_diary_meal" : "onClickSave",
+                "click .copy_diary_meal" : "onClickCopy",
                 "click .edit_diary_meal" : "onClickEdit",
                 "click .cancel_diary_meal" : "onClickCancel",
                 "click .delete_diary_meal" : "onClickDelete",
@@ -234,6 +235,12 @@ define([
             
             onClickSaveAsRecipe : function() {
                 $(this.el).find(".save_as_recipe_container").html(new Save_as_recipe_view({model : this.model}).render().el);
+            },
+            
+            onClickCopy : function() {
+                var id = this.model.get('id');
+                var diary_id = this.model.get('diary_id');
+                app.controller.copy_diary_meal(id, diary_id);
             },
 
             close :function() {

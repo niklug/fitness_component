@@ -100,4 +100,10 @@ class FitnessViewNutrition_diaries extends JView {
         $data_encoded = JRequest::getVar('data_encoded','','POST');
         echo json_encode($model->copyMealEntry($data_encoded));
     }
+    
+    function copyDiaryMeal() {
+        $model = $this -> getModel("nutrition_diaries");
+        $data_encoded = JRequest::getVar('data_encoded','','POST');
+        echo json_encode($model->copyDiaryMeal($data_encoded));
+    }
 }
