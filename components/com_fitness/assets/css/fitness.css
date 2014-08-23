@@ -1195,3 +1195,12 @@ td.center, th.center, .center {
     height: 1px;
     background-color: #ccc;
 }
+
+.table_header{
+    background: none repeat scroll 0 0 #313031 !important;
+    color:#fff;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 0;
+    height: 25px;
+}
