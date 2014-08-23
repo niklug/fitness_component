@@ -68,6 +68,7 @@ define([
             
             events : {
                 "click .save_meal_entry" : "onClickSave",
+                "click .copy_meal_entry" : "onClickCopy",
                 "click .delete_meal_entry" : "onClickClose",
                 "click .create_meal" : "onClickCreateMeal",
                 "click .add_meal_from_database" : "onClickCreateMealFromDatabase",
@@ -256,6 +257,12 @@ define([
                         alert(response.responseText);
                     }
                 });
+            },
+            
+            onClickCopy : function() {
+                var id = this.model.get('id');
+                var diary_id = this.model.get('diary_id');
+                app.controller.copy_meal_entry(id, diary_id);
             },
 
             close :function() {

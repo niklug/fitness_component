@@ -766,4 +766,64 @@ class FitnessModelNutrition_diaries extends JModelList {
     }
     
     
+    
+    public function copyMealEntry($data_encoded) {
+        $status['success'] = 1;
+        
+        $helper = new FitnessHelper();
+        
+        $data = json_decode($data_encoded);
+        
+        $meal_entry_id = $data->id;
+        
+        if(!$meal_entry_id) {
+            throw new Exception("Error: no meal_entry_id");
+        }
+        
+        $meal_entries_table = '#__fitness_nutrition_diary_meal_entries';
+        
+        $diary_meals_table = '#__fitness_nutrition_diary_meals';
+        
+        $ingredients_table = '#__fitness_nutrition_diary_ingredients';
+        
+        $query1 = " SELECT * FROM $meal_entries_table WHERE id='$meal_entry_id'";
+        
+        $meal_entry = FitnessHelper::customQuery($query1, 2);
+        
+        $meal_entry->id = null;
+        
+        $new_meal_entry_id = $helper->insertUpdateObj($meal_entry, $meal_entries_table);
+        
+        //
+        
+        $query2 = " SELECT * FROM $diary_meals_table WHERE meal_entry_id='$meal_entry_id'";
+        
+        $diary_meals = FitnessHelper::customQuery($query2, 1);
+      
+        foreach ($diary_meals as $diary_meal) {
+            
+            $meal_id = $diary_meal->id;
+            
+            $diary_meal->id = null;
+            $diary_meal->meal_entry_id = $new_meal_entry_id;
+            $new_meal_id = $helper->insertUpdateObj($diary_meal, $diary_meals_table);
+               
+            $query3 = " SELECT * FROM $ingredients_table WHERE meal_id='$meal_id'";
+            
+            $ingredients = FitnessHelper::customQuery($query3, 1);
+            
+            foreach ($ingredients as $ingredient) {
+                $ingredient->id = null;
+                $ingredient->meal_entry_id = $new_meal_entry_id;
+                $ingredient->meal_id = $new_meal_id;
+                $helper->insertUpdateObj($ingredient, $ingredients_table);
+            }
+        }
+        
+        //
+
+        $result = array( 'status' => $status, 'data' => $diary_meals);
+        
+        return $result;
+    }
 }

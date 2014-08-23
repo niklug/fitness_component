@@ -224,7 +224,23 @@ define([
         load_item_view : function(model) {
             $("#main_container").html(new Item_view({model : model}).render().el);
             $("#submenu_container").html(new Submenu_item_view({model : model}).render().el);
-        }
+        },
+        
+        copy_meal_entry : function(id, diary_id){
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = 'nutrition_diaries';
+            var task = 'copyMealEntry';
+            var table = '';
+
+            data.id = id;
+            var self = this;
+            $.AjaxCall(data, url, view, task, table, function(output) {
+                console.log(output);
+                self.navigate("");
+                self.navigate("!/item_view/" + diary_id, true);
+            });
+        },
             
     
     });
