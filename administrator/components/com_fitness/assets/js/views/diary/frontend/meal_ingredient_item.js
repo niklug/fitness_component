@@ -198,7 +198,7 @@ define([
                 }
                 
                 var quantity = $(event.target).val();
-                var inredient_id = $(event.target).attr('data-id');
+                var inredient_id = $(event.target).attr('data-ingredient_id');
                 
                 if(typeof this.ingredient_model !== "undefined") {
                     this.onSetQuantity(this.ingredient_model, quantity);

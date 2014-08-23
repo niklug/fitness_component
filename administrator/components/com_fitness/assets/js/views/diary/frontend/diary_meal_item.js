@@ -116,20 +116,7 @@ define([
             },
 
             onClickCancel : function(event) {
-                if(this.model.isNew()) {
-                    this.close();
-                    return;
-                }
-                
-                var description = this.model.get('description');
-
-                if(!parseInt(description)) {
-                    this.onClickDelete();
-                    return;
-                }
-                
-                this.model.set({edit_mode : false});
-                this.render();
+                this.onClickDelete();
             },
             
             onClickDelete : function() {

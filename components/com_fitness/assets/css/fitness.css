@@ -1189,3 +1189,9 @@ td.center, th.center, .center {
     height:100%;
     cursor:pointer;
 }
+
+.thin_hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+}

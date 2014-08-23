@@ -48,13 +48,22 @@ define([
                 });
           
             },
-            
+
             scrollTo : function() {
-                var scrollTo = localStorage.getItem('scrollTo');
-                if(this.model.get('id')){
-                    $('body').scrollTo('#' + scrollTo);
+                var scrollToY = localStorage.getItem('scrollToY');
+                
+                if(parseInt(scrollToY)) {
+                    $('html, body').animate({
+                        scrollTop: scrollToY - 180
+                    }, 1000);
+
+                    localStorage.setItem('scrollToY', '0');
                 }
-                localStorage.setItem('scrollTo', '');
+            },
+            
+            scrollToTarget : function(target) {
+                console.log(target);
+                $('body').scrollTo(target);
             },
         
             
@@ -107,6 +116,7 @@ define([
                         
                         app.collections.meal_entries.sort();
                         app.views.meal_entries_block.loadItems();
+ 
                     },
                     error: function (model, response) {
                         alert(response.responseText);
@@ -181,9 +191,14 @@ define([
                 }
             },
             
-            onClickCreateMealFromDatabase : function() {
+            onClickCreateMealFromDatabase : function(event) {
                 var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' + this.model.get('diary_id'));
-                localStorage.setItem('scrollTo', 'meal_entry_' + this.model.get('id'));
+                
+                var position = $(event.target).offset();
+                
+                var top = position.top;
+    
+                localStorage.setItem('scrollToY', top);
                 
                 var model = new Diary_meal_model({
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),
@@ -212,7 +227,11 @@ define([
             onClickCreateMealFromPlans : function() {
                 var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' + this.model.get('diary_id'));
                 
-                localStorage.setItem('scrollTo', 'meal_entry_' + this.model.get('id'));
+                var position = $(event.target).offset();
+                
+                var top = position.top;
+    
+                localStorage.setItem('scrollToY', top);
                 
                 var model = new Diary_meal_model({
                     nutrition_plan_id : this.model.get('nutrition_plan_id'),
