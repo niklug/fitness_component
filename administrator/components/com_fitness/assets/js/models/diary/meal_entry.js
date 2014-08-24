@@ -23,12 +23,20 @@ define([
             if (!attrs.meal_time || !result) {
               return 'meal_time';
             }
-            
-            if (!attrs.water) {
+                
+            if (!this.digits(attrs.water) ) {
               return 'water';
             }
             
-        }
+            if (!this.digits(attrs.previous_water) ) {
+              return 'previous_water';
+            }
+            
+        },
+        
+        digits : function(value) {
+            return  /^\d+$/.test(value);
+        },
     });
     
     

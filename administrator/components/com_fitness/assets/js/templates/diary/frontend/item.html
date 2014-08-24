@@ -29,10 +29,11 @@ if(_.contains(['2', '3', '4'], status)) {
                                 <td>
                                     <span class="grey_title">
                                     <% //if(submitted) {
-                                            var d1 = new Date(Date.parse(entry_date));            
-                                            var entry_date = moment(d1).format("ddd, D MMM  YYYY"); 
+                                            var d1 = new Date(Date.parse(item.entry_date));            
+                                            var entry_date = moment(d1).format("dddd, D MMM  YYYY"); 
+                                            
                                     %>
-                                            <%= item.entry_date%> 
+                                            <%= entry_date %> 
                                              <input value="<%= item.entry_date %>" style="width:70px;" readonly type="hidden" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
                                     <%
                                        /* } else {
@@ -52,7 +53,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                     <span class="grey_title">
                                     <%
                                         var d2 = new Date(Date.parse(item.created));            
-                                        var created = moment(d2).format("ddd, D MMM  YYYY HH:mm");    
+                                        var created = moment(d2).format("dddd, D MMM  YYYY @ HH:mm");    
                                     %>
                                     <%= created || '-' %>
                                     </span>
@@ -67,7 +68,7 @@ if(_.contains(['2', '3', '4'], status)) {
                                     <%
                                         if (submitted) {
                                             var d3 = new Date(Date.parse(item.submit_date));    
-                                            var submit_date = moment(d3).format("ddd, D MMM  YYYY HH:mm");    
+                                            var submit_date = moment(d3).format("dddd, D MMM  YYYY @ HH:mm");    
                                         } else {
                                             submit_date = '-';
                                         }
@@ -188,10 +189,8 @@ if(_.contains(['2', '3', '4'], status)) {
                                             <td>
                                                 Status 
                                             </td>
-                                            <td>
-                                                <span class="grey_title">
-                                                    <%=  $.fitness_helper.setGoalStatus(active_plan_data.primary_goal_status)  %>
-                                                </span>
+                                            <td id="primary_goal_status">
+                                              
                                             </td>
                                         </tr>
                                         <tr>
@@ -253,10 +252,8 @@ if(_.contains(['2', '3', '4'], status)) {
                                             <td>
                                                 Status 
                                             </td>
-                                            <td>
-                                                <span class="grey_title">
-                                                    <%=  $.fitness_helper.setGoalStatus(active_plan_data.mini_goal_status)  %>
-                                                </span>
+                                            <td id="mini_goal_status">
+                                                
                                             </td>
                                         </tr>
                                         <tr>

@@ -7,6 +7,7 @@ define([
         'views/diary/frontend/target_block',
         'views/diary/frontend/meal_entries_block',
         'views/diary/frontend/totals',
+        'views/status/index',
 	'text!templates/diary/frontend/item.html',
         'jqueryui',
         'jquery.flot',
@@ -25,6 +26,7 @@ define([
         Target_block_view,
         Meal_entries_block,
         Totals_view,
+        Status_view,
         template 
     ) {
 
@@ -45,8 +47,28 @@ define([
             this.connectTargets(this.active_plan_data.id);
             
             this.connectMealEntries();
+            
+            this.connectPrimaryGoalStatus(new Backbone.Model({status : app.models.active_plan_data.get('primary_goal_status')}), "#primary_goal_status");
+            
+            this.connectMiniGoalStatus(new Backbone.Model({status : app.models.active_plan_data.get('mini_goal_status')}), "#mini_goal_status");
 
             return this;
+        },
+        
+        connectPrimaryGoalStatus : function(model, target) {
+            app.options.primary_goal_status_options.button_not_active = true;
+            $(this.el).find(target).html(new Status_view({
+                model : model,
+                settings : app.options.primary_goal_status_options
+            }).render().el);
+        },
+        
+        connectMiniGoalStatus : function(model, target) {
+            app.options.mini_goal_status_options.button_not_active = true;
+            $(this.el).find(target).html(new Status_view({
+                model : model,
+                settings : app.options.mini_goal_status_options
+            }).render().el);
         },
         
         connectTargets : function(id) {

@@ -93,7 +93,8 @@ define([
 
                 meal_time_field.removeClass("red_style_border");
                 water_field.removeClass("red_style_border");
-
+                previous_water_field.removeClass("red_style_border");
+  
                 if (!this.model.isValid()) {
                     var validate_error = this.model.validationError;
 
@@ -102,6 +103,9 @@ define([
                         return false;
                     } else if(validate_error == 'water') {
                         water_field.addClass("red_style_border");
+                        return false;
+                    } else if(validate_error == 'previous_water') {
+                        previous_water_field.addClass("red_style_border");
                         return false;
                     }  else {
                         alert(this.model.validationError);
@@ -224,7 +228,7 @@ define([
                 });
             },
             
-            onClickCreateMealFromPlans : function() {
+            onClickCreateMealFromPlans : function(event) {
                 var back_url = encodeURIComponent(app.options.base_url_relative + 'index.php?option=com_fitness&view=nutrition_diaries#!/item_view/' + this.model.get('diary_id'));
                 
                 var position = $(event.target).offset();
@@ -259,7 +263,13 @@ define([
                 });
             },
             
-            onClickCopy : function() {
+            onClickCopy : function(event) {
+                var position = $(event.target).offset();
+                
+                var top = position.top;
+    
+                localStorage.setItem('scrollToY', top);
+                
                 var id = this.model.get('id');
                 var diary_id = this.model.get('diary_id');
                 app.controller.copy_meal_entry(id, diary_id);

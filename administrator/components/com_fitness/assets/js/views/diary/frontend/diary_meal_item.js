@@ -237,7 +237,13 @@ define([
                 $(this.el).find(".save_as_recipe_container").html(new Save_as_recipe_view({model : this.model}).render().el);
             },
             
-            onClickCopy : function() {
+            onClickCopy : function(event) {
+                var position = $(event.target).offset();
+                
+                var top = position.top;
+    
+                localStorage.setItem('scrollToY', top);
+                
                 var id = this.model.get('id');
                 var diary_id = this.model.get('diary_id');
                 app.controller.copy_diary_meal(id, diary_id);
