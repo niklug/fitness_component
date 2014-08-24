@@ -24,6 +24,7 @@ define([
             "click #close" : "onClickClose",
             "click #submit" : "onClickSubmit",
             "click #delete" : "onClickDelete",
+            "click #trash" : "onClickTrash",
         },
 
         onClickClose : function() {
@@ -44,23 +45,23 @@ define([
             });
         },
         
-        onClickSubmit : function() {
-            var data = {};
-
-            data.submit_date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
-            data.status = '5';
-
-            this.model.set(data);
-
-            if (!this.model.isValid()) {
-                alert(this.model.validationError);
-                return false;
-            }
-            
+        onClickDelete : function() {
             var self = this;
-            this.model.save(null, {
+            this.model.destroy({
                 success: function (model, response) {
-                    $.fitness_helper.sendSubmitEmail(model.get('id'));
+                    app.collections.items.remove(model);
+                    self.onClickClose();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickTrash : function() {
+            var self = this;
+            this.model.save({state : '-2'}, {
+                success: function (model, response) {
                     self.onClickClose();
                 },
                 error: function (model, response) {

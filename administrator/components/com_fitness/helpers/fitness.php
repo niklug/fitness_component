@@ -1295,7 +1295,9 @@ class FitnessHelper extends FitnessFactory
             (SELECT name FROM #__users WHERE id=a.client_id) client_name,
             (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name,
             g.status AS primary_goal_status,
-            mg.status AS mini_goal_status
+            mg.status AS mini_goal_status,
+            g.details AS primary_goal_details,
+            mg.details AS mini_goal_details
             FROM #__fitness_nutrition_plan AS a
             LEFT JOIN #__fitness_goals AS g ON g.id = a.primary_goal
             LEFT JOIN #__fitness_goal_categories AS gc  ON g.goal_category_id=gc.id

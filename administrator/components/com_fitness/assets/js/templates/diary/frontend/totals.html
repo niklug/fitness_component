@@ -4,7 +4,7 @@ if (item.submit_date && (item.submit_date != '0000-00-00 00:00:00')) {
     submitted = true;
 }
 var scored = false;
-if(_.contains(['2', '3', '4'], status)) {
+if(_.contains(['2', '3', '4'], item.status)) {
     scored = true;
 }
 
@@ -19,10 +19,13 @@ var score_hidden, score_display_none;
     <hr class="orange_line">
     <div class="internal_wrapper">
         <div  style="float:left; width:300px;<%= score_hidden %>">
+            <h6 style="text-align: center;">MACRONUTRIENT TOTALS</h6>
+            
             <div class="score_pie_container pie-container">
-                <h6 style="text-align: center;">MACRONUTRIENT TOTALS</h6>
-                <div id="placeholder_scope" class="placeholder_pie"></div>
+                <div id="placeholder_scope" style="width:220px;height:220px;font-size: 14px; line-height: 1.2em;" class="placeholder_pie"></div>
             </div>
+            
+            
             <div class="clr"></div>
 
             <table style="text-align: left;margin-top: 70px;margin-left: 40px;" width="250">

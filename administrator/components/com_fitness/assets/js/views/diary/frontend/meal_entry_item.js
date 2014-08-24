@@ -138,12 +138,24 @@ define([
                 var self = this;
                 this.model.destroy({
                     success: function (model) {
-                        self.close();
+                        self.onDelete(model);
                     },
                     error: function (model, response) {
                         alert(response.responseText);
                     }
                 });
+            },
+            
+            onDelete : function(model) {
+                var models = app.collections.meal_ingredients.where({meal_entry_id : model.get('id')});
+                
+                _.each(models, function(model) {
+                    app.collections.meal_ingredients.remove(model);
+                });
+                
+                app.collections.meal_entries.remove(model);
+                
+                this.close();
             },
             
             addHtml : function(container) {

@@ -14,7 +14,6 @@ define([
         'jquery.flot.time',
         'jquery.flot.pie',
         'jquery.drawPie',
-        'jquery.macronutrientTargets',
         'jquery.timepicker',
         'jquery.gredient_graph',
 ], function (

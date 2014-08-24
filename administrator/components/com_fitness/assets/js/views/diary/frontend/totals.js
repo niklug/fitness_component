@@ -18,6 +18,15 @@ define([
             app.collections.meal_ingredients.bind("sync", this.render, this);
             app.collections.meal_ingredients.bind("add", this.render, this);
             app.collections.meal_ingredients.bind("remove", this.render, this);
+            
+            app.collections.meal_entries.bind("sync", this.render, this);
+            app.collections.meal_entries.bind("add", this.render, this);
+            app.collections.meal_entries.bind("remove", this.render, this);
+            
+            app.collections.diary_meals.bind("sync", this.render, this);
+            app.collections.diary_meals.bind("add", this.render, this);
+            app.collections.diary_meals.bind("remove", this.render, this);
+            
 
             this.model.set({
                 daily_protein_grams : '0',
@@ -53,6 +62,9 @@ define([
             this.setDailyTargetWater();
             this.setDailyTotalWater();
             this.setDailyVarianceWater();
+            
+            this.connectPieGraph();
+            
             return this;
         },
         
@@ -315,7 +327,23 @@ define([
                 input_class = 'red_style'; 
             }
             element.addClass(input_class);
-        }
+        },
+        
+        connectPieGraph : function() {
+            //console.log(this.model.toJSON());
+            var data = [
+                {label: "Protein: " + this.daily_total_protein_percents + '%', data: [[1, app.models.target.get('step4_protein_percent')]]},
+                {label: "Carbs: " + this.daily_total_carbs_percents + '%', data: [[1, app.models.target.get('step4_carbs_percent')]]},
+                {label: "Fat: " + this.daily_total_fats_percents + '%', data: [[1, app.models.target.get('step4_fat_percent')]]}
+            ];
+
+            var container = this.$el.find(".placeholder_pie");
+
+            var targets_pie = $.drawPie(data, container, {'no_percent_label' : true});
+
+            targets_pie.draw(); 
+
+        },
         
 
 

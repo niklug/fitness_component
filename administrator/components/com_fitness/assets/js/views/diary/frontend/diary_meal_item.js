@@ -124,12 +124,22 @@ define([
                 var self = this;
                 this.model.destroy({
                     success: function (model) {
-                        self.close();
+                        self.onDelete(model);
                     },
                     error: function (model, response) {
                         alert(response.responseText);
                     }
                 });
+            },
+            
+            onDelete : function(model) {
+                var models = app.collections.meal_ingredients.where({meal_id : model.get('id')});
+                
+                _.each(models, function(model) {
+                    app.collections.meal_ingredients.remove(model);
+                });
+                
+                this.close();
             },
             
             edit_mode : function() {
