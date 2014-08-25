@@ -1297,15 +1297,27 @@ class FitnessHelper extends FitnessFactory
             g.status AS primary_goal_status,
             mg.status AS mini_goal_status,
             g.details AS primary_goal_details,
-            mg.details AS mini_goal_details
+            mg.details AS mini_goal_details,
+
+            tar.protein AS target_protein,
+            tar.water AS target_water,
+            tar.fats AS target_fats,
+            tar.carbs AS target_carbs,
+            tar.calories AS target_calories,
+            tar.step4_protein_percent AS target_protein_percent,
+            tar.step4_fat_percent AS target_fats_percent,
+            tar.step4_carbs_percent AS target_carbs_percent
+            
+            
             FROM #__fitness_nutrition_plan AS a
+            LEFT JOIN #__fitness_nutrition_plan_targets AS tar ON tar.nutrition_plan_id=a.id
             LEFT JOIN #__fitness_goals AS g ON g.id = a.primary_goal
             LEFT JOIN #__fitness_goal_categories AS gc  ON g.goal_category_id=gc.id
             LEFT JOIN #__fitness_mini_goals AS mg ON mg.id = a.mini_goal
             LEFT JOIN #__fitness_mini_goal_categories AS mgc  ON mg.mini_goal_category_id=mgc.id
             LEFT JOIN #__fitness_training_period AS tp ON tp.id=mg.training_period_id
             LEFT JOIN #__fitness_nutrition_focus AS nf ON nf.id=a.nutrition_focus
-
+            
             WHERE a.id='$id' AND a.state='1'";
 
         

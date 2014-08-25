@@ -56,9 +56,20 @@ define([
             data.nutrition_focus = this.active_plan_data.nutrition_focus;
             data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
             data.state = '1';
-
+            
+            data.target_protein = this.active_plan_data.target_protein;
+            data.target_water = this.active_plan_data.target_water;
+            data.target_fats = this.active_plan_data.target_fats;
+            data.target_carbs = this.active_plan_data.target_carbs;
+            data.target_calories = this.active_plan_data.target_calories;
+            data.target_protein_percent = this.active_plan_data.target_protein_percent;
+            data.target_fats_percent = this.active_plan_data.target_fats_percent;
+            data.target_carbs_percent = this.active_plan_data.target_carbs_percent;
+            
             this.model.set(data);
             
+            //console.log(this.model.toJSON());
+
             entry_date_field.removeClass("red_style_border");
 
 

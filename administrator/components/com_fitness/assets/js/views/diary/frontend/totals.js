@@ -112,11 +112,9 @@ define([
             var nutrition_plan_id = this.model.get('nutrition_plan_id');
             //console.log(this.model.toJSON());
             
-            //console.log(app.models.target.toJSON());
-            
-            this.daily_target_protein_grams = app.models.target.get('protein');
-            this.daily_target_fats_grams = app.models.target.get('fats');
-            this.daily_target_carbs_grams = app.models.target.get('carbs');
+            this.daily_target_protein_grams = this.model.get('target_protein');
+            this.daily_target_fats_grams = this.model.get('target_fats');
+            this.daily_target_carbs_grams = this.model.get('target_carbs');
             
             this.model.set({
                 daily_target_protein_grams : this.daily_target_protein_grams,
@@ -131,7 +129,7 @@ define([
             
             this.variance_protein_grams_value = this.calculateVarianceGrams(this.model.get('daily_protein_grams'), this.model.get('daily_target_protein_grams'));
             
-            variance_protein_grams_element.html(this.variance_protein_grams_value);
+            variance_protein_grams_element.html(this.setPositive(this.variance_protein_grams_value));
             
             this.variance_protein_percents_value = this.calculateVariancePercents(this.variance_protein_grams_value, this.model.get('daily_target_protein_grams'));
             
@@ -142,7 +140,7 @@ define([
             
             this.variance_fats_grams_value = this.calculateVarianceGrams(this.model.get('daily_fats_grams'), this.model.get('daily_target_fats_grams'));
             
-            variance_fats_grams_element.html(this.variance_fats_grams_value);
+            variance_fats_grams_element.html(this.setPositive(this.variance_fats_grams_value));
             
             this.variance_fats_percents_value = this.calculateVariancePercents(this.variance_fats_grams_value, this.model.get('daily_target_fats_grams'));
             
@@ -153,7 +151,7 @@ define([
             
             this.variance_carbs_grams_value = this.calculateVarianceGrams(this.model.get('daily_carbs_grams'), this.model.get('daily_target_carbs_grams'));
             
-            variance_carbs_grams_element.html(this.variance_carbs_grams_value);
+            variance_carbs_grams_element.html(this.setPositive(this.variance_carbs_grams_value));
             
             this.variance_carbs_percents_value = this.calculateVariancePercents(this.variance_carbs_grams_value, this.model.get('daily_target_carbs_grams'));
             
@@ -191,20 +189,20 @@ define([
         },
         
         setVariancePercents : function() {
-            $(this.el).find("#variance_protein_percents").html(this.variance_protein_percents_value);
+            $(this.el).find("#variance_protein_percents").html(this.setPositive(this.variance_protein_percents_value));
             this.setVarianceRangeStylePRO_FATS_CARBS($(this.el).find("#variance_protein_percents"), this.variance_protein_percents_value);
 
-            $(this.el).find("#variance_fats_percents").html(this.variance_fats_percents_value);
+            $(this.el).find("#variance_fats_percents").html(this.setPositive(this.variance_fats_percents_value));
             this.setVarianceRangeStylePRO_FATS_CARBS($(this.el).find("#variance_fats_percents"), this.variance_fats_percents_value);
 
-            $(this.el).find("#variance_carbs_percents").html(this.variance_carbs_percents_value);
+            $(this.el).find("#variance_carbs_percents").html(this.setPositive(this.variance_carbs_percents_value));
             this.setVarianceRangeStylePRO_FATS_CARBS($(this.el).find("#variance_carbs_percents"), this.variance_carbs_percents_value);
         },
         
         setDailyTargetPercents : function() {
-            this.daily_target_protein_percents = app.models.target.get('step4_protein_percent');
-            this.daily_target_carbs_percents = app.models.target.get('step4_carbs_percent');
-            this.daily_target_fats_percents = app.models.target.get('step4_fat_percent');
+            this.daily_target_protein_percents = this.model.get('target_protein_percent');
+            this.daily_target_carbs_percents = this.model.get('target_carbs_percent');
+            this.daily_target_fats_percents = this.model.get('target_fats_percent');
             
             $(this.el).find("#daily_target_protein_percents").html(this.daily_target_protein_percents);
             $(this.el).find("#daily_target_carbs_percents").html(this.daily_target_carbs_percents);
@@ -222,7 +220,7 @@ define([
         },
         
         setDailyTargetCalories : function() {
-            this.daily_target_calories = app.models.target.get('step4_calories');
+            this.daily_target_calories = this.model.get('target_calories');
             $(this.el).find("#daily_target_calories").html(this.daily_target_calories);
         },
         
@@ -247,7 +245,7 @@ define([
             
             this.variance_calories = this.round_2_sign(this.daily_totals_calories - this.daily_target_calories);
             
-            variance_calories_element.html(this.variance_calories);
+            variance_calories_element.html(this.setPositive(this.variance_calories));
             
             this.setVarianceRangeStyleCalories(variance_calories_element, this.getVarianceCaloriesPercents());
             
@@ -284,7 +282,7 @@ define([
             
             this.variance_energy = this.round_2_sign(this.daily_totals_energy - this.daily_target_energy);
             
-            variance_energy_element.html(this.variance_energy);
+            variance_energy_element.html(this.setPositive(this.variance_energy));
             
             this.setVarianceRangeStyleCalories(variance_energy_element, this.getVarianceCaloriesPercents());
         },
@@ -298,7 +296,7 @@ define([
         },
         
         setDailyTargetWater : function() {
-            this.daily_target_water = app.models.target.get('water');
+            this.daily_target_water = this.model.get('target_water');
             $(this.el).find("#daily_target_water").html(this.daily_target_water);
         },
         
@@ -317,13 +315,14 @@ define([
             
             this.variance_water = this.round_2_sign(this.daily_total_water - this.daily_target_water);
             
-            variance_daily_total_water_element.html(this.variance_water);
+            variance_daily_total_water_element.html(this.setPositive(this.variance_water));
             
             this.setVarianceRangeWater(variance_daily_total_water_element, this.variance_water );
         },
         
         setVarianceRangeWater : function(element, value) {
             var abs_value = Math.abs(value); 
+            
             var input_class = '';
             element.removeClass('green_style orange_style red_style');
             if((abs_value >= 0) && (abs_value <= 250)) {
@@ -337,15 +336,16 @@ define([
             if(abs_value > 350) {
                 input_class = 'red_style'; 
             }
+
             element.addClass(input_class);
         },
         
         connectPieGraph : function() {
             //console.log(this.model.toJSON());
             var data = [
-                {label: "Protein: <br/>" + this.daily_total_protein_percents + '%', data: [[1, app.models.target.get('step4_protein_percent')]]},
-                {label: "Carbs: <br/>" + this.daily_total_carbs_percents + '%', data: [[1, app.models.target.get('step4_carbs_percent')]]},
-                {label: "Fat: <br/>" + this.daily_total_fats_percents + '%', data: [[1, app.models.target.get('step4_fat_percent')]]}
+                {label: "Protein: <br/>" + this.daily_total_protein_percents + '%', data: [[1, this.model.get('target_protein_percent')]]},
+                {label: "Carbs: <br/>" + this.daily_total_carbs_percents + '%', data: [[1, this.model.get('target_carbs_percent')]]},
+                {label: "Fat: <br/>" + this.daily_total_fats_percents + '%', data: [[1, this.model.get('target_fats_percent')]]}
             ];
 
             var container = this.$el.find(".placeholder_pie");
@@ -366,6 +366,13 @@ define([
             this.water_total = this.round_2_sign(100 * (this.daily_total_water / this.daily_target_water));
 
             $(this.el).find("#water_total").html(this.water_total + '%');
+        },
+        
+        setPositive : function(value) {
+            if(parseFloat(value) > 0) {
+                value = '+' + value;
+            }
+            return value;
         }
 
 
