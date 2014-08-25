@@ -63,9 +63,20 @@ define([
             this.setDailyTotalWater();
             this.setDailyVarianceWater();
             
-            this.connectPieGraph();
+            this.setCaloriesTotal();
+            this.setWaterTotal();
+            
+            this.onRender();
+            
             
             return this;
+        },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                self.connectPieGraph();
+            });
         },
         
         setBaseValues : function() {
@@ -332,9 +343,9 @@ define([
         connectPieGraph : function() {
             //console.log(this.model.toJSON());
             var data = [
-                {label: "Protein: " + this.daily_total_protein_percents + '%', data: [[1, app.models.target.get('step4_protein_percent')]]},
-                {label: "Carbs: " + this.daily_total_carbs_percents + '%', data: [[1, app.models.target.get('step4_carbs_percent')]]},
-                {label: "Fat: " + this.daily_total_fats_percents + '%', data: [[1, app.models.target.get('step4_fat_percent')]]}
+                {label: "Protein: <br/>" + this.daily_total_protein_percents + '%', data: [[1, app.models.target.get('step4_protein_percent')]]},
+                {label: "Carbs: <br/>" + this.daily_total_carbs_percents + '%', data: [[1, app.models.target.get('step4_carbs_percent')]]},
+                {label: "Fat: <br/>" + this.daily_total_fats_percents + '%', data: [[1, app.models.target.get('step4_fat_percent')]]}
             ];
 
             var container = this.$el.find(".placeholder_pie");
@@ -345,6 +356,17 @@ define([
 
         },
         
+        setCaloriesTotal : function() {
+            this.calories_total = this.round_2_sign(100 * (this.daily_totals_calories  / this.daily_target_calories));
+
+            $(this.el).find("#calories_total").html(this.calories_total + '%');
+        },
+        
+        setWaterTotal : function() {
+            this.water_total = this.round_2_sign(100 * (this.daily_total_water / this.daily_target_water));
+
+            $(this.el).find("#water_total").html(this.water_total + '%');
+        }
 
 
     });
