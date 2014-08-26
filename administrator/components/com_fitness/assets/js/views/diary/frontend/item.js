@@ -13,8 +13,8 @@ define([
         'jquery.flot.time',
         'jquery.flot.pie',
         'jquery.drawPie',
-        'jquery.timepicker',
-        'jquery.gredient_graph',
+        'jquery.timepicker'
+        
 ], function (
         $,
         _,

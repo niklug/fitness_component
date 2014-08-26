@@ -3,12 +3,14 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/diary/frontend/scores',
 	'text!templates/diary/frontend/totals.html'
 ], function (
         $,
         _,
         Backbone,
         app,
+        Scores_view,
         template 
     ) {
 
@@ -45,6 +47,7 @@ define([
         render : function () {
             this.setBaseValues();
             var data = {item : this.model.toJSON()};
+            data.$ = $;
             $(this.el).html(this.template(data));
             
             this.setVarianceGrams();
@@ -76,6 +79,7 @@ define([
             var self = this;
             $(this.el).show('0', function() {
                 self.connectPieGraph();
+                self.connectScores();
             });
         },
         
@@ -252,7 +256,8 @@ define([
         },
         
         getVarianceCaloriesPercents : function() {
-            return this.round_2_sign((this.variance_calories / this.daily_target_calories)*100);
+            this.variance_calories_percents = this.round_2_sign((this.variance_calories / this.daily_target_calories)*100);
+            return this.variance_calories_percents;
         },
         
         getVarianceEnergyPercents : function() {
@@ -373,11 +378,15 @@ define([
                 value = '+' + value;
             }
             return value;
+        },
+        
+        connectScores : function() {
+            $(this.el).find("#scores_wrapper").html(new Scores_view({model : this.model, totals_view : this}).render().el);
         }
 
 
     });
             
     return view;
-
+round_2_sign
 });

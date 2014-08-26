@@ -573,21 +573,7 @@
         
         return this.round_2_sign(result);
     }
-    
-    CalculateSummary.prototype.calculateGraphScore = function(vpp) {
-      
-        var result = 0;
-        
-        if(vpp < 200) {
-            if(vpp > 0) {
-                result = 100 + Math.abs(vpp) - ((1.5) * Math.abs(vpp));
-            } else {
-                result = 100 + vpp;
-            }
-        }
-        
-        return this.round_2_sign(result);
-    }
+
     
     // Add the  function to the top level of the jQuery object
     $.calculateSummary = function(options) {
