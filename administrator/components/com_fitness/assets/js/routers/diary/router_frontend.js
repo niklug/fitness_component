@@ -17,7 +17,8 @@ define([
         'views/diary/frontend/menus/submenu_item',
         'views/diary/frontend/list',
         'views/diary/frontend/form',
-        'views/diary/frontend/item'
+        'views/diary/frontend/item',
+        'views/graph/progress_graph'
 ], function (
         $,
         _,
@@ -37,7 +38,8 @@ define([
         Submenu_item_view,
         List_view,
         Form_view,
-        Item_view
+        Item_view,
+        Progress_graph_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -54,6 +56,9 @@ define([
             }
             //
             app.collections.items = new Diaries_collection();
+            
+            app.collections.items.bind("sync", this.connectGraph, this);
+            
             app.models.request_params_diaries = new Request_params_diaries_model();
             app.models.request_params_diaries.bind("change", this.get_diaries, this);
 
@@ -130,6 +135,8 @@ define([
         },
         
         list_actions : function () {
+            this.connectGraph();
+            
             $("#main_container").html(new List_view({collection : app.collections.items}).render().el);
             
             app.models.pagination = $.backbone_pagination({});
@@ -155,6 +162,7 @@ define([
         },
         
         item_view : function(id) {
+            $("#progress_graph_container").empty();
             app.models.diary = new Diary_model({id : id});
             var self = this;
             $.when(
@@ -257,6 +265,50 @@ define([
                 self.navigate("!/item_view/" + diary_id, true);
             });
         },    
+        
+        connectGraph : function() {
+            var collection = app.collections.items;
+            this.calculateFinalScores(collection);
+            
+            this.progress_graph = new Progress_graph_view({
+                head_title : 'NUTRITION DIARY FINAL SCORES',
+                el : "#progress_graph_container",
+                collection : collection,
+                style : 'dark',
+                color : "#287725",
+                data_field_x : 'entry_date',
+                data_field_y : 'target_calories',
+                y_title : 'Final Score (%)',
+                tooltip : false,
+                setTooltipHtml : this.setTooltipHtml
+            });
+        },
+        
+        setTooltipHtml : function() {
+            
+        },
+        
+        calculateFinalScores : function(collection) {
+            var self = this;
+            _.each(collection.models, function(model) {
+                self.calculateFinalScore(model);
+            });
+        },
+        
+        calculateFinalScore : function(model) {
+         
+            var variance_protein_grams_value = this.calculateVarianceGrams(model.get('protein'), model.get('target_protein'));
+            var variance_carbs_grams_value = this.calculateVarianceGrams(model.get('carbs'), model.get('target_carbs'));
+            var variance_fats_gramsvalue = this.calculateVarianceGrams(model.get('fats'), model.get('target_fats'));
+        },
+        
+        calculateVarianceGrams : function(total, target) {
+            return this.round_2_sign(total - target);
+        },
+        
+        round_2_sign : function(value) {
+            return Math.round(value * 100)/100;
+        },
     
     });
 

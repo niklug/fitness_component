@@ -35,7 +35,16 @@ define([
             
             this.setFinalScore();
             
+            this.onRender();
+            
             return this;
+        },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                self.connectComments();
+            });
         },
         
         calculateGraphScore : function(vpp) {
@@ -168,7 +177,22 @@ define([
             }
 
             element.addClass(input_class);
-        }
+        },
+        
+        connectComments :function() {
+            var comment_options = {
+                'item_id' :  this.model.get('id'),
+                'fitness_administration_url' : app.options.ajax_call_url,
+                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
+                'db_table' : '#__fitness_nutrition_diary_comments',
+                'read_only' : true,
+            }
+            var comments = $.comments(comment_options, comment_options.item_id, '0');
+
+            var comments_html = comments.run();
+            $(this.el).find("#score_comments").html(comments_html);
+        },
+
 
         
   

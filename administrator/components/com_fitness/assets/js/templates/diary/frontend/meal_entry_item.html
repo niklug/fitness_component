@@ -94,3 +94,13 @@
         <div class="add_meal_entry">click to create a new entry</div>
     </div>
 <% } %>
+
+<% if(item.id) { %>
+    <br/>
+    <br/>
+    <div class="clr"></div>
+    <div class="meal_entry_comments_wrapper"></div>
+    <div class="clr"></div>
+    <input id="add_comment_<%= item.id %>" class="" type="button" value="Add Comment" >
+    <div class="clr"></div>
+<% } %>

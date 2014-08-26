@@ -21,6 +21,8 @@ $business_profile_id = $business_profile_id['data'];
 
     <h2>NUTRITION DIARY</h2>
     
+    <div id="progress_graph_container"></div>
+    
     <div style="padding: 2px;" id="submenu_container"></div>
     
     <div id="main_container"></div>

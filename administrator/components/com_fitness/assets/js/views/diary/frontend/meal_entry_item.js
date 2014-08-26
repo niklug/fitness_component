@@ -45,6 +45,10 @@ define([
                 var self = this;
                 $(this.el).show('0', function() {
                     self.scrollTo();
+                    
+                    if(self.model.get('id')) {
+                        self.connectComments();
+                    }
                 });
           
             },
@@ -285,6 +289,20 @@ define([
                 var id = this.model.get('id');
                 var diary_id = this.model.get('diary_id');
                 app.controller.copy_meal_entry(id, diary_id);
+            },
+            
+            connectComments :function() {
+             var comment_options = {
+                    'item_id' :  this.model.get('diary_id'),
+                    'fitness_administration_url' : app.options.ajax_call_url,
+                    'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
+                    'db_table' : '#__fitness_nutrition_diary_comments',
+                    'read_only' : true,
+                }
+                var comments = $.comments(comment_options, comment_options.item_id, this.model.get('id'));
+
+                var comments_html = comments.run();
+                $(this.el).find(".meal_entry_comments_wrapper").html(comments_html);
             },
 
             close :function() {
