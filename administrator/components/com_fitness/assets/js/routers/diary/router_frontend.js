@@ -268,7 +268,6 @@ define([
         
         connectGraph : function() {
             var collection = app.collections.items;
-            this.calculateFinalScores(collection);
             
             this.progress_graph = new Progress_graph_view({
                 head_title : 'NUTRITION DIARY FINAL SCORES',
@@ -277,7 +276,7 @@ define([
                 style : 'dark',
                 color : "#287725",
                 data_field_x : 'entry_date',
-                data_field_y : 'target_calories',
+                data_field_y : 'score',
                 y_title : 'Final Score (%)',
                 tooltip : false,
                 setTooltipHtml : this.setTooltipHtml
@@ -288,27 +287,7 @@ define([
             
         },
         
-        calculateFinalScores : function(collection) {
-            var self = this;
-            _.each(collection.models, function(model) {
-                self.calculateFinalScore(model);
-            });
-        },
         
-        calculateFinalScore : function(model) {
-         
-            var variance_protein_grams_value = this.calculateVarianceGrams(model.get('protein'), model.get('target_protein'));
-            var variance_carbs_grams_value = this.calculateVarianceGrams(model.get('carbs'), model.get('target_carbs'));
-            var variance_fats_gramsvalue = this.calculateVarianceGrams(model.get('fats'), model.get('target_fats'));
-        },
-        
-        calculateVarianceGrams : function(total, target) {
-            return this.round_2_sign(total - target);
-        },
-        
-        round_2_sign : function(value) {
-            return Math.round(value * 100)/100;
-        },
     
     });
 

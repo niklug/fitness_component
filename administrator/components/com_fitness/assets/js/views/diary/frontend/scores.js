@@ -192,11 +192,6 @@ define([
             var comments_html = comments.run();
             $(this.el).find("#score_comments").html(comments_html);
         },
-
-
-        
-  
-   
     });
             
     return view;
