@@ -107,7 +107,7 @@ define([
             app.collections.items.fetch({
                 data : app.models.request_params_diaries.toJSON(),
                 success: function (collection, response) {
-                    console.log(collection.toJSON());
+                    //console.log(collection.toJSON());
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -117,7 +117,7 @@ define([
         
         
         list_view : function() {
-            app.models.request_params_diaries.set({page : 1, current_page : 'list',  state : 1, uid : app.getUniqueId()});
+            app.models.request_params_diaries.set({page : 1,  state : '*', uid : app.getUniqueId()});
             
             this.list_actions();
         },
@@ -290,7 +290,9 @@ define([
             
         },
         
-        
+        update_list : function() {
+            app.models.request_params_diaries.set({ uid : app.getUniqueId()});
+        },
     
     });
 

@@ -110,6 +110,7 @@ define([
         search : function() {
             var client_name = this.$el.find("#client_name").val();
             var trainer_name = this.$el.find("#trainer_name").val();
+            var assessed_by_name = this.$el.find("#assessed_by_name").val();
             var final_score_from = this.$el.find("#final_score_from").val();
             var final_score_to = this.$el.find("#final_score_to").val();
             var entry_date_from = this.$el.find("#entry_date_from").val();
@@ -121,6 +122,7 @@ define([
             this.model.set({
                 client_name : client_name, 
                 trainer_name : trainer_name,
+                assessed_by_name : assessed_by_name,
                 final_score_from : final_score_from,
                 final_score_to : final_score_to,
                 entry_date_from : entry_date_from, 
@@ -139,12 +141,14 @@ define([
                 {
                     client_name : '',
                     trainer_name : '',
+                    assessed_by_name : '',
                     final_score_from : '',
                     final_score_to : '',
                     entry_date_from : '',
                     entry_date_to : '',
                     submit_date_from : '',
                     submit_date_to : '',
+                    status : ''
                 }
             );
         },
@@ -155,7 +159,6 @@ define([
         
         connectStatusFilter : function() {
             var collection = new Backbone.Collection();
-            
             _.each(app.options.statuses, function(status) {
                 var model = new Backbone.Model(status);
                 collection.add(model);

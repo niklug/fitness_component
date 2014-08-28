@@ -12,13 +12,13 @@ define([
         template : _.template(template),
         
         render : function(){
-            var data = this.model.toJSON();
+            var data = {item : this.model.toJSON()};
             data.app = app;
             data.$ = $;
             var template = _.template(this.template(data));
             this.$el.append(template);
             
-            this.connectStatus(new Backbone.Model({status : this.model.get('status')}), ".status_wrapper");
+            this.connectStatus(this.model, "#status_wrapper_" + this.model.get('id'));
             
             return this;
         },

@@ -1,6 +1,6 @@
 <tr data-id="<%= id %>" class="diary_row">
     <td><%= moment(new Date(Date.parse(entry_date))).format("ddd, D MMM  YY")  %></td>
-    <td class="status_wrapper"></td>
+    <td id="status_wrapper_<%= id %>"></td>
     <td>
         <% if (score != '0') { %>
             <%= score + '%' %>

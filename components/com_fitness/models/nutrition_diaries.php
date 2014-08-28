@@ -456,7 +456,7 @@ class FitnessModelNutrition_diaries extends JModelList {
                 $data->client_id = JRequest::getVar('client_id'); 
                 $data->client_name = JRequest::getVar('client_name'); 
                 $data->trainer_name = JRequest::getVar('trainer_name'); 
-                $data->assessed_by = JRequest::getVar('assessed_by'); 
+                $data->assessed_by_name = JRequest::getVar('assessed_by_name'); 
                 $data->final_score_from = JRequest::getVar('final_score_from'); 
                 $data->final_score_to = JRequest::getVar('final_score_to'); 
                 $data->entry_date_from = JRequest::getVar('entry_date_from'); 
@@ -504,7 +504,7 @@ class FitnessModelNutrition_diaries extends JModelList {
         $client_id = $data->client_id; 
         $client_name = $data->client_name; 
         $trainer_name = $data->trainer_name; 
-        $assessed_by = $data->assessed_by;
+        $assessed_by_name = $data->assessed_by_name;
         $final_score_from = $data->final_score_from; 
         $final_score_to = $data->final_score_to; 
         $entry_date_from = $data->entry_date_from; 
@@ -527,7 +527,9 @@ class FitnessModelNutrition_diaries extends JModelList {
         . " (SELECT name FROM #__users WHERE id=a.client_id) client_name,"
         . " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name,"
         . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name,"
-        . " (SELECT name FROM #__fitness_nutrition_focus WHERE id=a.nutrition_focus) nutrition_focus_name, ";
+        . " (SELECT name FROM #__fitness_nutrition_focus WHERE id=np.nutrition_focus) nutrition_focus_name, "
+        . " (SELECT name FROM #__fitness_goal_categories WHERE id=pg.goal_category_id) primary_goal_name, "
+        . " (SELECT name FROM #__fitness_mini_goal_categories WHERE id=mg.mini_goal_category_id) mini_goal_name, ";
 
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
@@ -547,14 +549,70 @@ class FitnessModelNutrition_diaries extends JModelList {
                 $query .= " AND a.client_id IN ($client_ids)";
             }
         }
+        
+        //search by trainer name
+        if (!empty($data->trainer_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->trainer_name%' ";
 
-        if($state) {
-            $query .= " AND a.state='$state'";
+            $trainer_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($trainer_ids) {
+                $query .= " AND a.trainer_id IN ($trainer_ids)";
+            }
         }
+        
+        //search by assessed by name 
+        if (!empty($data->assessed_by_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->assessed_by_name%' ";
+
+            $assessed_by_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($assessed_by_ids) {
+                $query .= " AND a.assessed_by IN ($assessed_by_ids)";
+            }
+        }
+        
+        if (!empty($final_score_from)) {
+            $query .= " AND a.score >= $final_score_from";
+        }
+        
+        if (!empty($final_score_to)) {
+            $query .= " AND a.score <= $final_score_to";
+        }
+        
+        
+        if (!empty($data->entry_date_from)) {
+            $query .= " AND a.entry_date >= '$data->entry_date_from'";
+        }
+
+        if (!empty($data->entry_date_to)) {
+            $query .= " AND a.entry_date <= '$data->entry_date_to'";
+        }
+
+        if (!empty($data->submit_date_from)) {
+            $query .= " AND a.submit_date >= '$data->submit_date_from'";
+        }
+
+        if (!empty($data->submit_date_to)) {
+            $query .= " AND a.submit_date <= '$data->submit_date_to'";
+        }
+
+
+        if($data->state != '' AND $data->state != '*') {
+            $query .= " AND a.state='$data->state'";
+        }
+        
+        if($status) {
+            $query .= " AND a.status='$status'";
+        }
+        
         $query .= " ) items_total ";
         //
         $query .= " FROM $table AS a";
         $query .= " LEFT JOIN #__users AS u ON u.id=a.assessed_by";
+        $query .= " LEFT JOIN #__fitness_nutrition_plan AS np ON np.id=a.nutrition_plan_id";
+        $query .= " LEFT JOIN #__fitness_goals AS pg ON pg.id=np.primary_goal";
+        $query .= " LEFT JOIN #__fitness_mini_goals AS mg ON mg.id=np.mini_goal";
         $query .= " WHERE 1 ";
         
         //search by client name
@@ -567,6 +625,54 @@ class FitnessModelNutrition_diaries extends JModelList {
                 $query .= " AND a.client_id IN ($client_ids)";
             }
         }
+        
+                
+        //search by trainer name
+        if (!empty($data->trainer_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->trainer_name%' ";
+
+            $trainer_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($trainer_ids) {
+                $query .= " AND a.trainer_id IN ($trainer_ids)";
+            }
+        }
+        
+        //search by assessed by name 
+        if (!empty($data->assessed_by_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->assessed_by_name%' ";
+
+            $assessed_by_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($assessed_by_ids) {
+                $query .= " AND a.assessed_by IN ($assessed_by_ids)";
+            }
+        }
+        
+        if (!empty($final_score_from)) {
+            $query .= " AND a.score >= $final_score_from";
+        }
+        
+        if (!empty($final_score_to)) {
+            $query .= " AND a.score <= $final_score_to";
+        }
+        
+        if (!empty($data->entry_date_from)) {
+            $query .= " AND a.entry_date >= '$data->entry_date_from'";
+        }
+
+        if (!empty($data->entry_date_to)) {
+            $query .= " AND a.entry_date <= '$data->entry_date_to'";
+        }
+
+        if (!empty($data->submit_date_from)) {
+            $query .= " AND a.submit_date >= '$data->submit_date_from'";
+        }
+
+        if (!empty($data->submit_date_to)) {
+            $query .= " AND a.submit_date <= '$data->submit_date_to'";
+        }
+
 
         if($id) {
             $query .= " AND a.id='$id' ";
@@ -576,8 +682,12 @@ class FitnessModelNutrition_diaries extends JModelList {
             $query .= " AND a.client_id='$client_id' ";
         }
 
-        if($state) {
-            $query .= " AND a.state='$state' ";
+        if($data->state != '' AND $data->state != '*') {
+            $query .= " AND a.state='$data->state'";
+        }
+        
+        if($status) {
+            $query .= " AND a.status='$status'";
         }
 
         if($sort_by) {

@@ -18,7 +18,7 @@ define([
             var template = _.template(this.template(data));
             this.$el.append(template);
             
-            this.connectStatus(new Backbone.Model({status : this.model.get('status')}), ".status_wrapper");
+            this.connectStatus(new Backbone.Model({status : this.model.get('status')}), "#status_wrapper_" + this.model.get('id'));
             
             return this;
         },

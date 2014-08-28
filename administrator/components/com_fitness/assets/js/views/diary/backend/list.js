@@ -43,10 +43,18 @@ define([
         
         events: {
             "click #sort_entry_date" : "onClickSortEnryDate",
+            "click #sort_submit_date" : "onClickSortSubmitDate",
+            "click #sort_client_name" : "onClickSortClientName",
+            "click #sort_trainer_name" : "onClickSortTrainerName",
+            "click #sort_assessed_by" : "onClickSortAssessedByName",
+            "click #sort_primary_goal" : "onClickSortPrimaryGoal",
+            "click #sort_mini_goal" : "onClickSortMiniGoal",
+            "click #sort_nutrition_focus" : "onClickSortNutritionFocus",
             "click #sort_status" : "onClickSortStatus",
+            "click #sort_state" : "onClickSortState",
             "click #sort_score" : "onClickSortScore",
-            "click #sort_assessed_by" : "onClickAssessedBy",
-            "click #sort_submit_date" : "onClickSubmitDate",
+            
+            "click .publish" : "onClickPublish",            
             "click .trash" : "onClickTrash",
             "click .restore" : "onClickRestore",
             "click .delete" : "onClickDelete",
@@ -65,24 +73,50 @@ define([
         },
 
         onClickSortEnryDate : function() {
-            app.models.request_params_diaries.set({'sort_by' : 'a.entry_date'});
+            app.models.request_params_diaries.set({'sort_by' : 'a.entry_date', order_dirrection : "DESC"});
         },
+        
+        onClickSortSubmitDate : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'a.submit_date', order_dirrection : "DESC"});
+        },
+        
+        onClickSortClientName : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'client_name', order_dirrection : "ASC"});
+        },
+        
+        onClickSortTrainerName : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'trainer_name', order_dirrection : "ASC"});
+        },
+        
+        onClickSortAssessedByName : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'assessed_by_name', order_dirrection : "ASC"});
+        },
+        
+        onClickSortPrimaryGoal : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'primary_goal_name', order_dirrection : "ASC"});
+        },
+        
+        onClickSortMiniGoal : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'mini_goal_name', order_dirrection : "ASC"});
+        },
+        
+        onClickSortNutritionFocus : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'nutrition_focus_name', order_dirrection : "ASC"});
+        },
+
 
         onClickSortStatus : function() {
             app.models.request_params_diaries.set({'sort_by' : 'a.status'});
+        },
+        
+        onClickSortState : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'a.state'});
         },
 
         onClickSortScore : function() {
             app.models.request_params_diaries.set({'sort_by' : 'a.score'});
         },
 
-        onClickAssessedBy : function() {
-            app.models.request_params_diaries.set({'sort_by' : 'assessed_by_name'});
-        },
-
-        onClickSubmitDate : function() {
-            app.models.request_params_diaries.set({'sort_by' : 'a.submit_date'});
-        },
         
         onClickTrash : function(event) {
             var id = $(event.target).attr('data-id');
@@ -90,7 +124,7 @@ define([
             var self  = this;
             this.model.save({state : '-2'}, {
                 success: function (model, response) {
-                    self.hide_items(id);
+                    app.controller.update_list();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -104,7 +138,7 @@ define([
             var self = this;
             this.model.save({state : '1'}, {
                 success: function (model, response) {
-                    self.hide_items(id);
+                    app.controller.update_list();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -118,7 +152,7 @@ define([
             var self = this;
             this.model.destroy({
                 success: function (model) {
-                    self.hide_items(id);
+                    app.controller.update_list();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
@@ -153,6 +187,28 @@ define([
             if($(event.target).attr("checked")) {
                 $(".trash_checkbox").prop("checked", true);
             }
+        },
+        
+        onClickPublish: function(event) {
+            var id = $(event.target).attr('data-id');
+            var state = $(event.target).attr('data-state');
+            
+            var published = 1;
+            
+            if(parseInt(state) == '1') {
+                published = 0;
+            }
+            
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({state : published}, {
+                success: function (model, response) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
         },
 
         close :function() {

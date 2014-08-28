@@ -71,7 +71,7 @@ $business_profile_id = $business_profile_id['data'];
     var status_options = {
         'fitness_administration_url' : '<?php echo JURI::root();?>administrator/index.php?option=com_fitness&tmpl=component&<?php echo JSession::getFormToken(); ?>=1',
         'calendar_frontend_url' : '<?php echo JURI::root()?>administrator/index.php?option=com_multicalendar&task=load&calid=0',
-        'db_table' : '#__fitness_goals',
+        'db_table' : '#__fitness_nutrition_diary',
         'status_button' : 'status_button',
         'status_button_dialog' : 'status_button_dialog',
         'dialog_status_wrapper' : 'dialog_status_wrapper',
@@ -163,6 +163,7 @@ $business_profile_id = $business_profile_id['data'];
         'view' : 'Goal'
     }
         
+    options.statuses = statuses;
     options.status_options = status_options;
     options.primary_goal_status_options = primary_goal_status_options;
     options.mini_goal_status_options = mini_goal_status_options;
