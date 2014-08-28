@@ -114,7 +114,6 @@ define([
             "change #graph_business_profile_id " : "onChangeBusinessName",
             "change #graph_trainer_id" : "onChangeTrainer",
             "change #graph_client_id" : "onChangeClient",
-            
         },
         
         onRender : function() {

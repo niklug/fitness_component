@@ -563,5 +563,29 @@ class FitnessController extends JController
             $view -> copySessionPeriod();
 	}
         
+        //diaries
+        function diaries() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
+            $nutrition_diaries_model = new FitnessModelNutrition_diaries();
+            echo json_encode($nutrition_diaries_model -> diaries()); 
+        }
+        
+        function meal_entries() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
+            $nutrition_diaries_model = new FitnessModelNutrition_diaries();
+            echo json_encode($nutrition_diaries_model -> meal_entries()); 
+        }
+
+        function diary_meals() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
+            $nutrition_diaries_model = new FitnessModelNutrition_diaries();
+            echo json_encode($nutrition_diaries_model -> diary_meals()); 
+        }
+
+        function meal_ingredients() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
+            $nutrition_diaries_model = new FitnessModelNutrition_diaries();
+            echo json_encode($nutrition_diaries_model -> meal_ingredients()); 
+        }
         
 }

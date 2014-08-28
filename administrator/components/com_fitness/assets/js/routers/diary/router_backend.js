@@ -10,15 +10,15 @@ define([
         'models/diary/request_params_diaries',
         'models/diary/diary',
         'models/diary/active_plan_data',
-        'models/diary/diary_days',
         'views/diary/frontend/menus/submenu_list',
         'views/diary/frontend/menus/submenu_trash_list',
         'views/diary/frontend/menus/submenu_form',
         'views/diary/frontend/menus/submenu_item',
-        'views/diary/frontend/list',
+        'views/diary/backend/list',
         'views/diary/frontend/form',
         'views/diary/frontend/item',
-        'views/graph/progress_graph'
+        'views/graph/progress_graph',
+        'views/diary/backend/search_block',
 ], function (
         $,
         _,
@@ -31,7 +31,6 @@ define([
         Request_params_diaries_model,
         Diary_model,
         Active_plan_data_model,
-        Diary_days_model,
         Submenu_list_view,
         Submenu_trash_list_view,
         Submenu_form_view,
@@ -39,7 +38,8 @@ define([
         List_view,
         Form_view,
         Item_view,
-        Progress_graph_view
+        Progress_graph_view,
+        Search_block_view
     ) {
 
     var Controller = Backbone.Router.extend({
@@ -59,24 +59,16 @@ define([
             
             app.collections.items.bind("sync", this.connectGraph, this);
             
-            app.models.request_params_diaries = new Request_params_diaries_model();
+            this.onClientChange();
+
+            app.options.client_id = localStorage.getItem('client_id');
+            
+            app.models.request_params_diaries = new Request_params_diaries_model({client_id : app.options.client_id});
             app.models.request_params_diaries.bind("change", this.get_diaries, this);
 
             //active plan data
             app.models.active_plan_data = new Active_plan_data_model();
             
-            
-            //diary days
-            app.models.diary_days = new Diary_days_model();
-            app.models.diary_days.fetch({
-                data : {client_id : app.options.client_id},
-                success : function (model, response) {
-                    //console.log(model.toJSON());
-                },
-                error : function (model, response) {
-                    alert(response.responseText);
-                }
-            });
             
             app.collections.meal_entries = new Meal_entries_collection();
             app.collections.diary_meals = new Diary_meals_collection();
@@ -99,13 +91,23 @@ define([
             }
         },
         
+        onClientChange : function() {
+            var self = this;
+            $("#client_id").die().live('change', function() {
+                var client_id = $(this).val();
+                app.options.client_id = client_id;
+                localStorage.setItem('client_id', client_id);
+                app.models.request_params_diaries.set({client_id : client_id});
+                self.navigate("!/list_view", true);
+            });
+        },
+        
         get_diaries : function() {
-            app.models.request_params_diaries.set({client_id : app.options.client_id});
             app.collections.items.reset();
             app.collections.items.fetch({
                 data : app.models.request_params_diaries.toJSON(),
                 success: function (collection, response) {
-                    //console.log(collection);
+                    console.log(collection.toJSON());
                 },
                 error: function (collection, response) {
                     alert(response.responseText);
@@ -115,8 +117,6 @@ define([
         
         
         list_view : function() {
-            $("#submenu_container").html(new Submenu_list_view().render().el);
-            
             app.models.request_params_diaries.set({page : 1, current_page : 'list',  state : 1, uid : app.getUniqueId()});
             
             this.list_actions();
@@ -137,6 +137,8 @@ define([
         
         list_actions : function () {
             this.connectGraph();
+            
+            new Search_block_view({el : $("#header_wrapper"), model : app.models.request_params_diaries, collection : app.collections.items});
             
             $("#main_container").html(new List_view({collection : app.collections.items}).render().el);
             
@@ -169,7 +171,6 @@ define([
             $.when(
 
                     app.models.diary.fetch({
-                        data : {client_id : app.options.client_id},
                         success : function (model, response) {
                             app.collections.items.add(model);
                         },
@@ -275,7 +276,7 @@ define([
                 head_title : 'NUTRITION DIARY FINAL SCORES',
                 el : "#progress_graph_container",
                 collection : collection,
-                style : 'dark',
+                style : '',
                 color : "#287725",
                 data_field_x : 'entry_date',
                 data_field_y : 'score',

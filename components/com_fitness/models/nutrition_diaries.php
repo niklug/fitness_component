@@ -445,81 +445,30 @@ class FitnessModelNutrition_diaries extends JModelList {
 
         switch ($method) {
             case 'GET': // Get Item(s)
-                $sort_by = JRequest::getVar('sort_by'); 
-                $order_dirrection = JRequest::getVar('order_dirrection'); 
-                $page = JRequest::getVar('page'); 
-                $limit = JRequest::getVar('limit'); 
-                $state = JRequest::getVar('state'); 
+                $data = new stdClass();
+                $data->id = $id;
+                $data->sort_by = JRequest::getVar('sort_by'); 
+                $data->order_dirrection = JRequest::getVar('order_dirrection'); 
+                $data->page = JRequest::getVar('page'); 
+                $data->limit = JRequest::getVar('limit'); 
+                $data->state = JRequest::getVar('state'); 
+                $data->status = JRequest::getVar('status'); 
+                $data->client_id = JRequest::getVar('client_id'); 
+                $data->client_name = JRequest::getVar('client_name'); 
+                $data->trainer_name = JRequest::getVar('trainer_name'); 
+                $data->assessed_by = JRequest::getVar('assessed_by'); 
+                $data->final_score_from = JRequest::getVar('final_score_from'); 
+                $data->final_score_to = JRequest::getVar('final_score_to'); 
+                $data->entry_date_from = JRequest::getVar('entry_date_from'); 
+                $data->entry_date_to = JRequest::getVar('entry_date_to'); 
+                $data->submit_date_from = JRequest::getVar('submit_date_from'); 
+                $data->submit_date_to = JRequest::getVar('submit_date_to'); 
+                $data->nutrition_focus = JRequest::getVar('nutrition_focus'); 
+                $data->primary_goal = JRequest::getVar('primary_goal'); 
+                $data->mini_goal = JRequest::getVar('mini_goal'); 
+             
 
-                $start = ($page - 1) * $limit;
-
-
-                $user = &JFactory::getUser();
-                $user_id = $user->id;
-
-                $query .= " SELECT a.*, u.name AS assessed_by_name,"
-         
-                . " (SELECT name FROM #__users WHERE id=a.client_id) client_name,"
-                . " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name,"
-                . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name,"
-                . " (SELECT name FROM #__fitness_nutrition_focus WHERE id=a.nutrition_focus) nutrition_focus_name, ";
-                
-                //get total number
-                $query .= " (SELECT COUNT(*) FROM $table AS a ";
-                $query .= " WHERE a.client_id='$user_id' ";
-        
-                if($state) {
-                    $query .= " AND a.state='$state'";
-                }
-                $query .= " ) items_total ";
-                //
-                $query .= " FROM $table AS a";
-                $query .= " LEFT JOIN #__users AS u ON u.id=a.assessed_by";
-                $query .= " WHERE a.client_id='$user_id' ";
-                
-                if($id) {
-                    $query .= " AND a.id='$id' ";
-                }
-                
-                if($state) {
-                    $query .= " AND a.state='$state' ";
-                }
-                
-                if($sort_by) {
-                    $query .= " ORDER BY " . $sort_by;
-                }
-                
-                if($order_dirrection) {
-                    $query .=  " " . $order_dirrection;
-                }
-                
-                if($limit) {
-                    $query .= " LIMIT $start, $limit";
-                }
-
-                $query_method = 1;
-                
-                if($id) {
-                    $query_method = 2;
-                }
-                
-                $data = FitnessHelper::customQuery($query, $query_method);
-                
-
-                if(!$id) {
-                    $i = 0;
-                    foreach ($data as $item) {
-                        $client_trainers = $helper->get_client_trainers_names($data->client_id, 'secondary');
-
-                        $data[$i]->secondary_trainers = $client_trainers;
-
-                        $i++;
-                    }
-                } else {
-                    $client_trainers = $helper->get_client_trainers_names($data->client_id, 'secondary');
-
-                    $data->secondary_trainers = $client_trainers;
-                }
+                $data = $this->getDiaries($data);
 
                 return $data;
                 break;
@@ -542,6 +491,133 @@ class FitnessModelNutrition_diaries extends JModelList {
         $model->id = $id;
 
         return $model;
+    }
+    
+    public function getDiaries($data) {
+        $id = $data->id; 
+        $sort_by = $data->sort_by; 
+        $order_dirrection = $data->order_dirrection; 
+        $page = $data->page; 
+        $limit = $data->limit; 
+        $state = $data->state;
+        $status = $data->status ;
+        $client_id = $data->client_id; 
+        $client_name = $data->client_name; 
+        $trainer_name = $data->trainer_name; 
+        $assessed_by = $data->assessed_by;
+        $final_score_from = $data->final_score_from; 
+        $final_score_to = $data->final_score_to; 
+        $entry_date_from = $data->entry_date_from; 
+        $entry_date_to = $data->entry_date_to; 
+        $submit_date_from = $data->submit_date_from;
+        $submit_date_from = $data->submit_date_from;
+        $submit_date_to = $data->submit_date_to; 
+        $nutrition_focus= $data->nutrition_focus; 
+        $primary_goal= $data->primary_goal;
+        $mini_goal = $data->mini_goal;
+        
+        $helper = new FitnessHelper();
+        
+        $start = ($page - 1) * $limit;
+        
+        $table = '#__fitness_nutrition_diary';
+
+        $query = " SELECT a.*, u.name AS assessed_by_name,"
+
+        . " (SELECT name FROM #__users WHERE id=a.client_id) client_name,"
+        . " (SELECT name FROM #__users WHERE id=a.trainer_id) trainer_name,"
+        . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name,"
+        . " (SELECT name FROM #__fitness_nutrition_focus WHERE id=a.nutrition_focus) nutrition_focus_name, ";
+
+        //get total number
+        $query .= " (SELECT COUNT(*) FROM $table AS a ";
+        $query .= " WHERE 1 ";
+        
+        if($client_id) {
+            $query .= " AND a.client_id='$client_id' ";
+        }
+        
+        //search by client name
+        if (!empty($data->client_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
+
+            $client_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($client_ids) {
+                $query .= " AND a.client_id IN ($client_ids)";
+            }
+        }
+
+        if($state) {
+            $query .= " AND a.state='$state'";
+        }
+        $query .= " ) items_total ";
+        //
+        $query .= " FROM $table AS a";
+        $query .= " LEFT JOIN #__users AS u ON u.id=a.assessed_by";
+        $query .= " WHERE 1 ";
+        
+        //search by client name
+        if (!empty($data->client_name)) {
+            $sql = " SELECT GROUP_CONCAT(id) FROM #__users WHERE name LIKE '%$data->client_name%' ";
+
+            $client_ids = FitnessHelper::customQuery($sql, 0);
+
+            if($client_ids) {
+                $query .= " AND a.client_id IN ($client_ids)";
+            }
+        }
+
+        if($id) {
+            $query .= " AND a.id='$id' ";
+        }
+        
+        if($client_id) {
+            $query .= " AND a.client_id='$client_id' ";
+        }
+
+        if($state) {
+            $query .= " AND a.state='$state' ";
+        }
+
+        if($sort_by) {
+            $query .= " ORDER BY " . $sort_by;
+        }
+
+        if($order_dirrection) {
+            $query .=  " " . $order_dirrection;
+        }
+
+        if($limit) {
+            $query .= " LIMIT $start, $limit";
+        }
+
+        $query_method = 1;
+
+        if($id) {
+            $query_method = 2;
+        }
+
+        $data = FitnessHelper::customQuery($query, $query_method);
+
+
+        if(!$id) {
+            $i = 0;
+            foreach ($data as $item) {
+                $client_trainers = $helper->get_client_trainers_names($data->client_id, 'secondary');
+
+                $data[$i]->secondary_trainers = $client_trainers;
+
+                $i++;
+            }
+        } else {
+            $client_trainers = $helper->get_client_trainers_names($data->client_id, 'secondary');
+
+            $data->secondary_trainers = $client_trainers;
+        }
+        
+        return $data;
+
     }
     
     public function meal_entries() {
