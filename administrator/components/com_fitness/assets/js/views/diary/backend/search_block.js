@@ -90,8 +90,8 @@ define([
         events : {
             "click #add_item" : "onClickAddItem",
             "click #trash_delete_selected" : "onClickTrashDeleteSelected",
-            "click #publish_workout_selected" : "onClickPublishWorkout",
-            "click #unpublish_workout_selected" : "onClickUnpublishWorkout",
+            "click #publish_selected" : "onClickPublish",
+            "click #unpublish_selected" : "onClickUnpublish",
             "click #search" : "search",
             'keypress input[type=text]': 'filterOnEnter',
             "click #clear_all" : "clearAll",
@@ -194,88 +194,7 @@ define([
                 model_field : 'state'
             }).render();
         },
-        
-        onClickTrashDeleteSelected : function() {
-            var selected = new Array();
-            $('.trash_checkbox:checked').each(function() {
-                selected.push($(this).attr('data-id'));
-            });
-            
-            var current_page = this.model.get('current_page');
-            var self = this;
-            
-            if(selected.length > 0) {
-                _.each(selected, function(item, key){ 
-                    if(current_page == 'trash_list') {
-                        self.deleteItem(item);
-                    } else {
-                       self.trashItem(item); 
-                    }
-                });
-            }
-            $("#select_trashed").prop("checked", false);
-        },
 
-        
-        trashItem : function(id) {
-            var model = this.collection.get(id);
-            var self  = this;
-            model.save({id : id, published : '-2'}, {
-                success: function (model, response) {
-                    app.controller.update_list();
-                },
-                error: function (model, response) {
-                    alert(response.responseText);
-                }
-            });
-        },
-        
-        deleteItem : function(id) {
-            var model = this.collection.get(id);
-            var self = this;
-            model.destroy({
-                success: function (model, response) {
-                    app.controller.update_list();
-                },
-                error: function (model, response) {
-                    alert(response.responseText);
-                }
-            });
-        },
-                
-        onClickPublishWorkout : function() {
-            
-            var selected = new Array();
-            $('.trash_checkbox:checked').each(function() {
-                selected.push($(this).attr('data-id'));
-            });
-            
-            var self = this;
-            
-            if(selected.length > 0) {
-                _.each(selected, function(item, key){ 
-                    self.publishWorkout(item);
-                });
-            }
-            $("#select_trashed").prop("checked", false);
-        },
-        
-        publishWorkout : function(id) {
-            var model = this.collection.get(id);
-            
-            var frontend_published = model.get('frontend_published');
-            
-            var self  = this;
-            model.save({id : id, frontend_published : '1'}, {
-                success: function (model, response) {
-                    app.controller.update_list();
-   
-                },
-                error: function (model, response) {
-                    alert(response.responseText);
-                }
-            });
-        },
         
         connectBusinessSelect : function() {
             var business_name_collection = new Backbone.Collection;
@@ -385,6 +304,107 @@ define([
             //console.log(client_id);
             localStorage.setItem('client_id', client_id);
         },
+        
+        onClickPublish : function() {
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+            
+            var self = this;
+            
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    self.publish(item);
+                });
+            }
+            $("#select_trashed").prop("checked", false);
+        },
+        
+        publish : function(id) {
+            var model = this.collection.get(id);
+       
+            var self  = this;
+            model.save({id : id, state : '1'}, {
+                success: function (model, response) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickUnpublish : function() {
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+
+            var self = this;
+            
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    self.unpublish(item);
+                });
+            }
+            $("#select_trashed").prop("checked", false);
+        },
+        
+        unpublish : function(id) {
+            var model = this.collection.get(id);
+            var self  = this;
+            model.save({id : id, state : '0'}, {
+                success: function (model, response) {
+                    app.controller.update_list();
+                },
+                error: function (model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        onClickTrashDeleteSelected : function() {
+            var selected = new Array();
+            $('.trash_checkbox:checked').each(function() {
+                selected.push($(this).attr('data-id'));
+            });
+            
+            var self = this;
+            
+            if(selected.length > 0) {
+                _.each(selected, function(item, key){ 
+                    self.trash_delete(item);
+                });
+            }
+            $("#select_trashed").prop("checked", false);
+        },
+        
+        trash_delete : function(id) {
+            this.model = this.collection.get(id);
+            var self  = this;
+            if(this.model.get('state') == '-2') {
+                this.model.destroy({
+                    success: function (model) {
+                        app.controller.update_list();
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+            } else {
+                this.model.save({state : '-2'}, {
+                    success: function (model, response) {
+                        app.controller.update_list();
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+            
+        },
+
 
     });
             
