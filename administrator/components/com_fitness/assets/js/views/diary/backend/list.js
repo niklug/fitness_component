@@ -4,6 +4,7 @@ define([
 	'backbone',
         'app',
         'views/diary/backend/list_item',
+        'views/diary/backend/batch_process',
 	'text!templates/diary/backend/list.html'
 ], function (
         $,
@@ -11,6 +12,7 @@ define([
         Backbone,
         app,
         List_item_view,
+        Batch_process_view,
         template 
     ) {
 
@@ -37,6 +39,8 @@ define([
                     self.addItem(model);
                 });
             }
+            
+            this.connectBatchProcess();
             
             return this;
         },
@@ -209,6 +213,17 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        connectBatchProcess : function() {
+            $(this.el).find("#batch_process_wrapper").html(new Batch_process_view({
+                collection : this.collection,
+                title : 'Choose Status to apply to selected nutrition diary entries',
+                email_title : 'Send notification email to all clients',
+                statuses : app.options.statuses,
+                checkbox_element : ".trash_checkbox",
+                checkbox_element_multiple : "#select_trashed"
+            }).render().el);
         },
 
         close :function() {

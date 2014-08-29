@@ -18,7 +18,8 @@ define([
         'views/diary/frontend/form',
         'views/diary/frontend/item',
         'views/graph/progress_graph',
-        'views/diary/backend/search_block',
+        'views/diary/backend/search_block'
+        
 ], function (
         $,
         _,
@@ -293,6 +294,8 @@ define([
         update_list : function() {
             app.models.request_params_diaries.set({ uid : app.getUniqueId()});
         },
+        
+        
     
     });
 

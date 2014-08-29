@@ -219,8 +219,8 @@ define([
             this.daily_total_fats_percents = this.round_2_sign(this.daily_target_fats_percents / this.daily_target_fats_grams * this.daily_fats_grams);
             
             $(this.el).find("#daily_protein_percents").html(this.daily_total_protein_percents);
-            $(this.el).find("#daily_fats_percents").html(this.daily_total_carbs_percents);
-            $(this.el).find("#daily_carbs_percents").html(this.daily_total_fats_percents);
+            $(this.el).find("#daily_fats_percents").html(this.daily_total_fats_percents);
+            $(this.el).find("#daily_carbs_percents").html(this.daily_total_carbs_percents);
         },
         
         setDailyTargetCalories : function() {
