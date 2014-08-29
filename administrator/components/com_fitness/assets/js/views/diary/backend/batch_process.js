@@ -71,14 +71,43 @@ define([
         updateStatus : function(model) {
             $(this.options.checkbox_element).prop("checked", false);
             $(this.options.checkbox_element_multiple).prop("checked", false);
+            var send_email = $(this.el).find("#batch_send_status_email").is(':checked');
+
+            var self = this;
             model.save(null, {
                 success: function (model, response) {
-                    
+                    if(send_email) {
+                        self.emailLogic(model);
+                    }
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
             });
+        },
+        
+        emailLogic : function(model) {
+            var item_id = model.get('id');
+            var status = model.get('status');
+            var method = this.options.status_options.statuses[status].email_alias;
+            
+            if(method) {
+                this.sendEmail(item_id, method);
+            }
+        },
+        
+        sendEmail : function(id, method) {
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.id = id;
+            data.view = this.options.status_options.view;
+            data.method = method;
+
+            $.AjaxCall(data, url, view, task, table, function(output){ });
         }
     });
             

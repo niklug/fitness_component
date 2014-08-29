@@ -221,6 +221,7 @@ define([
                 title : 'Choose Status to apply to selected nutrition diary entries',
                 email_title : 'Send notification email to all clients',
                 statuses : app.options.statuses,
+                status_options : app.options.status_options,
                 checkbox_element : ".trash_checkbox",
                 checkbox_element_multiple : "#select_trashed"
             }).render().el);

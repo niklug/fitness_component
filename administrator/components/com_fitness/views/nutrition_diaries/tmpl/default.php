@@ -81,9 +81,9 @@ $business_profile_id = $business_profile_id['data'];
 
         'statuses' : {
             '<?php echo FitnessHelper::INPROGRESS_DIARY_STATUS ?>'      : {'label' : statuses.INPROGRESS_DIARY_STATUS.name,       'class' : 'status_inprogress',       'email_alias' : ''},
-            '<?php echo FitnessHelper::PASS_DIARY_STATUS ?>'     : {'label' : statuses.PASS_DIARY_STATUS.name,      'class' : 'status_pass',      'email_alias' : ''},
-            '<?php echo FitnessHelper::FAIL_DIARY_STATUS ?>'   : {'label' : statuses.FAIL_DIARY_STATUS.name,    'class' : 'status_fail',    'email_alias' : ''},
-            '<?php echo FitnessHelper::DISTINCTION_DIARY_STATUS ?>'   : {'label' : statuses.DISTINCTION_DIARY_STATUS.name,    'class' : 'status_distinction',    'email_alias' : ''},
+            '<?php echo FitnessHelper::PASS_DIARY_STATUS ?>'     : {'label' : statuses.PASS_DIARY_STATUS.name,      'class' : 'status_pass',      'email_alias' : 'DiaryPass'},
+            '<?php echo FitnessHelper::FAIL_DIARY_STATUS ?>'   : {'label' : statuses.FAIL_DIARY_STATUS.name,    'class' : 'status_fail',    'email_alias' : 'DiaryFail'},
+            '<?php echo FitnessHelper::DISTINCTION_DIARY_STATUS ?>'   : {'label' : statuses.DISTINCTION_DIARY_STATUS.name,    'class' : 'status_distinction',    'email_alias' : 'DiaryDistinction'},
             '<?php echo FitnessHelper::SUBMITTED_DIARY_STATUS ?>'   : {'label' : statuses.SUBMITTED_DIARY_STATUS.name,    'class' : 'status_submitted',    'email_alias' : ''}
 
         },
@@ -92,7 +92,7 @@ $business_profile_id = $business_profile_id['data'];
          setStatuses : function(item_id) {
             return  this.statuses;
         },
-        'view' : 'nutrition_diaries'
+        'view' : 'NutritionDiary'
     }
     
     var goal_statuses = {
