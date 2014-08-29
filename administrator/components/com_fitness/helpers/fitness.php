@@ -1286,6 +1286,14 @@ class FitnessHelper extends FitnessFactory
        return self::customQuery($query, 2);
     }
     
+    public function getPlanDataByDiary($diary_id) {
+       $query = "SELECT nutrition_plan_id FROM #__fitness_nutrition_diary
+        WHERE id='$diary_id'";
+       $nutrition_plan_id = self::customQuery($query, 0);
+       
+       return $this->getPlanData($nutrition_plan_id);
+    }
+    
     function getPlanData($id) {
         $query = "SELECT a.*, gc.id AS primary_goal_id, gc.name AS primary_goal_name,
             g.start_date AS primary_goal_start_date, g.deadline AS primary_goal_deadline,

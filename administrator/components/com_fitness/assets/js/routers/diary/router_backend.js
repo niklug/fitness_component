@@ -9,13 +9,9 @@ define([
         'collections/diary/meal_ingredients',
         'models/diary/request_params_diaries',
         'models/diary/diary',
-        'models/diary/active_plan_data',
-        'views/diary/frontend/menus/submenu_list',
-        'views/diary/frontend/menus/submenu_trash_list',
-        'views/diary/frontend/menus/submenu_form',
+        'models/diary/plan_data',
         'views/diary/frontend/menus/submenu_item',
         'views/diary/backend/list',
-        'views/diary/frontend/form',
         'views/diary/frontend/item',
         'views/graph/progress_graph',
         'views/diary/backend/search_block'
@@ -31,13 +27,9 @@ define([
         Meal_ingredients_collection,
         Request_params_diaries_model,
         Diary_model,
-        Active_plan_data_model,
-        Submenu_list_view,
-        Submenu_trash_list_view,
-        Submenu_form_view,
+        Plan_data_model,
         Submenu_item_view,
         List_view,
-        Form_view,
         Item_view,
         Progress_graph_view,
         Search_block_view
@@ -68,7 +60,7 @@ define([
             app.models.request_params_diaries.bind("change", this.get_diaries, this);
 
             //active plan data
-            app.models.active_plan_data = new Active_plan_data_model();
+            app.models.active_plan_data = new Plan_data_model();
             
             
             app.collections.meal_entries = new Meal_entries_collection();
@@ -149,24 +141,9 @@ define([
 
             app.models.pagination.bind("change:items_number", this.set_diaries_model, this);
         },
-        
-        create_item : function() {
-            app.models.active_plan_data.fetch({
-                data : {client_id : app.options.client_id},
-                success : function (model, response) {
-                    $("#submenu_container").html(new Submenu_form_view({collection : app.collections.items, model : new Diary_model()}).render().el);
-                    $("#main_container").empty();
-                },
-                error : function (model, response) {
-                    alert(response.responseText);
-                }
-            });
-            
-            
-        },
-        
+
         item_view : function(id) {
-            $("#progress_graph_container").empty();
+            
             app.models.diary = new Diary_model({id : id});
             var self = this;
             $.when(
@@ -183,7 +160,7 @@ define([
                     ,
 
                     app.models.active_plan_data.fetch({
-                        data : {client_id : app.options.client_id},
+                        data : {diary_id : id},
                         success : function (model, response) {
                             //console.log(model.toJSON());
                         },
@@ -229,6 +206,7 @@ define([
                     })
                 
                 ).then(function() {
+                    $("#progress_graph_container, #header_wrapper").empty();
                     self.load_item_view(app.models.diary);
                 });
         },
