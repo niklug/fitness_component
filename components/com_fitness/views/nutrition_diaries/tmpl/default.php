@@ -47,6 +47,11 @@ $business_profile_id = $business_profile_id['data'];
         'back_url' : decodeURIComponent('<?php echo JRequest::getVar('back_url') ?>'),
         
         'current_view' : '<?php echo  JFactory::getApplication()->input->get('view'); ?>',
+        'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
+        'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
+        'is_simple_trainer' : '<?php echo FitnessFactory::is_simple_trainer($user_id); ?>',
+        'is_trainer_administrator' : '<?php echo FitnessFactory::is_trainer_administrator($user_id); ?>',
+        'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
         'business_profile_id' : '<?php echo $business_profile_id; ?>',
         
         'scrollTo' : '<?php echo JRequest::getVar('scrollTo') ?>',

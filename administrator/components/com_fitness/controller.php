@@ -594,5 +594,19 @@ class FitnessController extends JController
             $diary_id = JRequest::getVar('diary_id');
             echo json_encode($helper -> getPlanDataByDiary($diary_id)); 
         }
+        
+        function copyMealEntry() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
+            $nutrition_diaries_model = new FitnessModelNutrition_diaries();
+            $data_encoded = JRequest::getVar('data_encoded','','POST');
+            echo json_encode($nutrition_diaries_model -> copyMealEntry($data_encoded)); 
+        }
+
+        function copyDiaryMeal() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
+            $nutrition_diaries_model = new FitnessModelNutrition_diaries();
+            $data_encoded = JRequest::getVar('data_encoded','','POST');
+            echo json_encode($nutrition_diaries_model -> copyDiaryMeal($data_encoded)); 
+        }
 
 }

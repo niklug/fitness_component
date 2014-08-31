@@ -117,6 +117,8 @@
                 }
                 html += self.createCommentTemplate(comment_obj);
             });
+            
+            $(".comments_wrapper_" + self.sub_item_id).empty();
 
             $(".comments_wrapper_" + self.sub_item_id).append(html);
 

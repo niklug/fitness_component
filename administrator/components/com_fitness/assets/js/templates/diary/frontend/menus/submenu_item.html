@@ -1,5 +1,5 @@
-<div class="fitness_block_wrapper" style="height:30px;margin-top: 20px;">
-    <div class="internal_wrapper">
+<div class="fitness_block_wrapper " style="height:30px;">
+    <div class="internal_wrapper ">
         <div style="width:100%;">
           <% 
             var submitted = false;
@@ -11,9 +11,9 @@
             <a data-id="<%= id %>" style="cursor: pointer;float:left;" id="submit" onclick="javascript:void(0)">[SUBMIT TO TRAINER]</a>
             <% } %>
 
-            <a data-id="<%= id %>" style="cursor: pointer;float:left;margin-right:10px; float:right;" id="close" onclick="javascript:void(0)">[CLOSE]</a>
+            <a data-id="<%= id %>" style="cursor: pointer;margin-right:10px; float:right;" id="close" onclick="javascript:void(0)">[CLOSE]</a>
             <% if (!submitted) { %>
-            <a data-id="<%= id %>" style="cursor: pointer;float:left;margin-right:10px; float:right;" id="trash" onclick="javascript:void(0)">[TRASH]</a>
+            <a data-id="<%= id %>" style="cursor: pointer;margin-right:10px; float:right;" id="trash" onclick="javascript:void(0)">[TRASH]</a>
             <% } %>
         </div>
         <div class="clr"></div>

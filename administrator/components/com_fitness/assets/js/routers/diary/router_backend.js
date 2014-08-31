@@ -10,9 +10,9 @@ define([
         'models/diary/request_params_diaries',
         'models/diary/diary',
         'models/diary/plan_data',
-        'views/diary/frontend/menus/submenu_item',
+        'views/diary/backend/menus/submenu_item',
         'views/diary/backend/list',
-        'views/diary/frontend/item',
+        'views/diary/backend/item',
         'views/graph/progress_graph',
         'views/diary/backend/search_block'
         
@@ -129,6 +129,7 @@ define([
         },
         
         list_actions : function () {
+            $("#progress_graph_container, #header_wrapper, #submenu_container").empty();
             this.connectGraph();
             
             new Search_block_view({el : $("#header_wrapper"), model : app.models.request_params_diaries, collection : app.collections.items});
@@ -206,7 +207,7 @@ define([
                     })
                 
                 ).then(function() {
-                    $("#progress_graph_container, #header_wrapper").empty();
+                    $("#progress_graph_container, #header_wrapper, #submenu_container").empty();
                     self.load_item_view(app.models.diary);
                 });
         },

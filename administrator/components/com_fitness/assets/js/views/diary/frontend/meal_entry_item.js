@@ -28,6 +28,7 @@ define([
             
             render: function(){
                 var data = {item : this.model.toJSON()};
+                data.app = app;
                 //console.log(this.model.toJSON());
                 var template = _.template(this.template(data));
                 this.$el.html(template);
@@ -299,6 +300,11 @@ define([
                     'db_table' : '#__fitness_nutrition_diary_comments',
                     'read_only' : true,
                 }
+                
+                if(app.options.is_backend) {
+                    comment_options.read_only = false;
+                }
+
                 var comments = $.comments(comment_options, comment_options.item_id, this.model.get('id'));
 
                 var comments_html = comments.run();

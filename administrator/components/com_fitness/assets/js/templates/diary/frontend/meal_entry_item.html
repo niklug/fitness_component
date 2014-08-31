@@ -65,22 +65,26 @@
         <div class="clr"></div>
         <br/>
         <hr style="margin:0;margin-bottom:2px;" class="thin_hr">
-        <table width="100%">
-            <tr style="text-align: center;">
-                <td>
-                    <a onclick="javascript:void(0)" class="create_meal" style="cursor: pointer;">[Create a new Meal]</a>
-                </td>
-                <td>
-                    <a onclick="javascript:void(0)" class="add_meal_from_database" style="cursor: pointer;">[Add a Meal from Recipe Database]</a>
-                </td>
-                <td>
-                    <a onclick="javascript:void(0)" class="add_meal_from_plans" style="cursor: pointer;">[Add Meal from My Menu Plans]</a>
-                </td>
-            </tr>
-        </table>
-        <div class="clr"></div>
-        <hr class="thin_hr">
-        <br/>
+        
+            <table width="100%">
+                <tr style="text-align: center;">
+                    <td>
+                        <a onclick="javascript:void(0)" class="create_meal" style="cursor: pointer;">[Create a new Meal]</a>
+                    </td>
+                    <% if(!app.options.is_backend) { %>
+                        <td>
+                            <a onclick="javascript:void(0)" class="add_meal_from_database" style="cursor: pointer;">[Add a Meal from Recipe Database]</a>
+                        </td>
+                        <td>
+                            <a onclick="javascript:void(0)" class="add_meal_from_plans" style="cursor: pointer;">[Add Meal from My Menu Plans]</a>
+                        </td>
+                    <% } %>
+                </tr>
+            </table>
+            <div class="clr"></div>
+            <hr class="thin_hr">
+            <br/>
+        
         <div class="diary_meals_wrapper"></div>
     <% } %>
 

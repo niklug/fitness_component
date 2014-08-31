@@ -163,7 +163,6 @@ define([
         },
         
         item_view : function(id) {
-            $("#progress_graph_container").empty();
             app.models.diary = new Diary_model({id : id});
             var self = this;
             $.when(
@@ -227,6 +226,7 @@ define([
                     })
                 
                 ).then(function() {
+                    $("#progress_graph_container").empty();
                     self.load_item_view(app.models.diary);
                 });
         },

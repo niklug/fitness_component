@@ -65,7 +65,7 @@ class FitnessViewNutrition_diaries extends JView {
         
         $document->addStyleSheet('components/com_fitness/assets/css/fitness.css');
         $document->addStyleSheet(JUri::root() . 'administrator/components/com_fitness/assets/css/jquery-ui.css');
-        $document->addStyleSheet( JUri::base() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
+        $document->addStyleSheet( JUri::root() . 'administrator/components' . DS . 'com_fitness' . DS .'assets'. DS .'css'. DS . 'jquery.timepicker.css');
         
 
 

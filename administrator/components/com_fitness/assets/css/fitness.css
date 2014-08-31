@@ -1324,3 +1324,7 @@ width: 20px;
     height: 1px;
     background-color: #ccc;
 }
+
+.score_pie_container{
+    margin-left: 40px;
+}

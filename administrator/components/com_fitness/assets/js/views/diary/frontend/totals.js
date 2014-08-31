@@ -381,6 +381,7 @@ define([
         },
         
         connectScores : function() {
+            
             $(this.el).find("#scores_wrapper").html(new Scores_view({model : this.model, totals_view : this}).render().el);
         }
 
@@ -388,5 +389,5 @@ define([
     });
             
     return view;
-round_2_sign
+
 });

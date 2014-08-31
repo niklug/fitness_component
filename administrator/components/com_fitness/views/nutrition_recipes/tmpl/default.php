@@ -26,11 +26,14 @@ $business_profile_id = $business_profile_id['data'];
 
 
 <script type="text/javascript">
-    var add_diary_options = {
+  var add_diary_options = {
         'nutrition_plan_id' : '<?php echo JRequest::getVar('nutrition_plan_id'); ?>',
+        'diary_id' : '<?php echo JRequest::getVar('diary_id'); ?>',
+        'meal_entry_id' : '<?php echo JRequest::getVar('meal_entry_id'); ?>',
         'meal_id' : '<?php echo JRequest::getVar('meal_id'); ?>',
         'type' : '<?php echo JRequest::getVar('type'); ?>',
-        'parent_view' : '<?php echo JRequest::getVar('parent_view');?>'
+        'parent_view' : '<?php echo JRequest::getVar('parent_view');?>',
+        'back_url' : '<?php echo JRequest::getVar('back_url');?>'
     };
         
     var options = {
