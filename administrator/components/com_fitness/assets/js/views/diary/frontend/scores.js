@@ -4,6 +4,7 @@ define([
 	'backbone',
         'app',
         'views/graph/gredient_graph',
+        'views/status/index',
 	'text!templates/diary/frontend/scores.html'
 ], function (
         $,
@@ -11,6 +12,7 @@ define([
         Backbone,
         app,
         Gredient_graph_view,
+        Status_view,
         template 
     ) {
 
@@ -25,8 +27,9 @@ define([
         render : function () {
             var data = {item : this.model.toJSON()};
             data.$ = $;
+            data.app = app;
             $(this.el).html(this.template(data));
-            
+
             this.connectMacronutrientScores();
             
             this.setWaterScore();
@@ -35,9 +38,23 @@ define([
             
             this.setFinalScore();
             
+            if(app.options.is_backend) {
+            
+                this.model.set({score : this.total_score});
+
+                this.connectStatus(this.model, "#score_status_button_place");
+            }
+            
             this.onRender();
             
             return this;
+        },
+        
+        connectStatus : function(model, target) {
+              $(this.el).find(target).html(new Status_view({
+                model : model,
+                settings : app.options.status_options
+            }).render().el);
         },
         
         onRender : function() {
@@ -129,8 +146,10 @@ define([
             
             var total_score = this.calculateTotalScore(protein, carbs, fats);
             
-            var final_score_field = $(this.el).find("#final_score");
+            this.total_score = total_score;
             
+            var final_score_field = $(this.el).find("#final_score");
+
             final_score_field.html(total_score + '%');
             
             this.setVarianceRangeFinalScore(final_score_field, total_score);

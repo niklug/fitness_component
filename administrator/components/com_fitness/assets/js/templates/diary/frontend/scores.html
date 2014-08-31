@@ -55,10 +55,15 @@ var score_hidden, score_display_none;
                         <div id="final_score"></div>
                     </td>
                     <td  style="text-align: center;">
-                        <div style="display: inline-block;" id="status_button_place">
-                            <%=
-                               $.fitness_helper.status_html_stamp(item.status)
-                            %>
+                        <% if(!app.options.is_backend) { %>
+                            <div style="display: inline-block;" id="status_button_place">
+                                <%=
+                                   $.fitness_helper.status_html_stamp(item.status)
+                                %>
+                            </div>
+                        <% } else { %>                        
+                            <div style="display: inline-block;" id="score_status_button_place">
+                        <% } %>
                         </div>
                     </td>
                 </tr>
