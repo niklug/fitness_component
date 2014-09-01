@@ -12,7 +12,7 @@ if(_.contains(['2', '3', '4'], status)) {
     <table width="100%" >
         <tr>
             <td>
-                <div class="fitness_block_wrapper" style="min-height:200px;">
+                <div class="fitness_block_wrapper" style="min-height:250px;">
                     <h3>DIARY ENTRY DETAILS</h3>
                     <hr class="orange_line">
                     <div class="internal_wrapper">
@@ -89,7 +89,7 @@ if(_.contains(['2', '3', '4'], status)) {
                 </div>
             </td>
             <td   width="40%">
-                <div class="fitness_block_wrapper" style="min-height:200px;">
+                <div class="fitness_block_wrapper" style="min-height:250px;">
                     <h3>TRAINERS</h3>
                     <hr class="orange_line">
                     <div class="internal_wrapper">
@@ -139,7 +139,12 @@ if(_.contains(['2', '3', '4'], status)) {
         </tr>
 
 
-
+        <% if(
+              app.options.statuses.PASS_DIARY_STATUS.id == item.status
+              || app.options.statuses.FAIL_DIARY_STATUS.id == item.status
+              || app.options.statuses.DISTINCTION_DIARY_STATUS.id == item.status
+              ) {
+        %>
         <tr>
             <td    colspan="2">
                 <div class="fitness_block_wrapper" style="min-height:150px;">
@@ -326,7 +331,7 @@ if(_.contains(['2', '3', '4'], status)) {
                 </div>
             </td>
         </tr>
-
+        <% } %>
 
         <tr>
             <td     colspan="2" >

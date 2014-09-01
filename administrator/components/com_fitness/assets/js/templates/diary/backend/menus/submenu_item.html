@@ -1,12 +1,17 @@
-<div class="fitness_block_wrapper page_container_width" style="height:30px;">
-    <div class="internal_wrapper ">
-        <div style="width:100%;">
-            <a data-id="<%= id %>" style="cursor: pointer;margin-right:10px; float:right;" id="close" onclick="javascript:void(0)">[CLOSE]</a>
+<div id="toolbar" class="toolbar-list fitness_block_wrapper" style="height:55px;border:none;">
 
-            <a data-id="<%= id %>" style="cursor: pointer;margin-right:10px; float:right;" id="trash" onclick="javascript:void(0)">[TRASH]</a>
+    <a style="cursor: pointer;margin-right:10px; float:right;" data-id="<%= id %>" id="close"  class="toolbar" onclick="javascript:void(0)">
+        <span class="icon-32-cancel"> </span>
+        Close
+    </a>
 
-        </div>
-        <div class="clr"></div>
-    </div>
-    <hr class="orange_line">
+
+    <a style="cursor: pointer;margin-right:10px; float:right;" data-id="<%= id %>" id="trash"  class="toolbar" onclick="javascript:void(0)">
+        <span class="icon-32-trash"> </span>
+        Trash
+    </a>
+
+    <div class="clr"></div>
 </div>
+
+

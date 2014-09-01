@@ -48,6 +48,7 @@ define([
             this.setBaseValues();
             var data = {item : this.model.toJSON()};
             data.$ = $;
+            data.app = app;
             $(this.el).html(this.template(data));
             
             this.setVarianceGrams();

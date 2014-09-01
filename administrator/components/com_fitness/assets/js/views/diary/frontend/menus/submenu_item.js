@@ -15,7 +15,9 @@ define([
         template:_.template(template),
         
         render: function(){
-            var template = _.template(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            data.app = app;
+            var template = _.template(this.template(data));
             this.$el.html(template);
             return this;
         },
@@ -45,16 +47,45 @@ define([
             });
         },
         
-        onClickDelete : function() {
+        onClickSubmit : function() {
+            var data = {};
+
+            data.submit_date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
+            data.status =  app.options.statuses.SUBMITTED_DIARY_STATUS.id;
+
+            this.model.set(data);
+
+            if (!this.model.isValid()) {
+                alert(this.model.validationError);
+                return false;
+            }
+            
             var self = this;
-            this.model.destroy({
+            this.model.save(null, {
                 success: function (model, response) {
-                    app.collections.items.remove(model);
+                    self.sendSubmitEmail(model.get('id'));
                     self.onClickClose();
                 },
                 error: function (model, response) {
                     alert(response.responseText);
                 }
+            });
+        },
+        
+        sendSubmitEmail : function(id){
+            var data = {};
+            var url = app.options.ajax_call_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.id = id;
+            data.view = 'NutritionDiary';
+            data.method = 'DiarySubmitted';
+
+            var self = this;
+            $.AjaxCall(data, url, view, task, table, function(output) {
+                //console.log(output);
             });
         },
         

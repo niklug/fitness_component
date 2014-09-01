@@ -30,6 +30,8 @@ define([
                 var data = {item : this.model.toJSON()};
                 data.app = app;
                 //console.log(this.model.toJSON());
+                //console.log(this.options.diary_model.toJSON());
+                data.diary_model = this.options.diary_model.toJSON();
                 var template = _.template(this.template(data));
                 this.$el.html(template);
                 
@@ -46,11 +48,7 @@ define([
                 var self = this;
                 $(this.el).show('0', function() {
                     self.scrollTo();
-                    
-                    if(self.model.get('id')) {
-                        self.connectComments();
-                    }
-                });
+               });
           
             },
 
@@ -195,7 +193,11 @@ define([
                 var models = app.collections.meal_ingredients.where({meal_id : model.get('id')});
                 var collection = new Meal_ingredients_collection(models);
                 //console.log(collection);
-                $(this.el).find(".diary_meals_wrapper").append(new Diary_meal_item_view({model : model, collection : collection}).render().el);
+                $(this.el).find(".diary_meals_wrapper").append(new Diary_meal_item_view({
+                    model : model,
+                    diary_model : this.options.diary_model,
+                    collection : collection
+                }).render().el);
             },
             
             populateDiaryMeals : function() {

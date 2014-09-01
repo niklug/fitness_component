@@ -42,11 +42,17 @@
         <% } %>
     </td>
     <td>
-        <% if(state == '-2') { %>
-            <a  style="cursor: pointer;" class="delete" onclick="javascript:void(0)"><span data-id="<%= id %>" class="trash_icon"></span></a>
-        <% } else { %>
-            <a  style="cursor: pointer;" class="trash" onclick="javascript:void(0)"><span data-id="<%= id %>" class="trash_icon"></span></a>
+        <% if(app.options.statuses.SUBMITTED_DIARY_STATUS.id != status) { %>
+            <% if(state == '-2') { %>
+                <a  style="cursor: pointer;" class="delete" onclick="javascript:void(0)"><span data-id="<%= id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a  style="cursor: pointer;" class="trash" onclick="javascript:void(0)"><span data-id="<%= id %>" class="trash_icon"></span></a>
+            <% } %>
         <% } %>
     </td>
-    <td><input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/></td>
+    <td>
+        <% if(app.options.statuses.SUBMITTED_DIARY_STATUS.id != status) { %>
+            <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+        <% } %>
+    </td>
 </tr>

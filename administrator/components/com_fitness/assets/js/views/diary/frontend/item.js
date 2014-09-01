@@ -39,6 +39,7 @@ define([
             var data = {item : this.model.toJSON()};
             data.active_plan_data = this.active_plan_data;
             data.$ = $;
+            data.app = app;
             $(this.el).html(this.template(data));
             
             this.connectTargets();

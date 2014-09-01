@@ -9,7 +9,7 @@ if(_.contains(['2', '3', '4'], item.status)) {
 }
 
 var score_hidden, score_display_none;
- if(!scored) {
+ if(!scored && ! app.options.is_backend) {
         score_hidden = 'visibility: hidden;';
         score_display_none = 'display:none'
  }

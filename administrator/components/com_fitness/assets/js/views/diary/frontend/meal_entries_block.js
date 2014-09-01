@@ -24,7 +24,7 @@ define([
             template:_.template(template),
             
             render: function(){
-                var data = {};
+                var data = {item : this.model.toJSON()};
                 //console.log(this.model.toJSON());
                 var template = _.template(this.template(data));
                 this.$el.html(template);
@@ -46,6 +46,7 @@ define([
                 
                 container.closest( ".add_meal_entry_container" ).html(new Meal_entry_item_view({
                     model : new Meal_entry_model({diary_id : this.model.get('id')}),
+                    diary_model : this.model,
                     plan_model : this.options.plan_model
                 }).render().el);
             },
@@ -62,6 +63,7 @@ define([
             addItem : function(model) {
                 this.container_el.append(new Meal_entry_item_view({
                     model : model,
+                    diary_model : this.model,
                     plan_model : this.options.plan_model
                 }).render().el);
             },

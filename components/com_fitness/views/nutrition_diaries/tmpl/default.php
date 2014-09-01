@@ -160,6 +160,7 @@ $business_profile_id = $business_profile_id['data'];
         'view' : 'Goal'
     }
         
+    options.statuses = statuses;
     options.status_options = status_options;
     options.primary_goal_status_options = primary_goal_status_options;
     options.mini_goal_status_options = mini_goal_status_options;

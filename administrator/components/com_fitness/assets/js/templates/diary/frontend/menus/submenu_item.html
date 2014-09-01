@@ -7,14 +7,12 @@
             submitted = true;
             }
           %>
-            <% if (!submitted) { %>
+            <% if(app.options.statuses.INPROGRESS_DIARY_STATUS.id == status) { %>
             <a data-id="<%= id %>" style="cursor: pointer;float:left;" id="submit" onclick="javascript:void(0)">[SUBMIT TO TRAINER]</a>
             <% } %>
 
             <a data-id="<%= id %>" style="cursor: pointer;margin-right:10px; float:right;" id="close" onclick="javascript:void(0)">[CLOSE]</a>
-            <% if (!submitted) { %>
             <a data-id="<%= id %>" style="cursor: pointer;margin-right:10px; float:right;" id="trash" onclick="javascript:void(0)">[TRASH]</a>
-            <% } %>
         </div>
         <div class="clr"></div>
     </div>

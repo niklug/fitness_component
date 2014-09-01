@@ -10,21 +10,23 @@
         <td width="300" class="description_select" style="text-transform:uppercase;font-weight:bold;">
 
         </td>
-        <td>
-            <% if(item.edit_mode) { %>
-            <a onclick="javascript:void(0)" class="cancel_diary_meal" style="cursor: pointer;float:right;margin-right:10px;"> [DELETE]</a>
+        <%  if(diary_model.edit_allowed) { %>
+            <td>
+                <% if(item.edit_mode) { %>
+                <a onclick="javascript:void(0)" class="cancel_diary_meal" style="cursor: pointer;float:right;margin-right:10px;"> [DELETE]</a>
+                    <% if(parseInt(item.description)) { %>
+                        <a onclick="javascript:void(0)" class="copy_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[COPY]</a>
+                    <% } %>
+                <a onclick="javascript:void(0)" class="save_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[SAVE & ENTER]</a>
+                <% } else { %>
+                <a onclick="javascript:void(0)" class="delete_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[DELETE]</a>
                 <% if(parseInt(item.description)) { %>
                     <a onclick="javascript:void(0)" class="copy_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[COPY]</a>
                 <% } %>
-            <a onclick="javascript:void(0)" class="save_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[SAVE & ENTER]</a>
-            <% } else { %>
-            <a onclick="javascript:void(0)" class="delete_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[DELETE]</a>
-            <% if(parseInt(item.description)) { %>
-                <a onclick="javascript:void(0)" class="copy_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[COPY]</a>
-            <% } %>
-            <a onclick="javascript:void(0)" class="edit_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[EDIT]</a>
-            <% } %>
-        </td>
+                <a onclick="javascript:void(0)" class="edit_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[EDIT]</a>
+                <% } %>
+            </td>
+        <% } %>
     </tr>
 </table>
 
@@ -94,6 +96,23 @@
     </table>
 </div>
 
-<div class="clr"></div>
-<br/>
+<% if(item.id) { %>
+    
+    <% if(app.options.is_backend) { %>
+        <div class="clr"></div>
+        <br/>
+        TRAINER COMMENTS
+        <a onclick="javascript:void(0)" class="save_comment" style="cursor: pointer;float:right;margin-right:10px;">[SAVE]</a>
+        <textarea  style="width:99%;" rows="4" class="trainer_comments"><%= item.trainer_comments %></textarea>
+    <% } else if(!app.options.is_backend && !diary_model.edit_allowed) {%>
+        <div class="clr"></div>
+        <br/>
+        TRAINER COMMENTS
+        <div class="clr"></div>
+        <%= item.trainer_comments || '-' %>
+    <% } %>
+    <div class="clr"></div>
+
+    <br/>
+<% } %>
 <div class="save_as_recipe_container"></div>

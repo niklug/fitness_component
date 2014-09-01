@@ -56,6 +56,7 @@ define([
             data.nutrition_focus = this.active_plan_data.nutrition_focus;
             data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
             data.state = '1';
+            data.status =  app.options.statuses.INPROGRESS_DIARY_STATUS.id;
             
             data.target_protein = this.active_plan_data.target_protein;
             data.target_water = this.active_plan_data.target_water;

@@ -227,6 +227,8 @@ define([
                 
                 ).then(function() {
                     $("#progress_graph_container").empty();
+                    var edit_allowed = self.edit_allowed(app.models.diary);
+                    app.models.diary.set({edit_allowed : edit_allowed});
                     self.load_item_view(app.models.diary);
                 });
         },
@@ -289,7 +291,17 @@ define([
             
         },
         
-        
+        edit_allowed : function(model) {
+            var access = false;
+            
+            var status = model.get('status');
+            
+            if(status ==  app.options.statuses.INPROGRESS_DIARY_STATUS.id) {
+                access = true;
+            }
+
+            return access;
+        },
     
     });
 

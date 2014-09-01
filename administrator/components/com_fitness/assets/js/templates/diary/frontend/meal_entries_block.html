@@ -3,10 +3,11 @@
     <hr class="orange_line">
     <div class="internal_wrapper">
         
-        <div class="add_meal_entry_container add_area">
-            <div class="add_meal_entry">click to create a new entry</div>
-        </div>
-        
+        <%  if(item.edit_allowed) { %>
+            <div class="add_meal_entry_container add_area">
+                <div class="add_meal_entry">click to create a new entry</div>
+            </div>
+        <% } %>
         <div class="clr"></div>
         
         <div id="meals_wrapper"></div>

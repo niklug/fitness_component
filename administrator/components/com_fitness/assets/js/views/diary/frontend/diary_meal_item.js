@@ -46,6 +46,8 @@ define([
             render: function(){
                 this.calculateTotals();
                 var data = {item : this.model.toJSON()};
+                data.diary_model = this.options.diary_model.toJSON();
+                data.app = app;
                 //console.log(this.model.toJSON());
                 var template = _.template(this.template(data));
                 this.$el.html(template);
@@ -59,6 +61,7 @@ define([
             
             events : {
                 "click .save_diary_meal" : "onClickSave",
+                "click .save_comment" : "onClickSaveComment",
                 "click .copy_diary_meal" : "onClickCopy",
                 "click .edit_diary_meal" : "onClickEdit",
                 "click .cancel_diary_meal" : "onClickCancel",
@@ -81,8 +84,11 @@ define([
                     return false;
                 }
                 
+                
+                
                 this.model.set({
                     description : description,
+                    trainer_comments : $(this.el).find(".trainer_comments").val()
                 });
                 
                 console.log(this.model.toJSON());
@@ -104,6 +110,21 @@ define([
                     success : function (model, response) {
                         self.model.set({edit_mode : false});
                         self.render();
+                    },
+                    error: function (model, response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            
+            onClickSaveComment :function() {
+                this.model.set({
+                    trainer_comments : $(this.el).find(".trainer_comments").val()
+                });
+
+                var self = this;
+                this.model.save(null, {
+                    success : function (model, response) {
                     },
                     error: function (model, response) {
                         alert(response.responseText);
