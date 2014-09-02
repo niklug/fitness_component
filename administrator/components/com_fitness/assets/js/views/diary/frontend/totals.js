@@ -348,10 +348,14 @@ define([
         
         connectPieGraph : function() {
             //console.log(this.model.toJSON());
+            var label_protein = this.round_2_sign((this.daily_total_protein_percents / this.model.get('target_protein_percent')) * 100);
+            var label_carbs = this.round_2_sign((this.daily_total_carbs_percents / this.model.get('target_carbs_percent')) * 100);
+            var label_fats = this.round_2_sign((this.daily_total_fats_percents / this.model.get('target_fats_percent')) * 100);
+            
             var data = [
-                {label: "Protein: <br/>" + this.daily_total_protein_percents + '%', data: [[1, this.model.get('target_protein_percent')]]},
-                {label: "Carbs: <br/>" + this.daily_total_carbs_percents + '%', data: [[1, this.model.get('target_carbs_percent')]]},
-                {label: "Fat: <br/>" + this.daily_total_fats_percents + '%', data: [[1, this.model.get('target_fats_percent')]]}
+                {label: "Protein: <br/>" + label_protein + '%', data: [[1, this.model.get('target_protein_percent')]]},
+                {label: "Carbs: <br/>" + label_carbs + '%', data: [[1, this.model.get('target_carbs_percent')]]},
+                {label: "Fat: <br/>" + label_fats  + '%', data: [[1, this.model.get('target_fats_percent')]]}
             ];
 
             var container = this.$el.find(".placeholder_pie");

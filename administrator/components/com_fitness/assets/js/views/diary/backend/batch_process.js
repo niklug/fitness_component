@@ -63,7 +63,7 @@ define([
             var self = this;
             _.each(ids, function(id) {
                 var model = self.collection.get(id);
-                model.set({status : status});
+                model.set({status : status, assessed_by : app.options.user_id});
                 self.updateStatus(model);
             });
         },

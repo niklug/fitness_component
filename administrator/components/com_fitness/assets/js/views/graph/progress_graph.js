@@ -141,7 +141,7 @@ define([
                 }
             };
             // on load
-            var graph_period = 'options_year';
+            var graph_period = 'options_month';
             switch (graph_period) {
                 case 'options' :
                     current_options = options;

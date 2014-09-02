@@ -101,15 +101,15 @@
     <% if(app.options.is_backend) { %>
         <div class="clr"></div>
         <br/>
-        TRAINER COMMENTS
+        <b>TRAINER COMMENTS</b>
         <a onclick="javascript:void(0)" class="save_comment" style="cursor: pointer;float:right;margin-right:10px;">[SAVE]</a>
         <textarea  style="width:99%;" rows="4" class="trainer_comments"><%= item.trainer_comments %></textarea>
     <% } else if(!app.options.is_backend && !diary_model.edit_allowed) {%>
         <div class="clr"></div>
         <br/>
-        TRAINER COMMENTS
+        <b>TRAINER COMMENTS</b>
         <div class="clr"></div>
-        <%= item.trainer_comments || '-' %>
+        <span class="grey_title"><%= item.trainer_comments || '-' %></span>
     <% } %>
     <div class="clr"></div>
 

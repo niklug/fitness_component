@@ -47,6 +47,7 @@ define([
             "click #sort_score" : "onClickSortScore",
             "click #sort_assessed_by" : "onClickAssessedBy",
             "click #sort_submit_date" : "onClickSubmitDate",
+                        
             "click .trash" : "onClickTrash",
             "click .restore" : "onClickRestore",
             "click .delete" : "onClickDelete",
@@ -75,7 +76,7 @@ define([
         onClickSortScore : function() {
             app.models.request_params_diaries.set({'sort_by' : 'a.score'});
         },
-
+        
         onClickAssessedBy : function() {
             app.models.request_params_diaries.set({'sort_by' : 'assessed_by_name'});
         },

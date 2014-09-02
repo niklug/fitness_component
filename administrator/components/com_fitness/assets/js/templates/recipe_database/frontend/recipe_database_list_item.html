@@ -87,7 +87,9 @@ var current_page = app.models.get_recipe_params.get('current_page');
                 </table>
             </td>
             <td style="text-align:center; vertical-align:bottom;">
-                <% if(app.options.add_diary_options.nutrition_plan_id) {%>
+                <% if(app.options.add_diary_options.nutrition_plan_id
+                      && app.options.statuses.APPROVED_RECIPE_STATUS.id == status
+                ) {%>
                 <a data-id="<%= id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[add to diary]</a>
                 <br/><br/>
                 <% } %>

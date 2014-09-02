@@ -58,11 +58,17 @@ define([
             "click #sort_state" : "onClickSortState",
             "click #sort_score" : "onClickSortScore",
             
+            "click #sort_target_calories" : "onClickSortTargetCalories",
+            "click #sort_target_protein" : "onClickSortTargetProtein",
+            "click #sort_target_fats" : "onClickSortTargetFats",
+            "click #sort_target_carbs" : "onClickSortTargetCarbs",
+            
             "click .publish" : "onClickPublish",            
             "click .trash" : "onClickTrash",
             "click .restore" : "onClickRestore",
             "click .delete" : "onClickDelete",
             "click .preview" : "onClickPreview",
+            "click .view" : "onClickPreview",
             "click #select_trashed" : "onClickSelectTrashed",
         },
 
@@ -118,7 +124,23 @@ define([
         },
 
         onClickSortScore : function() {
-            app.models.request_params_diaries.set({'sort_by' : 'a.score'});
+            app.models.request_params_diaries.set({'sort_by' : 'a.score',  order_dirrection : "DESC"});
+        },
+        
+        onClickSortTargetCalories : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'a.target_calories',  order_dirrection : "DESC"});
+        },
+        
+        onClickSortTargetProtein : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'a.target_protein',  order_dirrection : "DESC"});
+        },
+
+        onClickSortTargetFats : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'a.target_fats',  order_dirrection : "DESC"});
+        },
+        
+        onClickSortTargetCarbs : function() {
+            app.models.request_params_diaries.set({'sort_by' : 'a.target_carbs',  order_dirrection : "DESC"});
         },
 
         

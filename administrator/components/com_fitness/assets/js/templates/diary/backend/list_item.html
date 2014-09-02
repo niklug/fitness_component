@@ -1,5 +1,8 @@
 <tr data-id="<%= item.id %>" class="diary_row">
-    <td><%= moment(new Date(Date.parse(item.entry_date))).format("ddd, D MMM  YY")  %></td>
+    <td>
+        <% var entry_date = moment(new Date(Date.parse(item.entry_date))).format("ddd, D MMM  YY");%>
+        <a data-id="<%= item.id %>" title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><%= entry_date %></a>
+    </td>
     
     <td>
         <% if (item.submit_date != '0000-00-00 00:00:00') { %>
@@ -29,15 +32,27 @@
     </td>
     
     <td>
-        <%= item.primary_goal_name %>
-    </td>
-    
-    <td>
         <%= item.mini_goal_name %>
     </td>
     
     <td>
         <%= item.nutrition_focus_name %>
+    </td>
+    
+    <td>
+        <%= item.target_calories %>
+    </td>
+    
+    <td>
+        <%= item.target_protein %>
+    </td>
+    
+    <td>
+        <%= item.target_fats %>
+    </td>
+    
+    <td>
+        <%= item.target_carbs %>
     </td>
     
     <td>

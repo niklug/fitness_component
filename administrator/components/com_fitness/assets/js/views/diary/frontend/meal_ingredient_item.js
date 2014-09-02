@@ -43,6 +43,14 @@ define([
             template:_.template(template),
             
             render: function(){
+                this.round_model_value(this.model, 'protein');
+                this.round_model_value(this.model, 'fats');
+                this.round_model_value(this.model, 'carbs');
+                this.round_model_value(this.model, 'calories');
+                this.round_model_value(this.model, 'energy');
+                this.round_model_value(this.model, 'saturated_fat');
+                this.round_model_value(this.model, 'total_sugars');
+                this.round_model_value(this.model, 'sodium');
                 
                 var data = {item : this.model.toJSON()};
                 //console.log(this.model.toJSON());
@@ -54,6 +62,12 @@ define([
                 }
 
                 return this;
+            },
+            
+            round_model_value : function(model, attribute) {
+                var data = {};
+                data[attribute] = this.round_2_sign(model.get(attribute));
+                model.set(data);
             },
             
             events : {

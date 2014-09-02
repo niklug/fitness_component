@@ -35,7 +35,8 @@
                         <% } %>
                     <% } %>
                     
-                    <% if(app.options.add_diary_options.diary_id) { %>
+                    <%  if(app.options.add_diary_options.diary_id
+                        && item.status == '2') { %>
                          <a style="float:right;margin-right: 5px;" class="orange_text add_to_diary" href="javascript:void(0)" title="">[ADD TO DIARY]</a>
                     <% } %>
                 </td>

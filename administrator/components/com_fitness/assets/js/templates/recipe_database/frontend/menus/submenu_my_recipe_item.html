@@ -13,7 +13,9 @@
 
                 <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
 
-            <% if(app.options.add_diary_options.nutrition_plan_id) {%>
+            <% if(app.options.add_diary_options.nutrition_plan_id
+                    && app.options.statuses.APPROVED_RECIPE_STATUS.id == status
+            ) {%>
              &#32;<a data-id="<%= id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
             <% } %>
 

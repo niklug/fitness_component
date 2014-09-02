@@ -18,28 +18,31 @@ var score_hidden, score_display_none;
     <h3>TODAYS TOTALS</h3>
     <hr class="orange_line">
     <div class="internal_wrapper">
-        <div  style="float:left; width:300px;<%= score_hidden %>">
+        <div  style="float:left; width:300px;">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <div style="border:2px solid #00983A;border-radius:10px;text-align: center;padding:5px;">
+                            <div id="calories_total" style="font-size:24px; color:#00983A; font-weight: bold;"></div>
+                            <div style="font-size: 14px; color:#00983A; font-weight: bold;">CALORIE TOTAL</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="border:2px solid #009FE3;border-radius:10px;text-align: center;padding:5px;">
+                            <div id="water_total" style="font-size:24px; color:#009FE3; font-weight: bold;"></div>
+                            <div style="font-size: 14px; color:#009FE3; font-weight: bold;">WATER TOTAL</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br/>
             <h6 style="text-align: center;margin: 0;">MACRONUTRIENT TOTALS</h6>
-            
+
             <div class="score_pie_container pie-container" style="margin-top: 10px;">
                 <div id="placeholder_scope" style="width:220px;height:220px;font-size: 14px; line-height: 1.2em;" class="placeholder_pie"></div>
             </div>
-            
-            
+
             <div class="clr"></div>
-
-            <table style="text-align: left;margin-top: 20px;margin-left: 40px;" width="250">
-                <tr>
-                    <td> <h6>CALORIE TOTAL</h6></td>
-                    <td id="calories_total" style="line-height: 45px;font-size: 28px;color:#008313;font-weight: bold;">
-
-                    </td>
-                </tr>
-                <tr>
-                    <td><h6>WATER TOTAL</h6></td>
-                    <td id="water_total" style="font-size: 28px;color:#009FE3;font-weight: bold;"></td>
-                </tr>
-            </table>
         </div>
         <div style="float:right; font-size: 12px;width: 600px;">
             <table width="100%">

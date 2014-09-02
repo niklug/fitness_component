@@ -205,6 +205,8 @@ define([
                 'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
                 'db_table' : '#__fitness_nutrition_diary_comments',
                 'read_only' : true,
+                'anable_comment_email' : true,
+                'comment_method' : 'DiaryComment'
             }
             
             if(app.options.is_backend) {

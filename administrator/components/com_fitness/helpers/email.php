@@ -1038,7 +1038,7 @@ class CommentDiaryEmail extends FitnessEmail {
             }
             
             if(self::is_trainer($this->data->created_by))  {
-                $send_to = 'client'; 
+                return;
             }
         }
         
