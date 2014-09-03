@@ -84,7 +84,7 @@ $business_profile_id = $business_profile_id['data'];
             '<?php echo FitnessHelper::PASS_DIARY_STATUS ?>'     : {'label' : statuses.PASS_DIARY_STATUS.name,      'class' : 'status_pass',      'email_alias' : 'DiaryPass'},
             '<?php echo FitnessHelper::FAIL_DIARY_STATUS ?>'   : {'label' : statuses.FAIL_DIARY_STATUS.name,    'class' : 'status_fail',    'email_alias' : 'DiaryFail'},
             '<?php echo FitnessHelper::DISTINCTION_DIARY_STATUS ?>'   : {'label' : statuses.DISTINCTION_DIARY_STATUS.name,    'class' : 'status_distinction',    'email_alias' : 'DiaryDistinction'},
-            '<?php echo FitnessHelper::SUBMITTED_DIARY_STATUS ?>'   : {'label' : statuses.SUBMITTED_DIARY_STATUS.name,    'class' : 'status_submitted',    'email_alias' : ''}
+            '<?php echo FitnessHelper::SUBMITTED_DIARY_STATUS ?>'   : {'label' : statuses.SUBMITTED_DIARY_STATUS.name,    'class' : 'event_status_assessing',    'email_alias' : ''}
 
         },
         'hide_image_class' : 'hideimage',

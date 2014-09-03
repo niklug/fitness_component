@@ -263,13 +263,15 @@ define([
                 data_field_x : 'entry_date',
                 data_field_y : 'score',
                 y_title : 'Final Score (%)',
-                tooltip : false,
+                tooltip : true,
                 setTooltipHtml : this.setTooltipHtml
             });
         },
         
-        setTooltipHtml : function() {
-            
+        setTooltipHtml : function(html, model) {
+            html +=  "Entry Date: " +  moment(new Date(Date.parse(model.get('entry_date')))).format("ddd, D MMM  YYYY") + "</br>";
+            html +=  "Final Score: " +  model.get('score') + '%';
+            return html;
         },
         
         update_list : function() {
