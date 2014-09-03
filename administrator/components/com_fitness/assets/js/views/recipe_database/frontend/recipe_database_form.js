@@ -5,9 +5,11 @@ define([
         'app',
         'collections/nutrition_plan/nutrition_guide/recipe_types',
         'collections/nutrition_plan/nutrition_guide/recipe_variations',
+        'collections/ingredients/recipe_ingredients',
+        'models/ingredients/recipe_ingredient',
         'views/exercise_library/select_filter',
+        'views/ingredients/ingredients_container',
 	'text!templates/recipe_database/frontend/recipe_database_form.html',
-        'jquery.itemDescription',
         'jquery.backbone_image_upload',
         'jquery.backbone_video_upload'
 ], function (
@@ -17,7 +19,10 @@ define([
         app,
         Recipe_types_collection,
         Recipe_variations_collection, 
+        Recipe_ingredients_collection,
+        Recipe_ingredient_model,
         Select_filter_fiew,
+        Ingredients_container_view,
         template 
     ) {
 
@@ -50,7 +55,8 @@ define([
                 self.connectVideoUpload();
 
                 if(self.model.get('id')) {
-                    self.connect_item_description();
+                    //self.connect_item_description();
+                    self.connectIngredients();
                     self.connectComments();
                 }
                 
@@ -60,6 +66,8 @@ define([
                 self.connectRecipeVariationsFilter();
                 
                 self.controller.connectStatus(self.model, $(self.el));
+                
+                
             });
         },
         
@@ -230,6 +238,22 @@ define([
                 element_disabled : ''
             }).render(); 
         },
+        
+        connectIngredients : function() {
+            var model = new Recipe_ingredient_model({
+                recipe_id : this.model.get('id')
+            });
+
+            new Ingredients_container_view({
+                el : $(this.el).find("#item_descriptions"),
+                model : this.model,
+                collection : new Recipe_ingredients_collection(),
+                recipe_ingredients_collection : Recipe_ingredients_collection,
+                request_data : {recipe_id : this.model.get('id')},
+                edit_mode : true,
+                ingredient_model : model
+            });
+         },
 
         close :function() {
             $(this.el).remove();

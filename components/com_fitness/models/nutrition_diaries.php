@@ -883,8 +883,10 @@ class FitnessModelNutrition_diaries extends JModelList {
         $model = json_decode(JRequest::getVar('model'));
         
         $id = JRequest::getVar('id', 0, '', 'INT');
+        
 
         $table = '#__fitness_nutrition_diary_ingredients';
+     
 
         $helper = new FitnessHelper();
 
@@ -918,8 +920,7 @@ class FitnessModelNutrition_diaries extends JModelList {
                 if($meal_id) {
                     $query .= " AND a.meal_id='$meal_id' ";
                 }
-
-               
+                
                 $query_method = 1;
                 
                 if($id) {

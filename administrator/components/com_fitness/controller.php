@@ -588,6 +588,12 @@ class FitnessController extends JController
             echo json_encode($nutrition_diaries_model -> meal_ingredients()); 
         }
         
+        function recipe_ingredients() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'recipe_database.php';
+            $recipe_database_model = new FitnessModelrecipe_database();
+            echo json_encode($recipe_database_model -> recipe_ingredients()); 
+        }
+        
         function getPlanDataByDiary() {
             require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
             $helper = new FitnessHelper();
