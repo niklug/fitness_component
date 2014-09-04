@@ -97,7 +97,7 @@ define([
         },
         
         onClickAddIngredient : function() {
-            var model = this.options.ingredient_model;
+            var model = new this.options.ingredient_model(this.options.ingredient_model_data);
             this.collection.add(model);
             this.addIngredientItem(model);
         },

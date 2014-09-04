@@ -103,7 +103,6 @@ define([
                 var search_text = $(event.target).val();
                 
                 this.search_results_view.close();
-                
                 $(event.target).parent().append(
                     this.search_results_view.render().el
                 );

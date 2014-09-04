@@ -240,10 +240,6 @@ define([
         },
         
         connectIngredients : function() {
-            var model = new Recipe_ingredient_model({
-                recipe_id : this.model.get('id')
-            });
-
             new Ingredients_container_view({
                 el : $(this.el).find("#item_descriptions"),
                 model : this.model,
@@ -251,7 +247,10 @@ define([
                 recipe_ingredients_collection : Recipe_ingredients_collection,
                 request_data : {recipe_id : this.model.get('id')},
                 edit_mode : true,
-                ingredient_model : model
+                ingredient_model : Recipe_ingredient_model,
+                ingredient_model_data : {
+                    recipe_id : this.model.get('id')
+                }
             });
          },
 

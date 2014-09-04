@@ -5,9 +5,11 @@ define([
         'app',
         'collections/nutrition_plan/nutrition_guide/recipe_types',
         'collections/nutrition_plan/nutrition_guide/recipe_variations',
+        'collections/ingredients/recipe_ingredients',
+        'models/ingredients/recipe_ingredient',
         'views/exercise_library/select_filter',
+        'views/ingredients/ingredients_container',
 	'text!templates/recipe_database/backend/form.html',
-        'jquery.itemDescription',
         'jquery.backbone_image_upload',
         'jquery.backbone_video_upload'
 ], function (
@@ -17,7 +19,10 @@ define([
         app,
         Recipe_types_collection,
         Recipe_variations_collection, 
+        Recipe_ingredients_collection,
+        Recipe_ingredient_model,
         Select_filter_fiew,
+        Ingredients_container_view,
         template 
     ) {
 
@@ -52,7 +57,7 @@ define([
                 self.connectVideoUpload();
 
                 if(self.model.get('id')) {
-                    self.connect_item_description();
+                    self.connectIngredients();
                     self.connectComments();
                 }
                 
@@ -71,20 +76,6 @@ define([
             });
         },
         
-        connect_item_description : function() {
-            var item_description_options = {
-                'nutrition_plan_id' : this.model.get('id'),
-                'fitness_administration_url' : app.options.fitness_frontend_url,
-                'main_wrapper' : $("#item_descriptions"),
-                'ingredient_obj' : {id : "", meal_name : "", quantity : "", measurement : "", protein : "", fats : "", carbs : "", calories : "", energy : "", saturated_fat : "", total_sugars : "", sodium : ""},
-                'db_table' : '#__fitness_nutrition_recipes_meals',
-                'parent_view' : '',
-                'read_only' : !this.edit_allowed,
-                'ingredient_model' : 'recipe_database'
-            }
-            var item_description_html = $.itemDescription(item_description_options, 'meal', 'MEAL ITEM DESCRIPTION', 0).run();
-            $("#item_descriptions").html(item_description_html);
-        },
         
         connectComments : function() {
             var comment_options = {
@@ -233,6 +224,21 @@ define([
                 element_disabled : element_disabled
             }).render(); 
         },
+        
+        connectIngredients : function() {
+            new Ingredients_container_view({
+                el : $(this.el).find("#item_descriptions"),
+                model : this.model,
+                collection : new Recipe_ingredients_collection(),
+                recipe_ingredients_collection : Recipe_ingredients_collection,
+                request_data : {recipe_id : this.model.get('id')},
+                edit_mode : true,
+                ingredient_model : Recipe_ingredient_model,
+                ingredient_model_data : {
+                    recipe_id : this.model.get('id')
+                }
+            });
+         },
         
     });
             

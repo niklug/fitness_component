@@ -21,7 +21,13 @@ define([
         initialize : function() {
             this.collection.bind("add", this.addItem, this);
             
-            this.model.set({sort_by : 'created', order_dirrection : 'DESC', limit : 15});
+            this.model.set({
+                sort_by : 'created', 
+                order_dirrection : 'DESC',
+                limit : 15,
+                business_profile_id : app.options.business_profile_id,
+                current_page : 'recipe_database'
+            });
 
             if(this.collection.length == 0) {
                 this.collection.fetch({
