@@ -1059,4 +1059,67 @@ class FitnessModelNutrition_diaries extends JModelList {
         
         return $result;
     }
+    
+    public function comments() {
+        $method = JRequest::getVar('_method');
+
+        if(!$method) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $model = json_decode(JRequest::getVar('model'));
+        
+        $id = JRequest::getVar('id', 0, '', 'INT');
+
+        $table = '#__' . JRequest::getVar('db_table');
+        
+        if(!$table) {
+            throw new Exception("Error: no db_table");
+        }
+
+        $helper = new FitnessHelper();
+
+        switch ($method) {
+            case 'GET': // Get Item(s)
+
+                $query .= "SELECT a.* FROM $table AS a";
+                
+                $query .= " WHERE 1 ";
+   
+                if($id) {
+                    $query .= " AND a.id='$id' ";
+                }
+   
+                $query .= " ORDER BY a.created";
+               
+                $query_method = 1;
+                
+                if($id) {
+                    $query_method = 2;
+                }
+                
+                $data = FitnessHelper::customQuery($query, $query_method);
+
+                return $data;
+                break;
+            case 'PUT': 
+                //update
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'POST': // Create
+                $id = $helper->insertUpdateObj($model, $table);
+                break;
+            case 'DELETE': // Delete Item
+                $id = JRequest::getVar('id', 0, '', 'INT');
+                $id = $helper->deleteRow($id, $table);
+                break;
+
+            default:
+                break;
+        }
+
+        $model->id = $id;
+
+        return $model;
+    }
 }

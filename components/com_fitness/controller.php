@@ -605,6 +605,12 @@ class FitnessController extends JController {
         $view -> copyDiaryMeal(); 
     }
     
+    function comments() {
+        $view = $this -> getView('nutrition_diaries', 'json');
+        $view->setModel($this->getModel('nutrition_diaries'));
+        $view -> comments(); 
+    }
+    
     public function nutrition_plan_protocol(){
         echo json_encode($this->admin_nutrition_plan_model->nutrition_plan_protocol());
     }

@@ -5,6 +5,7 @@ define([
         'app',
         'views/graph/gredient_graph',
         'views/status/index',
+        'views/comments/index',
 	'text!templates/diary/frontend/scores.html'
 ], function (
         $,
@@ -13,6 +14,7 @@ define([
         app,
         Gredient_graph_view,
         Status_view,
+        Comments_view,
         template 
     ) {
 
@@ -198,7 +200,7 @@ define([
             element.addClass(input_class);
         },
         
-        connectComments :function() {
+        connectComments1 :function() {
             var comment_options = {
                 'item_id' :  this.model.get('id'),
                 'fitness_administration_url' : app.options.ajax_call_url,
@@ -216,6 +218,24 @@ define([
             var comments = $.comments(comment_options, comment_options.item_id, '0');
 
             var comments_html = comments.run();
+            $(this.el).find("#score_comments").html(comments_html);
+        },
+        
+        connectComments :function() {
+            var comment_options = {
+                'item_id' :  this.model.get('id'),
+                'sub_item_id' :  '0',
+                'db_table' : 'fitness_nutrition_diary_comments',
+                'read_only' : true,
+                'anable_comment_email' : true,
+                'comment_method' : 'DiaryComment'
+            }
+            
+            if(app.options.is_backend) {
+                comment_options.read_only = false;
+            }
+            
+            var comments_html = new Comments_view(comment_options).render().el;
             $(this.el).find("#score_comments").html(comments_html);
         },
     });
