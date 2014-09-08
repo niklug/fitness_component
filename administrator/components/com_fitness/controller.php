@@ -570,6 +570,12 @@ class FitnessController extends JController
             echo json_encode($nutrition_diaries_model -> diaries()); 
         }
         
+        function comments() {
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
+            $nutrition_diaries_model = new FitnessModelNutrition_diaries();
+            echo json_encode($nutrition_diaries_model -> comments()); 
+        }
+        
         function meal_entries() {
             require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
             $nutrition_diaries_model = new FitnessModelNutrition_diaries();

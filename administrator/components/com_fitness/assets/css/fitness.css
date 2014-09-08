@@ -1328,3 +1328,7 @@ width: 20px;
 .score_pie_container{
     margin-left: 40px;
 }
+
+.orange_border {
+    border:2px solid #BC4A26;padding:2px;
+}

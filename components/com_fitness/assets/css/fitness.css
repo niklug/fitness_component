@@ -1204,3 +1204,7 @@ td.center, th.center, .center {
     padding: 0;
     height: 25px;
 }
+
+.orange_border {
+    border:2px solid #BC4A26;padding:2px;
+}

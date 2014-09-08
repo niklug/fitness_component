@@ -6,6 +6,7 @@ define([
         'collections/comments/comments',
         'models/comments/comment',
         'views/comments/item',
+        'views/comments/conversation',
 	'text!templates/comments/index.html'
         
 ], function (
@@ -16,6 +17,7 @@ define([
         Comments_collection,
         Comment_model,
         Comment_view,
+        Conversation_view,
         template 
     ) {
 
@@ -47,17 +49,24 @@ define([
         },
         
         events: {
-            "click .create_comment" : "onClickCreateComment",
+            "click .create_conversation" : "onClickCreateConversation",
         },
         
         addItem : function() {
             
         },
         
-        onClickCreateComment : function() {
-            $(this.el).find(".comments_wrapper").append(
-                new Comment_view({
-                    model : new Comment_model({}, {db_table : this.options.db_table})
+        onClickCreateConversation : function() {
+            var data = {
+                created_by : app.options.user_id,
+                created_by_name : app.options.user_name,
+                created : moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+            };
+
+            
+            $(this.el).find(".conversations_container").append(
+                new Conversation_view({
+                    model : new Comment_model(data, {db_table : this.options.db_table})
                 }).render().el
             );
         }
