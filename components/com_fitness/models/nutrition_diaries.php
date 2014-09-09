@@ -1082,7 +1082,11 @@ class FitnessModelNutrition_diaries extends JModelList {
         switch ($method) {
             case 'GET': // Get Item(s)
 
-                $query .= "SELECT a.* FROM $table AS a";
+                $query .= "SELECT a.*, ";
+                
+                $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name";
+                
+                $query .= "  FROM $table AS a";
                 
                 $query .= " WHERE 1 ";
    

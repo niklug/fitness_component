@@ -27,9 +27,11 @@ define([
             //console.log(this.options);
             app.collections.comments = new Comments_collection([], {db_table : this.options.db_table});
             //console.log( app.collections.comments);
+            var self = this;
             app.collections.comments.fetch({
                 success : function (collection, response) {
                     //console.log(collection.toJSON());
+                    self.populateItems(collection);
                 },
                 error : function (collection, response) {
                     alert(response.responseText);
@@ -52,23 +54,33 @@ define([
             "click .create_conversation" : "onClickCreateConversation",
         },
         
-        addItem : function() {
-            
+        populateItems : function(collection) {
+            var self = this;
+            _.each(collection.models, function (model) { 
+                this.addItem(model);
+            }, this);
+        },
+        
+        addItem : function(model) {
+            $(this.el).find(".conversations_container").append(
+                new Conversation_view({
+                    comment_options : this.options,
+                    model : model
+                }).render().el
+            );
         },
         
         onClickCreateConversation : function() {
             var data = {
+                business_profile_id : app.options.business_profile_id,
                 created_by : app.options.user_id,
                 created_by_name : app.options.user_name,
                 created : moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
             };
-
             
-            $(this.el).find(".conversations_container").append(
-                new Conversation_view({
-                    model : new Comment_model(data, {db_table : this.options.db_table})
-                }).render().el
-            );
+            var model = new Comment_model(data, {db_table : this.options.db_table});
+            
+            this.addItem(model);
         }
      
     });
