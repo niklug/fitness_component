@@ -2,22 +2,55 @@
     COACHING & CONVERSATION
 </div>
 <div class="conversation_wrapper orange_border">
-    Conversation Started By: <i><%= item.created_by_name %></i>
     
+    <table>
+        <tr>
+            <td width="300">
+                Conversation Started By:
+                <div class="clr"></div>
+                <i><%= item.created_by_name %></i>
+            </td>
+            <td width="10"></td>
+            
+            <% if(app.options.is_superuser) { %>
+            <td width="300">
+                Businesses That Can See This Conversation:
+                <div class="clr"></div>
+                <div style="width:200px;" class="conversation_permissions_select"></div>
+            </td>
+            <% } %>
+            
+            <% if(!app.options.is_superuser) { %>
+            <td width="250">
+                Who Can See This Conversation?
+                <div class="clr"></div>
+                <div style="width:200px;" class="conversation_permissions_select"></div>
+            </td>
+            <% } %>
+            <td width="200">
+                <a class="save_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[SAVE]</a>
     
-    <div style="width:200px;display:inline-block;margin-left:20px;">Who Can See This Conversation?</div>
-    
-    <div style="width:150px;display:inline-block;margin-left:5px;" class="conversation_permissions_select"></div>
-    
-    <a class="save_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[SAVE]</a>
-    
-    <a class="edit_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[VIEW/EDIT]</a>
-    
-    <a class="close_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[CLOSE]</a>
+                <a class="edit_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[VIEW/EDIT]</a>
+                
+                <% if(item.id) { %>
+                <a class="close_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[CLOSE]</a>
+                <% } %>
+                
+                <a class="delete_conversation" style="cursor: pointer;margin-left:10px" onclick="javascript:void(0)">[DELETE]</a>
+            </td>
+        </tr>
+    </table>
     
     <div class="clr"></div>
     
-    <div class="users_container"></div>
+    <fieldset class="toogle_checkboxes_wrapper" style="display:none;width:auto!important;">
+        <legend>
+            <a class="select_all_checkboxes" style="cursor: pointer;font-size:12px;" onclick="javascript:void(0)">[SELECT ALL]</a>
+            <a class="select_none_checkboxes" style="cursor: pointer;font-size:12px;" onclick="javascript:void(0)">[SELECT NONE]</a>
+            <a class="toogle_checkboxes" style="cursor: pointer;font-size:12px;" onclick="javascript:void(0)">[TOOGLE]</a>
+        </legend>
+        <div class="users_container"></div>
+    </fieldset>
     
     <div class="clr"></div>
 </div>
