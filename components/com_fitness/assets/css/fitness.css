@@ -1208,3 +1208,9 @@ td.center, th.center, .center {
 .orange_border {
     border:2px solid #BC4A26;padding:2px;
 }
+
+.formula {
+    background: url("../../../../administrator/components/com_fitness/assets/images/small-tip.png") no-repeat scroll right center rgba(0, 0, 0, 0);
+    cursor: default;
+    padding-right: 17px;
+}

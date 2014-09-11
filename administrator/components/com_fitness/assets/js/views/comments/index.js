@@ -78,9 +78,9 @@ define([
             }
             
             var user_id = app.options.user_id;
+            var created_by = model.get('created_by');
             
-            console.log(conversation_permissions);
-            
+          
             // filter for trainers by business
             if(conversation_permissions == 'all_business' || conversation_permissions == 'selected_business') {
                 if(app.options.is_superuser) {
@@ -100,18 +100,18 @@ define([
             }
             
             // filter for trainers by user_id
-            if(conversation_permissions == 'all_trainers' || conversation_permissions == 'selected_trainers') {
+            if(conversation_permissions == 'all_trainers' || conversation_permissions == 'all_my_trainers' || conversation_permissions == 'selected_trainers') {
                 if(app.options.is_superuser) {
                     
                 }
                 
-                if(app.options.is_trainer) {
+                if(app.options.is_trainer && (created_by != user_id)) {
                     if(allowed_users.indexOf(user_id) == '-1') {
                         return;
                     }
                 }
                 
-                if(app.options.is_client) {
+                if(app.options.is_client && (created_by != user_id)) {
                     return;
                 }
             }
@@ -126,7 +126,7 @@ define([
                     
                 }
                 
-                if(app.options.is_client) {
+                if(app.options.is_client && (created_by != user_id)) {
                     if(allowed_users.indexOf(user_id) == '-1') {
                         return;
                     }

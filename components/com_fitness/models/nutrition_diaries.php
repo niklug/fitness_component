@@ -1126,4 +1126,21 @@ class FitnessModelNutrition_diaries extends JModelList {
 
         return $model;
     }
+    
+    
+    public function users_names() {
+        $ids = JRequest::getVar('ids');
+        
+        $query = "SELECT id, name FROM #__users";
+        
+        $query .= " WHERE 1 ";
+        
+        $query .= " AND id IN($ids) ";
+        
+        $query .= " ORDER BY name ";
+
+        $data = FitnessHelper::customQuery($query, 1);
+        
+        return $data;
+    }
 }

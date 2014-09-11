@@ -6,6 +6,7 @@ define([
     'collections/exercise_library/business_profiles',
     'collections/programs/trainers',
     'collections/programs/trainer_clients',
+    'collections/diary/users_names',
     'views/programs/select_element',
     'views/diary/checkbox_item',
     'text!templates/comments/conversation.html'
@@ -18,6 +19,7 @@ define([
         Business_profiles_collection,
         Trainers_collection,
         Trainer_clients_collection,
+        Users_names_collection,
         Select_element_view,
         Checkbox_item_view,
         template
@@ -25,18 +27,22 @@ define([
 
     var view = Backbone.View.extend({
         initialize: function() {
-            /*
-             if (!app.collections.business_profiles) {
-             app.collections.business_profiles = new Business_profiles_collection();
-             app.collections.business_profiles.fetch({
-             error: function(collection, response) {
-             alert(response.responseText);
-             }
-             });
-             }
-             */
+        
+            this.conversation_permissions_object = {
+                all_clients : 'All My Clients',
+                selected_clients : 'Only Selected Clients',
+                all_trainers : 'All Trainers',
+                all_my_trainers : 'All My Trainers',
+                selected_trainers : 'Only Selected Trainers',
+                all_business : 'All Businesses',
+                selected_business : 'Only Selected Businesses'
+            };
+            
+            app.collections.users_names = new Users_names_collection();
         },
+        
         template: _.template(template),
+        
         render: function() {
             //console.log(this.model.toJSON());
             var data = {item: this.model.toJSON()};
@@ -55,11 +61,15 @@ define([
             this.users_container = $(this.el).find(".users_container");
 
             if (this.model.isNew()) {
-                $(this.el).find(".save_conversation, .toogle_checkboxes_wrapper").show();
+                $(this.el).find(".save_conversation, .toggle_checkboxes_wrapper").show();
             } else {
                 $(this.el).find(".edit_conversation").show();
                 $(this.el).find(".conversation_permissions").attr('disabled', true);
+                
+                this.setConversationPermissionsText();
             }
+            
+            
 
             return this;
         },
@@ -68,11 +78,53 @@ define([
             "click .save_conversation": "onClickSaveConversation",
             "click .edit_conversation": "onClickEditConversation",
             "click .close_conversation": "onClickCloseConversation",
-            "click .toogle_checkboxes": "onClickToogleCheckboxes",
+            "click .toggle_checkboxes": "onClickToogleCheckboxes",
             "click .select_all_checkboxes": "onClickSelectAll",
             "click .select_none_checkboxes": "onClickSelectNone",
             "click .delete_conversation": "onClickDeleteConversation",
+            "mouseover .formula" : "showUsersPopup",
+            "mouseout .formula" : "hideUsersPopup",
         },
+        
+        showUsersPopup : function() {
+            var ids  = this.model.get('allowed_users');
+            
+            if(!ids) {
+                return;
+            }
+            var self = this;
+            app.collections.users_names.fetch({
+                data: {ids: ids},
+                success: function(collection, response) {
+                    self.populateUserspopup(collection);
+                    //console.log(collection.toJSON());
+                },
+                error: function(collection, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        populateUserspopup : function(collection) {
+
+            var html = '<div class="users_popup">';
+            _.each(collection.models, function(model) {
+                html += model.get('name') + "</br>";
+            }, this);
+            html += "</div>";
+            $(this.el).find(".users_popup_container").html(html);
+        },
+        
+        hideUsersPopup : function() {
+             $(this.el).find(".users_popup_container").empty();
+        },
+        
+        setConversationPermissionsText : function() {
+            var conversation_permissions = this.model.get('conversation_permissions');
+            var conversation_permissions_text = this.conversation_permissions_object[conversation_permissions];
+            $(this.el).find(".conversation_permissions_text").html(conversation_permissions_text);
+        },
+        
         onClickToogleCheckboxes: function() {
             var checkBoxes = $(this.el).find(".checkbox_item");
             // Invert selection
@@ -99,37 +151,43 @@ define([
         
         onClickEditConversation: function() {
             $(this.el).find(".edit_conversation").hide();
-            $(this.el).find(".close_conversation, .save_conversation, .toogle_checkboxes_wrapper").show();
+            $(this.el).find(".close_conversation, .save_conversation, .toggle_checkboxes_wrapper").show();
             $(this.el).find(".conversation_permissions").attr('disabled', false);
             this.loadAllowedUsers();
         },
         onClickCloseConversation: function() {
             $(this.el).find(".edit_conversation").show();
-            $(this.el).find(".close_conversation, .save_conversation, .toogle_checkboxes_wrapper").hide();
+            $(this.el).find(".close_conversation, .save_conversation, .toggle_checkboxes_wrapper").hide();
             $(this.el).find(".conversation_permissions").attr('disabled', true);
             this.clearUsersContainer();
         },
         connectConversationPermissions: function() {
             var collection = new Backbone.Collection();
 
-            collection.add([
-                {id: 'all_trainers', name: 'All Trainers'},
-                {id: 'selected_trainers', name: 'Only Selected Trainers'},
-            ]);
-
             if (app.options.is_backend) {
                 collection.add([
-                    {id: 'all_clients', name: 'All My Clients'},
-                    {id: 'selected_clients', name: 'Only Selected Clients'},
+                    {id: 'all_clients', name: this.conversation_permissions_object['all_clients']},
+                    {id: 'selected_clients', name: this.conversation_permissions_object['selected_clients']},
+                    {id: 'all_trainers', name: this.conversation_permissions_object['all_trainers']},
                 ]);
             }
+            
+            if (!app.options.is_backend) {
+                collection.add([
+                    {id: 'all_my_trainers', name: this.conversation_permissions_object['all_my_trainers']},
+                ]);
+            }
+            
+            collection.add([
+                {id: 'selected_trainers', name: this.conversation_permissions_object['selected_trainers']},
+            ]);
 
             new Select_element_view({
                 model: this.model,
                 el: $(this.el).find(".conversation_permissions_select"),
                 collection: collection,
                 first_option_title: '-Select-',
-                class_name: 'conversation_permissions',
+                class_name: 'conversation_permissions dark_input_style',
                 id_name: '',
                 model_field: 'conversation_permissions'
             }).render();
@@ -145,24 +203,24 @@ define([
             this.loadUsersLogic(conversation_permissions);
         },
         loadUsersLogic: function(conversation_permissions) {
-            $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toogle_checkboxes").show();
+            $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toggle_checkboxes").show();
             switch (conversation_permissions) {
                 case 'all_clients':
-                    $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toogle_checkboxes").hide();
+                    $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toggle_checkboxes").hide();
                     this.showAllClients();
                     break;
                 case 'selected_clients':
                     this.showSelectedClients();
                     break;
                 case 'all_trainers':
-                    $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toogle_checkboxes").hide();
+                    $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toggle_checkboxes").hide();
                     this.showAllTrainers();
                     break;
                 case 'selected_trainers':
                     this.showSelectedTrainers();
                     break;
                 case 'all_business':
-                    $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toogle_checkboxes").hide();
+                    $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toggle_checkboxes").hide();
                     this.showAllBusiness();
                     break;
                 case 'selected_business':
@@ -194,10 +252,17 @@ define([
                 this.populateTrainers(app.collections.trainers, type);
                 return;
             }
+            
+            var data = {};
+            
+            if(app.options.is_client) {
+                data.client_id = app.options.user_id;
+            }
 
             var self = this;
             app.collections.trainers = new Trainers_collection();
             app.collections.trainers.fetch({
+                data : data,
                 success: function(collection, response) {
                     self.populateTrainers(collection, type);
                 },
@@ -349,8 +414,8 @@ define([
             var collection = new Backbone.Collection();
 
             collection.add([
-                {id: 'all_business', name: 'All Businesses'},
-                {id: 'selected_business', name: 'Only Selected Businesses'},
+                {id: 'all_business', name: this.conversation_permissions_object['all_business']},
+                {id: 'selected_business', name: this.conversation_permissions_object['selected_business']},
             ]);
 
 
@@ -359,7 +424,7 @@ define([
                 el: $(this.el).find(".conversation_permissions_select"),
                 collection: collection,
                 first_option_title: '-Select-',
-                class_name: 'conversation_permissions',
+                class_name: 'conversation_permissions dark_input_style',
                 id_name: '',
                 model_field: 'conversation_permissions'
             }).render();

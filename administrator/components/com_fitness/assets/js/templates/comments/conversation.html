@@ -1,6 +1,16 @@
-<div style="text-align: left;margin-top:5px;"  class="table_header conversation_wrapper">
-    COACHING & CONVERSATION
-</div>
+<table width="100%" class="table_header conversation_wrapper" style="font-size: 13px;margin-top:5px;">
+    <tr>
+        <td style="text-align: left;">
+            COACHING & CONVERSATION
+        </td>
+        <td>
+            <% if(!item.id || !app.options.is_client || (item.created_by == app.options.user_id)) { %>
+                <a class="delete_conversation" style="cursor: pointer;margin-left:10px;float:right;" onclick="javascript:void(0)">[DELETE]</a>
+            <% } %>    
+        </td>
+    </tr>
+</table>
+
 <div class="conversation_wrapper orange_border">
     
     <table>
@@ -20,34 +30,45 @@
             </td>
             <% } %>
             
-            <% if(!app.options.is_superuser) { %>
-            <td width="250">
-                Who Can See This Conversation?
-                <div class="clr"></div>
-                <div style="width:200px;" class="conversation_permissions_select"></div>
-            </td>
-            <% } %>
-            <td width="200">
-                <a class="save_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[SAVE]</a>
-    
-                <a class="edit_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[VIEW/EDIT]</a>
-                
-                <% if(item.id) { %>
-                <a class="close_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[CLOSE]</a>
+            
+            <% if(!item.id || !app.options.is_client || (item.created_by == app.options.user_id)) { %>
+                <% if(!app.options.is_superuser) { %>
+                <td width="250">
+                    Who Can See This Conversation?
+                    <div class="clr"></div>
+                    <div style="width:200px;" class="conversation_permissions_select"></div>
+                </td>
                 <% } %>
-                
-                <a class="delete_conversation" style="cursor: pointer;margin-left:10px" onclick="javascript:void(0)">[DELETE]</a>
-            </td>
+                <td width="200">
+                    <a class="save_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[SAVE]</a>
+
+                    <a class="edit_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[VIEW/EDIT]</a>
+
+                    <% if(item.id) { %>
+                    <a class="close_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[CLOSE]</a>
+                    <% } %>
+                </td>
+            <% } else { %>
+                <td width="250">
+                    Who Can See This Conversation?
+                    <div class="clr"></div>
+                    <span class="conversation_permissions_text"></span>
+                    <span class="formula"></span>
+                    <div class="users_popup_container">
+                        <div class="users_popup"></div>
+                    </div>
+                </td>
+            <% } %>
         </tr>
     </table>
     
     <div class="clr"></div>
     
-    <fieldset class="toogle_checkboxes_wrapper" style="display:none;width:auto!important;">
+    <fieldset class="toggle_checkboxes_wrapper" style="display:none;width:auto!important;">
         <legend>
-            <a class="select_all_checkboxes" style="cursor: pointer;font-size:12px;" onclick="javascript:void(0)">[SELECT ALL]</a>
-            <a class="select_none_checkboxes" style="cursor: pointer;font-size:12px;" onclick="javascript:void(0)">[SELECT NONE]</a>
-            <a class="toogle_checkboxes" style="cursor: pointer;font-size:12px;" onclick="javascript:void(0)">[TOOGLE]</a>
+            <a class="select_all_checkboxes" style="cursor: pointer;font-size:12px;display:none;" onclick="javascript:void(0)">[SELECT ALL]</a>
+            <a class="select_none_checkboxes" style="cursor: pointer;font-size:12px;display:none;" onclick="javascript:void(0)">[SELECT NONE]</a>
+            <a class="toggle_checkboxes" style="cursor: pointer;font-size:12px;display:none;" onclick="javascript:void(0)">[TOGGLE]</a>
         </legend>
         <div class="users_container"></div>
     </fieldset>

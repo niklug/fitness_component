@@ -15,8 +15,6 @@ require([
     'jqueryui',
     'backbone.syphon',
     'jquery.backbone_pagination',
-    'jquery.nutritionPlan',
-    'jquery.macronutrientTargets',
     'jquery.ajax_indicator',
     'jquery.cleditor'
     
