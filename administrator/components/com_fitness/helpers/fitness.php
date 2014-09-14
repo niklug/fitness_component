@@ -1823,6 +1823,8 @@ class FitnessHelper extends FitnessFactory
             
             $secondary_only = JRequest::getVar('secondary_only');
             
+            $business_profile_id = JRequest::getVar('business_profile_id');
+            
             $client_id = JRequest::getVar('client_id');
             
             $query = "SELECT CONCAT(primary_trainer, ',', other_trainers) AS trainers, business_profile_id";
@@ -1838,6 +1840,11 @@ class FitnessHelper extends FitnessFactory
             $query .= " FROM #__fitness_clients";
             
             $query .= "  WHERE state='1'";
+            
+            if($business_profile_id) {
+                $query .= "  AND business_profile_id='$business_profile_id' ";
+            }
+            
             
             if($client_id) {
                 $query .= "  and user_id='$client_id' LIMIT 1";

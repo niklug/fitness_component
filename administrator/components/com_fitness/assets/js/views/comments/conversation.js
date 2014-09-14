@@ -63,16 +63,17 @@ define([
             if (this.model.isNew()) {
                 $(this.el).find(".save_conversation, .toggle_checkboxes_wrapper").show();
             } else {
-                $(this.el).find(".edit_conversation").show();
+                this.editAllowLoggic();
+                
                 $(this.el).find(".conversation_permissions").attr('disabled', true);
                 
                 this.setConversationPermissionsText();
             }
-            
-            
 
             return this;
         },
+        
+        
         events: {
             "change .conversation_permissions": "onChangeConversationPermissions",
             "click .save_conversation": "onClickSaveConversation",
@@ -82,11 +83,56 @@ define([
             "click .select_all_checkboxes": "onClickSelectAll",
             "click .select_none_checkboxes": "onClickSelectNone",
             "click .delete_conversation": "onClickDeleteConversation",
-            "mouseover .formula" : "showUsersPopup",
-            "mouseout .formula" : "hideUsersPopup",
+            "click .show_users_list" : "showUsersPopup",
+            "click .close_users_list" : "hideUsersPopup",
         },
         
+        editAllowLoggic : function() {
+            var conversation_permissions = this.model.get('conversation_permissions');
+            var created_by_client = this.model.get('created_by_client');
+            
+            var logged_business_profile_id = app.options.business_profile_id;
+            var business_profile_id = this.model.get('business_profile_id');
+
+            var allowed_users = this.model.get('allowed_users');
+            if(allowed_users) {
+                allowed_users = allowed_users.split(",");
+            }
+
+            var allowed_business = this.model.get('allowed_business');
+            if(allowed_business) {
+                allowed_business = allowed_business.split(",");
+            }
+
+
+            var user_id = app.options.user_id;
+            var created_by = this.model.get('created_by');
+
+
+            if(app.options.is_superuser) {
+                this.showEditButton();
+            }
+
+            if(app.options.is_trainer) {
+                if((user_id == created_by) || created_by_client) {
+                    this.showEditButton();
+                }
+            }
+
+            if(app.options.is_client) {
+                if(user_id == created_by) {
+                    this.showEditButton();
+                }
+            }  
+        },
+        
+        showEditButton : function() {
+            $(this.el).find(".edit_conversation, .delete_conversation").show();
+        },
+
         showUsersPopup : function() {
+            $(this.el).find(".show_users_list").hide();
+            $(this.el).find(".close_users_list").show();
             var ids  = this.model.get('allowed_users');
             
             if(!ids) {
@@ -107,16 +153,20 @@ define([
         
         populateUserspopup : function(collection) {
 
-            var html = '<div class="users_popup">';
+            var html = '<div class="users_popup" style="border: 1px solid #ccc; padding:2px;">';
             _.each(collection.models, function(model) {
-                html += model.get('name') + "</br>";
+                html += '<div style="font-size:13px;color:#c2c2c2;font-style:italic;display:inline-block;">';
+                html += model.get('name') + "&nbsp; &nbsp;&nbsp;";
+                html += "</div>";
             }, this);
             html += "</div>";
             $(this.el).find(".users_popup_container").html(html);
         },
         
         hideUsersPopup : function() {
-             $(this.el).find(".users_popup_container").empty();
+            $(this.el).find(".show_users_list").show();
+            $(this.el).find(".close_users_list").hide();
+            $(this.el).find(".users_popup_container").empty();
         },
         
         setConversationPermissionsText : function() {
@@ -153,7 +203,7 @@ define([
             $(this.el).find(".edit_conversation").hide();
             $(this.el).find(".close_conversation, .save_conversation, .toggle_checkboxes_wrapper").show();
             $(this.el).find(".conversation_permissions").attr('disabled', false);
-            this.loadAllowedUsers();
+            //this.loadAllowedUsers();
         },
         onClickCloseConversation: function() {
             $(this.el).find(".edit_conversation").show();
@@ -163,6 +213,16 @@ define([
         },
         connectConversationPermissions: function() {
             var collection = new Backbone.Collection();
+            
+            var conversation_permissions = this.model.get('conversation_permissions');
+           
+            //if created by Super User
+            if(app.options.is_trainer && (conversation_permissions == 'all_business' || conversation_permissions == 'selected_business')) {
+                collection.add([
+                    {id: 'all_business', name : 'Only Trainers'},
+                    {id: 'selected_business', name : 'Only Trainers'},
+                ]);
+            }
 
             if (app.options.is_backend) {
                 collection.add([
@@ -216,6 +276,10 @@ define([
                     $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toggle_checkboxes").hide();
                     this.showAllTrainers();
                     break;
+                case 'all_my_trainers':
+                    $(this.el).find(".select_all_checkboxes, .select_none_checkboxes, .toggle_checkboxes").hide();
+                    this.showAllTrainers();
+                    break;
                 case 'selected_trainers':
                     this.showSelectedTrainers();
                     break;
@@ -257,6 +321,10 @@ define([
             
             if(app.options.is_client) {
                 data.client_id = app.options.user_id;
+            }
+            
+            if(app.options.is_trainer) {
+                data.business_profile_id = app.options.business_profile_id;
             }
 
             var self = this;

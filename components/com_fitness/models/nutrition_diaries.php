@@ -1084,7 +1084,9 @@ class FitnessModelNutrition_diaries extends JModelList {
 
                 $query .= "SELECT a.*, ";
                 
-                $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name";
+                $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name,";
+                
+                $query .= " (SELECT id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client";
                 
                 $query .= "  FROM $table AS a";
                 

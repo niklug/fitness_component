@@ -1283,7 +1283,7 @@ width: 20px;
 
 .formula {
     background: url("../images/small-tip.png") no-repeat scroll right center rgba(0, 0, 0, 0);
-    cursor: default;
+    cursor: pointer;
     padding-right: 17px;
 }
 

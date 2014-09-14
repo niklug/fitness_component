@@ -1211,6 +1211,7 @@ td.center, th.center, .center {
 
 .formula {
     background: url("../../../../administrator/components/com_fitness/assets/images/small-tip.png") no-repeat scroll right center rgba(0, 0, 0, 0);
-    cursor: default;
+    cursor: pointer;
     padding-right: 17px;
+    
 }
