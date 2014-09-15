@@ -9,6 +9,7 @@ define([
     'collections/diary/users_names',
     'views/programs/select_element',
     'views/diary/checkbox_item',
+    'views/comments/comment',
     'text!templates/comments/conversation.html'
 
 ], function(
@@ -22,6 +23,7 @@ define([
         Users_names_collection,
         Select_element_view,
         Checkbox_item_view,
+        Comment_view,
         template
         ) {
 
@@ -68,6 +70,8 @@ define([
                 $(this.el).find(".conversation_permissions").attr('disabled', true);
                 
                 this.setConversationPermissionsText();
+                
+                this.connectParentComment();
             }
 
             return this;
@@ -155,7 +159,7 @@ define([
 
             var html = '<div class="users_popup" style="border: 1px solid #ccc; padding:2px;">';
             _.each(collection.models, function(model) {
-                html += '<div style="font-size:13px;color:#c2c2c2;font-style:italic;display:inline-block;">';
+                html += '<div style="font-size:13px;color:#8a8a8a;font-style:italic;display:inline-block;">';
                 html += model.get('name') + "&nbsp; &nbsp;&nbsp;";
                 html += "</div>";
             }, this);
@@ -203,7 +207,11 @@ define([
             $(this.el).find(".edit_conversation").hide();
             $(this.el).find(".close_conversation, .save_conversation, .toggle_checkboxes_wrapper").show();
             $(this.el).find(".conversation_permissions").attr('disabled', false);
-            //this.loadAllowedUsers();
+            
+            var conversation_permissions = this.model.get('conversation_permissions');
+
+            //console.log(this.model.toJSON());
+            this.loadUsersLogic(conversation_permissions);
         },
         onClickCloseConversation: function() {
             $(this.el).find(".edit_conversation").show();
@@ -542,6 +550,19 @@ define([
             }
 
             this.users_container.append(new Checkbox_item_view({disabled: type, checked: checked, model: model}).render().el);
+        },
+        
+        connectParentComment : function() {
+            var target = $(this.el).find(".parent_comment_wrapper");
+            
+            target.html(new Comment_view({
+                model : this.model,
+                show_delete : false,
+                show_arrow : false,
+                show_reply : true,
+                show_editor : true,
+                edit_mode : false
+            }).render().el);
         },
         
         close : function() {

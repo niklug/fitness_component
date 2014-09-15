@@ -5,7 +5,6 @@ define([
         'app',
         'collections/comments/comments',
         'models/comments/comment',
-        'views/comments/item',
         'views/comments/conversation',
 	'text!templates/comments/index.html'
         
@@ -16,7 +15,6 @@ define([
         app,
         Comments_collection,
         Comment_model,
-        Comment_view,
         Conversation_view,
         template 
     ) {
@@ -84,7 +82,9 @@ define([
             // filter for trainers by business
             if(conversation_permissions == 'all_business' || conversation_permissions == 'selected_business') {
                 if(app.options.is_superuser) {
-                    
+                    if(created_by != user_id) {
+                        return;
+                    }
                 }
                 
                 if(app.options.is_trainer) {
@@ -102,7 +102,9 @@ define([
             // filter for trainers by user_id
             if(conversation_permissions == 'all_trainers' || conversation_permissions == 'all_my_trainers' || conversation_permissions == 'selected_trainers') {
                 if(app.options.is_superuser) {
-                    
+                    if(created_by != user_id) {
+                        return;
+                    }
                 }
                 
                 if(app.options.is_trainer && (created_by != user_id)) {
@@ -119,7 +121,9 @@ define([
             // filter for clients by user_id
             if(conversation_permissions == 'all_clients' || conversation_permissions == 'selected_clients') {
                 if(app.options.is_superuser) {
-                    
+                    if(created_by != user_id) {
+                        return;
+                    }
                 }
                 
                 if(app.options.is_trainer) {
