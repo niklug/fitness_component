@@ -465,7 +465,8 @@
 
 
 .comment_wrapper, .comment_textarea {
-    width: 600px !important;
+    width: 99% !important;
+    font-size:12px;
 }
 
 .nutrition_targets_table input {

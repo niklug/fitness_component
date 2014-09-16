@@ -1117,7 +1117,20 @@ class FitnessModelNutrition_diaries extends JModelList {
                 break;
             case 'DELETE': // Delete Item
                 $id = JRequest::getVar('id', 0, '', 'INT');
+                
+                $db = JFactory::getDbo();
+                
+                $query = "SELECT id FROM $table WHERE parent_id = '$id'";
+                
+                $items = FitnessHelper::customQuery($query, 1);
+                
+                foreach ($items as $item) {
+                    $helper->deleteRow($item->id, $table);
+                }
+                
                 $id = $helper->deleteRow($id, $table);
+                
+                
                 break;
 
             default:

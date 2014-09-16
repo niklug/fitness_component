@@ -49,6 +49,11 @@
                     
                     
                 </td>
+            <% } else if(app.options.is_trainer && (item.conversation_permissions == 'all_business' || item.conversation_permissions == 'selected_business')) { %>
+                <td width="250">
+                                        
+                </td>
+                
             <% } else { %>
                 <td width="250">
                     Who Can See This Conversation?
@@ -58,7 +63,6 @@
                     <a class="close_users_list" style="cursor: pointer;display:none;" onclick="javascript:void(0)">[CLOSE]</a>
                     
                 </td>
-                
             <% } %>
         </tr>
     </table>
@@ -81,5 +85,9 @@
     <% if(item.id) { %>
         <br/>
         <div class="parent_comment_wrapper"></div>
+        <div class="clr"></div>
+        <div class="child_comments_wrapper"></div>
+        <div class="clr"></div>
+        <a style="margin-top:5px;" href="javascript:void(0)" class="reply_parent_comment">[REPLY]</a>
     <% } %>
 </div>

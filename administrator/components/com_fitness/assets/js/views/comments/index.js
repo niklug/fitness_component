@@ -60,6 +60,9 @@ define([
         },
         
         addItem : function(model) {
+            if(!model.isNew() && model.get('parent_id') != '0') {
+                return;
+            }
             var conversation_permissions = model.get('conversation_permissions');
             
             var logged_business_profile_id = app.options.business_profile_id;
@@ -140,7 +143,8 @@ define([
             $(this.el).find(".conversations_container").append(
                 new Conversation_view({
                     comment_options : this.options,
-                    model : model
+                    model : model,
+                    collection : app.collections.comments
                 }).render().el
             );
         },
@@ -154,7 +158,6 @@ define([
             };
             
             var model = new Comment_model(data, {db_table : this.options.db_table});
-            
             this.addItem(model);
         }
      

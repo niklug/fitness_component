@@ -1,6 +1,10 @@
+<% if(options.show_arrow) { %>
+    <hr style="margin-left:50px;"  />
+<% } else { %>
+    <hr>
+<% } %>
 <div  class="comment_wrapper">
-
-    <table width="100%">
+   <table width="100%">
         <tr>
             <td>
             </td>
@@ -13,12 +17,12 @@
                 <% if(edit_mode) { %>
                 <a href="javascript:void(0)" class="save_parent_comment">[SAVE]</a>
                 <% } else { %>
-                <a  href="javascript:void(0)" class="edit_parent_comment">[EDIT]</a>
+                <a style="display:none;"  href="javascript:void(0)" class="edit_parent_comment">[EDIT]</a>
                 <% } %>
             </td>
             
             <% if(options.show_delete) { %>
-            <td align="center"><a href="javascript:void(0)" class="delete_parent_comment">[DELETE]</a></td>
+            <td align="center"><a style="display:none;" href="javascript:void(0)" class="delete_child_comment">[DELETE]</a></td>
             <% } %>
         </tr>
         <tr>
@@ -30,14 +34,12 @@
             
             <td colspan="5">
             <% if(edit_mode) { %>
-                <textarea  class="comment_textarea" cols="100" rows="3"><%= decodeURIComponent(item.comment) %></textarea>
+                <textarea  class="comment_textarea"  rows="3"><%= decodeURIComponent(item.comment) %></textarea>
             <% } else { %>
-                <%= decodeURIComponent(item.comment) %>
+            <span class="grey_title"><%= decodeURIComponent(item.comment) %></span>
             <% } %>
             </td>
         </tr>
     </table>
-
-    <a style="margin-top:5px;" href="javascript:void(0)" class="reply_parent_comment">[REPLY]</a>
     <div class="clr"></div>
 </div>

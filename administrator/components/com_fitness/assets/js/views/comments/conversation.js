@@ -7,6 +7,7 @@ define([
     'collections/programs/trainers',
     'collections/programs/trainer_clients',
     'collections/diary/users_names',
+    'models/comments/comment',
     'views/programs/select_element',
     'views/diary/checkbox_item',
     'views/comments/comment',
@@ -21,6 +22,7 @@ define([
         Trainers_collection,
         Trainer_clients_collection,
         Users_names_collection,
+        Comment_model,
         Select_element_view,
         Checkbox_item_view,
         Comment_view,
@@ -29,6 +31,7 @@ define([
 
     var view = Backbone.View.extend({
         initialize: function() {
+            this.parent_comment_edit_mode = false;
         
             this.conversation_permissions_object = {
                 all_clients : 'All My Clients',
@@ -72,6 +75,8 @@ define([
                 this.setConversationPermissionsText();
                 
                 this.connectParentComment();
+                
+                this.populateClildComments();
             }
 
             return this;
@@ -89,6 +94,7 @@ define([
             "click .delete_conversation": "onClickDeleteConversation",
             "click .show_users_list" : "showUsersPopup",
             "click .close_users_list" : "hideUsersPopup",
+            "click .reply_parent_comment": "onClickReplyComment",
         },
         
         editAllowLoggic : function() {
@@ -117,8 +123,14 @@ define([
                 this.showEditButton();
             }
 
-            if(app.options.is_trainer) {
+            if(app.options.is_trainer_administrator) {
                 if((user_id == created_by) || created_by_client) {
+                    this.showEditButton();
+                }
+            }
+            
+            if(app.options.is_simple_trainer) {
+                if(user_id == created_by) {
                     this.showEditButton();
                 }
             }
@@ -424,6 +436,12 @@ define([
             this.users_container.empty();
         },
         onClickSaveConversation: function() {
+            
+            if(this.model.isNew()) {
+                this.parent_comment_edit_mode = true;
+                this.model.set({comment : ''});
+            }
+            
             var allowed_users = $(this.el).find(".checkbox_item:checked").map(function() {
                 return $(this).val();
             }).get().join(",");
@@ -451,7 +469,7 @@ define([
                 conversation_permissions_field.addClass("red_style_border");
                 return;
             }
-
+            
             if (!this.model.isValid()) {
                 var validate_error = this.model.validationError;
                 alert(this.model.validationError);
@@ -559,8 +577,59 @@ define([
                 model : this.model,
                 show_delete : false,
                 show_arrow : false,
-                show_reply : true,
-                show_editor : true,
+                show_editor : false,
+                edit_mode : this.parent_comment_edit_mode
+            }).render().el);
+        },
+        
+        onClickReplyComment : function() {
+            var target = $(this.el).find(".child_comments_wrapper");
+            
+            var data = {
+                business_profile_id : app.options.business_profile_id,
+                created_by : app.options.user_id,
+                created_by_name : app.options.user_name,
+                created : moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                parent_id : this.model.get('id'),
+                comment : '',
+                item_id: this.options.comment_options.item_id,
+                sub_item_id: this.options.comment_options.sub_item_id,
+            };
+            
+            var model = new Comment_model(data, {db_table : this.options.comment_options.db_table});
+            
+            target.append(new Comment_view({
+                model : model,
+                show_delete : true,
+                show_arrow : true,
+                show_editor : false,
+                edit_mode : true
+            }).render().el);
+        },
+        
+        populateClildComments : function() {
+            var self = this;
+            _.each(this.collection.models, function (model) { 
+                this.addChildItem(model);
+            }, this);
+        },
+        
+        addChildItem : function(model) {
+            if(model.get('parent_id') == '0') {
+                return;
+            }
+            
+            if(model.get('parent_id') != this.model.get('id')) {
+                return;
+            }
+            
+            var target = $(this.el).find(".child_comments_wrapper");
+    
+            target.append(new Comment_view({
+                model : model,
+                show_delete : true,
+                show_arrow : true,
+                show_editor : false,
                 edit_mode : false
             }).render().el);
         },

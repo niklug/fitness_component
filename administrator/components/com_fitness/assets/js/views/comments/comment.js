@@ -42,12 +42,51 @@ define([
                 if(self.options.show_editor && self.edit_mode) {
                     self.connectEditor($(self.el), ".comment_textarea", false);
                 }
+                
+                if(!self.model.isNew()) {
+                    self.editAllowLoggic();
+                }
             });
         },
         
         events: {
             "click .save_parent_comment": "onClickSaveComment",
             "click .edit_parent_comment": "onClickEditComment",
+            "click .delete_child_comment": "onClickDeleteComment",
+        },
+        
+        editAllowLoggic : function() {
+            var created_by_client = this.model.get('created_by_client');
+
+            var user_id = app.options.user_id;
+            var created_by = this.model.get('created_by');
+
+
+            if(app.options.is_superuser) {
+                this.showEditButton();
+            }
+
+            if(app.options.is_trainer_administrator) {
+                if((user_id == created_by) || created_by_client) {
+                    this.showEditButton();
+                }
+            }
+            
+            if(app.options.is_simple_trainer) {
+                if(user_id == created_by) {
+                    this.showEditButton();
+                }
+            }
+
+            if(app.options.is_client) {
+                if(user_id == created_by) {
+                    this.showEditButton();
+                }
+            }  
+        },
+        
+        showEditButton : function() {
+            $(this.el).find(".delete_child_comment, .edit_parent_comment").show();
         },
         
         onClickEditComment : function() {
@@ -57,8 +96,14 @@ define([
         
         connectEditor : function(element, selector, disabled) {
             element.find(selector).cleditor({width:'98%', height:100, useCSS:true})[0];
+            
+            var font_color = '#fff';
+            
+            if(app.options.is_backend) {
+                font_color = '#000';
+            }
 
-            element.find("iframe").contents().find("body").css('color', '#fff');
+            element.find("iframe").contents().find("body").css('color', font_color);
 
             element.find(".cleditorMain").css('background-color', 'rgba(255, 255, 255, 0.1)');
             
@@ -95,6 +140,22 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        onClickDeleteComment : function() {
+            var self = this;
+            this.model.destroy({
+                success: function(model, response) {
+                    self.close();
+                },
+                error: function(model, response) {
+                    alert(response.responseText);
+                }
+            });
+        },
+        
+        close : function() {
+            $(this.el).remove();
         }
         
     });
