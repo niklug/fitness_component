@@ -12,6 +12,15 @@ $document = &JFactory::getDocument();
 $document -> addscript( JUri::root() . 'administrator/components/com_fitness/assets/js/lib/require.js');
 
 require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS .'helpers' . DS . 'fitness.php';
+
+$user_id = JFactory::getUser()->id;
+
+$helper = new FitnessHelper();
+
+$business_profile_id = $helper->getBusinessProfileId($user_id);
+
+$business_profile_id = $business_profile_id['data'];
+
 ?>
 <div style="opacity: 1;" class="fitness_wrapper">
 
@@ -48,6 +57,14 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
         'minigoals_db_table' : '#__fitness_mini_goals',
         'goals_comments_db_table' : '#__fitness_goal_comments',
         'minigoals_comments_db_table' : '#__fitness_mini_goal_comments',
+        
+        'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
+        'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
+        'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
+        'is_simple_trainer' : '<?php echo FitnessFactory::is_simple_trainer($user_id); ?>',
+        'is_trainer_administrator' : '<?php echo FitnessFactory::is_trainer_administrator($user_id); ?>',
+        'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
+        'business_profile_id' : '<?php echo $business_profile_id; ?>',
     };
     
 

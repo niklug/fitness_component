@@ -332,10 +332,8 @@ define([
             });
         },
         getTrainers: function(type) {
-            if (app.collections.trainers) {
-                var trainers_collection = new Backbone.Collection;
-                trainers_collection.add(app.collections.trainers.where({business_profile_id : app.options.business_profile_id}));
-                this.populateTrainers(trainers_collection, type);
+            if (app.collections.trainers_1) {
+                this.populateTrainers(app.collections.trainers_1, type);
                 return;
             }
             
@@ -350,8 +348,8 @@ define([
             }
 
             var self = this;
-            app.collections.trainers = new Trainers_collection();
-            app.collections.trainers.fetch({
+            app.collections.trainers_1 = new Trainers_collection();
+            app.collections.trainers_1.fetch({
                 data : data,
                 success: function(collection, response) {
                     self.populateTrainers(collection, type);

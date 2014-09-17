@@ -62,6 +62,7 @@ $business_profile_id = $business_profile_id['data'];
         'db_table_session_focuses': '#__fitness_session_focus',
         'db_table_program_templates': '#__fitness_programs_templates',
         
+        'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
         'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
         'is_simple_trainer' : '<?php echo FitnessFactory::is_simple_trainer($user_id); ?>',
