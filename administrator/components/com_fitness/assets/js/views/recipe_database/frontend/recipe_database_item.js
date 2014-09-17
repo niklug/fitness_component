@@ -3,13 +3,14 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/comments/index',
 	'text!templates/recipe_database/frontend/recipe_database_item.html',
         'jqueryui',
         'jquery.flot',
         'jquery.flot.pie',
         'jquery.drawPie'
         
-], function ( $, _, Backbone, app, template ) {
+], function ( $, _, Backbone, app, Comments_view, template ) {
 
     var view = Backbone.View.extend({
         
@@ -64,20 +65,21 @@ define([
             data.method = 'email_pdf_recipe';
             $.fitness_helper.sendEmail(data);
         },
-
-        connectComments : function(){
+        
+        connectComments :function() {
             var comment_options = {
-                'item_id' : this.model.get('id'),
-                'fitness_administration_url' : app.options.fitness_frontend_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : app.options.recipe_comments_db_table,
+                'item_id' :  this.model.get('id'),
+                'sub_item_id' :  '0',
+                'db_table' : 'fitness_nutrition_recipes_comments',
                 'read_only' : true,
                 'anable_comment_email' : true,
                 'comment_method' : 'RecipeComment'
             }
-            var comments_html = $.comments(comment_options, comment_options.item_id, 0).run();
-            this.$el.find("#comments_wrapper").html(comments_html);
+
+            var comments_html = new Comments_view(comment_options).render().el;
+            $(this.el).find("#comments_wrapper").html(comments_html);
         },
+
         
         setPieGraph : function() {
             var data = [

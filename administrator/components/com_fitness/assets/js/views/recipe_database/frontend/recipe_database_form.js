@@ -9,6 +9,7 @@ define([
         'models/ingredients/recipe_ingredient',
         'views/exercise_library/select_filter',
         'views/ingredients/ingredients_container',
+        'views/comments/index',
 	'text!templates/recipe_database/frontend/recipe_database_form.html',
         'jquery.backbone_image_upload',
         'jquery.backbone_video_upload'
@@ -23,6 +24,7 @@ define([
         Recipe_ingredient_model,
         Select_filter_fiew,
         Ingredients_container_view,
+        Comments_view,
         template 
     ) {
 
@@ -100,19 +102,18 @@ define([
             $("#item_descriptions").html(item_description_html);
         },
         
-        connectComments : function() {
+        connectComments :function() {
             var comment_options = {
-                'item_id' : this.model.get('id'),
-                'fitness_administration_url' : app.options.fitness_frontend_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : app.options.recipe_comments_db_table,
+                'item_id' :  this.model.get('id'),
+                'sub_item_id' :  '0',
+                'db_table' : 'fitness_nutrition_recipes_comments',
                 'read_only' : true,
-                'anable_comment_email' : false
+                'anable_comment_email' : false,
+                'comment_method' : ''
             }
-            var comments = $.comments(comment_options, comment_options.item_id, 0);
 
-            var comments_html = comments.run();
-            $("#comments_wrapper").html(comments_html);
+            var comments_html = new Comments_view(comment_options).render().el;
+            $(this.el).find("#comments_wrapper").html(comments_html);
         },
 
         connectImageUpload : function() {
