@@ -898,6 +898,12 @@ class CommentGoalEmail extends FitnessEmail {
              * 
              */
         }
+        
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
 
         $this->recipients_ids = $ids;
     }
@@ -1000,6 +1006,12 @@ class CommentRecipeEmail extends FitnessEmail {
             default:
                 break;
         }
+        
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
 
         $this->recipients_ids = $ids;
     }
@@ -1091,6 +1103,12 @@ class CommentDiaryEmail extends FitnessEmail {
            //add client
             $ids[] = $this->item_user_id;
         }
+        
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
 
         $this->recipients_ids = $ids;
     }
@@ -1195,6 +1213,12 @@ class CommentExerciseLibraryEmail extends FitnessEmail {
             default:
                 break;
         }
+        
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
 
         $this->recipients_ids = $ids;
     }
@@ -1517,6 +1541,12 @@ class CommentMenuPlanEmail extends FitnessEmail {
             $ids = array_merge($ids, $trainers_data['data']);
         }
         
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
+        
         $this->recipients_ids = $ids;
     }
 }
@@ -1587,6 +1617,12 @@ class CommentTargetsCommentEmail extends FitnessEmail {
             $ids[] = $client_id;
         }
         
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
+        
         $this->recipients_ids = $ids;
     }
 }
@@ -1654,6 +1690,12 @@ class CommentMacrosCommentEmail extends FitnessEmail {
         if($this->send_to == 'client') {
             $ids[] = $client_id;
         }
+        
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
         
         $this->recipients_ids = $ids;
     }
@@ -1724,6 +1766,12 @@ class CommentSupplementCommentEmail extends FitnessEmail {
         if($this->send_to == 'client') {
             $ids[] = $client_id;
         }
+        
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
         
         $this->recipients_ids = $ids;
     }
@@ -1808,6 +1856,13 @@ class CommentProgramEmail extends FitnessEmail {
         
         // send except cteator
         $ids = array_diff($ids, array($this->data->created_by));
+        
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
+        
         $this->recipients_ids = $ids;
     }
     
@@ -1882,6 +1937,12 @@ class CommentProgramTemplateEmail extends FitnessEmail {
         
         $ids = FitnessHelper::customQuery($query, 3);
      
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $ids =  array_intersect($ids, $allowed_users);
+        
         $this->recipients_ids = $ids;
     }
     

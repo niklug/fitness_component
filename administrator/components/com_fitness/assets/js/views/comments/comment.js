@@ -124,6 +124,14 @@ define([
                 comment = '';
             }
             
+            var saved_comment = this.model.get('comment');
+            var is_new = true;
+            
+            if(saved_comment) {
+                is_new = false;
+            }
+            //console.log(is_new);
+            
             this.model.set({comment : comment});
             
             if (!this.model.isValid()) {
@@ -132,9 +140,13 @@ define([
                 return;
             }
             var self = this;
+            
             this.model.save(null, {
                 success: function(model, response) {
                     self.render();
+                    if(is_new && self.options.comment_options.anable_comment_email !== 'undefined' && self.options.comment_options.anable_comment_email == true) {
+                        self.commentEmail(model);
+                    }
                 },
                 error: function(model, response) {
                     alert(response.responseText);
@@ -151,6 +163,23 @@ define([
                 error: function(model, response) {
                     alert(response.responseText);
                 }
+            });
+        },
+        
+        commentEmail : function(model) {
+            var data = model.toJSON();
+            var url = app.options.ajax_call_url;
+            var view = '';
+            var task = 'ajax_email';
+            var table = '';
+
+            data.view = 'Comment';
+            data.method = this.options.comment_options.comment_method;
+            data.table = this.options.comment_options.db_table;
+
+
+            $.AjaxCall(data, url, view, task, table, function(output){
+                console.log(output);
             });
         },
         

@@ -333,7 +333,9 @@ define([
         },
         getTrainers: function(type) {
             if (app.collections.trainers) {
-                this.populateTrainers(app.collections.trainers, type);
+                var trainers_collection = new Backbone.Collection;
+                trainers_collection.add(app.collections.trainers.where({business_profile_id : app.options.business_profile_id}));
+                this.populateTrainers(trainers_collection, type);
                 return;
             }
             
@@ -575,6 +577,7 @@ define([
             
             target.html(new Comment_view({
                 model : this.model,
+                comment_options : this.options.comment_options,
                 show_delete : false,
                 show_arrow : false,
                 show_editor : false,
@@ -600,6 +603,7 @@ define([
             
             target.append(new Comment_view({
                 model : model,
+                comment_options : this.options.comment_options,
                 show_delete : true,
                 show_arrow : true,
                 show_editor : false,
@@ -627,6 +631,7 @@ define([
     
             target.append(new Comment_view({
                 model : model,
+                comment_options : this.options.comment_options,
                 show_delete : true,
                 show_arrow : true,
                 show_editor : false,

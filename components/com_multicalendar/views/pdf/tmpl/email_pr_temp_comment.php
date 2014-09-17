@@ -139,7 +139,7 @@
                                                                     <p>COMMENT:
                                                                     </p></td>
                                                                 <td width="71%" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#FFF;">
-                                                                    <p><?php echo $data->comment->comment_text;?>
+                                                                    <p><?php echo urldecode($data->comment->comment_text);?>
                                                                     </p></td>
                                                             </tr>
                                                         </table>
