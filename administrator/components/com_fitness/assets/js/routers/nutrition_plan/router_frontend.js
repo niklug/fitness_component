@@ -27,7 +27,8 @@ define([
         'views/nutrition_plan/nutrition_guide/add_recipe',
         'views/nutrition_plan/nutrition_guide/shopping_list',
         'views/graph/graph',
-        'views/nutrition_plan/main_menu'
+        'views/nutrition_plan/main_menu',
+        'views/comments/index'
 
 ], function (
         $,
@@ -58,7 +59,8 @@ define([
         Example_day_add_recipe_view,
         Shopping_list_view,
         Graph_view,
-        Main_menu_view
+        Main_menu_view,
+        Comments_view
     ) {
 
 
@@ -185,18 +187,15 @@ define([
                 $("#main_container").html(new Target_block_view({model : app.models.target, item_model : app.models.nutrition_plan}).render().el);
                 
                 // connect comments
-                 var comment_options = {
+                var comment_options = {
                     'item_id' :  id,
-                    'fitness_administration_url' : app.options.fitness_frontend_url,
-                    'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                    'db_table' :  '#__fitness_nutrition_plan_targets_comments',
+                    'sub_item_id' :  '0',
+                    'db_table' : 'fitness_nutrition_plan_targets_comments',
                     'read_only' : true,
                     'anable_comment_email' : true,
                     'comment_method' : 'TargetsComment'
                 }
-                var comments =  $.comments(comment_options, comment_options.item_id, 0);
-
-                var comments_html = comments.run();
+                var comments_html = new Comments_view(comment_options).render().el;
                 $("#targets_comments_wrapper").html(comments_html);
             },
             
@@ -218,20 +217,7 @@ define([
                         alert(response.responseText);
                     }
                  });
-                 // connect comments
-                 var comment_options = {
-                    'item_id' :  id,
-                    'fitness_administration_url' : app.options.fitness_frontend_url,
-                    'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                    'db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
-                    'read_only' : true,
-                    'anable_comment_email' : true,
-                    'comment_method' : 'MacrosComment'
-                }
-                var comments = $.comments(comment_options, comment_options.item_id, 1);
-
-                var comments_html = comments.run();
-                $("#macronutrients_comments_wrapper").html(comments_html);
+                 
             },
             
             supplements: function (id) {

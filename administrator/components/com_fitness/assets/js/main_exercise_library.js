@@ -6,7 +6,6 @@ require([
     'app',
     'routers/exercise_library/router_backend',
     'jquery.AjaxCall',
-    'jquery.comments',
     'jquery.fitness_helper',
     'jqueryui',
     'backbone.syphon',

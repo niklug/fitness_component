@@ -40,7 +40,6 @@ define([
         template : _.template(template),
 
         render : function () {
-            
             var data = {};
             data.$ = $;
             $(this.el).html(this.template(data));
@@ -60,6 +59,10 @@ define([
         },
         
         addItem : function(model) {
+            if(this.options.item_id != model.get('item_id')) {
+                return;
+            }
+            
             if(!model.isNew() && model.get('parent_id') != '0') {
                 return;
             }
@@ -154,9 +157,10 @@ define([
                 business_profile_id : app.options.business_profile_id,
                 created_by : app.options.user_id,
                 created_by_name : app.options.user_name,
-                created : moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+                created : moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                item_id: this.options.item_id,
+                sub_item_id: this.options.sub_item_id,
             };
-            
             var model = new Comment_model(data, {db_table : this.options.db_table});
             this.addItem(model);
         }

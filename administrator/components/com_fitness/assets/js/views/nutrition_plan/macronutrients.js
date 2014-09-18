@@ -3,8 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/comments/index',
 	'text!templates/nutrition_plan/macronutrients.html'
-], function ( $, _, Backbone, app, template ) {
+], function ( $, _, Backbone, app, Comments_view, template ) {
 
     var view = Backbone.View.extend({
         
@@ -13,7 +14,15 @@ define([
         render: function(){
             var template = _.template(this.template(this.model.toJSON()));
             this.$el.html(template);
+            this.onRender();
             return this;
+        },
+        
+        onRender : function() {
+            var self = this;
+            $(this.el).show('0', function() {
+                self.connectComments();
+            });
         },
 
         events: {
@@ -38,6 +47,20 @@ define([
             data.view = 'NutritionPlan';
             data.method = 'email_pdf_nutrition_plan_macros';
             $.fitness_helper.sendEmail(data);
+        },
+        
+        connectComments :function() {
+            
+            var comment_options = {
+                'item_id' :  this.model.get('id'),
+                'sub_item_id' :  '0',
+                'db_table' : 'fitness_nutrition_plan_macronutrients_comments',
+                'read_only' : true,
+                'anable_comment_email' : true,
+                'comment_method' : 'MacrosComment'
+            }
+            var comments_html = new Comments_view(comment_options).render().el;
+            $(this.el).find("#macronutrients_comments_wrapper").html(comments_html);
         },
         
     });

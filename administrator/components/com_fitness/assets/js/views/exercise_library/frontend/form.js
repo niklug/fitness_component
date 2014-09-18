@@ -3,8 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/comments/index',
 	'text!templates/exercise_library/frontend/form.html'
-], function ( $, _, Backbone, app, template ) {
+], function ( $, _, Backbone, app, Comments_view, template ) {
 
     var view = Backbone.View.extend({
         
@@ -31,19 +32,17 @@ define([
             var status = $.status(app.options.status_options);
         },
         
-        connectComments : function() {
+        connectComments :function() {
             var comment_options = {
-                'item_id' : this.model.get('id'),
-                'fitness_administration_url' : app.options.ajax_call_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : '#__fitness_exercise_library_comments',
+                'item_id' :  this.model.get('id'),
+                'sub_item_id' :  '0',
+                'db_table' : 'fitness_exercise_library_comments',
                 'read_only' : true,
                 'anable_comment_email' : true,
                 'comment_method' : 'ExerciseLibraryComment'
             }
-            var comments = $.comments(comment_options, comment_options.item_id, 0);
 
-            var comments_html = comments.run();
+            var comments_html = new Comments_view(comment_options).render().el;
             $(this.el).find("#comments_wrapper").html(comments_html);
         },
         

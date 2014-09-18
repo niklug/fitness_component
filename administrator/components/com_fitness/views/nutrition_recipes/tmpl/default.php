@@ -20,9 +20,9 @@ $business_profile_id = $helper->getBusinessProfileId($user_id);
 $business_profile_id = $business_profile_id['data'];
 ?>
 
-<div id="search_block"></div>
+<div id="search_block" ></div>
 <div class="clr"></div>
-<div id="main_container"></div>
+<div id="main_container" ></div>
 
 
 <script type="text/javascript">

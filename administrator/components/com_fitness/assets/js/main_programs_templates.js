@@ -6,7 +6,6 @@ require([
     'app',
     'routers/programs_templates/router',
     'jquery.AjaxCall',
-    'jquery.comments',
     'jquery.fitness_helper',
     'jqueryui',
     'backbone.syphon',

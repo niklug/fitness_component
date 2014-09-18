@@ -7,7 +7,6 @@ require([
     'routers/recipe_database/router_frontend',
     'views/recipe_database/frontend/menus/main_menu',
     'jquery.AjaxCall',
-    'jquery.comments',
     'jquery.fitness_helper',
     'jqueryui',
     'backbone.syphon',

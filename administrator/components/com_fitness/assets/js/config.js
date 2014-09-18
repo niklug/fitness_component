@@ -71,7 +71,6 @@ require.config({
         backbone: 'lib/backbone-min',
         'backbone.syphon': 'lib/backbone.syphon.min',
         'jquery.AjaxCall': 'lib/ajax_call_function',
-        'jquery.comments': 'lib/comments_class',
         'jquery.goals_frontend': 'lib/goals_frontend',
         'jquery.fitness_helper': 'lib/fitness_helper',
         text: 'lib/text',

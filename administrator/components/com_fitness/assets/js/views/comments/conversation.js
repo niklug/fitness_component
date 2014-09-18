@@ -313,15 +313,15 @@ define([
             }
         },
         getTrainerClients: function(type) {
-            if (app.collections.trainer_clients) {
-                this.populateClients(app.collections.trainer_clients, type);
+            if (app.collections.trainer_clients1) {
+                this.populateClients(app.collections.trainer_clients1, type);
                 return;
             }
 
             var self = this;
             var trainer_id = app.options.user_id;
-            app.collections.trainer_clients = new Trainer_clients_collection();
-            app.collections.trainer_clients.fetch({
+            app.collections.trainer_clients1 = new Trainer_clients_collection();
+            app.collections.trainer_clients1.fetch({
                 data: {trainer_id: trainer_id},
                 success: function(collection, response) {
                     self.populateClients(collection, type);
@@ -446,11 +446,6 @@ define([
                 return $(this).val();
             }).get().join(",");
 
-            this.model.set({
-                item_id: this.options.comment_options.item_id,
-                sub_item_id: this.options.comment_options.sub_item_id,
-            });
-            
             if(!app.options.is_superuser) {
                 this.model.set({allowed_users: allowed_users});
             }

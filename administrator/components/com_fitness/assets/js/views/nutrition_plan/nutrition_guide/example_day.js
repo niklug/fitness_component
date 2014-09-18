@@ -9,6 +9,7 @@ define([
         'views/nutrition_plan/nutrition_guide/example_day_recipe',
         'views/nutrition_plan/nutrition_guide/add_recipe',
         'views/nutrition_plan/nutrition_guide/daily_targets',
+        'views/comments/index',
 	'text!templates/nutrition_plan/nutrition_guide/example_day.html',
         'jquery.timepicker'
 ], function ( 
@@ -22,6 +23,7 @@ define([
         Example_day_recipe_view,
         Example_day_add_recipe_view,
         Daily_targets_view,
+        Comments_view,
         template
     ) {
 
@@ -209,13 +211,12 @@ define([
                 collection : app.collections.example_day_recipes
             }).render().el);
         },
-        
-        connectComments : function() {
+
+        connectComments :function() {
             var comment_options = {
-                'item_id' : this.options.menu_id,
-                'fitness_administration_url' : app.options.ajax_call_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : '#__fitness_nutrition_plan_example_day_comments',
+                'item_id' :  this.options.menu_id,
+                'sub_item_id' : this.options.example_day_id,
+                'db_table' : 'fitness_nutrition_plan_example_day_comments',
                 'read_only' : true,
                 'anable_comment_email' : false,
                 'comment_method' : ''
@@ -225,9 +226,7 @@ define([
                 comment_options.read_only = false;
             }
             
-            var comments = $.comments(comment_options, comment_options.item_id, this.options.example_day_id);
-
-            var comments_html = comments.run();
+            var comments_html = new Comments_view(comment_options).render().el;
             $(this.el).find("#comments_wrapper").html(comments_html);
         },
             

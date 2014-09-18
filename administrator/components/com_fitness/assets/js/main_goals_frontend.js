@@ -6,7 +6,6 @@ require([
     'app',
     'routers/goals/router_frontend',
     'jquery.AjaxCall',
-    'jquery.comments',
     'jquery.fitness_helper',
     'jquery.flot',
     'jquery.flot.time',

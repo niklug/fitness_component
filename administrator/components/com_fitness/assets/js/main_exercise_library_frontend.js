@@ -7,7 +7,6 @@ require([
     'routers/exercise_library/router_frontend',
     'views/exercise_library/frontend/menus/main_menu',
     'jquery.AjaxCall',
-    'jquery.comments',
     'jquery.fitness_helper',
     'jqueryui',
     'backbone.syphon',

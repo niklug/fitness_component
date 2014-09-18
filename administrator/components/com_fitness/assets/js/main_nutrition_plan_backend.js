@@ -6,7 +6,6 @@ require([
     'app',
     'routers/nutrition_plan/router_backend',
     'jquery.AjaxCall',
-    'jquery.comments',
     'jquery.fitness_helper',
     'jquery.flot',
     'jquery.flot.time',

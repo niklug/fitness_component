@@ -65,18 +65,17 @@ $business_profile_id = $business_profile_id['data'];
         'video_upload_folder' : '<?php echo JPATH_ROOT . DS . 'images' . DS . 'Assessments_Videos' . DS  ?>',
         'video_path' : 'images/Assessments_Videos',
         
+        'current_view' : '<?php echo  JFactory::getApplication()->input->get('view'); ?>',
         'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
         'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
+        'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
         'is_simple_trainer' : '<?php echo FitnessFactory::is_simple_trainer($user_id); ?>',
         'is_trainer_administrator' : '<?php echo FitnessFactory::is_trainer_administrator($user_id); ?>',
-        
         'is_backend' : '<?php echo JFactory::getApplication()->isAdmin(); ?>',
-        
         'business_profile_id' : '<?php echo $business_profile_id; ?>',
+        
         'pr_temp_id' : '<?php echo JRequest::getVar('pr_temp_id') ?>',
         'back_url' : decodeURIComponent('<?php echo JRequest::getVar('back_url') ?>'),
-        
-        'current_view' : '<?php echo  JFactory::getApplication()->input->get('view'); ?>',
         
         'const_trainer_assessment' : <?php echo FitnessHelper::TRAINER_ASSESSMENT; ?>,
         'const_self_assessment' : <?php echo FitnessHelper::SELF_ASSESSMENT; ?>,

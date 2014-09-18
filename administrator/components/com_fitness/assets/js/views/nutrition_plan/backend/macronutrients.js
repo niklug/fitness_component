@@ -4,8 +4,9 @@ define([
 	'backbone',
         'app',
         'views/nutrition_plan/backend/menus/macronutrients_menu',
+        'views/comments/index',
 	'text!templates/nutrition_plan/backend/macronutrients.html'
-], function ( $, _, Backbone, app, Form_menu_view, template ) {
+], function ( $, _, Backbone, app, Form_menu_view, Comments_view, template ) {
 
     var view = Backbone.View.extend({
         
@@ -41,18 +42,15 @@ define([
         },
         
         connectComments :function() {
-             var comment_options = {
+            var comment_options = {
                 'item_id' :  this.model.get('id'),
-                'fitness_administration_url' : app.options.ajax_call_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : '#__fitness_nutrition_plan_macronutrients_comments',
+                'sub_item_id' :  '0',
+                'db_table' : 'fitness_nutrition_plan_macronutrients_comments',
                 'read_only' : false,
                 'anable_comment_email' : true,
                 'comment_method' : 'MacrosComment'
             }
-            var comments = $.comments(comment_options, comment_options.item_id, 1);
-
-            var comments_html = comments.run();
+            var comments_html = new Comments_view(comment_options).render().el;
             $(this.el).find("#macronutrients_comments_wrapper").html(comments_html);
         },
         

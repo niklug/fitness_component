@@ -3,8 +3,9 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'views/comments/index',
 	'text!templates/programs/backend/comments_block.html'
-], function ( $, _, Backbone, app, template ) {
+], function ( $, _, Backbone, app, Comments_view, template ) {
 
     var view = Backbone.View.extend({
         
@@ -20,21 +21,23 @@ define([
             this.connectComments();
             return this;
         },
-        
-        connectComments : function() {
+
+        connectComments :function() {
             var comment_options = {
-                'item_id' : this.model.get('id'),
-                'fitness_administration_url' : app.options.ajax_call_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : '#__fitness_pr_temp_comments',
+                'item_id' :  this.model.get('id'),
+                'sub_item_id' :  '0',
+                'db_table' : 'fitness_pr_temp_comments',
                 'read_only' : this.options.read_only || false,
                 'anable_comment_email' : true,
                 'comment_method' : 'ProgramTemplateComment'
             }
-            var comments = $.comments(comment_options, comment_options.item_id, 0);
-
-            var comments_html = comments.run();
-            this.$el.find("#comments_wrapper").html(comments_html);
+            
+            if(app.options.is_backend) {
+                comment_options.read_only = false;
+            }
+            
+            var comments_html = new Comments_view(comment_options).render().el;
+            $(this.el).find("#comments_wrapper").html(comments_html);
         },
     });
             

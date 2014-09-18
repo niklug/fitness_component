@@ -6,7 +6,6 @@ require([
     'app',
     'routers/diary/router_frontend',
     'jquery.AjaxCall',
-    'jquery.comments',
     'jquery.fitness_helper',
     'jqueryui',
     'backbone.syphon',

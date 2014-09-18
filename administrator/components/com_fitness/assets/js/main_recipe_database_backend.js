@@ -6,7 +6,6 @@ require([
     'app',
     'routers/recipe_database/router_backend',
     'jquery.AjaxCall',
-    'jquery.comments',
     'jquery.fitness_helper',
     'jqueryui',
     'backbone.syphon',

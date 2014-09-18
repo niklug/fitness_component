@@ -6,8 +6,19 @@ define([
         'collections/nutrition_plan/supplements/supplements',
         'models/nutrition_plan/supplements/supplement',
         'views/nutrition_plan/supplements/backend/supplement',
+        'views/comments/index',
 	'text!templates/nutrition_plan/supplements/backend/protocol_item.html'
-], function ( $, _, Backbone, app, Supplements_collection, Supplement_model, Supplement_view, template ) {
+], function (
+            $,
+            _,
+            Backbone, 
+            app,
+            Supplements_collection,
+            Supplement_model,
+            Supplement_view,
+            Comments_view,
+            template
+    ) {
 
      var view = Backbone.View.extend({
 
@@ -57,31 +68,26 @@ define([
 
             return this;
         },
-
-        connectComments : function() {
-            var comment_options = {
-                'item_id' : this.options.nutrition_plan_id,
-                'fitness_administration_url' : app.options.ajax_call_url,
-                'comment_obj' : {'user_name' : app.options.user_name, 'created' : "", 'comment' : ""},
-                'db_table' : '#__fitness_nutrition_plan_supplements_comments',
-                'read_only' : false,
-                'anable_comment_email' : true,
-                'comment_method' : 'SupplementComment'
-            };
-
-            var comments = $.comments(comment_options, comment_options.item_id, this.model.get('id'));
-            
-            var comments_html = comments.run();
-
-            this.$el.find(".comments_wrapper").html(comments_html);
-        },
-
+        
         events: {
             "click .save_protocol" : "onClickSaveProtocol",
             "click .delete_protocol" : "onClickDeleteProtocol",
             "click .add_supplement" : "onClickAddSupplement",
         },
 
+        connectComments :function() {
+            var comment_options = {
+                'item_id' :  this.options.nutrition_plan_id,
+                'sub_item_id' :  this.model.get('id'),
+                'db_table' : 'fitness_nutrition_plan_supplements_comments',
+                'read_only' : false,
+                'anable_comment_email' : true,
+                'comment_method' : 'SupplementComment'
+            }
+             
+            var comments_html = new Comments_view(comment_options).render().el;
+            $(this.el).find(".comments_wrapper").html(comments_html);
+        },
 
         onClickSaveProtocol : function(event) {
             var protocol_name_field = this.$el.find('.protocol_name');
