@@ -332,15 +332,16 @@ define([
             });
         },
         getTrainers: function(type) {
-            if (app.collections.trainers_1) {
-                this.populateTrainers(app.collections.trainers_1, type);
-                return;
-            }
-            
             var data = {};
             
             if(app.options.is_client) {
                 data.client_id = app.options.user_id;
+            }
+            
+            var created_by_client = this.options.comment_options.item_model.get('created_by_client');
+            //console.log(this.options.comment_options);
+            if(created_by_client) {
+                data.client_id = created_by_client;
             }
             
             if(app.options.is_trainer) {

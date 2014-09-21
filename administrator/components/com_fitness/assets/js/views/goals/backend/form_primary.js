@@ -133,6 +133,12 @@ define([
                     user_id : app.options.client_id
             });
             
+            if(this.model.isNew()) {
+                this.model.set({
+                    created_by : app.options.user_id                    
+                });
+            }
+            
             var overlap_start_date = this.onCheckOverlapDate('start_date');
             var overlap_deadline = this.onCheckOverlapDate('deadline');
      

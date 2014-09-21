@@ -14,6 +14,9 @@ define([
          },
         
         validate: function(attrs, options) {
+            if (!attrs.created_by || attrs.created_by == '0') {
+              return 'Error: no created_by';
+            }
             
             if (!attrs.primary_goal_id || attrs.primary_goal_id == '0') {
               return 'primary_goal_id';

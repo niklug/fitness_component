@@ -125,9 +125,14 @@ define([
                     start_date : start_date, 
                     deadline : deadline, 
                     details : details_field.val(),
-                    primary_goal_id : this.options.primary_goal_id
-                    
+                    primary_goal_id : this.options.primary_goal_id                  
             });
+            
+            if(this.model.isNew()) {
+                this.model.set({
+                    created_by : app.options.user_id                    
+                });
+            }
             
             var overlap_start_date = this.onCheckOverlapDate('start_date');
             var overlap_deadline = this.onCheckOverlapDate('deadline');

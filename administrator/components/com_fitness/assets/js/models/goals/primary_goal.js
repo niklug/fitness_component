@@ -14,6 +14,10 @@ define([
          },
         
         validate: function(attrs, options) {
+            if (!attrs.created_by || attrs.created_by == '0') {
+              return 'Error: no created_by';
+            }
+            
             if (!attrs.start_date) {
               return 'start_date';
             }

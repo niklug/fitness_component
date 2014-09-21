@@ -100,7 +100,7 @@ class FitnessModelrecipe_database extends JModelList {
         $SUPERUSER_GROUP_ID = FitnessHelper::SUPERUSER_GROUP_ID;
         
         $query = "SELECT a.*,";
-        
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client,";
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
         $query .= " LEFT JOIN #__user_usergroup_map AS um ON um.user_id=a.created_by";

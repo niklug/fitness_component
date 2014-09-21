@@ -138,6 +138,8 @@ class FitnessModelGoals extends JModelList {
         
         $query = "SELECT pg.*,"; 
         
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=pg.created_by LIMIT 1) created_by_client,";
+        
         //get total number
         if(!$id) {
             $query .= " (SELECT COUNT(*) FROM $table ";
@@ -148,7 +150,7 @@ class FitnessModelGoals extends JModelList {
                 $query .= " AND user_id='$user_id'";
             }
 
-            if($state != '*') {
+            if(!empty($state) && $state != '*') {
                 $query .= " AND state='$state'";
             }
 
@@ -202,7 +204,7 @@ class FitnessModelGoals extends JModelList {
             $query .= " AND pg.user_id='$user_id'";
         }
         
-        if($state != '*') {
+        if(!empty($state) && $state != '*') {
             $query .= " AND pg.state='$state'";
         }
 
@@ -330,6 +332,8 @@ class FitnessModelGoals extends JModelList {
         
         $query = "SELECT mg.*,";
         
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=mg.created_by LIMIT 1) created_by_client,";
+        
         $query .= " (SELECT name FROM #__users WHERE id=mg.user_id) client_name,";
         $query .= " (SELECT name FROM #__fitness_mini_goal_categories WHERE id=mg.mini_goal_category_id) mini_goal_name,";
         $query .= " (SELECT color FROM #__fitness_training_period WHERE id=mg.training_period_id) training_period_color,";
@@ -346,8 +350,11 @@ class FitnessModelGoals extends JModelList {
         if($user_id) {
             $query .= " AND mg.user_id='$user_id'";
         }
+  
         
-        $query .= " AND mg.state='$state'";
+        if(!empty($state) && $state != '*') {
+            $query .= " AND mg.state='$state'";
+        }
         
         if($list_type == 'previous') {
             $query .= " AND ( mg.deadline < " . $db->quote($current_date);

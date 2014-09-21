@@ -530,6 +530,8 @@ class FitnessModelNutrition_diaries extends JModelList {
         . " (SELECT name FROM #__fitness_nutrition_focus WHERE id=np.nutrition_focus) nutrition_focus_name, "
         . " (SELECT name FROM #__fitness_goal_categories WHERE id=pg.goal_category_id) primary_goal_name, "
         . " (SELECT name FROM #__fitness_mini_goal_categories WHERE id=mg.mini_goal_category_id) mini_goal_name, ";
+        
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client,";
 
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
@@ -1086,7 +1088,7 @@ class FitnessModelNutrition_diaries extends JModelList {
                 
                 $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name,";
                 
-                $query .= " (SELECT id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client";
+                $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client";
                 
                 $query .= "  FROM $table AS a";
                 

@@ -55,6 +55,7 @@ define([
             data.goal_category_id = this.active_plan_data.mini_goal;
             data.nutrition_focus = this.active_plan_data.nutrition_focus;
             data.created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"); 
+            data.created_by = app.options.user_id;
             data.state = '1';
             data.status =  app.options.statuses.INPROGRESS_DIARY_STATUS.id;
             

@@ -982,6 +982,8 @@ class FitnessHelper extends FitnessFactory
         $query = "SELECT a.*,"
                 . " (SELECT name FROM #__users WHERE id=a.created_by) author,"
                 . " (SELECT name FROM #__users WHERE id=a.assessed_by) trainer,";
+        
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client,";
                 
         $query .= " (SELECT ROUND(SUM(protein),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS protein,
                    (SELECT ROUND(SUM(fats),2) FROM #__fitness_nutrition_recipes_meals WHERE recipe_id=a.id) AS fats,

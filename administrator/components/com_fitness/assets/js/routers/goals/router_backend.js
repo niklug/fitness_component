@@ -177,7 +177,7 @@ define([
             }
 
             var model = app.collections.primary_goals.get(id);
-
+            
             if(model) {
                 this.load_form_primary(model);
                 return;

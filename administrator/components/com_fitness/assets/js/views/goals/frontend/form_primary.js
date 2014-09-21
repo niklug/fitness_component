@@ -95,6 +95,12 @@ define([
                     details : details_field.val()
             });
             
+            if(this.model.isNew()) {
+                this.model.set({
+                    created_by : app.options.user_id                    
+                });
+            }
+            
             var overlap_start_date = this.onCheckOverlapDate('start_date');
             var overlap_deadline = this.onCheckOverlapDate('deadline');
      
