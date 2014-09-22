@@ -388,7 +388,14 @@ define([
                 this.addClientItem(model, type);
             }, this);
         },
+        
         addClientItem: function(model, type) {
+            var created_by_client = this.options.comment_options.item_model.get('created_by_client');
+
+            if(created_by_client && created_by_client != model.get('client_id')) {
+                return;
+            }
+            
             var id = model.get('client_id');
 
             var checked = type;
