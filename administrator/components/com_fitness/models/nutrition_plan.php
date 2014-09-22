@@ -910,9 +910,12 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     
                     $query = "SELECT a.*, "
                             . " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name,"
-                            . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name"
-                            . " FROM $table AS a WHERE 1";
+                            . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name,";
                             
+                            
+                    $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client";
+                    
+                    $query .=  " FROM $table AS a WHERE 1";
                     
                     if($id) {
                         $query .= " AND id='$id'";

@@ -38,13 +38,15 @@ define([
         },
         
         loadStep1 : function() {
-            app.views.targets_step1 = new Step1_view({model : this.model});
+            //console.log(this.options.item_model);
+            app.views.targets_step1 = new Step1_view({model : this.model, item_model : this.options.item_model});
             $(this.el).find("#step1_wrapper").html(app.views.targets_step1.render().el);
         },
         
         connectComments :function() {
             var comment_options = {
                 'item_id' :  this.options.item_model.get('id'),
+                'item_model' :  this.model,
                 'sub_item_id' :  '0',
                 'db_table' : 'fitness_nutrition_plan_targets_comments',
                 'read_only' : false,

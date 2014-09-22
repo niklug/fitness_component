@@ -257,6 +257,7 @@ class FitnessModelExercise_library extends JModelList {
         
         $query .= " SELECT a.*, ";
         
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client,";
         //get total number
         if(!$id) {
             $query .= " (SELECT COUNT(*) FROM $table AS a ";

@@ -335,7 +335,9 @@ define([
         },
         
         addPlan : function(model) {
+            
             var data = model.toJSON();
+            //console.log(data);
             var url = app.options.ajax_call_url;
             var view = 'goals';
             var task = 'addPlan';

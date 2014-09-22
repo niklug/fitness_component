@@ -123,7 +123,7 @@ define([
                 wait : true,
                 data : {user_id :  app.options.client_id},
                 success : function (collection, response) {
-                    //console.log(collection);
+                    //console.log(collection.toJSON());
                 },
                 error : function (collection, response) {
                     alert(response.responseText);

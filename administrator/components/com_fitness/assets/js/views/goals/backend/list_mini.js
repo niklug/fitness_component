@@ -17,6 +17,7 @@ define([
     var view = Backbone.View.extend({
         
         initialize : function() {
+            this.collection.bind("add", this.addItem, this);
         },
         
         template:_.template(template),
@@ -61,6 +62,7 @@ define([
         
         
         addItem : function(model) {
+            //console.log(model.toJSON());
             var readonly_allowed = app.controller.readonly_allowed(model);
             model.set({readonly_allowed : readonly_allowed});
             var primary_goal_id = this.model.get('id');

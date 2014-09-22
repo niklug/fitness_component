@@ -64,7 +64,7 @@ require_once  JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_fitness' . DS 
             
             'item_id' : '<?php echo  $nutrition_plan_id?>',
             
-            
+            'is_client' : '<?php echo FitnessFactory::is_client($user_id); ?>',
             'is_superuser' : '<?php echo FitnessFactory::is_superuser($user_id); ?>',
             'is_trainer' : '<?php echo FitnessFactory::is_trainer($user_id); ?>',
             'is_simple_trainer' : '<?php echo FitnessFactory::is_simple_trainer($user_id); ?>',

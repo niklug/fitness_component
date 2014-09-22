@@ -882,6 +882,7 @@ class FitnessModelgoals extends JModelList {
         $obj->primary_goal_id = $goal->primary_goal_id;
         $obj->start_date = $goal->start_date;
         $obj->deadline = $goal->deadline;
+        $obj->created_by = $goal->created_by;
 
         try {
             $plan_data = $helper->goalToPlanDecorator($obj);

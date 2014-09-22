@@ -3,6 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'collections/goals/mini_goals',
         'views/goals/backend/list_item',
 	'text!templates/goals/backend/list.html'
 ], function (
@@ -10,6 +11,7 @@ define([
         _, 
         Backbone, 
         app,
+        Mini_goals_collection,
         List_item_view,
         template
     ) {
@@ -19,6 +21,20 @@ define([
         initialize : function() {
             this.collection.bind("add", this.addItem, this);
             this.collection.bind("reset", this.clearItems, this);
+            
+            app.collections.mini_goals = new Mini_goals_collection();
+            var self = this;
+            app.collections.mini_goals.fetch({
+                wait : true,
+                data : {user_id : app.options.client_id},
+                success : function (collection, response) {
+                    //console.log(collection.toJSON());
+                },
+                error : function (collection, response) {
+                    alert(response.responseText);
+                }
+            }); 
+
         },
         
         template:_.template(template),

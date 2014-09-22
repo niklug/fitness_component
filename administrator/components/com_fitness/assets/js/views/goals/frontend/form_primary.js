@@ -97,7 +97,7 @@ define([
             
             if(this.model.isNew()) {
                 this.model.set({
-                    created_by : app.options.user_id                    
+                    created_by : app.options.client_id                  
                 });
             }
             

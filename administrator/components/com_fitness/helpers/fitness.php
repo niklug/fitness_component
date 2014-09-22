@@ -1589,6 +1589,7 @@ class FitnessHelper extends FitnessFactory
         $plan->mini_goal = $goal->id;
         $plan->active_start = $goal->start_date;
         $plan->active_finish = $goal->deadline;
+        $plan->created_by = $goal->created_by;
         $plan->created = $this->getTimeCreated();
         $plan->state = 1;
         

@@ -189,6 +189,7 @@ define([
                 // connect comments
                 var comment_options = {
                     'item_id' :  id,
+                    'item_model' :  app.models.target,
                     'sub_item_id' :  '0',
                     'db_table' : 'fitness_nutrition_plan_targets_comments',
                     'read_only' : true,
