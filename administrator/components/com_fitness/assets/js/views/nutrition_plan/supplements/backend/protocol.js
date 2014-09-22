@@ -78,6 +78,7 @@ define([
         connectComments :function() {
             var comment_options = {
                 'item_id' :  this.options.nutrition_plan_id,
+                'item_model' : this.model,
                 'sub_item_id' :  this.model.get('id'),
                 'db_table' : 'fitness_nutrition_plan_supplements_comments',
                 'read_only' : false,
@@ -104,6 +105,7 @@ define([
 
             var self = this;
             if (this.model.isNew()) {
+                this.model.set({created_by : app.options.user_id});
                 this.collection.create(this.model, {
                     wait: true,
                     success: function (model, response) {

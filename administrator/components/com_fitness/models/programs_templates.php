@@ -163,6 +163,8 @@ class FitnessModelprograms_templates extends JModelList {
 
         $query = " SELECT a.*,";
         
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client,";
+        
         $query .= " t.name AS appointment_name,";
 
         $query .= " st.name AS session_type_name,";

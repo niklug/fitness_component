@@ -54,6 +54,7 @@ define([
         connectComments :function() {
             var comment_options = {
                 'item_id' :  this.model.get('nutrition_plan_id'),
+                'item_model' : this.model,
                 'sub_item_id' :  this.model.get('id'),
                 'db_table' : 'fitness_nutrition_plan_supplements_comments',
                 'read_only' : true,

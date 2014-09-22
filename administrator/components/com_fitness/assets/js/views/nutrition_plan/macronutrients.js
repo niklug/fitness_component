@@ -53,6 +53,7 @@ define([
             
             var comment_options = {
                 'item_id' :  this.model.get('id'),
+                'item_model' : this.model,
                 'sub_item_id' :  '0',
                 'db_table' : 'fitness_nutrition_plan_macronutrients_comments',
                 'read_only' : true,

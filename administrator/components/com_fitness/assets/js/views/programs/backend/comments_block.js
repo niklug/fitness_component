@@ -23,8 +23,10 @@ define([
         },
         
         connectComments :function() {
+            this.model.set({created_by : this.model.get('owner')});
             var comment_options = {
                 'item_id' :  this.model.get('id'),
+                'item_model' : this.model,
                 'sub_item_id' :  '0',
                 'db_table' : 'fitness_program_comments',
                 'read_only' : this.options.read_only || false,

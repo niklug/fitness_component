@@ -465,6 +465,8 @@ class FitnessModelnutrition_plans extends JModelList {
         
         $query = "SELECT a.*,";
         
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client,";
+        
         $query .= " pg.start_date AS start_date_primary,";
         
         $query .= " pg.deadline AS deadline_primary,";

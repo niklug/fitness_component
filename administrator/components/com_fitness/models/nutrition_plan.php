@@ -598,13 +598,19 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $id = JRequest::getVar('id');
                     $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
                     
-                    $query = "SELECT * FROM $table WHERE 1";
+                    $query = "SELECT a.*,";
+                    
+                    $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client";
+                    
+                    $query .= " FROM $table AS a";
+                    
+                    $query .= " WHERE 1";
                     
                     if($id) {
-                        $query .= " AND id='$id'";
+                        $query .= " AND a.id='$id'";
                     }
                     if($nutrition_plan_id) {
-                        $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+                        $query .= " AND a.nutrition_plan_id='$nutrition_plan_id'";
                     }
 
                     $items = FitnessHelper::customQuery($query, 1);
@@ -656,16 +662,22 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $nutrition_plan_id = JRequest::getVar('nutrition_plan_id');
                     $protocol_id = JRequest::getVar('protocol_id');
                     
-                    $query = "SELECT * FROM $table WHERE 1";
+                    $query = "SELECT a.*,";
+                    
+                    $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client,";
+                    
+                    $query = "SELECT * FROM $table AS a";
+                    
+                    $query .= " WHERE 1";
                     
                     if($id) {
                         $query .= " AND id='$id'";
                     }
                     if($nutrition_plan_id) {
-                        $query .= " AND nutrition_plan_id='$nutrition_plan_id'";
+                        $query .= " AND a.nutrition_plan_id='$nutrition_plan_id'";
                     }
                     if($protocol_id) {
-                        $query .= " AND protocol_id='$protocol_id'";
+                        $query .= " AND a.protocol_id='$protocol_id'";
                     }
                     
                     $items = FitnessHelper::customQuery($query, 1);

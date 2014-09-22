@@ -176,6 +176,8 @@ class FitnessModelprograms extends JModelList {
 
         $query = " SELECT a.*,";
         
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.owner LIMIT 1) created_by_client,";
+        
         $query .= " t.name AS appointment_name,";
         
         $query .= " l.name AS location_name,";
