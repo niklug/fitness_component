@@ -67,8 +67,10 @@ define([
             model.set({readonly_allowed : readonly_allowed});
             var primary_goal_id = this.model.get('id');
             if(primary_goal_id == model.get('primary_goal_id')) {
-                $(this.el).find(".minigoals_container").append(new List_item_mini_view({model : model, primary_goal_model : this.model}).render().el); 
+                $(this.el).find(".minigoals_container").append(new List_item_mini_view({model : model, primary_goal_model : this.model}).render().el);
+                $(this.el).find(".minigoals_container").append('<hr>');
             }
+            
         },
         
         clearItems : function() {

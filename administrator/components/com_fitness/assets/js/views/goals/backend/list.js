@@ -101,7 +101,8 @@ define([
         addItem : function(model) {
             var readonly_allowed = app.controller.readonly_allowed(model);
             model.set({readonly_allowed : readonly_allowed});
-            this.container_el.append(new List_item_view({model : model}).render().el); 
+            this.container_el.append(new List_item_view({model : model}).render().el);
+            this.container_el.append('<hr>');
             this.$el.find( "#items_container tr:odd" ).addClass('row1');
             this.$el.find( "#items_container tr:even" ).addClass('row0');
         },
@@ -137,8 +138,9 @@ define([
         
         onClickTrash : function(event) {
             var id = $(event.target).attr('data-id');
+            
             var model = this.collection.get(id);
-            var self  = this;
+            
             model.save({state : '-2'}, {
                 success: function (model, response) {
                     self.render();

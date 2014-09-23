@@ -1333,3 +1333,7 @@ width: 20px;
 .orange_border {
     border:2px solid #BC4A26;padding:2px;
 }
+
+.width_100 {
+    width:100%;
+}

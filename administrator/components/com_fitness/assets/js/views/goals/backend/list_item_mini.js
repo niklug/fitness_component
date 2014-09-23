@@ -11,6 +11,10 @@ define([
         
         template : _.template(template),
         
+        tagName : "table",
+        
+        className : "width_100",
+        
         render : function(){
             var data = {item : this.model.toJSON()};
             data.item.primary_goal = this.options.primary_goal_model.toJSON();
