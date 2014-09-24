@@ -396,6 +396,22 @@ define([
                 return;
             }
             
+            //for appointments 
+            var group_clients_data = this.options.comment_options.item_model.get('group_clients_data');
+            
+            if(group_clients_data) {
+                var group_clients = [];
+                _.each(group_clients_data, function(o) {
+                     group_clients.push(o.client_id);
+                });
+                
+       
+                if(group_clients.indexOf(model.get('client_id')) == '-1') {
+                    return;
+                }
+            }
+            //
+            
             var id = model.get('client_id');
 
             var checked = type;
