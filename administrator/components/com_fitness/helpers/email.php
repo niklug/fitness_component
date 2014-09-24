@@ -165,6 +165,29 @@ class FitnessEmail extends FitnessHelper
         return $emails;
     }
     
+    public function allowedUsersFilter($ids) {
+        $allowed_users = $this->data->allowed_users;
+        
+        $allowed_users = split(",", $allowed_users);
+        
+        $parent_id = $this->data->parent_id;
+        
+        if($parent_id) {
+            $table = '#__' . $this->data->table;
+        
+            $query = "SELECT created_by FROM $table WHERE id = '$parent_id'";
+
+            $parent_created_by = $this->customQuery($query, 0);
+            
+            if($parent_created_by) {
+                $allowed_users[] = $parent_created_by;
+            }
+        }
+        
+        $ids =  array_intersect($ids, $allowed_users);
+        return $ids;
+    }
+    
     public function processing($data) {
 
         $this->setParams($data);
@@ -841,7 +864,7 @@ class CommentGoalEmail extends FitnessEmail {
         $layout = 'email_goal_comment';
         $goal_type = '1';
         $goal_table = '#__fitness_goals';
-        if($this->data->table == '#__fitness_mini_goal_comments'){
+        if($this->data->table == 'fitness_mini_goal_comments'){
             $goal_type = '2';
             $layout = 'email_goal_comment_mini';
             $goal_table = '#__fitness_mini_goals';
@@ -878,32 +901,21 @@ class CommentGoalEmail extends FitnessEmail {
    
     protected function get_recipients_ids() {
         $ids = array();
+        
         //client makes comment
         if($this->send_to == 'all_trainers') {
             
             $trainers_data = $this->getClientTrainers($this->item_user_id,  'all');
-            
             $ids = array_merge($ids, $trainers_data['data']);
         }
         // trainer  makes comment
         if($this->send_to == 'to_client') {
            //add client
             $ids[] = $this->item_user_id;
-            /*
-            $all_trainers = $this->getClientTrainers($this->item_user_id,  'all');
-            //add client trainers, except trainer who created a comment
-            $other_trainers = array_diff($all_trainers['data'], array($this->data->created_by));
-            
-            $ids = array_merge($ids, $other_trainers);
-             * 
-             */
+
         }
         
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
 
         $this->recipients_ids = $ids;
     }
@@ -1007,11 +1019,7 @@ class CommentRecipeEmail extends FitnessEmail {
                 break;
         }
         
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
 
         $this->recipients_ids = $ids;
     }
@@ -1104,12 +1112,8 @@ class CommentDiaryEmail extends FitnessEmail {
             $ids[] = $this->item_user_id;
         }
         
-        $allowed_users = $this->data->allowed_users;
+        $ids = $this->allowedUsersFilter($ids);
         
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
-
         $this->recipients_ids = $ids;
     }
     
@@ -1214,11 +1218,7 @@ class CommentExerciseLibraryEmail extends FitnessEmail {
                 break;
         }
         
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
 
         $this->recipients_ids = $ids;
     }
@@ -1541,11 +1541,7 @@ class CommentMenuPlanEmail extends FitnessEmail {
             $ids = array_merge($ids, $trainers_data['data']);
         }
         
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
         
         $this->recipients_ids = $ids;
     }
@@ -1617,11 +1613,7 @@ class CommentTargetsCommentEmail extends FitnessEmail {
             $ids[] = $client_id;
         }
         
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
         
         $this->recipients_ids = $ids;
     }
@@ -1691,11 +1683,7 @@ class CommentMacrosCommentEmail extends FitnessEmail {
             $ids[] = $client_id;
         }
         
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
         
         $this->recipients_ids = $ids;
     }
@@ -1767,11 +1755,7 @@ class CommentSupplementCommentEmail extends FitnessEmail {
             $ids[] = $client_id;
         }
         
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
         
         $this->recipients_ids = $ids;
     }
@@ -1857,11 +1841,7 @@ class CommentProgramEmail extends FitnessEmail {
         // send except cteator
         $ids = array_diff($ids, array($this->data->created_by));
         
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
         
         $this->recipients_ids = $ids;
     }
@@ -1937,11 +1917,7 @@ class CommentProgramTemplateEmail extends FitnessEmail {
         
         $ids = FitnessHelper::customQuery($query, 3);
      
-        $allowed_users = $this->data->allowed_users;
-        
-        $allowed_users = split(",", $allowed_users);
-        
-        $ids =  array_intersect($ids, $allowed_users);
+        $ids = $this->allowedUsersFilter($ids);
         
         $this->recipients_ids = $ids;
     }

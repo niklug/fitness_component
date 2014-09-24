@@ -29,7 +29,7 @@ define([
             data.app = app;
             $(this.el).html(this.template(data));
             
-            this.onRender();
+            this.loadItems();
           
             return this;
         },
@@ -45,13 +45,7 @@ define([
             
             "click .publish_mini" : "onClickPublish",
         },
-        
-        onRender : function() {
-            var self = this;
-            $(this.el).show('0', function() {
-                self.loadItems();
-            });
-        },
+
         
         loadItems : function() {
               var self = this;

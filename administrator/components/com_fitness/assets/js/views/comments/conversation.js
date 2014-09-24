@@ -598,6 +598,7 @@ define([
                 comment : '',
                 item_id: this.options.comment_options.item_id,
                 sub_item_id: this.options.comment_options.sub_item_id,
+                allowed_users : this.model.get('allowed_users')
             };
             
             var model = new Comment_model(data, {db_table : this.options.comment_options.db_table});

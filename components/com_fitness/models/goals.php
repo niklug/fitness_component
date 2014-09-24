@@ -138,7 +138,7 @@ class FitnessModelGoals extends JModelList {
         
         $query = "SELECT pg.*,"; 
         
-        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=pg.created_by LIMIT 1) created_by_client,";
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=pg.user_id LIMIT 1) created_by_client,";
         
         //get total number
         if(!$id) {
@@ -332,7 +332,7 @@ class FitnessModelGoals extends JModelList {
         
         $query = "SELECT mg.*,";
         
-        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=mg.created_by LIMIT 1) created_by_client,";
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=mg.user_id LIMIT 1) created_by_client,";
         
         $query .= " (SELECT name FROM #__users WHERE id=mg.user_id) client_name,";
         $query .= " (SELECT name FROM #__fitness_mini_goal_categories WHERE id=mg.mini_goal_category_id) mini_goal_name,";
