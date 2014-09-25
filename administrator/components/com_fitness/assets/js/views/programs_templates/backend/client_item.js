@@ -57,6 +57,8 @@ define([
         onClientSelect : function(event) {
             var client_id = $(event.target).val();
             
+            var group_clients_data = app.models.item.get('group_clients_data');
+            
             if(!parseInt(client_id)) return;
             
             this.model.set({client_id : client_id});
@@ -64,6 +66,9 @@ define([
             var self = this;
             this.model.save(null, {
                 success: function (model, response) {
+                    group_clients_data.push(model.toJSON());
+                    
+                    app.models.item.set({group_clients_data : group_clients_data});
                     self.render().el;
                     if(app.collections.clients_rest.length - 1) {
                         $("#add_client").show();
@@ -76,9 +81,15 @@ define([
         },
 
         delete : function(event) {
+            var group_clients_data = app.models.item.get('group_clients_data');
             var self = this;
             this.model.destroy({
                 success: function (model) {
+                    var id = model.get('id');
+                    
+                    group_clients_data = _.without(group_clients_data, _.findWhere(group_clients_data, {id : id}));
+                    
+                    app.models.item.set({group_clients_data : group_clients_data});
                     self.close();
                     $("#add_client").show();
                 },

@@ -260,7 +260,6 @@ define([
         },
         
         goStep2 : function() {
-            var created_by = this.options.item_model.get('created_by');
             this.model.set({
                 gender : this.gender,
                 formula : this.formula,
@@ -272,8 +271,7 @@ define([
                 exercise_level_water : this.exercise_level_water,
                 BMR : this.BMR.toFixed(0),
                 TDEE : this.TDEE.toFixed(0),
-                climate : this.climate,
-                created_by : created_by
+                climate : this.climate
             });
             //console.log(this.model.toJSON());
             var self = this;

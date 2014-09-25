@@ -179,7 +179,9 @@ class FitnessEmail extends FitnessHelper
 
             $parent_created_by = $this->customQuery($query, 0);
             
-            if($parent_created_by) {
+            if($parent_created_by != $this->data->created_by)
+            
+            if($parent_created_by && ($parent_created_by != $this->data->created_by)) {
                 $allowed_users[] = $parent_created_by;
             }
         }
@@ -1436,7 +1438,7 @@ class CommentMenuPlanEmail extends FitnessEmail {
         
         $layout = 'email_menu_plan_comment';
 
-        $this->item = $this->getExampleDayMeal($this->data->sub_item_id);
+        $this->item = $this->getExampleDayMenu($this->data->item_id);
         
         $this->item_created_by = $this->item->created_by;
         
@@ -1444,7 +1446,6 @@ class CommentMenuPlanEmail extends FitnessEmail {
         
         $status = $this->item->status;
         
-
         if($status == self::INPROGRESS_MENU_PLAN_STATUS) {
             if(self::is_client($this->comment_created_by)) {
                 $send_to = 'all_trainers';

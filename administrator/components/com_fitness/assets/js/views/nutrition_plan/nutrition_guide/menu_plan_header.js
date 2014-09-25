@@ -90,9 +90,10 @@ define([
                 app.models.target = new Target_model({nutrition_plan_id : this.options.nutrition_plan_id});
                 var self = this;
                 app.models.target.fetch({
+                    wait : true,
                     data : {nutrition_plan_id : this.options.nutrition_plan_id},
                     success : function (model, response) {
-                        //console.log(model);
+                        //console.log(model.toJSON());
                         self.createItem(model);
                     },
                     error : function (collection, response) {
@@ -127,6 +128,7 @@ define([
             this.collection.create(this.model, {
                 wait: true,
                 success: function (model, response) {
+                    //console.log(model.toJSON());
                     var id = model.get('id');
                     app.controller.navigate("!/menu_plan/" + id + "/" + self.options.nutrition_plan_id, true);
                     if(app.options.is_trainer) {

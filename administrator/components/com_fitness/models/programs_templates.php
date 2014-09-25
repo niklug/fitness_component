@@ -351,9 +351,49 @@ class FitnessModelprograms_templates extends JModelList {
 
 
         $items = FitnessHelper::customQuery($query, $query_type);
+        
+        if(!$id) {
+            $i = 0;
+            foreach ($items as $item) {
+                $group_clients_data = $this->getGroupClientsData($item->id);
+                $items[$i]->group_clients_data = $group_clients_data;
+                $i++;
+            }
+        } else {
+            $group_clients_data = $this->getGroupClientsData($items->id);
+            $items->group_clients_data = $group_clients_data;
+            
+            $secondary_trainers = $helper->get_client_trainers_names($user_id, 'secondary');
+            $items->secondary_trainers = $secondary_trainers;
+            $items->client_name = JFactory::getUser($user_id)->name;
+        }
 
         return $items;
 
+    }
+    
+    public function getGroupClientsData($item_id) {
+
+        $query = "SELECT * FROM #__fitness_pr_temp_clients WHERE item_id='$item_id'";
+        
+        $clients = FitnessHelper::customQuery($query, 1);
+
+        $data = array();
+        $i = 0;
+        foreach ($clients as $client) {
+            $user = &JFactory::getUser($client->client_id);
+             
+            $data[$i]->id = $client->id;
+            
+            $data[$i]->client_id = $client->client_id;
+            
+            $data[$i]->client_name = $user->name;
+                    
+            $i++;
+            
+        }
+       
+        return $data;
     }
     
 

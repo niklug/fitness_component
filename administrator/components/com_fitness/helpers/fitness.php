@@ -1505,9 +1505,8 @@ class FitnessHelper extends FitnessFactory
         return $data;
     }
     
-    public function getExampleDayMeal($id) {
-        $query = "SELECT a.*, m.* FROM #__fitness_nutrition_plan_example_day_meals AS a"
-                . " LEFT JOIN #__fitness_nutrition_plan_menus AS m ON m.id=a.menu_id"
+    public function getExampleDayMenu($id) {
+        $query = "SELECT a.* FROM #__fitness_nutrition_plan_menus AS a"
                 . " WHERE a.id='$id'";
         $data = self::customQuery($query, 2);
         return $data;

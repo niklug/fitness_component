@@ -214,13 +214,13 @@ define([
 
         connectComments :function() {
             var comment_options = {
-                'item_id' :  this.options.menu_id,
+                'item_id' :  this.model.get('id'),
                 'item_model' :  this.model,
                 'sub_item_id' : this.options.example_day_id,
                 'db_table' : 'fitness_nutrition_plan_example_day_comments',
                 'read_only' : true,
-                'anable_comment_email' : false,
-                'comment_method' : ''
+                'anable_comment_email' : true,
+                'comment_method' : 'MenuPlanComment'
             }
             
             if(app.options.is_backend) {

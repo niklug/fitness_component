@@ -498,6 +498,7 @@ define([
                     app.models.target.fetch({
                         data : {nutrition_plan_id : id},
                         success : function (model, response) {
+                            //console.log(model.toJSON());
                             self.loadTragers();
                         },
                         error : function (collection, response) {

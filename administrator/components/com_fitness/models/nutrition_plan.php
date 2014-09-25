@@ -620,6 +620,9 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'POST': // Create
+                    $query = "SELECT client_id FROM #__fitness_nutrition_plan WHERE id='$model->nutrition_plan_id'";
+                    $client_id = $helper->customQuery($query, 0);
+                    $model->created_by_client = $client_id;
                     $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'DELETE': // Delete Item
@@ -925,7 +928,7 @@ class FitnessModelnutrition_plan extends JModelAdmin
                             . " (SELECT name FROM #__users WHERE id=a.assessed_by) assessed_by_name,";
                             
                             
-                    $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client";
+                    $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.client_id LIMIT 1) created_by_client";
                     
                     $query .=  " FROM $table AS a WHERE 1";
                     
@@ -951,6 +954,11 @@ class FitnessModelnutrition_plan extends JModelAdmin
                     $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'POST': // Create
+                    $query = "SELECT client_id FROM #__fitness_nutrition_plan WHERE id='$model->nutrition_plan_id'";
+                    $client_id = $helper->customQuery($query, 0);
+                    $model->client_id = $client_id;
+                    $model->created_by_client = $client_id;
+                    
                     $id = $helper->insertUpdateObj($model, $table);
                     break;
                 case 'DELETE': // Delete Item

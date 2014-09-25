@@ -465,7 +465,7 @@ class FitnessModelnutrition_plans extends JModelList {
         
         $query = "SELECT a.*,";
         
-        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client,";
+        $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.client_id LIMIT 1) created_by_client,";
         
         $query .= " pg.start_date AS start_date_primary,";
         
@@ -713,9 +713,8 @@ class FitnessModelnutrition_plans extends JModelList {
         switch ($method) {
             case 'GET': // Get Item(s)
                 
-                $query = "SELECT a.*, ";
+                $query = "SELECT a.* ";
                 
-                $query .= " (SELECT user_id  FROM #__fitness_clients WHERE user_id=a.created_by LIMIT 1) created_by_client";
                 
                 $query .= " FROM $table AS a";
                 

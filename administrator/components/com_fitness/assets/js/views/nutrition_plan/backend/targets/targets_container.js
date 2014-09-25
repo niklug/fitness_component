@@ -44,6 +44,7 @@ define([
         },
         
         connectComments :function() {
+            this.model.set({created_by_client : this.options.item_model.get('client_id')});
             var comment_options = {
                 'item_id' :  this.options.item_model.get('id'),
                 'item_model' :  this.model,

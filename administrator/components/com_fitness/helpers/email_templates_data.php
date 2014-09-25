@@ -867,9 +867,9 @@ class MenuPlanTemplateData extends EmailTemplateData  {
         
         //comments
         if($this->comment_id) {
-            $this->comment = $this->getCommentData($this->comment_id, '#__fitness_nutrition_plan_example_day_meal_comments');
+            $this->comment = $this->getCommentData($this->comment_id, '#__fitness_nutrition_plan_example_day_comments');
             
-            $this->item = $this->getExampleDayMeal($this->comment->sub_item_id);
+            $this->item = $this->getExampleDayMenu($this->comment->item_id);
         } else {
             $this->item = $this->getMenuPlanData($this->id);
         }

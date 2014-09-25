@@ -391,6 +391,8 @@ define([
         
         addClientItem: function(model, type) {
             var created_by_client = this.options.comment_options.item_model.get('created_by_client');
+            
+            console.log(this.options.comment_options.item_model);
 
             if(created_by_client && created_by_client != model.get('client_id')) {
                 return;
@@ -399,7 +401,9 @@ define([
             //for appointments 
             var group_clients_data = this.options.comment_options.item_model.get('group_clients_data');
             
-            if(group_clients_data) {
+            var item_data = this.options.comment_options.item_model.toJSON();
+            
+            if(item_data.hasOwnProperty("group_clients_data")) {
                 var group_clients = [];
                 _.each(group_clients_data, function(o) {
                      group_clients.push(o.client_id);

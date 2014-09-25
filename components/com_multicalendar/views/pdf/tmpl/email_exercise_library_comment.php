@@ -25,8 +25,8 @@
                 color:#FFA600 !important;
             }
             .readMore a:hover {
-                background-color:#5D3B01 !important;
-                color: #FFA600 !important;
+            background-color:#5D3B01 !important;
+            color: #FFF !important;
             }
             body {
                 margin:0;
