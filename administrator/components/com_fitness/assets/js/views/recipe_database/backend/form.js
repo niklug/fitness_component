@@ -85,8 +85,8 @@ define([
                 'sub_item_id' :  '0',
                 'db_table' : 'fitness_nutrition_recipes_comments',
                 'read_only' : !this.edit_allowed,
-                'anable_comment_email' : false,
-                'comment_method' : ''
+                'anable_comment_email' : true,
+                'comment_method' : 'RecipeComment'
             }
             
             if(app.options.is_backend) {

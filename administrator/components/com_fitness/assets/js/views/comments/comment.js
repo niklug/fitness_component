@@ -3,6 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
+        'models/notifications/notification',
 	'text!templates/comments/comment.html',
         'jquery.cleditor'
         
@@ -11,6 +12,7 @@ define([
         _,
         Backbone,
         app,
+        Notification_model,
         template 
     ) {
 
@@ -147,6 +149,8 @@ define([
                     if(is_new && self.options.comment_options.anable_comment_email !== 'undefined' && self.options.comment_options.anable_comment_email == true) {
                         self.commentEmail(model);
                     }
+                    
+                    self.connectNotification();
                 },
                 error: function(model, response) {
                     alert(response.responseText);
@@ -181,6 +185,19 @@ define([
             $.AjaxCall(data, url, view, task, table, function(output){
                 console.log(output);
             });
+        },
+        
+        connectNotification : function() {
+            var options = {
+                item_model : this.options.comment_options.item_model,
+                comment_model : this.model,
+                db_table : this.options.comment_options.db_table
+            };
+      
+            var model = new Notification_model(options);
+
+            console.log(model.toJSON());
+
         },
         
         close : function() {

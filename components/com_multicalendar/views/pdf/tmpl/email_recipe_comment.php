@@ -107,8 +107,7 @@
                                                         </table>
                                                         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                                             <tr>
-                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;"><p>Hi,
-                                                                    </p>
+                                                                <td colspan="2" style="margin:0; padding:15px 0 15px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15pt; color:#CCC;">
                                                                     <p>Additional comments or instructions have been posted about this recipe. Please take a moment to review this recipe and take into account and action any requests or instructions.</p></td>
                                                             </tr>
                                                             <tr>

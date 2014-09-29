@@ -112,6 +112,12 @@ class FitnessViewNutrition_diaries extends JView {
         echo json_encode($model->comments());
     }
     
+    function notifications() {
+        $model = $this -> getModel("nutrition_diaries");
+        echo json_encode($model->notifications());
+    }
+    
+    
     function users_names() {
         $model = $this -> getModel("nutrition_diaries");
         echo json_encode($model->users_names());
