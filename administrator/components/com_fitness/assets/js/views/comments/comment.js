@@ -189,15 +189,12 @@ define([
         
         connectNotification : function() {
             var options = {
-                item_model : this.options.comment_options.item_model,
-                comment_model : this.model,
-                db_table : this.options.comment_options.db_table
+                db_table : this.options.comment_options.db_table,
+                date : this.options.comment_options.item_model.get('entry_date'),
+                user_id : this.options.comment_options.item_model.get('client_id'),
             };
       
             var model = new Notification_model(options);
-
-            console.log(model.toJSON());
-
         },
         
         close : function() {
