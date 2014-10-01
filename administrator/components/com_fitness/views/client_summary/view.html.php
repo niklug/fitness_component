@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View to edit
  */
-class FitnessViewClient_progress extends JView
+class FitnessViewClient_summary extends JView
 {
 	protected $state;
 	protected $item;
@@ -39,7 +39,7 @@ class FitnessViewClient_progress extends JView
                 $view = $input->getCmd('view', '');
                 FitnessHelper::addSubmenu('Dashboard', 'dashboard');
                 FitnessHelper::addSubmenu('Clients', 'clients');
-                FitnessHelper::addSubmenu('Client Overview', 'client_summary');
+                FitnessHelper::addSubmenu('Client Progress', 'client_progress');
                 FitnessHelper::addSubmenu('Client Planning', 'goals');
                 FitnessHelper::addSubmenu('Assessments', 'assessments');
                 FitnessHelper::addSubmenu('Calendar', 'calendar');
@@ -71,7 +71,7 @@ class FitnessViewClient_progress extends JView
 	 */
 	protected function addToolbar()
 	{
-            JToolBarHelper::title(JText::_('Client Progress'), 'client_progress.png');
+            JToolBarHelper::title(JText::_('Client Overview / Notifications'), 'notifications.png');
 	}
 
 }
