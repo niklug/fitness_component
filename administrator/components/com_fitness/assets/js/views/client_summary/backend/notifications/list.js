@@ -38,7 +38,9 @@ define([
             
             this.render();
             
-            app.models.request_params_notifications.set({page : 1,  uid : app.getUniqueId()});
+            app.models.request_params_notifications.set({page : 1, user_id : app.options.client_id,  uid : app.getUniqueId()});
+            
+            this.onClientChange();
             
             //setInterval(this.runList, 60000);
         },
@@ -53,6 +55,8 @@ define([
             
             this.container_el = this.$el.find("#items_container");
             
+            this.$el.find("#date_from, #date_to").datepicker({ dateFormat: "yy-mm-dd"});
+            
             this.onRender();
 
             return this;
@@ -66,6 +70,9 @@ define([
             
             "click #select_all_notifications" : "onClickSelectAll",
             "click #delete_selected_notifications" : "onClickDeleteSelected",
+            
+            "click #search_notifications" : "onClickSearch",
+            "click #clear_notifications" : "onClickClearSearch",
         },
         
         onRender : function() {
@@ -76,8 +83,17 @@ define([
             });
         },
         
+        onClientChange : function() {
+            var self = this;
+            $("#client_id").die().live('change', function() {
+                var client_id = $(this).val();
+                app.options.client_id = client_id;
+                localStorage.setItem('client_id', client_id);
+                app.models.request_params_notifications.set({user_id : client_id});
+            });
+        },
+        
         runList : function() {
-            console.log(app.getUniqueId());
             app.models.request_params_notifications.set({uid : app.getUniqueId()});
         },
         
@@ -136,6 +152,9 @@ define([
             this.item_views[model.get('id')] = item_view;
             
             this.container_el.append(item_view.render().el); 
+            
+            this.$el.find( "#items_container tr:odd" ).addClass('row1');
+            this.$el.find( "#items_container tr:even" ).addClass('row0');
         },
         
         clearItems : function() {
@@ -187,6 +206,23 @@ define([
                 }
             });
         },
+        
+        onClickSearch : function() {
+            var date_from = this.$el.find("#date_from").val();
+            var date_to = this.$el.find("#date_to").val();
+            app.models.request_params_notifications.set({date_from : date_from, date_to : date_to});
+        },
+        
+        onClickClearSearch : function() {
+            $(this.el).find("#date_from, #date_to").val('');
+            
+            app.models.request_params_notifications.set(
+                {
+                    date_from : '',
+                    date_to : '',
+                }
+            );
+        }
 
     });
             

@@ -1190,6 +1190,8 @@ class FitnessModelNutrition_diaries extends JModelList {
                 $data->user_id = JRequest::getVar('user_id'); 
                 $data->created_by = JRequest::getVar('created_by'); 
                 $data->readed = JRequest::getVar('readed'); 
+                $data->date_from = JRequest::getVar('date_from'); 
+                $data->date_to = JRequest::getVar('date_to'); 
 
                 
                 $data = $this->getNotifications($data);
@@ -1242,6 +1244,19 @@ class FitnessModelNutrition_diaries extends JModelList {
         //get total number
         $query .= " (SELECT COUNT(*) FROM $table AS a ";
         $query .= " WHERE 1 ";
+        
+        if($user_id) {
+            $query .= " AND a.user_id='$user_id' ";
+        }
+        
+        if (!empty($data->date_from)) {
+            $query .= " AND a.created >= '$data->date_from'";
+        }
+
+        if (!empty($data->date_to)) {
+            $query .= " AND a.created <= '$data->date_to'";
+        }
+        
         $query .= " ) items_total ";
         
         //end het items total
@@ -1252,6 +1267,18 @@ class FitnessModelNutrition_diaries extends JModelList {
 
         if($id) {
             $query .= " AND a.id='$id' ";
+        }
+        
+        if($user_id) {
+            $query .= " AND a.user_id='$user_id' ";
+        }
+        
+        if (!empty($data->date_from)) {
+            $query .= " AND a.created >= '$data->date_from'";
+        }
+
+        if (!empty($data->date_to)) {
+            $query .= " AND a.created <= '$data->date_to'";
         }
 
         $query_method = 1;

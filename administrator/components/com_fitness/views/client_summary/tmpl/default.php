@@ -16,7 +16,6 @@ $business_profile_id = $business_profile_id['data'];
     <div id="header_wrapper" class="fitness_wrapper" style="background:none;"></div>
 
     <div class="clr"></div>
-    <br/>
     
     <div id="main_container" class="fitness_wrapper" style="background:none;"></div>
 

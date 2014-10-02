@@ -192,6 +192,7 @@ define([
                 db_table : this.options.comment_options.db_table,
                 date : this.options.comment_options.item_model.get('entry_date'),
                 user_id : this.options.comment_options.item_model.get('client_id'),
+                created : this.model.get('created')
             };
       
             var model = new Notification_model(options);
