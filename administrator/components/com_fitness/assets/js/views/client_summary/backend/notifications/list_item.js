@@ -4,7 +4,13 @@ define([
 	'backbone',
         'app',
 	'text!templates/client_summary/backend/notifications/list_item.html'
-], function ( $, _, Backbone, app, template ) {
+], function (
+        $,
+        _,
+        Backbone,
+        app,
+        template
+    ) {
 
     var view = Backbone.View.extend({
         
@@ -12,8 +18,12 @@ define([
         
         template : _.template(template),
         
+        initialize : function() {
+
+        },
+        
         render : function(){
-            console.log(this.model.toJSON());
+            //console.log(this.model.toJSON());
             var data = {item : this.model.toJSON()};
             data.app = app;
             data.$ = $;
@@ -29,7 +39,7 @@ define([
         onRender : function() {
             var self = this;
             $(this.el).show('0', function() {
-
+                self.parseNotificationTemplate();
             });
         },
         
@@ -51,8 +61,9 @@ define([
         },
         
         onClickRead : function() {
+            var readed =  !this.model.get('readed');
             var self = this;
-            this.model.save({readed : '1'},{
+            this.model.save({readed : readed},{
                 success: function (model) {
                     self.render();
                 },
@@ -60,6 +71,25 @@ define([
                     alert(response.responseText);
                 }
             });
+        },
+        
+        parseNotificationTemplate : function() {
+            var template_id = this.model.get('template_id');
+            var model = this.collection.get(template_id);
+            
+            var template = model.get('template');
+            
+            template = template
+                    .replace("{created_by}", this.model.get('created_by_name'))
+                    .replace("{user_id}", this.model.get('user_name'))
+                    .replace("{object}", this.model.get('object'))
+                    .replace("{date}", moment(new Date(Date.parse(this.model.get('date')))).format("ddd, D MMM YYYY"));
+            
+            if(!this.model.get('readed')) {
+                template = '<b>' + template + '</b>';
+            }
+            
+            $(this.el).find(".template_container").html(template);
         },
         
         close : function() {

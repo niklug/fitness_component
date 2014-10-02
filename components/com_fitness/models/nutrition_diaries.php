@@ -1179,25 +1179,20 @@ class FitnessModelNutrition_diaries extends JModelList {
         switch ($method) {
             case 'GET': // Get Item(s)
 
-                $query .= "SELECT a.* ";
-   
-                $query .= "  FROM $table AS a";
+                $data = new stdClass();
                 
-                $query .= " WHERE 1 ";
-   
-                if($id) {
-                    $query .= " AND a.id='$id' ";
-                }
-   
-                $query .= " ORDER BY a.created";
-               
-                $query_method = 1;
+                $data->id = $id;
+                $data->sort_by = JRequest::getVar('sort_by'); 
+                $data->order_dirrection = JRequest::getVar('order_dirrection'); 
+                $data->page = JRequest::getVar('page'); 
+                $data->limit = JRequest::getVar('limit'); 
+                $data->state = JRequest::getVar('state'); 
+                $data->user_id = JRequest::getVar('user_id'); 
+                $data->created_by = JRequest::getVar('created_by'); 
+                $data->readed = JRequest::getVar('readed'); 
+
                 
-                if($id) {
-                    $query_method = 2;
-                }
-                
-                $data = FitnessHelper::customQuery($query, $query_method);
+                $data = $this->getNotifications($data);
 
                 return $data;
                 break;
@@ -1219,5 +1214,65 @@ class FitnessModelNutrition_diaries extends JModelList {
         $model->id = $id;
 
         return $model;
+    }
+    
+    public function getNotifications($data) {
+        $id = $data->id; 
+        $sort_by = $data->sort_by; 
+        $order_dirrection = $data->order_dirrection; 
+        $page = $data->page; 
+        $limit = $data->limit; 
+        
+        $user_id = $data->user_id; 
+        $created_by = $data->created_by; 
+        $readed = $data->readed; 
+        
+        
+        $helper = new FitnessHelper();
+        
+        $start = ($page - 1) * $limit;
+        
+        $table = '#__fitness_notifications';
+        
+        $query .= "SELECT a.*, ";
+        
+        $query .= " (SELECT name FROM #__users WHERE id=a.created_by) created_by_name,";
+        $query .= " (SELECT name FROM #__users WHERE id=a.user_id) user_name,";
+
+        //get total number
+        $query .= " (SELECT COUNT(*) FROM $table AS a ";
+        $query .= " WHERE 1 ";
+        $query .= " ) items_total ";
+        
+        //end het items total
+   
+        $query .= "  FROM $table AS a";
+
+        $query .= " WHERE 1 ";
+
+        if($id) {
+            $query .= " AND a.id='$id' ";
+        }
+
+        $query_method = 1;
+
+        if($id) {
+            $query_method = 2;
+        }
+        
+        if($sort_by) {
+            $query .= " ORDER BY " . $sort_by;
+        }
+
+        if($order_dirrection) {
+            $query .=  " " . $order_dirrection;
+        }
+
+        if($limit) {
+            $query .= " LIMIT $start, $limit";
+        }
+        $data = FitnessHelper::customQuery($query, $query_method);
+
+        return $data;
     }
 }

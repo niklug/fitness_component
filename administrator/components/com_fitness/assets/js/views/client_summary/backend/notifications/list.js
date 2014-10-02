@@ -4,6 +4,8 @@ define([
 	'backbone',
         'app',
         'collections/notifications/notifications',
+        'collections/notifications/types',
+        'models/notifications/request_params_notifications',
         'views/client_summary/backend/notifications/list_item',
 	'text!templates/client_summary/backend/notifications/list.html'
 ], function (
@@ -12,6 +14,8 @@ define([
         Backbone, 
         app,
         Notifications_collection,
+        Template_types_collection,
+        Request_params_notifications_model,
         List_item_view,
         template
     ) {
@@ -24,11 +28,19 @@ define([
             app.collections.notifications.bind("add", this.addItem, this);
             app.collections.notifications.bind("reset", this.clearItems, this);
             
+            app.collections.notification_types = Template_types_collection;
+            
+            app.models.request_params_notifications = new Request_params_notifications_model();
+                
+            app.models.request_params_notifications.bind("change", this.get_items, this);
+
             this.item_views = [];
             
             this.render();
             
-            this.get_items();
+            app.models.request_params_notifications.set({page : 1,  uid : app.getUniqueId()});
+            
+            //setInterval(this.runList, 60000);
         },
         
         template:_.template(template),
@@ -47,17 +59,9 @@ define([
         },
         
         events: {
-            "click #sort_client_name" : "sort_client_name",
-            "click #sort_trainer" : "sort_trainer",
-            "click #sort_active_start" : "sort_active_start",
-            "click #sort_active_finish" : "sort_active_finish",
-            "click #sort_active_plan" : "sort_active_plan",
-            "click #sort_force_active" : "sort_force_active",
-            "click #sort_primary_goal" : "sort_primary_goal",
-            "click #sort_mini_goal" : "sort_mini_goal",
-            "click #sort_nutrition_focus" : "sort_nutrition_focus",
-            "click #sort_state" : "sort_state",
-
+            "click #sort_created" : "sort_created",
+            "click #sort_readed" : "sort_readed",
+    
             "click .view" : "onClickView",
             
             "click #select_all_notifications" : "onClickSelectAll",
@@ -72,6 +76,11 @@ define([
             });
         },
         
+        runList : function() {
+            console.log(app.getUniqueId());
+            app.models.request_params_notifications.set({uid : app.getUniqueId()});
+        },
+        
         connectPagination : function() {
             app.models.notifications_pagination = $.backbone_pagination({el : $(this.el).find(".pagination_container")});
             
@@ -84,14 +93,20 @@ define([
                 app.models.notifications_pagination.set({'items_total' : app.collections.notifications.models[0].get('items_total')});
             }
 
-            app.models.notifications_pagination.bind("change:currentPage", this.get_items, this);
+            app.models.notifications_pagination.bind("change:currentPage", this.set_params_model, this);
 
-            app.models.notifications_pagination.bind("change:items_number", this.get_items, this);
+            app.models.notifications_pagination.bind("change:items_number", this.set_params_model, this);
             
         },
         
+        set_params_model : function() {
+            app.collections.notifications.reset();
+            app.models.request_params_notifications.set({"page" : app.models.notifications_pagination.get('currentPage') || 1, "limit" : localStorage.getItem('items_number') || 10, uid : app.getUniqueId()});
+        },
+            
+        
         get_items : function() {
-            var params = {};
+            var params = app.models.request_params_notifications.toJSON();
             app.collections.notifications.reset();
             app.collections.notifications.fetch({
                 data : params,
@@ -113,8 +128,10 @@ define([
         
         addItem : function(model) {
             //console.log(model.toJSON());
+            //var template_id = this.model.get('template_id');
+            //var model = app.collections.notification_types.get(template_id);
             
-            var item_view = new List_item_view({model : model});
+            var item_view = new List_item_view({model : model, collection : app.collections.notification_types});
             
             this.item_views[model.get('id')] = item_view;
             
@@ -125,46 +142,14 @@ define([
             this.container_el.empty();
         },
         
-        sort_client_name : function() {
-            this.model.set({sort_by : 'client_name', order_dirrection : 'ASC'});
+        sort_created : function() {
+            app.models.request_params_notifications.set({sort_by : 'a.created', order_dirrection : 'DESC'});
         },
         
-        sort_trainer : function() {
-            this.model.set({sort_by : 'trainer_name', order_dirrection : 'ASC'});
+        sort_readed : function() {
+            app.models.request_params_notifications.set({sort_by : 'a.readed', order_dirrection : 'ASC'});
         },
-        
-        sort_active_start : function() {
-            this.model.set({sort_by : 'a.active_start', order_dirrection : 'DESC'});
-        },
-        
-        sort_active_finish : function() {
-            this.model.set({sort_by : 'active_finish', order_dirrection : 'DESC'});
-        },
-        
-        sort_active_plan : function() {
-            this.model.set({sort_by : 'a.active_plan', order_dirrection : 'DESC'});
-        },
-        
-        sort_force_active : function() {
-            this.model.set({sort_by : 'a.force_active', order_dirrection : 'DESC'});
-        },
-        
-        sort_primary_goal : function() {
-            this.model.set({sort_by : 'primary_goal_name', order_dirrection : 'ASC'});
-        },
-        
-        sort_mini_goal : function() {
-            this.model.set({sort_by : 'mini_goal_name', order_dirrection : 'ASC'});
-        },
-        
-        sort_nutrition_focus : function() {
-            this.model.set({sort_by : 'nutrition_focus_name', order_dirrection : 'ASC'});
-        },
-        
-        sort_state : function() {
-            this.model.set({sort_by : 'a.state', order_dirrection : 'DESC'});
-        },
- 
+       
         onClickSelectAll : function(event) {
             $(".item_checkbox").prop("checked", false);
 
