@@ -140,7 +140,7 @@ define([
             var id = $(event.target).attr('data-id');
             
             var model = this.collection.get(id);
-            
+            var self = this;
             model.save({state : '-2'}, {
                 success: function (model, response) {
                     self.render();

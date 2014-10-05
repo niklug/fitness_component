@@ -4,7 +4,10 @@ define([
     'app',
 ], function ( _, Backbone, app) {
     var collection = new Backbone.Collection([
-      {id : "1", type : "Primary Goal", action : "created", template : "{created_by} created a new {object} beginning {date}"},
+      {id : "1", type : "Primary Goal", action : "created", template : "{created_by} created a new Primary Goal beginning {date}"},
+      
+      
+      
       
       {id : "2", type : "Primary Goal", action : "submitted", template : "{created_by} submitted a new {object} beginning {date}"},
       

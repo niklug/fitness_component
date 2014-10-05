@@ -577,9 +577,9 @@ class FitnessController extends JController
         }
         
         function notifications() {
-            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'nutrition_diaries.php';
-            $nutrition_diaries_model = new FitnessModelNutrition_diaries();
-            echo json_encode($nutrition_diaries_model -> notifications()); 
+            require_once  JPATH_SITE . DS . 'components' . DS . 'com_fitness' . DS .'models' . DS . 'client_summary.php';
+            $client_summary_model = new FitnessModelClient_summary();
+            echo json_encode($client_summary_model -> notifications()); 
         }
         
         function users_names() {

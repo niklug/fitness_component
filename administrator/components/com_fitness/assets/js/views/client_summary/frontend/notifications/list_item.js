@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
         'app',
-	'text!templates/client_summary/backend/notifications/list_item.html'
+	'text!templates/client_summary/frontend/notifications/list_item.html'
 ], function (
         $,
         _,

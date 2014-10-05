@@ -5,6 +5,7 @@ define([
         'app',
         'collections/programs/select_filter',
         'models/goals/primary_goal',
+        'models/notifications/notification',
         'views/programs/select_element',
 	'text!templates/goals/backend/form_primary.html'
 
@@ -15,6 +16,7 @@ define([
         app,
         Select_filter_collection,
         Model,
+        Notification_model,
         Select_element_view,
         template
     ) {
@@ -135,7 +137,8 @@ define([
             
             if(this.model.isNew()) {
                 this.model.set({
-                    created_by : app.options.user_id                    
+                    created_by : app.options.user_id,
+                    created : moment(new Date()).format("YYYY-MM-DD HH:mm:ss") 
                 });
             }
             
@@ -193,6 +196,7 @@ define([
                 this.collection.create(this.model, {
                     wait: true,
                     success: function (model, response) {
+                        self.connectNotification(model);
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
                         } else if(self.save_method == 'save') {
@@ -253,7 +257,18 @@ define([
                     alert(response.responseText);
                 }
             });
-        }
+        },
+        
+        connectNotification : function(model) {
+            var options = {
+                template_id : 1,
+                date : model.get('start_date'),
+                user_id : model.get('user_id'),
+                created : model.get('created')
+            };
+      
+            var model = new Notification_model(options);
+        },
  
     });
             
