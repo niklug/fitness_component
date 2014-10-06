@@ -264,7 +264,9 @@ define([
                 template_id : 1,
                 date : model.get('start_date'),
                 user_id : model.get('user_id'),
-                created : model.get('created')
+                created : model.get('created'),
+                url_id_1 : model.get('id'),
+                
             };
       
             var model = new Notification_model(options);

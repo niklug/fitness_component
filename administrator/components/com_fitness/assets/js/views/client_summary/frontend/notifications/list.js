@@ -6,7 +6,7 @@ define([
         'collections/notifications/notifications',
         'collections/notifications/types',
         'models/notifications/request_params_notifications',
-        'views/client_summary/frontend/notifications/list_item',
+        'views/client_summary/backend/notifications/list_item',
 	'text!templates/client_summary/frontend/notifications/list.html'
 ], function (
         $,

@@ -6,6 +6,7 @@ define([
         'collections/programs/select_filter',
         'models/goals/primary_goal',
         'models/goals/mini_goal',
+        'models/notifications/notification',
         'views/programs/select_element',
 	'text!templates/goals/backend/form_mini.html'
 
@@ -17,6 +18,7 @@ define([
         Select_filter_collection,
         Primary_goal_model,
         Model,
+        Notification_model,
         Select_element_view,
         template
     ) {
@@ -201,6 +203,7 @@ define([
                     user_id : app.options.client_id
             });
             
+            var self = this;
             if(this.model.isNew()) {
                 this.model.set({
                     created_by : app.options.user_id                    
@@ -268,6 +271,7 @@ define([
                 this.collection.create(this.model, {
                     wait: true,
                     success: function (model, response) {
+                        self.connectNotification(model);
                         self.addPlan(model);
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
@@ -347,7 +351,20 @@ define([
             $.AjaxCall(data, url, view, task, table, function(output) {
                 console.log(output);
             });
-        }
+        },
+        
+        connectNotification : function(model) {
+            var options = {
+                template_id : 2,
+                date : model.get('start_date'),
+                user_id : model.get('user_id'),
+                created : model.get('created'),
+                url_id_1 : model.get('id'),
+                url_id_2 : model.get('primary_goal_id')
+            };
+      
+            var model = new Notification_model(options);
+        },
 
     });
             

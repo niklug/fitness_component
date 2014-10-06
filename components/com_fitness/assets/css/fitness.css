@@ -1216,3 +1216,7 @@ td.center, th.center, .center {
     padding-right: 17px;
     
 }
+
+.notifiction_open_list, .notifiction_open_form {
+    cursor:pointer;
+}

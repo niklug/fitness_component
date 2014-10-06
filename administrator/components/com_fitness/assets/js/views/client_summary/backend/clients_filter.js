@@ -142,7 +142,6 @@ define([
             
             if(app.options.is_trainer && !app.options.is_trainer_administrator) {
                 trainer_id = app.options.user_id 
-                this.model.set({trainer_id : trainer_id});
             }
             
             new Select_element_view({

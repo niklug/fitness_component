@@ -1337,3 +1337,7 @@ width: 20px;
 .width_100 {
     width:100%;
 }
+
+.notifiction_open_list, .notifiction_open_form {
+    cursor:pointer;
+}

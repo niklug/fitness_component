@@ -4,6 +4,7 @@ define([
 	'backbone',
         'app',
         'models/goals/primary_goal',
+        'models/notifications/notification',
 	'text!templates/goals/frontend/form_primary.html'
 
 ], function (
@@ -12,6 +13,7 @@ define([
         Backbone,
         app,
         Model,
+        Notification_model,
         template
     ) {
 
@@ -148,6 +150,7 @@ define([
                 this.collection.create(this.model, {
                     wait: true,
                     success: function (model, response) {
+                        self.connectNotification(model);
                         if(self.save_method == 'save_close') {
                             app.controller.navigate("!/list_view", true);
                         }
@@ -192,6 +195,18 @@ define([
 
             result.status = false;
             return result;
+        },
+        
+         connectNotification : function(model) {
+            var options = {
+                template_id : 1,
+                date : model.get('start_date'),
+                user_id : model.get('user_id'),
+                created : model.get('created'),
+                url_id_1 : model.get('id')
+            };
+      
+            var model = new Notification_model(options);
         },
  
     });

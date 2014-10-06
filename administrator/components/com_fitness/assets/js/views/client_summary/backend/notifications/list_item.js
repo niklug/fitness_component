@@ -47,6 +47,8 @@ define([
         events: {
             "click .delete_notification" : "onClickDelete",
             "click .read_notification" : "onClickRead",
+            "click .notifiction_open_list" : "onClickOpenList",
+            "click .notifiction_open_form" : "onClickOpenForm",
         },
         
         onClickDelete : function() {
@@ -82,8 +84,6 @@ define([
 
             readed = readed.join(",");
             
-            console.log(readed);
-            
             var self = this;
             this.model.save({readed : readed},{
                 success: function (model) {
@@ -101,13 +101,56 @@ define([
             
             var template = model.get('template');
             
+            console.log(this.model.toJSON());
+            
+            this.backend_list_url = model.get('backend_list_url');
+            this.backend_form_url = model.get('backend_form_url');
+            this.frontend_list_url = model.get('frontend_list_url');
+            this.frontend_form_url = model.get('frontend_form_url');
+            
+            if(this.backend_list_url) {
+                this.backend_list_url = this.backend_list_url
+                    .replace("{url_id_1}", this.model.get('url_id_1'))
+                    .replace("{url_id_2}", this.model.get('url_id_2'));
+            }
+            
+            if(this.backend_form_url) {
+                this.backend_form_url = this.backend_form_url
+                    .replace("{url_id_1}", this.model.get('url_id_1'))
+                    .replace("{url_id_2}", this.model.get('url_id_2'));
+            }
+            
+            if(this.frontend_list_url) {
+                this.frontend_list_url = this.frontend_list_url
+                    .replace("{url_id_1}", this.model.get('url_id_1'))
+                    .replace("{url_id_2}", this.model.get('url_id_2'));
+            }
+            
+            if(this.frontend_form_url) {
+                this.frontend_form_url = this.frontend_form_url
+                    .replace("{url_id_1}", this.model.get('url_id_1'))
+                    .replace("{url_id_2}", this.model.get('url_id_2'));
+            }
+
             template = template
                     .replace("{created_by}", this.model.get('created_by_name'))
-                    .replace("{user_id}", this.model.get('user_name'))
                     .replace("{object}", this.model.get('object'))
-                    .replace("{date}", moment(new Date(Date.parse(this.model.get('date')))).format("ddd, D MMM YYYY"));
+                    .replace("{date}", moment(new Date(Date.parse(this.model.get('date')))).format("ddd, D MMM YYYY"))
+                    .replace("{url_id_1}", this.model.get('url_id_1'))
+                    .replace("{url_id_2}", this.model.get('url_id_2'));
             
+            if(this.model.get('user_id') == this.model.get('created_by')) {
+                template = template.replace("{user_id}", "");
+            }
             
+            if(app.options.is_trainer || app.options.is_superuser) {
+                template = template.replace("{user_id}", 'for ' + this.model.get('user_name'))
+            }
+            
+            if(app.options.is_client) {
+                template = template.replace("{user_id}", "");
+            }
+              
             var readed = this.model.get('readed');
             
             if(parseInt(readed)) {
@@ -120,7 +163,24 @@ define([
                 template = '<b>' + template + '</b>';
             }
             
+                        
             $(this.el).find(".template_container").html(template);
+        },
+        
+        onClickOpenList : function() {
+            var url = this.frontend_list_url;
+            if(app.options.is_backend) {
+                url = this.backend_list_url;
+            }
+            window.open(url, '_blank');
+        },
+        
+        onClickOpenForm : function() {
+            var url = this.frontend_form_url;
+            if(app.options.is_backend) {
+                url = this.backend_form_url;
+            }
+            window.open(url, '_blank');
         },
         
         close : function() {
