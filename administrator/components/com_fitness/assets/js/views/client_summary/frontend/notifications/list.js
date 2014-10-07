@@ -190,25 +190,14 @@ define([
             
             if(selected.length > 0) {
                 _.each(selected, function(item, key){ 
-                    self.deleteItem(item);
+                    var model = app.collections.notifications.get(item);
+                    var view = self.item_views[model.get('id')]
+                    view.onClickHide();
                 });
             }
             $("#select_all_notifications").prop("checked", false);
         },
 
-        deleteItem : function(id) {
-            var model = app.collections.notifications.get(id);
-            var self = this;
-            model.destroy({
-                success: function (model, response) {
-                    var view = self.item_views[model.get('id')];
-                    view.close();
-                },
-                error: function (model, response) {
-                    alert(response.responseText);
-                }
-            });
-        },
         
         onClickSearch : function() {
             var date_from = this.$el.find("#date_from").val();
@@ -230,7 +219,23 @@ define([
         view_allowed : function(model) {
             var allowed = true;
             var created_by = model.get('created_by');
-            if(created_by == app.options.user_id) {
+            var user_id = app.options.user_id;
+            
+            if(created_by == user_id) {
+                allowed = false;
+            }
+            
+            var user_id = app.options.user_id;
+            
+            var hidden = model.get('hidden');
+   
+            if(parseInt(hidden)) {
+                hidden = hidden.split(",");
+            } 
+            
+            var index = hidden.indexOf(user_id);
+            
+            if(index != '-1') {
                 allowed = false;
             }
             

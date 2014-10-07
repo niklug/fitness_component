@@ -45,15 +45,35 @@ define([
         },
         
         events: {
-            "click .delete_notification" : "onClickDelete",
+            "click .delete_notification" : "onClickHide",
             "click .read_notification" : "onClickRead",
             "click .notifiction_open_list" : "onClickOpenList",
             "click .notifiction_open_form" : "onClickOpenForm",
         },
         
-        onClickDelete : function() {
+        onClickHide : function() {
+            var user_id = app.options.user_id;
+            
+            var hidden = this.model.get('hidden');
+   
+            if(parseInt(hidden)) {
+                hidden = hidden.split(",");
+            } else {
+                hidden = [];
+            }
+            
+            var index = hidden.indexOf(user_id);
+            
+            if(index == '-1') {
+                hidden.push(user_id);
+            } else {
+                hidden.splice(index, 1)
+            }
+
+            hidden = hidden.join(",");
+            
             var self = this;
-            this.model.destroy({
+            this.model.save({hidden : hidden},{
                 success: function (model) {
                     self.close();
                 },
