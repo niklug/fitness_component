@@ -1,0 +1,86 @@
+<td  >
+    <% if(item.edit_mode) { %>
+        <input style="float:none;"   size="40" type="text"  class="ingredient_name_input dark_input_style" value="<%= item.meal_name %>">
+    <% } else { %>
+        <%= item.meal_name %>
+    <% } %>
+</td>
+
+<td style="width:200px;">
+    <% if(item.edit_mode) { %>
+    <input data-id="<%= item.id %>" data-ingredient_id="<%= item.ingredient_id %>"   size="5" type="text"  class="ingredient_quantity_input number_input dark_input_style"  value="<%= item.quantity %>">
+    <% } else { %>
+        <%= item.quantity %>
+    <% } %>
+    <span class="grams_mil"><%= item.measurement %></span>
+</td>
+
+<td>
+    <% if(item.edit_mode) { %>
+        <input readonly size="5" type="text"  class="ingredient_protein number_input dark_input_style" value="<%= item.protein %>">
+    <% } else { %>
+        <%= item.protein %>
+    <% } %>
+</td>
+
+<td>
+    <% if(item.edit_mode) { %>
+        <input readonly size="5" type="text"  class="ingredient_fats number_input dark_input_style" value="<%= item.fats %>">
+    <% } else { %>
+        <%= item.fats %>
+    <% } %>
+</td>
+
+<td>
+    <% if(item.edit_mode) { %>
+        <input readonly size="5" type="text"  class="ingredient_carbs number_input dark_input_style" value="<%= item.carbs %>">
+    <% } else { %>
+        <%= item.carbs %>
+    <% } %>
+</td>
+
+<td>
+    <% if(item.edit_mode) { %>
+        <input readonly size="5" type="text"  class="ingredient_calories number_input dark_input_style" value="<%= item.calories %>">
+    <% } else { %>
+        <%= item.calories %>
+    <% } %>
+</td>
+
+<td>
+    <% if(item.edit_mode) { %>
+        <input readonly size="5" type="text"  class="ingredient_energy number_input dark_input_style" value="<%= item.energy %>">
+    <% } else { %>
+        <%= item.energy %>
+    <% } %>
+</td>
+
+<td>
+    <% if(item.edit_mode) { %>
+        <input readonly size="5" type="text"  class="ingredient_saturated_fat number_input dark_input_style" value="<%= item.saturated_fat %>">
+    <% } else { %>
+        <%= item.saturated_fat %>
+    <% } %>
+</td>
+
+<td>
+    <% if(item.edit_mode) { %>
+        <input readonly size="5" type="text"  class="ingredient_total_sugars number_input dark_input_style" value="<%= item.total_sugars %>">
+    <% } else { %>
+        <%= item.total_sugars %>
+    <% } %>
+</td>
+
+<td>
+    <% if(item.edit_mode) { %>
+        <input readonly size="5" type="text"  class="ingredient_sodium number_input dark_input_style" value="<%= item.sodium %>">
+    <% } else { %>
+        <%= item.sodium %>
+    <% } %>
+</td>
+
+<td class="ingredient_cell_delete">
+    <% if(item.edit_mode) { %>
+        <a href="javascript:void(0)" class="delete_meal delete_meal_ingredient" title="delete"></a>
+    <% } %>
+</td>

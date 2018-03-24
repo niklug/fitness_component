@@ -1,0 +1,49 @@
+<table width="400">
+    <tr>
+        <td width="100">
+            <label>Appointment</label>
+        </td>
+        <td id="appointment_select">
+            
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Session Type</label> 
+        </td>
+        <td id="session_type_select">
+            
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Session Focus</label> 
+        </td>
+        <td id="session_focus_select">
+            
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+            <label>Workout Name</label> 
+        </td>
+        <td>
+            <input style="width:100%;" type="text" name="workout_name" id="workout_name" value="<%= name %>">
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+            <label>Date Created</label>
+        </td>
+        <td>
+            <% if(id) { %>
+           <%= moment(new Date(Date.parse(created))).format("ddd, D MMM  YYYY") %>
+           <% }  %>
+        </td>
+    </tr>
+    
+    
+</table>
+

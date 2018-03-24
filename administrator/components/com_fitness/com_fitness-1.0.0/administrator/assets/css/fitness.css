@@ -1,0 +1,1343 @@
+.icon-48-notificationss {
+    background-image: url('../images/l_notificationss.png');
+    padding-left:60px!important;
+}
+
+.icon-48-notifications {
+    background-image: url('../images/l_notificationss.png');
+    padding-left:60px!important;
+}
+
+.clients_href, .icon-48-clients {
+    background-image: url("../images/header/clients.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.goals_href, .icon-48-goals {
+    background-image: url("../images/header/goals.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.icon-48-sessiontypes {
+      background-image: url('../images/l_sessiontypes.png');
+      padding-left:60px!important;
+}
+
+.icon-48-sessiontype {
+      background-image: url('../images/l_sessiontypes.png');
+      padding-left:60px!important;
+}
+
+
+.icon-48-categories {
+      background-image: url('../images/l_categories.png');
+      padding-left:60px!important;
+}
+
+.icon-48-category {
+      background-image: url('../images/l_categories.png');
+      padding-left:60px!important;
+}
+
+.icon-48-sessionfocuses {
+      background-image: url('../images/l_sessionfocuses.png');
+      padding-left:60px!important;
+}
+
+.icon-48-sessionfocus {
+      background-image: url('../images/l_sessionfocuses.png');
+      padding-left:60px!important;
+}
+
+.icon-48-goalfocuses {
+      background-image: url('../images/l_goalfocuses.png');
+      padding-left:60px!important;
+}
+
+.icon-48-goalfocus {
+      background-image: url('../images/l_goalfocuses.png');
+      padding-left:60px!important;
+}
+
+
+.calendar_href, .icon-48-calendar {
+    background-image: url("../images/header/calendar.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.programs_href, .icon-48-programs {
+    background-image: url("../images/header/programs.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.exercise_href, .icon-48-programs {
+    background-image: url("../images/header/exercise_library.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.nutrition_plans_href, .icon-48-nutrition_plans {
+    background-image: url("../images/header/nutrition_plans.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.nutrition_diary_href, .icon-48-nutrition_diary {
+    background-image: url("../images/header/nutrition_diary.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+.assessments_href, .icon-48-assessments {
+    background-image: url("../images/header/assessments.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+
+.settings_href , .icon-48-settings{
+    background-image: url("../images/header/settings.png");
+    background-size: 45px auto;
+    display: block;
+} 
+
+
+
+.dashboard_icon {
+    background-repeat: no-repeat;
+    height: 135px;
+    width: 150px;
+    display: block;
+}
+
+
+#clients_href {
+    background-image: url('../images/dashboard/clients.png');
+} 
+
+#goals_href {
+    background-image: url('../images/dashboard/goals.png');
+} 
+
+#progress_href {
+    background-image: url('../images/dashboard/progress.png');
+} 
+
+#assessments_href {
+    background-image: url('../images/dashboard/assessments.png');
+}
+
+
+#calendar_href {
+    background-image: url('../images/dashboard/calendar.png');
+}
+
+
+#programs_href {
+    background-image: url('../images/dashboard/programs.png');
+}
+
+#programs_tempates_href {
+    background-image: url('../images/dashboard/templates.png');
+}
+
+#exercise_href {
+    background-image: url('../images/dashboard/exercise_library.png');
+} 
+
+#nutrition_plans_href {
+    background-image: url('../images/dashboard/nutrition_plans.png');
+} 
+
+#nutrition_diary_href {
+    background-image: url('../images/dashboard/nutrition_diary.png');
+} 
+
+#nutrition_database_href{
+    background-image: url('../images/dashboard/nutrition_database.png');
+} 
+
+#recipe_database_href{
+    background-image: url('../images/dashboard/recipe_database.png');
+} 
+
+#settings_href {
+    background-image: url('../images/dashboard/settings.png');
+} 
+
+
+#filter_from_start_date, #filter_to_start_date, #filter_from_deadline,
+#filter_to_deadline, #filter_created, #filter_modified,
+#filter_from_created, #filter_to_created,
+#filter_from_active_start, #filter_to_active_start, #filter_from_active_finish, #filter_to_active_finish,
+#jform_active_start, #jform_active_finish,
+#filter_from_submit_date, #filter_to_submit_date, #filter_from_entry_date, #filter_to_entry_date,
+#primary_goal_start_date, #primary_goal_deadline
+
+{
+    width: 70px;
+}
+
+
+#filter_from_score, #filter_to_score
+{
+    width: 30px;
+}
+
+
+
+.hideimage{
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 5px;
+    margin: 2px;
+    width: 5px;
+    background-repeat: no-repeat;
+    background-image: url("../images/close.png");
+}
+
+.send_email_button {
+    background-image: url("../images/send_email.png");
+    background-size: 20px auto;
+    display: block;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+
+
+
+
+.event_status_pending {
+    background-color: #EBEBEB !important;
+    border: 2px solid #818283;
+}
+
+.event_status_attended {
+    background-color: #DEFFE2 !important;
+    border: 2px solid #1BC721;
+}
+
+
+.event_status_cancelled {
+    background-color: #FFCA9F !important;
+    border: 2px solid #FF7200;
+}
+
+
+.event_status_latecancel {
+    background-color: #F9E4F6 !important;
+    border: 2px solid #FD8AFF;
+}
+
+
+
+.event_status_noshow {
+    background-color: #9999FF !important;
+    border: 2px solid #4C4DFF;
+}
+
+.event_status_complete {
+    background-color: #DEFFE2 !important;
+    border: 2px solid #1BC721;
+}
+
+.event_status_incomplete {
+    background-color: #FF9292 !important;
+    border: 2px solid #C60000;
+}
+
+.event_status_notattemped {
+    background-color: #FFAF97 !important;
+    border: 2px solid #AB4423;
+}
+
+.event_status_scheduled, .goal_status_scheduled {
+    background-color: #FCF7A7 !important;
+    border: 2px solid #E7AE24;
+}
+
+.event_status_assessing {
+    background-color: #ECB8FF !important;
+    border: 2px solid #4B0082;
+}
+
+
+.event_status__button {
+    display: block;
+    font-size: 10px !important;
+    font-weight: bold;
+    height: 11px;
+    margin: 5px 0 0 5px;
+    padding: 2px 0;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: 90px;
+    cursor:none;
+    color: #000 !important;
+}
+
+.menu_plan_status_pending {
+    background-color: #E6CCF2 !important;
+    border: 2px solid #662D86;
+}
+
+.event_status_wrapper a{
+    margin: 5px;
+}
+
+
+.mv_dlg.ui-dialog .ui-dialog-titlebar-close span {
+    display: block;
+    margin: 1px;
+}
+.ui-dialog .ui-dialog-titlebar-close, .ui-icon-closethick {
+    height: 20px !important;
+    position: absolute;
+    right: -2px;
+    top: 1px;
+    width: 20px !important;
+}
+.ui-icon-closethick {
+    background-image: url("../images/close.png") !important;
+    background-position: left top !important;
+    background-repeat:no-repeat;
+    margin: 0 !important;
+}
+
+.mv_dlg_editevent{
+    border:1px solid #cccccc;
+    display: none;
+    z-index: 1005;
+    outline: 0px none;
+    position: absolute;
+    height: auto;
+    width: 650px; 
+    top: 101.8px; 
+    left: 50%;  
+    margin-left: -325px;
+}
+
+
+#add_appointment {
+    background-image: url("../images/add_exercise.png");
+    background-repeat: no-repeat;
+    background-size: 24px auto;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 24px;
+    margin-right: 5px;
+    margin-top: 3px;
+    width: 24px;
+}
+
+
+.graph-container {
+	box-sizing: border-box;
+	width: 600x;
+	height: 250px;
+	padding: 20px 15px 15px 15px;
+	margin: 15px auto 30px auto;
+	border: 1px solid #ddd;
+	background: #fff;
+	background: linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+	box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+	-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.graph-placeholder {
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	line-height: 1.2em;
+}
+
+.menu_link{
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #146295;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    height: 12px;
+    line-height: 14px;
+    padding: 0 15px;
+}
+
+.delete_meal, .delete_comment , .delete_plan_meal, .delete_shopping_item, .delete_icon{
+    background-image: url("../images/cross.png");
+    background-size: 15px auto;
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+}
+
+
+
+#select_meal_form, .select_meal_form{
+    background-color: #FFFFFF;
+    height: auto;
+    margin-top: 0px;
+    position: absolute;
+    min-width: 392px;
+    border: 1px solid #cccccc;
+    text-align: center;
+    z-index: 999;
+}
+
+.meal_date, .meal_time, .save_plan_meal, .water, .previous_water {
+    float:none;
+    margin: 5px;
+}
+
+.error_wrapper, .error, .error_message  {
+    color:red;
+}
+
+#ingredients_results, .ingredients_results, #supplement_name_results, .supplement_name_results {
+    width: 100%;
+    margin: 0;
+    border: none;
+}
+
+#meal_search_cancel {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+#meal_search_next{
+    position: absolute;
+    bottom: 5px;
+    right: 5px; 
+}
+
+#ingred_select_error_message{
+    color:red;
+    margin-top: 2px;
+    text-align: center;
+}
+
+ .red_style_border {
+    border: 2px solid #FF0000 !important;
+}
+
+#quantity_wrapper {
+    text-align: center;
+    margin: 5px 0;
+}
+
+.grams_mil{
+    display: inline-block;
+    margin-top: 6px;
+}
+
+
+#totals_row , .totals_row{
+    background-color:#c6c6c6;
+    text-align: center;
+}
+
+.totals_row input {
+    text-align: center;
+    float: none !important;
+}
+
+.no_background{
+    background-color: #ffffff;
+    background: none;
+}
+
+
+.comment_wrapper, .comment_textarea {
+    width: 99% !important;
+    font-size:12px;
+}
+
+.nutrition_targets_table input {
+    width: 70px;
+}
+
+#recipes_list_wrapper {
+    background-color: #FFFFFF;
+    border: 7px ridge #CCCCCC;
+    height: 500px;
+    margin-left: 10px;
+    position: fixed;
+    top: 100px;
+    width: 98%;
+    z-index: 999;
+}
+
+#close_recipe_list {
+    background-image: url("../images/cross.png");
+    background-size: 15px auto;
+    display: block;
+    height: 15px;
+    width: 15px;
+    position: absolute;
+    right: 15px;
+}
+
+
+
+.green_style {
+    background-color:#1BC721;
+}
+
+.orange_style {
+    background-color:#FF7570;
+}
+
+.red_style {
+    background-color:#E62C2F;
+}
+
+
+.yellow_style_total {
+    color:#F0E51D;
+}
+
+.green_style_total {
+    color: #1BC721;
+}
+
+.orange_style_total {
+    color:#FF7570;
+}
+
+.red_style_total {
+    color:#E62C2F;
+}
+
+.blue_style_total {
+    color:  #264db3 !important;
+}
+
+
+.adminformlist li {
+    clear: both;
+}
+
+.ingredient_title{
+    width: 450px;
+}
+.totals_pagging {
+    width:515px;
+}
+
+.totals_right {
+    width: 40px;
+}
+
+
+#dialog_status_wrapper, .dialog_status_wrapper {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    left: 50%;
+    margin-left: -60px;
+    padding: 15px 0 2px;
+    position: absolute;
+    text-align: center;
+    top: 60%;
+    width: 102px;
+
+}
+
+#dialog_status_wrapper a, .dialog_status_wrapper a{
+    margin: 5px;
+}
+
+.status_inprogress {
+    background-color: #F9DEA4 !important;
+    border: 2px solid #C79700;
+}
+
+.status_pass {
+    background-color: #DBFFDB !important;
+    border: 2px solid #429625;
+}
+
+.status_fail, .status_resubmit {
+    background-color: #E4B4B4 !important;
+    border: 2px solid #A71313;
+}
+
+.status_distinction {
+    background-color: #BFEFFF !important;
+    border: 2px solid #1C4EE6;
+}
+
+.status_submitted {
+    background-color: #D2D2D2 !important;
+    border: 2px solid #4C4C4C;
+}
+
+.recipe_status_button, .status_button, .status_button_not_active, .status_button_dialog, .status_button_mini, .status_button_dialog_mini, .status_button_passive {
+    font-size: 10px !important;
+    height: 11px;
+    margin: 0;
+    padding: 2px 0 7px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 90px;
+    color:#000000 !important;
+    font-weight: bold;
+    line-height: 19px;
+    text-decoration: none !important;
+    display: inline-block;
+}
+
+
+
+.goal_status_wrapper, .event_status_wrapper {
+    background-color: #FFFFFF;
+    border-radius: 5px 5px 5px 5px;
+    left: 50%;
+    margin-left: -50px;
+    padding: 2px 0;
+    position: fixed;
+    top: 33%;
+    width: 100px;
+    text-align: center;
+    display:none;
+    border: 1px #cccccc solid;
+    padding-top:17px;
+
+}
+
+.goal_status_wrapper a{
+    margin: 5px;
+}
+
+.goal_status_pending, .recipe_status_pending  {
+    background-color: #E3E4E4 !important;
+    border: 2px solid #A4A4A4;
+}
+
+
+.goal_status_complete, .recipe_status_approved, .status_approved {
+    background-color: #B0FFB0 !important;
+    border: 2px solid #04BF04;
+}
+
+.goal_status_incomplete, .recipe_status_notapproved, .status_notapproved {
+    background-color: #FF9292 !important;
+    border: 2px solid #C60000;
+
+}
+
+.goal_status_evaluating {
+    background-color: #FFA992 !important;
+    border: 2px solid #AA4424;
+}
+
+.goal_status_inprogress {
+    background-color: #FFFDAE !important;
+    border: 2px solid #A5A908;
+}
+
+.goal_status_assessing {
+    background-color: #ECB8FF !important;
+    border: 2px solid #4B0082;
+}
+
+/* pie */
+    #placeholder_targets {
+        width: 100%;
+        height: 100%;
+    }
+
+    .pie-container {
+        margin: 0;
+        padding: 0;
+        width: 220px;
+        height: 220px;
+        position: relative;
+    }
+
+    .placeholder_pie {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        line-height: 1.2em;
+    }
+    
+    
+
+/* end pie*/
+
+#final_score{
+    font-size: 36px;
+    font-weight: bold;
+    border:3px solid;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 5px;
+    width:150px;
+}
+
+#status_button_place {
+    margin-top: 50px;
+    padding-left: 39px;
+    text-align: center;
+}
+
+
+.choosen_link{
+    font-weight: bold;
+}
+
+.chat_image {
+    background-image: url("../images/chat_arrow.png");
+    float: left;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-size: 25px;
+}
+
+
+.meal_table  thead tr {
+    background: #4F4F4F !important;
+    color: #fff;
+}
+
+.meal_table  tbody tr {
+    background-color: #E1E9E9;
+}
+
+.meal_table   tr input[type="text"]{
+    margin: 0 5px;
+}
+
+
+.meal_table  thead tr th{
+    padding: 3px;
+}
+
+.ingredient_cell {
+    width:70px;
+}
+
+.meal_invisible_cell{
+    background-color: #fff !important;
+}
+
+
+.ingredient_cell_delete {
+    width:10px !important; 
+    background-color: #fff !important;
+}
+
+.table_header{
+    text-align: center;
+    background: none repeat scroll 0 0 #4F4F4F !important;
+    color:#fff;
+    padding: 5px;
+    font-size: 14px;
+}
+
+
+.score_gradient {
+    background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.05, #1C4EE6),
+    color-stop(0.17, #00BF03),
+    color-stop(0.42, #F0E51D),
+    color-stop(0.77, #C90000)
+    );
+    background-image: -o-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -moz-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -webkit-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -ms-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: linear-gradient(to left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+}
+
+.gradient_bar_score_mark {
+    background-color: #000000;
+}
+
+.ajax_loader {
+
+    background: url('../images/ajax-loader.gif') 0  0 no-repeat;
+    width: 66px;
+    height: 66px;
+    display: inline-block;
+}
+
+.ajax_indicator {
+    background: url('../images/ajax-indicator.gif') 0  0 no-repeat;
+}
+
+
+#plan_menu, #recipe_mainmenu {
+    width: auto;
+}
+
+#plan_menu ul, #recipe_mainmenu ul {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+#plan_menu ul li, #recipe_mainmenu ul li {
+    border: 1px solid #818283;
+    float: left;
+    line-height: 1.7em;
+    list-style: none outside none;
+    padding: 0 10px;
+    position: relative;
+    text-align: center;
+    width: auto;
+    background-color:#D2D2D2;
+}
+
+#plan_menu ul li a , #recipe_mainmenu ul li a{
+    text-decoration: none !important;
+    color: #000;
+    font-size: 16px;
+    
+}
+
+#plan_menu ul li a:hover, #plan_menu ul li a:active, .active_link,
+#recipe_mainmenu ul li a:hover, #recipe_mainmenu ul li a:active, .active_link {
+    color:#BC4A26 !important;
+    border-bottom: 2px solid #BC4A26;
+    font-weight:bold;
+}
+
+
+
+
+#nutrition_guide_menu {
+    width: auto;
+}
+
+#nutrition_guide_menu ul {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+#nutrition_guide_menu ul li {
+  border: 1px solid #818283;
+  float: left;
+  list-style: none outside none;
+  margin-right: 5px;
+  padding: 0 5px;
+  position: relative;
+  text-align: center;
+  width: auto;
+  line-height: 1.4em;
+}
+
+#nutrition_guide_menu ul li a{
+    text-decoration: none !important;
+    color: #000;
+    font-size: 14px;
+}
+
+#nutrition_guide_menu ul li a:hover, #nutrition_guide_menu ul li a:active, #nutrition_guide_menu ul li a.active {
+    color:#BC4A26 !important;
+    border-bottom: 2px solid #BC4A26;
+    font-weight:bold;
+}
+
+
+
+
+
+.notice_image {
+    background-size: 40px auto;
+    width:40px;height:40px; 
+    background-image:url("../../../../../components/com_fitness/assets/images/exclamation.png");
+    background-repeat:no-repeat;
+    display:inline-block;
+}
+
+.notice_image_20 {
+  background-image: url("../../../../../components/com_fitness/assets/images/exclamation.png");
+  background-repeat: no-repeat;
+  background-size: 20px auto;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}
+
+.recipe_database_image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  border: 3px solid #FFFFFF;
+  height: 180px;
+  width: 200px;
+}
+
+.thumbnail_slide_image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  border: 1px solid #ccc;
+  height: 100px;
+  width: 120px;
+}
+
+/* backbone pagination  */
+ .bac_nav {
+    padding: 0;
+    width: 600px;
+    margin: auto;
+    position:relative; 
+    text-align: center;
+}
+
+.bac_nav a {
+    display: inline-block;
+}
+
+.bac_nav ul {
+    display: inline;
+}	
+
+.bac_nav li {
+    display: inline;
+    list-style-type: none;
+    padding: 0 2px !important;
+}
+/* */
+
+.table_border_top_dark {
+    border-top:1px solid #ccc;
+    
+}
+
+.table_border_top {
+    border-top:1px solid #ccc !important;
+}
+
+
+.table_border_bottom_dark {
+    border-bottom:1px solid #ccc !important;
+}
+
+.table_border_bottom {
+    border-bottom:1px solid #ccc !important;
+}
+
+.table_border_dark {
+    border:1px solid #474747 !important;
+}
+
+
+.internal_wrapper {
+    padding: 5px;
+    min-height: 19px;
+}
+
+.recipe_filter {
+    border: 1px solid #ccc;
+}
+
+.recipe_filter h5 {
+  margin: 0;
+  padding: 5px;
+}
+
+.recipe_database_item_wrapper{
+    margin-bottom: 10px;
+}
+
+#jform_allowed_proteins-lbl, #jform_allowed_fats-lbl, #jform_allowed_carbs-lbl, #jform_allowed_liquids-lbl, #jform_other_recommendations-lbl, #jform_trainer_comments-lbl, #jform_information-lbl{
+    float: none;
+}
+
+
+.fitness_wrapper {
+    background: none;
+    background-color: #0E0704;
+    opacity: 0.85;
+    color: #000;
+    padding: 5px;
+    font-size: 14px;
+}
+
+
+.fitness_content_wrapper table th {
+    background: none !important;
+}
+
+.fitness_block_wrapper {
+    background: none;
+    color: #000;
+    padding: 0px;
+    font-size: 13px;
+    border: 1px solid #cccccc;
+}
+
+.fitness_block_wrapper a, .fitness_block_wrapper a:visited,  .fitness_block_wrapper a:link  {
+    color: #DA4828;
+}
+
+.fitness_wrapper h2, .fitness_block_wrapper h2 {
+    color:#000 !important;
+}
+
+.fitness_wrapper h5 {
+    line-height: 18px;
+    margin: 5px;
+    padding: 2px 0;
+}
+
+.fitness_wrapper  select {
+    margin-top: 3px;
+}
+
+.fitness_content_wrapper{
+    border: 1px solid #cccccc;
+    padding: 10px;
+}
+
+.orange_line {
+    color: #BC4A26;
+    background-color: #BC4A26;
+    border: 0;
+    height: 2px;
+    margin: 0;
+    padding: 0;
+}
+
+.orange_text {
+    color: #BC4A26;
+}
+
+.fitness_wrapper .pagination {
+
+    border: none !important;
+}
+
+.fitness_wrapper table td {
+    padding:2px;
+}
+
+
+.fitness_wrapper table, .fitness_wrapper table td, .fitness_wrapper table tr {
+    border:none;
+}
+
+.fitness_wrapper table thead{
+    background-color: #313031;
+    height: 25px;
+    text-align: left;
+}
+
+td.center, th.center, .center {
+    float: none;
+    text-align: center;
+}
+
+
+.fitness_wrapper h3 {
+    margin: 0px !important;
+    color: #BC4A26 !important;
+    padding: 5px;
+}
+
+.blue_link {
+    color: #146295;
+}
+
+.preview{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url("../../../../../components/com_fitness/assets/images/preview.png");
+}
+
+.restore_icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url("../../../../../components/com_fitness/assets/images/restore_icon.png");
+    background-size: 16px;
+}
+
+
+.trash_icon{
+    background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/trash.png");
+    background-repeat: no-repeat;
+    display: block;
+    height: 20px;
+    width: 20px;
+}
+
+.copy_icon {
+    background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/copy.png");
+    background-repeat: no-repeat;
+    display: block;
+    height: 20px;
+    width: 20px;
+}
+
+.email_button {
+    background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/email_button.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    margin-left: 10px;
+    width: 20px;
+}
+
+.email_button_40 {
+background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/email_button.png");
+background-repeat: no-repeat;
+background-size: 40px auto;
+display: inline-block;
+height: 40px;
+margin-left: 10px;
+width: 40px;
+}
+
+
+.pdf_button_40 {
+background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/pdf_button.png");
+background-repeat: no-repeat;
+background-size: 40px auto;
+display: inline-block;
+height: 40px;
+margin-left: 10px;
+width: 40px;
+}
+
+.pdf_button_20 {
+background-image: url("../../../../../components/com_multicalendar/DC_MultiViewCal/css/images/pdf_button.png");
+background-repeat: no-repeat;
+background-size: 20px auto;
+display: inline-block;
+height: 20px;
+margin-left: 10px;
+width: 20px;
+}
+
+
+.appointment_email {
+    background-image: url("../../../../../administrator/components/com_multicalendar/images/header/calendar.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    margin-left: 10px;
+    width: 20px;
+}
+
+.calendar_icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-size: 16px auto;
+    background-image: url("../images/calendar_icon.png");
+}
+
+.focused_cell {
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 1px solid rgba(81, 203, 238, 1);
+  background-color: #fff;
+}
+
+
+.drag_item {
+    background-image: url("../images/move_arrow.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 22px auto;
+    cursor: move;
+}
+
+.search_video_icon {
+    background-image: url("../images/search_video.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+.video_link_icon {
+    background-image: url("../images/video_link.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+
+.video_link_icon_32 {
+    background-image: url("../images/video_link.png");
+    background-repeat: no-repeat;
+    background-size: 32px auto;
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+}
+
+.add_template_icon_32 {
+    background-image: url("../images/add_template.png");
+    background-repeat: no-repeat;
+    background-size: 32px auto;
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+}
+
+.add_template_icon_20 {
+    background-image: url("../images/add_template.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+.search_program_icon_20 {
+    background-image: url("../images/search_program.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+
+.search_program_icon_32 {
+    background-image: url("../images/search_program.png");
+    background-repeat: no-repeat;
+    background-size: 32px auto;
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+}
+
+.assessment_input {
+    width: 60px;
+}
+
+.yaxisLabel {
+    text-align:center;
+    top: 245px;
+    width: 240px;
+
+    position: inherit;
+    
+    left: -245px;
+    transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -webkit-transform:  rotate(-90deg);
+    transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+}
+
+.vertical_text {
+    writing-mode:tb-rl;
+    -webkit-transform:rotate(-90deg);
+    -moz-transform:rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    white-space:nowrap;
+    display:block;
+    bottom:0;
+    width:20px;
+    height:20px;
+    margin-bottom: 5px;
+}
+
+.grey_title {
+    color: #585858 ;
+}
+
+.formula {
+    background: url("../images/small-tip.png") no-repeat scroll right center rgba(0, 0, 0, 0);
+    cursor: pointer;
+    padding-right: 17px;
+}
+
+.page_container_width {
+    min-width:960px;
+    max-width:1000px;
+}
+
+.example_day_menu_wrapper {
+    background-color:#d2d2d2;
+}
+
+#daily_targets_container {
+    background-color:#fff;
+}
+
+#nutrition_guide_menu li, .recipe_database_item_wrapper,
+.example_day_edit_bar, .add_recipe_container {
+    background-color:#fff;
+}
+
+.add_area {
+    border:1px #ccc dashed;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.add_area .add_recipe {
+    color:#4f4f4f;
+    padding:5px;
+    width:100%;
+    height:100%;
+    cursor:pointer;
+}
+
+.thin_hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+}
+
+.score_pie_container{
+    margin-left: 40px;
+}
+
+.orange_border {
+    border:2px solid #BC4A26;padding:2px;
+}
+
+.width_100 {
+    width:100%;
+}
+
+.notifiction_open_list, .notifiction_open_form {
+    cursor:pointer;
+}

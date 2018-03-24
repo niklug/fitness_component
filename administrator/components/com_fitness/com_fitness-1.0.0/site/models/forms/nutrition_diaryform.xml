@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+              
+        <field name="nutrition_plan_id" type="text" default="" label="Nutrition Plan Id"
+            readonly="true" class="readonly"
+            description="" required="true" /> 
+
+       <field name="entry_date" type="calendar"
+                
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_ENTRY_DATE"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_ENTRY_DATE" 
+                
+                
+                 required="true"  /> 
+
+       <field name="submit_date" type="calendar"
+                
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_SUBMIT_DATE"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_SUBMIT_DATE" 
+        /> 
+
+       <field name="client_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_CLIENT_ID"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_CLIENT_ID" 
+        
+        
+         required="true" 
+        filter="safehtml" /> 
+
+       <field name="trainer_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_TRAINER_ID"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_TRAINER_ID" 
+        
+        
+         required="true" 
+        filter="safehtml" /> 
+
+       <field name="assessed_by" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_ASSESSED_BY"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_ASSESSED_BY" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="goal_category_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_PRIMARY_GOAL"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_PRIMARY_GOAL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+
+       <field name="nutrition_focus" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_NUTRITION_FOCUS"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_NUTRITION_FOCUS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="status" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_STATUS"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_STATUS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+
+       <field name="score" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_DIARY_SCORE"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_DIARY_SCORE" 
+        
+        
+        
+        filter="safehtml" /> 
+       
+       <field
+            name="activity_level"
+            type="radio"
+            label="What is your activity level for today?"
+            description=""
+            class="inputbox"
+            size="1"
+            default="0">
+            <option value="1">Heavy Training Day</option>
+            <option value="2">Light Training Day</option>
+            <option value="3">Recovery/Rest Day</option>
+        </field>
+        
+        
+       
+             <field name="created" type="timecreated" default="" 
+            label="Date Created"
+            description=""  />    
+
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

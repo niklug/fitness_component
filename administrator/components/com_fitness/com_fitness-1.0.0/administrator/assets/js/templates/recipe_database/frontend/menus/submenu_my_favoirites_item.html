@@ -1,0 +1,15 @@
+<div class="fitness_block_wrapper" style="height:30px;margin-top: 20px;">
+    <div class="internal_wrapper">
+        <div style="width:100%;">
+            <a data-id="<%= id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
+            <% if(app.options.add_diary_options.nutrition_plan_id) {%>
+             &#32;<a data-id="<%= id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
+            <% } %>
+
+            <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
+
+        </div>
+        <div class="clr"></div>
+    </div>
+    <hr class="orange_line">
+</div>

@@ -1,0 +1,1222 @@
+
+/* form css */
+.front-end-edit ul {
+    padding: 0 !important;
+}
+.front-end-edit li {
+    list-style: none;
+    margin-bottom: 6px !important;
+}
+.front-end-edit label {
+    margin-right: 10px;
+    display: block;
+    float: left;
+    width: 200px !important;
+}
+.front-end-edit .radio label {
+    float: none;
+}
+.front-end-edit .readonly {
+    border: none !important;
+    color: #666;
+}    
+.front-end-edit #editor-xtd-buttons {
+    height: 50px;
+    width: 600px;
+    float: left;
+}
+.front-end-edit .toggle-editor {
+    height: 50px;
+    width: 120px;
+    float: right;
+}
+
+#jform_rules-lbl{
+    display:none;
+}
+
+#access-rules a:hover{
+    background:#f5f5f5 url('../images/slider_minus.png') right  top no-repeat;
+    color: #444;
+}
+
+fieldset.radio label{
+    width: 50px !important;
+}
+/* end form css */
+.jgrid span.unpublish {
+    background-image: url("../images/publish_x.png");
+}
+
+.jgrid span.publish {
+    background-image: url("../images/tick.png");
+}
+.jgrid span.state {
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
+.jgrid:hover, .jgrid:active, .jgrid:focus {
+    background: none !important;
+}
+
+.clr {
+    clear: both;
+    height: 0;
+    overflow: hidden;
+}
+
+.fitness_wrapper .internal_wrapper hr {
+    margin: 5px 0;
+}
+
+.preview{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url("../images/preview.png");
+}
+
+.trash_icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url("../images/trash_icon.png");
+    background-size: 16px;
+}
+
+.restore_icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url("../images/restore_icon.png");
+    background-size: 16px;
+}
+
+a:hover, a:active, a:focus {
+    background: none ;
+}
+
+
+
+
+.add_item {
+    background-image: url("../images/add_exercise.png");
+    background-repeat: no-repeat;
+    background-size: 24px auto;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 24px;
+    margin-right: 5px;
+    margin-top: 3px;
+    width: 24px;
+}
+
+
+.status_inprogress {
+    background-color: #F9DEA4 !important;
+    border: 2px solid #C79700;
+}
+
+.status_pass {
+    background-color: #DBFFDB !important;
+    border: 2px solid #429625;
+}
+
+.status_fail {
+    background-color: #E4B4B4 !important;
+    border: 2px solid #A71313;
+}
+
+.status_distinction {
+    background-color: #BFEFFF !important;
+    border: 2px solid #1C4EE6;
+}
+
+.status_submitted {
+    background-color: #D2D2D2 !important;
+    border: 2px solid #4C4C4C;
+}
+
+.menu_plan_status_pending {
+    background-color: #F9DEA4 !important;
+    border: 2px solid #C79700;
+}
+
+.recipe_status_button, .status_button, .status_button_dialog,
+.status_button_mini, .status_button_dialog_mini,
+.event_status__button, .status_button_not_active
+{
+    font-size: 10px !important;
+    height: 11px;
+    margin: 0;
+    padding: 2px 0 7px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 90px;
+    color:#000000 !important;
+    font-weight: bold;
+    line-height: 19px;
+    text-decoration: none !important;
+    display: inline-block;
+}
+
+
+
+.goal_status_wrapper, .event_status_wrapper {
+    background-color: #FFFFFF;
+    border-radius: 5px 5px 5px 5px;
+    left: 50%;
+    margin-left: -50px;
+    padding: 2px 0;
+    position: fixed;
+    top: 33%;
+    width: 100px;
+    text-align: center;
+    display:none;
+    border: 1px #cccccc solid;
+    padding-top:17px;
+
+}
+
+.goal_status_wrapper a{
+    margin: 5px;
+}
+
+.goal_status_pending, .recipe_status_pending  {
+    background-color: #E3E4E4 !important;
+    border: 2px solid #A4A4A4;
+}
+
+
+.goal_status_complete, .recipe_status_approved {
+    background-color: #B0FFB0 !important;
+    border: 2px solid #04BF04;
+}
+
+.goal_status_incomplete, .recipe_status_notapproved {
+    background-color: #FF9292 !important;
+    border: 2px solid #C60000;
+
+}
+
+.goal_status_evaluating {
+    background-color: #FFA992 !important;
+    border: 2px solid #AA4424;
+}
+
+.goal_status_inprogress {
+    background-color: #FFFDAE !important;
+    border: 2px solid #A5A908;
+}
+
+.goal_status_assessing {
+    background-color: #ECB8FF !important;
+    border: 2px solid #4B0082;
+}
+
+
+.event_status_pending {
+    background-color: #EBEBEB !important;
+    border: 2px solid #818283;
+}
+
+.event_status_attended {
+    background-color: #DEFFE2 !important;
+    border: 2px solid #1BC721;
+}
+
+
+.event_status_cancelled {
+    background-color: #FFCA9F !important;
+    border: 2px solid #FF7200;
+}
+
+
+.event_status_latecancel {
+    background-color: #F9E4F6 !important;
+    border: 2px solid #FD8AFF;
+}
+
+
+
+.event_status_noshow {
+    background-color: #9999FF !important;
+    border: 2px solid #4C4DFF;
+}
+
+.event_status_complete {
+    background-color: #DEFFE2 !important;
+    border: 2px solid #1BC721;
+}
+
+.event_status_incomplete {
+    background-color: #FF9292 !important;
+    border: 2px solid #C60000;
+}
+
+.event_status_notattemped {
+    background-color: #FFAF97 !important;
+    border: 2px solid #AB4423;
+}
+
+.event_status_scheduled, .goal_status_scheduled {
+    background-color: #FCF7A7 !important;
+    border: 2px solid #E7AE24;
+}
+
+.event_status_assessing {
+    background-color: #ECB8FF !important;
+    border: 2px solid #4B0082;
+}
+
+.status_pass_stamp {
+    background-image: url("../images/status_pass.png");
+}
+
+.status_fail_stamp {
+    background-image: url("../images/status_fail.png");
+}
+
+.status_distinction_stamp {
+    background-image: url("../images/status_distinction.png");
+}
+
+.status_button_stamp {
+    background-position: 0 10px;
+    background-repeat: no-repeat;
+    background-size: 169px 60px;
+    display: inline-block;
+    height: 73px;
+    margin-left: 10px;
+    width: 170px;
+}
+
+
+.fitness_wrapper {
+    background: none;
+    background-color: #0E0704;
+    opacity: 0.85;
+    color: #ffffff;
+    padding: 5px;
+    font-size: 14px;
+}
+
+
+.fitness_content_wrapper table th {
+    background: none !important;
+}
+
+.fitness_block_wrapper {
+    background: none;
+    color: #ffffff;
+    padding: 0px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+}
+
+.fitness_wrapper h2, .fitness_block_wrapper h2 {
+    color:#ffffff !important;
+}
+
+.fitness_wrapper h5 {
+    line-height: 18px;
+    margin: 5px;
+    padding: 2px 0;
+}
+
+.fitness_wrapper  select {
+    margin-top: 3px;
+}
+
+.fitness_content_wrapper{
+    border: 1px solid #cccccc;
+    padding: 10px;
+}
+
+.orange_line {
+    color: #BC4A26;
+    background-color: #BC4A26;
+    border: 0;
+    height: 2px;
+}
+
+.orange_text {
+    color: #BC4A26 !important;
+}
+
+.fitness_wrapper .pagination {
+
+    border: none !important;
+}
+
+.fitness_wrapper table td {
+    padding:2px;
+}
+
+
+.fitness_wrapper table, .fitness_wrapper table td, .fitness_wrapper table tr {
+    border:none;
+}
+
+.fitness_wrapper table thead{
+    background-color: #313031;
+    height: 25px;
+    text-align: left;
+}
+
+td.center, th.center, .center {
+    float: none;
+    text-align: center;
+}
+
+
+.fitness_wrapper h3 {
+    margin: 0px !important;
+    color: #BC4A26 !important;
+    padding: 5px;
+}
+
+.internal_wrapper {
+    padding: 5px;
+    min-height: 19px;
+}
+
+.internal_wrapper2 {
+    padding: 5px;
+}
+
+.grey_title {
+    color:#cccccc;
+}
+
+#jform_entry_date {
+    background-color: #000000;
+    color: #FFFFFF;
+    width: 90px;
+}
+
+.calendar {
+    margin-left: 2px;
+    position: absolute;
+    cursor:pointer !important;
+}
+
+/* pie */
+#placeholder_targets,  #placeholder_scope{
+    width: 100%;
+    height: 100%;
+}
+
+.pie-container {
+    margin: 0;
+    padding: 0;
+    width: 220px;
+    height: 220px;
+    position: relative;
+}
+
+.placeholder_pie {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    line-height: 1.2em;
+}
+
+/* end pie*/
+
+#jform_activity_level {
+    margin: 0;
+    padding: 2px;
+    width: 172px;
+}
+#jform_activity_level0{
+    display: inline-block;
+}
+
+#jform_activity_level1{
+    display: inline-block;
+}
+
+
+#jform_activity_level2{
+    display: inline-block;
+}
+
+.fitness_wrapper fieldset.radio label {
+    display: inline-block !important;
+    width: 200px !important;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+.fitness_wrapper fieldset {
+    width: 225px !important;
+}
+
+
+#jform_activity_level-lbl {
+    display: inline-block;
+    padding-bottom: 35px;
+}
+
+
+.fitness_wrapper .ingredient_name_input {
+    width:270px;
+    font-size: 12px;
+    background-color: #fff;
+    color:#000;
+    padding: 2px;
+}
+
+.fitness_wrapper .number_input , .fitness_wrapper .meal_quantity_input, .fitness_wrapper .totals_row input, .fitness_wrapper .water, .fitness_wrapper .previous_water{
+    width: 32px;
+    font-size: 10px;
+    background-color: #fff;
+    color:#000;
+    padding: 2px;
+}
+
+.fitness_wrapper #meals_wrapper th, .fitness_block_wrapper .internal_wrapper th {
+    font-size: 10px;
+    background: none;
+    padding: 0;
+}
+
+
+.fitness_wrapper .ingredient_title{
+    width: 325px;
+}
+
+.fitness_wrapper .totals_pagging {
+    width:388px;
+}
+.fitness_wrapper .totals_right {
+    width: 0px;
+}
+
+.fitness_wrapper .comment_wrapper, .fitness_wrapper .comment_textarea {
+    width: 99% !important;
+    padding: 2px !important;
+    font-size:12px;
+}
+
+
+.delete_meal, .fitness_wrapper .delete_comment , 
+.fitness_wrapper .delete_plan_meal, .fitness_wrapper .delete_shopping_item,
+.delete_icon
+{
+    background-image: url("../images/cross.png");
+    background-size: 15px auto;
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+}
+
+.fitness_wrapper .meal_date{
+    font-size: 12px;
+    width: 65px;
+}
+
+.fitness_block_wrapper .internal_wrapper input[type="text"] {
+    background-color: #fff;
+    padding: 2px; 
+    color: #000;
+    font-size: 10px;
+}
+.meal_date, .meal_time, .save_plan_meal, .water, .previous_water {
+    float:none;
+    margin: 5px;
+}
+.error_wrapper, .error {
+    color:red;
+}
+
+
+.fitness_block_wrapper .internal_wrapper textarea, .comment_wrapper textarea {
+    color: #fff;
+    height: 50px;
+}
+
+.fitness_wrapper .meal_time {
+    width: 35px;
+    margin-left: 5px;
+}
+
+.fitness_wrapper .meal_center_desc{
+    width:480px;
+}
+
+
+.fitness_wrapper #select_meal_form, .fitness_wrapper .select_meal_form{
+    background-color: #FFFFFF;
+    height: auto;
+    margin-top: 0px;
+    position: absolute;
+    min-width: 392px;
+    border: 1px solid #cccccc;
+    text-align: center;
+    z-index: 999;
+}
+
+.fitness_wrapper #ingredients_results, .fitness_wrapper .ingredients_results{
+    width: 100%;
+    margin: 0;
+    border: none;
+}
+
+.fitness_wrapper #meal_search_cancel {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+.fitness_wrapper #meal_search_next{
+    position: absolute;
+    bottom: 5px;
+    right: 5px; 
+}
+
+.fitness_wrapper #ingred_select_error_message{
+    color:red;
+    margin-top: 2px;
+    text-align: center;
+}
+
+.fitness_wrapper #quantity_wrapper {
+    text-align: center;
+    margin: 5px 0;
+}
+
+.fitness_wrapper .grams_mil{
+    padding-left: 2px;
+}
+
+
+.fitness_wrapper #totals_row , .fitness_wrapper .totals_row{
+    text-align: center;
+    background-color:#333333;
+}
+
+.fitness_wrapper .totals_row input {
+    text-align: center;
+    float: none !important;
+}
+
+.fitness_wrapper .no_background{
+    background-color: #ffffff;
+    background: none;
+}
+
+
+.fitness_wrapper .nutrition_targets_table input {
+    width: 70px;
+}
+
+
+#recipes_list_wrapper {
+    background-color: #FFFFFF;
+    border: 7px ridge #CCCCCC;
+    height: 100%;
+    left: 50%;
+    margin-left: -500px;
+    position: fixed;
+    top: 0;
+    width: 1000px;
+    z-index: 999;
+}
+
+#close_recipe_list, #close_recipe_list:hover, #close_recipe_list:active, #close_recipe_list:active, #close_recipe_list:focus {
+    background-image: url("../images/cross.png") !important;
+    background-size: 15px auto !important;
+    display: block !important;
+    height: 15px;
+    width: 15px;
+    position: absolute;
+    right: 15px;
+}
+
+
+
+.fitness_wrapper .select_meal_form span {
+    color: #000000;
+}
+.fitness_wrapper .yellow_style {
+    background-color:yellow!important;
+}
+
+.fitness_wrapper .green_style {
+    background-color:#1BC721 !important;
+}
+
+.fitness_wrapper .orange_style {
+    background-color:#FF7570 !important;
+}
+
+.fitness_wrapper .red_style {
+    background-color:#E62C2F !important;
+}
+
+.fitness_wrapper .red_style_border {
+    border: 2px solid #FF0000 !important;
+}
+
+.fitness_wrapper .yellow_style_total {
+    color:yellow!important;
+}
+
+.fitness_wrapper .green_style_total {
+    color:#1BC721 !important;
+}
+
+.fitness_wrapper .orange_style_total {
+    color:#FF7570 !important;
+}
+
+.fitness_wrapper .red_style_total {
+    color:#E62C2F !important;
+}
+
+.fitness_wrapper .blue_style_total {
+    color:  #264db3 !important;
+}
+
+
+
+.fitness_wrapper #recipes_list_wrapper {
+    background-color: #FFFFFF;
+    border: 7px ridge #CCCCCC;
+    height: 500px;
+    margin-left: 10px;
+    position: fixed;
+    top: 100px;
+    width: 98%;
+    z-index: 999;
+}
+
+
+#final_score{
+    font-size: 36px;
+    font-weight: bold;
+    border:3px solid;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 15px;
+    width:150px;
+}
+#status_button_place {
+    text-align: center;
+}
+
+#total_score{
+    margin-top: 50px;
+}
+
+.score_pie_container{
+    margin-left: 40px;
+}
+
+
+
+
+
+.graph-container {
+    background: none repeat scroll 0 0 transparent;
+    height: 250px;
+    margin: 0;
+    padding: 0;
+
+}
+
+.graph-placeholder {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    line-height: 1.2em;
+}
+
+.choosen_link {
+    color: #fff !important;
+}
+
+
+
+
+
+#plan_menu, #recipe_mainmenu, #exercise_mainmenu,#mainmenu {
+    width: 100%;
+}
+
+#plan_menu ul, #recipe_mainmenu ul, #exercise_mainmenu ul, #mainmenu ul {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+#plan_menu ul li, #recipe_mainmenu ul li, #exercise_mainmenu ul li, #mainmenu ul li  {
+    border: 1px solid #CCCCCC;
+    float: left;
+    line-height: 1.7em;
+    list-style: none outside none;
+    padding: 0 10px;
+    position: relative;
+    text-align: center;
+    width: auto;
+}
+
+#plan_menu ul li a , #recipe_mainmenu ul li a, #exercise_mainmenu ul li a, #mainmenu ul li a{
+    text-decoration: none !important;
+    color: #BC4A26;
+    font-size: 16px;
+}
+
+#plan_menu ul li a:hover, #plan_menu ul li a:active,  #exercise_mainmenu ul li a:active,.active_link,
+#recipe_mainmenu ul li a:hover, #recipe_mainmenu ul li a:active,
+#mainmenu ul li a:hover, #mainmenu ul li a:active
+{
+    color:#fff !important;
+    border-bottom: 2px solid #BC4A26;
+    font-weight:bold;
+}
+
+
+
+.recipe_database_image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  border: 3px solid #FFFFFF;
+  height: 180px;
+  width: 200px;
+}
+
+/* backbone pagination  */
+ .bac_nav {
+    padding: 0;
+    width: 600px;
+    margin: auto;
+    position:relative; 
+    text-align: center;
+}
+
+.bac_nav a {
+    display: inline-block;
+}
+
+.bac_nav ul {
+    display: inline;
+}	
+
+.bac_nav li {
+    display: inline;
+    list-style-type: none;
+    padding: 0 2px !important;
+}
+/* */
+
+.table_border_top {
+    border-top:1px solid #fff !important;
+}
+
+.table_border_top_dark {
+    border-top:1px solid #474747 !important;
+}
+
+
+.table_border_bottom_dark {
+    border-bottom:1px solid #474747 !important;
+}
+
+.table_border_bottom {
+    border-bottom:1px solid #fff !important;
+}
+
+.table_border_dark {
+    border:1px solid #474747 !important;
+}
+
+.show_element{
+    display:block !important;
+}
+
+
+.hide_element{
+    display:none !important;
+}
+
+
+.width_50{
+   width:50px !important;
+}
+
+
+#ingradient_fields label {
+    display: block;
+    float: left;
+    font-size: 1em;
+    line-height: 2em;
+    min-width: 131px !important;
+}
+
+.error_message {
+    color: #CC0000;
+    padding-top: 7px;
+}
+
+.chat_image {
+    background-image: url("../images/chat_arrow.png");
+    float: left;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-size: 25px;
+}
+
+.dark_input_style {
+    font-size: 13px !important;
+    width: 231px;
+    color: #696969 !important;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1) !important;
+    border: medium none !important;
+    outline: medium none !important;
+    padding: 7px 10px !important;
+}
+
+.ingredient_cell {
+    width:57px;
+}
+
+
+.ingredient_cell_delete {
+    width:15px !important; 
+}
+
+.meal_invisible_cell {
+    background: none repeat scroll 0 0 rgba(6, 7, 9, 0.93) !important;
+}
+
+.score_gradient {
+    background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.05, #1C4EE6),
+    color-stop(0.17, #00BF03),
+    color-stop(0.42, #F0E51D),
+    color-stop(0.77, #C90000)
+    );
+    background-image: -o-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -moz-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -webkit-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: -ms-linear-gradient(left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+    background-image: linear-gradient(to left, #1C4EE6 5%, #00BF03 17%, #F0E51D 42%, #C90000 77%);
+}
+
+.ajax_loader {
+
+    background: url('../images/ajax-loader.gif') 0  0 no-repeat;
+    width: 66px;
+    height: 66px;
+    display: inline-block;
+}
+
+.gradient_bar_score_mark {
+    background-color: #ffffff;
+}
+
+
+
+#close_recipe_list_frontend_wpapper #close_recipe_list {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+  font-size: 16px;
+  width: 63px;
+  height: 29px;
+}
+
+#close_recipe_list_frontend_wpapper {
+  border: 1px solid #CCCCCC;
+  height: 29px;
+  line-height: 2.3em;
+  list-style: none outside none;
+  padding: 0 10px;
+  position: absolute;
+  right: 47px;
+  text-align: center;
+  top: 78px;
+  width: 73px;
+  background-color: #0E0704;
+}
+
+.notice_image {
+    background-size: 40px auto;
+    width:40px;height:40px; 
+    background-image:url('../images/exclamation.png');
+    background-repeat:no-repeat;
+    display:inline-block;
+}
+
+.notice_image_20 {
+  background-image: url("../images/exclamation.png");
+  background-repeat: no-repeat;
+  background-size: 20px auto;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}
+
+ #recipe_video {
+    border: 3px solid #FFFFFF;
+}
+
+#exercise_video {
+    border: 3px solid #FFFFFF;
+    background-size: 640px 340px;
+    height: 340px;
+    width: 640px;
+}
+
+
+#nutrition_guide_menu {
+    width: auto;
+}
+
+#nutrition_guide_menu ul {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+#nutrition_guide_menu ul li {
+  float: left;
+  list-style: none outside none;
+  margin-right: 5px;
+  padding: 0 5px;
+  position: relative;
+  text-align: center;
+  width: auto;
+  line-height: 1.4em;
+}
+
+#nutrition_guide_menu ul li a{
+    text-decoration: none !important;
+    color:#BC4A26 !important;
+    font-size: 14px;
+}
+
+#nutrition_guide_menu ul li a:hover, #nutrition_guide_menu ul li a:active, #nutrition_guide_menu ul li a.active {
+    color:#fff !important;
+    font-weight:bold;
+}
+
+.orange_label {
+    color: #BC4A26 !important;
+    font-size:14px;
+    font-weight: bold;
+    padding: 2px;
+}
+
+.email_button, .email_button:hover, .email_button:active, .email_button:focus  {
+  background-image: url("../../../../components/com_multicalendar/DC_MultiViewCal/css/images/email_button.png");
+  background-repeat: no-repeat;
+  background-size: 40px auto;
+  display: block;
+  height: 40px;
+  margin-left: 10px;
+  width: 40px;
+}
+
+.pdf_button, .pdf_button:hover, .pdf_button:active, .pdf_button:focus  {
+  background-image: url("../../../../components/com_multicalendar/DC_MultiViewCal/css/images/pdf_button.png");
+  background-repeat: no-repeat;
+  background-size: 40px auto;
+  display: block;
+  height: 40px;
+  margin-left: 10px;
+  width: 40px;
+}
+
+.recipe_database_item_wrapper{
+    margin-bottom: 10px;
+}
+
+.copy_icon {
+    background-image: url("../../../../components/com_multicalendar/DC_MultiViewCal/css/images/copy.png");
+    background-repeat: no-repeat;
+    display: block;
+    height: 20px;
+    width: 20px;
+}
+
+
+.hideimage{
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 5px;
+    margin: 2px;
+    width: 5px;
+    background-repeat: no-repeat;
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/close.png");
+}
+
+
+#dialog_status_wrapper, .dialog_status_wrapper{
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    left: 50%;
+    margin-left: -60px;
+    padding: 15px 0 2px;
+    position: absolute;
+    text-align: center;
+    top: 60%;
+    width: 102px;
+
+}
+
+#dialog_status_wrapper a, .dialog_status_wrapper a{
+    margin: 5px;
+}
+
+
+.drag_item {
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/move_arrow.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 22px auto;
+    cursor: move;
+}
+
+.search_video_icon {
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/search_video.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+.video_link_icon {
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/video_link.png");
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+
+.video_link_icon_32 {
+    background-image: url("../../../../administrator/components/com_fitness/assets/images/video_link.png");
+    background-repeat: no-repeat;
+    background-size: 32px auto;
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+}
+
+
+.assessment_input {
+    width:40px !important;
+}
+
+#body_image {
+    background-image:url('../images/body_image.png');
+    background-repeat: no-repeat;
+    height: 607px;
+    width: 516px;
+}
+
+
+#preview_video {
+    border: 3px solid #FFFFFF;
+}
+
+
+.yaxisLabel {
+    text-align:center;
+    top: 245px;
+    width: 240px;
+
+    position: inherit;
+    
+    left: -260px;
+    transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -webkit-transform:  rotate(-90deg);
+    transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+}
+
+.vertical_text {
+    writing-mode:tb-rl;
+    -webkit-transform:rotate(-90deg);
+    -moz-transform:rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    white-space:nowrap;
+    display:block;
+    bottom:0;
+    width:20px;
+    height:20px;
+    margin-bottom: 5px;
+}
+
+.table_border, .table_border th, .table_border td {
+   border: 1px solid #474747 !important;
+   border-collapse: collapse;
+}
+
+.add_area {
+    border:1px #ccc dashed;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.add_area .add_recipe {
+    color:#4f4f4f;
+    padding:5px;
+    width:100%;
+    height:100%;
+    cursor:pointer;
+}
+
+.thin_hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+}
+
+.table_header{
+    background: none repeat scroll 0 0 #313031 !important;
+    color:#fff;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 0;
+    height: 25px;
+}
+
+.orange_border {
+    border:2px solid #BC4A26;padding:2px;
+}
+
+.formula {
+    background: url("../../../../administrator/components/com_fitness/assets/images/small-tip.png") no-repeat scroll right center rgba(0, 0, 0, 0);
+    cursor: pointer;
+    padding-right: 17px;
+    
+}
+
+.notifiction_open_list, .notifiction_open_form {
+    cursor:pointer;
+}

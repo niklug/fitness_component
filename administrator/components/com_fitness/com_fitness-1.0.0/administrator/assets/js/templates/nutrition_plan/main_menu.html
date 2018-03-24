@@ -1,0 +1,15 @@
+<div id="plan_menu">
+    <ul>
+        <li><a onclick="javascript:void(0)"  id="overview_link" class="plan_menu_link"  href="javascript:void(0)">OVERVIEW</a></li>
+        <li><a onclick="javascript:void(0)"  id="targets_link" class="plan_menu_link"  href="javascript:void(0)">TARGETS</a></li>
+        <li><a onclick="javascript:void(0)"  id="macronutrients_link" class="plan_menu_link"  href="javascript:void(0)">MACROS</a></li>
+        <li><a onclick="javascript:void(0)"  id="supplements_link" class="plan_menu_link"  href="javascript:void(0)">SUPPLEMENTS</a></li>
+        <li><a onclick="javascript:void(0)"  id="nutrition_guide_link" class="plan_menu_link"  href="javascript:void(0)">MENU PLANS</a></li>
+        <li><a onclick="javascript:void(0)"  id="information_link" class="plan_menu_link"  href="javascript:void(0)">INFO</a></li>
+        <li><a onclick="javascript:void(0)"  id="archive_focus_link" class="plan_menu_link"  href="javascript:void(0)">ARCHIVE</a></li>
+        <li style="" id="close_tab" ><a onclick="javascript:void(0)"   class="plan_menu_link"  href="javascript:void(0)">ACTIVE PLAN</a></li>
+        <% if(app.options.add_diary_options.diary_id) { %>
+        <li><a onclick="javascript:void(0)" id="back_to_diary_link" class="plan_menu_link"  href="javascript:void(0)">BACK TO DAIRY</a></li>
+    <% } %>
+    </ul>
+</div>

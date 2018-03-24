@@ -1,0 +1,63 @@
+<table class="meal_table" width="100%">
+        <thead>
+            <tr>
+                <th class="ingredient_title">MEAL ITEMS</th>
+                <th>QUANTITY</th>
+                <th class="ingredient_cell">PRO</th>
+                <th class="ingredient_cell">FAT</th>
+                <th class="ingredient_cell">CARB</th>
+                <th class="ingredient_cell">CALS</th>
+                <th class="ingredient_cell">ENRG (kJ)</th>
+                <th class="ingredient_cell">FAT, SAT</th>
+                <th class="ingredient_cell">SUG</th>
+                <th class="ingredient_cell">SOD (mg)</th>
+
+                <th class="ingredient_cell_delete"></th>
+
+            </tr>
+        </thead>
+        <tbody class="meal_ingredients_wrapper">
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <%  if(item.edit_mode) { %>
+                        <a onclick="javascript:void(0)" class="add_meal_ingredient" style="cursor: pointer;">[ADD ITEM]</a>
+                        <%  if(item.show_save_as_recipe) { %>
+                            <a onclick="javascript:void(0)" class="save_as_recipe" style="cursor: pointer;margin-left:10px;">[SAVE AS RECIPE]</a>
+                        <% } %>
+                    <% } %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <b>TOTALS</b>
+                </td>
+                <td class="protein_totals table_border_top table_border_bottom">
+                    <%= item.protein_totals %>
+                </td>
+                <td class="fats_totals table_border_top table_border_bottom">
+                    <%= item.fats_totals %>
+                </td>
+                <td class="carbs_totals table_border_top table_border_bottom">
+                    <%= item.carbs_totals %>
+                </td>
+                <td class="calories_totals table_border_top table_border_bottom">
+                    <%= item.calories_totals %>
+                </td>
+                <td class="energy_totals table_border_top table_border_bottom">
+                    <%= item.energy_totals %>
+                </td>
+                <td class="saturated_fat_totals table_border_top table_border_bottom">
+                    <%= item.saturated_fat_totals %>
+                </td>
+                <td class="total_sugars_totals table_border_top table_border_bottom">
+                    <%= item.total_sugars_totals %>
+                </td>
+                <td class="sodium_totals table_border_top table_border_bottom">
+                    <%= item.sodium_totals %>
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+
+    </table>

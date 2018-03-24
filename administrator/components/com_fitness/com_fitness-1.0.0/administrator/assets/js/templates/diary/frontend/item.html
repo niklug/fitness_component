@@ -1,0 +1,359 @@
+<%
+var submitted = false;
+if (item.submit_date && (item.submit_date != '0000-00-00 00:00:00')) {
+    submitted = true;
+}
+var scored = false;
+if(_.contains(['2', '3', '4'], status)) {
+    scored = true;
+}
+%>
+<div class="page_container_width" style="margin-top: 10px; min-height:350px; border:none;">
+    <table width="100%" >
+        <tr>
+            <td>
+                <div class="fitness_block_wrapper" style="min-height:250px;">
+                    <h3>DIARY ENTRY DETAILS</h3>
+                    <hr class="orange_line">
+                    <div class="internal_wrapper">
+                        <table width="100%">
+                            <tr>
+                                <td width="150">
+                                    Date of Entry
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                    <% //if(submitted) {
+                                            var d1 = new Date(Date.parse(item.entry_date));            
+                                            var entry_date = moment(d1).format("dddd, D MMM  YYYY"); 
+                                            
+                                    %>
+                                            <%= entry_date %> 
+                                             <input value="<%= item.entry_date %>" style="width:70px;" readonly type="hidden" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
+                                    <%
+                                       /* } else {
+                                    %>
+                                        <input value="<%= item.entry_date %>" style="width:70px;" readonly type="text" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
+                                    <%
+                                        }
+                                    */%>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Date Created
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                    <%
+                                        var d2 = new Date(Date.parse(item.created));            
+                                        var created = moment(d2).format("dddd, D MMM  YYYY @ HH:mm");    
+                                    %>
+                                    <%= created || '-' %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Date Submitted
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                    <%
+                                        if (submitted) {
+                                            var d3 = new Date(Date.parse(item.submit_date));    
+                                            var submit_date = moment(d3).format("dddd, D MMM  YYYY @ HH:mm");    
+                                        } else {
+                                            submit_date = '-';
+                                        }
+                                    %>
+                                    <%= submit_date %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Assessed By
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                    <%=
+                                        item.assessed_by_name || '-'
+                                    %>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+            <td   width="40%">
+                <div class="fitness_block_wrapper" style="min-height:250px;">
+                    <h3>TRAINERS</h3>
+                    <hr class="orange_line">
+                    <div class="internal_wrapper">
+                        <table width="100%">
+                            <tr>
+                                <td>
+                                    Client Name
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%= item.client_name %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Primary Trainer
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%= item.trainer_name %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align:top;">
+                                    Secondary Trainers
+                                </td>
+                                <td>
+                                    <br/>
+                                    <span class="grey_title">
+                                        <%
+                                        _.each(item.secondary_trainers, function(item, key){ %>
+                                            <%=  item + " <br/>" %>
+                                        <%
+                                        })
+
+                                        %>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+            
+        </tr>
+
+
+        <% if(
+              app.options.statuses.PASS_DIARY_STATUS.id == item.status
+              || app.options.statuses.FAIL_DIARY_STATUS.id == item.status
+              || app.options.statuses.DISTINCTION_DIARY_STATUS.id == item.status
+              ) {
+        %>
+        <tr>
+            <td    colspan="2">
+                <div class="fitness_block_wrapper" style="min-height:150px;">
+                    <h3>MY CURRENT GOALS & TRAINING FOCUS</h3>
+                    <hr class="orange_line">
+                    <div class="internal_wrapper">
+                        <table width="100%">
+                            <tr>
+                                <td width="50%" style="vertical-align:top;">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="100">
+                                                Primary Goal
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.primary_goal_name %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Start Date
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.primary_goal_start_date %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Achieve By 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.primary_goal_deadline %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Status 
+                                            </td>
+                                            <td id="primary_goal_status">
+                                              
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Goal Details 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.primary_goal_details %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                                <td style="vertical-align:top;">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="100">
+                                                Mini  Goal
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.mini_goal_name %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100">
+                                                Training Period 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.training_period_name %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Start Date
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.mini_goal_start_date %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Achieve By 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.mini_goal_deadline %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Status 
+                                            </td>
+                                            <td id="mini_goal_status">
+                                                
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Goal Details 
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= active_plan_data.mini_goal_details %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+
+
+        <tr>
+            <td    colspan="2">
+                <div class="fitness_block_wrapper" style="min-height:150px;">
+                    <h3>MY NUTRITION FOCUS</h3>
+                    <hr class="orange_line">
+                    <div class="internal_wrapper">
+                        <table width="100%">
+                            <tr>
+                                <td>
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="130">
+                                                Nutrition Focus
+                                            </td>
+                                            <td>
+                                                <span class="grey_title">
+                                                    <%= item.nutrition_focus_name %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <%= decodeURIComponent(active_plan_data.trainer_comments) %>
+                                            </td>
+                                        </tr>
+                                    </table> 
+                                </td>
+                                <td>
+                                    <table width="50%">
+                                        <tr>
+                                            <td>
+                                                <%
+                                                if(item.trainer_comments) {
+                                                %>
+                                                   'Trainer Comments'
+                                                <%
+                                                }
+                                                %>
+
+                                            </td>
+                                            <td>
+                                                <%= item.trainer_comments %>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <% } %>
+
+        <tr>
+            <td     colspan="2" >
+                <div  id="targets_wrapper" class="fitness_block_wrapper">
+
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td   colspan="2">
+                <div id="meal_entries_wrapper"  class="fitness_block_wrapper" style="min-height: 300px;">
+                    
+                </div>
+            </td>
+        </tr>
+        
+        <tr>
+            <td id="totals_wrapper" colspan="2" >
+                
+            </td>
+        </tr>
+
+    </table>
+</div>

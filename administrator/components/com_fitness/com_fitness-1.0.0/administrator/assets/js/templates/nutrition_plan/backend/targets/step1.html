@@ -1,0 +1,153 @@
+<div class="fitness_block_wrapper" >
+    <table width="100%">
+        <tr>
+            <td width="70%">
+                <b style="float:left;">SELECT ASSESSMENT RESULTS</b>
+                <input style="float:left;margin-left: 10px;" id="date_from" size="15" type="text" placeholder="Date From" >
+                <input style="float:left;margin-left: 10px;" id="date_to" size="15" type="text" placeholder="Date To" >
+
+                <a title="" style="cursor: pointer;display: inline-block;margin-left:10px;" id="search_assessments" onclick="javascript:void(0)">[SEARCH]</a>
+                <a title="" style="cursor: pointer;display: inline-block;margin-left:10px;" id="clear_assessments" onclick="javascript:void(0)">[CLEAR]</a>
+                <div class="clr"></div>
+                <br/>
+                <table width="80%" id="assessments_list_wrapper"></table>
+                
+                <hr>
+                
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <b>GENDER</b> <br/>
+                            <input checked="checked" type="radio" name="step1_gender" id="step1_gender_male" value="male"> Male 
+                            <div class="clr"></div>
+                            <input type="radio" name="step1_gender" id="step1_gender_female" value="female">Female <br/>
+                        </td>
+                        
+                        <td>
+                            <b>AGE</b> <br/>
+                            <input type="text" maxlength="2" size="2" name="step1_age" id="step1_age" value="<%= item.age %>"> 
+                            Years
+                        </td>
+                        
+                        <td>
+                            <b>HEIGHT</b> <br/>
+                            <input type="text" maxlength="8" size="8" name="step1_height" id="step1_height" value="<%= item.height %>"> 
+                            cm
+                        </td>
+                        
+                        <td>
+                            <b>WEIGHT</b> <br/>
+                            <input type="text" maxlength="8" size="8" name="step1_weight" id="step1_weight" value="<%= item.weight %>"> 
+                            kg
+                        </td>
+                        
+                    </tr>
+                </table>
+                
+                <hr>
+                
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <b>FORMULA</b>
+                            <div class="clr"></div>
+                            <br/>
+                            <input checked="checked" type="radio" name="step1_formula" id="step1_formula_lean" value="lean">
+                            <span title="&lt;p&gt;The Mifflin-St Jeor formula is touted by that American Dietetic Association as the most accurate method for TDEE Calculation.&lt;P&gt;This formula bases protein needs off of total mass and is best suited for athletes or those with lower body fat levels. Overweight individuals should not use this formula as it will give them too much protein and strip them of carbohydrates in the final calcualtions.&lt;/p&gt;
+                                &lt;p&gt;&lt;P&gt;&lt;br /&gt;
+                                &lt;strong&gt;How to calculate for Men&lt;/strong&gt;&lt;br /&gt;
+                                10 x weight (kg) + 6.25 x height (cm) &ndash; 5 x age (y) + 5&lt;br /&gt;
+                                &lt;P&gt;&lt;br /&gt;
+                                &lt;strong&gt;How to calculate for Women&lt;/strong&gt;&lt;br /&gt;
+                                10 x weight (kg) + 6.25 x height (cm) &ndash; 5 x age (y) &ndash; 161&lt;/p&gt;
+                                " class="formula">Athletes Formula (best for lean people)
+                            </span>
+                            
+                            <div class="clr"></div>
+                            <br/>
+                            
+                            <input type="radio" name="step1_formula" id="step1_formula_overweight" value="overweight">
+                            <span title="&lt;p&gt;A variation of the Mifflin-St Jeor equation which is more accurate for those who are who know their body fat percentage. This formula will base your protein needs off of your lean mass rather than your total mass. Ideal for those that have higher levels of body fat. Idea for those that are overweight.&lt;br /&gt;
+                                &lt;P&gt;&lt;br /&gt;
+                                &lt;strong&gt;Calculations are the same for both Men &amp; Women&lt;/strong&gt;&lt;br /&gt;
+                                21.6 * Lean Body Mass (kg) + 370&lt;/p&gt;
+                                " class="formula">Lean Mass Formula (best if overweight)
+                            </span>
+                            <br/>
+                        </td>
+                        
+                        <td>
+                            <b>EXERCISE LEVEL</b> <br/>
+                            <select id="exercise_level" name="exercise_level">
+                                <option data-water="0" value="1.0">Basal Metabolic Rate</option>
+                                <option data-water="0.5" class="hilite" value="1.2">No exercise (desk job/couch potato)</option>
+                                <option data-water="0.56" value="1.375" selected="selected">3 times/week</option>
+                                <option data-water="0.56" class="hilite" value="1.4187">4 times/week</option>
+                                <option data-water="0.62" value="1.4625">5 times/week</option>
+                                <option data-water="0.62" class="hilite" value="1.5063">6 times/week</option>
+                                <option data-water="0.68" class="hilite" value="1.550">5 times/week (*intense)</option>
+                                <option data-water="0.68" value="1.6375">Every day</option>
+                                <option data-water="0.75" class="hilite" value="1.725">Every day (*intense) or twice daily</option>
+                                <option data-water="0.75" value="1.9">Daily exercise + physical job</option>
+                            </select>
+                            
+                            <div class="clr"></div>
+                            <br/>
+                            
+                            <b>CURRENT BODY FAT</b> <br/>
+                            <input type="text" maxlength="8" size="8" name="step1_body_fat" id="step1_body_fat" value="<%= item.body_fat %>"> 
+                            %
+                            
+                            <div class="clr"></div>
+                            <br/>
+                            <b>CLIMATE</b> <br/>
+                            <select id="climate">
+                                <option value="0">Temperate</option>
+                                <option value="473.1764">Tropical</option>
+                                <option value="236.5882" >Cold</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="vertical-align: bottom;text-align: center;">
+                <div style="width: 250px;height: auto;border:1px #000 solid; display: inline-block;background-color:#d2d2d2;">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                           <b>BMR</b>  
+                                        </td>
+                                        <td>
+                                            <input readonly type="text" maxlength="8" size="8" name="step1_bmr" id="step1_bmr" value="<%= item.BMR %>">
+                                        </td>
+                                        <td>
+                                            calories/day
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                           <b>TDEE</b>  
+                                        </td>
+                                        <td>
+                                            <input readonly type="text" maxlength="8" size="8" name="step1_tdee" id="step1_tdee" value="<%= item.TDEE %>">
+                                        </td>
+                                        <td>
+                                            calories/day
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="clr"></div>
+                <br/><br/>
+                <input style="float: right;" id="step1_claculate" type="button" value="CALCULATE TDEE">
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_MINIGOAL_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="primary_goal_id" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_PRIMARY_GOAL_ID"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_PRIMARY_GOAL_ID" 
+        
+        
+        
+        filter="safehtml" /> 
+       
+       <field name="user_id" type="text" size="40" class="inputbox"
+        filter="safehtml" /> 
+       
+              
+        <field name="mini_goal_category_id" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_mini_goal_categories WHERE state='1'"
+              key_field="id"
+              value_field="name"
+              label="COM_FITNESS_FORM_LBL_MINIGOAL_MINI_GOAL_CATEGORY_ID"
+        /> 
+        
+        <field name="training_period_id" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_training_period`"
+              key_field="id"
+              value_field="name"
+              label="Training Period"
+        /> 
+        
+                
+        <field name="start_date" type="text" size="8"
+              class="inputbox" 
+              label="Start Date"
+              description="" 
+              readonly="true"
+              filter="safehtml" /> 
+
+       <field name="deadline" type="text" class="inputbox"
+         size="8"
+         readonly="true"
+         default="" 
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_DEADLINE"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_DEADLINE" 
+        filter="safehtml" /> 
+
+       <field name="details" type="editor" buttons="true"
+        class="inputbox"
+        filter="safehtml"
+        
+        
+        
+        
+            label="COM_FITNESS_FORM_LBL_MINIGOAL_DETAILS"
+            description="COM_FITNESS_FORM_DESC_MINIGOAL_DETAILS"  /> 
+
+
+
+        <field name="status" type="list"
+                
+              label="Status"
+              description="" 
+              default="4"   
+              filter="raw">
+            <option value="1">Pending</option>
+            <option value="2">Complete</option>
+            <option value="3">Incomplete</option>
+            <option value="4">Evaluating</option>
+            <option value="5">In Progress</option>
+            <option value="6">Assessing</option>
+        </field> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

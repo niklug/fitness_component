@@ -1,0 +1,21 @@
+<div class="fitness_block_wrapper" style="height:30px;margin-top: 10px;">
+    <div class="internal_wrapper">
+        <div style="width:100%;">
+
+            <a data-id="<%= id %>" style="cursor: pointer;" class="view_calender" onclick="javascript:void(0)">[VIEW ON CALENDAR]</a>
+           
+            
+            <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="close_item" onclick="javascript:void(0)">[CLOSE]</a>
+            
+            <% 
+            //PENDING, CONFIRMED
+            if ((app.options.const_self_assessment == session_type) && parseInt(frontend_published) && (status == '1' || status == '12' )) { %>
+                <a data-id="<%= id %>" style="cursor: pointer; float:right;margin-right:10px;" class="edit_item" onclick="javascript:void(0)">[EDIT]</a>
+                
+                <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="submit_to_trainer" onclick="javascript:void(0)">[SUBMIT TO TRAINER]</a>
+            <% } %>
+        </div>
+        <div class="clr"></div>
+    </div>
+    <hr class="orange_line">
+</div>

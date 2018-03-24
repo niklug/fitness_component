@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="recipe_name" type="text" size="60" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_RECIPE_NAME"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_RECIPE_RECIPE_NAME" 
+        
+        
+         required="true" 
+        filter="safehtml" /> 
+       
+       <field name="recipe_type" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_recipe_types`"
+              key_field="id"
+              value_field="name"
+              label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_RECIPE_TYPE"
+        /> 
+       
+        <field name="number_serves"  size="3" class="inputbox" type="text" default="1" label="NUMBER OF SERVES"
+            description="" /> 
+
+        <field name="instructions" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+            label="Cooking Instructions / Method"
+            description=""  /> 
+       
+       <field name="created_by" type="createdby" default="" 
+            label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_CREATED_BY"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_RECIPE_CREATED_BY"  /> 
+
+ 
+		<field name="filter_created_by" type="user" onchange="this.form.submit();" /> 
+
+       <field name="created" type="timecreated" default="" 
+            label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_CREATED"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_RECIPE_CREATED"  /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

@@ -1,0 +1,102 @@
+<div class="fitness_block_wrapper" style="margin-top:10px;">
+    <table width="100%">
+        
+        <tr>
+            <td class="center" style="vertical-align: top;">
+                <div style="border:2px solid #E94E1B;border-radius:10px;" >
+                    <div style="line-height: 80px;font-size:48px; color:#E94E1B; font-weight: bold;"><%= item.BMR || '0' %></div>
+                    <div style="font-size: 22px; color:#E94E1B; font-weight: bold; height: 40px;">calories</div>
+                </div>
+            </td>
+            <td style="vertical-align: top;padding-left: 10px;">
+                BASAL METABOLIC RATE (BMR)<br/><br/>
+                
+                Your BMR represents the number of calories your body burns at rest. This is in effect,<br/>
+                the precise amount of calories your individual body requires to keep you alive.<br/>
+            </td>
+        </tr>
+        
+        <tr><td colspan="2"><hr></td></tr>
+        
+        <tr>
+            <td class="center" style="vertical-align: top;">
+                <div style="border:2px solid #ffff00;border-radius:10px;" >
+                    <div style="line-height: 80px;font-size:48px; color:#ffff00; font-weight: bold;"><%= item.TDEE || '0' %></div>
+                    <div style="font-size: 22px; color:#ffff00; font-weight: bold; height: 40px;">calories</div>
+                </div>
+            </td>
+            <td style="vertical-align: top;padding-left: 10px;">
+                TOTAL DAILY ENERGY EXPENDITURE (TDEE)<br/><br/>
+                
+                Your TDEE is the amount of calories your body burns in a 24 hour period while sleeping, working,<br/>
+                exercising, playing and even digesting food!
+            </td>
+        </tr>
+        
+        <tr><td colspan="2"><hr></td></tr>
+        
+        <tr>
+            <td class="center" style="vertical-align: top;">
+                <div style="border:2px solid #00983A;border-radius:10px;" >
+                    <div style="line-height: 80px;font-size:48px; color:#00983A; font-weight: bold;"><%= item.calories || '0' %></div>
+                    <div style="font-size: 22px; color:#00983A; font-weight: bold; height: 40px;">calories</div>
+                </div>
+            </td>
+            <td style="vertical-align: top;padding-left: 10px;">
+                TOTAL DAILY CALORIE TARGET (TDCT)<br/><br/>
+                
+                Your TDCT is the amount of calories your trainer has determined you need to consume on a daily<br/>
+                basis. This is the optimal amount required that will allow you to reach your specific goal.
+            </td>
+        </tr>
+        
+        <tr><td colspan="2"><hr></td></tr>
+        
+        <tr>
+            <td class="center" style="vertical-align: top;">
+                <div style="border:2px solid #3F9EEB;border-radius:10px;" >
+                    <div style="line-height: 80px;font-size:48px; color:#3F9EEB; font-weight: bold;"><%= item.water || '0' %></div>
+                    <div style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">millilitres</div>
+                </div>
+            </td>
+            <td style="vertical-align: top;padding-left: 10px;">
+                TOTAL DAILY WATER TARGET (TDWT)<br/><br/>
+                
+                Your TDWT is the amount of water your trainer has estimated you need to consume on a daily<br/>
+                basis. Remember, this is only an estimate. The actual amount required can be influenced by<br/>
+                other factors such as more exercise on a particular day, illness and fluid content in dietary intake.<br/>
+                Pregnant and breast feeding women need to drink additional fluids to stay hydrated.<br/>
+            </td>
+        </tr>
+        
+        <tr><td colspan="2"><hr></td></tr>
+        
+        <tr>
+            <td  class="center" style="vertical-align: top;">
+                <div  class="pie-container">
+                    <div style="width:220px;height:220px;font-size: 14px; line-height: 1.2em;" class="placeholder_pie"></div>
+                </div>
+            </td>
+            <td style="vertical-align: top;padding-left: 10px;">
+                DAILY MACRONUTRIENT RATIOS<br/><br/>
+                
+                This is the macronutrient ratio your trainer has determined as your specific daily requirements<br/>
+                in order to accomplish your goals. You should eat the exact (or as close to) amount of protein, fat and<br/>
+                carbohydrates every day, regardless if you exercise or not.<br/>
+            </td>
+        </tr>
+        
+        <tr><td colspan="2"><hr></td></tr>
+        
+        
+        <tr>
+            <td colspan="2">
+                <div id="targets_comments_wrapper" style="width:100%"></div>
+            </td>
+        </tr>
+        
+        
+    </table> 
+    
+    
+</div>

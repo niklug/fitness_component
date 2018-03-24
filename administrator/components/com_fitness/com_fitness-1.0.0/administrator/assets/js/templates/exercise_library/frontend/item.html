@@ -1,0 +1,162 @@
+<table width="100%" style="margin-top: 20px">
+    <tr>
+        <td style="vertical-align: top;padding-left: 0;">
+            
+            <div id="exercise_video" style="text-align: center;"></div>
+            <div class="clr"></div>
+            <br/>
+            <table width="100%">
+                <tr>
+                    <td style="vertical-align: top;" width="60%">
+                        <table width="100%">
+                            <tr>
+                                <td  width="140">AUTHOR</td>
+                                <td><%= created_by_name %></td>
+                            </tr>
+                            <tr>
+                                <td>DATE CREATED</td>
+                                <td><%= moment(new Date(Date.parse(created))).format("ddd, D MMM  YY")  %></td>
+                            </tr>
+                            <tr>
+                                <td>STATUS</td>
+                                <td>
+                                    <%= $.fitness_helper.setExerciseLibraryStatus(status, id) %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ASSESSED BY</td>
+                                <td><%= assessed_by_name  %></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <table width="100%">
+                            <tr>
+                                <td width="140">EXERCISE NAME</td>
+                                <td><%= exercise_name  %></td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    EXERCISE TYPE
+                                </td>
+                                <td>
+                                    <%
+                                    if(exercise_type_names) {
+                                        _.each(exercise_type_names.split(','), function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% })
+                                    }  else { %>
+                                        <%= '-' %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    FORCE TYPE
+                                </td>
+                                <td>
+                                    <%
+                                    if(force_type_names) {
+                                        _.each(force_type_names.split(','), function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% })
+                                    }  else { %>
+                                        <%= '-' %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    MECHANICS TYPE
+                                </td>
+                                <td>
+                                    <%
+                                    if(mechanics_type_names) {
+                                        _.each(mechanics_type_names.split(','), function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% })
+                                    }  else { %>
+                                        <%= '-' %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    BODY PART
+                                </td>
+                                <td>
+                                    <%
+                                    if(body_part_names) {
+                                        _.each(body_part_names.split(','), function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% })
+                                    }  else { %>
+                                        <%= '-' %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    TARGET MUSCLES
+                                </td>
+                                <td>
+                                    <%
+                                    if(target_muscles_names) {
+                                        _.each(target_muscles_names.split(','), function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% })
+                                    }  else { %>
+                                        <%= '-' %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    EQUIPMENT
+                                </td>
+                                <td>
+                                    <%
+                                    if(equipment_type_names) {
+                                        _.each(equipment_type_names.split(','), function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% })
+                                    }  else { %>
+                                        <%= '-' %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    DIFFICULTY
+                                </td>
+                                <td>
+                                    <%
+                                    if(difficulty_names) {
+                                        _.each(difficulty_names.split(','), function(item){ %>
+                                            <%= item + "<br/>" %>
+                                        <% })
+                                    }  else { %>
+                                        <%= '-' %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td colspan="2" style="padding: 5px;">
+                        <br/>
+                        <div class="clr"></div>
+                        <div id="comments_wrapper"></div>
+                    </td>
+                </tr>
+            </table>
+            
+            
+        </td>
+        <td style="vertical-align:top; padding-right: 0; width:200px;">
+            <div id="right_side"> </div>
+        </td>
+    </tr>
+</table>

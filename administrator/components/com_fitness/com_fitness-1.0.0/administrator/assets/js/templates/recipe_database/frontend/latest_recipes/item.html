@@ -1,0 +1,69 @@
+<div class="recipe_database_latest_item_wrapper" style="margin-top: 0px;">
+    <table  width="100%">
+        <tr>
+            <td colspan="2">
+                 <h5><%= recipe_name %></h5>
+            </td>
+        </tr>
+        <tr>
+        <tr>
+            <td width="40%">Author: </td>
+            <td>
+                <span class="grey_title">
+                     <%= author %>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>Created:</td>
+            <td>
+                <span class="grey_title">
+                    <%
+                    var d1 = new Date(Date.parse(created));            
+                    var created_date = moment(d1).format("ddd, D MMM  YY"); 
+
+                    %>
+                    <%= created_date %>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>Calories:</td>
+            <td>
+                <span class="grey_title"><%= calories || '0.00' %></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Protein:</td>
+            <td>
+                <span class="grey_title"><%= protein || '0.00' %></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Fat:</td>
+            <td>
+                <span class="grey_title"><%= fats || '0.00' %></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Carb:</td>
+            <td>
+                <span class="grey_title"><%= carbs || '0.00' %></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Serves:</td>
+            <td>
+                <span class="grey_title"><%= number_serves %></span>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align:right; vertical-align:bottom;">
+                <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[view]</a>
+            </td>
+        </tr>
+    </table>
+
+</div>
+<hr>

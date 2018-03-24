@@ -1,0 +1,96 @@
+<% 
+var value_label = 'grams per kg of body weight';
+
+if(item.formula == 'overweight') {
+    value_label = 'grams per kg of lean mass';
+}
+
+%>
+<div class="fitness_block_wrapper">
+    <table width="100%">
+        <tr> 
+            <td style="vertical-align: top; width:25%;">
+                <b>COMMON PROFILES</b>
+                <div class="clr"></div><br/>
+                <select size="8" id="common_profiles" name="common_profiless">
+                    <option selected="selected" id="common_profiles_iifym" data-name="iifym" value="iifym">FLEXIBLE (IIFYM)</option>
+                    <option data-fat="25" data-protein="25" data-carbs="50" data-name="textbook" value="textbook"> TEXTBOOK</option>
+                    <option data-fat="20" data-protein="40" data-carbs="40" data-name="body_builder" value="body_builder">BODY BUILDER</option>
+                    <option data-fat="30" data-protein="30" data-carbs="40" data-name="zone_diet" value="zone_diet">ZONE DIET</option>
+                    <option data-fat="15" data-protein="25" data-carbs="60" data-name="low_fat" value="low_fat">LOW FAT</option>
+                    <option data-fat="35" data-protein="40" data-carbs="25" data-name="low_carb" value="low_carb">LOW CARB</option>
+                    <option data-fat="65" data-protein="30" data-carbs="5" data-name="ketogenic" value="ketogenic">KETOGENIC (ATKINS)</option>
+                    <option data-fat="" data-protein="" data-carbs="" data-name="custom_ratios" value="custom_ratios">CUSTOM RATIOS</option>
+                </select>
+            </td>
+            
+            <td style="vertical-align: top;width:35%;display:none;" id="iifym_block">
+                <b>PROTEIN</b> (4 calories per gram)
+                <div class="clr"></div>
+                <input checked="checked" type="radio"  name="step3_protein" class="step3_protein" value="1.54322">1.5 <%= value_label %>
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_protein"  value="1.76368">1.75 <%= value_label %>
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_protein"  value="1.98414">2 <%= value_label %>
+                <div class="clr"></div>
+                <input type="radio" name="step3_protein" class="step3_protein"  value="custom">
+                Custom
+                <input type="text" maxlength="8" size="8"  id="step3_protein_custom" value="<%= item.step3_protein_custom %>"> 
+                <%= value_label %>
+                
+                <div class="clr"></div>
+                <br/>
+                
+                <b>FATS</b> (9 calories per gram)
+                <div class="clr"></div>
+                <input checked="checked" type="radio"  name="step3_fats" class="step3_fats" value="0.66138">0.66 <%= value_label %>
+                <div class="clr"></div>
+                <input type="radio" name="step3_fats" class="step3_fats"  value="0.77161">0.77 <%= value_label %>
+                <div class="clr"></div>
+                <input type="radio" name="step3_fats" class="step3_fats"  value="0.88184">0.88 <%= value_label %>               <div class="clr"></div>
+                <input type="radio" name="step3_fats" class="step3_fats"  value="custom">
+                Custom
+                <input type="text" maxlength="8" size="8"  id="step3_fats_custom" value="<%= item.step3_fats_custom %>"> 
+                <%= value_label %>
+                
+                <div class="clr"></div>
+                <br/>
+                <b>CARBOHYDRATES</b> (4 calories per gram)
+                <div class="clr"></div>
+                Carbohydrates are calculated based on the
+                calories remaining after calories from protein
+                and fat have been subtracted from the TDEE.
+            </td>
+            
+            <td style="vertical-align: top;width:35%;display:none;" id="other_common_profiles_block">
+                <table width="100%">
+                    <td>
+                        <b>PROTEIN</b>
+                        <div class="clr"></div>
+                        <input type="text" maxlength="8" size="8" id="step3_protein" value="<%= item.step3_protein %>"> 
+                        %
+                    </td>
+                    
+                    <td>
+                        <b>FATS</b>
+                        <div class="clr"></div>
+                        <input type="text" maxlength="8" size="8" id="step3_fats" value="<%= item.step3_fats %>"> 
+                        %
+                    </td>
+                    
+                    <td>
+                        <b>CARBS</b>
+                        <div class="clr"></div>
+                        <input type="text" maxlength="8" size="8" id="step3_carbs" value="<%= item.step3_carbs %>" > 
+                        %
+                    </td>
+                </table>
+            </td>
+            
+            <td style="vertical-align: bottom;">
+                <input style="float: right;" id="step3_claculate" type="button" value="SAVE & CALCULATE">
+            </td>
+        </tr>
+    </table>
+</div>
+

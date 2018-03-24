@@ -1,0 +1,42 @@
+<div style="width:900px;">
+    <table width="100%">
+        <tr>
+            <td width="200" class="photo_item_wrapper">
+
+            </td>
+            <td>
+                <table width="100%">
+                    <tr>
+                        <td width="110">
+                            <label>Description</label>
+                        </td>
+                        <td>
+                            <input style="width:100%" type="text" class="photo_description" value="<%= data.description %>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Client Comments</label>
+                        </td>
+                        <td>
+                            <textarea style="width:100%;height:50px;" type="text" class="photo_client_comments"  ><%= data.client_comments %></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Trainer Comments</label>
+                        </td>
+                        <td>
+                            <textarea style="width:100%;height:50px;" type="text" class="photo_trainer_comments" ><%= data.trainer_comments %></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <a data-id="<%= data.id %>" style="float:right;margin-left: 20px;" href="javascript:void(0)" class="close_photo">[Close]</a>
+                <a data-id="<%= data.id %>" style="float:right;" href="javascript:void(0)" class="save_photo">[Save]</a>
+            </td>
+        </tr>
+    </table>
+    <hr>
+</div>
+

@@ -1,0 +1,45 @@
+<%
+var sort_title = 'Click to sort by this column';
+%>
+<div class="fitness_block_wrapper" style="margin-top: 20px; background-color:#fff;">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <thead class="table_header" style="font-size: 12px;">
+                <tr>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_exercise_name" onclick="javascript:void(0)">Exercise Name</a></th>
+                    <th>Exercise Type</th>
+                    <th>Force Type</th>
+                    <th>Mechanics Type</th>
+                    <th>Body Part</th>
+                    <th>Target Muscles</th>
+                    <th>Equipment</th>
+                    <th>Difficulty</th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_created" onclick="javascript:void(0)">Created</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_created_by" onclick="javascript:void(0)">Author</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_status" onclick="javascript:void(0)">Status</a></th>
+                    
+                    <% if(app.options.is_superuser) { %>
+                        <th>Global Business Permission</th>
+                    <% } %>
+                    
+                    <th>My Exercises List</th>
+                    <% if(app.options.exercise_id) { %>
+                        <th></th>
+                    <% } %>  
+                    <th>  
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                    <th><input style="margin-left:2px;" id="select_trashed" type="checkbox"/></th>
+                </tr>
+            </thead>
+            <tbody id="items_container">
+            
+            </tbody>
+        </table>
+        <br/>
+        <div style="text-align:center;" id="pagination_container"></div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<%
+var current_page = app.models.request_params.get('current_page');
+
+%>
+<div class="fitness_block_wrapper" style="margin-top: 20px;">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th width="175"><a title="Click to sort by this column" style="cursor: pointer;" id="sort_starttime" onclick="javascript:void(0)">DATE</a></th>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_session_focus" onclick="javascript:void(0)">ASSESSMENT</a></th>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_trainer" onclick="javascript:void(0)">TRAINER</a></th>
+                    
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_weight" onclick="javascript:void(0)">WEIGHT (kg)</a></th>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_lean_mass" onclick="javascript:void(0)">LEAN MASS (kg)</a></th>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_body_fat" onclick="javascript:void(0)">BODY FAT (%)</a></th>
+
+                    
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_status" onclick="javascript:void(0)">STATUS</a></th>
+                    
+                    
+                    <th></th>
+                    
+                    <% if(current_page == 'my_programs') { %>
+                    <th width="25" >
+                        <a id="copy_selected" title="Copy Selected" style="cursor: pointer;" onclick="javascript:void(0)"><span class="copy_icon"></span></a>
+                    </th>
+                    <% } %>
+                    
+                    
+                    <% if(current_page == 'my_programs') { %>
+                        <th width="25" >
+                            <a id="trash_selected" title="Trash Selected" style="cursor: pointer;" onclick="javascript:void(0)"><span  class="trash_icon"></span></a>
+                        </th>
+                    <% } %>
+                        
+                    <% if(current_page == 'trash_list') { %>
+                        <th width="25" >
+                            <a id="delete_selected" title="Delete Selected" style="cursor: pointer;" onclick="javascript:void(0)"><span  class="delete_icon"></span></a>
+                        </th>
+                    <% } %>
+        
+                    <% if(current_page == 'my_programs' || current_page == 'trash_list') { %>
+                    <th><input style="margin-left:2px;" id="select_all" type="checkbox"/></th>
+                    <% } %>
+                </tr>
+            </thead>
+            <tbody id="items_container">
+            
+            </tbody>
+        </table>
+        <br/>
+        <div style="text-align:center;" id="pagination_container"></div>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+<tr data-id="<%= item.id %>" class="diary_row">
+    <td>
+        <% var entry_date = moment(new Date(Date.parse(item.entry_date))).format("ddd, D MMM  YY");%>
+        <a data-id="<%= item.id %>" title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><%= entry_date %></a>
+    </td>
+    
+    <td>
+        <% if (item.submit_date != '0000-00-00 00:00:00') { %>
+            <%= moment(new Date(Date.parse(item.submit_date))).format("ddd, D MMM  YYYY") %>
+            &nbsp;@&nbsp;
+            <%= moment(new Date(Date.parse(item.submit_date))).format("HH:mm") %>
+
+        <% } else { %> 
+            <%= '-' %>
+        <% } %>
+    </td>
+    
+    <td>
+        <%= item.client_name %>
+    </td>
+    
+    <td>
+        <%= item.trainer_name %>
+    </td>
+    
+    <td>
+        <% if (item.assessed_by_name) { %>
+            <%= item.assessed_by_name %>
+        <% } else { %> 
+            <%= '-' %>
+        <% } %>
+    </td>
+    
+    <td>
+        <%= item.mini_goal_name %>
+    </td>
+    
+    <td>
+        <%= item.nutrition_focus_name %>
+    </td>
+    
+    <td>
+        <%= item.target_calories %>
+    </td>
+    
+    <td>
+        <%= item.target_protein %>
+    </td>
+    
+    <td>
+        <%= item.target_fats %>
+    </td>
+    
+    <td>
+        <%= item.target_carbs %>
+    </td>
+    
+    <td>
+        <% if (item.score != '0') { %>
+            <%= item.score + '%' %>
+        <% } else { %> 
+            <%= '-' %>
+        <% } %>
+    </td>
+    
+    <td id="status_wrapper_<%= item.id %>"></td>
+  
+    <td>
+        <% if(item.state == '1' || item.state == '0') { %>
+            <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
+        <% } else { %>
+            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
+        <% } %>
+    </td>
+    <td>
+        <% if(item.state == '1' || item.state == '0') { %>
+            <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= item.id %>" class="trash_icon"></span></a>
+        <% } else { %>
+            <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= item.id %>" class="delete_icon"></span></a>
+        <% } %>
+    </td>
+    
+    <td class="center">
+        <%
+        var icon_class = 'unpublish';
+        var publish_title = 'Publish'; 
+        if(parseInt(item.state) == '1') {
+            icon_class = 'publish';
+            publish_title = 'Unpublish'; 
+        }
+        %>
+        <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish state <%= icon_class %> " ></span></span> <br/>
+
+    </td>
+    
+    <td><input data-id="<%= item.id %>" class="trash_checkbox" type="checkbox"/></td>
+</tr>

@@ -1,0 +1,179 @@
+<table width="100%">
+    <tr>
+        <td width="40%" style="padding-left:0px;">
+            <div class="fitness_block_wrapper" style="min-height:224px;">
+                <h3>MY TRAINERS</h3>
+                <hr class="orange_line">
+                <div class="internal_wrapper">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                Client Name
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= client_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Primary Trainer
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= trainer_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;">
+                                Secondary Trainers
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%
+                                    var secondary_trainers = secondary_trainers;
+                                    _.each(secondary_trainers, function(item, key){ %>
+                                        <%=  item + " <br/>" %>
+                                    <%
+                                    })
+
+                                    %>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </td>
+        <td style="padding-right:0px;">
+            <div class="fitness_block_wrapper" style="min-height:224px;">
+                <h3>NUTRITION PLAN & TRAINING PERIOD</h3>
+                <hr class="orange_line">
+                <div class="internal_wrapper">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                Primary Goal 
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= primary_goal_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Start Date
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%
+                                    var d1 = new Date(Date.parse(primary_goal_start_date));            
+                                    var primary_goal_start_date = moment(d1).format("dddd D MMMM  YYYY");      
+                                    %>
+                                    <%= primary_goal_start_date %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Achieve By 
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%
+                                    var d2 = new Date(Date.parse(primary_goal_deadline));            
+                                    var primary_goal_deadline = moment(d2).format("dddd D MMMM  YYYY");      
+                                    %>
+                                    <%= primary_goal_deadline %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Mini Goal 
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= mini_goal_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Training Period 
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%= training_period_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Start Date
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%
+                                    var d3 = new Date(Date.parse(active_start));            
+                                    var active_start = moment(d3).format("dddd D MMMM  YYYY");      
+                                    %>
+                                    <%= active_start %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Achieve By 
+                            </td>
+                            <td>
+                                <span class="grey_title">
+                                    <%
+                                    var d4 = new Date(Date.parse(active_finish));            
+                                    var active_finish = moment(d4).format("dddd D MMMM  YYYY");      
+                                    %>
+                                    <%= active_finish %>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<br/>
+
+<div class="fitness_block_wrapper" style="min-height:150px;">
+    <h3>MY NUTRITION FOCUS</h3>
+    <hr class="orange_line">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <tr>
+                <td width="20%">
+                    Nutrition Focus
+                </td>
+                <td>
+                    <span class="grey_title">
+                         <%= nutrition_focus_name %>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <%= decodeURIComponent(trainer_comments) %>
+                </td>
+            </tr>
+        </table> 
+    </div>
+</div>

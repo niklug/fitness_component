@@ -1,0 +1,46 @@
+<table width="400">
+    <tr>
+        <td width="100">
+            <label>Business Name</label>
+        </td>
+        <td id="business_name_select">
+            
+        </td>
+    </tr>
+    
+    <% if(id) { %>
+    <tr>
+        <td>
+            <label>Author</label> 
+        </td>
+        <td>
+            <%= created_by_name %>
+        </td>
+    </tr>
+    <% } %>
+    
+    <tr>
+        <td>
+            <label>Trainer Name</label> 
+        </td>
+        <td id="trainer_select">
+            
+        </td>
+    </tr>
+    <% if(is_owner) { %>
+    <tr>
+        <td>
+            <label>View Access</label> 
+        </td>
+        <td>
+            <select id="access" class="inputbox" size="1" name="access">
+                <option value="0">All Trainers</option>
+                <option value="1">Author Only</option>
+            </select>
+            
+        </td>
+    </tr>
+    <% } %>
+    
+</table>
+

@@ -1,0 +1,43 @@
+<table width="900">
+    <tr>
+        <td width="30%" id="video_upload_content">
+            
+        </td>
+        <td>
+            <table width="100%">
+                <tr>
+                    <td width="110">
+                        <label>Name/Title</label>
+                    </td>
+                    <td>
+                        <input style="width:100%" type="text" name="video_name" value="<%= data.video_name %>">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Description</label>
+                    </td>
+                    <td>
+                        <textarea style="width:100%;height:50px;" type="text" name="video_description" ><%= data.video_description %></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Client Comments</label>
+                    </td>
+                    <td>
+                        <textarea style="width:100%;height:50px;" type="text" name="video_client_comments" ><%= data.video_client_comments %></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Trainer Comments</label>
+                    </td>
+                    <td>
+                        <textarea style="width:100%;height:50px;" type="text" name="video_trainer_comments" ><%= data.video_trainer_comments %></textarea>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

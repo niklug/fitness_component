@@ -1,0 +1,8 @@
+<div style="float:left; width:180px;">
+    <input type="checkbox" class="sub_search_item" value="<%= item.id %>">
+    <%
+    var d1 = new Date(Date.parse(item.starttime));            
+    var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+    %>
+    <%= start_date  %>
+</div>

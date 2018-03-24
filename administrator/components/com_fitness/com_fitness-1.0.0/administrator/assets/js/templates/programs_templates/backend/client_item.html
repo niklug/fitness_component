@@ -1,0 +1,11 @@
+<table>
+    <tr>
+        <td width="200" class="event_client_select"></td>
+        
+        <% if(item_model.is_owner || app.options.is_trainer_administrator) { %>
+        <td width="30" class="event_client_delete">
+            <a class="delete delete_event_client" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+        </td>
+        <% } %>
+    </tr>
+</table>

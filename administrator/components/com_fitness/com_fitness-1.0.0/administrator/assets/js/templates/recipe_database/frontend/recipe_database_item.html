@@ -1,0 +1,202 @@
+<%
+if(!image || image == 'images/Recipe_Images/'){
+    image = app.options.default_image;
+} else {
+    image  = app.options.base_url + image
+}
+var background_image = 'url(' + "'" + image  + "')" ;
+var current_page = app.models.get_recipe_params.get('current_page');
+%>
+<div class="fitness_block_wrapper" style="margin-top: 20px;">
+    <div class="internal_wrapper">
+        <div class="" style="margin-top: 0px;">
+            <table width="100%">
+                <tr>
+                    <td width="40%" style="vertical-align:top;">
+                        <table  width="100%">
+                            <tr>
+                                <td width="40%">RECIPE NAME</td>
+                                <td width="60%">
+                                    <span class="grey_title">
+                                         <%= recipe_name %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align:top;">RECIPE TYPE</td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%
+                                        if(recipe_types_names) {
+                                            _.each(recipe_types_names.split(','), function(item){ %>
+                                                <%= item + "<br/>" %>
+                                            <% })
+                                        } else { %> 
+                                            <%= '-' %>
+                                        <% } %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align:top;">VARIATIONS</td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%
+                                        if(recipe_variations_names) {
+                                            _.each(recipe_variations_names.split(','), function(item){ %>
+                                                <%= item + "<br/>" %>
+                                            <% })
+                                        } else { %> 
+                                            <%= '-' %>
+                                        <% } %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SERVES</td>
+                                <td>
+                                    <span class="grey_title">
+                                         <%= number_serves %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AUTHOR</td>
+                                <td>
+                                    <span class="grey_title">
+                                         <%= author %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>STATUS</td>
+                                <td id="status_button_place_<%= id %>"  ></td>
+                            </tr>
+                            <tr>
+                                <td>ASSESSED BY</td>
+                                <td>
+                                    <span class="grey_title">
+                                         <%= trainer || '-' %>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="30%" style="text-align:center; vertical-align:top;">
+                        <div class="pie-container">
+                            <div id="placeholder_targets" class="placeholder_pie"></div>
+                        </div>
+                    </td>
+                    
+                    <td width="30%" style="text-align:center; vertical-align:top;">
+                        <div class="recipe_database_image" style="display: inline-block;background-image: <%= background_image %>"></div>
+                        <div class="clr"></div>
+                        <div style=" margin-top: 10px;text-align: center; width: 184px">
+                            <a data-id="<%=id %>" style="float:right;" id="pdf_button_recipe"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
+                            <a data-id="<%=id %>" style="float:right;" id="email_button_recipe" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+            <br/>
+            <table width="100%">
+                <thead>
+                    <th>MEAL ITEM/DESCRIPTION</th>
+                    <th>QUANTITY</th>
+                    <th>Protein</th>
+                    <th>Fat</th>
+                    <th>Carbs</th>
+                    <th>Cals</th>
+                    <th>Energy</th>
+                    <th>Fat, Sat</th>
+                    <th>Sug</th>
+                    <th>Sod</th>
+                </thead>
+                <tbody>
+                <% _.each(recipe_meals, function(item){ %>
+                    <tr class="table_border_top_dark">
+                        <td width="30%">
+                            <%= item.meal_name %>
+                        </td>
+                        <td>
+                            <%= item.quantity + ' ' + item.measurement %>
+                        </td>
+                        <td>
+                            <%= item.protein %>
+                        </td>
+                        <td>
+                            <%= item.fats %>
+                        </td>
+                        <td>
+                            <%= item.carbs %>
+                        </td>
+                        <td>
+                            <%= item.calories %>
+                        </td>
+                        <td>
+                            <%= item.energy %>
+                        </td>
+                        <td>
+                            <%= item.saturated_fat %>
+                        </td>
+                        <td>
+                            <%= item.total_sugars %>
+                        </td>
+                        <td>
+                            <%= item.sodium %>
+                        </td>
+                    </tr>
+                <% 
+                })  
+                %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            TOTALS 
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            <%= protein %>
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            <%= fats %>
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            <%= carbs %>
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            <%= calories %>
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            <%= energy %>
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            <%= saturated_fat %>
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            <%= total_sugars %>
+                        </td>
+                        <td class="table_border_top table_border_bottom">
+                            <%= sodium %>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <br>
+            <h5>COOKING INSTRUCTIONS / METHOD</h5>
+            <span style="width:100%" class="grey_title">
+                <%= decodeURIComponent(instructions) %>
+            </span>
+
+            <br><br>
+            <div style="background-size: 640px 340px; width:640px; height:340px;" id="recipe_video"></div>
+
+            <br>
+            <div id="comments_wrapper" style="width:99%"></div>
+        </div>
+    </div>
+</div>

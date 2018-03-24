@@ -1,0 +1,77 @@
+<div class="fitness_block_wrapper page_container_width"  style="margin-top:5px;border:1px solid #ccc">
+    <div class="internal_wrapper">
+        <form>
+            <table width="100%">
+                <tr>
+                    <td width="100">
+                        <span class="orange_text">MENU NAME:</span>
+                    </td>
+                    <td>
+                        <%
+                          if(is_submitted == false) {
+                        %>
+                            <input class="required dark_input_style" type="text"  name="name"  id="menu_name" value="<%= name %>" style="width:250px;">
+                        <% } else { %>
+                        <b><%= name.toUpperCase() %></b>
+                        <% } %>
+                    </td>
+                    
+                    <!--
+                    <% if(parseInt(id)) { %>
+                        <td width="50">
+                            <span class="orange_text">STATUS:</span>
+                        </td>
+
+                        <td class="status_container"></td>
+                    <% } %>
+                    -->
+                    
+                    <td>
+                        <span class="orange_text">MENU DATE:</span>
+                    </td>
+                    <td>
+                        <%
+                          if(is_submitted == false) {
+                        %>
+                            <input style="width:80px;" readonly type="text" name="start_date" id="start_date" value="<%= start_date %>"  class="required dark_input_style"/>
+                        <% } else { %>
+                            <%= moment(new Date(Date.parse(start_date))).format("ddd, D MMM  YY")  %>
+                        <% } %>
+                        
+                    </td>
+                    <td style="text-align: right;">
+                        
+                        <a style="cursor: pointer;float:right;margin-right:10px;" id="close_menu_plan" onclick="javascript:void(0)">[CLOSE]</a>
+                        
+                        <%
+                          if((app.options.is_backend && status == '5') || (parseInt(id) && is_submitted == false)) {
+                        %>
+                            <a style="cursor: pointer;float:right;margin-right:10px;" id="delete_menu_plan" onclick="javascript:void(0)">[DELETE]</a>
+                        <% } %>
+                        
+                        <%
+                          if((app.options.is_backend && status == '5') || is_submitted == false) {
+                        %>
+                        
+                            <%
+                            if(parseInt(id)) {
+                            %>
+                                <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[SAVE]</a>
+                            <% } else { %>
+                                <a style="cursor: pointer;float:right;margin-right:10px;" id="save_menu_plan" onclick="javascript:void(0)">[CONTINUE]</a>
+                            <% } %>
+                            
+                        <% } %>
+                            
+                            
+                        <%
+                          if(parseInt(id) && is_submitted == false) {
+                        %>
+                            <a style="cursor: pointer;float:right;margin-right:10px;" id="submit_menu_plan" onclick="javascript:void(0)">[SUBMIT]</a>
+                        <% } %>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>

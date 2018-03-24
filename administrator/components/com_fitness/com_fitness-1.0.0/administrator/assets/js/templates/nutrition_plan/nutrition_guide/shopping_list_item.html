@@ -1,0 +1,23 @@
+<div class="internal_wrapper" style=" margin:5px; width:425px;float:left;">
+   <span class="orange_text">CATEGORY:</span>
+   <span style="font-weight: bold"><%= name %></span>
+   <hr class="orange_line">
+   <table width="100%">
+       <% _.each(ingredients, function(model) {  %>
+           <tr>
+               <td>
+                   <input type="checkbox" value="<%= model.get('id') %>">
+               </td>
+               <td width="350">
+                   <%= model.get('meal_name') %>
+               </td>
+               <td width="100">
+                   <%= model.get('quantity_sum') + ' ' + model.get('measurement') %>
+               </td>
+           </tr>
+       <% })%>
+   </table>
+</div>
+<% if(count%2 == 1) { %>
+    <div class="clr"></div>
+<% } %>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="component" label="COM_CPMULTICALENDAR_GLOBAL_CONFIGURATION">
+		<field name="language" id="language" type="list" default="ENG" label="Language" description="You must select the language.">
+			<option value="en-GB">English</option>
+			<option value="es-ES">Spanish</option>
+			<option value="fr-FR">French</option>
+			<option value="it-IT">Italian</option>
+			<option value="de-DE">German</option>
+			<option value="pt-PT">Portuguese</option>
+		</field>
+		<field name="cellwidth" id="cellwidth" type="text" default="100" label="Widthxxxxxx" description="WIDTH FOR DAY'S CELL" />
+		<field name="cellheight" id="cellheight" type="text" default="100" label="Height" description="HEIGHT FOR DAY'S CELL" />
+		<field name="months" id="months" type="text" default="1" label="Months" description="HOW MANY MONTH THE MODULE DISPLAYS" />
+	</fieldset>
+</config>

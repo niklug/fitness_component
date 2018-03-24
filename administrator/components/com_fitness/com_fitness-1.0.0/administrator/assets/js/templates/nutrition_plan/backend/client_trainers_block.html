@@ -1,0 +1,46 @@
+<table width="100%">
+    <tr>
+        <td>
+            Client Name:
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= item.client_name %>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>
+            Primary Trainer:
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= item.trainer_name %>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <td style="vertical-align:top;">
+            Secondary Trainers:
+        </td>
+        <td>
+            <span class="grey_title">
+                <%
+                var secondary_trainers = item.secondary_trainers;
+                _.each(secondary_trainers, function(item, key){ %>
+                    <%=  item + " <br/>" %>
+                <%
+                })
+
+                %>
+            </span>
+        </td>
+    </tr>
+</table>
+     

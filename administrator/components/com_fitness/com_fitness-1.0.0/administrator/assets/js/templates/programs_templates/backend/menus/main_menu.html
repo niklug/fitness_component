@@ -1,0 +1,105 @@
+<div id="toolbar" class="toolbar-list">
+    <ul>
+        <% 
+        var add_template_title = 'Create New Program From Template';
+        if(app.options.event_id) { 
+            add_template_title = 'Add Template To Appointment';
+        } 
+        %>  
+
+        <% if(app.options.event_id  && parseInt(id) ) { %>
+        <li id="toolbar-apply" class="button">
+            <a title="<%= add_template_title %>" id="add_template" class="toolbar" onclick="javascript:void(0)">
+                <span data-id="<%= id %>" class="add_template_icon_32"> </span>
+            </a>
+        </li>
+        <% } %> 
+        
+        <% 
+        var search_program_title = 'Search Programs';
+        if(!app.options.event_id) { 
+            search_program_title = 'Add Template To Existing Program';
+        } 
+        %> 
+        
+        <% if(!app.options.event_id  && parseInt(id)) { %>
+        <li id="toolbar-apply" class="button">
+            <a title="<%= search_program_title %>" id="search_program" class="toolbar" onclick="javascript:void(0)">
+                <span data-id="<%= id %>" class="search_program_icon_32"> </span>
+            </a>
+        </li>
+        <% } %> 
+        
+        
+        <% if(view_allowed) { %>
+            <% if(parseInt(id)) { %>
+                <li id="toolbar-apply" class="button">
+                    <a id="save" class="toolbar" onclick="javascript:void(0)">
+                        <span  class="icon-32-apply"> </span>
+                        Save
+                    </a>
+                </li>
+             <% } else { %>
+                <li id="toolbar-apply" class="button">
+                    <a  id="save" class="toolbar" onclick="javascript:void(0)">
+                        <span  class="icon-32-forward"> </span>
+                        Next
+                    </a>
+                </li>
+             <% } %>
+        <% } %>    
+            
+        
+        <% if(view_allowed) { %>
+            <% if(parseInt(id)) { %>
+                <li id="toolbar-save" class="button">
+                    <a id="save_close" class="toolbar" onclick="javascript:void(0)">
+                        <span  class="icon-32-save"> </span>
+                        Save & Close
+                    </a>
+                </li>
+                <li id="toolbar-save-new" class="button">
+                    <a  id="save_copy"  class="toolbar" onclick="javascript:void(0)">
+                        <span class="icon-32-save-new"> </span>
+                        Save As Copy
+                    </a>
+                </li>
+                <li id="toolbar-save-new" class="button">
+                    <a  id="save_new"  class="toolbar" onclick="javascript:void(0)">
+                        <span class="icon-32-save-new"> </span>
+                        Save & New
+                    </a>
+                </li>
+                <li id="toolbar-cancel" class="button">
+                    <a id="cancel"  class="toolbar" onclick="javascript:void(0)">
+                        <span class="icon-32-cancel"> </span>
+                        Close
+                    </a>
+                </li>
+             <% } else { %>
+                <li id="toolbar-cancel" class="button">
+                    <a id="cancel"  class="toolbar" onclick="javascript:void(0)">
+                        <span class="icon-32-cancel"> </span>
+                        Cancel
+                    </a>
+                </li>
+             <% } %>
+         
+         <% } else { %>  
+            <li id="toolbar-save-new" class="button">
+                <a  id="save_copy"  class="toolbar" onclick="javascript:void(0)">
+                    <span class="icon-32-save-new"> </span>
+                    Save As Copy
+                </a>
+            </li>
+            <li id="toolbar-cancel" class="button">
+                <a id="cancel"  class="toolbar" onclick="javascript:void(0)">
+                    <span class="icon-32-cancel"> </span>
+                    Close
+                </a>
+            </li>
+         <% } %>
+            
+    </ul>
+    <div class="clr"></div>
+</div>

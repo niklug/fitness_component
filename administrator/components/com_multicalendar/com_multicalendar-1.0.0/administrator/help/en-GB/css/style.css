@@ -1,0 +1,37 @@
+/* CSS Document */
+
+h1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #00A5E9;
+	text-decoration: none;
+}
+h2 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-style: italic;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #00A5E9;
+	text-decoration: none;
+}
+p, li {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	color: #333333;
+	text-decoration: none;
+}
+a {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	color: #4778BD;
+	text-decoration: none;
+}

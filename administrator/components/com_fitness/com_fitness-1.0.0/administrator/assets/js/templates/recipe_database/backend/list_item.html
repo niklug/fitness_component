@@ -1,0 +1,132 @@
+<%
+var image;
+if(!item.image || item.image == 'images/Recipe_Images/'){
+    image = app.options.default_image;
+} else {
+    image  = app.options.base_url + item.image
+}
+var background_image = 'url(' + "'" + image  + "')" ;
+
+%>
+<tr data-id="<%= item.id %>"  class="item_row">
+    <td width="100" style="text-align:center; vertical-align:top;">
+        <div class="recipe_database_image" style="height: 90px; width: 100px;display: inline-block;background-image: <%= background_image %>"></div>
+    </td>
+    <td>
+        <a title="View Details" style="cursor: pointer;" data-id="<%= item.id %>"  class="view " onclick="javascript:void(0)"><%= item.recipe_name %></a>
+    </td>
+    
+    <td>
+        <span>
+            <%
+            if(item.recipe_types_names) {
+                _.each(item.recipe_types_names.split(','), function(item){ %>
+                    <%= item + "<br/>" %>
+                <% })
+            } else { %> 
+                <%= '-' %>
+            <% } %>
+        </span>
+    </td>
+    
+    <td>
+        <span>
+            <%
+            if(item.recipe_variations_names) {
+                _.each(item.recipe_variations_names.split(','), function(item){ %>
+                    <%= item + "<br/>" %>
+                <% })
+            } else { %> 
+                <%= '-' %>
+            <% } %>
+        </span>
+    </td>
+    <td>
+        <span>
+             <%= item.author %>
+        </span>
+    </td>
+    
+    <td >
+        <%
+        var d1 = new Date(Date.parse(item.created));            
+        var created = moment(d1).format("ddd, D MMM  YYYY");      
+        %>
+        <%= created %>
+    </td>
+    
+    <td>
+        <%= item.calories || '0.00' %>
+    </td>
+    <td>
+        <%= item.energy || '0.00' %>
+    </td>
+    <td>
+        <%= item.protein || '0.00' %>
+    </td>
+    <td>
+        <%= item.fats || '0.00' %>
+    </td>
+    <td>
+        <%= item.saturated_fat || '0.00' %>
+    </td>
+    <td>
+        <%= item.carbs || '0.00' %>
+    </td>
+    <td>
+        <%= item.total_sugars || '0.00' %>
+    </td>
+    <td>
+        <%= item.sodium || '0.00' %>
+    </td>
+    
+    <td id="status_button_place_<%= item.id %>"  ></td>
+    
+    <td>
+        <% if(item.state != '-2') { %>
+            <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
+        <% } else {
+            if(item.edit_allowed) {
+                %>
+                <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
+                <%
+            }
+        } %>
+    </td>
+    
+    <td>
+         <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="copy_icon"></span></a>
+    </td>
+    
+    <td>
+        <% if(item.edit_allowed) { %>
+            <% if(item.state != '-2') { %>
+                <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= item.id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= item.id %>" class="delete_icon"></span></a>
+            <% } %>
+        <% } %>
+    </td>
+    
+    <td>
+    <%
+        var icon_class = 'unpublish';
+        var publish_title = 'Publish'; 
+        if(parseInt(item.state) == '1') {
+            icon_class = 'publish';
+            publish_title = 'Unpublish'; 
+        }
+        %>
+        <% if(item.edit_allowed) { %>
+            <% if(item.state != '-2') { %>
+            <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish state <%= icon_class %> " ></span>
+            <% } %>
+        <% } %>
+    </td>
+    
+    <td class="center">
+        <% if(item.edit_allowed) { %>
+            <input data-id="<%= item.id %>" data-state="<%= item.state %>" class="trash_checkbox" type="checkbox"/>
+        <% } %>
+    </td>
+</tr>

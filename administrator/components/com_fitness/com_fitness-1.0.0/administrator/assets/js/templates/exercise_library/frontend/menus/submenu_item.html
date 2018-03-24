@@ -1,0 +1,36 @@
+<div class="fitness_block_wrapper" style="height:30px;margin-top: 10px;">
+    <div class="internal_wrapper">
+        <div style="width:100%;">
+            <% if (is_favourite) {
+                var display_remove_favourite = 'inline';
+                var display_add_favourite = 'none';
+
+            } else {  
+                var display_add_favourite = 'inline';
+                var display_remove_favourite = 'none';
+            } %>
+            <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
+
+            <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
+            
+            <% if(app.options.event_id) { %>
+                <a class="add_exercise" title="" style="cursor: pointer;margin-right:10px;"  onclick="javascript:void(0)" data-id="<%= id %>" >[ADD TO PROGRAM]</a>
+            <% } %> 
+            
+            
+            <% if (edit_allowed) { %>
+            <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="trash_exercise" onclick="javascript:void(0)">[TRASH]</a>
+            <% } %>
+            
+            
+            
+            <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" class="close_exercise" onclick="javascript:void(0)">[CLOSE]</a>
+            
+            <% if (edit_allowed) { %>
+                <a data-id="<%= id %>" style="cursor: pointer; float:right;margin-right:10px;" class="edit_exercise" onclick="javascript:void(0)">[EDIT]</a>
+            <% } %>
+        </div>
+        <div class="clr"></div>
+    </div>
+    <hr class="orange_line">
+</div>

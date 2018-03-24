@@ -1,0 +1,124 @@
+<div  class="recipe_database_item_wrapper">
+    <div style="width:100%;background: none repeat scroll 0 0 #4f4f4f !important; text-align: right;">
+        <label style="font-weight:bold;color:#fff;"># OF SERVES</label>
+        <input maxlength="3" style="width:30px"  class="number_serves" type="text" value="1" >
+        <a style="cursor: pointer;float:right;margin-left:10px;margin-right:10px;margin-top:2px;" class="enter_number_serves" onclick="javascript:void(0)">[ADD TO MENU PLAN]</a>
+    </div>
+    <table width="100%">
+        <tr>
+            <td style="vertical-align: top;">
+                <%
+                if(!image || image == 'images/Recipe_Images/'){
+                    image = $.fitness_helper.get('default_recipe_image');
+                }
+                image = $.fitness_helper.get('base_url') + image;
+                %>
+                <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+                
+            </td>
+            <td  style="vertical-align: top;" width="50%">
+                <table  width="100%">
+                    <tr>
+                        <td width="40%">RECIPE NAME</td>
+                        <td width="60%">
+                              <%= recipe_name %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AUTHOR</td>
+                        <td>
+                             <%= author %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SERVES</td>
+                        <td>
+                             <%= number_serves %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>STATUS</td>
+                        <td>
+                            <%= $.fitness_helper.setRecipeStatus(status) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>APPROVED BY</td>
+                        <td>
+                             <%= trainer || '-' %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <br/>
+                            <a style="float:left;" class="view_add_recipe" href="javascript:void(0)" title="">[VIEW RECIPE]</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td  style="vertical-align: top;" width="30%">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            CALORIES
+                        </td>
+                        <td>
+                            <%= calories || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            ENERGY
+                        </td>
+                        <td>
+                            <%= energy || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            PROTEIN
+                        </td>
+                        <td>
+                            <%= protein || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            FAT
+                        </td>
+                        <td>
+                            <%= fats || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            CARB
+                        </td>
+                        <td>
+                            <%= carbs || '0.00' %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            SUGAR
+                        </td>
+                        <td>
+                            <%= total_sugars || '0.00' %>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            
+        </tr>
+    </table>
+    <div class="clr"></div>
+
+    <div style="margin: 5px;" class="recipe_details"> </div>
+    <div class="clr"></div>
+
+    <div class="clr"></div>
+</div>

@@ -1,0 +1,45 @@
+<%
+var sort_title = 'Click to sort by this column';
+%>
+<div class="fitness_block_wrapper" style="background-color:#fff;">
+    <table width="100%">
+        <tr>
+            <td style="vertical-align: top;" >
+                <div class="internal_wrapper">
+                    <table width="100%">
+                        <thead class="table_header" style="font-size: 12px;">
+                            <tr>
+                                <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_created" onclick="javascript:void(0)">Date</a></th>
+                                <th>Notification Details</th>
+                                <th class="center">View</th>
+                                <th class="center"><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_readed" onclick="javascript:void(0)">Mark</a></th>
+                                <th class="center"><a title="Delete Selected" style="cursor: pointer;" id="delete_selected_notifications" onclick="javascript:void(0)">Delete</a></th>
+                                <th class="center"><input style="margin-left:2px;" id="select_all_notifications" type="checkbox"/></th>
+                            </tr>
+                        </thead>
+                        <tbody id="items_container">
+
+                        </tbody>
+                    </table>
+                    <br/>
+                    <div style="text-align:center;" class="pagination_container"></div>
+                </div>
+            </td>
+            <td style="vertical-align: top;" width="150">
+                <div id="notifications_search_wrapper" style="border:1px solid #ccc;padding-bottom:2px;">
+                    <div style="padding: 3px;">
+                        <b style="font-size: 14px;">SEARCH DATES</b>
+                    </div>
+                    <div class="clr"></div>
+                    <hr class="orange_line">
+
+                    <input id="date_from" type="text" class="dark_input_style" style="display:inline-block;width:auto;margin:2px;"  placeholder="From Date">
+                    <input id="date_to" type="text" class="dark_input_style" style="display:inline-block;width:auto;margin:2px;"  placeholder="To Date">
+                    <br/>
+                    <a style="cursor: pointer;margin:5px;" id="search_notifications" onclick="javascript:void(0)">[Search]</a>
+                    <a style="cursor: pointer;" id="clear_notifications" onclick="javascript:void(0)">[Clear]</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

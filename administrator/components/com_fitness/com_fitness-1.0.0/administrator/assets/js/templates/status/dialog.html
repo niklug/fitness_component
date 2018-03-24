@@ -1,0 +1,29 @@
+<div class="hideimage close_status_dialog" title="Close" ></div>
+
+<div class="status_list_container">
+    <%
+if(!button_class) {
+    var button_class = 'status_button';
+}
+
+%>
+<% _.each(options.statuses, function(item, key){
+    if(status != key) {
+    %>
+        <a class="dialog_button_element <%= button_class %> <%= item.class %>" data-status="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+    <% 
+    }
+})  
+%>
+
+<%
+if(typeof options.show_send_email == 'undefined' || options.show_send_email == true) {
+%>
+    <input type="checkbox" checked class="send_status_email" value="1">
+
+    <span style="font-size:12px;">Send email</span>
+<% } %>
+
+
+</div>
+

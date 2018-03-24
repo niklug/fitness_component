@@ -1,0 +1,80 @@
+<%
+var scored = false;
+if(_.contains(['2', '3', '4'], item.status)) {
+    scored = true;
+}
+
+var score_hidden, score_display_none;
+ if(!scored) {
+        score_hidden = 'visibility: hidden;';
+        score_display_none = 'display:none'
+ }
+%>
+
+<div class="fitness_block_wrapper" style="min-height: 320px;margin-top:10px;">
+    <h3>FINAL SCORES & ASSESSMENT</h3>
+    <hr class="orange_line">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <thead  style="background: none;" >
+            <th class="table_header" colspan="3">
+                NUTRITION ENTRY SCORES
+            </th>
+            </thead>
+            <tbody  style="text-align: center;">
+                <tr >
+                    <td id="protein_score_graph">
+
+                    </td>
+                    <td id="fat_score_graph">
+
+                    </td>
+                    <td id="carbs_score_graph">
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="clr"></div>
+        <br/>
+
+
+        <table  style="text-align: center" width="100%">
+            <thead style="background: none; text-align: center;">
+            <th><h6>WATER SCORE</h6></th>
+            <th><h6>CALORIE SCORE</h6></th>
+            <th><h6>FINAL SCORE</h6></th>
+            <th><h6>FINAL RESULT</h6></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="water_score"  style="text-align: center;font-size: 36px;color:#009FE3;font-weight: bold;"></td>
+                    <td id="calorie_score" style="text-align: center;font-size: 36px;color:#008313;font-weight: bold;"></td>
+                    <td  style="text-align: center">
+                        <div id="final_score"></div>
+                    </td>
+                    <td  style="text-align: center;">
+                        <% if(!app.options.is_backend) { %>
+                            <div style="display: inline-block;" id="status_button_place">
+                                <%=
+                                   $.fitness_helper.status_html_stamp(item.status)
+                                %>
+                            </div>
+                        <% } else { %>                        
+                            <div style="display: inline-block;" id="score_status_button_place">
+                        <% } %>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <% if(scored || app.options.is_backend) { %>
+            <br/>
+            <br/>
+            <div class="clr"></div>
+            <div id="score_comments"></div>
+        <% } %>
+    </div>
+</div>

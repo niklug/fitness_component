@@ -1,0 +1,119 @@
+<%
+    var unix_meal_time = new Date(Date.parse(item.meal_time)).getTime();
+%>
+
+<% if(item.id) { %>
+<div style="border:2px solid #BC4A26;padding:2px;margin-top:5px;">
+<% } %>
+    <div style="background-color:#1a1a1a;color:#fff;width:99%;padding:2px;cursor:default;margin-top:10px;"  id="meal_entry_time_<%= unix_meal_time %>" >
+        <table width="100%">
+            <tr>
+                <td></td>
+                <td style="text-align: right;">
+                    WHAT TIME WAS THIS MEAL CONSUMED?
+                </td>
+                <td class="center">
+                    <%  if(diary_model.edit_allowed) { %>
+                        <input  style="width:43px;margin:0;" type="text" size="5" class="meal_time dark_input_style" value="<%= item.meal_time %>">
+                    <% } else { %>
+                        <%= item.meal_time %>
+                    <% } %>
+                    
+                </td>
+                <td>
+                    hh:mm
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td style="text-align: right;">
+                    HOW MUCH WATER WAS CONSUMED WITH THIS MEAL? 
+                </td>
+                <td class="center">
+                    <%  if(diary_model.edit_allowed) { %>
+                        <input  style="width:43px;" type="text" size="5" class="meal_water dark_input_style" value="<%= item.water %>">
+                    <% } else { %>
+                        <%= item.water %>
+                    <% } %>
+                    
+                </td>
+                <td >
+                    millilitres
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                <td style="text-align: right;">
+                    HOW MUCH WATER WAS CONSUMED BETWEEN THIS MEAL AND THE PREVIOUS MEAL? 
+                </td>
+                <td width="70" class="center">
+                    <%  if(diary_model.edit_allowed) { %>
+                        <input style="width:43px;" type="text" size="5" class="meal_previous_water dark_input_style" value="<%= item.previous_water %>">
+                    <% } else { %>
+                        <%= item.previous_water %>
+                    <% } %>
+                    
+                </td>
+                <td width="70">
+                    millilitres
+                </td>
+            </tr>
+        </table>
+        
+        <%  if(diary_model.edit_allowed) { %>
+            <div class="clr"></div>
+            <a onclick="javascript:void(0)" class="delete_meal_entry" style="cursor: pointer;float:right;margin-right:10px;">[DELETE]</a>
+
+
+            <% if(item.id) { %>
+                <a onclick="javascript:void(0)" class="copy_meal_entry" style="cursor: pointer;float:right;margin-right:10px;">[COPY]</a>
+
+                <a onclick="javascript:void(0)" class="save_meal_entry" style="cursor: pointer;float:right;margin-right:10px;">[SAVE]</a>
+            <% } else { %>
+                <a onclick="javascript:void(0)" class="save_meal_entry" style="cursor: pointer;float:right;margin-right:10px;">[CONTINUE]</a>
+            <% } %>
+            <div class="clr"></div>
+        <% } %>
+    </div>
+
+    <% if(item.id) { %>
+    
+        <%  if(diary_model.edit_allowed) { %>
+            <div class="clr"></div>
+            <br/>
+            <hr style="margin:0;margin-bottom:2px;" class="thin_hr">
+        
+            <table width="100%">
+                <tr style="text-align: center;">
+                    <td>
+                        <a onclick="javascript:void(0)" class="create_meal" style="cursor: pointer;">[Create a new Meal]</a>
+                    </td>
+                    <% if(!app.options.is_backend) { %>
+                        <td>
+                            <a onclick="javascript:void(0)" class="add_meal_from_database" style="cursor: pointer;">[Add a Meal from Recipe Database]</a>
+                        </td>
+                        <td>
+                            <a onclick="javascript:void(0)" class="add_meal_from_plans" style="cursor: pointer;">[Add Meal from My Menu Plans]</a>
+                        </td>
+                    <% } %>
+                </tr>
+            </table>
+            <div class="clr"></div>
+            <hr class="thin_hr">
+            <br/>
+        <% } %>
+        <div class="diary_meals_wrapper"></div>
+    <% } %>
+
+    <% if(item.id) { %>
+</div>
+    <% } %>
+
+<% if(item.id && diary_model.edit_allowed) { %>
+    <div class="clr"></div>
+    <div class="add_meal_entry_container add_area">
+        <div class="add_meal_entry">click to create a new entry</div>
+    </div>
+<% } %>

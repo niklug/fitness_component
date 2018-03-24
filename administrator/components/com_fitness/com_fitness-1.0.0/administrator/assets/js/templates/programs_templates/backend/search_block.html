@@ -1,0 +1,82 @@
+<div style="display: inline-block; float: right;"  class="right">
+    <div id="toolbar" class="toolbar-list right">
+        <% if(app.options.event_id) { %>
+            <a id="back_program" tilte="Go Back" class="toolbar" onclick="javascript:void(0)">
+                <span  class="icon-32-back"> </span>
+            </a>
+        <% } %>
+                
+        <a title="Add New" id="add_item" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-new"> </span>
+        </a>
+        
+        <a  title="Copy Selected" id="copy_selected"  class="toolbar" onclick="javascript:void(0)">
+            <span class="icon-32-save-new"> </span>
+        </a>
+
+        
+        <a title="Trash/Delete" id="trash_delete_selected" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-trash"> </span>
+        </a>
+    </div>
+</div>
+
+
+<div class="clr"></div>
+
+<div style="width:100%">
+    
+    <label>Workout Name:</label>
+    <input id="workout_name" size="25" type="text" >
+    
+    <label>Date From:</label>
+    <input id="date_from" size="10" type="text" >
+    
+    
+    <label>Date To:</label>
+    <input id="date_to" size="10" type="text" >
+    
+    <label>Client Name:</label>
+    <input id="client_name" size="20" type="text" >
+
+    <label>Author Name:</label>
+    <input id="created_by_name" size="20" type="text" >
+    
+    <input id="search" type="button" value="Search">
+    <input id="clear_all" type="button" value="Clear All">
+    
+    <div style="width:200px;display: inline-block;" id="business_profile_filter"></div>
+    
+
+    <select id="state_filter" class="inputbox" size="1" name="state">
+        <%
+        var selected_published = '';
+        var selected_unpublished = '';
+        var selected_trashed = '';
+        var selected_all = '';
+        
+        if(current_page == 'list') {
+            selected_published = 'selected="selected"';
+        }
+        
+        if(current_page == 'unpublished_list') {
+            selected_unpublished = 'selected="selected"';
+        }
+        
+        if(current_page == 'trash_list') {
+            selected_trashed = 'selected="selected"';
+        }
+        
+        if(current_page == 'all_list') {
+            selected_all = 'selected="selected"';
+        }
+
+        %>
+        <option <%= selected_published %> value="1">Published</option>
+        <option <%= selected_unpublished %>   value="0">Unpublished</option>
+        <option <%= selected_trashed %>   value="-2">Trashed</option>
+        <option <%= selected_all %>   value="*">All</option>
+    </select>
+    
+    
+    

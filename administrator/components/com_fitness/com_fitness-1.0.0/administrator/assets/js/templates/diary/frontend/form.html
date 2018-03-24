@@ -1,0 +1,45 @@
+<div class="fitness_block_wrapper" style="margin-top: 20px; height:300px;">
+    <div class="internal_wrapper">
+        <form action="" id="create_item_form">
+            Select a Date for this Diary Entry
+            &nbsp;
+            <input style="width:70px;" readonly type="text" name="entry_date" id="entry_date" size="6" class="required dark_input_style"/>
+
+            <div class="clr"></div>
+
+            <table width="100%">
+                <tr>
+                    <td>
+                        <h6>WHAT IS YOUR ACTIVITY LEVEL FOR TODAY?</h6>
+                        <fieldset id="jform_activity_level" class="radio inputbox">
+                            <input class="activity_level required" name="activity_level" id="jform_activity_level0" type="radio"  value="1" >
+                            <label for="jform_activity_level0" >Heavy Training Day</label>
+                            <input class="activity_level required" name="activity_level" id="jform_activity_level1"  type="radio" value="2" >
+                            <label for="jform_activity_level1" >Light Training Day</label>
+                            <input class="activity_level required" name="activity_level" id="jform_activity_level2"  type="radio" value="3" >
+                            <label  for="jform_activity_level2" >Recovery/Rest Day</label>
+                        </fieldset>
+                    </td>
+
+                    <td id="pie_td" style="visibility: hidden;" class="center">
+                        <div class="pie-container">
+                            <h6 style="margin-top:10px;margin-bottom: 5px">MACRONUTRIENT RATIOS</h6>
+                            <div id="placeholder_targets" class="placeholder_pie"></div>
+                        </div>
+                    </td>
+
+                    <td class="center calories_td"  style="visibility: hidden;">
+                        <h6 style="margin-top:50px;">TARGET CALORIE INTAKE</h6> 
+                        <div id="calories_value" style="line-height: 80px;font-size: 48px; color:#00983A; font-weight: bold;"></div>
+                        <div  style="font-size: 22px; color:#00983A;font-weight: bold; height: 40px;"> calories</div>
+                    </td>
+                    <td class="center calories_td"  style="visibility: hidden;">
+                        <h6 style="margin-top:50px;">TARGET WATER INTAKE</h6>
+                        <div id="water_value" style="line-height: 80px;font-size:48px; color:#3F9EEB; font-weight: bold;"></div>
+                        <div style="font-size: 22px; color:#3F9EEB; font-weight: bold; height: 40px;">millilitres</div>
+                    </td>
+                </tr>
+            </table> 
+        </form>
+    </div>
+</div>

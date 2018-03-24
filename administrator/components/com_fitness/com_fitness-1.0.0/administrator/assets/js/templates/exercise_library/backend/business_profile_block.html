@@ -1,0 +1,40 @@
+<div style="border: 1px dashed #ccc;width:100%;margin-bottom: 5px;min-height: 100px;">
+    <table width="100%" style="height: 30px;">
+        <tr>
+            <td width="25">
+                <input data-business_profile_id="<%= id %>" type="checkbox" class="bisiness_profile_item">
+            </td>
+            <td>
+                <b><%= name %></b>
+            </td>
+            <td width="150">
+                <label>Show in Public Database:</label>
+            </td>
+            <td width="100">
+                <select data-business_profile_id="<%= id %>" class="show_public_database" size="1" name="show_public_database">
+                    <option value="1">All Users</option>
+                    <option value="0">None</option>
+                </select>
+            </td>
+            <td width="150">
+                <label>Show on My Exercises List:</label>
+            </td>
+            <td width="100">
+                <select data-business_profile_id="<%= id %>"  class="show_my_exercise" size="1" name="show_my_exercise">
+                    <option value="0">None</option>
+                    <option value="1">All Users</option>
+                    <option value="2">Only Selected Users</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <hr style="margin: 0;padding: 0;">
+    
+    <div class="business_clients_wrapper"></div>
+</div>
+
+
+
+
+
+

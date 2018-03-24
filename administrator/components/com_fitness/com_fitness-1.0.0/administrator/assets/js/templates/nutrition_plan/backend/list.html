@@ -1,0 +1,42 @@
+<%
+var sort_title = 'Click to sort by this column';
+%>
+<div class="fitness_block_wrapper" style="margin-top: 20px; background-color:#fff;">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <thead class="table_header" style="font-size: 12px;">
+                <tr>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_client_name" onclick="javascript:void(0)">Client Name</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_trainer" onclick="javascript:void(0)">Trainer Name</a></th>
+                    
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_active_start" onclick="javascript:void(0)">Start Date</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_active_finish" onclick="javascript:void(0)">End Date</a></th>
+                    
+                    <th>Active Plan</th>
+                    
+                    
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_force_active" onclick="javascript:void(0)">Force Active</a></th>
+
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_primary_goal" onclick="javascript:void(0)">Primary Goal</a></th>
+                    
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_mini_goal" onclick="javascript:void(0)">Mini Goal</a></th>
+
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_nutrition_focus" onclick="javascript:void(0)">Nutrition Focus</a></th>
+
+                    <th>Send Email</th>
+                    
+                    <th>View</th>
+                    
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_state" onclick="javascript:void(0)">Published</a></th>
+
+                    <th><input style="margin-left:2px;" id="select_all_checkbox" type="checkbox"/></th>
+                </tr>
+            </thead>
+            <tbody id="items_container">
+            
+            </tbody>
+        </table>
+        <br/>
+        <div style="text-align:center;" id="pagination_container"></div>
+    </div>
+</div>

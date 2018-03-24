@@ -1,0 +1,45 @@
+<fieldset class="adminform" style="height: 100%;padding-bottom: 0;margin-bottom: 0;">
+    <legend>Business Permissions</legend>
+    <% if(parseInt(app.options.is_superuser)) { %>
+        <table>
+            <tr>
+                <td width="200">
+                    <label>GLOBAL VIEW ACCESS</label>
+                </td>
+                <td>
+                    <select id="global_view_access" class="inputbox" size="1" name="global_view_access">
+                        <%
+                        var selected_published = '';
+                        var selected_unpublished = 'selected="selected"';
+                        if(global_business_permissions == '1' || !id) {
+                            selected_published = 'selected="selected"';
+                            selected_unpublished = '';
+                        }
+                        %>
+                        <option <%= selected_published %> value="1">All Business Profiles</option>
+                        <option <%= selected_unpublished %>   value="0">Only Selected Business Profiles</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <br/>
+    <% } %>
+    <div id="business_profiles_list"></div>
+</fieldset>
+
+<% if(id) { %>
+<fieldset class="adminform fitness_block_wrapper">
+    <div class="clr"></div>
+    <div id="comments_wrapper"></div>
+</fieldset>
+<% } %>
+
+
+
+
+
+
+
+
+
+

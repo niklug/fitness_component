@@ -1,0 +1,208 @@
+<table width="100%">
+    <tr>
+        <td width="150">
+            Primary Goal:
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= item.primary_goal_name %>
+            </span>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Start Date:
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= moment(new Date(Date.parse(item.start_date_primary))).format("ddd, D MMM  YYYY") %>
+            </span>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Achieve By:
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= moment(new Date(Date.parse(item.deadline_primary))).format("ddd, D MMM  YYYY") %>
+            </span>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <hr/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Mini Goal:
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= item.mini_goal_name %>
+            </span>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Training Period:
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= item.training_period_name %>
+            </span>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Start Date (Active From):
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= moment(new Date(Date.parse(item.start_date_mini))).format("ddd, D MMM  YYYY") %>
+            </span>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            End Date (Active To):
+        </td>
+        <td>
+            <span class="grey_title">
+                <%= moment(new Date(Date.parse(item.deadline_mini))).format("ddd, D MMM  YYYY") %>
+            </span>
+        </td>
+    </tr>
+</table>
+
+<hr/>
+
+<table>
+    <tr>
+        <td>
+            Do you wish to OVERRIDE the dates above?
+        </td>
+        <td>
+            <%
+            var override_dates_checked = '';
+            if(parseInt(item.override_dates)) {
+            override_dates_checked = 'checked';
+            }
+            %>
+            <input type="checkbox" name="override_dates" id="override_dates"  value="1" <%= override_dates_checked %>  />
+        </td>
+    </tr>
+</table>
+
+
+<table id="override_dated_area">
+    <tr>
+        <td>
+            Start Date / Active From:
+        </td>
+        <td>
+            <input id="active_start" size="13" type="text" value="<%= item.active_start %>" >
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>
+            Achieve By / Active To:
+        </td>
+        <td>
+            <input id="active_finish" size="13" type="text" value="<%= item.active_finish %>" >
+        </td>
+        <td>
+            <input type="checkbox" name="no_end_date" id="no_end_date"  value="1"  />
+        </td>
+        <td>
+            NO END DATE (plan will not expire)
+        </td>
+    </tr>
+</table>
+
+<hr/>
+
+
+<table>
+    <tr>
+        <td width="150">
+            Nutrition Plan Status: 
+        </td>
+        <td>
+            <% if(item.id ==item.active_plan_id) { %>
+            <span style="color:green;">ACTIVE</span>
+            <% } else { %>
+            <span style="color:red;">INACTIVE</span>
+            <% } %>
+        </td>
+        <td></td>
+    </tr>
+    
+    <tr>
+        <td colspan="2">
+            &nbsp;
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Currently Forced Active: 
+        </td>
+        <td>
+            <% if(parseInt(item.force_active)) { %>
+            <span style="color:green;">YES</span>
+            <% } else { %>
+            <span style="color:red;">NO</span>
+            <% } %>
+        </td>
+        <td>
+
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Force Planner Active:
+        </td>
+        <td>
+            <%
+            var force_active_checked = '';
+            if(parseInt(item.force_active)) {
+            force_active_checked = 'checked';
+            }
+            %>
+            <input type="checkbox" name="force_active" id="force_active"  value="1" <%= force_active_checked %>  />
+        </td>
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="notice_image"></div>
+                        </td>
+                        <td style="font-size:10px;"> 
+                            <span class="grey_title">
+                                Nutrition Diary calorie and macronutrient calculations and based on values<br/>
+                                from the ACTIVE Nutrition Plan! <br/><br/>
+                                
+                                If this Nutrition Plan is set as “Forced Active”, it will remain the ‘Active’ Nutrition Plan
+                                until this setting has been disabled, or another Nutrition Plan is set as “Forced Active”.
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>

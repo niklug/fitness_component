@@ -1,0 +1,195 @@
+<div style="border:1px solid #ccc;margin-top:10px;">
+    <div  style="width:100%;background: none repeat scroll 0 0 #4f4f4f !important;color:#fff;">
+        <table width="100%">
+            <tr>
+                <td width="100">
+                    <% if(item.edit_mode) { %>
+                    <label class="orange_text" style="font-weight:bold;">DESCRIPTION: </label>
+                    <% } else { %>
+                    <div style="width:75px;height:75px;background-size: 75px 75px;" class="description_image"></div>
+                    <% } %>
+                </td>
+                <td width="300" class="description_select" style="text-transform:uppercase;font-weight:bold;">
+
+                </td>
+                <td width="50">
+                    <label class="orange_text" style="font-weight:bold;margin-left: 5px;">TIME</label>
+                </td>
+                <td width="50">
+                    <% if(!item.edit_mode) { %>
+                        <%= item.time %>
+                    <% } else { %>
+                    <input  style="width:100%;"  class="recipe_time" type="text" value="<%= item.time %>" >
+                    <% } %>
+                </td>
+                <td></td>
+                <td width="300">
+                    <% if((app.options.is_backend && menu_plan_model.status == '5') || !menu_plan_model.is_submitted) { %>
+                        <% if(item.edit_mode) { %>
+                            <a style="float:right;margin-right: 5px;" class="orange_text delete_recipe" href="javascript:void(0)" title="">[DELETE]</a>
+                            <a style="float:right;margin-right: 5px;"  class="orange_text save_close_recipe" href="javascript:void(0)" title="">[SAVE]</a>
+                        <% } else { %>
+                            <a style="float:right;margin-right: 5px;" class="orange_text delete_recipe" href="javascript:void(0)" title="">[DELETE]</a>
+                            <a style="float:right;margin-right: 5px;"  class="orange_text copy_recipe" href="javascript:void(0)" title="">[COPY]</a>
+                            <a style="float:right;margin-right: 5px;"  class="orange_text edit_recipe" href="javascript:void(0)" title="">[EDIT]</a>
+                        <% } %>
+                    <% } %>
+                    
+                    <%  if(app.options.add_diary_options.diary_id
+                        && item.status == '2') { %>
+                         <a style="float:right;margin-right: 5px;" class="orange_text add_to_diary" href="javascript:void(0)" title="">[ADD TO DIARY]</a>
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div  class="recipe_database_item_wrapper" style="padding:5px;">
+        <%
+        var submitted = false;
+        if((menu_plan.status == 2) || (menu_plan.status == 3) || (menu_plan.status == 5)) {
+            submitted = true;
+        }
+        %>
+        <table width="100%">
+            <tr>
+                <td style="vertical-align: top;" rowspan="2">
+                     <%
+                    if(!item.image || item.image == 'images/Recipe_Images/'){
+                        image = $.fitness_helper.get('default_recipe_image');
+                    }
+                    image =  $.fitness_helper.get('base_url') + item.image;
+                    %>
+                    <div class="recipe_database_image" style="display: inline-block;background-image: url('<%= image %>')"></div>
+                    <div class="clr"></div>
+                    <a data-id="<%= item.id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[VIEW RECIPE]</a>
+                </td>
+                <td style="vertical-align: top;" width="50%">
+                    <table  width="100%">
+                        <tr>
+                            <td width="40%" class="orange_label">RECIPE NAME</td>
+                            <td width="60%">
+                                  <%= item.recipe_name %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">AUTHOR</td>
+                            <td>
+                                 <%= item.author %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">SERVES</td>
+                            <td>
+                                 <%= item.number_serves %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">STATUS</td>
+                            <td>
+                                <%= $.fitness_helper.setRecipeStatus(item.status) %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">APPROVED BY</td>
+                            <td>
+                                 <%= item.trainer || '-' %>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+
+                <td style="vertical-align: top;" width="30%">
+
+                    <table width="100%">
+                        <tr>
+                            <td class="orange_label">
+                                CALORIES
+                            </td>
+                            <td>
+                                <%= item.calories || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="orange_label">
+                                ENERGY
+                            </td>
+                            <td>
+                                <%= item.energy || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="orange_label">
+                                PROTEIN
+                            </td>
+                            <td>
+                                <%= item.protein || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="orange_label">
+                                FAT
+                            </td>
+                            <td>
+                                <%= item.fats || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="orange_label">
+                                CARB
+                            </td>
+                            <td>
+                                <%= item.carbs || '0.00' %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orange_label">
+                                SUGAR
+                            </td>
+                            <td>
+                                <%= item.total_sugars || '0.00' %>
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+
+            </tr>
+            <tr>
+                <td style="vertical-align: top;" colspan="2"> 
+                    COMMENTS
+                    <div class="clr"></div>
+                    <% if(!item.edit_mode) { %>
+                        <%= item.comments %>
+                    <% } else { %>
+                         <% 
+                        var readonly='';
+                        if(submitted == true) {
+                            readonly='readonly';
+                        } %>
+                        <textarea  <%= readonly %>  style="width:98%;" class="recipe_comments" rows="3"class="required"><%= item.comments %></textarea> 
+                    <% } %>
+
+
+                </td>
+            </tr>
+
+        </table>
+        <div class="clr"></div>
+    </div>
+    
+</div>
+
+<div class="clr"></div>
+
+<% if(!menu_plan_model.is_submitted) { %>
+<div  class="add_recipe_container add_area">
+    <div class="add_recipe">click to add new recipe</div>
+</div>
+<div class="clr"></div>
+<% } %>

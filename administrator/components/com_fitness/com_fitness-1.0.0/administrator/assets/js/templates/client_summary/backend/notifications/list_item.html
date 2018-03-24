@@ -1,0 +1,49 @@
+<td >
+    <% 
+    var created = moment(new Date(Date.parse(item.created))).format("ddd, D MMM  YYYY @ HH:mm");
+    
+    var readed = item.readed;
+    if(parseInt(readed)) {
+        readed = readed.split(",");
+    }
+            
+    readed = readed.indexOf(app.options.user_id);
+    
+    %>
+    
+    <% if(readed == '-1') { %>
+        <b><%= created %></b>
+    <% } else { %>
+        <%= created %>
+    <% } %>
+</td>
+
+<td class="template_container">
+
+</td>
+
+<td class="center">
+    <a style="cursor: pointer;" class="view_notification notifiction_open_form" onclick="javascript:void(0)">
+        <% if(readed == '-1') { %>
+            <b>[View]</b>
+        <% } else { %>
+            [View]
+        <% } %>
+    </a>
+</td>
+
+<td class="center">
+    <% if(readed == '-1') { %>
+    <a style="cursor: pointer;" class="read_notification " onclick="javascript:void(0)"><b>[Read]</b></a>
+    <% } else { %>
+        <a style="cursor: pointer;" class="read_notification " onclick="javascript:void(0)">[Unread]</a>
+    <% } %>
+</td>
+
+<td class="center"> 
+    <a class="delete_notification" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" class="delete_icon"></span></a>
+</td>
+
+<td class="center">
+    <input data-id="<%= item.id %>" class="item_checkbox" type="checkbox"/>
+</td>

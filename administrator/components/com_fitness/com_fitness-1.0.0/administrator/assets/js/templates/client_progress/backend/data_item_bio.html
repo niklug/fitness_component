@@ -1,0 +1,97 @@
+<div class="fitness_block_wrapper" style="padding: 5px;background-color: #fff;margin-top:10px;">
+
+    <table width="100%">
+        <tr>
+            <td>
+                <h3>BIOSIGNATURE ASSESSMENT COMPARISON</h3>
+            </td>
+            <td>
+                 <a style="cursor:pointer;float:right;" class="open_assessment" href="javascript:void(0)">[OPEN ASSESSMENT]</a>       
+            </td>
+        </tr>
+    </table>
+    
+    <hr class="orange_line">
+    <div class="clr"></div>
+    
+    <table width="100%" style="background-color: #dadada;">
+        <thead style="color: #fff;vertical-align: bottom;">
+            <tr align="center">
+                <td width="150" height="160"><div class="vertical_text">DATE</div></td>
+                <td width="40"><div class="vertical_text">AGE</div></td>
+                <td width="40"><div class="vertical_text">HEIGHT(cm)</div></td>
+                <td width="40"><div class="vertical_text">BODY FAT(%)</div></td>
+                <td width="40"><div class="vertical_text">LEAN MASS(kg)</div></td>
+                <td width="40"><div class="vertical_text">SUM 10</div></td>
+                <td width="40"><div class="vertical_text">QUADS & HAM.</div></td>
+                <td ><div class="vertical_text">PRIORITIES</div></td>
+                <td width="40"><div class="vertical_text">CHIN(mm)</div></td>
+                <td width="40"><div class="vertical_text">CHEEK(mm)</div></td>
+                <td width="40"><div class="vertical_text">PECTORALS(mm)</div></td>
+                <td width="40"><div class="vertical_text">TRICEPS(mm)</div></td>
+                <td width="40"><div class="vertical_text">SUB-SCAPULARIS(mm)</div></td>
+                <td width="40"><div class="vertical_text">MID-AXILLARY(mm)</div></td>
+                <td width="40"><div class="vertical_text">SUPRASPINATUS(mm)</div></td>
+                <td width="40"><div class="vertical_text">UMBILICAL(mm)</div></td>
+                <td width="40"><div class="vertical_text">KNEE(mm)</div></td>
+                <td width="40"><div class="vertical_text">CALF (mm)</div></td>
+                <td width="40"><div class="vertical_text">QUADRICEP(mm)</div></td>
+                <td width="40"><div class="vertical_text">HAMSTRING(mm)</div></td>
+            </tr>
+        </thead>
+        
+        <tbody>
+            <tr style="background-color: #fff;text-align: center;">
+                <td>
+                    <%
+                    var d1 = new Date(Date.parse(item.starttime));            
+                    var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+                    %>
+                    <%= start_date  %>
+                </td>
+                <td><%= item.age %></td>
+                <td><%= item.height %></td>
+                <td><%= item.body_fat || '-' %></td>
+                <td><%= item.lean_mass || '-' %></td>
+                <td><%= item.sum_10 || '-' %></td>
+                <td><%= item.quads_ham || '-' %></td>
+                <td align="left">
+                    <%= '1) ' + priorities[item.priority_1] %> <br/>
+                    <%= '2) ' + priorities[item.priority_2] %> <br/>
+                    <%= '3) ' + priorities[item.priority_3] %> <br/>
+                </td>
+                <td><%= item.chin || '-' %></td>
+                <td><%= item.cheek || '-' %></td>
+                <td><%= item.pectorial || '-' %></td>
+                <td><%= item.triceps || '-' %></td>
+                <td><%= item.sub_scapularis || '-' %></td>
+                <td><%= item.midaxillary || '-' %></td>
+                <td><%= item.supraspinatus || '-' %></td>
+                <td><%= item.umbilical || '-' %></td>
+                <td><%= item.knee || '-' %></td>
+                <td><%= item.calf || '-' %></td>
+                <td><%= item.quadricep || '-' %></td>
+                <td><%= item.hamstring || '-' %></td>
+            </tr>
+        </tbody>
+    </table>
+    <br/>
+    
+    <table width="100%">
+        <tr>
+            <td>
+                <h3>PHOTO ASSESSMENTS</h3>
+            </td>
+            <td>
+                 <a style="cursor:pointer;float:right;" class="show_images" href="javascript:void(0)">[SHOW]</a>   
+                 <a style="cursor:pointer;float:right;display:none;" class="hide_images" href="javascript:void(0)">[HIDE]</a>
+            </td>
+        </tr>
+    </table>
+    
+    <hr class="orange_line">
+    <div class="clr"></div>
+    
+    <div class="photos_wraper"></div>
+    
+</div>

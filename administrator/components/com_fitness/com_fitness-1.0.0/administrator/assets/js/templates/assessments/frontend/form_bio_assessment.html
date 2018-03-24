@@ -1,0 +1,288 @@
+<div class="internal_wrapper2">
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td class="left">
+                    <h5 class="orange_text">BIOSIGNATURE MODULATION</h5>
+                </td>
+                <td>
+                    <a class="pdf_button" style="float:right; margin-left: 10px;" title="Save in PDF" href="javascript:void(0)" id="pdf_button_bio"></a>
+                    <a class="email_button" style="float:right; margin-left: 10px;" title="Send by Email" href="javascript:void(0)" id="email_button_bio"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <hr class="orange_line">
+    <br/>
+    <table border="0" width="100%">
+        <tr>
+            <td width="30%" style="vertical-align: top;">
+                <h5 class="orange_text">CLIENT DETAILS</h5>
+                <hr class="orange_line">
+                <table border="0" width="100%">
+                    <tr>
+                        <td >AGE (years)</td>
+                        <td>
+                            <input  class="assessment_input required digits" min="1" maxlength="2" type="text" name="age" value="<%= data.age %>" id="age">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >HEIGHT (cm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="height" value="<%= data.height %>" id="height">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>WEIGHT (kg)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="weight" value="<%= data.weight %>" id="weight">
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+            
+            <td style="vertical-align: top;">
+                <h5 class="orange_text">BIOSIGNATURE CALCULATIONS</h5>
+                <hr class="orange_line">
+                <table border="0" width="100%">
+                    <tr>
+                        <td>TOTAL BODY FAT (%)</td>
+                        <td>
+                            <input   class="assessment_input required number" min="1" maxlength="6" type="text" name="body_fat" value="<%= data.body_fat %>" id="body_fat">
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>LEAN MASS (kg)</td>
+                        <td>
+                            <input   class="assessment_input required number" min="1" maxlength="6" type="text" name="lean_mass" value="<%= data.lean_mass %>" id="lean_mass">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SUM 10 (mm)</td>
+                        <td>
+                            <input   class="assessment_input required number" min="1" maxlength="6" type="text" name="sum_10" value="<%= data.sum_10 %>" id="sum_10">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>QUADS & HAM (mm)</td>
+                        <td>
+                            <input   class="assessment_input required number" min="1" maxlength="6" type="text" name="quads_ham" value="<%= data.quads_ham %>" id="quads_ham">
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </td>
+            
+            
+            <td width="30%" style="vertical-align: top;">
+                <h5 class="orange_text">PRIORITIES</h5>
+                <hr class="orange_line">
+                <table border="0" width="150">
+                    <tr>
+                        <td>1.</td>
+                        <td id="priority_1"></td>
+                    </tr>
+                    <tr>
+                        <td>2.</td>
+                        <td id="priority_2"></td>
+                    </tr>
+                    <tr>
+                        <td>3.</td>
+                        <td id="priority_3"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    
+    <!-- -->
+    <h5 class="orange_text">BODY FAT MEASUREMENTS</h5>
+    <hr class="orange_line">
+    <table border="0" width="100%">
+        <tr>
+            <td width="60%">
+                <div id="body_image"> </div>
+            </td>
+            
+            <td style="vertical-align: top;">
+                <table border="0" width="100%">
+                    <tr>
+                        <td >CHIN (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="chin" value="<%= data.chin %>" id="chin">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >CHEEK (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="cheek" value="<%= data.cheek %>" id="cheek">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PECTORAL (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="pectorial" value="<%= data.pectorial %>" id="pectorial">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>TRICEPS (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="triceps" value="<%= data.triceps %>" id="triceps">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SUB-SCAPULARIS (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="sub_scapularis" value="<%= data.sub_scapularis %>" id="sub_scapularis">
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>MID-AXILLARY (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="midaxillary" value="<%= data.midaxillary %>" id="midaxillary">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SUPRASPINATUS (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="supraspinatus" value="<%= data.supraspinatus %>" id="supraspinatus">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>UMBILICAL (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="umbilical" value="<%= data.umbilical %>" id="umbilical">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>KNEE (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="knee" value="<%= data.knee %>" id="knee">
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>CALF (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="calf" value="<%= data.calf %>" id="calf">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>QUADRICEP (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="quadricep" value="<%= data.quadricep %>" id="quadricep">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HAMSTRING (mm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="hamstring" value="<%= data.hamstring %>" id="hamstring">
+                        </td>
+                    </tr>
+                 </table>
+            </td>
+        </tr>
+    </table>
+    
+    <!-- -->
+
+    <table border="0" width="100%">
+        <tr>
+            <td  style="vertical-align: top;">
+                <h5 class="orange_text">ANATOMICAL MEASUREMENTS</h5>
+                <hr class="orange_line">
+                <table border="0" width="100%">
+                    <tr>
+                        <td >CHEST (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6" type="text" name="chest" value="<%= data.chest %>" id="chest">
+                        </td>
+                        <td >LEFT THIGH (cm) </td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="left_thigh" value="<%= data.left_thigh %>" id="left_thigh">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >WAIST (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="waist" value="<%= data.waist %>" id="waist">
+                        </td>
+                        <td>RIGHT THIGH (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="right_thigh" value="<%= data.right_thigh %>" id="right_thigh">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HIPS (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="hips" value="<%= data.hips %>" id="hips">
+                        </td>
+                        <td>LEFT CALF (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="left_calf" value="<%= data.left_calf %>" id="left_calf">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LEFT BICEP (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="left_bicep" value="<%= data.left_bicep %>" id="left_bicep">
+                        </td>
+                        <td>RIGHT CALF (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="right_calf" value="<%= data.right_calf %>" id="right_calf">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>RIGHT BICEP (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="right_bicep" value="<%= data.right_bicep %>" id="right_bicep">
+                        </td>
+                        <td></td>
+                        <td>
+             
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            
+            
+            
+            
+            <td style="vertical-align: top;">
+                <h5 class="orange_text">TEST SCORES</h5>
+                <hr class="orange_line">
+                <table border="0" width="100%">
+                    <tr>
+                        <td>BLOOD PRESSURE (mm/hg)</td>
+                        <td>
+                            <input  class="assessment_input"   type="text" name="blood_pressure" value="<%= data.blood_pressure %>" id="blood_pressure">
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>BODY COMPOSITION (bmi)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="body_composition" value="<%= data.body_composition %>" id="body_composition">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LUNG FUCTION (ml)</td>
+                        <td>
+                            <input  class="assessment_input  digits" min="1" maxlength="6"  type="text" name="lung_function" value="<%= data.lung_function %>" id="lung_function">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>FITNESS / VO2 MAX</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="v02_max" value="<%= data.v02_max %>" id="v02_max">
+                        </td>
+                    </tr>
+                 </table>
+            </td>
+        </tr>
+    </table>
+</div> 

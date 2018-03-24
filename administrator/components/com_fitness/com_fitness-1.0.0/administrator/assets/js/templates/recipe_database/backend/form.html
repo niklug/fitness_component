@@ -1,0 +1,149 @@
+<div class="width-100 fltlft fitness_block_wrapper">
+    <form id="recipe_edit_form">
+        <table width="100%">
+            <tr>
+                <td width="50%" style="vertical-align: top;">
+                    <fieldset class="adminform">
+                        <legend>RECIPE DETAILS</legend>
+                        <div id="details_wrapper">
+                            <table width="100%">
+                                 <tr>
+                                    <td width="200">
+                                        <label>RECIPE NAME</label>
+                                    </td>
+                                    <td>
+                                        <input class="dark_input_style" value="<%= recipe_name || '' %>" style="width:250px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div style="width:200px;float:left;" id="recipe_type_wrapper"></div>
+                                        <div style="width:200px;float:left;margin-left: 10px;"  id="recipe_variation_wrapper"></div>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="200">
+                                        <label>SERVES</label>
+                                    </td>
+                                    <td>
+                                        <input class="dark_input_style" value="<%= number_serves %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>AUTHOR</label>
+                                    </td>
+                                    <td>
+                                        <span class="grey_title">
+                                            <%= author || '-' %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>STATUS</label>
+                                    </td>
+                                    <td id="status_button_place_<%= id %>"  ></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>ASSESSED BY</label>
+                                    </td>
+                                    <td>
+                                        <%= trainer || '-' %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>PUBLISHED</label>
+                                    </td>
+                                    <td>
+                                        <%
+                                        var published_checked = '';
+                                        if(state == 1) {
+                                            published_checked = 'checked';
+                                        }
+                                        %>
+                                        <input type="checkbox" name="published" id="published"  value="1" <%= published_checked %>  />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </td>
+                <td style="vertical-align: top;">
+                    <% if(id) { %>
+                    <table width="100%">
+                        <tr>
+                            <td width="50%">
+                                <fieldset class="adminform">
+                                    <legend>RECIPE IMAGE</legend>
+                                    <div style="width:200px;" id="image_upload_content"></div>
+                                </fieldset>
+                            </td>
+                            <td>
+                                <fieldset class="adminform">
+                                    <legend>RECIPE VIDEO</legend>
+                                    <div style="width:200px;"  id="video_upload_content"></div>
+                                </fieldset>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <fieldset class="adminform">
+                                    <legend>RECIPE INSTRUCTIONS / METHOD</legend>
+                                    <textarea id="instructions" style="min-height:200px;width:98%;background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);padding:5px;" name="instructions" cols="50" rows="4"><%= decodeURIComponent(instructions) %></textarea>
+                                </fieldset>
+                            </td>
+                        </tr>
+                    </table>
+                    <% } %>
+                </td>
+
+            </tr>
+        </table>
+        
+        <% if(id) { %>
+            <fieldset class="adminform">
+                <legend>RECIPE INGREDIENTS</legend>
+                <div id="item_descriptions"></div>
+            </fieldset>
+       
+            <fieldset class="adminform">
+                <div id="comments_wrapper" style="width:99%"></div>
+            </fieldset>
+        <% } %>
+        
+    </form>
+</div>

@@ -1,0 +1,64 @@
+<td>
+    <% if(item.editable) { %>
+         <%
+        var start_date = '';
+        if(item.starttime) {
+            start_date = item.starttime.substring(0,10);
+        }
+        %>
+        <input style="width:75px;"  type="text" name="start_date" class="start_date required" size="6"  value="<%= start_date %>">
+    <% } else { %>
+        <%
+        var d1 = new Date(Date.parse(item.starttime));            
+        var start_date = moment(d1).format("ddd, D MMM  YYYY");      
+        %>
+        <%= start_date %>
+    <% } %>
+</td>
+
+<td>
+    <% if(item.editable) { %>
+        <%
+        var start_time = '';
+        if(item.starttime) {
+            start_time = item.starttime.substring(10,16);
+        }
+        %>  
+        <input style="width:55px;"  size="5" type="text" name="start_time"  class="start_time required"  value="<%= start_time %>">
+    <% } else { %>
+        <%
+        var d1 = new Date(Date.parse(item.starttime));            
+        var start_time = moment(d1).format("HH:mm");      
+        %>
+        <%= start_time %>
+    <% } %>
+</td>
+
+<td class="appointment_select">
+    <%= item.appointment_name %>
+</td>
+<td class="session_type_select">
+    <%= item.session_type_name %>
+</td>
+<td class="session_focus_select">
+    <%= item.session_focus_name %>
+</td>
+<td class="location_select">
+    <%= item.location_name %>
+</td>
+<td class="pr_temp_select">
+    <%= item.pr_temp_name || '-' %>
+</td>
+<td>
+    
+    
+    
+    
+    <% if(item.editable) { %>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" class="delete_session" onclick="javascript:void(0)">[DELETE]</a>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" class="save_session" onclick="javascript:void(0)">[SAVE]</a>
+    <% } else { %>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" class="schedule_session" onclick="javascript:void(0)">[SCHEDULE]</a>
+        <a  style="cursor: pointer;float:right;margin-right:10px;" class="edit_session" onclick="javascript:void(0)">[EDIT]</a>
+    <% } %>
+</td>

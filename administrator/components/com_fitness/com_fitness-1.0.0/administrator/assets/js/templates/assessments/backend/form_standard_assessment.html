@@ -1,0 +1,129 @@
+<fieldset class="adminform">
+    <table border="0" width="900">
+        <tr>
+            <td width="30%" style="vertical-align: top;">
+                <h5>PHYSICAL MEASUREMENTS</h5>
+                <table border="0" width="100%">
+                    <tr>
+                        <td >AGE (years)</td>
+                        <td>
+                            <input  class="assessment_input required digits" min="1" maxlength="2" type="text" name="age" value="<%= data.age %>" id="age">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >HEIGHT (cm)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="height" value="<%= data.height %>" id="height">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>WEIGHT (kg)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6" type="text" name="weight" value="<%= data.weight %>" id="weight">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LEAN MASS (kg) </td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6"   type="text" name="lean_mass" value="<%= data.lean_mass %>" id="lean_mass">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BODY FAT (%)</td>
+                        <td>
+                            <input  class="assessment_input required number" min="1" maxlength="6"  type="text" name="body_fat" value="<%= data.body_fat %>" id="body_fat">
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            
+            
+            
+            
+            <td style="vertical-align: top;">
+                <h5>ANATOMICAL MEASUREMENTS</h5>
+                <table border="0" width="100%">
+                    <tr>
+                        <td>CHEST (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6" type="text" name="chest" value="<%= data.chest %>" id="chest">
+                        </td>
+                        <td>LEFT THIGH (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="left_thigh" value="<%= data.left_thigh %>" id="left_thigh">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>WAIST (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="waist" value="<%= data.waist %>" id="waist">
+                        </td>
+                        <td>RIGHT THIGH (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="right_thigh" value="<%= data.right_thigh %>" id="right_thigh">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HIPS (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="hips" value="<%= data.hips %>" id="hips">
+                        </td>
+                        <td>LEFT CALF (cm)</td>
+                        <td>
+                            <input class="assessment_input  number" min="1" maxlength="6"  type="text" name="left_calf" value="<%= data.left_calf %>" id="left_calf">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LEFT BICEP (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="left_bicep" value="<%= data.left_bicep %>" id="left_bicep">
+                        </td>
+                        <td>RIGHT CALF (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="right_calf" value="<%= data.right_calf %>" id="right_calf">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>RIGHT BICEP (cm)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6" type="text" name="right_bicep" value="<%= data.right_bicep %>" id="right_bicep">
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </td>
+            
+            
+            <td width="30%" style="vertical-align: top;">
+                <h5>TEST SCORES</h5>
+                <table border="0" width="100%">
+                    <tr>
+                        <td>BLOOD PRESSURE (mm/hg)</td>
+                        <td>
+                            <input  class="assessment_input" type="text" name="blood_pressure" value="<%= data.blood_pressure %>" id="blood_pressure">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BODY COMPOSITION (bmi)</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6"  type="text" name="body_composition" value="<%= data.body_composition %>" id="body_composition">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LUNG FUCTION (ml)</td>
+                        <td>
+                            <input  class="assessment_input  digits" min="1" maxlength="6"  type="text" name="lung_function" value="<%= data.lung_function %>" id="lung_function">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>FITNESS / VO2 MAX</td>
+                        <td>
+                            <input  class="assessment_input  number" min="1" maxlength="6" type="text" name="v02_max" value="<%= data.v02_max %>" id="v02_max">
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</fieldset>

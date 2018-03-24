@@ -1,0 +1,104 @@
+<tr data-id="<%= id %>" class="item_row">
+    <td>
+        <a title="View Details" style="cursor: pointer;" data-id="<%= id %>"  class="view " onclick="javascript:void(0)">
+             <%= name %>
+        </a>
+    </td>
+    <td>
+        <% 
+
+        if(group_clients_names) {
+            _.each(group_clients_names.split(','), function(name){
+                %>
+                
+                <%= name %><br>
+                
+                <%
+            });
+        }
+         %>
+    </td>
+    <td>
+        <%= moment(new Date(Date.parse(created))).format("ddd, D MMM  YYYY") %>
+    </td>
+    <td>
+        <%= created_by_name %>
+    </td>
+    <td>
+        <%= appointment_name %>
+    </td>
+    <td>
+        <%= session_type_name %>
+    </td>
+    <td>
+        <%= session_focus_name %>
+    </td>
+    <td>
+        <%= business_profile_name %>
+    </td>
+    
+    <td>
+        <% if(state == '1' || state == '0') { %>
+            <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
+        <% } else { %>
+            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+        <% } %>
+    </td>
+    
+    <td>
+         <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
+    </td>
+    
+    <td class="center"> 
+        <% if(view_allowed) { %>
+            <% if(state == '1' || state == '0') { %>
+                <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+            <% } %>
+        <% } %>
+    </td>
+    
+    <% 
+    var add_template_title = 'Create New Program From Template';
+    if(app.options.event_id) { 
+        add_template_title = 'Add Template To Appointment';
+    } 
+    %> 
+    
+    <% if(app.options.event_id) { %>
+    <td>
+
+            <a class="add_template" title="<%= add_template_title %>" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="add_template_icon_20"></span></a>
+
+    </td>
+    <% } %> 
+    
+    <% if(!app.options.event_id) { %>
+    <td>
+
+            <a class="search_program" title="Add Template To Existing Program" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="search_program_icon_20"></span></a>
+
+    </td>
+    <% } %> 
+    
+    <td class="center">
+        <%
+        var icon_class = 'unpublish';
+        var publish_item = 'Publish'; 
+        if(parseInt(state) == '1') {
+            icon_class = 'publish';
+            publish_item = 'Unpublish'; 
+        }
+        %>
+        <% if(view_allowed) { %>
+            <span title="<%= publish_item %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= id %>" data-state="<%= state %>" class="publish_item state <%= icon_class %> " ></span></span> <br/>
+        <% } %> 
+    </td>
+    
+    <td class="center">
+        <% if(view_allowed) { %>
+            <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+        <% } %> 
+    </td>
+</tr>

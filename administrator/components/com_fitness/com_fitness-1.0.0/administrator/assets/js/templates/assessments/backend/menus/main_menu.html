@@ -1,0 +1,64 @@
+<div id="toolbar" class="toolbar-list">
+    <ul>
+        <% if(parseInt(id)) { %>
+            <li id="toolbar-apply" class="button">
+                <a id="save" class="toolbar" onclick="javascript:void(0)">
+                    <span  class="icon-32-apply"> </span>
+                    Save
+                </a>
+            </li>
+         <% } else { %>
+            <li id="toolbar-apply" class="button">
+                <a id="save" class="toolbar" onclick="javascript:void(0)">
+                    <span  class="icon-32-forward"> </span>
+                    Next
+                </a>
+            </li>
+         <% } %>
+            
+            
+        <% if(parseInt(id)) { %>
+            <li id="toolbar-save" class="button">
+                <a id="save_close" class="toolbar" onclick="javascript:void(0)">
+                    <span  class="icon-32-save"> </span>
+                    Save & Close
+                </a>
+            </li>
+            <li id="toolbar-save-new" class="button">
+                <a  id="save_copy"  class="toolbar" onclick="javascript:void(0)">
+                    <span class="icon-32-save-new"> </span>
+                    Save As Copy
+                </a>
+            </li>
+            
+            <li id="save_template_button" class="button">
+                <a  id="save_template"  class="toolbar" onclick="javascript:void(0)">
+                    <span class="icon-32-save"> </span>
+                    Save As Template
+                </a>
+            </li>
+            
+            <li id="toolbar-save-new" class="button">
+                <a  id="save_new"  class="toolbar" onclick="javascript:void(0)">
+                    <span class="icon-32-save-new"> </span>
+                    Save & New
+                </a>
+            </li>
+            <li id="toolbar-cancel" class="button">
+                <a id="cancel"  class="toolbar" onclick="javascript:void(0)">
+                    <span class="icon-32-cancel"> </span>
+                    Close
+                </a>
+            </li>
+         <% } else { %>
+            <li id="toolbar-cancel" class="button">
+                <a id="cancel"  class="toolbar" onclick="javascript:void(0)">
+                    <span class="icon-32-cancel"> </span>
+                    Cancel
+                </a>
+            </li>
+         <% } %>
+            
+    </ul>
+    <div class="clr"></div>
+</div>

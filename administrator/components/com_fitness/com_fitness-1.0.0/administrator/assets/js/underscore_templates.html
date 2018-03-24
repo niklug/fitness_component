@@ -1,0 +1,151 @@
+<!--  Status  -->
+<script type="text/template" id="dialog_status_template">
+    <div id="<%= wrapper %>">
+        <div class="<%=  hide_image_class %>" title="close" ></div>
+        <% _.each(statuses, function(item, key){
+            if(status_id != key) {
+            %>
+                <a class="<%= status_button_dialog %> <%= item.class %>" data-item_id="<%= item_id %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+            <% 
+            }
+        })  
+        var display = 'display:none;';
+        if(show_send_email) {
+            display = 'display:inline-block;';
+        }
+        %>
+            <input style="<%= display %>" type="checkbox" checked id="send_diary_email" name="send_diary_email" value="1">
+            
+        <% if(show_send_email) { %>
+            <span style="font-size:12px;">Send email</span>
+        <% }  %>
+        
+    </div>
+      
+</script>
+
+<script type="text/template" id="status_button_template">
+    <% _.each(statuses, function(item, key){
+        if(status_id == key) {
+        %>
+            <a class="<%= status_button %> <%= item.class %>" data-item_id="<%= item_id %>" data-status_id="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+        <% 
+        }
+    })  
+    %>
+</script>
+
+
+<!-- PAGINATION -->
+<script type="text/template" id="backbone_pagination_template">
+    <div class="bac_nav">
+        <% if(currentPage > 1) { %>
+            <a class="first_pag" title="First Page" href="javascript:void(0)">START</a>&#32; &#108;
+            <a class="prev_pag" title="Previous Page" href="javascript:void(0)">PREV</a>
+        <% } %>
+        <ul class="ul-pagination"></ul>
+        <% if(currentPage <  pages) { %>
+            <a class="next_pag" title="Next Page" href="javascript:void(0)">NEXT</a>&#32;&#108;
+            <a class="last_pag" title="Last Page" href="javascript:void(0)">END</a>
+        <% } %>
+    </div>
+    <div style="width:100%;text-align: center;">
+        Display # 
+        <select style="float:none;" name="items_number" class="items_number">
+            <option value="2">2</option>
+            <option value="5">5</option>
+            <option selected="selected" value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+        </select> 
+    </div>
+</script>
+
+<script id="template-page" type="text/template">
+    <a class=" a-page-item <%= pageClass %>" href="javascript:void(0)"><%= pageNumber %></a>
+</script>
+<!-- END PAGINATION -->
+
+
+
+<script type="text/template" id="image_upload_template">
+    <%
+    var background_image =  'url(' + "'" + base_url + img_path + '/' + picture  + "')" ;
+
+    if(!picture) {
+        background_image = 'url(' + "'" + default_image  + "')" ;
+        full_image_path = '';
+    } 
+    %>
+    <div class="form-left-col" style="text-align:center;">
+    <% if(!picture && (readonly == false)) { %>
+            Select & Upload New Image 
+            <div class="clr"></div>
+            <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Image]</a>
+            <div class="clr"></div>
+            <input type="file" name="change_image" id="change_image" style=" cursor: pointer !important; direction: ltr;font-size: 20px;margin:-22px 0 0; opacity: 0;position: relative;display: inline; right: 0;top:0px; width: 200px;"> 
+            <div class="clr"></div>
+            Or drag image here
+    <% }  %>
+         
+        <div data-imagepath="<%= img_path + '/' + picture %>" 
+            class="recipe_database_image preview_image"
+            style=" background-image: <%= background_image %>;display: inline-block; margin: 5px;"
+            >
+        </div>
+        <br/>
+        <% if(readonly == false) { %>
+            <% if(!picture) { %>
+            <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+            <% } %>
+            <a href="javascript:void(0)" class="clear_image">[Clear]</a>
+        <% } %>
+    </div>
+
+</script>
+    
+    
+<script type="text/template" id="video_upload_template">
+    <%
+    var full_video_path = video_path + '/' + video;
+    if(!video) {
+        var background_image = 'url(' + "'" + default_video_image  + "')" ;
+        full_video_path = '';
+    } else {
+        var background_image = 'none';
+    }
+    %>
+    <div class="form-left-col" style="text-align:center; width:264px;display:inline-block;" id="video_container" data-videopath="<%= full_video_path %>" >
+    
+        <% if(!video && (readonly == false)) { %>
+            Select & Upload New Video 
+            <div class="clr"></div>
+            <a style=" cursor: pointer !important; z-index:999;" href="javascript:void(0)">[Add Video]</a>
+            <div class="clr"></div>
+    
+            <input
+                type="file"
+                name="change_video" 
+                id="change_video" 
+                style="cursor: pointer !important; direction: ltr;font-size: 20px;margin:-22px 0 0; opacity: 0;position: relative;display: inline; right: 0;top:0px; width: 200px;"
+            > 
+            
+            <div class="clr"></div>
+            Or drag video here
+        <% }  %>
+        
+        <div 
+            style="background-image: <%= background_image%>; background-repeat: no-repeat;background-size:100% 100%;margin: 5px; display: inline-block; height:<%= preview_height%>;width:<%= preview_width%>;"
+            id="preview_video">
+        </div>
+        <br/>
+        <% if(readonly == false) { %>
+            <% if(!video) { %>
+            <a style="display: inline-block; margin-right: 50px;" href="javascript:void(0)" class="save">[Save]</a>
+            <% } %>
+            <a href="javascript:void(0)" class="clear_video">[Clear]</a>
+        <% } %>
+    </div>
+
+</script>
+

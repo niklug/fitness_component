@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="name" type="text"
+                
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_NAME"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_NAME" 
+                
+            required="true"   
+                
+            filter="raw" /> 
+
+       <field name="group_id" type="accesslevel"
+                
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_GROUP_ID"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_GROUP_ID" 
+                
+                
+                 required="true" 
+            filter="raw" /> 
+
+       <field name="primary_administrator" type="text"
+                
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_PRIMARY_ADMINISTRATOR"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_PRIMARY_ADMINISTRATOR" 
+            required="true"   
+       /> 
+
+       <field name="secondary_administrator" type="text"
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_SECONDARY_ADMINISTRATOR"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_SECONDARY_ADMINISTRATOR" 
+       /> 
+
+       <field name="terms_conditions" type="editor"
+                
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_TERMS_CONDITIONS"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_TERMS_CONDITIONS" 
+              filter="raw"   
+                
+                 /> 
+
+       <field name="header_image" type="media"
+                
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_HEADER_IMAGE"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_HEADER_IMAGE" 
+                
+                
+                
+            directory="Email_Headers" /> 
+
+       <field name="facebook_url" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_FACEBOOK_URL"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_FACEBOOK_URL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="twitter_url" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_TWITTER_URL"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_TWITTER_URL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="youtube_url" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_YOUTUBE_URL"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_YOUTUBE_URL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="instagram_url" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_INSTAGRAM_URL"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_INSTAGRAM_URL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="google_plus_url" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_GOOGLE_PLUS_URL"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_GOOGLE_PLUS_URL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="linkedin_url" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_LINKEDIN_URL"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_LINKEDIN_URL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="website_url" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_WEBSITE_URL"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_WEBSITE_URL" 
+        
+        
+        
+        filter="safehtml" /> 
+
+ 
+		<field name="email" type="email" size="40" label="Email Address" description="" validate="email"   /> 
+
+       <field name="contact_number" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_BUSINESS_PROFILE_CONTACT_NUMBER"
+            description="COM_FITNESS_FORM_DESC_BUSINESS_PROFILE_CONTACT_NUMBER" 
+        
+        
+        
+        filter="safehtml" /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

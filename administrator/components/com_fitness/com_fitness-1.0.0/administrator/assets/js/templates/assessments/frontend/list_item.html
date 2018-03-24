@@ -1,0 +1,58 @@
+<tr data-id="<%= id %>"  class="item_row">
+    <td>
+        <div style="float:left; width:130px;"><%= moment(new Date(Date.parse(starttime))).format("ddd, D MMM  YYYY") %></div>
+        <div style="float:left;width:20px;"><%= moment(new Date(Date.parse(starttime))).format("HH:mm")  %></div>
+    </td>
+
+    <td>
+        <%= session_focus_name %>
+    </td>
+    
+    <td>
+        <%= trainer_name %>
+    </td>
+    
+    <td class="center"><%= weight %></td>
+    <td class="center"><%= lean_mass %></td>
+    <td class="center"><%= body_fat %></td>
+    
+    <td id="status_button_place_<%= client_item_id %>" data-appointment_id="<%= title %>"  ></td>
+    
+    
+    <% if(status != '10') { //not ASSESSING %>
+    <td>
+        <% if(published == '1') { %>
+            <a title="View" style="cursor: pointer;" class="view_item " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
+        <% } else { %>
+            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+        <% } %>
+    </td>
+    <% } %>
+    
+    <% if(current_page == 'my_programs' && status != '10') { %>
+    <td>
+         <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
+    </td>
+    <% } %>
+    
+    <% if((current_page == 'my_programs' || current_page == 'trash_list') && status != '10') { %>
+    <td > 
+        <% if(delete_allowed) { %>
+            <% if(published == '1') { %>
+                <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+            <% } %>
+        <% } %>
+    </td>
+    <% } %>
+    
+     <% if(status != '10') { %>
+    <td >
+        <% if((current_page == 'my_programs' || current_page == 'trash_list') && (delete_allowed == true)) { %>
+            <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+        <% } %>
+    </td>
+    <% } %>
+
+</tr>

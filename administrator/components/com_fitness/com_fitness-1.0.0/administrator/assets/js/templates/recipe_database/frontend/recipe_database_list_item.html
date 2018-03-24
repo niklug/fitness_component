@@ -1,0 +1,163 @@
+<%
+if(!image || image == 'images/Recipe_Images/'){
+    image = app.options.default_image;
+} else {
+    image  = app.options.base_url + image
+}
+var background_image = 'url(' + "'" + image  + "')" ;
+var current_page = app.models.get_recipe_params.get('current_page');
+%>
+<div    class="recipe_database_item_wrapper" data-id="<%= id%>" style="margin-top: 0px;border:none;">
+    <table width="100%">
+        <tr>
+            <td width="30%" style="text-align:center; vertical-align:top;">
+                <div class="recipe_database_image" style="display: inline-block;background-image: <%= background_image %>"></div>
+            </td>
+            <td width="50%">
+                <table  width="100%">
+                    <tr>
+                        <td width="40%">RECIPE NAME</td>
+                        <td width="60%">
+                            <span class="grey_title">
+                                 <%= recipe_name %>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top;">RECIPE TYPE</td>
+                        <td>
+                            <span class="grey_title">
+                                <%
+                                if(recipe_types_names) {
+                                    _.each(recipe_types_names.split(','), function(item){ %>
+                                        <%= item + "<br/>" %>
+                                    <% })
+                                } else { %> 
+                                    <%= '-' %>
+                                <% } %>
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="vertical-align:top;">VARIATIONS</td>
+                        <td>
+                            <a data-id="<%= id %>" style="cursor: pointer;" class="show_recipe_variations" onclick="javascript:void(0)">[show]</a>
+                            <span data-id="<%= id %>" style="display:none;" class="grey_title recipe_variations">
+                                <%
+                                if(recipe_variations_names) {
+                                    _.each(recipe_variations_names.split(','), function(item){ %>
+                                        <%= item + "<br/>" %>
+                                    <% })
+                                } else { %> 
+                                    <%= '-' %>
+                                <% } %>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SERVES</td>
+                        <td>
+                            <span class="grey_title">
+                                 <%= number_serves %>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AUTHOR</td>
+                        <td>
+                            <span class="grey_title">
+                                 <%= author %>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>STATUS</td>
+                        <td id="status_button_place_<%= id %>"  ></td>
+                    <td>
+                    </tr>
+                    <tr>
+                        <td>ASSESSED BY</td>
+                        <td>
+                            <span class="grey_title">
+                                 <%= trainer || '-' %>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="text-align:center; vertical-align:bottom;">
+                <% if(app.options.add_diary_options.nutrition_plan_id
+                      && app.options.statuses.APPROVED_RECIPE_STATUS.id == status
+                ) {%>
+                <a data-id="<%= id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[add to diary]</a>
+                <br/><br/>
+                <% } %>
+
+                <a data-id="<%= id %>" style="cursor: pointer;" class="view_recipe" onclick="javascript:void(0)">[view recipe]</a>
+
+                <% if ((current_page == 'my_recipes') || (current_page == 'recipe_database')) { %>
+                    <br/><br/>
+                    <% if (is_favourite) {
+                        var display_remove_favourite = 'inline';
+                        var display_add_favourite = 'none';
+
+                    } else {  
+                        var display_add_favourite = 'inline';
+                        var display_remove_favourite = 'none';
+                    } %>
+                        <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
+
+                        <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[add favourite]</a>
+                <% } %>
+
+                 <br/><br/>
+                <% if(current_page == 'my_recipes') { %>
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="trash_recipe" onclick="javascript:void(0)">[trash recipe]</a>
+                <% } else if (current_page == 'recipe_database') { %>
+                    <a data-id="<%= id %>" style="cursor: pointer;" id="copy_recipe" onclick="javascript:void(0)">[quick copy]</a>
+                <% } else if (current_page == 'my_favourites') { %>
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="remove_favourites" onclick="javascript:void(0)">[remove favourite]</a>
+                <% } else if (current_page == 'trash_list') { %>
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="restore_recipe" onclick="javascript:void(0)">[restore recipe]</a>
+                    <br><br>
+                    <a data-id="<%= id %>" style="cursor: pointer;" class="delete_recipe" onclick="javascript:void(0)">[delete recipe]</a>
+                <% } %>
+            </td>
+        </tr>
+    </table>
+    </br>
+    <div class="fitness_block_wrapper" style="">
+        <table width="100%">
+            <tr>
+                <td>
+                    CALORIES
+                    <span class="grey_title"><%= calories || '0.00' %></span>
+                </td>
+                <td>
+                    ENERGY
+                    <span class="grey_title"><%= energy || '0.00' %></span>
+                </td>
+                <td>
+                    PROTEIN
+                    <span class="grey_title"><%= protein || '0.00' %></span>
+                </td>
+                <td>
+                    FAT
+                    <span class="grey_title"><%= fats || '0.00' %></span>
+                </td>
+                <td>
+                    CARB
+                    <span class="grey_title"><%= carbs || '0.00' %></span>
+                </td>
+                <td>
+                    SUGAR
+                    <span class="grey_title"><%= total_sugars || '0.00' %></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br/>
+    <hr>
+    <br/>
+</div>

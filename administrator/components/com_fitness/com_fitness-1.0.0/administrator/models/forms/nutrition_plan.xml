@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset>
+
+        <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ID"
+                     readonly="true" class="readonly"
+                     description="JGLOBAL_FIELD_ID_DESC" /> 
+
+        <field name="client_id" type="text" size="40" class="inputbox"
+        
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_CLIENT_ID"
+              description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_CLIENT_ID" 
+              required="true" 
+              filter="safehtml" /> 
+        
+        <field name="business_profile_id" type="text" class="inputbox"
+            label="Business Profile"
+            required="true"
+       /> 
+
+        <field name="trainer_id" type="text" class="inputbox"
+              required="true"
+              label="Trainer Name"
+        /> 
+        
+
+        <field name="active_start" type="calendar"
+              required="true"
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE_START"
+              description="" 
+              filter="raw" /> 
+
+        <field name="active_finish" type="calendar"
+              required="true" 
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE_FINISH"
+              description="" 
+              filter="raw" /> 
+
+        <field name="active" type="text" size="40" class="inputbox"
+        
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_ACTIVE"
+              description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_ACTIVE" 
+              filter="safehtml" /> 
+
+        
+        <field name="force_active" type="radio" default="0" label="Force Planner Active" description="">
+          <option value="1">JYES</option>
+          <option value="0">JNO</option>
+        </field>
+        
+        <field name="override_dates" type="radio" default="0" label="Override Dates" description="">
+          <option value="1">JYES</option>
+          <option value="0">JNO</option>
+        </field>
+       
+        <field name="no_end_date" type="radio" default="0" label="No End Date" description="">
+          <option value="1">JYES</option>
+          <option value="0">JNO</option>
+        </field>
+
+        <field name="primary_goal" type="text" size="40" class="inputbox"
+        
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_PRIMARY_GOAL"
+              description="COM_FITNESS_FORM_DESC_NUTRITION_PLAN_PRIMARY_GOAL" 
+              required="true" 
+              filter="safehtml" /> 
+        
+        <field name="mini_goal" type="text" size="40" class="inputbox"
+        
+              label="Mini Goal
+
+
+
+
+
+"
+              description="" 
+              required="true" 
+              filter="safehtml" /> 
+
+        
+        <field name="nutrition_focus" type="sql" class="inputbox"
+              query="SELECT id, name FROM #__fitness_nutrition_focus WHERE state='1'"
+              key_field="id"
+              value_field="name"
+              label="COM_FITNESS_FORM_LBL_NUTRITION_PLAN_NUTRITION_FOCUS"
+              required="true"
+        /> 
+        
+        
+       <field name="trainer_comments" type="editor" buttons="true"  height="150px"
+        class="inputbox"
+        filter="safehtml"
+            label="Details"
+            description=""  /> 
+       
+              <field name="information" type="editor" buttons="true"  height="450px"
+        class="inputbox"
+        filter="safehtml"
+            label="Details"
+            description=""  /> 
+                
+           <field name="created" type="timecreated" default="" 
+            label="COM_FITNESS_FORM_LBL_NUTRITION_RECIPE_CREATED"
+            description="COM_FITNESS_FORM_DESC_NUTRITION_RECIPE_CREATED"  />       
+
+        <field
+            name="state"
+            type="radio"
+            label=""
+            description="JFIELD_PUBLISHED_DESC"
+            class="inputbox"
+            size="1"
+            default="1">
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+        
+        <field
+            name="activity_level"
+            type="radio"
+            label="Level of activity for this entry?"
+            description="Level of activity for this entry?"
+            class="inputbox"
+            size="1"
+            default="0">
+            <option value="1">HEAVY TRAINING DAY</option>
+            <option value="2">LIGHT TRAINING DAY</option>
+            <option value="3">RECOVERY/REST DAY</option>
+        </field>
+        
+               
+        <field name="allowed_proteins" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="PROTEINS"
+        description=""  /> 
+        
+                
+        <field name="allowed_fats" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="FATS"
+        description=""  /> 
+        
+                
+        <field name="allowed_carbs" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="CARBOHYDRATES"
+        description=""  /> 
+        
+                
+        <field name="allowed_liquids" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="LIQUIDS"
+        description=""  /> 
+        
+        <field name="other_recommendations" type="editor" buttons="true"
+        class="inputbox" height="150"
+        filter="safehtml"
+        label="OTHER RECOMMENDATIONS"
+        description=""  /> 
+        
+
+    </fieldset>
+
+</form>

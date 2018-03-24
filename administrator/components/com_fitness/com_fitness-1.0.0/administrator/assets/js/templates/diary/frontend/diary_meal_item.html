@@ -1,0 +1,118 @@
+<table width="100%">
+    <tr>
+        <td width="60">
+            <% if(item.edit_mode) { %>
+            <label class="orange_text" style="font-weight:bold;">DESCRIPTION: </label>
+            <% } else { %>
+            <div style="width:50px;height:50px;background-size: 50px 50px;" class="description_image"></div>
+            <% } %>
+        </td>
+        <td width="300" class="description_select" style="text-transform:uppercase;font-weight:bold;">
+
+        </td>
+        <%  if(diary_model.edit_allowed) { %>
+            <td>
+                <% if(item.edit_mode) { %>
+                <a onclick="javascript:void(0)" class="cancel_diary_meal" style="cursor: pointer;float:right;margin-right:10px;"> [DELETE]</a>
+                    <% if(parseInt(item.description)) { %>
+                        <a onclick="javascript:void(0)" class="copy_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[COPY]</a>
+                    <% } %>
+                <a onclick="javascript:void(0)" class="save_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[SAVE & ENTER]</a>
+                <% } else { %>
+                <a onclick="javascript:void(0)" class="delete_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[DELETE]</a>
+                <% if(parseInt(item.description)) { %>
+                    <a onclick="javascript:void(0)" class="copy_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[COPY]</a>
+                <% } %>
+                <a onclick="javascript:void(0)" class="edit_diary_meal" style="cursor: pointer;float:right;margin-right:10px;">[EDIT]</a>
+                <% } %>
+            </td>
+        <% } %>
+    </tr>
+</table>
+
+<br/>
+<div class="ingredients_wrapper">
+    <table class="meal_table" width="100%">
+        <thead>
+            <tr>
+                <th class="ingredient_title">MEAL ITEMS</th>
+                <th>QUANTITY</th>
+                <th class="ingredient_cell">PRO</th>
+                <th class="ingredient_cell">FAT</th>
+                <th class="ingredient_cell">CARB</th>
+                <th class="ingredient_cell">CALS</th>
+                <th class="ingredient_cell">ENRG (kJ)</th>
+                <th class="ingredient_cell">FAT, SAT</th>
+                <th class="ingredient_cell">SUG</th>
+                <th class="ingredient_cell">SOD (mg)</th>
+
+                <th class="ingredient_cell_delete"></th>
+
+            </tr>
+        </thead>
+        <tbody class="meal_ingredients_wrapper">
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <% if(item.edit_mode) { %>
+                        <a onclick="javascript:void(0)" class="add_meal_ingredient" style="cursor: pointer;">[ADD ITEM]</a>
+                        
+                        <a onclick="javascript:void(0)" class="save_as_recipe" style="cursor: pointer;margin-left:10px;">[SAVE AS RECIPE]</a>
+                    <% } %>
+                </td>
+                <td class="table_border_top table_border_bottom">
+                    <b>TOTALS</b>
+                </td>
+                <td class="protein_totals table_border_top table_border_bottom">
+                    <%= item.protein_totals %>
+                </td>
+                <td class="fats_totals table_border_top table_border_bottom">
+                    <%= item.fats_totals %>
+                </td>
+                <td class="carbs_totals table_border_top table_border_bottom">
+                    <%= item.carbs_totals %>
+                </td>
+                <td class="calories_totals table_border_top table_border_bottom">
+                    <%= item.calories_totals %>
+                </td>
+                <td class="energy_totals table_border_top table_border_bottom">
+                    <%= item.energy_totals %>
+                </td>
+                <td class="saturated_fat_totals table_border_top table_border_bottom">
+                    <%= item.saturated_fat_totals %>
+                </td>
+                <td class="total_sugars_totals table_border_top table_border_bottom">
+                    <%= item.total_sugars_totals %>
+                </td>
+                <td class="sodium_totals table_border_top table_border_bottom">
+                    <%= item.sodium_totals %>
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+
+    </table>
+</div>
+
+<% if(item.id) { %>
+    
+    <% if(app.options.is_backend) { %>
+        <div class="clr"></div>
+        <br/>
+        <b>TRAINER COMMENTS</b>
+        <a onclick="javascript:void(0)" class="save_comment" style="cursor: pointer;float:right;margin-right:10px;">[SAVE]</a>
+        <textarea  style="width:99%;" rows="4" class="trainer_comments"><%= item.trainer_comments %></textarea>
+    <% } else if(!app.options.is_backend && !diary_model.edit_allowed) {%>
+        <div class="clr"></div>
+        <br/>
+        <b>TRAINER COMMENTS</b>
+        <div class="clr"></div>
+        <span class="grey_title"><%= item.trainer_comments || '-' %></span>
+    <% } %>
+    <div class="clr"></div>
+
+    <br/>
+<% } %>
+<div class="save_as_recipe_container"></div>

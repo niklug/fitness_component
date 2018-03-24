@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.6.0" method="upgrade">
+    <name>com_fitness</name>
+    <creationDate>2013-06-10</creationDate>
+    <copyright>Copyright (C) 2013. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Nikolay Korban</author>
+    <authorEmail>niklug@ukr.net</authorEmail>
+    <authorUrl>http://</authorUrl>
+    <version>1.0.0</version>
+    <description></description>
+    
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    <files folder="site">
+        <filename>index.html</filename>
+        <filename>fitness.php</filename>
+        <filename>controller.php</filename>
+        <filename>router.php</filename>
+        <folder>views</folder>
+        <folder>models</folder>
+        <folder>controllers</folder>
+        <folder>helpers</folder>
+    </files>
+    <languages folder="site">
+        
+			<language tag="en-GB">language/en-GB.com_fitness.ini</language>
+    </languages>
+    <administration>
+        <menu img="components/com_fitness/assets/images/s_com_fitness.png" >Fitness Management</menu>
+        <submenu>
+            <menu link="option=com_fitness&amp;view=dashboard" view="dashboard" img="components/com_fitness/assets/images/s_notificationss.png" alt="Dashboard">COM_FITNESS_TITLE_DASHBOARD</menu>
+            <menu link="option=com_fitness&amp;view=clients" view="clients" img="components/com_fitness/assets/images/s_clients.png" alt="Clients">COM_FITNESS_TITLE_CLIENTS</menu>
+            <menu link="option=com_fitness&amp;view=goals" view="goals" img="components/com_fitness/assets/images/s_goals.png" alt="Client Planning">COM_FITNESS_TITLE_CLIENTS</menu>
+            <menu link="option=com_fitness&amp;view=assessments" view="assessments" img="components/com_fitness/assets/images/s_assessments.png" alt="Assessments">COM_FITNESS_TITLE_ASSESSMENTS</menu>
+            <menu link="option=com_multicalendar&amp;view=admin&amp;task=admin" view="calendar" img="components/com_fitness/assets/images/s_calendar.png" alt="Calendar">COM_FITNESS_TITLE_CALENDAR</menu>
+            <menu link="option=com_fitness&amp;view=programs" view="programs" img="components/com_fitness/assets/images/s_programs.png" alt="Programs">COM_FITNESS_TITLE_PROGRAMS</menu>
+            <menu link="#" view="" img="components/com_fitness/assets/images/s_exersice_library.png" alt="Exercise Library">COM_FITNESS_TITLE_EXERCISE_LIBRARY</menu>
+            <menu link="option=com_fitness&amp;view=nutrition_plans" view="nutrition_plans" img="components/com_fitness/assets/images/s_nutrition_plans.png" alt="Nutrition Plans">COM_FITNESS_TITLE_NUTRITION_PLANS</menu>
+            <menu link="option=com_fitness&amp;view=nutrition_diaries" view="nutrition_diaries" img="components/com_fitness/assets/images/s_nutrition_diary.png" alt="Nutrition Diary">COM_FITNESS_TITLE_NUTRITION_DIARY</menu>
+            <menu link="option=com_fitness&amp;view=nutrition_recipes" view="nutrition_recipes" img="components/com_fitness/assets/images/s_nutrition_recipes.png" alt="Recipe Database">COM_FITNESS_TITLE_RECIPE_DATABASE</menu>
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <filename>controller.php</filename>
+            <filename>index.html</filename>
+            <filename>fitness.php</filename>
+            <folder>controllers</folder>
+            <folder>assets</folder>
+            <folder>helpers</folder>
+            <folder>models</folder>
+            <folder>sql</folder>
+            <folder>tables</folder>
+            <folder>views</folder>
+        </files>
+        <languages folder="administrator">
+            
+			<language tag="en-GB">language/en-GB.com_fitness.ini</language>
+			<language tag="en-GB">language/en-GB.com_fitness.sys.ini</language>
+        </languages>
+    </administration>
+</extension>
+<!-- Component built by the Joomla Component Creator -->
+<!-- http://www.notwebdesign.com/joomla-component-creator/ -->

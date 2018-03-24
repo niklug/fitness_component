@@ -1,0 +1,90 @@
+
+    <tr>
+        <td width="40%" style="vertical-align: top;">
+            <table width="100%">
+                <tr>
+                    <td style="width:120px;">
+                        Primary Goal 
+                    </td>
+                    <td class="grey_title">
+                        <%= item.primary_goal_name %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Start Date 
+                    </td>
+                    <td class="grey_title">
+                        <%
+                        var d1 = new Date(Date.parse(item.start_date));            
+                        var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+                        %>
+                        <%= start_date %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Achieve By 
+                    </td>
+                    <td class="grey_title">
+                        <%
+                            var d2 = new Date(Date.parse(item.deadline));            
+                            var deadline = moment(d2).format("dddd, D MMMM  YYYY");      
+                        %>
+                        <%= deadline %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Status 
+                    </td>
+                    <td id="status_button_place_<%= item.id %>"  >
+   
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top;">
+                        Goal Details 
+                    </td>
+                    <td class="grey_title">
+                        <%= item.details %>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td width="10%" style="vertical-align: top;">
+            <% if(item.state != '-2') { %>
+                <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
+            <% } else { %>
+                <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
+            <% } %>
+
+            <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status  && item.state == '1') { %>
+               <br/><br/>
+                <a data-id="<%= item.id %>" style="cursor: pointer;" class="submit_primary_goal" onclick="javascript:void(0)">[FINALISE]</a>
+             <% } %>
+             
+            <br/><br/>
+            <% if(item.state != '-2') { %>
+                <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= item.id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete_primary_goal" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= item.id %>" class="delete_icon"></span></a>
+            <% } %>
+            
+            <br/>
+            <%
+            var icon_class = 'unpublish';
+            var publish_title = 'Publish'; 
+            if(parseInt(item.state) == '1') {
+                icon_class = 'publish';
+                publish_title = 'Unpublish'; 
+            }
+            %>
+            <% if(item.state != '-2') { %>
+            <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish_primary state <%= icon_class %> " ></span>
+            <% } %>
+
+        </td>
+        <td class="minigoals_wrapper" style="vertical-align: top;">
+        </td>
+    </tr>

@@ -1,0 +1,111 @@
+<div class="fitness_block_wrapper" style="margin-top: 20px;">
+    <form id="recipe_edit_form">
+        <div class="internal_wrapper">
+            <table width="100%">
+                <tr>
+                    <td width="55%">
+                        <table width="100%">
+                            <tr>
+                                <td >
+                                    RECIPE NAME
+                                </td>
+                                <td>
+                                    <input class="dark_input_style" value="<%= recipe_name || '' %>" style="width:257px;" maxlength="100"  type="text" name="recipe_name" id="recipe_name">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div style="width:198px;float:left;" id="recipe_type_wrapper"></div>
+                                    <div style="width:198px;float:left;margin-left: 10px;"  id="recipe_variation_wrapper"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    SERVES
+                                </td>
+                                <td>
+                                    <input class="dark_input_style" value="<%= number_serves %>" style="width:30px;" type="text" maxlength="3"  name="number_serves" id="number_serves">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    AUTHOR
+                                </td>
+                                <td>
+                                    <span class="grey_title">
+                                        <%= author || '-' %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    STATUS
+                                </td>
+                                <td id="status_button_place_<%= id %>"  ></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ASSESSED BY
+                                </td>
+                                <td>
+                                    <%= trainer || '-' %>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <table>
+                            <% if(id) { %>
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    <div id="image_upload_content"></div>
+                                </td>
+                                <td style="vertical-align: top;">
+                                    <div id="video_upload_content" style="padding: 5px;"></div>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <% if(id) { %>
+            <br/>
+            <div id="item_descriptions"></div>
+            
+            <br/>
+            <h5>COOKING INSTRUCTIONS / METHOD</h5>
+            <textarea id="instructions" style="min-height:300px;width:98%;background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);padding:5px;" name="instructions" cols="50" rows="4"><%= decodeURIComponent(instructions) %></textarea>
+
+            <br>
+            <div id="comments_wrapper" style="width:99%"></div>
+        <% } %>
+    </div>
+    
+</div>

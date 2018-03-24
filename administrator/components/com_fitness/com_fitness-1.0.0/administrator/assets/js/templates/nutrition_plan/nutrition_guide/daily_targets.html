@@ -1,0 +1,61 @@
+<div id="daily_targets_container" style="border:1px solid #ccc;padding: 10px">
+    <b>DAILY TARGETS & TOTALS</b>
+    <hr class="orange_line">
+    <div class="clr"></div>
+    
+    <table width="100%">
+        <thead class="table_header">
+            <th></th>
+            <th>CALORIES</th>
+            <th>PROTEIN(grams)</th>
+            <th>FAT(grams)</th>
+            <th>CARBS(grams)</th>
+            <th>SUGAR(grams)</th>
+        </thead>
+        <tbody>
+            <tr style="color:blue;">
+                <td>
+                    TODAYS TARGET
+                </td>
+                <td class="center">
+                    <%= item.calories %>
+                </td>
+                <td class="center">
+                    <%= item.protein %>
+                </td>
+                <td class="center">
+                    <%= item.fats %>
+                </td>
+                <td class="center">
+                    <%= item.carbs %>
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+            <tr style="color:green;">
+                <td>
+                    TODAYS TOTAL
+                </td>
+                <td class="center">
+                    <%= item.calories_amount %>
+                </td>
+                <td class="center">
+                    <%= item.protein_amount %>
+                </td>
+                <td class="center">
+                    <%= item.fats_amount %>
+                </td>
+                <td class="center">
+                    <%= item.carbs_amount %>
+                </td>
+                <td>
+                    <%= item.total_sugars_amount %>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="clr"></div>
+</br>

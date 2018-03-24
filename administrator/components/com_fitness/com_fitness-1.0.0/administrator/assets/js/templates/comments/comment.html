@@ -1,0 +1,45 @@
+<% if(options.show_arrow) { %>
+    <hr style="margin-left:50px;"  />
+<% } else { %>
+    <hr>
+<% } %>
+<div  class="comment_wrapper">
+   <table width="100%">
+        <tr>
+            <td>
+            </td>
+
+            <td width="33%"><b>Comment by: </b><span class="comment_by"><%= item.created_by_name %></span></td>
+            <td width="33%"><b>Date: </b> <span class="comment_date"></span><%= moment(new Date(Date.parse(item.created))).format("ddd, D MMM  YYYY") %></td>
+            <td><b>Time: </b> <span class="comment_time"><%= moment(new Date(Date.parse(item.created))).format("HH:mm")  %></span></td>
+
+            <td>
+                <% if(edit_mode) { %>
+                <a href="javascript:void(0)" class="save_parent_comment">[SAVE]</a>
+                <% } else { %>
+                <a style="display:none;"  href="javascript:void(0)" class="edit_parent_comment">[EDIT]</a>
+                <% } %>
+            </td>
+            
+            <% if(options.show_delete) { %>
+            <td align="center"><a style="display:none;" href="javascript:void(0)" class="delete_child_comment">[DELETE]</a></td>
+            <% } %>
+        </tr>
+        <tr>
+            <% if(options.show_arrow) { %>
+            <td>
+                <div class="chat_image"></div>
+            </td>
+            <% } %>
+            
+            <td colspan="5">
+            <% if(edit_mode) { %>
+                <textarea  class="comment_textarea"  rows="3"><%= decodeURIComponent(item.comment) %></textarea>
+            <% } else { %>
+            <span class="grey_title"><%= decodeURIComponent(item.comment) %></span>
+            <% } %>
+            </td>
+        </tr>
+    </table>
+    <div class="clr"></div>
+</div>

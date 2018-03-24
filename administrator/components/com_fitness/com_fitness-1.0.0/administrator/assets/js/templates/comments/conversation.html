@@ -1,0 +1,93 @@
+<table width="100%" class="table_header conversation_wrapper" style="font-size: 13px;margin-top:10px;">
+    <tr>
+        <td style="text-align: left;">
+            COACHING & CONVERSATION
+        </td>
+        <td>
+            <a class="delete_conversation" style="cursor: pointer;margin-left:10px;float:right;display:none;" onclick="javascript:void(0)">[DELETE]</a>
+        </td>
+    </tr>
+</table>
+
+<div class="conversation_wrapper orange_border">
+    
+    <table>
+        <tr>
+            <td width="300">
+                Conversation Started By:
+                <div class="clr"></div>
+                <i><%= item.created_by_name %></i>
+            </td>
+            <td width="10"></td>
+            
+            <% if(app.options.is_superuser) { %>
+            <td width="300">
+                Businesses That Can See This Conversation:
+                <div class="clr"></div>
+                <div style="width:200px;" class="conversation_permissions_select"></div>
+            </td>
+            <% } %>
+            
+            
+            <% if(item.created_by == app.options.user_id) { %>
+                <% if(!app.options.is_superuser) { %>
+                <td width="250">
+                    Who Can See This Conversation?
+                    <div class="clr"></div>
+                    <div style="width:200px;" class="conversation_permissions_select"></div>
+                    
+                </td>
+                <% } %>
+                <td width="200">
+                    <a class="save_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[SAVE]</a>
+
+                    <a class="edit_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[EDIT]</a>
+
+                    <% if(item.id) { %>
+                    <a class="close_conversation" style="cursor: pointer;margin-left:10px;display:none;" onclick="javascript:void(0)">[CLOSE]</a>
+                    <% } %>
+                    
+                    
+                </td>
+            <% } else if(app.options.is_trainer && (item.conversation_permissions == 'all_business' || item.conversation_permissions == 'selected_business')) { %>
+                <td width="250">
+                                        
+                </td>
+                
+            <% } else { %>
+                <td width="250">
+                    Who Can See This Conversation?
+                    <div class="clr"></div>
+                    <span class="conversation_permissions_text" ></span>
+                    <a class="show_users_list" style="cursor: pointer;" onclick="javascript:void(0)">[SHOW]</a>
+                    <a class="close_users_list" style="cursor: pointer;display:none;" onclick="javascript:void(0)">[CLOSE]</a>
+                    
+                </td>
+            <% } %>
+        </tr>
+    </table>
+    
+    <div class="clr"></div>
+    
+    <fieldset class="toggle_checkboxes_wrapper" style="display:none;width:auto!important;">
+        <legend>
+            <a class="select_all_checkboxes" style="cursor: pointer;font-size:12px;display:none;" onclick="javascript:void(0)">[SELECT ALL]</a>
+            <a class="select_none_checkboxes" style="cursor: pointer;font-size:12px;display:none;" onclick="javascript:void(0)">[SELECT NONE]</a>
+            <a class="toggle_checkboxes" style="cursor: pointer;font-size:12px;display:none;" onclick="javascript:void(0)">[TOGGLE]</a>
+        </legend>
+        <div class="users_container"></div>
+    </fieldset>
+    
+    <div class="users_popup_container"></div>
+    
+    <div class="clr"></div>
+    
+    <% if(item.id) { %>
+        <br/>
+        <div class="parent_comment_wrapper"></div>
+        <div class="clr"></div>
+        <div class="child_comments_wrapper"></div>
+        <div class="clr"></div>
+        <a style="margin-top:5px;" href="javascript:void(0)" class="reply_parent_comment">[REPLY]</a>
+    <% } %>
+</div>

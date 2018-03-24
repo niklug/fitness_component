@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="CALENDAR LAYOUT">
+		<message>
+			<![CDATA[THIS LAYOUT DISPLAYS THE MULTI CALENDARS]]>
+		</message>
+	</layout>
+	<state>
+		<name>MULTI CALENDAR - CALENDAR VIEW</name>
+		<description>YOU MUST SELECT THE CALENDAR TO DISPLAY IN THE PARAMETERS BASIC SECTION IN THE RIGHT COLUMN</description>
+		<config>
+			<fields name="params">
+				<fieldset name="basic" addfieldpath="/administrator/components/com_multicalendar/models/fields" >
+		            <field name="the_calendar_id" type="multicalendar" default="" label="MULTICALENDAR" description="SELECT THE MULTI VIEW CALENDAR" required="true"/>
+		            <field name="views" type="checkboxlist" multiple="multiple" addfieldpath="/administrator/components/com_multicalendar/models/fields" default="viewDay,viewWeek,viewMonth,viewNMonth" description="CHECK WHICH VIEWS YOU WANT TO SHOW ON THE FRONTEND" label="CALENDAR VIEWS" required="true">
+                            <option value="viewDay" >DAY</option>
+                            <option value="viewWeek">WEEK</option>
+                            <option value="viewMonth">MONTH</option>
+                            <option value="viewNMonth">NMONTH</option>
+                    </field>
+                    <field name="viewdefault" type="list" description="SELECT WHICH OF THE PREVIOUSLY CHECKED VIEWS WILL BE SHOWN AS DEFAULT" default="month" label="DEFAULT VIEW">
+                            <option value="day">DAY</option>
+                            <option value="week">WEEK</option>
+                            <option value="month">MONTH</option>
+                            <option value="nMonth">NMONTH</option>
+                    </field>
+					<field name="start_weekday" id="start_weekday" type="list" default="0" label="START DAY OF THE WEEK" description="SELECT THE START DAY OF THE WEEK">
+						<option value="0">Sunday</option>
+						<option value="1">Monday</option>
+						<option value="2">Tuesday</option>
+						<option value="3">Wednesday</option>
+						<option value="4">Thursday</option>
+						<option value="5">Friday</option>
+						<option value="6">Saturday</option>
+					</field>
+					<field name="cssStyle" id="cssStyle" type="list" default="cupertino" label="CSS STYLE" description="SELECT WHICH OF THE PRE-DEFINED COLOR SCHEMED YOU WANT TO USE">
+						<option value="ui-lightness">UI lightness</option>
+                        <option value="ui-darkness">UI darkness</option>
+                        <option value="smoothness">Smoothness</option>
+                        <option value="start">Start</option>
+                        <option value="redmond">Redmond</option>
+                        <option value="sunny">Sunny</option>
+                        <option value="overcast">Overcast</option>
+                        <option value="le-frog">Le Frog</option>
+                        <option value="flick">Flick</option>
+                        <option value="pepper-grinder">Pepper Grinder</option>
+                        <option value="eggplant">Eggplant</option>
+                        <option value="dark-hive">Dark Hive</option>
+                        <option value="cupertino">Cupertino</option>
+                        <option value="south-street">South Street</option>
+                        <option value="blitzer">Blitzer</option>
+                        <option value="humanity">Humanity</option>
+                        <option value="hot-sneaks">Hot sneaks</option>
+                        <option value="excite-bike">Excite Bike</option>
+                        <option value="vader">Vader</option>
+                        <option value="mint-choc">Mint Choc</option>
+                        <option value="black-tie">Black Tie</option>
+                        <option value="trontastic">Trontastic</option>
+                        <option value="swanky-purse">Swanky Purse</option>
+	    		    </field>
+	  				<field name="palette" type="palettes" default="" label="PALETTE COLOR" description="SELECT THE PALETTE COLOR" required="true"/>
+	  				<field name="edition" type="checkbox" value="1" description="CHECK THIS TO ALLOW EDITION ON THE FRONTEND" label="ALLOW EDITION" />
+	  				<field name="buttons" type="checkboxlist" multiple="multiple" addfieldpath="/administrator/components/com_multicalendar/models/fields" default="bnavigation" description="ENABLE OR DISABLE OTHER BUTTONS" label="OTHER BUTTONS">
+                            <option value="btoday">SHOW TODAY BUTTON</option>
+                            <option value="bnavigation">SHOW NAVIGATION BUTTONS</option>
+                            <option value="brefresh">SHOW REFRESH BUTTON</option>
+                    </field>
+                    <field name="numberOfMonths" type="integer" first="1" last="24" step="1" default="6" label="NUMBER OF MONTHS FOR NMONTHS VIEW" description="NUMBER OF MONTHS FOR NMONTHS VIEW"  />
+                    <field name="sample" type="nmonths" default="" label="OTHER PARAMETERS FOR NMONTHS VIEW" description="OTHER PARAMETERS FOR NMONTHS VIEW" />
+		        </fieldset>
+		        <fieldset name="advanced">
+		        	<field name="otherparams" id="otherparams" type="textarea" rows="3" cols="40" label="ADDITIONAL PARAMETERS" description="ADDITIONAL PARAMETERS" />
+		        </fieldset>		          
+            </fields>
+		</config>
+	</state>
+</metadata>	

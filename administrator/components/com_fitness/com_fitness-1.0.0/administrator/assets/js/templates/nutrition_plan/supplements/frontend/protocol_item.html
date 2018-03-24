@@ -1,0 +1,34 @@
+<div style="border:1px solid #ccc;padding:0px; margin-top:10px;" class="protocol_wrapper">
+    <table width="100%">
+        <tr>
+            <td width="200">
+                <div style="color: #BC4A26 !important;font-size:16px;font-weight: bold; padding: 4px;">PROTOCOL NAME</div>
+            </td>
+            <td >
+                <%
+                var name_cap = '';
+                if(name !== null) {
+                    name_cap = name.toUpperCase();
+                }
+                %>
+                <div style="color: #fff !important;font-size:14px;font-weight: bold; padding: 4px;" ><%= name_cap %></div>
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+
+    <hr class="orange_line">
+
+    <div class="internal_wrapper">
+
+        <div id="supplements_list_<%= id %>" class="supplements_list"></div>
+
+        <br>
+        <div class="clr"></div>
+        <%  if(id) { %>
+            <div class=" comments_wrapper" style="width:100%"></div>
+        <% } %>
+
+    </div>
+</div>

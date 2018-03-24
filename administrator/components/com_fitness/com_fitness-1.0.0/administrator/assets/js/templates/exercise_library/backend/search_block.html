@@ -1,0 +1,63 @@
+<% if(current_page == 'list') { %>
+    <div id="toolbar" class="toolbar-list right">
+        <% if(app.options.exercise_id) { %>
+            <a id="back_program" tilte="Go Back" class="toolbar" onclick="javascript:void(0)">
+                <span  class="icon-32-back"> </span>
+            </a>
+            <a id="add_selected_exercises" title="Add Selected Videos to Exercises" style="cursor: pointer;"  onclick="javascript:void(0)">
+                <span class="video_link_icon_32"></span>
+            </a>
+        <% } %>
+        <a title="Add Video Item" id="add_item" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-new"> </span>
+        </a>
+        <a title="Trash Selected Items" id="trash_selected" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-trash"> </span>
+        </a>
+    </div>
+<% } %>
+
+<% if(current_page == 'trash_list') { %>
+    <div id="toolbar" class="toolbar-list right">
+        <a title="Delete Selected Items" id="delete_selected" class="toolbar" onclick="javascript:void(0)">
+            <span  class="icon-32-delete"> </span>
+        </a>
+    </div>
+<% } %>
+
+<div class="clr"></div>
+
+<div style="width:100%">
+    <label>Exercise Name</label>
+    <input id="exercise_name" size="30" type="text" >
+    
+    <label>Client Name(My Exercises List)</label>
+    <input id="client_name" size="30" type="text" >
+    
+    <label>Author Name:</label>
+    <input id="created_by_name" size="20" type="text" >
+    
+    <input id="search_by_name" type="button" value="Search">
+    <input id="clear_all" type="button" value="Clear All">
+    
+    <div style="width:200px;display: inline-block;" id="business_profile_filter"></div>
+    
+    <select id="state_filter" class="inputbox" size="1" name="state">
+        <%
+        var selected_published = '';
+        var selected_unpublished = 'selected="selected"';
+        if(current_page == 'list') {
+            selected_published = 'selected="selected"';
+            selected_unpublished = '';
+        }
+
+        %>
+        <option <%= selected_published %> value="1">Published</option>
+        <option <%= selected_unpublished %>   value="0">Unpublished</option>
+    </select>
+   
+</div>
+
+
+
+

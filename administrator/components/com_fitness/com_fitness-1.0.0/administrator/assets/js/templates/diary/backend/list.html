@@ -1,0 +1,42 @@
+<%
+var sort_title = 'Click to sort by this column';
+%>
+<div class="fitness_block_wrapper" style="margin-top: 20px;">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_entry_date" onclick="javascript:void(0)">Date of Entry</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_submit_date" onclick="javascript:void(0)">Date Submitted</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_client_name" onclick="javascript:void(0)">Client Name</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_trainer_name" onclick="javascript:void(0)">Trainer Name</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_assessed_by" onclick="javascript:void(0)">Assessed By</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_mini_goal" onclick="javascript:void(0)">Mini Goal</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_nutrition_focus" onclick="javascript:void(0)">Nutrition Focus</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_target_calories" onclick="javascript:void(0)">Cals</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_target_protein" onclick="javascript:void(0)">Pro %</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_target_fats" onclick="javascript:void(0)">Fat %</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_target_carbs" onclick="javascript:void(0)">Carb %</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_score" onclick="javascript:void(0)">Final Score</a></th>
+                    <th><a title="<%= sort_title %>" style="cursor: pointer;" id="sort_status" onclick="javascript:void(0)">Status</a></th>
+                    <th>        
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                       <a title="<%= sort_title %>" style="cursor: pointer;" id="sort_state" onclick="javascript:void(0)">Published</a>
+                    </th>
+                    <th><input style="margin-left:2px;" id="select_trashed" type="checkbox"/></th>
+                </tr>
+            </thead>
+            <tbody id="diary_items">
+            
+            </tbody>
+        </table>
+        <br/>
+        <div style="text-align:center;" id="pagination_container"></div>
+    </div>
+    
+    <div class="clr"></div>
+    <div id="batch_process_wrapper"></div>
+</div>

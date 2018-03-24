@@ -1,0 +1,102 @@
+    <tr>
+        <td width="90%">
+            <table width="100%">
+                <tr>
+                    <td style="width:120px;">
+                        Mini Goal 
+                    </td>
+                    <td class="grey_title">
+                        <%= item.mini_goal_name %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Training Period 
+                    </td>
+                    <td class="grey_title">
+                         <%= item.training_period_name %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Start Date 
+                    </td>
+                    <td class="grey_title">
+                        <%
+                        var d1 = new Date(Date.parse(item.start_date));            
+                        var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+                        %>
+                        <%= start_date %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Achieve By 
+                    </td>
+                    <td class="grey_title">
+                        <%
+                            var d2 = new Date(Date.parse(item.deadline));            
+                            var deadline = moment(d2).format("dddd, D MMMM  YYYY");      
+                        %>
+                        <%= deadline %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Status 
+                    </td>
+                    <td id="status_button_place_mini_<%= item.id %>"  >
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Goal Details 
+                    </td>
+                    <td class="grey_title">
+                        <%= item.details %>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <% if(app.options.statuses.PENDING_GOAL_STATUS.id != item.status) { %>
+                <a title="Schedule" style="cursor: pointer;" class="schedule_mini_goal calendar_icon" onclick="javascript:void(0)">]</a>
+                <br/><br/>
+            <% } %>
+            
+            <% if(item.state != '-2') { %>
+                <a title="View/Edit" style="cursor: pointer;" class="view_mini " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
+            <% } else { %>
+                <a title="Restore" style="cursor: pointer;" class="restore_mini " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="restore_icon"></span></a>
+            <% } %>
+             
+            <% if(app.options.statuses.PENDING_GOAL_STATUS.id == item.status && item.state == '1') { %>
+                <br/><br/>
+                <a data-id="" style="cursor: pointer;" class="submit_mini_goal" onclick="javascript:void(0)">[FINALISE]</a>
+            <% } %>
+
+                
+            <br/><br/>
+            <% if(item.state != '-2') { %>
+                <a class="trash_mini" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= item.id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a class="delete_mini" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= item.id %>" class="delete_icon"></span></a>
+            <% } %>
+            
+            
+            
+            <% if(item.state != '-2') { %>
+            <%
+            var icon_class = 'unpublish';
+            var publish_title = 'Publish'; 
+            if(parseInt(item.state) == '1') {
+                icon_class = 'publish';
+                publish_title = 'Unpublish'; 
+            }
+            %>
+            <br/>
+            <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish_mini state <%= icon_class %> " ></span>
+            <% } %>
+        </td>
+    </tr>

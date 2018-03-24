@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_USER_GROUP_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+ 
+		<field name="filter_group_id" type="accesslevel" onchange="this.form.submit();" /> 
+
+                
+            <field name="business_profile_id" type="text"
+
+        label="Business Name"
+        description="" 
+
+
+             required="true" 
+        filter="raw" /> 
+                
+                
+       <field name="group_id" type="accesslevel"
+                
+            label="COM_FITNESS_FORM_LBL_USER_GROUP_GID"
+            description="COM_FITNESS_FORM_DESC_USER_GROUP_GID" 
+                
+                
+                 required="true" 
+            filter="raw" /> 
+       
+       <field name="primary_trainer" type="text" class="inputbox"
+            label="COM_FITNESS_FORM_LBL_USER_GROUP_PRIMARY_TRAINER"
+            description="" 
+       /> 
+       
+       
+       <field name="other_trainers" type="text" class="inputbox"
+            label="COM_FITNESS_FORM_LBL_USER_GROUP_OTHER_TRAINERS"
+       /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

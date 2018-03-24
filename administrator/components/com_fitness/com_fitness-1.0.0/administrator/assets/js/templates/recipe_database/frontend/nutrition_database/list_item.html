@@ -1,0 +1,39 @@
+<tr>
+    <td width="40%">
+        <a data-id="<%= id %>" style="cursor: pointer;" class="ingredient_name" onclick="javascript:void(0)">
+            <%= ingredient_name %>
+        </a>
+    </td>
+    <td>
+        <%= calories || '0.00' %>
+    </td>
+    <td>
+        <%= energy || '0.00' %>
+    </td>
+    <td>
+        <%= protein || '0.00' %>
+    </td>
+    <td>
+        <%= fats || '0.00' %>
+    </td>
+    <td>
+        <%= saturated_fat || '0.00' %>
+    </td>
+    <td>
+        <%= carbs || '0.00' %>
+    </td>
+    <td>
+        <%= total_sugars || '0.00' %>
+    </td>
+    <td>
+        <%= sodium || '0.00' %>
+    </td>
+    <td>
+        <%= specific_gravity || '0.00' %>
+    </td>
+</tr>
+<tr class="description" data-description="<%= id %>" style="display:none">
+    <td colspan="10">
+        <%= description %>
+    </td>
+</tr>

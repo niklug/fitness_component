@@ -1,0 +1,19 @@
+<div id="protocol_wrapper_<%= id %>" style="border:2px solid #000;padding:5px; margin-top:10px;background-color: #d2d2d2;" class="protocol_wrapper ">
+    <b>PROTOCOL NAME</b>
+    <input style='margin-left:5px;'  size="71" type="text"  class="protocol_name"  value="<%= name %>">
+    <input data-id="<%= id %>"  style="float:right;"  class="delete_protocol" type="button" value="Delete" >
+    <input data-id="<%= id %>" style="float:right;"  class="save_protocol" type="button" value="Save" >
+    <div class="clr"></div>
+    <div id="supplements_list_<%= id %>" class="supplements_list"></div>
+    <div class="clr"></div>
+    <%  if(id) { %>
+    <br>
+    <input data-id="<%= id %>"  class="add_supplement" type="button" value="New Supplement" >
+    <div class="clr"></div>
+    <hr>
+    <br/>
+    <div class=" fitness_block_wrapper comments_wrapper" style="width:100%"></div>
+    
+    <div class="clr"></div>
+    <% } %>
+</div>

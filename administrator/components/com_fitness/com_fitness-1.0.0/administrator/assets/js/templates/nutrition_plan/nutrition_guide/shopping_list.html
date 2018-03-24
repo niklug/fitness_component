@@ -1,0 +1,30 @@
+<table width="100%">
+    <tr>
+        <td  class="left">
+            <span class="orange_text" style="">SHOPPING LIST DATE:</span>
+            <%
+            var d2 = new Date();            
+            var date = moment(d2).format("dddd, D MMM  YYYY"); 
+            %>
+            <%= date.toUpperCase() %>
+        </td>
+        <td>
+            <a data-id="<%= id %>" style="float:right;"  class="pdf_button" href="javascript:void(0)" title="Save in PDF"></a>
+            <a data-id="<%= id %>"  style="float:right;" class="email_button" href="javascript:void(0)" title="Send by Email"></a>
+        </td>
+    </tr>
+</table>
+<hr class="orange_line">
+<div id="shopping_list_container" class="internal_wrapper" style="width:900px; overflow: hidden;"></div>
+
+<br>
+<div class="clr"></div>
+
+<div class="comments_wrapper" id="shopping_list_comments_wrapper" style="width:100%"></div>
+<div class="clr"></div>
+<input id="add_comment_<%= id %>"   type="button" value="Add Comment" >
+<div class="clr"></div>
+
+
+
+

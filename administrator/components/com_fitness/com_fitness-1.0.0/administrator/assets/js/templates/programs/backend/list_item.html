@@ -1,0 +1,143 @@
+<tr data-id="<%= id %>" class="item_row">
+    <td >
+        <a title="View Details" style="cursor: pointer;" data-id="<%= id %>"  class="view " onclick="javascript:void(0)">
+            <div data-id="<%= id %>" style="float:left; width:120px;"><%= moment(new Date(Date.parse(starttime))).format("ddd, D MMM  YYYY") %></div>
+            <div data-id="<%= id %>" style="float:left;width:20px;"><%= moment(new Date(Date.parse(starttime))).format("HH:mm")  %></div>
+        </a>
+        
+    </td>
+    
+    <td>
+        <%
+        if(group_clients_data) {
+            _.each(group_clients_data, function(item){ %>
+                <%= item.client_name + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    
+    <td class="center">
+        <%
+        if(group_clients_data) {
+            _.each(group_clients_data, function(item){ 
+                var icon_class = 'unpublish';
+                if(parseInt(item.sent)) {
+                    icon_class = 'publish';
+                }
+                %>
+                <span class="jgrid"><span class="state <%= icon_class %> " ></span></span> <br/>
+                
+            <% })
+        } %>
+    </td>
+    
+    <td class="center">
+        <%
+        if(group_clients_data) {
+            _.each(group_clients_data, function(item){ 
+                var icon_class_confirmed = 'unpublish';
+                if(parseInt(item.confirmed)) {
+                    icon_class_confirmed= 'publish';
+                }
+                %>
+                <span class="jgrid"><span class="state <%= icon_class_confirmed %> " ></span></span> <br/>
+                
+            <% })
+        } 
+        %>
+    </td>
+    
+    <td width="70"  id="status_button_<%= id %>"  data-appointment="<%= title %>">
+        <%
+        _.each(group_clients_data, function(item){ 
+               %>
+               <div id="status_button_place_<%= item.id %>"  data-appointment_id="<%= title %>"></div>
+               <%
+         })
+        %>
+    </td>
+    <td>
+        <%= trainer_name %>
+    </td>
+    
+    <td>
+        <%= created_by_name %>
+    </td>
+    <td>
+        <%= location_name %>
+    </td>
+    
+    <td id="appointment_title_<%= id %>" data-appointment="<%= title %>">
+        <%= appointment_name %>
+    </td>
+    
+    <td>
+        <%= session_type_name %>
+    </td>
+    
+    <td>
+        <%= session_focus_name %>
+    </td>
+    
+    <% if(app.options.pr_temp_id) { %>
+    <td>
+        <a class="add_template" title="Add Program Template and Open" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="search_program_icon_20"></span></a>
+    </td>
+    <% } %>
+    
+    <td>
+        <% if(published == '1' || published == '0') { %>
+            <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
+        <% } else { %>
+            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+        <% } %>
+    </td>
+    
+    <td>
+         <a title="Copy" style="cursor: pointer;" class="copy_item" onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
+    </td>
+    
+    <td class="center"> 
+        <% if(published == '1' || published == '0') { %>
+            <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
+        <% } else { %>
+            <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+        <% } %>
+    </td>
+    
+    <td class="center">
+        <a data-id="<%= id %>" class="appointment_email" href="javascript:void(0)" title="Send Appointment Email"></a>
+    </td>
+   
+    <td class="center">
+        <%
+        var icon_class = 'unpublish';
+        var publish_workout_title = 'Publish Workout';
+        if(parseInt(frontend_published) == '1') {
+            icon_class = 'publish';
+            publish_workout_title = 'Unpublish Workout';
+        }
+        %>
+        <span title="<%= publish_workout_title %>"   class="jgrid"><span style="cursor:pointer;"  data-id="<%= id %>"  data-frontend_published="<%= frontend_published %>"  class="publish_workout state <%= icon_class %> " ></span></span> <br/>
+
+    </td>
+    
+    <td class="center">
+        <%
+        var icon_class = 'unpublish';
+        var publish_title = 'Publish Event'; 
+        if(parseInt(published) == '1') {
+            icon_class = 'publish';
+            publish_title = 'Unpublish Event'; 
+        }
+        %>
+        <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= id %>" data-published="<%= published %>" class="publish_event state <%= icon_class %> " ></span></span> <br/>
+
+    </td>
+    
+
+    <td class="center">
+        <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+    </td>
+
+</tr>

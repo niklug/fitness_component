@@ -1,0 +1,38 @@
+<%
+var current_page = app.models.request_params_diaries.get('current_page');
+%>
+<div class="fitness_block_wrapper" style="margin-top: 20px;">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_entry_date" onclick="javascript:void(0)">ENTRY DATE</a></th>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_status" onclick="javascript:void(0)">STATUS/RESULT</a></th>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_score" onclick="javascript:void(0)">SCORE</a></th>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_assessed_by" onclick="javascript:void(0)">ASSESSED BY</a></th>
+                    <th><a title="Click to sort by this column" style="cursor: pointer;" id="sort_submit_date" onclick="javascript:void(0)">SUBMIT DATE</a></th>
+                    <th>        
+                        <% if(current_page == 'list') { %>
+                            VIEW
+                        <% } else { %>
+                            RESTORE
+                        <% } %>
+                    </th>
+                    <th>
+                        <% if(current_page == 'list') { %>
+                            TRASH
+                        <% } else { %>
+                            DELETE
+                        <% } %>
+                    </th>
+                    <th><input style="margin-left:2px;" id="select_trashed" type="checkbox"/></th>
+                </tr>
+            </thead>
+            <tbody id="diary_items">
+            
+            </tbody>
+        </table>
+        <br/>
+        <div style="text-align:center;" id="pagination_container"></div>
+    </div>
+</div>

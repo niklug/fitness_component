@@ -1,0 +1,58 @@
+<tr data-id="<%= id %>" class="diary_row">
+    <td><%= moment(new Date(Date.parse(entry_date))).format("ddd, D MMM  YY")  %></td>
+    <td id="status_wrapper_<%= id %>"></td>
+    <td>
+        <% if (score != '0') { %>
+            <%= score + '%' %>
+        <% } else { %> 
+            <%= '-' %>
+        <% } %>
+    </td>
+    <td>
+        <% if (assessed_by_name) { %>
+            <%= assessed_by_name %>
+        <% } else { %> 
+            <%= '-' %>
+        <% } %>
+    </td>
+    <td>
+        <% if (submit_date != '0000-00-00 00:00:00') { %>
+            <%= moment(new Date(Date.parse(submit_date))).format("ddd, D MMM  YYYY") %>
+            &nbsp;@&nbsp;
+            <%= moment(new Date(Date.parse(submit_date))).format("HH:mm") %>
+
+        <% } else { %> 
+            <%= '-' %>
+        <% } %>
+    </td>
+    <td>
+        <% if(parseInt(status) != 5) { %>
+            <% if(state == '1') { %>
+                <a style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
+            <% } else { %>
+                <a style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+            <% } %>
+
+        <% } %>
+
+        <% if(parseInt(status) == 5 && state == '-2') { %>
+
+                <a style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+
+        <% } %>
+    </td>
+    <td>
+        <% if(app.options.statuses.SUBMITTED_DIARY_STATUS.id != status) { %>
+            <% if(state == '-2') { %>
+                <a  style="cursor: pointer;" class="delete" onclick="javascript:void(0)"><span data-id="<%= id %>" class="trash_icon"></span></a>
+            <% } else { %>
+                <a  style="cursor: pointer;" class="trash" onclick="javascript:void(0)"><span data-id="<%= id %>" class="trash_icon"></span></a>
+            <% } %>
+        <% } %>
+    </td>
+    <td>
+        <% if(app.options.statuses.SUBMITTED_DIARY_STATUS.id != status) { %>
+            <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+        <% } %>
+    </td>
+</tr>

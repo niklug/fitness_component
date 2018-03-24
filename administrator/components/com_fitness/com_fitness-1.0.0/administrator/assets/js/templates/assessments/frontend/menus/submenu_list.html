@@ -1,0 +1,39 @@
+<div class="fitness_block_wrapper" style="height:44px;margin-top: 10px;">
+    <div class="internal_wrapper">
+        <table width="100%">
+            <tr>
+                <td width="75">
+                    <label>Date From:</label>
+                </td>
+                <td width="80">
+                    <input id="date_from" type="text" style="width:80px;" class="dark_input_style">
+                </td>
+                <td width="60">
+                    <label>Date To:</label>
+                </td>
+                <td width="80">
+                    <input id="date_to" type="text" style="width:80px;" class="dark_input_style">
+                </td>
+                <td width="120">
+                    <a data-id="" style="cursor: pointer; float:left;margin-left: 5px;" id="search" onclick="javascript:void(0)">[Search]</a>
+                    <a data-id="" style="cursor: pointer;float:left;margin-left: 10px;" id="clear_all" onclick="javascript:void(0)">[Clear]</a>
+                </td>
+               
+                <td>
+                    <% if(current_page == 'my_workouts') {%>
+                                                
+                        <a data-id="" style="cursor: pointer;float:right;margin-left: 20px;" id="view_trash" onclick="javascript:void(0)">[VIEW TRASH]</a>
+                        <a data-id="" style="cursor: pointer;float:right;margin-left: 20px;" id="new_item" onclick="javascript:void(0)">[NEW]</a>
+                    <% } %>
+                    
+                    
+                    <% if(current_page == 'trash_list') {%>
+                        <a data-id="" style="cursor: pointer;float:right;" id="close_trash_list" onclick="javascript:void(0)">[CLOSE TRASH]</a>
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <div class="clr"></div>
+    </div>
+    <hr class="orange_line">
+</div>

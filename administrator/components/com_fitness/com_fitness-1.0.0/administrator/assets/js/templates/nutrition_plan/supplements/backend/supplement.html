@@ -1,0 +1,58 @@
+<div id="supplement_wrapper_<%= id %>" style="padding:5px; margin-top:10px;border: 1px solid #000;background-color: #f4f4f4" class="supplement_wrapper">
+    <form class="supplement_form">
+        <table width="100%">
+            <tr>
+                <td>
+                    <label>SUPPLEMENT NAME</label>
+                    <div class="clr"></div>
+                    <input style="width:98%;"  size="70" type="text" name="name" class="supplement_name"  value="<%= name %>">
+                </td>
+                <td>
+                    <label>SHOP URL</label>
+                    <div class="clr"></div>
+                    <input style="width:100%;"  size="50" type="text" name="url"  class="supplement_url"  value="<%= url %>">
+                </td>
+            </tr>
+            <tr>
+                <td width="70%">
+                    <label>DESCRIPTION</label>
+                    <div class="clr"></div>
+                    <textarea readonly rows="4" cols="50" class="supplement_description" name="description" style="border:1px solid #ccc;width:98%;min-height:50px;"><%= description %></textarea>
+                </td>
+                <td>
+
+                    <div class="shop_url_slider">
+                        <% 
+                        if(typeof (image) !== 'undefined') {
+                            if(image) {
+                                var background_image = 'url(' + "'" + image  + "')" ;
+                            %>
+                                <div class="thumbnail_slide_image thumbnail_slide_image_saved" style="background-image:<%= background_image %>"></div>
+
+                            <% } 
+                            var image = '';
+                            %>
+
+                       <% }%>
+                        <input value="<%= image %>" type="hidden" name="image" class="supplement_image" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label>RECOMMENDED USAGE</label>
+                    <div class="clr"></div>
+                    <textarea rows="4" cols="50" class="supplement_comments" name="comments" style="border:1px solid #ccc;width:100%;min-height:50px;"><%= comments %></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input style="float:right;"  data-id="<%= id %>"  class="delete_supplement" type="button" value="Delete" >
+                    <input style="float:right;"  data-id="<%= id %>"  class="save_supplement" type="submit" value="Save" >
+                </td>
+            </tr>
+        </table>
+        <input type="hidden"  name="protocol_id"  value="<%= protocol_id %>">
+        <input type="hidden" name="nutrition_plan_id"  value="<%= nutrition_plan_id %>">
+    </form>
+</div>

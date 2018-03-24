@@ -1,0 +1,14 @@
+<%
+if(!button_class) {
+    var button_class = 'status_button';
+}
+
+%>
+<% _.each(options.statuses, function(item, key){
+    if(status == key) {
+    %>
+        <a class="status_button_element <%= button_class %> <%= item.class %>" data-status="<%= key %>" href="javascript:void(0)"> <%= item.label %></a>       
+    <% 
+    }
+})  
+%>

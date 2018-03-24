@@ -1,0 +1,90 @@
+<div class="fitness_block_wrapper" style="padding: 5px;background-color: #fff;margin-top:10px;">
+
+    <table width="100%">
+        <tr>
+            <td>
+                <h3>STANDARD ASSESSMENT COMPARISON</h3>
+            </td>
+            <td>
+                 <a style="cursor:pointer;float:right;" class="open_assessment" href="javascript:void(0)">[OPEN ASSESSMENT]</a>       
+            </td>
+        </tr>
+    </table>
+    
+    <hr class="orange_line">
+    <div class="clr"></div>
+    
+    <table width="100%" style="background-color: #dadada;">
+        <thead style="color: #fff;vertical-align: bottom;">
+            <tr align="center">
+                <td  height="160"><div class="vertical_text">DATE</div></td>
+                <td width="40"><div class="vertical_text">AGE</div></td>
+                <td width="40"><div class="vertical_text">HEIGHT(cm)</div></td>
+                <td width="40"><div class="vertical_text">WEIGHT(kg)</div></td>
+                <td width="40"><div class="vertical_text">LEAN MASS(kg)</div></td>
+                <td width="40"><div class="vertical_text">BODY FAT(%)</div></td>
+                
+                <td width="40"><div class="vertical_text">CHEST(mm)</div></td>
+                <td width="40"><div class="vertical_text">WAIST(mm)</div></td>
+                <td width="40"><div class="vertical_text">HIPS(mm)</div></td>
+                <td width="40"><div class="vertical_text">LEFT BICEP(mm)</div></td>
+                <td width="40"><div class="vertical_text">RIGHT BICEP(mm)</div></td>
+                <td width="40"><div class="vertical_text">LEFT CALF(mm)</div></td>
+                <td width="40"><div class="vertical_text">RIGHT CALF(mm)<</div></td>
+                <td width="40"><div class="vertical_text">BLOOD PRESSURE</div></td>
+                <td width="40"><div class="vertical_text">BODY COMPOSITION</div></td>
+                <td width="40"><div class="vertical_text">LUNG FUNCTION</div></td>
+                <td width="40"><div class="vertical_text">FITNESS / V02 MAX</div></td>
+            </tr>
+        </thead>
+        
+        <tbody>
+            <tr style="background-color: #fff;text-align: center;">
+                <td>
+                    <%
+                    var d1 = new Date(Date.parse(item.starttime));            
+                    var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+                    %>
+                    <%= start_date  %>
+                </td>
+                <td><%= item.age %></td>
+                <td><%= item.height %></td>
+                <td><%= item.weight %></td>
+                <td><%= item.lean_mass || '-' %></td>
+                <td><%= item.body_fat || '-' %></td>
+                
+                
+                <td><%= item.chest || '-' %></td>
+                <td><%= item.waist || '-' %></td>
+                <td><%= item.hips || '-' %></td>
+                <td><%= item.left_bicep || '-' %></td>
+                <td><%= item.right_bicep || '-' %></td>
+                <td><%= item.left_calf || '-' %></td>
+                <td><%= item.right_calf || '-' %></td>
+                <td><%= item.blood_pressure || '-' %></td>
+                <td><%= item.body_composition || '-' %></td>
+                <td><%= item.lung_function || '-' %></td>
+                <td><%= item.v02_max || '-' %></td>
+            </tr>
+        </tbody>
+    </table>
+    <br/>
+    
+    <table width="100%">
+        <tr>
+            <td>
+                <h3>PHOTO ASSESSMENTS</h3>
+            </td>
+            <td>
+                 <a style="cursor:pointer;float:right;" class="show_images" href="javascript:void(0)">[SHOW]</a>   
+                 <a style="cursor:pointer;float:right;display:none;" class="hide_images" href="javascript:void(0)">[HIDE]</a>
+            </td>
+        </tr>
+    </table>
+    
+    <hr class="orange_line">
+    <div class="clr"></div>
+    
+    <div class="photos_wraper"></div>
+    
+</div>

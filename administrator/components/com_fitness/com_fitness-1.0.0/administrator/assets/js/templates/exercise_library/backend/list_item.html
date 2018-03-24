@@ -1,0 +1,141 @@
+<tr data-id="<%= id %>" class="item_row">
+    <td>
+        <a title="View Details" style="cursor: pointer;" data-id="<%= id %>"  class="view " onclick="javascript:void(0)">
+            <%= exercise_name  %>
+        </a>
+    </td>
+    <td>
+        <%
+        if(exercise_type_names) {
+            _.each(exercise_type_names.split(','), function(item){ %>
+                <%= item + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    <td>
+        <%
+        if(force_type_names) {
+            _.each(force_type_names.split(','), function(item){ %>
+                <%= item + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    <td>
+        <%
+        if(mechanics_type_names) {
+            _.each(mechanics_type_names.split(','), function(item){ %>
+                <%= item + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    <td>
+        <%
+        if(body_part_names) {
+            _.each(body_part_names.split(','), function(item){ %>
+                <%= item + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    <td>
+        <%
+        if(target_muscles_names) {
+            _.each(target_muscles_names.split(','), function(item){ %>
+                <%= item + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    <td>
+        <%
+        if(equipment_type_names) {
+            _.each(equipment_type_names.split(','), function(item){ %>
+                <%= item + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    <td>
+        <%
+        if(difficulty_names) {
+            _.each(difficulty_names.split(','), function(item){ %>
+                <%= item + "<br/>" %>
+            <% })
+        } %>
+    </td>
+    <td><%= moment(new Date(Date.parse(created))).format("ddd, D MMM  YY")  %></td>
+    <td><%= created_by_name %></td>
+    <td id="status_button_place_<%= id %>" >
+     
+    </td>
+    
+    <% if(app.options.is_superuser) { %>
+        <td>
+            <%
+            if(parseInt(global_business_permissions)) { %>
+                <%= 'All Business Profiles' %>
+           <% } else {
+                if(business_profiles_names) {
+                    _.each(business_profiles_names.split(','), function(item){ %>
+                        <%= item + "<br/>" %>
+                    <% })
+                } 
+            }%>
+        </td>
+    <% } %>
+    
+    <td>
+        <%
+        if(clients_of_trainer) {
+            clients_of_trainer = clients_of_trainer.split(',');
+        }
+        if(my_exercise_clients) {
+            my_exercise_clients = my_exercise_clients.split(',');
+        }
+
+        if(my_exercise_clients_names) {
+            _.each(my_exercise_clients_names.split(','), function(item, index){ 
+                if(app.options.is_trainer) {
+                    if(_.include(clients_of_trainer, my_exercise_clients[index])) {
+                    %>
+                        <%= item + "<br/>" %>
+                    <%
+                    }
+                } else { %>
+                    <%= item + "<br/>" %>
+                <% }
+            })
+        } %>
+    </td>
+    
+    <% if(app.options.exercise_id) { %>
+    <td>
+        <a class="add_exercise" title="Add to Exercise" style="cursor: pointer;"  onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="video_link_icon"></span></a>
+    </td>
+    <% } %>  
+    
+    <td>
+        <% if(state == '1') { %>
+            <a title="View Details" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="preview"></span></a>
+        <% } else { %>
+            <a title="Restore" style="cursor: pointer;" class="restore " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="restore_icon"></span></a>
+        <% } %>
+    </td>
+    
+    <td>
+         <a title="Copy Exercise" style="cursor: pointer;" class="copy_exercise " onclick="javascript:void(0)"><span  data-id="<%= id %>"  class="copy_icon"></span></a>
+    </td>
+    
+    <td class="center"> 
+        <% if(state == '1' && edit_allowed) { %>
+            <a class="trash" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Trash" data-id="<%= id %>" class="trash_icon"></span></a>
+        <% } else if (edit_allowed) { %>
+            <a class="delete" style="cursor: pointer;" onclick="javascript:void(0)"><span title="Delete" data-id="<%= id %>" class="delete_icon"></span></a>
+        <% } %>
+    </td>
+    
+    
+    <td class="center">
+        <% if(edit_allowed) { %>
+        <input data-id="<%= id %>" class="trash_checkbox" type="checkbox"/>
+         <% } %>
+    </td>
+   
+</tr>

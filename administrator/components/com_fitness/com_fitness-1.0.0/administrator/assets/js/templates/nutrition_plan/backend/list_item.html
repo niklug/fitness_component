@@ -1,0 +1,74 @@
+<tr  class="item_row">
+    <td >
+        <%= item.client_name %>
+    </td>
+    
+    <td>
+        <%= item.trainer_name %>
+    </td>
+    
+    <td >
+        <%= moment(new Date(Date.parse(item.active_start))).format("ddd, D MMM  YYYY") %>
+    </td>
+    
+    <td >
+        <%= moment(new Date(Date.parse(item.active_finish))).format("ddd, D MMM  YYYY") %>
+    </td>
+    
+    <td class="center">
+        <%
+        var icon_class_active = 'unpublish';
+        if(item.id == item.active_plan_id) {
+            icon_class_active = 'publish';
+        }
+        %>
+        <span  class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>"  class=" state <%= icon_class_active %> " ></span></span> <br/>
+    </td>
+    
+    <td class="center">
+        <%
+        var icon_class_force = 'unpublish';
+        if(parseInt(item.force_active) == '1') {
+            icon_class_force = 'publish';
+        }
+        %>
+        <span  class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>"  class=" state <%= icon_class_force %> " ></span></span> <br/>
+    </td>
+    
+    <td>
+        <%= item.primary_goal_name %>
+    </td>
+    
+    <td>
+        <%= item.mini_goal_name %>
+    </td>
+    
+    <td>
+        <%= item.nutrition_focus_name %>
+    </td>
+    
+    <td class="center">
+        <a data-id="<%= item.id %>" class="email_button" href="javascript:void(0)" title="Send Email"></a>
+    </td>
+    
+    <td>
+        <a title="View/Edit" style="cursor: pointer;" class="view " onclick="javascript:void(0)"><span  data-id="<%= item.id %>"  class="preview"></span></a>
+    </td>
+    
+     <td class="center">
+        <%
+        var icon_class = 'unpublish';
+        var publish_title = 'Publish Event'; 
+        if(parseInt(item.state) == '1') {
+            icon_class = 'publish';
+            publish_title = 'Unpublish Event'; 
+        }
+        %>
+        <span title="<%= publish_title %>" class="jgrid"><span style="cursor:pointer;" data-id="<%= item.id %>" data-state="<%= item.state %>" class="publish state <%= icon_class %> " ></span></span> <br/>
+
+    </td>
+    
+    <td class="center">
+        <input data-id="<%= item.id %>" class="item_checkbox" type="checkbox"/>
+    </td>
+</tr>

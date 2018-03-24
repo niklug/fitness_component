@@ -1,0 +1,51 @@
+<div class="width-100 fltlft">
+   <form id="program_form"> 
+        <table width="100%">
+            <tr>
+                <td width="50%" style="vertical-align: top;">
+                    <fieldset class="adminform">
+                        <legend>APPOINTMENT & ASSESSMENT DETAILS</legend>
+                        <div id="details_wrapper"></div>
+                    </fieldset>
+
+                </td>
+                <td style="vertical-align: top;">
+                    <fieldset class="adminform">
+                        <legend>TRAINER</legend>
+                        <div id="trainer_data_wrapper"></div>
+                    </fieldset>
+
+                    <div id="clients_data_wrapper"></div>
+                </td>
+            </tr>
+        </table>
+
+        <% if(id) { %>
+        
+            <div id="assessment_form_wrapper"></div>
+            
+            <div id="workout_instuctions_wrapper"></div>
+            
+            <fieldset class="adminform">
+                <div id="exercises_list"></div>
+            </fieldset>
+
+            <fieldset class="adminform">
+                <legend>ASSESSMENT VIDEO</legend>
+                <div id="video_block"></div>
+            </fieldset>
+            
+            <fieldset class="adminform">
+                <legend>PHOTO ASSESSMENTS</legend>
+                <div id="photo_block"></div>
+            </fieldset>
+
+            <fieldset class="adminform">
+                <div id="comments_block"></div>
+            </fieldset>
+
+        <% } %>
+        
+        </form>
+    
+</div>

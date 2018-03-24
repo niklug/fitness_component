@@ -1,0 +1,32 @@
+<div class="fitness_block_wrapper" style="">
+    <div class="internal_wrapper">
+        <div  style="width:350px; float: left;">
+        <% if(head_title) { %>
+            <h3 style="font-size: 14px;"><%= head_title %></h3>
+        <% } %>
+        </div>
+        <div  style="width:500px; float:right; text-align: right;margin-top: 4px;margin-right: 20px;">
+            <a id="whole" href="javascript:void(0)">[Whole Period]</a>
+            <a  id="by_year_previous" href="javascript:void(0)">[Previous Year]</a>
+            <a  id="by_year" href="javascript:void(0)">[Current Year]</a>
+            <a  id="by_year_next" href="javascript:void(0)">[Next Year]</a>
+            <a  id="by_month" href="javascript:void(0)">[Current Month]</a>
+        </div>
+        <div class="clr"></div>
+        <hr class="orange_line">
+        <div class="internal_wrapper">
+            <table width="100%">
+                <tr>
+                    <td align="center">
+                        <div class="graph-container" style="width:740px;">
+
+                            <div id="placeholder" class="graph-placeholder"></div>
+
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

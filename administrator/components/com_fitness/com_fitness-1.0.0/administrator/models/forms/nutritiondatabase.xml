@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="ingredient_name" type="text" size="40" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_INGREDIENT_NAME"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_INGREDIENT_NAME" 
+            required="true"
+        
+        
+        filter="safehtml" /> 
+
+       <field name="calories" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_NUTRITIONDATABASES_CALORIES"
+            description="" 
+        
+        
+        
+        filter="safehtml" /> 
+       
+       <field name="energy" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_ENERGY"
+            description="" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="protein" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_PROTEIN"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_PROTEIN" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="fats" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_FATS"
+            description="" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="carbs" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_CARBS"
+            description="" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="saturated_fat" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_SATURATED_FAT"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_SATURATED_FAT" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="total_sugars" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_TOTAL_SUGARS"
+            description="" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="sodium" type="text" size="10" class="inputbox"
+        
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_SODIUM"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_SODIUM" 
+
+        filter="safehtml" /> 
+       
+       <field name="specific_gravity" type="text" size="10" class="inputbox"
+        
+            label="Specific Gravity"
+            description="" 
+            
+
+        filter="safehtml" /> 
+              
+              
+
+       <field name="description" type="editor" buttons="true"
+        class="inputbox"
+        filter="safehtml"
+            label="COM_FITNESS_FORM_LBL_NUTRITIONDATABASE_DESCRIPTION"
+            description="COM_FITNESS_FORM_DESC_NUTRITIONDATABASE_DESCRIPTION"  /> 
+        
+       <field name="category" type="sql"
+        query="SELECT id, name FROM #__fitness_database_categories WHERE state='1'"
+        key_field="id"
+        value_field="name"
+        class="inputbox"
+        filter="safehtml"        required="true"
+            label="Category"
+            description=""  /> 
+       
+       
+       
+       <field
+        name="measurement_unit"
+        type="list"
+        label="Measurement Unit"
+        description=""
+        class="inputbox required"
+        size="1"
+        >
+        <option value="">-Select-</option>
+        <option value="1">GRAMS</option>
+        <option value="2">MILLILITRES</option>
+    </field>
+    
+    
+    
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

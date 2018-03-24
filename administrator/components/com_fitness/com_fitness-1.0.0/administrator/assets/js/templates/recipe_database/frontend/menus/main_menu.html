@@ -1,0 +1,10 @@
+<ul>
+    <li><a onclick="javascript:void(0)" id="my_favourites_link" class="plan_menu_link"  href="javascript:void(0)">MY FAVOURITES</a></li>
+    <li><a onclick="javascript:void(0)" id="my_recipes_link" class="plan_menu_link"  href="javascript:void(0)">MY RECIPES</a></li>
+    <li><a onclick="javascript:void(0)" id="recipe_database_link" class="plan_menu_link"  href="javascript:void(0)">RECIPE DATABASE</a></li>
+    <li><a onclick="javascript:void(0)" id="nutrition_database_link" class="plan_menu_link"  href="javascript:void(0)">NUTRITION DATABASE</a></li>
+    
+    <% if(app.options.add_diary_options.diary_id) { %>
+        <li><a onclick="javascript:void(0)" id="back_to_diary_link" class="plan_menu_link"  href="javascript:void(0)">BACK TO DAIRY</a></li>
+    <% } %>
+</ul>

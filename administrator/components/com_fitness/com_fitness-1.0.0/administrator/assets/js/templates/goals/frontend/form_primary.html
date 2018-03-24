@@ -1,0 +1,117 @@
+<div class="fitness_block_wrapper" style="margin-top: 5px;">
+    <table width="100%">
+        <tr>
+            <td>
+                <% if(!item.readonly_allowed) { %>
+                    <h3  style="float:left;">NEW/EDIT PRIMARY GOAL</h3>
+                <% } else { %>
+                    <h3  style="float:left;">MY PRIMARY GOAL</h3>
+                <% } %>
+            </td>
+            <td>
+                
+                <% if(!item.readonly_allowed) { %>
+                    <a  style="cursor: pointer;float:right;margin-right:10px;" id="cancel" onclick="javascript:void(0)">[CANCEL]</a>
+                    <a  style="cursor: pointer;float:right;margin-right:10px;" id="save_close" onclick="javascript:void(0)">[SAVE/CLOSE]</a>
+                    <a  style="cursor: pointer;float:right;margin-right:10px;" id="save" onclick="javascript:void(0)">[SAVE]</a>
+                <% } else { %>
+                    <a  style="cursor: pointer;float:right;margin-right:10px;" id="cancel" onclick="javascript:void(0)">[CLOSE]</a>
+                <% } %>
+            </td>
+        </tr>
+    </table>
+
+    <hr class="orange_line">
+    <div class="internal_wrapper2">
+        <form action="" id="add_goal_form">
+            <table>
+                <% if(item.readonly_allowed) { %>
+                    <tr>
+                        <td style="width:120px;">
+                            Primary Goal 
+                        </td>
+                        <td class="grey_title">
+                            <%= item.primary_goal_name  || '-' %>
+                        </td>
+                    </tr>
+                <% } %>
+                <tr>
+                    <td>
+                        Start Date
+                    </td>
+                    <% if(!item.readonly_allowed) { %>
+                    <td>
+                        <input style="width:75px;"  type="text" name="start_date" id="start_date" size="6" class="required" value="<%= item.start_date %>">
+                    </td>
+                    <% } else { %>
+                    <td class="grey_title">
+                        <%
+                        var d1 = new Date(Date.parse(item.start_date));            
+                        var start_date = moment(d1).format("dddd, D MMMM  YYYY");      
+                        %>
+                        <%= start_date %>
+                    </td>
+                    <% } %>
+                    <td id="error_start_date" class="error_message"></td>
+                </tr>
+               
+                <tr>
+                    <td>
+                        Achieve By 
+                    </td>
+                    <% if(!item.readonly_allowed) { %>
+                    <td>
+                        <input style="width:75px;"  type="text" name="deadline" id="deadline" size="6" class="required" value="<%= item.deadline %>">
+                    </td>
+                    <% } else { %>
+                    <td class="grey_title">
+                        <%
+                        var d1 = new Date(Date.parse(item.deadline));            
+                        var deadline = moment(d1).format("dddd, D MMMM  YYYY");      
+                        %>
+                        <%= deadline %>
+                    </td>
+                    <% } %>
+                    <td id="error_deadline" class="error_message"></td>
+                </tr>
+                
+                <% if(parseInt(item.id)) { %>
+                <tr>
+                    <td colspan="3">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Status 
+                    </td>
+                    <td id="status_button_place_<%= item.id %>"  >
+   
+                    </td>
+                </tr>
+                <% } %>
+                
+                <tr>
+                    <td colspan="3">
+                        &nbsp;
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="vertical-align: top;">Goal Details</td>
+                    <% if(!item.readonly_allowed) { %>
+                    <td colspan="2">
+                        <textarea  name="details" id="details" rows="4" cols="80" class="required"><%= item.details %></textarea> 
+                    </td>
+                    <% } else { %>
+                    <td class="grey_title">
+                        <%= item.details %>
+                    </td>
+                    <% } %>
+                </tr>
+            </table>
+        </form>
+        <br/>
+        <div id="comments_block"></div>
+    </div>
+</div>

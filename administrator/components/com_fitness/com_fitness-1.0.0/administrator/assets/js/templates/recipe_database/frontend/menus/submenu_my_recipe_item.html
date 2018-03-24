@@ -1,0 +1,37 @@
+<div class="fitness_block_wrapper" style="height:30px;margin-top: 20px;">
+    <div class="internal_wrapper">
+        <div style="width:100%;">
+            <% if (is_favourite) {
+                var display_remove_favourite = 'inline';
+                var display_add_favourite = 'none';
+
+            } else {  
+                var display_add_favourite = 'inline';
+                var display_remove_favourite = 'none';
+            } %>
+                <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_remove_favourite%>" class="remove_favourites" onclick="javascript:void(0)">[REMOVE FAVOURITE]</a>
+
+                <a data-id="<%= id %>" style="cursor: pointer;display:<%= display_add_favourite%>" class="add_favourite" onclick="javascript:void(0)">[ADD FAVOURITE]</a>
+
+            <% if(app.options.add_diary_options.nutrition_plan_id
+                    && app.options.statuses.APPROVED_RECIPE_STATUS.id == status
+            ) {%>
+             &#32;<a data-id="<%= id %>" style="cursor: pointer;" class="add_diary" onclick="javascript:void(0)">[ADD TO DIARY]</a>
+            <% } %>
+
+            <% if(edit_allowed) { %>
+            <a data-id="<%= id %>" style="cursor: pointer;float:right;margin-right:10px;" class="trash_recipe" onclick="javascript:void(0)">[TRASH]</a>
+            <% } %>
+            <a data-id="" style="cursor: pointer;float:right;margin-right:10px;" id="close_recipe" onclick="javascript:void(0)">[CLOSE]</a>
+            <% if(edit_allowed) { %>
+            <a data-id="<%= id %>" style="cursor: pointer; float:right;margin-right:10px;" class="edit_recipe" onclick="javascript:void(0)">[EDIT]</a>
+            <% } %>
+            
+            <% if(status == app.options.statuses.PENDING_RECIPE_STATUS.id || status == app.options.statuses.NOTAPPROVED_RECIPE_STATUS.id) { %>
+            <a data-id="<%= id %>" style="cursor: pointer; float:right;margin-right:10px;" class="submit_recipe" onclick="javascript:void(0)">[SUBMIT TO TRAINER]</a>
+            <% } %>
+        </div>
+        <div class="clr"></div>
+    </div>
+    <hr class="orange_line">
+</div>

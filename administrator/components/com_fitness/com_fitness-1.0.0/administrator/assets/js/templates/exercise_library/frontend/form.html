@@ -1,0 +1,81 @@
+<div class="fitness_block_wrapper" style="margin-top: 20px;padding: 5px;">
+    <table width="100%">
+        <tr>
+            <td style="vertical-align: top;" width="50%">
+                <div id="select_filter_wrapper"></div>
+            </td>
+
+            <td style="vertical-align: top;">
+                <table width="100%">
+                    <tr>
+                        <td width="100">
+                            <label>Exercise Name</label>
+                        </td>
+                        <td>
+                            <input id="exercise_name" size="50" type="text" title="" value="<%= exercise_name %>" name="exercise_name">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Author Name</label>
+                        </td>
+                        <td id="created_by" >
+                            <%= created_by_name %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>User Group</label>
+                        </td>
+                        <td id="user_group" >
+                            <%= user_group_name %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Created Date</label>
+                        </td>
+                        <td id="created" >
+                            <%
+                            var d1 = new Date(Date.parse(created));            
+                            var created = moment(d1).format("dddd, D MMM  YYYY");      
+                            %>
+                            <% if (id) { %>
+                                <%= created %>
+                            <% } %> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Status</label>
+                        </td>
+                        <td id="status_button_place_<%= id %>">
+                            <%= $.fitness_helper.setExerciseLibraryStatus(status, id) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Assessed By</label>
+                        </td>
+                        <td id="assessed_by" >
+                            <%= assessed_by_name || '-' %>
+                        </td>
+                    </tr>
+                </table>
+
+                </br>
+                <div id="video_upload_content"></div>
+            </td>
+        </tr>
+        <% if(id) { %>
+        <tr>
+            <td colspan="2">
+                <br/>
+                <div class="clr"></div>
+                <div id="comments_wrapper"></div>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+</div>
+
